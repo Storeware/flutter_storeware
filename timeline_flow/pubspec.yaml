@@ -1,8 +1,8 @@
 name: timeline_flow
 description: A new flutter package project.
-version: 0.0.1
+version: 0.0.4
 author: amarildo lacerda <amarildo_51@msn.com>
-homepage: http://www.tireideletra.com.br
+homepage: https://github.com/amarildolacerda/flutter_dart/tree/master/timeline_flow
 
 
 
@@ -12,7 +12,7 @@ dependencies:
     sdk: flutter
 
 environment:
-    sdk: ">=1.19.0 <2.0.0"
+    sdk: ">=1.19.0 <3.0.0"
 
 dev_dependencies:
   flutter_test:

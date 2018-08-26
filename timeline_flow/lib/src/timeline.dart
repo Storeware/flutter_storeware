@@ -41,6 +41,7 @@ class TimelineView extends StatelessWidget {
   double right;
   double leftLine;
   double topLine;
+  double bottomLine;
 
   TimelineView(
       {this.children,
@@ -49,7 +50,8 @@ class TimelineView extends StatelessWidget {
       this.left = 16.0,
       this.right = 16.0,
       this.topLine = 0.0,
-      this.leftLine = 32.0});
+      this.leftLine = 32.0,
+      this.bottomLine = 0.0});
 
   static builder(
       {int itemCount = 0,
@@ -58,7 +60,8 @@ class TimelineView extends StatelessWidget {
       bottom = 10.0,
       left = 16.0,
       right = 16.0,
-      leftLine = 32.0}) {
+      leftLine = 32.0,
+      bottomLine = 0.0}) {
     List<Widget> rt = [];
     for (var idx = 0; idx < itemCount; idx++) {
       rt.add(itemBuilder(idx));
@@ -70,6 +73,7 @@ class TimelineView extends StatelessWidget {
       left: left,
       right: right,
       leftLine: leftLine,
+      bottomLine: bottomLine,
     );
     return vw;
   }
@@ -80,6 +84,7 @@ class TimelineView extends StatelessWidget {
       TimelineVerticalLine(
         left: leftLine,
         top: topLine,
+        bottom: bottomLine,
         width: 1.0,
       ),
       Positioned(
@@ -94,14 +99,14 @@ class TimelineView extends StatelessWidget {
   }
 }
 
+@immutable
 class TimelineTile extends StatelessWidget {
-  //TimelineTask task;
   final Widget title;
   final Widget subTitle;
   final Widget leading;
   final Widget trailing;
   final double dotSize;
-  Color dotColor;
+  final Color dotColor;
   final double dotLeft;
   final double left;
   final double height;
@@ -126,9 +131,9 @@ class TimelineTile extends StatelessWidget {
       this.left = 16.0,
       this.gap = 2.0,
       this.dotLeft = 16.0,
-      this.dotColor,
+      this.dotColor = Colors.blue,
       this.dotSize = 10.0,
-        this.onLongPress/*, this.animation*/})
+      this.onLongPress /*, this.animation*/})
       : super(key: key);
 
   List<Widget> _list = [];
@@ -138,33 +143,37 @@ class TimelineTile extends StatelessWidget {
     if (subTitle != null) _list.add(subTitle);
   }
 
-  Widget _createGap(){
-    return new Padding(padding: new EdgeInsets.symmetric(horizontal: gap),);
+  Widget _createGap() {
+    return new Padding(
+      padding: new EdgeInsets.symmetric(horizontal: gap),
+    );
   }
 
   List<Widget> _createRow() {
     List<Widget> rt = [];
     // dot
-    rt.add(new Padding(
-      padding: new EdgeInsets.symmetric(horizontal: dotLeft - dotSize / 2),
-      child: new Container(
-        height: dotSize,
-        width: dotSize,
+    if (icon == null)
+      rt.add(new Padding(
+        padding: new EdgeInsets.symmetric(horizontal: dotLeft - dotSize / 2),
+        child: new Container(
+          height: dotSize,
+          width: dotSize,
+          decoration:
+              new BoxDecoration(shape: BoxShape.circle, color: dotColor),
+        ),
+      ));
+
+    if (icon != null)
+      rt.add(new Padding(
+        padding: new EdgeInsets.symmetric(horizontal: (dotLeft - dotSize) / 2),
         child: icon,
-        decoration: new BoxDecoration(shape: BoxShape.circle, color: dotColor),
-      ),
-    ));
+      ));
 
-    if (gap>0)
-      rt.add( _createGap()  );
+    if (gap > 0) rt.add(_createGap());
 
+    if (leading != null) rt.add(leading);
 
-    if (leading!=null)
-      rt.add(leading);
-
-    if (gap>0)
-      rt.add( _createGap()  );
-
+    if (gap > 0) rt.add(_createGap());
 
     // tasks
     rt.add(new Expanded(
@@ -172,12 +181,12 @@ class TimelineTile extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: left),
           child: new Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: _list,
           )),
     ));
 
-    if (gap>0)
-      rt.add( _createGap()  );
+    if (gap > 0) rt.add(_createGap());
     // trailing
     rt.add(
       new Padding(
@@ -189,36 +198,36 @@ class TimelineTile extends StatelessWidget {
     return rt;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     _createList();
-    if (dotColor == null) dotColor = Colors.blue;
     return new InkWell(
-       onTap: (enabled? onTap:null),
-      onLongPress: (enabled?onLongPress:null),
-      child: Container(
-      height: height,
-      child: Row( children: _createRow()),
-    ));
+        onTap: (enabled ? onTap : null),
+        onLongPress: (enabled ? onLongPress : null),
+        child: Container(
+          height: height,
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: _createRow()),
+        ));
   }
 }
 
+@immutable
 class TimelineVerticalLine extends StatelessWidget {
-  double top;
-  double bottom;
-  double left;
-  double width;
-  Color color;
+  final double top;
+  final double bottom;
+  final double left;
+  final double width;
+  final Color color;
 
   TimelineVerticalLine(
       {this.top = 0.0,
       this.bottom = 0.0,
       this.left = 32.0,
       this.width = 1.0,
-      this.color}) {
-    if (this.color == null) this.color = Colors.grey[300];
+      this.color = Colors.grey}) {
+    //if (this.color == null) this.color = Colors.grey[300];
   }
 
   @override
@@ -235,16 +244,22 @@ class TimelineVerticalLine extends StatelessWidget {
   }
 }
 
+@immutable
 class TimelineProfile extends StatelessWidget {
-  double minRadius;
-  double maxRadius;
-  ImageProvider<dynamic> image;
-  double imageHeight;
-  double paddingLeft;
-  double paddingRight;
-  Widget title;
-  Widget subTitle;
-  Widget trailling;
+  final double minRadius;
+  final double maxRadius;
+  final ImageProvider<dynamic> image;
+  final double imageHeight;
+  final double paddingLeft;
+  final double paddingRight;
+  final Widget title;
+  final Widget subTitle;
+  final double height;
+  final Widget trailling;
+  final Color color;
+  final Decoration foregroundDecoration;
+  final Decoration decoration;
+  final EdgeInsets margin;
 
   TimelineProfile(
       {this.minRadius = 28.0,
@@ -255,7 +270,12 @@ class TimelineProfile extends StatelessWidget {
       this.paddingLeft = 16.0,
       this.title,
       this.subTitle,
-      this.trailling});
+      this.trailling,
+      this.height = 80.0,
+      this.margin ,
+      this.color = Colors.black12,
+      this.decoration,
+      this.foregroundDecoration});
 
   List<Widget> _list = [];
   _createList() {
@@ -267,8 +287,13 @@ class TimelineProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     _createList();
-    return new Padding(
+    return new Container(
+      height: height,
+      margin: (margin==null?EdgeInsets.all(0.0):margin),
       padding: new EdgeInsets.only(left: paddingLeft, top: imageHeight / 2.5),
+      color: color,
+      foregroundDecoration: foregroundDecoration,
+      decoration: decoration,
       child: new Row(
         children: <Widget>[
           new CircleAvatar(
@@ -295,10 +320,11 @@ class TimelineProfile extends StatelessWidget {
   }
 }
 
+@immutable
 class TimelineFabView extends StatefulWidget {
-  double top;
-  double left;
-  var onClick;
+  final double top;
+  final double left;
+  final onClick;
   TimelineFabView({this.top, this.left, this.onClick});
   @override
   _AnimatedFabViewState createState() => _AnimatedFabViewState();
@@ -317,6 +343,7 @@ class _AnimatedFabViewState extends State<TimelineFabView> {
   }
 }
 
+@immutable
 class TimelineAnimatedFab extends StatefulWidget {
   final VoidCallback onClick;
 

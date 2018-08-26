@@ -4,7 +4,7 @@ A flutter package to create timeline flow;
 
 
 Usage:
-
+<pre>
 @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -42,5 +42,5 @@ Usage:
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
-
+</pre>
   <img src='sample.jpg' />   

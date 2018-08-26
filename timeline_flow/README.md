@@ -43,4 +43,4 @@ Usage:
     );
   }
 
-     
+  <img src='sample.jpg' />   

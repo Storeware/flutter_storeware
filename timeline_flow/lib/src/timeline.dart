@@ -249,6 +249,7 @@ class TimelineProfile extends StatelessWidget {
   final double minRadius;
   final double maxRadius;
   final ImageProvider<dynamic> image;
+  final Widget icon;
   final double imageHeight;
   final double paddingLeft;
   final double paddingRight;
@@ -265,6 +266,7 @@ class TimelineProfile extends StatelessWidget {
       {this.minRadius = 28.0,
       this.maxRadius = 28.0,
       this.image,
+      this.icon,
       this.imageHeight = 28.0,
       this.paddingRight = 10.0,
       this.paddingLeft = 16.0,
@@ -300,6 +302,7 @@ class TimelineProfile extends StatelessWidget {
             minRadius: minRadius,
             maxRadius: maxRadius,
             backgroundImage: image,
+            child: icon,
           ),
           new Expanded(
               child: new Padding(

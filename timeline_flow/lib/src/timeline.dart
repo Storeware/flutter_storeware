@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 /*
+  Amarildo Lacerda <amarildo_51@msn.com>
+  Credits:  https://marcinszalek.pl/flutter/filter-menu-ui-challenge/
+  see:      https://github.com/MarcinusX/flutter_ui_challenge_filter_menu
 
           TimelineFabView(),
 
@@ -45,23 +48,23 @@ class TimelineView extends StatelessWidget {
 
   TimelineView(
       {this.children,
-      this.top = 0.0,
-      this.bottom = 0.0,
-      this.left = 16.0,
-      this.right = 16.0,
-      this.topLine = 0.0,
-      this.leftLine = 32.0,
-      this.bottomLine = 0.0});
+        this.top = 0.0,
+        this.bottom = 0.0,
+        this.left = 16.0,
+        this.right = 16.0,
+        this.topLine = 0.0,
+        this.leftLine = 32.0,
+        this.bottomLine = 0.0});
 
   static builder(
       {int itemCount = 0,
-      TimelineViewCallback itemBuilder,
-      top = 10.0,
-      bottom = 10.0,
-      left = 16.0,
-      right = 16.0,
-      leftLine = 32.0,
-      bottomLine = 0.0}) {
+        TimelineViewCallback itemBuilder,
+        top = 10.0,
+        bottom = 10.0,
+        left = 16.0,
+        right = 16.0,
+        leftLine = 32.0,
+        bottomLine = 0.0}) {
     List<Widget> rt = [];
     for (var idx = 0; idx < itemCount; idx++) {
       rt.add(itemBuilder(idx));
@@ -120,20 +123,20 @@ class TimelineTile extends StatelessWidget {
 
   TimelineTile(
       {Key key,
-      this.onTap,
-      this.enabled = true,
-      this.title,
-      this.subTitle,
-      this.leading,
-      this.trailing,
-      this.icon,
-      this.height = 60.0,
-      this.left = 16.0,
-      this.gap = 2.0,
-      this.dotLeft = 16.0,
-      this.dotColor = Colors.blue,
-      this.dotSize = 10.0,
-      this.onLongPress /*, this.animation*/})
+        this.onTap,
+        this.enabled = true,
+        this.title,
+        this.subTitle,
+        this.leading,
+        this.trailing,
+        this.icon,
+        this.height = 60.0,
+        this.left = 16.0,
+        this.gap = 2.0,
+        this.dotLeft = 16.0,
+        this.dotColor = Colors.blue,
+        this.dotSize = 10.0,
+        this.onLongPress /*, this.animation*/})
       : super(key: key);
 
   List<Widget> _list = [];
@@ -159,7 +162,7 @@ class TimelineTile extends StatelessWidget {
           height: dotSize,
           width: dotSize,
           decoration:
-              new BoxDecoration(shape: BoxShape.circle, color: dotColor),
+          new BoxDecoration(shape: BoxShape.circle, color: dotColor),
         ),
       ));
 
@@ -223,10 +226,10 @@ class TimelineVerticalLine extends StatelessWidget {
 
   TimelineVerticalLine(
       {this.top = 0.0,
-      this.bottom = 0.0,
-      this.left = 32.0,
-      this.width = 1.0,
-      this.color = Colors.grey}) {
+        this.bottom = 0.0,
+        this.left = 32.0,
+        this.width = 1.0,
+        this.color = Colors.grey}) {
     //if (this.color == null) this.color = Colors.grey[300];
   }
 
@@ -264,20 +267,20 @@ class TimelineProfile extends StatelessWidget {
 
   TimelineProfile(
       {this.minRadius = 28.0,
-      this.maxRadius = 28.0,
-      this.image,
-      this.icon,
-      this.imageHeight = 28.0,
-      this.paddingRight = 10.0,
-      this.paddingLeft = 16.0,
-      this.title,
-      this.subTitle,
-      this.trailling,
-      this.height = 80.0,
-      this.margin ,
-      this.color = Colors.black12,
-      this.decoration,
-      this.foregroundDecoration});
+        this.maxRadius = 28.0,
+        this.image,
+        this.icon,
+        this.imageHeight = 28.0,
+        this.paddingRight = 10.0,
+        this.paddingLeft = 16.0,
+        this.title,
+        this.subTitle,
+        this.trailling,
+        this.height = 80.0,
+        this.margin ,
+        this.color = Colors.black12,
+        this.decoration,
+        this.foregroundDecoration});
 
   List<Widget> _list = [];
   _createList() {
@@ -306,13 +309,13 @@ class TimelineProfile extends StatelessWidget {
           ),
           new Expanded(
               child: new Padding(
-            padding: EdgeInsets.only(left: paddingLeft),
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: _list,
-            ),
-          )),
+                padding: EdgeInsets.only(left: paddingLeft),
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: _list,
+                ),
+              )),
           new Padding(
             padding: EdgeInsets.only(right: paddingRight),
             child: trailling,

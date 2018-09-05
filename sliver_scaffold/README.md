@@ -1,6 +1,6 @@
 # sliver_scaffold
 
-A new flutter package project.
+SliverScaffold combine Sliver with Scaffold Widgets.
 
 ## Getting Started
 

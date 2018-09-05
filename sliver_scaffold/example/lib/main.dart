@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sliver_scaffold/sliver_scaffold.dart';
+//import 'package:timeline_flow/timeline_flow.dart';
 
 void main() => runApp(new MyApp());
 
@@ -19,7 +21,7 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new MyHomePage(title: 'Flutter Sample SliverScaffold'),
     );
   }
 }
@@ -64,29 +66,28 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return new Scaffold(
+    return new SliverScaffold(
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: new Text(widget.title),
       ),
-      body: new Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: new Column(
-          // Column is also layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug paint" (press "p" in the console where you ran
-          // "flutter run", or select "Toggle Debug Paint" from the Flutter tool
-          // window in IntelliJ) to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
+      radius: 15.0,
+      backgroundColor: Colors.orange[200],
+
+      sliverAppBar: SliverAppBar(
+        actions: <Widget>[Icon(Icons.access_alarms)],
+        floating: true,
+        backgroundColor: Colors.orange,
+        expandedHeight: 280.0,
+        title: Text('SliverAppBar Title'),
+        flexibleSpace: FlexibleSpaceBar(
+          title: Text('FlexibleSpaceBar Title'),
+          background: Image.asset('assets/imagem.jpg'),
+        ),
+      ),
+      body: 
+        new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             new Text(
@@ -96,9 +97,27 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
-          ],
-        ),
-      ),
+/*        Expanded(child:TimelineView.builder(
+            bottom: 40.0,
+            left: 30.0,
+            leftLine: 45.0,
+            bottomLine: 40.0,
+            itemCount: 20,
+            itemBuilder: (index) {
+              return TimelineTile(
+                title: Text(
+                  'text $index',
+                ),
+                subTitle: Text(' sub-title $index'),
+                icon: Icon(
+                  (index.isEven ? Icons.history : Icons.check),
+                  color: (index.isEven ? Colors.red : Colors.blue),
+                ),
+                gap: 0.0,
+                trailing: Text('15:00'),
+              );
+            }),
+              ),*/      ]),
       floatingActionButton: new FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',

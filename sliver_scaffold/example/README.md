@@ -1,6 +1,6 @@
 # example
 
-A new Flutter project.
+SliverScaffold combine Sliver and Scaffold
 
 ## Getting Started
 

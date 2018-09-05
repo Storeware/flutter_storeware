@@ -14,6 +14,7 @@ class SliverScaffold extends StatefulWidget {
   final Widget bottomNavigationBar;
   final afterLoaded;
   final ScrollController controller;
+  final bool isScrollView;
 
   final bool reverse;
 
@@ -23,6 +24,7 @@ class SliverScaffold extends StatefulWidget {
       this.sliverAppBar,
       this.slivers,
       this.body,
+      this.isScrollView = false,
       this.controller,
       this.reverse = false,
       this.drawer,
@@ -33,6 +35,39 @@ class SliverScaffold extends StatefulWidget {
       this.afterLoaded,
       this.radius = 0.0})
       : super(key: key);
+
+  static scrollable(
+      {Key key,
+      appBar,
+      sliverAppBar,
+      slivers,
+      body,
+      controller,
+      reverse = false,
+      drawer,
+      endDrawer,
+      floatingActionButton,
+      backgroundColor,
+      bottomNavigationBar,
+      afterLoaded,
+      radius = 0.0}) {
+    return SliverScaffold(
+        key: key,
+        appBar: appBar,
+        sliverAppBar: sliverAppBar,
+        slivers: slivers,
+        body: body,
+        isScrollView: true,
+        controller: controller,
+        reverse: reverse,
+        drawer: drawer,
+        endDrawer: endDrawer,
+        floatingActionButton: floatingActionButton,
+        backgroundColor: backgroundColor,
+        bottomNavigationBar: bottomNavigationBar,
+        afterLoaded: afterLoaded,
+        radius: radius);
+  }
 
   static nested(
       {AppBar appBar,
@@ -52,7 +87,6 @@ class SliverScaffold extends StatefulWidget {
 }
 
 class _SliverScaffoldState extends State<SliverScaffold> {
-
   List<Widget> _builder() {
     List<Widget> rt = [];
     if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
@@ -65,6 +99,14 @@ class _SliverScaffoldState extends State<SliverScaffold> {
 
   @override
   Widget build(BuildContext context) {
+
+     Widget _body = widget.body;
+     if (widget.isScrollView)
+      _body = Container(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(child: widget.body));
+
     var scf = Scaffold(
         key: widget.key,
         bottomNavigationBar: widget.bottomNavigationBar,
@@ -79,7 +121,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
           headerSliverBuilder: (context, inner) {
             return _builder();
           },
-          body: (widget.body == null ? Text('body.....') : widget.body),
+          body: (widget.body == null ? Text('body.....') : _body),
         ));
 
     var rt = Container(

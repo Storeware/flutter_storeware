@@ -102,10 +102,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
 
      Widget _body = widget.body;
      if (widget.isScrollView)
-      _body = Container(
-          height: double.infinity,
-          width: double.infinity,
-          child: SingleChildScrollView(child: widget.body));
+      _body = SingleChildScrollView(child: widget.body);
 
     var scf = Scaffold(
         key: widget.key,
@@ -121,7 +118,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
           headerSliverBuilder: (context, inner) {
             return _builder();
           },
-          body: (widget.body == null ? Text('body.....') : _body),
+          body: Scaffold(body: (widget.body == null ? Text('body.....') : _body)),
         ));
 
     var rt = Container(

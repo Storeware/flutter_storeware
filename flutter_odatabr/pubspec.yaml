@@ -1,8 +1,8 @@
 name: flutter_odatabr
 description: ODataBr package
-version: 0.0.1
-author: amarildolacerda
-homepage:
+version: 0.0.2
+author: amarildolacerda <amarildo_51@msn.com>
+homepage: https://github.com/amarildolacerda/flutter_dart/tree/master/flutter_odatabr
 
 environment:
   sdk: ">=2.0.0-dev.68.0 <3.0.0"

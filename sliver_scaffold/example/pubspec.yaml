@@ -15,7 +15,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sliver_scaffold: any  
+  sliver_scaffold: ^0.0.5  
   timeline_flow: any
 
 

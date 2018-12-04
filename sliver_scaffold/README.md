@@ -3,7 +3,7 @@
 SliverScaffold combine Sliver with Scaffold Widgets.
 
 
-<image src="sliverscaffold.jpg" height="300em"/>
+<image src="https://github.com/amarildolacerda/flutter_dart/blob/master/sliver_scaffold/sliverscaffold.jpg" height="300em"/>
 
 
 

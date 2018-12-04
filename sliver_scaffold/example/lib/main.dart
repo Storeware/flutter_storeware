@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sliver_scaffold/sliver_scaffold.dart';
+//import 'package:sliver_scaffold/sliver_scaffold.dart';
 //import 'package:timeline_flow/timeline_flow.dart';
 
 void main() => runApp(new MyApp());
@@ -70,54 +71,63 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: new Text(widget.title),
+        title: new Text('SliverScaffold'),
       ),
-      radius: 15.0,
+      //radius: 0.0,
+      //slivers: <Widget>[],
+      //grid:<Widget>[],
       backgroundColor: Colors.orange[200],
 
       sliverAppBar: SliverAppBar(
         actions: <Widget>[Icon(Icons.access_alarms)],
         floating: true,
+        centerTitle: true,
         backgroundColor: Colors.orange,
         expandedHeight: 280.0,
         title: Text('SliverAppBar Title'),
         flexibleSpace: FlexibleSpaceBar(
           title: Text('FlexibleSpaceBar Title'),
-          background: Image.asset('assets/imagem.jpg'),
+          background: Image.asset('assets/spacebar.jpg'),
         ),
       ),
-      body: 
-        new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
+      body: DashboardView(
+          radius: 0.0,
+          cardColor: Colors.blue.withAlpha(150),
+          appBar: AppBar(title: Text('Dashboard')),
+          cards: [
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+              IconButton(
+                color: Colors.black,
+                icon: Icon(Icons.access_alarm),
+                onPressed: () {},
+              ),
+              Text('Alarm'),
+            ]),
+            Container(
+              width: 50.0,
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.home),
+              ),
+            )
+          ],
+          listView: <Widget>[
+            ListTile(
+              title: Text('Dashboard.listView to show childrens...'),
             ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+            Center(
+              child: new Text(
+                'You have pushed the button this many times:',
+              ),
             ),
-/*        Expanded(child:TimelineView.builder(
-            bottom: 40.0,
-            left: 30.0,
-            leftLine: 45.0,
-            bottomLine: 40.0,
-            itemCount: 20,
-            itemBuilder: (index) {
-              return TimelineTile(
-                title: Text(
-                  'text $index',
-                ),
-                subTitle: Text(' sub-title $index'),
-                icon: Icon(
-                  (index.isEven ? Icons.history : Icons.check),
-                  color: (index.isEven ? Colors.red : Colors.blue),
-                ),
-                gap: 0.0,
-                trailing: Text('15:00'),
-              );
-            }),
-              ),*/      ]),
+            Center(
+              child: new Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.display1,
+              ),
+            ),
+          ]),
+
       floatingActionButton: new FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',

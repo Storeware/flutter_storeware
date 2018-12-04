@@ -10,12 +10,18 @@ class DashboardView extends StatefulWidget {
   final Color cardColor;
   final double cardElevation;
   final double cardMargin;
+  final double radius;
+  final double topRadius;
+  final double bottomRadius;
   final WidgetListBuilderContext gridBuilder;
   final Widget floatingActionButton;
   final Widget bottomNavigationBar;
   DashboardView(
       {this.appBar,
       this.cards,
+      this.radius = 0.0,
+      this.topRadius = 0.0,
+      this.bottomRadius = 0.0,
       this.gridMaxCrossAxisExtend = 200.0,
       this.gridChildAspectRatio = 1.5,
       this.cardColor,
@@ -43,6 +49,9 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return SliverScaffold(
         appBar: widget.appBar,
+        radius: widget.radius,
+        topRadius: widget.topRadius,
+        bottomRadius: widget.bottomRadius,
         grid: WidgetList.count(context, itemCount: widget.cards.length,
             itemBuilder: (context, index) {
           return (widget.gridBuilder != null

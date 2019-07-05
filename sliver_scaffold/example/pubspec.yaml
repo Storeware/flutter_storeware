@@ -15,7 +15,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sliver_scaffold: ^0.0.5  
+  #sliver_scaffold: any  
   timeline_flow: any
 
 
@@ -27,6 +27,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  git:
+    url: https://github.com/amarildolacerda/flutter_dart.git
+    path: sliver_scaffold  
 
 
 # For information on the generic Dart part of this file, see the

@@ -306,7 +306,7 @@ class BoxContainer extends StatelessWidget {
                   bottomRight: Radius.circular(bottomRight))),
       child: Stack(
         children: <Widget>[
-          child,
+          child??Container(),
         ],
       ),
     );

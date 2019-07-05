@@ -58,7 +58,7 @@ class _DashboardViewState extends State<DashboardView> {
               ? widget.gridBuilder(context, index)
               : _gridBuilder(context, index));
         }),
-        gridMaxCrossAxisExtend: widget.gridMaxCrossAxisExtend,
+        //gridMaxCrossAxisExtend: widget.gridMaxCrossAxisExtend,
         gridCrossAxisSpacing: 10.0,
         gridMainAxisSpacing: 10.0,
         gridChildAspectRatio: widget.gridChildAspectRatio,

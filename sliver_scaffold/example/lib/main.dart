@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sliver_scaffold/sliver_scaffold.dart';
-//import 'package:sliver_scaffold/sliver_scaffold.dart';
-//import 'package:timeline_flow/timeline_flow.dart';
 
 void main() => runApp(new MyApp());
 

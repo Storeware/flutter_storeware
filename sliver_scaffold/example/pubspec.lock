@@ -89,10 +89,12 @@ packages:
   sliver_scaffold:
     dependency: "direct main"
     description:
-      name: sliver_scaffold
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.4"
+      path: sliver_scaffold
+      ref: HEAD
+      resolved-ref: "46845036d17baf17b7451631e16041d06f29f123"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.7"
   source_span:
     dependency: transitive
     description:

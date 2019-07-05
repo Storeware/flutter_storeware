@@ -5,7 +5,8 @@ class DashboardView extends StatefulWidget {
   final List<Widget> cards;
   final AppBar appBar;
   final List<Widget> listView;
-  final double gridMaxCrossAxisExtend;
+  //final double gridMaxCrossAxisExtend;
+  final int gridCrossAxisCount;
   final double gridChildAspectRatio;
   final Color cardColor;
   final double cardElevation;
@@ -22,7 +23,8 @@ class DashboardView extends StatefulWidget {
       this.radius = 0.0,
       this.topRadius = 0.0,
       this.bottomRadius = 0.0,
-      this.gridMaxCrossAxisExtend = 200.0,
+      //this.gridMaxCrossAxisExtend = 200.0,
+      this.gridCrossAxisCount = 2,
       this.gridChildAspectRatio = 1.5,
       this.cardColor,
       this.cardElevation = 1.0,
@@ -59,6 +61,7 @@ class _DashboardViewState extends State<DashboardView> {
               : _gridBuilder(context, index));
         }),
         //gridMaxCrossAxisExtend: widget.gridMaxCrossAxisExtend,
+        gridCrossAxisCount: widget.gridCrossAxisCount,
         gridCrossAxisSpacing: 10.0,
         gridMainAxisSpacing: 10.0,
         gridChildAspectRatio: widget.gridChildAspectRatio,

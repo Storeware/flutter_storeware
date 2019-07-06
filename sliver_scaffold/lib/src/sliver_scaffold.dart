@@ -251,7 +251,7 @@ class ExtendedAppBar extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: child,
+      child: Wrap(children: [child]),
       color: color,
     );
   }
@@ -306,7 +306,7 @@ class BoxContainer extends StatelessWidget {
                   bottomRight: Radius.circular(bottomRight))),
       child: Stack(
         children: <Widget>[
-          child??Container(),
+          child ?? Container(),
         ],
       ),
     );
@@ -335,7 +335,7 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
   @override
   Widget build(BuildContext context) {
     double h = 0;
-    if (widget.extendedBar!=null) h = widget.extendedBar.height ?? 0;
+    if (widget.extendedBar != null) h = widget.extendedBar.height ?? 0;
     return Scaffold(
         appBar: widget.appBar,
         body: Container(
@@ -348,7 +348,7 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
                 height: double.maxFinite,
                 child: Column(children: [
                   Container(height: h + widget.bodyTop),
-                  Expanded(child: widget.body??Container())
+                  Expanded(child: widget.body ?? Container())
                 ]))
           ]),
         ));

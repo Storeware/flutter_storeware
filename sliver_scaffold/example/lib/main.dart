@@ -1,4 +1,7 @@
+import 'package:example/clean.dart';
+import 'package:example/drawer_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sliver_scaffold/sliver_scaffold.dart';
 
 void main() => runApp(new MyApp());
@@ -9,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return new MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: new ThemeData(
         // This is the theme of your application.
         //
@@ -56,6 +60,12 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,12 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return new SliverScaffold(
-      appBar: new AppBar(
+      drawer: DrawerView(),
+      //appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: new Text('SliverScaffold'),
-      ),
-      //radius: 0.0,
+      //  title: new Text('SliverScaffold'),
+      //),
+      topRadius: 0,
       //slivers: <Widget>[],
       //grid:<Widget>[],
       backgroundColor: Colors.orange[200],
@@ -124,6 +135,14 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: Theme.of(context).textTheme.display1,
               ),
             ),
+            RaisedButton(
+                child: Text('Clean View'),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => CleanView()));
+                })
           ]),
 
       floatingActionButton: new FloatingActionButton(

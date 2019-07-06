@@ -87,11 +87,11 @@ packages:
     source: sdk
     version: "0.0.99"
   sliver_scaffold:
-    dependency: "direct main"
+    dependency: "direct dev"
     description:
       path: sliver_scaffold
       ref: HEAD
-      resolved-ref: "46845036d17baf17b7451631e16041d06f29f123"
+      resolved-ref: c2b4d736142ac769ef231846a9f718ea125e4a75
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.7"

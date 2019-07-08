@@ -11,6 +11,26 @@ double responsiveHeight(context, height) {
   return MediaQuery.of(context).size.height * height / _baseSize.height;
 }
 
+class ProfileView extends StatefulWidget {
+  final List<Widget> children;
+  final Key sliversKey;
+  ProfileView({Key key, this.children, this.sliversKey}) : super(key: key);
+
+  _ProfileViewState createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: SliverList(
+        key: widget.sliversKey,
+        delegate: SliverChildListDelegate(widget.children),
+      ),
+    );
+  }
+}
+
 class ProfileList extends StatelessWidget {
   final Widget title;
   final double height;
@@ -32,7 +52,10 @@ class ProfileList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Container(width: double.infinity, color:backgroundColor, child:title??Container()),
+        Container(
+            width: double.infinity,
+            color: backgroundColor,
+            child: title ?? Container()),
         Container(
           height: height,
           color: backgroundColor,
@@ -89,13 +112,12 @@ class ProfileTile extends StatelessWidget {
         child: Padding(
           padding: padding ?? const EdgeInsets.all(0.0),
           child: Column(
-            children: <Widget>[n(topBar),n(child),n(title), n(bottomBar)],
+            children: <Widget>[n(topBar), n(child), n(title), n(bottomBar)],
           ),
         ),
       ),
     );
   }
-
 }
 
 class ProfileValue extends StatefulWidget {
@@ -103,7 +125,7 @@ class ProfileValue extends StatefulWidget {
   final String label;
   final double height;
   final double width;
-  final backgroundColor; 
+  final backgroundColor;
   final borderColor;
   final double elevation;
   final String unit;

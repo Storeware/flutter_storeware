@@ -113,7 +113,7 @@ class ProfileValue extends StatefulWidget {
   ProfileValue(
       {Key key,
       this.elevation = 0,
-      this.direction,
+      this.direction = Axis.horizontal,
       this.value = '',
       this.label = '',
       this.height = 60,

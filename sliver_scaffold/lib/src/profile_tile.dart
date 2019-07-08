@@ -23,10 +23,10 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      slivers: SliverList(
+      slivers: [SliverList(
         key: widget.sliversKey,
         delegate: SliverChildListDelegate(widget.children),
-      ),
+      )],
     );
   }
 }

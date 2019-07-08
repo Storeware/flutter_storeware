@@ -11,6 +11,18 @@ SliverScaffold combine Sliver with Scaffold Widgets.
 
 
 
+Last code:
+
+[pubspec.yaml]
+
+flutter:
+  .....
+  sliver_scaffold:
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: sliver_scaffold  
+
+
 
 ## Getting Started
 

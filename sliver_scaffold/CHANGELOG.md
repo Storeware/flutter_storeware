@@ -1,3 +1,4 @@
+[0.0.8] - add ProfileList, ProfileTile, ProfileButton, ProfileValue
 [0.0.7] - add ScaffoldClean - add some more sample
 [0.0.4] - add support to DashboardView
 [0.0.3] - add Scaffold to widget.body for scollable area

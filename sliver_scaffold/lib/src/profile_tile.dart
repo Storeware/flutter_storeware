@@ -103,15 +103,17 @@ class ProfileValue extends StatefulWidget {
   final String label;
   final double height;
   final double width;
-  final backgroundColor;
+  final backgroundColor; 
   final borderColor;
   final double elevation;
   final String unit;
   final Function onTap;
   final EdgeInsetsGeometry padding;
+  final Axis direction;
   ProfileValue(
       {Key key,
       this.elevation = 0,
+      this.direction,
       this.value = '',
       this.label = '',
       this.height = 60,
@@ -138,7 +140,8 @@ class _ProfileValueState extends State<ProfileValue> {
         child: Card(
           elevation: widget.elevation,
           color: widget.backgroundColor,
-          child: Column(
+          child: Wrap(
+            direction: widget.direction,
             children: <Widget>[
               Text(widget.label, style: TextStyle(fontSize: 16)),
               Row(

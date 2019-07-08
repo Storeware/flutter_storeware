@@ -12,7 +12,7 @@ double responsiveHeight(context, height) {
 }
 
 class ProfileList extends StatelessWidget {
-  final double heigth;
+  final double height;
   final List<Widget> children;
   final Axis scrollDirection;
   final Color backgroundColor;
@@ -21,14 +21,15 @@ class ProfileList extends StatelessWidget {
       {Key key,
       this.children,
       this.backgroundColor,
-      this.heigth,
+      this.height,
       this.padding,
       this.scrollDirection = Axis.horizontal})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: heigth,
+      height: height,
       color: backgroundColor,
       child: ListView(
         padding: padding,

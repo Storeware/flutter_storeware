@@ -12,6 +12,7 @@ double responsiveHeight(context, height) {
 }
 
 class ProfileList extends StatelessWidget {
+  final Widget title;
   final double height;
   final List<Widget> children;
   final Axis scrollDirection;
@@ -19,6 +20,7 @@ class ProfileList extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   const ProfileList(
       {Key key,
+      this.title,
       this.children,
       this.backgroundColor,
       this.height,
@@ -28,14 +30,19 @@ class ProfileList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      color: backgroundColor,
-      child: ListView(
-        padding: padding,
-        scrollDirection: scrollDirection,
-        children: children,
-      ),
+    return Column(
+      children: <Widget>[
+        Container(width: double.infinity, color:backgroundColor, child:title??Container()),
+        Container(
+          height: height,
+          color: backgroundColor,
+          child: ListView(
+            padding: padding,
+            scrollDirection: scrollDirection,
+            children: children,
+          ),
+        ),
+      ],
     );
   }
 }

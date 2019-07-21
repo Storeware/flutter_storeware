@@ -1,5 +1,3 @@
-//import 'package:app/components/sliver_scaffold.dart';
-//import 'package:app/components/texts.dart';
 import 'package:flutter/material.dart';
 
 class PageTabView extends StatefulWidget {
@@ -11,6 +9,7 @@ class PageTabView extends StatefulWidget {
   final Color tabColor;
   final Color indicatorColor;
   final Widget bottomNavigationBar;
+  final Widget floatingActionButton;
   final Widget leading;
   final bool automaticallyImplyLeading;
   PageTabView({
@@ -23,6 +22,7 @@ class PageTabView extends StatefulWidget {
     this.initialIndex = 0,
     this.tabColor,
     this.indicatorColor,
+    this.floatingActionButton,
     this.bottomNavigationBar,
   });
   _TabBarViewState createState() => _TabBarViewState();
@@ -99,6 +99,7 @@ class _TabBarViewState extends State<PageTabView>
           children: _pages(),
         ),
         bottomNavigationBar: widget.bottomNavigationBar,
+        floatingActionButton:widget.floatingActionButton,
       ),
     );
   }

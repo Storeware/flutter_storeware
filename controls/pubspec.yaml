@@ -10,6 +10,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  cloud_firestore:
+  intl:
+  datetime_picker_formfield:
+  date_format:  
+  rxdart: 
+  http:
+
+
 
 dev_dependencies:
   flutter_test:

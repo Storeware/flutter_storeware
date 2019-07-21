@@ -346,6 +346,8 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
   Widget build(BuildContext context) {
     double h = 0;
     if (widget.extendedBar != null) h = widget.extendedBar.height ?? 0;
+    var h1 = h + widget.bodyTop;
+    if (h1<0) h1 = 0;
     return Scaffold(
         appBar: widget.appBar,
         body: Container(
@@ -357,7 +359,7 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
             Container(
                 height: double.maxFinite,
                 child: Column(children: [
-                  Container(height: h + widget.bodyTop),
+                  Container(height: h1),
                   Expanded(child: widget.body ?? Container())
                 ]))
           ]),

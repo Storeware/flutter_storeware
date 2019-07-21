@@ -49,34 +49,34 @@ class SliverScaffold extends StatefulWidget {
   final ExtendedAppBar extendedBar;
   final double bodyTop;
   final List<Widget> bottomSlivers;
-  SliverScaffold({
-    Key key,
-    this.appBar,
-    this.sliverAppBar,
-    this.slivers,
-    this.bottomSlivers,
-    this.grid,
-    this.gridMainAxisSpacing = 1.0,
-    this.gridCrossAxisSpacing = 1.0,
-    this.gridChildAspectRatio = 8.0,
-    this.gridCrossAxisCount = 1,
-    this.resizeToAvoidBottomPadding = false,
-    this.body,
-    this.isScrollView = false,
-    this.controller,
-    this.reverse = false,
-    this.drawer,
-    this.endDrawer,
-    this.floatingActionButton,
-    this.backgroundColor,
-    this.bottomNavigationBar,
-    this.afterLoaded,
-    this.radius = 0.0,
-    this.topRadius = 0.0,
-    this.bottomRadius = 0.0,
-    this.extendedBar,
-    this.bodyTop = 0
-  }) : super(key: key);
+  SliverScaffold(
+      {Key key,
+      this.appBar,
+      this.sliverAppBar,
+      this.slivers,
+      this.bottomSlivers,
+      this.grid,
+      this.gridMainAxisSpacing = 1.0,
+      this.gridCrossAxisSpacing = 1.0,
+      this.gridChildAspectRatio = 8.0,
+      this.gridCrossAxisCount = 1,
+      this.resizeToAvoidBottomPadding = false,
+      this.body,
+      this.isScrollView = false,
+      this.controller,
+      this.reverse = false,
+      this.drawer,
+      this.endDrawer,
+      this.floatingActionButton,
+      this.backgroundColor,
+      this.bottomNavigationBar,
+      this.afterLoaded,
+      this.radius = 0.0,
+      this.topRadius = 0.0,
+      this.bottomRadius = 0.0,
+      this.extendedBar,
+      this.bodyTop = 0})
+      : super(key: key);
 
   static scrollable(
       {Key key,
@@ -181,8 +181,10 @@ class _SliverScaffoldState extends State<SliverScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    double gapBody = (widget.extendedBar!=null ? widget.extendedBar.height:0) + widget.bodyTop;
-    if (gapBody<0) gapBody=0;
+    double gapBody =
+        (widget.extendedBar != null ? widget.extendedBar.height : 0) +
+            widget.bodyTop;
+    if (gapBody < 0) gapBody = 0;
 
     Widget _body = widget.body;
     if (widget.isScrollView) _body = SingleChildScrollView(child: widget.body);
@@ -199,14 +201,17 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         body: _clipRBody(
             Stack(
               children: <Widget>[
-                widget.extendedBar,
+                widget.extendedBar ?? Container(),
                 Column(children: [
-                  Container(height: gapBody,),
+                  Container(
+                    height: gapBody,
+                  ),
                   Expanded(
-                      //height: double.maxFinite,
-                      child: CustomScrollView(
-                        slivers: _scroolSlivers(_body),
-                      )),
+                      child: Container(
+                    child: CustomScrollView(
+                      slivers: _scroolSlivers(_body),
+                    ),
+                  )),
                 ]),
               ],
             ),
@@ -227,13 +232,14 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     rt.add(SliverList(
       delegate: SliverChildListDelegate(_builder()),
     ));
+
     if (widget.grid != null) rt.add(_sliverGrid());
-    if (_body != null)
-      rt.add(SliverList(
-          delegate: SliverChildListDelegate([_body ?? Container()])));
+    rt.add(
+        SliverList(delegate: SliverChildListDelegate([_body ?? Container()])));
     if (widget.bottomSlivers != null)
       rt.add(
           SliverList(delegate: SliverChildListDelegate(widget.bottomSlivers)));
+
     return rt;
   }
 

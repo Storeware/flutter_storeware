@@ -25,6 +25,7 @@ class WidgetList {
 //@immutable
 class SliverScaffold extends StatefulWidget {
   final AppBar appBar;
+  final EdgeInsets padding;
   final SliverAppBar sliverAppBar;
   final List<Widget> slivers;
   final List<Widget> grid;
@@ -62,6 +63,7 @@ class SliverScaffold extends StatefulWidget {
       this.gridCrossAxisCount = 1,
       this.resizeToAvoidBottomPadding = false,
       this.body,
+      this.padding,
       this.isScrollView = false,
       this.controller,
       this.reverse = false,
@@ -185,10 +187,10 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         (widget.extendedBar != null ? widget.extendedBar.height : 0) +
             widget.bodyTop;
     if (gapBody < 0) gapBody = 0;
-
     Widget _body = widget.body;
     if (widget.isScrollView) _body = SingleChildScrollView(child: widget.body);
     var theme = Theme.of(context);
+    var _backgroundColor = widget.backgroundColor ?? theme.primaryColor;
     var scf = Scaffold(
         resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
         key: widget.key,
@@ -215,11 +217,17 @@ class _SliverScaffoldState extends State<SliverScaffold> {
                 ]),
               ],
             ),
-            theme));
+            theme,
+            _backgroundColor));
 
-    var rt = Container(
-        child: ClipRRect(
-            borderRadius: BorderRadius.circular(widget.radius), child: scf));
+    var rt;
+    if (widget.radius > 0)
+      rt = Container(
+          color: _backgroundColor,
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(widget.radius), child: scf));
+    else
+      rt = scf;
 
     if (widget.afterLoaded != null) widget.afterLoaded(scf);
 
@@ -243,9 +251,9 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     return rt;
   }
 
-  Widget _clipRBody(Widget _body, ThemeData theme) {
-    return Container(
-        color: widget.backgroundColor ?? theme.primaryColor,
+  Widget _clipRBody(Widget _body, ThemeData theme, _backgroundColor) {
+    Widget r = Container(
+        color: _backgroundColor,
         child: ClipRRect(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(widget.topRadius),
@@ -255,6 +263,10 @@ class _SliverScaffoldState extends State<SliverScaffold> {
             ),
             child:
                 Container(color: theme.scaffoldBackgroundColor, child: _body)));
+
+    if (widget.padding != null)
+      return Container(color:_backgroundColor, child:Padding(padding: widget.padding, child:  r));
+    return r;
   }
 }
 

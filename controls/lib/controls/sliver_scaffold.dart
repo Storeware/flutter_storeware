@@ -261,7 +261,7 @@ class ExtendedAppBar extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: Wrap(children: [child]),
+      child: child!=null? Wrap(children: [child]):null,
       color: color,
     );
   }

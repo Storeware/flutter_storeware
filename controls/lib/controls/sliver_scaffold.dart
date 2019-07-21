@@ -11,7 +11,6 @@ bool navigateTo(context, onToPageFunc,
   return true;
 }
 
-
 class WidgetList {
   static List<Widget> count(context,
       {int itemCount = 0, WidgetListBuilderContext itemBuilder}) {
@@ -43,41 +42,41 @@ class SliverScaffold extends StatefulWidget {
   final double bottomRadius;
   final bool reverse;
   final bool resizeToAvoidBottomPadding;
-  //final double gridMaxCrossAxisExtend;
   final double gridMainAxisSpacing;
   final double gridCrossAxisSpacing;
   final double gridChildAspectRatio;
   final int gridCrossAxisCount;
   final ExtendedAppBar extendedBar;
   final double bodyTop;
-  SliverScaffold(
-      {Key key,
-      this.appBar,
-      this.sliverAppBar,
-      this.slivers,
-      this.grid,
-      //this.gridMaxCrossAxisExtend = 200.0,
-      this.gridMainAxisSpacing = 10.0,
-      this.gridCrossAxisSpacing = 10.0,
-      this.gridChildAspectRatio = 2.0,
-      this.gridCrossAxisCount = 1,
-      this.resizeToAvoidBottomPadding = false,
-      this.body,
-      this.isScrollView = false,
-      this.controller,
-      this.reverse = false,
-      this.drawer,
-      this.endDrawer,
-      this.floatingActionButton,
-      this.backgroundColor,
-      this.bottomNavigationBar,
-      this.afterLoaded,
-      this.radius = 0.0,
-      this.topRadius = 0.0,
-      this.bottomRadius = 0.0,
-      this.extendedBar,
-      this.bodyTop = 0})
-      : super(key: key);
+  final List<Widget> bottomSlivers;
+  SliverScaffold({
+    Key key,
+    this.appBar,
+    this.sliverAppBar,
+    this.slivers,
+    this.bottomSlivers,
+    this.grid,
+    this.gridMainAxisSpacing = 1.0,
+    this.gridCrossAxisSpacing = 1.0,
+    this.gridChildAspectRatio = 8.0,
+    this.gridCrossAxisCount = 1,
+    this.resizeToAvoidBottomPadding = false,
+    this.body,
+    this.isScrollView = false,
+    this.controller,
+    this.reverse = false,
+    this.drawer,
+    this.endDrawer,
+    this.floatingActionButton,
+    this.backgroundColor,
+    this.bottomNavigationBar,
+    this.afterLoaded,
+    this.radius = 0.0,
+    this.topRadius = 0.0,
+    this.bottomRadius = 0.0,
+    this.extendedBar,
+    this.bodyTop = 0
+  }) : super(key: key);
 
   static scrollable(
       {Key key,
@@ -153,36 +152,38 @@ class SliverScaffold extends StatefulWidget {
 class _SliverScaffoldState extends State<SliverScaffold> {
   List<Widget> _builder() {
     List<Widget> rt = [];
-    if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
-    //if (widget.extendedBar!=null) rt.add(widget.extendedBar);
+    //if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
+    //if (widget.extendedBar != null) rt.add(widget.extendedBar);
     if (widget.slivers != null)
       widget.slivers.forEach((f) {
         rt.add(f);
       });
-    if (widget.grid != null) {
-      if (widget.extendedBar != null) widget.grid.insert(0, widget.extendedBar);
-      rt.add(
-        SliverGrid(
-          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-            mainAxisSpacing: widget.gridMainAxisSpacing,
-            crossAxisSpacing: widget.gridCrossAxisSpacing,
-            childAspectRatio: widget.gridChildAspectRatio,
-            crossAxisCount: widget.gridCrossAxisCount,
-          ),
-          delegate: new SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return widget.grid[index];
-            },
-            childCount: widget.grid.length,
-          ),
-        ),
-      );
-    }
     return rt;
+  }
+
+  _sliverGrid() {
+    var _grid = widget.grid ?? [];
+    return SliverGrid(
+      gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisSpacing: widget.gridMainAxisSpacing,
+        crossAxisSpacing: widget.gridCrossAxisSpacing,
+        childAspectRatio: widget.gridChildAspectRatio,
+        crossAxisCount: widget.gridCrossAxisCount,
+      ),
+      delegate: new SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return _grid[index];
+        },
+        childCount: _grid.length,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    double gapBody = (widget.extendedBar!=null ? widget.extendedBar.height:0) + widget.bodyTop;
+    if (gapBody<0) gapBody=0;
+
     Widget _body = widget.body;
     if (widget.isScrollView) _body = SingleChildScrollView(child: widget.body);
     var theme = Theme.of(context);
@@ -195,27 +196,21 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         backgroundColor: widget.backgroundColor,
         floatingActionButton: widget.floatingActionButton,
         appBar: widget.appBar,
-        body: Container(
-            height: double.maxFinite,
-            color: theme.primaryColor,
-            child: ClipRRect(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(widget.topRadius),
-                topRight: Radius.circular(widget.topRadius),
-                bottomLeft: Radius.circular(widget.bottomRadius),
-                bottomRight: Radius.circular(widget.bottomRadius),
-              ),
-              child: Container(
-                  color: Theme.of(context).scaffoldBackgroundColor,
-                  child: NestedScrollView(
-                    controller: widget.controller,
-                    reverse: widget.reverse,
-                    headerSliverBuilder: (context, inner) {
-                      return _builder();
-                    },
-                    body: _createBody(_body),
-                  )),
-            )));
+        body: _clipRBody(
+            Stack(
+              children: <Widget>[
+                widget.extendedBar,
+                Column(children: [
+                  Container(height: gapBody,),
+                  Expanded(
+                      //height: double.maxFinite,
+                      child: CustomScrollView(
+                        slivers: _scroolSlivers(_body),
+                      )),
+                ]),
+              ],
+            ),
+            theme));
 
     var rt = Container(
         child: ClipRRect(
@@ -226,20 +221,34 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     return rt;
   }
 
-  Widget _createBody(Widget _body) {
-    if (widget.extendedBar != null) {
-      return ScaffoldLight(
-        extendedBar: widget.extendedBar,
-        bodyTop: widget.bodyTop,
-        body: _body,
-      );
-    } else {
-      return (widget.isScrollView
-          ? Scaffold(
-              resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
-              body: (widget.body == null ? Text('no data.....') : _body))
-          : widget.body);
-    }
+  List<Widget> _scroolSlivers(Widget _body) {
+    List<Widget> rt = [];
+    if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
+    rt.add(SliverList(
+      delegate: SliverChildListDelegate(_builder()),
+    ));
+    if (widget.grid != null) rt.add(_sliverGrid());
+    if (_body != null)
+      rt.add(SliverList(
+          delegate: SliverChildListDelegate([_body ?? Container()])));
+    if (widget.bottomSlivers != null)
+      rt.add(
+          SliverList(delegate: SliverChildListDelegate(widget.bottomSlivers)));
+    return rt;
+  }
+
+  Widget _clipRBody(Widget _body, ThemeData theme) {
+    return Container(
+        color: widget.backgroundColor ?? theme.primaryColor,
+        child: ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(widget.topRadius),
+              topRight: Radius.circular(widget.topRadius),
+              bottomLeft: Radius.circular(widget.bottomRadius),
+              bottomRight: Radius.circular(widget.bottomRadius),
+            ),
+            child:
+                Container(color: theme.scaffoldBackgroundColor, child: _body)));
   }
 }
 
@@ -261,7 +270,7 @@ class ExtendedAppBar extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: child!=null? Wrap(children: [child]):null,
+      child: child != null ? Wrap(children: [child]) : null,
       color: color,
     );
   }
@@ -347,7 +356,7 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
     double h = 0;
     if (widget.extendedBar != null) h = widget.extendedBar.height ?? 0;
     var h1 = h + widget.bodyTop;
-    if (h1<0) h1 = 0;
+    if (h1 < 0) h1 = 0;
     return Scaffold(
         appBar: widget.appBar,
         body: Container(

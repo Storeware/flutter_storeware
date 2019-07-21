@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:core';
 import '../bloc/firestore_bloc.dart';
-import '../bloc/rxdart_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../bloc/firebase_model.dart';
@@ -17,54 +16,6 @@ class DocsSnap {
   dynamic operator [](String key) => data[key];
 }
 
-/*
-class ListDocumentSnapshot {
-  List<DocumentSnapshot> documents = [];
-  add(DocumentSnapshot doc) {
-    documents.add(doc); //new DocsSnap( doc.documentID, doc.data) ) ;
-  }
-
-  addList(ListDocumentSnapshot list, AsyncFilterCallback<DocumentSnapshot> fn) {
-    list.documents.forEach((f) {
-      if (fn(f)) add(f);
-    });
-  }
-
-  int get length {
-    return documents.length;
-  }
-
-  get data {
-    return this;
-  }
-
-  clear() {
-    documents.clear();
-  }
-
-  static ListDocumentSnapshot from(QuerySnapshot rsp) {
-    ListDocumentSnapshot r = ListDocumentSnapshot();
-    r.fromSnapshots(rsp);
-    return r;
-  }
-
-  ListDocumentSnapshot fromSnapshots(QuerySnapshot rsp) {
-    rsp.documents.forEach((f) {
-      add(f);
-    });
-    return this;
-  }
-}
-*/
-
-/*
-class ObjectModel {
-  String documentID;
-  String toJson() {
-    return DataModel.jsonEncode(this);
-  }
-}
-*/
 
 class DataModel {
   static String jsonEncode(dynamic object) {

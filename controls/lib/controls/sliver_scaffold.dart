@@ -350,46 +350,73 @@ class BoxContainer extends StatelessWidget {
   }
 }
 
+var bgColor = (Colors.blue[900]);
+
+AppBar appBarLight(context,{Widget title, List<Widget> actions, Widget menu, backgroundColor}) {
+  //var bg = (backgroundColor ??= bgColor);
+  return AppBar(
+    //iconTheme: IconThemeData(color: Colors.white),
+    //backgroundColor: bg,
+    leading: menu??IconButton(icon: Image.asset('assets/voltar.png'),onPressed: (){
+       Navigator.of(context).pop();
+    },),
+    title: title,
+    actions: actions,
+    elevation: 0.0,
+    //brightness: Brightness.light,
+  );
+}
+
 class ScaffoldLight extends StatefulWidget {
   final Widget body;
-  final ExtendedAppBar extendedBar;
-  final Widget appBar;
-  final double bodyTop;
-  final Color backgroundColor;
+  final AppBar appBar;
+  final Widget drawer;
+  final Widget bottomNavigationBar;
+  final Widget panelImage;
+  final double extendedPanelHeigh;
+  final Color backgroudColor;
+  final String title;
+  final Key scaffoldKey;
   ScaffoldLight(
       {Key key,
+      this.scaffoldKey,
       this.body,
       this.appBar,
-      this.extendedBar,
-      this.backgroundColor,
-      this.bodyTop = 0})
+      this.drawer,
+      this.bottomNavigationBar,
+      this.panelImage,
+      this.backgroudColor,
+      this.title,
+      this.extendedPanelHeigh = 150})
       : super(key: key);
 
   _ScaffoldLightState createState() => _ScaffoldLightState();
 }
 
 class _ScaffoldLightState extends State<ScaffoldLight> {
+  appBar() {
+    return widget.appBar;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double h = 0;
-    if (widget.extendedBar != null) h = widget.extendedBar.height ?? 0;
-    var h1 = h + widget.bodyTop;
-    if (h1 < 0) h1 = 0;
+    var bg = bgColor;
     return Scaffold(
-        appBar: widget.appBar,
-        body: Container(
-          color: widget.backgroundColor ??
-              Theme.of(context).scaffoldBackgroundColor,
-          height: double.maxFinite,
-          child: Stack(children: [
-            widget.extendedBar,
-            Container(
-                height: double.maxFinite,
-                child: Column(children: [
-                  Container(height: h1),
-                  Expanded(child: widget.body ?? Container())
-                ]))
-          ]),
-        ));
+        key : widget.scaffoldKey,
+        backgroundColor: widget.backgroudColor,
+        appBar: appBar(),
+        drawer: widget.drawer,
+        body: Stack(children: <Widget>[
+          Container(width: double.infinity, height: widget.extendedPanelHeigh,
+          child:Container(color: bg ,
+            child: Center(child:widget.title != null
+                        ? Text(widget.title,
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 18))
+                        : widget.panelImage,)
+          )),
+          widget.body,
+        ]),
+        bottomNavigationBar: widget.bottomNavigationBar);
   }
 }

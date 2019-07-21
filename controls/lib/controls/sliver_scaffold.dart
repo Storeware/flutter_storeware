@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 
 typedef WidgetListBuilderContext(BuildContext context, int index);
 
+bool navigateTo(context, onToPageFunc,
+    {String key, Function(String) permission}) {
+  if (permission != null) if (!permission(key)) {
+    return false;
+  }
+  Navigator.of(context).push(MaterialPageRoute(builder: (x) => onToPageFunc()));
+  return true;
+}
+
+
 class WidgetList {
   static List<Widget> count(context,
       {int itemCount = 0, WidgetListBuilderContext itemBuilder}) {

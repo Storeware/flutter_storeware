@@ -163,16 +163,18 @@ class OData extends _ODataBuilder {
 
   int statusCode = 0;
   Future<String> openUrl(String method, url, [Map<String, dynamic> body]) async {
+    String _url = '${host}${url}';
+    print(_url);
     Map<String, String> headers = _setHeader();
     http.Response resp;
-    if (method == 'GET') resp = await http.get(url, headers: headers);
+    if (method == 'GET') resp = await http.get(_url, headers: headers);
     if (method == 'POST')
-      resp = await http.post(url, body: encode(body), headers: headers);
+      resp = await http.post(_url, body: encode(body), headers: headers);
     if (method == 'PUT')
-      resp = await http.put(url, body: encode(body), headers: headers);
+      resp = await http.put(_url, body: encode(body), headers: headers);
     if (method == 'PATCH')
-      resp = await http.patch(url, body: encode(body), headers: headers);
-    if (method == 'DELETE') resp = await http.delete(url, headers: headers);
+      resp = await http.patch(_url, body: encode(body), headers: headers);
+    if (method == 'DELETE') resp = await http.delete(_url, headers: headers);
     statusCode = resp.statusCode;
     if (statusCode == 200) {
       return resp.body;

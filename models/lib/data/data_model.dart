@@ -130,7 +130,7 @@ abstract class DataRows<T extends DataItem> {
   bool _bof = true;
 
   get length => items.length;
-  add(T item){
+  addItem(T item){
     items.add(item);
     rowNum = items.length-1;
     rowChanged(0);

@@ -124,6 +124,8 @@ abstract class DataRows<T extends DataItem> {
     _itemChanged.close();
   }
 
+  get length=>items.length;
+  
   int rowNum = -1;
   List<T> items = [];
   bool _eof = true;

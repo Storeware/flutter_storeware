@@ -135,6 +135,7 @@ abstract class DataRows<T extends DataItem> {
     rowNum = items.length - 1;
     rowChanged(0);
     itemChanged(rowNum);
+    _itemChanged.notify(rowNum);
   }
 
   toJson() {
@@ -212,5 +213,27 @@ abstract class DataRows<T extends DataItem> {
     if (!eof && !bof) {
       return items[rowNum];
     }
+    return null;
   }
+
+  setItem(it) {
+    rowChanged(0);
+    if (!eof || !bof)
+      addItem(it);
+    else
+      items[rowNum] = it;
+    _itemChanged.notify(rowNum);
+    return it;
+  }
+  
+  deleteItem(){
+    rowChanged(0);
+    if (!eof && !bof) items.delete(rowNum);
+    _itemChanged.notify(rowNum);
+  }
+  delete(idx){
+    items.delete(idx);
+    _itemChanged.notify(idx);
+  }
+
 }

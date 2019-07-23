@@ -68,11 +68,22 @@ class OData extends _ODataBuilder {
     super.order(order);
   }
 
-  Map<String, dynamic> value({key = 'value'}) {
-    return responseBody[key];
+  bool checkError({String data, String key = 'error'}) {
+    var response = responseBody;
+    if (data!=null)
+       response = json.decode(data);
+    if (response[key] != null) {
+      throw new StateError(response[key]);
+    }
+    return true;
   }
 
-  List<dynamic> toList({key='value'}){
+  Map<String, dynamic> value({Map<String, dynamic> data, key = 'value'}) {
+    if (data == null) data = responseBody;
+    return data[key];
+  }
+
+  List<dynamic> toList({key = 'value'}) {
     return responseBody[key];
   }
 
@@ -168,7 +179,7 @@ class OData extends _ODataBuilder {
   Future<String> options(String servico, [dynamic jsonObj]) async {
     return await openUrl('OPTIONS', servico, jsonObj);
   }
- 
+
   int statusCode = 0;
   Future<String> openUrl(String method, url,
       [Map<String, dynamic> body]) async {
@@ -194,7 +205,6 @@ class OData extends _ODataBuilder {
     } else {
       return throw (resp.body);
     }
-   
   }
 }
 

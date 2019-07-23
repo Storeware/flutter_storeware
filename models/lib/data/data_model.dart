@@ -110,10 +110,10 @@ class _TypeOf<T> {
 }
 
 abstract class DataRows<T extends DataItem> {
-  final _changed = DataNotifyChange<dynamic>();
+  final _changed = DataNotifyChange<String>();
   get notifier => _changed.stream;
   notify(dynamic value) => _changed.sink.add(value);
-  
+
   T newItem();
 
   final _itemChanged = DataNotifyChange<int>();
@@ -130,9 +130,9 @@ abstract class DataRows<T extends DataItem> {
   bool _bof = true;
 
   get length => items.length;
-  addItem(T item){
+  addItem(T item) {
     items.add(item);
-    rowNum = items.length-1;
+    rowNum = items.length - 1;
     rowChanged(0);
     itemChanged(rowNum);
   }

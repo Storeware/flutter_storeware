@@ -11,7 +11,17 @@ class RestServer extends RestserverService {
     host = x;
   }
 
-  result({key = 'result'}) {
+  results({key = 'result'}) {
     return toList(key: key);
   }
+  Future<String> send(servico) async{
+    return openUrl('GET', servico);
+  }
+  Map<String, dynamic>  result({Map<String,dynamic> data, key='result'}){
+    return value(data:data,key:key);
+  }
+  rows({key='rows'}){
+    return value(key:key);
+  }
+
 }

@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 
-
-class StyledButton extends StatefulWidget {
+class StyledButton extends StatelessWidget {
   final Widget child;
   final double radius;
   final onPressed;
-  //Color color;
   final double padding;
   final Icon icon;
   final double width;
   final String text;
-  StyledButton(
+  const StyledButton(
       {Key key,
       this.child,
       this.text,
@@ -22,33 +20,29 @@ class StyledButton extends StatefulWidget {
       this.radius = 10.0})
       : super(key: key);
 
-  _StyledButtonState createState() => _StyledButtonState();
-}
-
-class _StyledButtonState extends State<StyledButton> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     Color color = /*widget.color ??*/ Theme.of(context).buttonColor;
-    Widget bt = widget.text != null
-        ? Text(widget.text, style:theme.textTheme.button )
-        : widget.child;
+    Widget bt = text != null
+        ? Text(text, style: theme.textTheme.button)
+        : child;
     return GestureDetector(
       onTap: () {
-        widget.onPressed();
+        onPressed();
       },
       child: Container(
         height: 45,
-        width: widget.width,
-        margin: EdgeInsets.all(widget.padding),
+        width: width,
+        margin: EdgeInsets.all(padding),
         decoration: BoxDecoration(
-            color: color, borderRadius: BorderRadius.circular(widget.radius)),
+            color: color, borderRadius: BorderRadius.circular(radius)),
         child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          widget.icon != null
+          icon != null
               ? IconButton(
-                  icon: widget.icon,
+                  icon: icon,
                   onPressed: () {
-                    widget.onPressed();
+                    onPressed();
                   },
                 )
               : Container(),

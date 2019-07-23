@@ -116,7 +116,7 @@ abstract class DataRows<T extends DataItem> {
   
   T newItem();
 
-  final _itemChanged = DataNotifyChange<dynamic>();
+  final _itemChanged = DataNotifyChange<int>();
   get itemNotifier => _itemChanged.stream;
   itemChanged(dynamic value) => _itemChanged.sink.add(value);
   dispose() {
@@ -124,12 +124,18 @@ abstract class DataRows<T extends DataItem> {
     _itemChanged.close();
   }
 
-  get length=>items.length;
-  
   int rowNum = -1;
   List<T> items = [];
   bool _eof = true;
   bool _bof = true;
+
+  get length => items.length;
+  add(T item){
+    items.add(item);
+    rowNum = items.length-1;
+    rowChanged(0);
+    itemChanged(rowNum);
+  }
 
   toJson() {
     List<Map<String, dynamic>> l = [];

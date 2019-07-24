@@ -76,11 +76,13 @@ abstract class DataModel {
   final _changed = DataNotifyChange<dynamic>();
   get notifier => _changed.stream;
   notify(dynamic value) => notifier.sink.add(value);
-  static Map<String, dynamic> encodeValues(Map<String, dynamic> values) {
+
+  static Map<String, dynamic> encodeValues(Map<String, dynamic> values,
+      {bool encodeFull = false}) {
     Map<String, dynamic> m = {};
     values.forEach((k, v) {
       if (v is String)
-        m[k] = Uri.encodeFull(v);
+        m[k] = encodeFull ? Uri.encodeFull(v) : v;
       else if (v is DateTime)
         m[k] = v.toIso8601String();
       else
@@ -112,7 +114,12 @@ class _TypeOf<T> {
 abstract class DataRows<T extends DataItem> {
   final _changed = DataNotifyChange<String>();
   get notifier => _changed.stream;
-  notify(dynamic value) => _changed.sink.add(value);
+  notify(String value) {
+    try {
+      return _changed.sink.add(value);
+    } catch (e) {}
+    ;
+  }
 
   T newItem();
 
@@ -156,7 +163,7 @@ abstract class DataRows<T extends DataItem> {
       items.add(newItem().fromJson(e));
     });
     first();
-    notify(this);
+    notify('');
     return this;
   }
 
@@ -177,23 +184,27 @@ abstract class DataRows<T extends DataItem> {
   }
 
   first() {
-    rowChanged(-rowNum);
-    return this;
+    rowNum = 0;
+    rowChanged(0);
+    _itemChanged.notify(rowNum);
+    return getItem();
   }
 
   last() {
-    rowChanged(items.length - rowNum);
-    return this;
+    rowNum = items.length - 1;
+    rowChanged(0);
+    _itemChanged.notify(rowNum);
+    return getItem();
   }
 
   next() {
     rowChanged(1);
-    return this;
+    return getItem();
   }
 
   prior() {
     rowChanged(-1);
-    return this;
+    return getItem();
   }
 
   get eof {
@@ -208,7 +219,7 @@ abstract class DataRows<T extends DataItem> {
     return items;
   }
 
-  getItem() {
+  T getItem() {
     rowChanged(0);
     if (!eof && !bof) {
       return items[rowNum];
@@ -216,7 +227,7 @@ abstract class DataRows<T extends DataItem> {
     return null;
   }
 
-  setItem(it) {
+  setItem(T it) {
     rowChanged(0);
     if (!eof || !bof)
       addItem(it);
@@ -225,14 +236,14 @@ abstract class DataRows<T extends DataItem> {
     _itemChanged.notify(rowNum);
     return it;
   }
-  
-  deleteItem(){
+
+  deleteItem() {
     rowChanged(0);
     if (!eof && !bof) removeAt(rowNum);
   }
-  removeAt(idx){
+
+  removeAt(idx) {
     items.removeAt(idx);
     _itemChanged.notify(idx);
   }
-
 }

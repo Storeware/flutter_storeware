@@ -102,6 +102,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.6"
+  models:
+    dependency: "direct main"
+    description:
+      path: models
+      ref: HEAD
+      resolved-ref: b240b49db03d7c0494c23ca85a70550f1d4c649f
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
   path:
     dependency: transitive
     description:
@@ -130,6 +139,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.22.0"
+  shared_preferences:
+    dependency: "direct main"
+    description:
+      name: shared_preferences
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.3+4"
   sky_engine:
     dependency: transitive
     description: flutter

@@ -1,5 +1,5 @@
 import 'dart:async';
-import '../data/rest_client.dart';
+import 'package:models/data.dart';
 import 'dart:convert';
 
 class ViaCepService extends RestClient {

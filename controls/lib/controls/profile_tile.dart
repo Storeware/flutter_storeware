@@ -23,10 +23,12 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      slivers: [SliverList(
-        key: widget.sliversKey,
-        delegate: SliverChildListDelegate(widget.children),
-      )],
+      slivers: [
+        SliverList(
+          key: widget.sliversKey,
+          delegate: SliverChildListDelegate(widget.children),
+        )
+      ],
     );
   }
 }
@@ -106,16 +108,18 @@ class ProfileTile extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: Card(
-        color: color,
-        elevation: elevation,
-        child: Padding(
-          padding: padding ?? const EdgeInsets.all(0.0),
-          child: Column(
-            children: <Widget>[n(topBar), n(child), n(title), n(bottomBar)],
-          ),
-        ),
-      ),
+      child: InkWell(
+          onTap: onTap,
+          child: Card(
+            color: color,
+            elevation: elevation,
+            child: Padding(
+              padding: padding ?? const EdgeInsets.all(0.0),
+              child: Column(
+                children: <Widget>[n(topBar), n(child), n(title), n(bottomBar)],
+              ),
+            ),
+          )),
     );
   }
 }

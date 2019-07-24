@@ -228,11 +228,10 @@ abstract class DataRows<T extends DataItem> {
   
   deleteItem(){
     rowChanged(0);
-    if (!eof && !bof) items.delete(rowNum);
-    _itemChanged.notify(rowNum);
+    if (!eof && !bof) removeAt(rowNum);
   }
-  delete(idx){
-    items.delete(idx);
+  removeAt(idx){
+    items.removeAt(idx);
     _itemChanged.notify(idx);
   }
 

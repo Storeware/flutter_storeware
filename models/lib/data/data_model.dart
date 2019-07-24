@@ -81,6 +81,7 @@ abstract class DataModel {
       {bool encodeFull = false}) {
     Map<String, dynamic> m = {};
     values.forEach((k, v) {
+      print([k, v]);
       if (v is String)
         m[k] = encodeFull ? Uri.encodeFull(v) : v;
       else if (v is DateTime)
@@ -96,10 +97,14 @@ abstract class DataModel {
     Map<String, dynamic> rt = {};
     j.forEach((k, v) {
       rt[k] = v;
-      if (v is String && v.length > 13) if (v.substring(10, 10) == 'T' &&
-          v.substring(13, 13) == ':') {
-        DateTime d = DateTime.tryParse(v);
-        if (d != null) rt[k] = d;
+      if (v is String && v.length > 13) if (v.substring(10, 11) == 'T' &&
+          v.substring(13, 14) == ':') {
+        print([k, v, v is String,v.substring(10, 11)]);
+        try {
+          DateTime d = DateTime.tryParse(v);
+          print(['datetime', d]);
+          if (d != null) rt[k] = d;
+        } catch (e) {}
         //TODO: Lists
       }
     });

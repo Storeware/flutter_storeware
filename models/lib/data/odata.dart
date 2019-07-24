@@ -88,6 +88,7 @@ class OData extends _ODataBuilder {
   }
 
   static Map<String, dynamic> encode(Map<String, dynamic> values) {
+    if (values==null) return null;
     Map<String, dynamic> m = {};
     (values ?? {}).forEach((k, v) {
       if (v is DateTime)

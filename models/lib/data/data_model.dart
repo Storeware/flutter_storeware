@@ -99,7 +99,7 @@ abstract class DataModel {
       rt[k] = v;
       if (v is String && v.length > 13) if (v.substring(10, 11) == 'T' &&
           v.substring(13, 14) == ':') {
-        print([k, v, v is String,v.substring(10, 11)]);
+        print([k, v, v is String, v.substring(10, 11)]);
         try {
           DateTime d = DateTime.tryParse(v);
           print(['datetime', d]);
@@ -142,6 +142,15 @@ abstract class DataRows<T extends DataItem> {
   bool _bof = true;
 
   get length => items.length;
+
+  int checkError(String response) {
+    var resp = json.decode(response);
+    if (resp['error'] != null) {
+      throw new StateError(resp['error']);
+    }
+    return resp['rows'] ?? 1;
+  }
+
   addItem(T item) {
     items.add(item);
     rowNum = items.length - 1;

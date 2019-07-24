@@ -151,6 +151,12 @@ abstract class DataRows<T extends DataItem> {
     return resp['rows'] ?? 1;
   }
 
+  execute(Function callback,{rest}) async {
+      return callback(rest).then((resp) {
+        return checkError(resp);
+      });
+  }
+
   addItem(T item) {
     items.add(item);
     rowNum = items.length - 1;

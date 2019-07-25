@@ -50,6 +50,8 @@ class SliverScaffold extends StatefulWidget {
   final ExtendedAppBar extendedBar;
   final double bodyTop;
   final List<Widget> bottomSlivers;
+  final int itemCount;
+  final Function(BuildContext,int) builder;
   SliverScaffold(
       {Key key,
       this.appBar,
@@ -77,6 +79,8 @@ class SliverScaffold extends StatefulWidget {
       this.topRadius = 0.0,
       this.bottomRadius = 0.0,
       this.extendedBar,
+      this.itemCount,
+      this.builder,
       this.bodyTop = 0})
       : super(key: key);
 
@@ -244,6 +248,13 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     if (widget.grid != null) rt.add(_sliverGrid());
     rt.add(
         SliverList(delegate: SliverChildListDelegate([_body ?? Container()])));
+
+    if (widget.builder!=null && widget.itemCount!=null){
+      for(var i=0;i<widget.itemCount;i++){
+         rt.add(widget.builder(context,i));
+      }
+    }
+
     if (widget.bottomSlivers != null)
       rt.add(
           SliverList(delegate: SliverChildListDelegate(widget.bottomSlivers)));

@@ -283,3 +283,21 @@ class _ProfileButtonState extends State<ProfileButton> {
     );
   }
 }
+
+class ProfileTitle extends StatelessWidget {
+  final String text;
+  final Color color;
+  final TextStyle style;
+  const ProfileTitle({Key key, this.text, this.color,this.style}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var _color = color??Theme.of(context).primaryColor.withAlpha(30);
+    return Container(
+        color: _color,
+        child: Text(
+          text,
+          style: style?? TextStyle(fontWeight: FontWeight.w600),
+        ));
+  }
+}

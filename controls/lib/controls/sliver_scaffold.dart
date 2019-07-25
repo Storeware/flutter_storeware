@@ -254,9 +254,11 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     if (widget.grid != null) rt.add(_sliverGrid());
 
     rt.add(
-        SliverList(delegate: SliverChildListDelegate([widget.beforeBody??Container(), _body ?? Container(), widget.afterBody??Container()])));
+        SliverList(delegate: SliverChildListDelegate([widget.beforeBody??Container(), _body ?? Container()])));
     if (widget.children!=null)
        SliverList(delegate: SliverChildListDelegate(widget.children));
+    rt.add(
+        SliverList(delegate: SliverChildListDelegate([widget.afterBody??Container()])));
 
     if (widget.builder != null && widget.itemCount != null) {
       List<Widget> r = [];

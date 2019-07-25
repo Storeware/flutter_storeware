@@ -27,11 +27,12 @@ class SliverScaffold extends StatefulWidget {
   final AppBar appBar;
   final EdgeInsets padding;
   final SliverAppBar sliverAppBar;
-  final List<Widget> slivers;
+  final List<SliverMultiBoxAdaptorWidget> slivers;
   final List<Widget> grid;
   final Widget body;
   final Widget beforeBody;
   final Widget afterBody;
+  final List<Widget>children;
   final Widget drawer;
   final Widget endDrawer;
   final double radius;
@@ -51,7 +52,7 @@ class SliverScaffold extends StatefulWidget {
   final int gridCrossAxisCount;
   final ExtendedAppBar extendedBar;
   final double bodyTop;
-  final List<Widget> bottomSlivers;
+  final List<SliverMultiBoxAdaptorWidget> bottomSlivers;
   final int itemCount;
   final Function(BuildContext, int) builder;
   SliverScaffold(
@@ -67,6 +68,7 @@ class SliverScaffold extends StatefulWidget {
       this.gridCrossAxisCount = 1,
       this.resizeToAvoidBottomPadding = false,
       this.body,
+      this.children,
       this.beforeBody,
       this.afterBody,
       this.padding,
@@ -162,8 +164,6 @@ class SliverScaffold extends StatefulWidget {
 class _SliverScaffoldState extends State<SliverScaffold> {
   List<Widget> _builder() {
     List<Widget> rt = [];
-    //if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
-    //if (widget.extendedBar != null) rt.add(widget.extendedBar);
     if (widget.slivers != null)
       widget.slivers.forEach((f) {
         rt.add(f);
@@ -245,14 +245,18 @@ class _SliverScaffoldState extends State<SliverScaffold> {
   List<Widget> _scroolSlivers(Widget _body) {
     List<Widget> rt = [];
     if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
-    rt.add(SliverList(
-      delegate: SliverChildListDelegate(_builder()),
-    ));
+
+    _builder().forEach((sliver){
+      rt.add(sliver);
+    });
+       
 
     if (widget.grid != null) rt.add(_sliverGrid());
 
     rt.add(
         SliverList(delegate: SliverChildListDelegate([widget.beforeBody??Container(), _body ?? Container(), widget.afterBody??Container()])));
+    if (widget.children!=null)
+       SliverList(delegate: SliverChildListDelegate(widget.children));
 
     if (widget.builder != null && widget.itemCount != null) {
       List<Widget> r = [];
@@ -264,8 +268,9 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     }
 
     if (widget.bottomSlivers != null)
-      rt.add(
-          SliverList(delegate: SliverChildListDelegate(widget.bottomSlivers)));
+     widget.bottomSlivers.forEach((item){
+       rt.add(item);
+     });
 
     return rt;
   }

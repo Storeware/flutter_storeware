@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 
 typedef WidgetListBuilderContext(BuildContext context, int index);
 
-
-double defaultTopScaffoldRadius = 0;
-double defaultBottomScaffoldRadius = 0;
-
 bool navigateTo(context, onToPageFunc,
     {String key, Function(String) permission}) {
   if (permission != null) if (!permission(key)) {
@@ -34,6 +30,8 @@ class SliverScaffold extends StatefulWidget {
   final List<Widget> slivers;
   final List<Widget> grid;
   final Widget body;
+  final Widget beforeBody;
+  final Widget afterBody;
   final Widget drawer;
   final Widget endDrawer;
   final double radius;
@@ -55,7 +53,7 @@ class SliverScaffold extends StatefulWidget {
   final double bodyTop;
   final List<Widget> bottomSlivers;
   final int itemCount;
-  final Function(BuildContext,int) builder;
+  final Function(BuildContext, int) builder;
   SliverScaffold(
       {Key key,
       this.appBar,
@@ -69,6 +67,8 @@ class SliverScaffold extends StatefulWidget {
       this.gridCrossAxisCount = 1,
       this.resizeToAvoidBottomPadding = false,
       this.body,
+      this.beforeBody,
+      this.afterBody,
       this.padding,
       this.isScrollView = false,
       this.controller,
@@ -80,8 +80,8 @@ class SliverScaffold extends StatefulWidget {
       this.bottomNavigationBar,
       this.afterLoaded,
       this.radius = 0.0,
-      this.topRadius = defaultTopScaffoldRadius,
-      this.bottomRadius = defaultBottomScaffoldRadius,
+      this.topRadius = 0,
+      this.bottomRadius = 0,
       this.extendedBar,
       this.itemCount,
       this.builder,
@@ -250,13 +250,17 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     ));
 
     if (widget.grid != null) rt.add(_sliverGrid());
-    rt.add(
-        SliverList(delegate: SliverChildListDelegate([_body ?? Container()])));
 
-    if (widget.builder!=null && widget.itemCount!=null){
-      for(var i=0;i<widget.itemCount;i++){
-         rt.add(widget.builder(context,i));
+    rt.add(
+        SliverList(delegate: SliverChildListDelegate([widget.beforeBody??Container(), _body ?? Container(), widget.afterBody??Container()])));
+
+    if (widget.builder != null && widget.itemCount != null) {
+      List<Widget> r = [];
+      for (var i = 0; i < widget.itemCount; i++) {
+        r.add(widget.builder(context, i));
       }
+      if (r.length > 0)
+        rt.add(SliverList(delegate: SliverChildListDelegate(r)));
     }
 
     if (widget.bottomSlivers != null)
@@ -280,7 +284,9 @@ class _SliverScaffoldState extends State<SliverScaffold> {
                 Container(color: theme.scaffoldBackgroundColor, child: _body)));
 
     if (widget.padding != null)
-      return Container(color:_backgroundColor, child:Padding(padding: widget.padding, child:  r));
+      return Container(
+          color: _backgroundColor,
+          child: Padding(padding: widget.padding, child: r));
     return r;
   }
 }
@@ -367,14 +373,19 @@ class BoxContainer extends StatelessWidget {
 
 var bgColor = (Colors.blue[900]);
 
-AppBar appBarLight(context,{Widget title, List<Widget> actions, Widget menu, backgroundColor}) {
+AppBar appBarLight(context,
+    {Widget title, List<Widget> actions, Widget menu, backgroundColor}) {
   //var bg = (backgroundColor ??= bgColor);
   return AppBar(
     //iconTheme: IconThemeData(color: Colors.white),
     //backgroundColor: bg,
-    leading: menu??IconButton(icon: Image.asset('assets/voltar.png'),onPressed: (){
-       Navigator.of(context).pop();
-    },),
+    leading: menu ??
+        IconButton(
+          icon: Image.asset('assets/voltar.png'),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
     title: title,
     actions: actions,
     elevation: 0.0,
@@ -417,19 +428,22 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
   Widget build(BuildContext context) {
     var bg = bgColor;
     return Scaffold(
-        key : widget.scaffoldKey,
+        key: widget.scaffoldKey,
         backgroundColor: widget.backgroudColor,
         appBar: appBar(),
         drawer: widget.drawer,
         body: Stack(children: <Widget>[
-          Container(width: double.infinity, height: widget.extendedPanelHeigh,
-          child:Container(color: bg ,
-            child: Center(child:widget.title != null
+          Container(
+              width: double.infinity,
+              height: widget.extendedPanelHeigh,
+              child: Container(
+                  color: bg,
+                  child: Center(
+                    child: widget.title != null
                         ? Text(widget.title,
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 18))
-                        : widget.panelImage,)
-          )),
+                            style: TextStyle(color: Colors.white, fontSize: 18))
+                        : widget.panelImage,
+                  ))),
           widget.body,
         ]),
         bottomNavigationBar: widget.bottomNavigationBar);

@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 
 typedef WidgetListBuilderContext(BuildContext context, int index);
 
+
+double defaultTopScaffoldRadius = 0;
+double defaultBottomScaffoldRadius = 0;
+
 bool navigateTo(context, onToPageFunc,
     {String key, Function(String) permission}) {
   if (permission != null) if (!permission(key)) {
@@ -76,8 +80,8 @@ class SliverScaffold extends StatefulWidget {
       this.bottomNavigationBar,
       this.afterLoaded,
       this.radius = 0.0,
-      this.topRadius = 0.0,
-      this.bottomRadius = 0.0,
+      this.topRadius = defaultTopScaffoldRadius,
+      this.bottomRadius = defaultBottomScaffoldRadius,
       this.extendedBar,
       this.itemCount,
       this.builder,

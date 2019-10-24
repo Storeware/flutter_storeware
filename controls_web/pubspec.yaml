@@ -1,0 +1,41 @@
+name: controls_web
+description: A new Flutter package project.
+version: 0.0.1
+author: amarildo lacerda<amarildo_51@msn.com>
+homepage: http://tireideletra.tech
+
+environment:
+  sdk: ">=2.5.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_web: ^5.0.9
+  uuid: ^2.0.2
+  universal_html: ^1.1.6
+  datetime_picker_formfield: ^0.4.3
+  http: ^0.12.0+2
+  meta: ^1.1.7
+
+
+dev_dependencies:
+#  build_runner: ^1.4.0
+#  build_web_compilers: ^2.0.0
+#  pedantic: ^1.0.0
+
+dependency_overrides:
+#  flutter_web:
+#    git:
+#      url: https://github.com/flutter/flutter_web
+#      path: packages/flutter_web
+#  flutter_web_ui:
+#    git:
+#      url: https://github.com/flutter/flutter_web
+#      path: packages/flutter_web_ui
+  
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true

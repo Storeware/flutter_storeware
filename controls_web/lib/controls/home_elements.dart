@@ -11,6 +11,7 @@ class SliverContents extends StatefulWidget {
   final Axis scrollDirection;
   final int itemCount;
   final Function builder;
+  final double crossAxisSpacing;
   SliverContents(
       {Key key,
       this.children,
@@ -21,6 +22,7 @@ class SliverContents extends StatefulWidget {
       this.itemCount = 0,
       this.builder,
       this.crossAxisCount = 2,
+      this.crossAxisSpacing = 0.0,
       this.slivers,
       this.scrollDirection = Axis.vertical})
       : super(key: key);
@@ -49,6 +51,7 @@ class _SliverContentsState extends State<SliverContents> {
           ? SliverGrid.count(
               crossAxisCount: widget.crossAxisCount,
               children: widget.grid,
+              crossAxisSpacing: widget.crossAxisSpacing ,
             )
           : SliverToBoxAdapter(child: Container()),
       SliverToBoxAdapter(
@@ -87,7 +90,7 @@ class ApplienceTile extends StatelessWidget {
   final Widget appBar;
   final Widget bottomBar;
   final Function onPressed;
-  final EdgeInsetsGeometry padding;
+  final padding;
   const ApplienceTile(
       {Key key,
       this.padding,

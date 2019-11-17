@@ -1,5 +1,4 @@
 import 'package:controls_web/controls/rounded_button.dart';
-import 'package:controls_web/models/resources.dart';
 import 'package:flutter/material.dart';
 import 'models/constantes.dart';
 import 'package:controls_web/services/routes.dart';
@@ -25,7 +24,7 @@ class _MainViewState extends State<MainView> {
           SizedBox(height: 30,),
           RoundedButton(height: 40, width: 180, buttonName: 'Entrar',
           onTap: (){
-             Routes.pushNames (context,'/menu');            
+             Routes.pushNamed(context,'/menu');            
           },
           )     
         ]),

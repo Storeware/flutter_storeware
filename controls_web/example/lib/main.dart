@@ -1,3 +1,5 @@
+import 'package:controls_web/services/routes.dart';
+
 import 'routing.dart';
 import 'package:flutter/material.dart';
 import 'main_view.dart';
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //routes: AppRouting().routes,
+      routes: Routes().routes,
       home: MainView(title: 'Console Framework'),
     );
   }

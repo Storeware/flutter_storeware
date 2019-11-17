@@ -40,10 +40,10 @@ class MyApp extends StatelessWidget {
         builder: (ctx, theme) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: Constantes.appNome,
+            title: Constantes.appName,
             theme: theme,
             routes: Routes().routes,
-            home: MainView(title: Constantes.appNome ),
+            home: MainView(title: Constantes.appName ),
           );
         });
   }

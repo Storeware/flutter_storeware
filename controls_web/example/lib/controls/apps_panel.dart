@@ -13,7 +13,6 @@ class AppsGrid extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SliverContents(grid: children ,
-          crossAxisSpacing: 0,
       crossAxisCount: cols , ),
     );
   }

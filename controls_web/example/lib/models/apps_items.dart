@@ -7,21 +7,26 @@ class AppsItems{
   static final _singleton = AppsItems._create();
   factory AppsItems()=>_singleton;
   AppsItems._create(){
-    _init();
+    
   }
   final List<Widget> _items = [];
-  static List<Widget> builder(){
-    return _singleton._items;
+  static List<Widget> builder(context){
+    return _singleton._init(context);  
   }
 
-  _init(){
+  _init(context){
     _items.clear();
-    _items.add( ApplienceTile(value: '10', color: genColor(1) , title: 'yyyy',)  ) ;
-    _items.add( ApplienceTile(value: '10',color: genColor(2),title: 'xxxxrr',)  ) ;
+    _items.add( ApplienceTile(
+      dividerHeight:1,
+      value: '10', color: genColor(1) , title: 'yyyy',)  ) ;
+    _items.add( ApplienceTile(image: Icon(Icons.ac_unit),value: '10',color: genColor(2),title: 'xxxxrr',)  ) ;
     _items.add( ApplienceTile(value: '10',color: genColor(3),title: 'xxxxrr',)  ) ;
     _items.add( ApplienceTile(value: '10',color: genColor(4),title: 'xxxxrr',)  ) ;
     _items.add( ApplienceTile(value: '10',color: genColor(5),title: 'xxxxrr',)  ) ;
     _items.add( ApplienceTile(value: '10',color: genColor(6),title: 'xxxxrr',)  ) ;
+ 
+ 
+    return _items;
   }
 
 }

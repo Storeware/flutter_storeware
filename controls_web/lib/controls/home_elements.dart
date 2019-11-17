@@ -23,7 +23,7 @@ class SliverContents extends StatefulWidget {
       this.itemCount = 0,
       this.builder,
       this.crossAxisCount = 2,
-      this.crossAxisSpacing = 0.0,
+      this.crossAxisSpacing = 2.0,
       this.mainAxisSpacing = 2.0,
       this.slivers,
       this.scrollDirection = Axis.vertical})

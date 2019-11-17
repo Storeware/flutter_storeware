@@ -18,7 +18,7 @@ class Menu {
     return Column(
      children:[
        Image.network(Constantes.imagemEntrar),
-       Text('Nome:')
+       Text('Nome: xyz')
      ]
     );
   }

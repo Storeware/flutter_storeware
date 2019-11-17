@@ -1,3 +1,5 @@
+import 'package:app/controls/apps_panel.dart';
+import 'package:app/models/apps_items.dart';
 import 'package:app/views/drawer_view.dart';
 import 'package:controls_web/controls/sliver_scaffold.dart';
 
@@ -18,7 +20,7 @@ class _EntradaViewState extends State<EntradaView> {
       appBar: appBarLight(
         title: Text(Constantes.appName),
       ),
-      body: Text('entrada view'),
+      body: AppsGrid(children: AppsItems.builder()),
     );
   }
 }

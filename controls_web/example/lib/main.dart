@@ -1,5 +1,6 @@
 import 'package:app/models/config_app.dart';
 import 'package:controls_web/services/routes.dart';
+import 'models/apps_items.dart';
 import 'routing.dart';
 import 'package:flutter/material.dart';
 import 'main_view.dart';
@@ -15,6 +16,7 @@ class Setup {
   static init() 
   {
     ConfigApp();
+    AppsItems();
   }
   static starting() {
     AppRouting(); // inicializa routing

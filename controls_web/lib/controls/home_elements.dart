@@ -87,7 +87,7 @@ class ApplienceTile extends StatelessWidget {
   final Widget appBar;
   final Widget bottomBar;
   final Function onPressed;
-  final padding;
+  final EdgeInsetsGeometry padding;
   const ApplienceTile(
       {Key key,
       this.padding,

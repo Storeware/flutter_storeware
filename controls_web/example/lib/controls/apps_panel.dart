@@ -10,8 +10,11 @@ class AppsGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     int cols = MediaQuery.of(context).size.width ~/ 150;
     if (cols<2) cols = 2;
-    return SliverContents(grid: children ,
-    
-    crossAxisCount: cols , );
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SliverContents(grid: children ,
+          crossAxisSpacing: 2,
+      crossAxisCount: cols , ),
+    );
   }
 }

@@ -16,7 +16,7 @@ class AppsItems{
 
   _init(){
     _items.clear();
-    _items.add( ApplienceTile(value: '10',padding: EdgeInsets.all(2), color: genColor(1) , title: 'yyyy',)  ) ;
+    _items.add( ApplienceTile(value: '10', color: genColor(1) , title: 'yyyy',)  ) ;
     _items.add( ApplienceTile(value: '10',color: genColor(2),title: 'xxxxrr',)  ) ;
     _items.add( ApplienceTile(value: '10',color: genColor(3),title: 'xxxxrr',)  ) ;
     _items.add( ApplienceTile(value: '10',color: genColor(4),title: 'xxxxrr',)  ) ;

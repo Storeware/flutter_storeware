@@ -28,6 +28,7 @@ tasks:
       flutter pub get
       flutter config --enable-web
       flutter doctor
+      echo "Ready to start!"
 vscode:
   extensions:
     - Dart-Code.dart-code@3.5.0-beta.1:Wg2nTABftVR/Dry4tqeY1w==

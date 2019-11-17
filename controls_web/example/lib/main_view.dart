@@ -1,5 +1,5 @@
-import 'package:example/views/drawer_view.dart';
 import 'package:flutter/material.dart';
+import 'views/drawer_view.dart';
 
 class MainView extends StatefulWidget {
   MainView({Key key, this.title}) : super(key: key);
@@ -42,7 +42,7 @@ class _MainViewState extends State<MainView> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      drawer: DrawerView(),
+      drawer: Drawer(child: DrawerView(),),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.

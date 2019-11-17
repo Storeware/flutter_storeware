@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 const _baseSize = Size(411, 830);
 
@@ -23,12 +22,10 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      slivers: [
-        SliverList(
-          key: widget.sliversKey,
-          delegate: SliverChildListDelegate(widget.children),
-        )
-      ],
+      slivers: [SliverList(
+        key: widget.sliversKey,
+        delegate: SliverChildListDelegate(widget.children),
+      )],
     );
   }
 }
@@ -108,18 +105,16 @@ class ProfileTile extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: InkWell(
-          onTap: onTap,
-          child: Card(
-            color: color,
-            elevation: elevation,
-            child: Padding(
-              padding: padding ?? const EdgeInsets.all(0.0),
-              child: Column(
-                children: <Widget>[n(topBar), n(child), n(title), n(bottomBar)],
-              ),
-            ),
-          )),
+      child: Card(
+        color: color,
+        elevation: elevation,
+        child: Padding(
+          padding: padding ?? const EdgeInsets.all(0.0),
+          child: Column(
+            children: <Widget>[n(topBar), n(child), n(title), n(bottomBar)],
+          ),
+        ),
+      ),
     );
   }
 }
@@ -281,25 +276,5 @@ class _ProfileButtonState extends State<ProfileButton> {
         onTapCancel: _tapCancel,
       ),
     );
-  }
-}
-
-class ProfileTitle extends StatelessWidget {
-  final String text;
-  final Color color;
-  final TextStyle style;
-  final double height;
-  const ProfileTitle({Key key, this.text,this.height, this.color,this.style}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    var _color = color??Theme.of(context).primaryColor.withAlpha(30);
-    return Container(
-        height: height,
-        color: _color,
-        child: Text(
-          text,
-          style: style?? TextStyle(fontWeight: FontWeight.w600),
-        ));
   }
 }

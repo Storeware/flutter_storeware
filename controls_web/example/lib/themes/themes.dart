@@ -1,6 +1,6 @@
 import 'dart:async';
-import '../controls/defaults.dart';
-import '../drivers/local_storage.dart';
+import 'package:controls_web/controls/defaults.dart';
+import 'package:controls_web/drivers/local_storage.dart';
 import 'package:flutter/material.dart';
 
 typedef ThemedWidgetBuilder = Widget Function(

@@ -1,6 +1,7 @@
-
+import 'package:controls_web/controls/rounded_button.dart';
+import 'package:controls_web/models/resources.dart';
 import 'package:flutter/material.dart';
-import 'views/drawer_view.dart';
+import 'models/constantes.dart';
 
 class MainView extends StatefulWidget {
   MainView({Key key, this.title}) : super(key: key);
@@ -13,16 +14,20 @@ class _MainViewState extends State<MainView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(
-        child: DrawerView(),
-      ),
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          children: [],
-        ),
+        child: Column(children: [
+          SizedBox(height: 70,),
+          Container(
+               child: Center(child: Image.network(Constantes.imagemEntrar))),
+          SizedBox(height: 40,),
+          Text(widget.title),
+          SizedBox(height: 30,),
+          RoundedButton(height: 40, width: 180, buttonName: 'Entrar',
+          onTap: (){
+            
+          },
+          )     
+        ]),
       ),
     );
   }

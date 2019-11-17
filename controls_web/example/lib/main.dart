@@ -1,27 +1,33 @@
+import 'routing.dart';
 import 'package:flutter/material.dart';
 import 'main_view.dart';
 
-void main() => runApp(MyApp());
+void main() { 
+  Setup.init();
+  return  runApp(MyApp()); }
+
+class Setup{
+  static init(){
+
+  }
+  static starting(){
+   AppRouting(); // inicializa routing
+  }
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Setup.starting();
     return MaterialApp(
-      title: 'Controls_Web Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Console Framework',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MainView(title: 'Controls Web'),
+      //routes: AppRouting().routes,
+      home: MainView(title: 'Console Framework'),
     );
   }
 }

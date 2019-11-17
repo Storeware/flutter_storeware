@@ -15,7 +15,7 @@ class _EntradaViewState extends State<EntradaView> {
   Widget build(BuildContext context) {
     return SliverScaffold(
       drawer: Drawer(child: DrawerView()),
-      appBar: AppBar(
+      appBar: appBarLight(
         title: Text(Constantes.appNome),
       ),
       body: Text('entrada view'),

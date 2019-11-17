@@ -1,4 +1,5 @@
 import 'package:app/models/menu_items.dart';
+import 'package:controls_web/controls/sliver_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class DrawerView extends StatefulWidget {
@@ -13,7 +14,7 @@ class _DrawerViewState extends State<DrawerView> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-       appBar: AppBar(title:Text('Opções')),
+       appBar: appBarLight(title:Text('Opções')),
        body: Column(children: <Widget>[
         Container(width: double.infinity, color:theme.primaryColor.withAlpha(120),
         child: Menu.profile(),

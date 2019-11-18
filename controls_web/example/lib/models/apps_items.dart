@@ -35,9 +35,10 @@ class AppsItems{
     List<Widget> r = [];
     r.add(ApplienceTile(
         value:'11',
-        valueFontSize: 16,
+        valueFontSize: 24,
         title:'Títulos',
-        titleFontSize: 12
+        titleFontSize: 16,
+        elevation:1.0
     ));
     return r;
   }

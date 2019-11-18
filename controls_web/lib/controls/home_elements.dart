@@ -103,10 +103,10 @@ class ApplienceTile extends StatelessWidget {
       this.title,
       this.onPressed,
       this.titleStyle,
-      this.titleFontSize = 54,
+      this.titleFontSize = 18,
       this.value,
       this.valueStyle,
-      this.valueFontSize = 18,
+      this.valueFontSize = 28,
       this.image,
       this.body,
       this.appBar,
@@ -125,7 +125,7 @@ class ApplienceTile extends StatelessWidget {
           style: valueStyle ??
               TextStyle(
                   color: theme.primaryColor,
-                  fontSize: titleFontSize,
+                  fontSize: valueFontSize,
                   fontWeight: FontWeight.w200)));
     if (body != null) items.add(body);
 
@@ -133,7 +133,7 @@ class ApplienceTile extends StatelessWidget {
       items.add(Text(title,
           textAlign: TextAlign.center,
           style: titleStyle ??
-              TextStyle(fontFamily: 'Sans', fontSize: valueFontSize, fontWeight: FontWeight.w500)));
+              TextStyle(fontFamily: 'Sans', fontSize: titleFontSize, fontWeight: FontWeight.w500)));
 
     return Container(
       padding: padding,

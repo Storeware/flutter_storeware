@@ -10,6 +10,8 @@ class AppsItems{
     
   }
   final List<Widget> _items = [];
+ 
+ 
   static List<Widget> builder(context){
     return _singleton._init(context);  
   }
@@ -28,5 +30,17 @@ class AppsItems{
  
     return _items;
   }
+
+  static List<Widget> topBars(){
+    List<Widget> r = [];
+    r.add(ApplienceTile(
+        value:'11',
+        valueFontSize: 16,
+        title:'Títulos',
+        titleFontSize: 12
+    ));
+    return r;
+  }
+  
 
 }

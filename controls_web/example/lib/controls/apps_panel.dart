@@ -2,11 +2,13 @@ import 'package:controls_web/controls/home_elements.dart';
 import 'package:flutter/material.dart';
 
 
-class AppsGrid extends StatelessWidget {
+class SliverApps extends StatelessWidget {
+  final appBar;  
   final List<Widget> topBars;
   final List<Widget> body;
   final List<Widget> grid;
-  const AppsGrid({Key key,this.topBars,this.body,this.grid }) : super(key: key);
+  final List<Widget> bottomBars;
+  const SliverApps({Key key,this.appBar,this.topBars,this.body,this.grid, this.bottomBars }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +18,7 @@ class AppsGrid extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: CustomScrollView(
         slivers: <Widget>[
+         if (appBar!=null) appBar,   
          SliverToBoxAdapter(child:Container(height:90, child:   
           SliverContents(  slivers: [ 
              for(var item in topBars??[])
@@ -25,14 +28,14 @@ class AppsGrid extends StatelessWidget {
             scrollDirection: Axis.horizontal
           ))),  
 
-     SliverList(
-    delegate: SliverChildListDelegate(
-      [
-        for(var item in body??[])
-          item
-      ],
+    SliverList(
+       delegate: SliverChildListDelegate(
+         [
+           for(var item in body??[])
+              item
+         ],
+        ),
     ),
-),
 
      SliverGrid.count(
               crossAxisCount: cols,
@@ -40,6 +43,16 @@ class AppsGrid extends StatelessWidget {
               crossAxisSpacing: 2,
               mainAxisSpacing: 2,
             ),      
+
+    SliverList(
+       delegate: SliverChildListDelegate(
+         [
+           for(var item in bottomBars??[])
+              item
+         ],
+        ),
+    ),
+
         ],
       ),
     );

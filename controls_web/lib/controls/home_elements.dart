@@ -106,7 +106,7 @@ class ApplienceTile extends StatelessWidget {
       this.titleFontSize = 18,
       this.value,
       this.valueStyle,
-      this.valueFontSize = 28,
+      this.valueFontSize = 54,
       this.image,
       this.body,
       this.appBar,

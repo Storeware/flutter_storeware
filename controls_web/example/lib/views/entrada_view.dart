@@ -15,12 +15,20 @@ class EntradaView extends StatefulWidget {
 class _EntradaViewState extends State<EntradaView> {
   @override
   Widget build(BuildContext context) {
-    return SliverScaffold(
+    return Scaffold(
       drawer: Drawer(child: DrawerView()),
-      appBar: appBarLight(
-        title: Text(Constantes.appName),
+      //appBar: appBarLight(
+      //  title: Text(Constantes.appName),
+      //),
+      body: SliverApps(
+          appBar: SliverAppBar(
+              title: Text('AppBar')
+          ),
+          topBars: AppsItems.topBars(),
+          topBarsHeight:70,
+           body: AppsItems.body(), grid: AppsItems.builder(context),
+        bottomBars: AppsItems.bottom()  
       ),
-      body: SliverApps(topBars: AppsItems.topBars(), body: AppsItems.body(), grid: AppsItems.builder(context)),
     );
   }
 }

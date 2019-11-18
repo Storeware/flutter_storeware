@@ -73,10 +73,19 @@ class AppsItems {
   static List<Widget> body(){
       List<Widget> r = [];
       for(var i in intRange(10,15)){
-          r.add( ListTile(title:Text(i.toString()))  );
+          r.add( ListTile(title:Text('body $i'))  );
       }
 
       return r;
   }
+
+ static List<Widget> bottom(){
+      List<Widget> r = [];
+      for(var i in intRange(10,15)){
+          r.add( ListTile(title:Text('Bottom $i'))  );
+      }
+      return r;
+ }
+
 
 }

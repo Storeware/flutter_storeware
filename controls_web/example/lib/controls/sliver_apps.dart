@@ -8,7 +8,8 @@ class SliverApps extends StatelessWidget {
   final List<Widget> body;
   final List<Widget> grid;
   final List<Widget> bottomBars;
-  const SliverApps({Key key,this.appBar,this.topBars,this.body,this.grid, this.bottomBars }) : super(key: key);
+  final double topBarsHeight;
+  const SliverApps({Key key,this.appBar,this.topBars,this.topBarsHeight=90,this.body,this.grid, this.bottomBars }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class SliverApps extends StatelessWidget {
       child: CustomScrollView(
         slivers: <Widget>[
          if (appBar!=null) appBar,   
-         SliverToBoxAdapter(child:Container(height:90, child:   
+         SliverToBoxAdapter(child:Container(height:topBarsHeight, child:   
           SliverContents(  slivers: [ 
              for(var item in topBars??[])
               SliverToBoxAdapter(

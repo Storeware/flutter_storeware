@@ -20,7 +20,7 @@ class _EntradaViewState extends State<EntradaView> {
       appBar: appBarLight(
         title: Text(Constantes.appName),
       ),
-      body: AppsGrid(topBars: AppsItems.topBars(), children: AppsItems.builder(context)),
+      body: AppsGrid(topBars: AppsItems.topBars(), body: AppsItems.body(), grid: AppsItems.builder(context)),
     );
   }
 }

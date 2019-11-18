@@ -23,11 +23,14 @@ class Setup {
   }
 }
 
+
+final fontFamily = 'Roboto';
+
 class MyApp extends StatelessWidget {
 
   ThemeData themesEvents(Brightness b) {
-    if (b==Brightness.light) return ThemeData.light();
-    return ThemeData.dark();
+    if (b==Brightness.light) return ThemeData(fontFamily:fontFamily);
+    return ThemeData(fontFamily:fontFamily);
   }
 
   // This widget is the root of your application.

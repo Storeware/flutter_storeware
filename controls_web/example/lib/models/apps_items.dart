@@ -46,23 +46,28 @@ class AppsItems {
       title: 'xxxxrr',
     ));
 
-   for(var i in intRange(10,40)){
-       _items.add(
-           ApplienceTile(value:i.toString(),
-           title: 'YYYY $i',
-           color:genColor(i) )
-       );
-   }
+    for (var i in intRange(10, 40)) {
+      _items.add(ApplienceTile(
+          value: i.toString(), title: 'YYYY $i', color: genColor(i)));
+    }
 
     return _items;
   }
-
+  
   static List<Widget> topBars() {
     List<Widget> r = [];
+    r.add(ApplienceTicket(
+      title: 'Detalhes',
+      color: Colors.amber,
+      subTitle: 'novo item',
+      onPressed: (){},
+      value: '99',
+      icon: Icons.access_time,
+    ));
     for (int i in intRange(0, 5)) {
       r.add(ApplienceTile.status(
         color: genColor(i),
-        value: ((i+1)*10).toString(),
+        value: ((i + 1) * 10).toString(),
         title: 'Títulos-$i',
         width: 150,
       ));
@@ -70,22 +75,20 @@ class AppsItems {
     return r;
   }
 
-  static List<Widget> body(){
-      List<Widget> r = [];
-      for(var i in intRange(10,15)){
-          r.add( ListTile(title:Text('body $i'))  );
-      }
+  static List<Widget> body() {
+    List<Widget> r = [];
+    for (var i in intRange(10, 15)) {
+      r.add(ListTile(title: Text('body $i')));
+    }
 
-      return r;
+    return r;
   }
 
- static List<Widget> bottom(){
-      List<Widget> r = [];
-      for(var i in intRange(10,15)){
-          r.add( ListTile(title:Text('Bottom $i'))  );
-      }
-      return r;
- }
-
-
+  static List<Widget> bottom() {
+    List<Widget> r = [];
+    for (var i in intRange(10, 15)) {
+      r.add(ListTile(title: Text('Bottom $i')));
+    }
+    return r;
+  }
 }

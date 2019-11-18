@@ -127,8 +127,8 @@ class ApplienceTile extends StatelessWidget {
       title: title,
       color: color,
       image: image,
-      valueStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
-      titleStyle: TextStyle(fontSize:14,fontWeight: FontWeight.w200),
+      valueStyle: TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
+      titleStyle: TextStyle(color: Colors.white, fontSize:18),
       width: width,
     );
   }
@@ -140,8 +140,8 @@ class ApplienceTile extends StatelessWidget {
       title: title,
       color: color,
       image: image,
-      valueStyle: TextStyle(fontSize: 54, fontWeight: FontWeight.w400),
-      titleStyle: TextStyle(fontSize:18,fontWeight: FontWeight.w200),
+      valueStyle: TextStyle(color:Colors.white,fontSize: 54,fontFamily: 'Raleway', fontWeight: FontWeight.bold),
+      titleStyle: TextStyle(color:Colors.white,fontSize:18),
       width: width,
     );
   }
@@ -202,6 +202,108 @@ class ApplienceTile extends StatelessWidget {
                   ]),
             )
           ]))),
+    );
+  }
+}
+
+
+class ApplienceTicket extends StatelessWidget {
+  final String title;
+  final Color color;
+  final Color fontColor;
+  final IconData icon;
+  final Widget image;
+  final String value;
+  final String subTitle;
+  final double width;
+  final double height;
+  final double elevation;
+  final Function onPressed;
+  const ApplienceTicket(
+      {Key key,
+      @required this.title,
+      this.color,
+      this.fontColor = Colors.white,
+      this.onPressed,
+      this.image,
+      this.icon,
+      this.value,
+      this.width,
+      this.height,
+      this.elevation = 2,
+      this.subTitle})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return _tickets();
+  }
+
+  Widget _tickets() {
+    return Card(
+      elevation: elevation,
+      child: Container(
+        padding: EdgeInsets.all(22),
+        color: color,
+        width: width,
+        height: height,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                if (image != null) image,
+                if (icon != null)
+                  Icon(
+                    icon,
+                    size: 36,
+                    color: fontColor,
+                  ),
+                if (title != null)
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: fontColor,
+                      fontFamily: 'HelveticaNeue',
+                    ),
+                  )
+              ],
+            ),
+            SizedBox(width: 10,),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  value??'',
+                  style: TextStyle(
+                    fontSize: 34,
+                    color: fontColor,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Raleway',
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                InkWell(
+                    onTap: onPressed,
+                    child: Text(
+                      subTitle??'',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: fontColor,
+                        // fontWeight: FontWeight.bold,
+                        fontFamily: 'HelveticaNeue',
+                      ),
+                    ))
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }

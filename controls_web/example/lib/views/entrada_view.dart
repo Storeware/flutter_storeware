@@ -25,7 +25,7 @@ class _EntradaViewState extends State<EntradaView> {
               title: Text('AppBar')
           ),
           topBars: AppsItems.topBars(),
-          topBarsHeight:70,
+          topBarsHeight:120,
            body: AppsItems.body(), grid: AppsItems.builder(context),
         bottomBars: AppsItems.bottom()  
       ),

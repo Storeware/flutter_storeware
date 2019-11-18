@@ -266,7 +266,7 @@ class ApplienceTicket extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       color: fontColor,
-                      fontFamily: 'HelveticaNeue',
+                      fontFamily: 'Quicksand',
                     ),
                   )
               ],
@@ -296,7 +296,7 @@ class ApplienceTicket extends StatelessWidget {
                         fontSize: 14,
                         color: fontColor,
                         // fontWeight: FontWeight.bold,
-                        fontFamily: 'HelveticaNeue',
+                        fontFamily: 'Quicksand',
                       ),
                     ))
               ],

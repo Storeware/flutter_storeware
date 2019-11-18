@@ -16,7 +16,7 @@ class AppsGrid extends StatelessWidget {
       child: Column(
         children: <Widget>[
          Container(height:90, child:   
-          SliverContents(  children: topBars??[],
+          SliverContents(  children: [ ...topBars ],
             scrollDirection: Axis.horizontal
           )),  
          Expanded( child:

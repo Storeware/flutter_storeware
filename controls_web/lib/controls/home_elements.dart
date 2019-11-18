@@ -53,8 +53,8 @@ class _SliverContentsState extends State<SliverContents> {
           ? SliverGrid.count(
               crossAxisCount: widget.crossAxisCount,
               children: widget.grid,
-              crossAxisSpacing: widget.crossAxisSpacing ,
-              mainAxisSpacing: widget.mainAxisSpacing ,
+              crossAxisSpacing: widget.crossAxisSpacing,
+              mainAxisSpacing: widget.mainAxisSpacing,
             )
           : SliverToBoxAdapter(child: Container()),
       SliverToBoxAdapter(
@@ -92,6 +92,8 @@ class ApplienceTile extends StatelessWidget {
   final double left;
   final Widget appBar;
   final Widget bottomBar;
+  final Widget topBar;
+  final double dividerHeight;
   final Function onPressed;
   final padding;
   const ApplienceTile(
@@ -103,18 +105,47 @@ class ApplienceTile extends StatelessWidget {
       this.title,
       this.onPressed,
       this.titleStyle,
-      this.titleFontSize = 18,
+      this.titleFontSize = 16,
       this.value,
       this.valueStyle,
       this.valueFontSize = 54,
       this.image,
       this.body,
       this.appBar,
+      this.topBar,
       this.bottomBar,
       this.elevation = 0.0,
       this.height,
+      this.dividerHeight = 0,
       this.width})
       : super(key: key);
+
+  static status(
+      {Widget image, String value, String title, Color color, double width}) {
+    return ApplienceTile(
+      value: value,
+      title: title,
+      color: color,
+      image: image,
+      valueStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
+      titleStyle: TextStyle(fontSize:14,fontWeight: FontWeight.w200),
+      width: width,
+    );
+  }
+
+  static panel(
+      {Widget image, String value, String title, Color color, double width}) {
+    return ApplienceTile(
+      value: value,
+      title: title,
+      color: color,
+      image: image,
+      valueStyle: TextStyle(fontSize: 54, fontWeight: FontWeight.w400),
+      titleStyle: TextStyle(fontSize:18,fontWeight: FontWeight.w200),
+      width: width,
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +164,14 @@ class ApplienceTile extends StatelessWidget {
       items.add(Text(title,
           textAlign: TextAlign.center,
           style: titleStyle ??
-              TextStyle(fontFamily: 'Sans', fontSize: titleFontSize, fontWeight: FontWeight.w500)));
+              TextStyle(
+                  fontFamily: 'Sans',
+                  fontSize: titleFontSize,
+                  fontWeight: FontWeight.w500)));
 
     return Container(
       padding: padding,
-      decoration: createBoxDecoration(color:color),
+      decoration: createBoxDecoration(color: color),
       height: height,
       width: width,
       child: InkWell(
@@ -146,21 +180,28 @@ class ApplienceTile extends StatelessWidget {
               //elevation: elevation,
               //color: color,
               child: Stack(children: [
-                Positioned(
-                  left: left,
-                  top: top,
-                  child: image ?? Container(),
-                ),
-                Center(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        appBar ?? Container(),
-                        ...items,
-                        bottomBar ?? Container()
-                      ]),
-                )
-              ]))),
+            Positioned(
+              left: left,
+              top: top,
+              child: image ?? Container(),
+            ),
+            Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    appBar ?? Container(),
+                    if (topBar != null) topBar,
+                    if (dividerHeight > 0)
+                      Container(
+                        height: dividerHeight,
+                        color: Colors.black54,
+                        width: double.infinity,
+                      ),
+                    ...items,
+                    bottomBar ?? Container()
+                  ]),
+            )
+          ]))),
     );
   }
 }

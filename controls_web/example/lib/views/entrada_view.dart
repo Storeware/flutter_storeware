@@ -1,4 +1,4 @@
-import 'package:app/controls/apps_panel.dart';
+import 'package:app/controls/sliver_apps.dart';
 import 'package:app/models/apps_items.dart';
 import 'package:app/views/drawer_view.dart';
 import 'package:controls_web/controls/sliver_scaffold.dart';

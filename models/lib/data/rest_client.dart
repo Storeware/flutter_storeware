@@ -1,6 +1,11 @@
+
+//import 'dart:io';
+
+//import "package:universal_html/html.dart" as http;
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 
 String tokenId;
 
@@ -17,21 +22,40 @@ class RestClientBloC<T> {
   }
 }
 
+class RestClientProvider<T> extends StatelessWidget {
+  final RestClientBloC<T> bloc;
+  final AsyncWidgetBuilder builder;
+  final Widget noDataChild;
+  const RestClientProvider({Key key, this.bloc, this.builder, this.noDataChild})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: bloc.stream,
+      builder: (a, b) {
+        return (b.hasData ? builder(a, b) : noDataChild ?? Container());
+      },
+    );
+  }
+}
+
 class RestClient {
-  String baseUrl;
   RestClientBloC<String> notify = RestClientBloC<String>();
   String service = '/';
   String accessControlAllowOrigin = '*';
   Map<String, String> _headers = {};
   Map<String, dynamic> jsonResponse;
-  RestClient({this.baseUrl});
+  RestClient({this.baseUrl}) {}
   /* decode json string to object */
-  Map<String, dynamic> decode(String texto) {
+  decode(String texto) {
     return json.decode(texto);
   }
 
   get observable => notify.stream;
   dispose() {}
+  String encode(js) {
+    return json.encode(js);
+  }
 
   /* convert String to List<int> */
   List<int> strToList(String value) {
@@ -66,6 +90,7 @@ class RestClient {
   }
 
   /*  RestClient Interface */
+  String baseUrl;
   Map<String, dynamic> params = {};
   String contentType = 'application/json';
   get headers => _headers;
@@ -74,18 +99,16 @@ class RestClient {
     return this;
   }
 
-  Uri encodeUrl({String service}) {
-    return Uri.parse(formatUrl(service:service));
+  Uri encodeUrl() {
+    return Uri.parse(formatUrl());
   }
 
-  formatUrl({String service}) {
-    service = service??this.service;
+  formatUrl() {
     String p = '';
     params.forEach((key, value) {
-      p = (p == '' ? '?' : '&') + "$key=$value";
+      p += (p == '' ? '?' : '&') + "$key=$value";
     });
-    String rt = '${this.baseUrl}${service}${p}';
-    return rt;
+    return baseUrl + service + p;
   }
 
   addParameter(String key, value) {
@@ -108,26 +131,27 @@ class RestClient {
   _decodeResp(http.Response resp) {
     statusCode = resp.statusCode;
     if (resp.body != null) {
-      //if (resp.headers.containsValue('application/json')) 
-      response = resp.body;
+      if (resp.headers.containsValue('application/json')) response = resp.body;
     }
   }
 
   _setHeader() {
     addHeader('Content-Type', contentType);
     addHeader('Access-Control-Allow-Origin', accessControlAllowOrigin);
+    //print(headers);
   }
 
-  Future<String> openUrl(Uri url, {String method, Map<String,dynamic> body}) async {
+  Future<String> openUrl(Uri url, {String method, body}) async {
     _setHeader();
     http.Response resp;
+    print('OpenUrl $method:$url');
     if (method == 'GET') resp = await http.get(url, headers: headers);
     if (method == 'POST')
-      resp = await http.post(url, body: encode(body), headers: headers);
+      resp = await http.post(url, body: body, headers: headers);
     if (method == 'PUT')
-      resp = await http.put(url, body: encode(body), headers: headers);
+      resp = await http.put(url, body: body, headers: headers);
     if (method == 'PATCH')
-      resp = await http.patch(url, body: encode(body), headers: headers);
+      resp = await http.patch(url, body: body, headers: headers);
     if (method == 'DELETE') resp = await http.delete(url, headers: headers);
     _decodeResp(resp);
     if (statusCode == 200) {
@@ -138,84 +162,33 @@ class RestClient {
     }
   }
 
-  Future<String> send(String urlService, {method = 'GET', Map<String,dynamic> body}) async {
+  Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
     return openUrl(url, method: method, body: body);
   }
 
-  Future<String> post(String urlService, {Map<String,dynamic> body}) async {
-    Uri url = encodeUrl(service:urlService);
-    return await openUrl(url, method: 'POST', body: body);
+  Future<String> post(String urlService, {body}) async {
+    this.service = urlService;
+    Uri url = encodeUrl();
+    return openUrl(url, method: 'POST', body: body);
   }
 
-  Future<String> put(String urlService, {Map<String,dynamic> body}) async {
+  Future<String> put(String urlService, {body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
     return openUrl(url, method: 'PUT', body: body);
   }
 
-  Future<String> delete(String urlService, {Map<String,dynamic> body}) async {
+  Future<String> delete(String urlService, {body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
     return openUrl(url, method: 'DELETE', body: body);
   }
 
-  Future<String> patch(String urlService, {Map<String,dynamic> body}) async {
+  Future<String> patch(String urlService, {body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
     return openUrl(url, method: 'PATCH', body: body);
-  }
-
-  String encode(Map<String, dynamic> js) {
-
-    var rt = json.encode(RestClient.encodeValues(js??{}));
-    return rt;
-  }
-
-  static Map<String, dynamic> encodeValues(Map<String, dynamic> values) {
-    Map<String, dynamic> m = {};
-    values.forEach((k, v) {
-      if (v is String)
-        m[k] = Uri.encodeFull(v);
-      else if (v is DateTime)
-        m[k] = v.toIso8601String();
-      else
-        m[k] = v;
-    });
-    return m;
-  }
-
-  static String asJson(dynamic object) {
-    return json.encode(RestClient.encodeValues(object));
-  }
-
-  static dynamic decodeValues(Map<String, dynamic> j) {
-    Map<String, dynamic> rt = {};
-    j.forEach((k, v) {
-      rt[k] = v;
-      if (v is String && v.length > 13) if (v.substring(10, 10) == 'T' &&
-          v.substring(13, 13) == ':') {
-        DateTime d = DateTime.tryParse(v);
-        if (d != null) rt[k] = d;
-      }
-    });
-    return rt;
-  }
-
-  static dynamic fromJson(String js) {
-    return decodeValues(json.decode(js));
-  }
-
-  static String uriEncode(String motivo) {
-    return Uri.encodeFull(motivo);
-  }
-
-  static String uriDecode(String motivo) {
-    return Uri.decodeFull(motivo);
-  }
-
-  static Map<String, dynamic> decodeString(String js) {
-    return fromJson(js);
   }
 }

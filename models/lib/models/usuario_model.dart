@@ -1,5 +1,5 @@
 
-import 'package:models/data/data_model.dart';
+import '../data/data_model.dart';
 
 class UsuarioItem extends DataItem {
   String idLogin="";

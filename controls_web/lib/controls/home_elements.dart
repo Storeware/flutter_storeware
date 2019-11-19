@@ -210,7 +210,6 @@ class ApplienceTile extends StatelessWidget {
   }
 }
 
-
 class ApplienceTicket extends StatelessWidget {
   final String title;
   final Color color;
@@ -284,8 +283,110 @@ class ApplienceTicket extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                if (value != null)
+                  Text(
+                    value,
+                    style: TextStyle(
+                      fontSize: valueFontSize,
+                      color: fontColor,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Raleway',
+                    ),
+                  ),
+                if (value != null)
+                  SizedBox(
+                    height: 8,
+                  ),
+                if (subTitle != null)
+                  InkWell(
+                      onTap: onPressed,
+                      child: Text(
+                        subTitle ?? '',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: fontColor,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: 'HelveticaNeue',
+                        ),
+                      ))
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ApplienceStatus extends StatelessWidget {
+  final EdgeInsets padding;
+  final String value;
+  final Color color;
+  final String title;
+  final double valueFontSize;
+  final Color fontColor;
+  final Function onPressed;
+  final Widget image;
+  final IconData icon;
+  final double elevation;
+  final Widget bottom;
+  final double width;
+  final double height;
+  const ApplienceStatus(
+      {Key key,
+      this.padding,
+      this.image,
+      this.title,
+      this.color = Colors.lightBlue,
+      this.value,
+      this.valueFontSize = 28,
+      this.elevation = 1,
+      this.fontColor = Colors.white,
+      this.onPressed,
+      this.icon,
+      this.height,
+      this.width,
+      this.bottom})
+      : super(key: key);
+
+  static transparent(
+      {String title,
+      String value,
+      double valueFontSize = 16,
+      Color fontColor = Colors.white}) {
+    return ApplienceStatus(
+        elevation: 0,
+        color: Colors.transparent,
+        title: title,
+        value: value,
+        fontColor: fontColor,
+        valueFontSize: valueFontSize);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var pad = padding ?? const EdgeInsets.all(2);
+    return Card(
+      elevation: elevation,
+      color: color,
+      child: Container(
+          width: width,
+          height: height,
+          padding: pad,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              if (image != null) image,
+              if (icon != null)
+                Icon(
+                  icon,
+                  size: 36,
+                  color: fontColor,
+                ),
+              if (value != null)
                 Text(
-                  value ?? '',
+                  value,
                   style: TextStyle(
                     fontSize: valueFontSize,
                     color: fontColor,
@@ -293,25 +394,66 @@ class ApplienceTicket extends StatelessWidget {
                     fontFamily: 'Raleway',
                   ),
                 ),
+              if (value != null)
                 SizedBox(
-                  height: 8,
+                  height: 2,
                 ),
+              if (title != null)
                 InkWell(
                     onTap: onPressed,
                     child: Text(
-                      subTitle ?? '',
+                      title ?? '',
                       style: TextStyle(
                         fontSize: 14,
                         color: fontColor,
                         // fontWeight: FontWeight.bold,
                         fontFamily: 'HelveticaNeue',
                       ),
-                    ))
-              ],
-            )
-          ],
-        ),
-      ),
+                    )),
+              if (bottom != null) Expanded(child: Container()),
+              if (bottom != null) bottom,
+            ],
+          )),
+    );
+  }
+}
+
+class ApplienceCards extends StatelessWidget {
+  final List<Widget> children;
+  final double elevation;
+  final Color color;
+  final Axis direction;
+  final WrapAlignment alignment;
+  final WrapCrossAlignment crossAxisAlignment;
+  final double spacing;
+  final double runSpacing;
+  final WrapAlignment runAlignment;
+  const ApplienceCards(
+      {Key key,
+      this.children,
+      this.color = Colors.transparent,
+      this.direction = Axis.horizontal,
+      this.alignment = WrapAlignment.spaceAround,
+      this.crossAxisAlignment = WrapCrossAlignment.start,
+      this.runAlignment = WrapAlignment.spaceAround,
+      this.spacing = 2,
+      this.runSpacing = 2,
+      this.elevation = 0})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      direction: direction,
+      alignment: alignment,
+      crossAxisAlignment: crossAxisAlignment,
+      spacing: spacing,
+      runAlignment: runAlignment,
+      runSpacing: runSpacing,
+      children: <Widget>[
+        for (var item in children)
+          Card(color: color, elevation: elevation, child: item)
+      ],
     );
   }
 }

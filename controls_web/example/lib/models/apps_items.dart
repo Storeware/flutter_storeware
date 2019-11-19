@@ -64,6 +64,7 @@ class AppsItems {
       icon: Icons.access_time,
     ));
     r.add(ApplienceStatus(
+      padding: EdgeInsets.all(4),
       width: 150,
       icon: Icons.sim_card,
       title: 'Cards',
@@ -73,7 +74,6 @@ class AppsItems {
         width: 150,
         title: 'Detalhes',
         color: Colors.amber,
-        //value: '99',
         icon: Icons.adjust,
         valueFontSize: 18,
         bottom: Row(
@@ -83,13 +83,10 @@ class AppsItems {
             ApplienceStatus.transparent(
               title: 'Itens',
               value: '1',
-              //valueFontSize: 16,
             ),
             ApplienceStatus.transparent(
               title: 'Total',
               value: '2',
-              //valueFontSize: 16,
-              //  width: 65,
             )
           ],
         )));

@@ -7,12 +7,16 @@ import '../drivers.dart';
 final translate = Translate._create();
 final translateHistory = {};
 
+
+/// Bloc para notificar alteração
 class TranslateChangedBloc extends BlocModel<bool> {
   static final _singleton = TranslateChangedBloc._create();
   TranslateChangedBloc._create();
   factory TranslateChangedBloc() => _singleton;
 }
 
+/// widget de notificado de alteração do idioma
+/// Notifier para indicar que o idioma foi alterado pelo usuário
 class TranslateNotify extends StatelessWidget {
   final Function builder;
   const TranslateNotify({Key key,@required this.builder}) : super(key: key);
@@ -28,6 +32,8 @@ class TranslateNotify extends StatelessWidget {
   }
 }
 
+/// Translate permite fazer tradução para idiomas - localização
+/// 
 class Translate extends AssetsJson {
   Translate._create() {
     this.filename = 'intl/pt_br.json';
@@ -49,6 +55,7 @@ class Translate extends AssetsJson {
     //print([this.filename,hist]);
   }
 
+  /// a instancia fica armazenada na pasta assets/intl/<lang>.json
   static instance({String lang}) async {
     String l = lang ?? translate.filename;
     if (!l.contains('.')) l = 'assets/intl/' + lang + '.json';
@@ -62,6 +69,7 @@ class Translate extends AssetsJson {
     return translate;
   }
 
+  /// executa a tradução ou mantem o default
   static String string(String key) {
     if (key=='') return '';
     String base = key.replaceAll(' ', '_').toLowerCase();
@@ -85,6 +93,7 @@ class Translate extends AssetsJson {
   }
 }
 
+/// widget para selecionar o idioma desejado
 class LangWidget extends StatefulWidget {
   final Function(String) onChanged;
   const LangWidget({Key key, this.onChanged}) : super(key: key);

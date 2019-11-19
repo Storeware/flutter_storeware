@@ -1,6 +1,10 @@
 image:
   file: .gitpod.Dockerfile
 
+ports:
+  - port: 6080
+  - port: 33501
+
 tasks:
   - before: |
       export PATH=$FLUTTER_HOME/bin:$ANDROID_HOME/bin:$ANDROID_HOME/platform-tools:$PATH

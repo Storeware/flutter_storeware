@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// Routes é base para criar routes no app
+/// substitui o Navigator para entregar uma chamada
+/// de link que não são apresentados na barra do navegador
+/// evitando manter links parciais carregados na barra de navegação do browser
+
 class Routes {
   static final _singleton = Routes._create();
   Routes._create();

@@ -2,7 +2,7 @@ import '../drivers.dart';
 import 'package:flutter/material.dart';
 import '../views/logar_conta_view.dart';
 import '../views/logout_view.dart';
-import 'package:controls_web/services.dart';
+import '../services.dart';
 
 /// UsuarioItem
 /// Model para a estrutura da tabela de Usuarios

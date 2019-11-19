@@ -1,5 +1,5 @@
 import "dart:convert";
-import "package:controls_web/drivers/local_storage.dart";
+import "../drivers/local_storage.dart";
 
 /// instance utilizada para criar ao entrar,
 /// na sequencia usar a mesma instancia

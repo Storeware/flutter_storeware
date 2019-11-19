@@ -1,11 +1,36 @@
-# Files and directories created by pub
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
 .dart_tool/
+.flutter-plugins
 .packages
-# Remove the following pattern if you wish to check in your lock file
-pubspec.lock
+.pub-cache/
+.pub/
+/build/
 
-# Conventional directory for build outputs
-build/
+# Web related
+lib/generated_plugin_registrant.dart
 
-# Directory created by dartdoc
-doc/api/
+# Exceptions to above rules.
+!/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages

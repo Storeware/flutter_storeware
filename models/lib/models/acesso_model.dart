@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:models/data.dart';
+import '../data.dart';
 
 class AcessoItem extends DataItem {
   int idgrupo;

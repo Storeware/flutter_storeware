@@ -102,6 +102,37 @@ class AppsItems {
 
   static List<Widget> body() {
     List<Widget> r = [];
+    r.add(Container(
+        color: Colors.lightBlue,
+        child: ApplienceCards(elevation: 0, children: [
+          for (var i in intRange(20, 25))
+            Chip(backgroundColor: genColor(i), label: Text('body $i')),
+        ])));
+    r.add(Container(
+      height: 200,
+      child: ApplienceCarrousel(
+        enabled: false,
+        children: <Widget>[
+          Container(
+            color: Colors.greenAccent,
+            height: 120,
+            width: 120,
+          ),
+          Container(
+            color: Colors.red,
+            height: 120,
+            width: 120,
+          ),
+          for (var i in intRange(1, 10))
+            Container(
+              color: genColor(i),
+              height: 120,
+              width: 120,
+            )
+        ],
+      ),
+    ));
+
     for (var i in intRange(10, 15)) {
       r.add(ListTile(title: Text('body $i')));
     }

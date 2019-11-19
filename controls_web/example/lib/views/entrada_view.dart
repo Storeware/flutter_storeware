@@ -1,9 +1,6 @@
 import 'package:controls_web/controls/sliver_apps.dart';
 import 'package:app/models/apps_items.dart';
 import 'package:app/views/drawer_view.dart';
-import 'package:controls_web/controls/sliver_scaffold.dart';
-
-import '../models/constantes.dart';
 import 'package:flutter/material.dart';
 
 class EntradaView extends StatefulWidget {
@@ -21,14 +18,12 @@ class _EntradaViewState extends State<EntradaView> {
       //  title: Text(Constantes.appName),
       //),
       body: SliverApps(
-          appBar: SliverAppBar(
-              title: Text('AppBar')
-          ),
+          appBar: SliverAppBar(title: Text('AppBar')),
           topBars: AppsItems.topBars(),
-          topBarsHeight:120,
-           body: AppsItems.body(), grid: AppsItems.builder(context),
-        bottomBars: AppsItems.bottom()  
-      ),
+          topBarsHeight: 120,
+          body: AppsItems.body(),
+          grid: AppsItems.builder(context),
+          bottomBars: AppsItems.bottom()),
     );
   }
 }

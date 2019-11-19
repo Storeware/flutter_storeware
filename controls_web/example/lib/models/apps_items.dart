@@ -13,8 +13,7 @@ class AppsItems {
 
   _init(context) {
     List<Widget> _items = [];
-    _items.add(ApplienceTile(
-      dividerHeight: 1,
+    _items.add(ApplienceTile.status(
       value: '10',
       color: genColor(1),
       title: 'yyyy',
@@ -25,7 +24,7 @@ class AppsItems {
       color: genColor(2),
       title: 'xxxxrr',
     ));
-    _items.add(ApplienceTile(
+    _items.add(ApplienceStatus(
       value: '10',
       color: genColor(3),
       title: 'xxxxrr',
@@ -40,7 +39,7 @@ class AppsItems {
       color: genColor(5),
       title: 'xxxxrr',
     ));
-    _items.add(ApplienceTile(
+    _items.add(ApplienceTile.status(
       value: '10',
       color: genColor(6),
       title: 'xxxxrr',
@@ -53,23 +52,52 @@ class AppsItems {
 
     return _items;
   }
-  
+
   static List<Widget> topBars() {
     List<Widget> r = [];
     r.add(ApplienceTicket(
       title: 'Detalhes',
       color: Colors.amber,
       subTitle: 'novo item',
-      onPressed: (){},
+      onPressed: () {},
       value: '99',
       icon: Icons.access_time,
     ));
+    r.add(ApplienceStatus(
+      width: 150,
+      icon: Icons.sim_card,
+      title: 'Cards',
+      bottom: ApplienceCards(children: [Text('x'), Text('y')]),
+    ));
+    r.add(ApplienceStatus(
+        width: 150,
+        title: 'Detalhes',
+        color: Colors.amber,
+        //value: '99',
+        icon: Icons.adjust,
+        valueFontSize: 18,
+        bottom: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            ApplienceStatus.transparent(
+              title: 'Itens',
+              value: '1',
+              //valueFontSize: 16,
+            ),
+            ApplienceStatus.transparent(
+              title: 'Total',
+              value: '2',
+              //valueFontSize: 16,
+              //  width: 65,
+            )
+          ],
+        )));
     for (int i in intRange(0, 5)) {
-      r.add(ApplienceTile.status(
+      r.add(ApplienceTicket(
         color: genColor(i),
         value: ((i + 1) * 10).toString(),
-        title: 'Títulos-$i',
-        width: 150,
+        subTitle: 'Títulos-$i',
       ));
     }
     return r;

@@ -127,8 +127,9 @@ class ApplienceTile extends StatelessWidget {
       title: title,
       color: color,
       image: image,
-      valueStyle: TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
-      titleStyle: TextStyle(color: Colors.white, fontSize:18),
+      valueStyle: TextStyle(
+          color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
+      titleStyle: TextStyle(color: Colors.white, fontSize: 18),
       width: width,
     );
   }
@@ -140,12 +141,15 @@ class ApplienceTile extends StatelessWidget {
       title: title,
       color: color,
       image: image,
-      valueStyle: TextStyle(color:Colors.white,fontSize: 54,fontFamily: 'Raleway', fontWeight: FontWeight.bold),
-      titleStyle: TextStyle(color:Colors.white,fontSize:18),
+      valueStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 54,
+          fontFamily: 'Raleway',
+          fontWeight: FontWeight.bold),
+      titleStyle: TextStyle(color: Colors.white, fontSize: 18),
       width: width,
     );
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -219,18 +223,20 @@ class ApplienceTicket extends StatelessWidget {
   final double height;
   final double elevation;
   final Function onPressed;
+  final double valueFontSize;
   const ApplienceTicket(
       {Key key,
-      @required this.title,
+      this.title = '',
       this.color,
       this.fontColor = Colors.white,
       this.onPressed,
       this.image,
       this.icon,
       this.value,
+      this.valueFontSize = 28,
       this.width,
       this.height,
-      this.elevation = 2,
+      this.elevation = 1,
       this.subTitle})
       : super(key: key);
 
@@ -266,20 +272,22 @@ class ApplienceTicket extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                       color: fontColor,
-                      fontFamily: 'Quicksand',
+                      fontFamily: 'HelveticaNeue',
                     ),
                   )
               ],
             ),
-            SizedBox(width: 10,),
+            SizedBox(
+              width: 10,
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  value??'',
+                  value ?? '',
                   style: TextStyle(
-                    fontSize: 34,
+                    fontSize: valueFontSize,
                     color: fontColor,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Raleway',
@@ -291,12 +299,12 @@ class ApplienceTicket extends StatelessWidget {
                 InkWell(
                     onTap: onPressed,
                     child: Text(
-                      subTitle??'',
+                      subTitle ?? '',
                       style: TextStyle(
                         fontSize: 14,
                         color: fontColor,
                         // fontWeight: FontWeight.bold,
-                        fontFamily: 'Quicksand',
+                        fontFamily: 'HelveticaNeue',
                       ),
                     ))
               ],

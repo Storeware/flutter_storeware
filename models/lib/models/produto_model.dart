@@ -1,5 +1,5 @@
 
-import 'package:models/data.dart';
+import '../data.dart';
 
 class ProdutoItem extends DataItem {
   String codigo;

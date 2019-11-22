@@ -53,7 +53,7 @@ class AppsItems {
     return _items;
   }
 
-  static List<Widget> topBars() {
+  static List<Widget> topBars(context) {
     List<Widget> r = [];
     r.add(ApplienceTicket(
       title: 'Detalhes',
@@ -116,18 +116,18 @@ class AppsItems {
           Container(
             color: Colors.greenAccent,
             height: 80,
-            width: MediaQuery.of(context).size.width * 2 / 3,
+            width: MediaQuery.of(context).size.width * 4 / 5,
           ),
           Container(
             color: Colors.red,
             height: 120,
-            width: 120,
+            width: MediaQuery.of(context).size.width * 4 / 5,
           ),
           for (var i in intRange(1, 10))
-            Containcer c(
+            Container(
               color: genColor(i),
               height: 120,
-              width: 120,
+              width: MediaQuery.of(context).size.width * 4 / 5,
             )
         ],
       ),
@@ -140,7 +140,7 @@ class AppsItems {
     return r;
   }
 
-  static List<Widget> bottom() {
+  static List<Widget> bottom(context) {
     List<Widget> r = [];
     for (var i in intRange(10, 15)) {
       r.add(ListTile(title: Text('Bottom $i')));

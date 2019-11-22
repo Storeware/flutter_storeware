@@ -19,11 +19,11 @@ class _EntradaViewState extends State<EntradaView> {
       //),
       body: SliverApps(
           appBar: SliverAppBar(title: Text('AppBar')),
-          topBars: AppsItems.topBars(),
+          topBars: AppsItems.topBars(context),
           topBarsHeight: 120,
-          body: AppsItems.body(),
+          body: AppsItems.body(context),
           grid: AppsItems.builder(context),
-          bottomBars: AppsItems.bottom()),
+          bottomBars: AppsItems.bottom(context)),
     );
   }
 }

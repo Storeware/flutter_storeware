@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls/shopping.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+class ShoppingViewDemo extends StatefulWidget {
+  ShoppingViewDemo({Key key, this.title = ''}) : super(key: key);
   final String title;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _ShoppingViewDemoState createState() => _ShoppingViewDemoState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _ShoppingViewDemoState extends State<ShoppingViewDemo> {
   int _counter = 0;
 
   void _incrementCounter() {

@@ -100,7 +100,7 @@ class AppsItems {
     return r;
   }
 
-  static List<Widget> body() {
+  static List<Widget> body(context) {
     List<Widget> r = [];
     r.add(Container(
         color: Colors.lightBlue,
@@ -111,12 +111,12 @@ class AppsItems {
     r.add(Container(
       height: 200,
       child: ApplienceCarrousel(
-        enabled: false,
+        enabled: true,
         children: <Widget>[
           Container(
             color: Colors.greenAccent,
-            height: 120,
-            width: 120,
+            height: 80,
+            width: MediaQuery.of(context).size.width * 2 / 3,
           ),
           Container(
             color: Colors.red,
@@ -124,7 +124,7 @@ class AppsItems {
             width: 120,
           ),
           for (var i in intRange(1, 10))
-            Container(
+            Containcer c(
               color: genColor(i),
               height: 120,
               width: 120,

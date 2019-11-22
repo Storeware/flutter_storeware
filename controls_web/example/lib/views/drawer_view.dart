@@ -14,14 +14,18 @@ class _DrawerViewState extends State<DrawerView> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-       appBar: appBarLight(title:Text('Opções')),
-       body: Column(children: <Widget>[
-        Container(width: double.infinity, color:theme.primaryColor.withAlpha(120),
-        child: Menu.profile(),
-        ),
-        Expanded(child:Menu.builder()),
-        Container(height: 40,color:theme.primaryColor.withAlpha(100))
-       ],),
+      appBar: appBarLight(title: Text('Opções')),
+      body: Column(
+        children: <Widget>[
+          Container(
+            width: double.infinity,
+            color: theme.primaryColor.withAlpha(120),
+            child: Menu.profile(),
+          ),
+          Expanded(child: Menu.builder(context)),
+          Container(height: 40, color: theme.primaryColor.withAlpha(100))
+        ],
+      ),
     );
   }
 }

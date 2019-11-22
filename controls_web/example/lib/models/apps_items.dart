@@ -112,6 +112,7 @@ class AppsItems {
       height: 200,
       child: ApplienceCarrousel(
         enabled: true,
+        navColor: Colors.amber,
         children: <Widget>[
           Container(
             color: Colors.greenAccent,

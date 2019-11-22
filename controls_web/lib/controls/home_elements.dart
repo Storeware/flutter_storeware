@@ -762,6 +762,7 @@ int _remainder(int input, int source) {
 class ApplienceCarrousel extends StatefulWidget {
   final List<Widget> children;
   final bool enabled;
+  final Color navColor;
   final bool autoPlay;
   final Function(int) onPageChanged;
   final double height;
@@ -782,6 +783,7 @@ class ApplienceCarrousel extends StatefulWidget {
       {Key key,
       this.children,
       this.enabled = true,
+      this.navColor,
       this.onPageChanged,
       this.autoPlay = true,
       this.height,
@@ -827,10 +829,12 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
         if (widget.enabled)
           InkWell(
             child: Container(
+                color: widget.navColor,
                 height: size.height,
                 width: 18,
                 child: Icon(
                   Icons.keyboard_arrow_left,
+                  size: 18,
                 )),
             onTap: () => carrousel.previousPage(
                 duration: Duration(milliseconds: 300), curve: Curves.linear),
@@ -839,9 +843,13 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
         if (widget.enabled)
           InkWell(
             child: Container(
+                color: widget.navColor,
                 height: size.height,
                 width: 18,
-                child: Icon(Icons.keyboard_arrow_right)),
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 18,
+                )),
             onTap: () => carrousel.nextPage(
                 duration: Duration(milliseconds: 300), curve: Curves.linear),
           ),

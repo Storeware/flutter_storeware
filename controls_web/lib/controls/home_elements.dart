@@ -125,7 +125,7 @@ class ApplienceTile extends StatelessWidget {
       this.titleFontSize = 16,
       this.value,
       this.valueStyle,
-      this.valueFontSize = 54,
+      this.valueFontSize = 48,
       this.image,
       this.body,
       this.appBar,
@@ -158,6 +158,7 @@ class ApplienceTile extends StatelessWidget {
       title: title,
       color: color,
       image: image,
+      padding: EdgeInsets.all(2),
       valueStyle: TextStyle(
           color: Colors.white,
           fontSize: 54,
@@ -296,9 +297,11 @@ class ApplienceTicket extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              direction: Axis.vertical,
+              alignment: WrapAlignment.end,
+              //crossAxisAlignment: CrossAxisAlignment.end,
+              //mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 if (value != null)
                   Text(

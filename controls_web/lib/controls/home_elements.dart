@@ -16,6 +16,9 @@ class SliverContents extends StatefulWidget {
   final Function builder;
   final double crossAxisSpacing;
   final double mainAxisSpacing;
+  final List<Widget> topBars;
+
+  final double topBarsHeight;
   SliverContents(
       {Key key,
       this.children,
@@ -25,6 +28,8 @@ class SliverContents extends StatefulWidget {
       this.bottonBar,
       this.grid,
       this.itemCount = 0,
+      this.topBars,
+      this.topBarsHeight = 90,
       this.builder,
       this.crossAxisCount = 2,
       this.crossAxisSpacing = 2.0,
@@ -48,7 +53,14 @@ class _SliverContentsState extends State<SliverContents> {
       if (widget.sliverAppBar != null) widget.sliverAppBar,
       SliverToBoxAdapter(
           child: Column(children: [
-        widget.appBar ?? Container(),
+        if (widget.appBar != null) widget.appBar,
+        if (widget.topBars != null)
+          Container(
+              height: widget.topBarsHeight,
+              child: CustomScrollView(slivers: [
+                for (var item in widget.topBars ?? [])
+                  SliverToBoxAdapter(child: item)
+              ], scrollDirection: Axis.horizontal)),
         widget.body ?? Container(),
         ...items ?? [],
         ...widget.children ?? []

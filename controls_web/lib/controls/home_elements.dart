@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 
 class SliverContents extends StatefulWidget {
   final Widget appBar;
+  final Widget sliverAppBar;
   final List<Widget> children;
   final List<Widget> grid;
   final List<Widget> slivers;
@@ -19,6 +20,7 @@ class SliverContents extends StatefulWidget {
       {Key key,
       this.children,
       this.appBar,
+      this.sliverAppBar,
       this.body,
       this.bottonBar,
       this.grid,
@@ -43,6 +45,7 @@ class _SliverContentsState extends State<SliverContents> {
         items.add(widget.builder(i));
       }
     return CustomScrollView(scrollDirection: widget.scrollDirection, slivers: [
+      if (widget.sliverAppBar != null) widget.sliverAppBar,
       SliverToBoxAdapter(
           child: Column(children: [
         widget.appBar ?? Container(),

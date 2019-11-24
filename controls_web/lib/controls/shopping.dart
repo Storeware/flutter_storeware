@@ -2,7 +2,269 @@ import 'package:flutter/material.dart';
 
 enum MainImagePosition { left, rigth, top, bottom }
 
-class ShoppingPage extends StatelessWidget {
+class ShoppingStatus extends StatelessWidget {
+  final String title;
+  final Color titleColor;
+  final String value;
+  final Color valueColor;
+  final Color color;
+  final double width;
+  final Function onPressed;
+  const ShoppingStatus({
+    Key key,
+    this.title,
+    this.titleColor = Colors.indigo,
+    this.value,
+    this.valueColor = Colors.blue,
+    this.color,
+    this.width,
+    this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        child: Container(
+          width: width,
+          color: color,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              if (value != null)
+                Text(value, style: TextStyle(color: valueColor, fontSize: 18)),
+              if (title != null)
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    color: titleColor,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        onTap: onPressed);
+  }
+}
+
+class ShoppingDescriptionPage extends StatelessWidget {
+  final Widget image;
+  final Widget icon;
+  final String title;
+  final Color titleColor;
+  final Color baseColor;
+  final String subTitle;
+  final String price;
+  final String rank;
+  final Widget stars;
+  final List<Widget> items;
+  final String description;
+  final String buttonText;
+  final Color buttonColor;
+  final Function onPressed;
+  final Function onClose;
+  final Widget button;
+  final BoxDecoration decoration;
+  final String fontFamily;
+  const ShoppingDescriptionPage(
+      {this.image,
+      this.icon,
+      this.title,
+      this.fontFamily = 'Sans',
+      this.titleColor = Colors.indigo,
+      this.baseColor = Colors.blue,
+      this.subTitle,
+      this.price,
+      this.rank,
+      this.stars,
+      this.decoration,
+      this.items,
+      this.description,
+      this.buttonText,
+      this.buttonColor = Colors.red,
+      this.onPressed,
+      this.onClose,
+      this.button,
+      Key key})
+      : super(key: key);
+
+  @override
+  Widget build(context) {
+    return Container(
+      decoration: decoration,
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 30,
+          ),
+          if (image != null) image,
+          if (icon != null)
+            Container(alignment: Alignment.centerRight, child: icon),
+          if (title != null)
+            SizedBox(
+              height: 5,
+            ),
+          if (title != null)
+            Container(
+              alignment: Alignment.topLeft,
+              child: Text(
+                title,
+                softWrap: true,
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: titleColor,
+                ),
+              ),
+            ),
+          if (subTitle != null)
+            SizedBox(
+              height: 8,
+            ),
+          if (subTitle != null)
+            Container(
+              alignment: Alignment.topLeft,
+              child: Text(subTitle ?? '',
+                  style: TextStyle(
+                      fontFamily: fontFamily,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300)),
+            ),
+          SizedBox(
+            height: 8,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text(
+              price ?? '',
+              style: TextStyle(
+                fontFamily: fontFamily,
+                color: baseColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            Container(
+                height: 52,
+                child: Row(
+                  children: <Widget>[
+                    Text(rank ?? '',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: baseColor)),
+                    stars ?? Container(),
+                  ],
+                )),
+          ]),
+          if (items != null)
+            Wrap(
+              //alignment: WrapAlignment.start,
+              runSpacing: 3,
+              runAlignment: WrapAlignment.start,
+              direction: Axis.horizontal,
+              spacing: 8,
+              children: items,
+            ),
+          SizedBox(
+            height: 8,
+          ),
+          if (description != null)
+            Text(description,
+                style: TextStyle(
+                    fontFamily: fontFamily,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300)),
+          SizedBox(
+            height: 32,
+          ),
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            if (onClose != null)
+              ShoppingButton(
+                minWidth: 32,
+                maxWidth: 50,
+                child: Text('X'),
+                onPressed: () {
+                  onClose();
+                },
+              ),
+            SizedBox(
+              width: 5,
+            ),
+            if (buttonText != null && onPressed != null)
+              ShoppingButton(
+                minWidth: 90,
+                child: Text(
+                  buttonText,
+                  style: TextStyle(
+                    //fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onPressed: () {
+                  if (onPressed != null) onPressed();
+                },
+              ),
+            SizedBox(
+              width: 5,
+            ),
+            if (button != null) button
+          ]),
+        ],
+      ),
+    );
+  }
+}
+
+class ShoppingCard extends StatelessWidget {
+  const ShoppingCard({
+    Key key,
+    @required this.child,
+    this.color = Colors.white,
+    this.minWidth,
+    this.maxWidth,
+    this.decoration,
+    this.height,
+    this.width,
+    this.elevation = 0,
+  }) : super(key: key);
+  final double elevation;
+  final Widget child;
+  final double minWidth;
+  final double maxWidth;
+  final double width;
+  final double height;
+  final Color color;
+  final BoxDecoration decoration;
+
+  @override
+  Widget build(BuildContext context) {
+    var ctn = Container(
+        width: width,
+        height: height,
+        alignment: Alignment.center,
+        constraints: (maxWidth != null && minWidth != null)
+            ? BoxConstraints(maxWidth: maxWidth, minWidth: minWidth ?? 1)
+            : null,
+        decoration: decoration ??
+            BoxDecoration(
+                color: color,
+                gradient: buildLinearGradient(context, colors: [
+                  color,
+                  color.withAlpha(200),
+                  color.withAlpha(200),
+                  color
+                ]),
+                borderRadius: BorderRadius.circular(10)),
+        child: child);
+
+    if (elevation > 0) return Card(elevation: elevation, child: ctn);
+    return ctn;
+  }
+}
+
+class ShoppingScrollView extends StatelessWidget {
   final appBar;
   final List<Widget> topBars;
   final Widget body;
@@ -11,7 +273,7 @@ class ShoppingPage extends StatelessWidget {
   final List<Widget> bottomBars;
   final double topBarsHeight;
   final EdgeInsetsGeometry padding;
-  const ShoppingPage(
+  const ShoppingScrollView(
       {Key key,
       this.appBar,
       this.topBars,
@@ -74,8 +336,12 @@ class ShoppingCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        child: Container(
+    return ShoppingButton(
+        minWidth: 80,
+        maxWidth: 110,
+        child: Text(title),
+        color: color,
+        /*child: Container(
           padding: EdgeInsets.only(left: 8, right: 8),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12), color: color),
@@ -83,7 +349,8 @@ class ShoppingCategory extends StatelessWidget {
           constraints: BoxConstraints(minWidth: 80, minHeight: 20),
           child: Text(title),
         ),
-        onTap: () {
+        */
+        onPressed: () {
           onPressed(id);
         });
   }
@@ -153,6 +420,8 @@ class ShoppingTile extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     var _width = width ?? size.width;
     var csize = _width * 2 / 3;
+    if (csize < 20) csize = 100;
+
     return Card(
       elevation: elevation,
       child: InkWell(
@@ -304,6 +573,59 @@ class _ShoppingDiscriptions extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+}
+
+BoxDecoration buildBoxGradient(context) {
+  return BoxDecoration(gradient: buildLinearGradient(context));
+}
+
+LinearGradient buildLinearGradient(context, {List<Color> colors}) {
+  var colores = Theme.of(context).primaryColor;
+  return LinearGradient(
+    // Where the linear gradient begins and ends
+    begin: Alignment.topRight,
+    end: Alignment.bottomLeft,
+    // Add one stop for each color. Stops should increase from 0 to 1
+    stops: [0.1, 0.3, 0.5, 0.9],
+    colors: colors ??
+        [
+          colores.withAlpha(25),
+          colores.withAlpha(25),
+          colores.withAlpha(50),
+          colores.withAlpha(100),
+        ],
+  );
+}
+
+class ShoppingButton extends StatelessWidget {
+  final Widget child;
+  final Function onPressed;
+  final Color color;
+  final double minWidth;
+  final double maxWidth;
+  const ShoppingButton(
+      {Key key,
+      this.color = Colors.red,
+      this.child,
+      this.minWidth = 90,
+      this.maxWidth = 200,
+      this.onPressed})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: ShoppingCard(
+        child: child,
+        color: color,
+        maxWidth: maxWidth,
+        minWidth: minWidth,
+        height: 32,
+      ),
+      onTap: onPressed,
+      splashColor: Theme.of(context).primaryColor,
     );
   }
 }

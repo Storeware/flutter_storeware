@@ -356,10 +356,10 @@ class ShoppingCategory extends StatelessWidget {
   }
 }
 
-class ShoppingView extends StatelessWidget {
+class ShoppingListView extends StatelessWidget {
   final List<Widget> children;
   final Color color;
-  const ShoppingView({Key key, this.color, this.children}) : super(key: key);
+  const ShoppingListView({Key key, this.color, this.children}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -24,14 +24,14 @@ class _ShoppingViewDemoState extends State<ShoppingViewDemo> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ShoppingPage(
+      body: ShoppingScrollView(
         body: Container(
           child: Text('Categorias'),
         ),
         children: <Widget>[
           Container(
             height: 40,
-            child: ShoppingView(color: Colors.greenAccent, children: [
+            child: ShoppingListView(color: Colors.greenAccent, children: [
               for (var i = 0; i < 10; i++)
                 ShoppingCategory(
                     color: Colors.amber, title: 'Categoria ' + i.toString())
@@ -73,7 +73,7 @@ class _ShoppingViewDemoState extends State<ShoppingViewDemo> {
           Text('ofertas'),
           Container(
             height: 30,
-            child: ShoppingView(color: Colors.lime, children: <Widget>[
+            child: ShoppingListView(color: Colors.lime, children: <Widget>[
               for (var i = 0; i < 10; i++)
                 ShoppingCategory(color: Colors.orange, title: '$i'),
             ]),

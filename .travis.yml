@@ -23,8 +23,8 @@ matrix:
         # TODO  Enable travis to run charts common test after fixing timezone test bug.
         - flutter upgrade
         - flutter config --enable-web
-        - pub get
-        - pub run test -p "chrome,vm"
+        - flutter pub get
+        - flutter test
         #- cd ../charts_flutter
         #- flutter test
 

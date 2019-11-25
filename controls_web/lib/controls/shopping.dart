@@ -2,6 +2,115 @@ import 'package:flutter/material.dart';
 
 enum MainImagePosition { left, rigth, top, bottom }
 
+nullIf(Widget wg) {
+  if (wg != null)
+    return wg;
+  else
+    return Container();
+}
+
+class ShoppingPanel extends StatelessWidget {
+  final Widget header;
+  final double width;
+  final double height;
+  final double elevator;
+  final String title;
+  final TextStyle titleStyle;
+  final String subTitle;
+  final TextStyle subTitleStyle;
+  final Widget body;
+  final Widget image;
+  final String value;
+  final TextStyle valueStyle;
+  final Color color;
+  //final Widget stars;
+  final Widget bottom;
+  final Widget action;
+  final Widget leading;
+  final Widget trailing;
+  final List<Widget> children;
+  final Widget bottomBar;
+  ShoppingPanel({
+    Key key,
+    this.header,
+    this.width,
+    this.height,
+    this.color,
+    this.elevator = 0,
+    this.title,
+    this.titleStyle,
+    this.subTitle,
+    this.subTitleStyle,
+    this.leading,
+    this.trailing,
+    this.body,
+    this.bottom,
+    this.image,
+    this.value,
+    this.valueStyle,
+    this.action,
+    this.children,
+    this.bottomBar,
+    //this.stars
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var _color = color ?? Colors.grey.withAlpha(100);
+    return Card(
+        elevation: elevator,
+        child: Container(
+          alignment: Alignment.centerLeft,
+          color: _color,
+          padding: EdgeInsets.all(18),
+          width: width,
+          height: height,
+          child: Column(children: [
+            if (header != null) header,
+            if (title != null)
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                leading ?? Container(),
+                Text(
+                  title,
+                  style: titleStyle ??
+                      TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                trailing ?? Container(),
+              ]),
+            Text(subTitle,
+                style: subTitleStyle ??
+                    TextStyle(
+                      fontSize: 12,
+                    )),
+            Expanded(child: body ?? Container()),
+            Row(children: [
+              image ?? Container(),
+              Expanded(child: Container()),
+              Row(
+                children: <Widget>[
+                  Text(value ?? '',
+                      style: valueStyle ??
+                          TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          )),
+                  //        stars ?? Container(),
+                  if (action != null)
+                    action,
+                ],
+              ),
+            ]),
+            if (bottom != null) bottom,
+            ...children ?? [],
+            if (bottomBar != null) bottomBar,
+          ]),
+        ));
+  }
+}
+
 class ShoppingStatus extends StatelessWidget {
   final String title;
   final Color titleColor;
@@ -359,7 +468,8 @@ class ShoppingCategory extends StatelessWidget {
 class ShoppingListView extends StatelessWidget {
   final List<Widget> children;
   final Color color;
-  const ShoppingListView({Key key, this.color, this.children}) : super(key: key);
+  const ShoppingListView({Key key, this.color, this.children})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

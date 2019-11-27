@@ -2,6 +2,30 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 
+
+
+class ColumnView extends StatefulWidget {
+  final List<Widget> children;
+  ColumnView({this.children});
+
+  @override
+  _ColumnViewState createState() => _ColumnViewState();
+}
+
+class _ColumnViewState extends State<ColumnView> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      for (var item in widget.children)
+        SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(child: item),
+        ),
+    ]);
+  }
+}
+
+
 class SliverContents extends StatefulWidget {
   final Widget appBar;
   final Widget sliverAppBar;

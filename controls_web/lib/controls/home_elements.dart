@@ -3,21 +3,45 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 
-
-class ColumnView extends StatefulWidget {
+class ColumnScroll extends StatefulWidget {
   final List<Widget> children;
-  ColumnView({this.children});
+  final double spacing;
+  ColumnScroll({Key key, this.spacing = 1, this.children}) : super(key: key);
 
   @override
-  _ColumnViewState createState() => _ColumnViewState();
+  _ColumnScrollState createState() => _ColumnScrollState();
 }
 
-class _ColumnViewState extends State<ColumnView> {
+class _ColumnScrollState extends State<ColumnScroll> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      for (var item in widget.children)
+        SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: widget.spacing),
+          scrollDirection: Axis.horizontal,
+          child: Container(child: item),
+        ),
+    ]);
+  }
+}
+
+class RowScroll extends StatefulWidget {
+  final List<Widget> children;
+  final double spacing;
+  RowScroll({this.children, this.spacing = 1});
+
+  @override
+  _RowScrollState createState() => _RowScrollState();
+}
+
+class _RowScrollState extends State<RowScroll> {
   @override
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
       for (var item in widget.children)
         SingleChildScrollView(
+          padding: EdgeInsets.only(right: widget.spacing),
           scrollDirection: Axis.vertical,
           child: Container(child: item),
         ),

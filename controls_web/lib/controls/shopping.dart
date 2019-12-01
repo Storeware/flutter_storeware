@@ -698,13 +698,13 @@ LinearGradient buildLinearGradient(context, {List<Color> colors}) {
     begin: Alignment.topRight,
     end: Alignment.bottomLeft,
     // Add one stop for each color. Stops should increase from 0 to 1
-    stops: [0.1, 0.3, 0.5, 0.9],
+    stops: [0.5, 0.3, 0.7, 0.95],
     colors: colors ??
         [
           colores.withAlpha(25),
-          colores.withAlpha(25),
-          colores.withAlpha(50),
-          colores.withAlpha(100),
+          colores.withAlpha(150),
+          colores.withAlpha(150),
+          colores.withAlpha(250),
         ],
   );
 }

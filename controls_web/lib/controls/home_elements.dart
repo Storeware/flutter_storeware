@@ -2,6 +2,54 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 
+
+class ColumnScroll extends StatefulWidget {
+  final List<Widget> children;
+  final double spacing;
+  ColumnScroll({Key key, this.spacing = 1, this.children}) : super(key: key);
+
+  @override
+  _ColumnScrollState createState() => _ColumnScrollState();
+}
+
+class _ColumnScrollState extends State<ColumnScroll> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      for (var item in widget.children)
+        SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: widget.spacing),
+          scrollDirection: Axis.horizontal,
+          child: Container(child: item),
+        ),
+    ]);
+  }
+}
+
+class RowScroll extends StatefulWidget {
+  final List<Widget> children;
+  final double spacing;
+  RowScroll({this.children, this.spacing = 1});
+
+  @override
+  _RowScrollState createState() => _RowScrollState();
+}
+
+class _RowScrollState extends State<RowScroll> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      for (var item in widget.children)
+        SingleChildScrollView(
+          padding: EdgeInsets.only(right: widget.spacing),
+          scrollDirection: Axis.vertical,
+          child: Container(child: item),
+        ),
+    ]);
+  }
+}
+
+
 class SliverContents extends StatefulWidget {
   final Widget appBar;
   final Widget sliverAppBar;
@@ -17,12 +65,13 @@ class SliverContents extends StatefulWidget {
   final double crossAxisSpacing;
   final double mainAxisSpacing;
   final List<Widget> topBars;
-
+  final Widget toolBar;
   final double topBarsHeight;
   SliverContents(
       {Key key,
       this.children,
       this.appBar,
+      this.toolBar,
       this.sliverAppBar,
       this.body,
       this.bottonBar,
@@ -54,6 +103,7 @@ class _SliverContentsState extends State<SliverContents> {
       SliverToBoxAdapter(
           child: Column(children: [
         if (widget.appBar != null) widget.appBar,
+        if (widget.toolBar != null) widget.toolBar,
         if (widget.topBars != null)
           Container(
               height: widget.topBarsHeight,
@@ -113,6 +163,8 @@ class ApplienceTile extends StatelessWidget {
   final double dividerHeight;
   final Function onPressed;
   final padding;
+  final Widget chart;
+  final textAlign;
   const ApplienceTile(
       {Key key,
       this.padding,
@@ -120,6 +172,7 @@ class ApplienceTile extends StatelessWidget {
       this.top = 10,
       this.left = 10,
       this.title,
+      this.textAlign = TextAlign.center,
       this.onPressed,
       this.titleStyle,
       this.titleFontSize = 16,
@@ -128,6 +181,7 @@ class ApplienceTile extends StatelessWidget {
       this.valueFontSize = 48,
       this.image,
       this.body,
+      this.chart,
       this.appBar,
       this.topBar,
       this.bottomBar,
@@ -138,8 +192,14 @@ class ApplienceTile extends StatelessWidget {
       : super(key: key);
 
   static status(
-      {Widget image, String value, String title, Color color, double width}) {
+      {padding,
+      Widget image,
+      String value,
+      String title,
+      Color color,
+      double width}) {
     return ApplienceTile(
+      padding: padding ?? EdgeInsets.only(right: 5),
       value: value,
       title: title,
       color: color,
@@ -152,19 +212,25 @@ class ApplienceTile extends StatelessWidget {
   }
 
   static panel(
-      {Widget image, String value, String title, Color color, double width}) {
+      {padding,
+      Widget image,
+      String value,
+      String title,
+      Color color,
+      double width}) {
     return ApplienceTile(
       value: value,
       title: title,
       color: color,
       image: image,
-      padding: EdgeInsets.all(2),
+      textAlign: TextAlign.end,
+      padding: padding ?? EdgeInsets.only(right: 5),
       valueStyle: TextStyle(
           color: Colors.white,
-          fontSize: 54,
+          fontSize: 28,
           fontFamily: 'Raleway',
           fontWeight: FontWeight.bold),
-      titleStyle: TextStyle(color: Colors.white, fontSize: 18),
+      titleStyle: TextStyle(color: Colors.white, fontSize: 14),
       width: width,
     );
   }
@@ -175,6 +241,7 @@ class ApplienceTile extends StatelessWidget {
     List<Widget> items = [];
     if (value != null)
       items.add(Text(value,
+          textAlign: textAlign,
           style: valueStyle ??
               TextStyle(
                   color: theme.primaryColor,
@@ -184,7 +251,7 @@ class ApplienceTile extends StatelessWidget {
 
     if (title != null)
       items.add(Text(title,
-          textAlign: TextAlign.center,
+          textAlign: textAlign,
           style: titleStyle ??
               TextStyle(
                   fontFamily: 'Sans',
@@ -198,9 +265,8 @@ class ApplienceTile extends StatelessWidget {
       width: width,
       child: InkWell(
           onTap: onPressed,
+          splashColor: Theme.of(context).primaryColor,
           child: Container(
-              //elevation: elevation,
-              //color: color,
               child: Stack(children: [
             Positioned(
               left: left,

@@ -360,10 +360,10 @@ class ShoppingCard extends StatelessWidget {
             BoxDecoration(
                 color: color,
                 gradient: buildLinearGradient(context, colors: [
+                  color.withAlpha(200),
+                  color,
                   color,
                   color.withAlpha(200),
-                  color.withAlpha(200),
-                  color
                 ]),
                 borderRadius: BorderRadius.circular(10)),
         child: child);

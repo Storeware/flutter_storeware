@@ -38,7 +38,7 @@ tasks:
       #flutter doctor
       echo "Ready to start!"
 
-  - command: "firefox http://localhost:33501"
+  - command: "/usr/bin/google-chrome http://localhost:33501"
 
 vscode:
   extensions:

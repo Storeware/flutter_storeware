@@ -28,9 +28,10 @@ tasks:
       echo "Ready to go!"
   - command: |
       export PATH=$FLUTTER_HOME/bin:$ANDROID_HOME/bin:$ANDROID_HOME/platform-tools:$PATH
-      #flutter upgrade
+      flutter config --enable-web
+      flutter upgrade
       #flutter pub get
-      #flutter config --enable-web
+      
       #flutter doctor
       echo "Ready to start!"
 

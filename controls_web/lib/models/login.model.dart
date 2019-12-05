@@ -73,12 +73,15 @@ abstract class AuthUser extends UsuarioItem {
 }
 
 /// LoginModel - Classe de autenticação de usuario
-class LoginModel extends AuthUser {
+class LoginModel extends LoginModelBase {
   static final LoginModel _instance = LoginModel._create();
   final _notifier = BlocModel<String>();
   factory LoginModel() {
     return _instance;
   }
+
+class LoginModelBase extends AuthUser{
+  LoginModelBase();
   get conta => LocalStorage().getKey('conta');
   set conta(x) {
     print('setting conta: $x');

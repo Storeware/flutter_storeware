@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'sliver_scaffold_web.dart';
+import 'sliver_scaffold.dart';
 
 class DashboardView extends StatefulWidget {
   final Color backgroundColor;

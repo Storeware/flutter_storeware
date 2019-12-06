@@ -1,5 +1,5 @@
-import 'package:app/dashs/dash_danut.dart';
-import 'package:app/dashs/dash_pie.dart';
+import 'dash_danut.dart';
+import 'dash_pie.dart';
 
 /// Gauge chart example, where the data does not cover a full revolution in the
 /// chart.

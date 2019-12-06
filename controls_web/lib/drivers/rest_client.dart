@@ -137,7 +137,7 @@ class RestClient {
 
   _setHeader() {
     addHeader('Content-Type', contentType);
-    addHeader('Access-Control-Allow-Origin', accessControlAllowOrigin);
+    //addHeader('Access-Control-Allow-Origin', accessControlAllowOrigin); // controle é no servidor
     //print(headers);
   }
 

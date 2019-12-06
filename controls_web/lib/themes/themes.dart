@@ -9,6 +9,9 @@ typedef ThemedWidgetBuilder = Widget Function(
 typedef ThemeDataWithBrightnessBuilder = ThemeData Function(
     Brightness brightness);
 
+ThemeData themeLight(b) => DynamicTheme.light();
+ThemeData themeBlack(b) => DynamicTheme.dark();
+
 ThemeData changedTheme(brightness) {
   return (brightness == Brightness.light)
       ? themeLight(Brightness.light)
@@ -30,7 +33,7 @@ class DynamicTheme extends StatefulWidget {
     return context.ancestorStateOfType(const TypeMatcher<DynamicThemeState>());
   }
 
-  static ligth(BuildContext context) {
+  static light() {
     var th = ThemeData.light();
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
@@ -43,7 +46,7 @@ class DynamicTheme extends StatefulWidget {
     ));
   }
 
-  static dark(BuildContext context) {
+  static dark() {
     var th = ThemeData.dark();
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
@@ -53,9 +56,9 @@ class DynamicTheme extends StatefulWidget {
 
   static changeTo(Brightness b) {
     if (b == Brightness.light) {
-      return DynamicTheme.ligth(context);
+      return DynamicTheme.light();
     }
-    return DynamicTheme.dark(context);
+    return DynamicTheme.dark();
   }
 }
 

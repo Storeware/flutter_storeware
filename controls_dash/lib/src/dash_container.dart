@@ -5,6 +5,7 @@ class DashContainer extends StatelessWidget {
   final String subTitle;
   final Color color;
   final Widget child;
+  final Widget body;
   final double width;
   final double height;
   final double elevation;
@@ -16,6 +17,7 @@ class DashContainer extends StatelessWidget {
       this.width = 200,
       this.height = 150,
       Key key,
+      this.body,
       this.child})
       : super(key: key);
 
@@ -24,26 +26,36 @@ class DashContainer extends StatelessWidget {
     return Card(
       color: color,
       elevation: elevation,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
           if (title != null)
-            SizedBox(
-              height: 8,
+            Positioned(
+              left: 5,
+              right: 5,
+              top: 5,
+              child: Column(
+                children: <Widget>[
+                  Text(title,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  if (body != null) body,
+                ],
+              ),
             ),
-          if (title != null)
-            Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
-          Container(width: width, height: height, child: child),
+          Container(
+              padding: EdgeInsets.all(3),
+              width: width,
+              height: height,
+              child: child),
           if (subTitle != null)
-            Text(subTitle,
-                style: TextStyle(
-                  fontSize: 12,
-                )),
-          if (subTitle != null)
-            SizedBox(
-              height: 8,
-            ),
+            Positioned(
+                top: 40,
+                left: 5,
+                right: 5,
+                child: Text(subTitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                    ))),
         ],
       ),
     );

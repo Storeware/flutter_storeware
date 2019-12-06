@@ -26,7 +26,7 @@ class DashPieChart extends StatelessWidget {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<ChartPair, String>> createSerie(
-      {String id, List<ChartPair> data, bool showValues = false}) {
+      {String id, List<ChartPair> data}) {
     return [
       new charts.Series<ChartPair, String>(
         id: id,
@@ -34,9 +34,7 @@ class DashPieChart extends StatelessWidget {
         measureFn: (ChartPair sales, _) => sales.value,
         data: data,
         // Set a label accessor to control the text of the arc label.
-        labelAccessorFn: (ChartPair row, _) {
-          return (showValues ? '${row.title}:${row.value}' : '${row.title}');
-        },
+        labelAccessorFn: (ChartPair row, _) => '${row.title}',
       )
     ];
   }

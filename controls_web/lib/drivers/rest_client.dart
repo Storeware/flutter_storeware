@@ -1,4 +1,3 @@
-
 //import 'dart:io';
 
 //import "package:universal_html/html.dart" as http;
@@ -137,14 +136,13 @@ class RestClient {
 
   _setHeader() {
     addHeader('Content-Type', contentType);
-    //addHeader('Access-Control-Allow-Origin', accessControlAllowOrigin); // controle é no servidor
-    //print(headers);
   }
 
   Future<String> openUrl(Uri url, {String method, body}) async {
     _setHeader();
     http.Response resp;
-    print('OpenUrl $method:$url');
+    //print('OpenUrl $method:$url');
+    //print(headers);
     if (method == 'GET') resp = await http.get(url, headers: headers);
     if (method == 'POST')
       resp = await http.post(url, body: body, headers: headers);

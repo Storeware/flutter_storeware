@@ -216,7 +216,7 @@ class ApplienceTile extends StatelessWidget {
       String title,
       Color color,
       double width,
-      Functions onPressed}) {
+      Function onPressed}) {
     return ApplienceTile(
       value: value,
       title: title,

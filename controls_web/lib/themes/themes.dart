@@ -9,39 +9,14 @@ typedef ThemedWidgetBuilder = Widget Function(
 typedef ThemeDataWithBrightnessBuilder = ThemeData Function(
     Brightness brightness);
 
-
-
-
-themeLight(brightness) {
-  //defaultTextStyleButton = produtoTextStyle(context);
-  defaultScaffoldBackgroudColor = Color.fromRGBO(252, 252, 252, 1);
-  /*var r = ThemeData(
-      fontFamily: 'Sans',
-      scaffoldBackgroundColor: defaultScaffoldBackgroudColor,
-      brightness: brightness);*/
-  return ThemeData.light() ;
-}
-
-themeBlack(bightness) {
-//  defaultTextStyleButton = produtoTextStyle(context);
-  var r = ThemeData(
-    fontFamily: 'Sans',
-    brightness: Brightness.dark
-    );
-  defaultScaffoldBackgroudColor = r.scaffoldBackgroundColor;
-  return r;
-}
-
 ThemeData changedTheme(brightness) {
   return (brightness == Brightness.light)
-          ? themeLight(Brightness.light)
-          : themeBlack( Brightness.dark);
+      ? themeLight(Brightness.light)
+      : themeBlack(Brightness.dark);
 }
 
-
 class DynamicTheme extends StatefulWidget {
-  const DynamicTheme(
-      {Key key, this.onData, this.builder, this.initial})
+  const DynamicTheme({Key key, this.onData, this.builder, this.initial})
       : super(key: key);
 
   final ThemedWidgetBuilder builder;
@@ -53,6 +28,34 @@ class DynamicTheme extends StatefulWidget {
 
   static DynamicThemeState of(BuildContext context) {
     return context.ancestorStateOfType(const TypeMatcher<DynamicThemeState>());
+  }
+
+  static ligth(BuildContext context) {
+    var th = ThemeData.light();
+    return th.copyWith(
+        appBarTheme: th.appBarTheme.copyWith(
+      textTheme: TextTheme(
+        title: TextStyle(color: Colors.black),
+      ),
+      elevation: 0,
+      color: th.scaffoldBackgroundColor,
+      iconTheme: th.iconTheme.copyWith(color: Colors.black),
+    ));
+  }
+
+  static dark(BuildContext context) {
+    var th = ThemeData.dark();
+    return th.copyWith(
+        appBarTheme: th.appBarTheme.copyWith(
+            color: th.scaffoldBackgroundColor,
+            iconTheme: th.iconTheme.copyWith(color: Colors.white)));
+  }
+
+  static changeTo(Brightness b) {
+    if (b == Brightness.light) {
+      return DynamicTheme.ligth(context);
+    }
+    return DynamicTheme.dark(context);
   }
 }
 
@@ -67,17 +70,20 @@ class DynamicThemeState extends State<DynamicTheme> {
 
   Brightness get brightness => _brightness;
 
-  Color get backColor=> (brightness==Brightness.light)?defaultScaffoldBackgroudColor:Colors.black; 
-  Color get color=> (brightness==Brightness.light)?Colors.black:Colors.white; 
+  Color get backColor => (brightness == Brightness.light)
+      ? defaultScaffoldBackgroudColor
+      : Colors.black;
+  Color get color =>
+      (brightness == Brightness.light) ? Colors.black : Colors.white;
 
-  onData(b){
-    return (widget.onData!=null)? widget.onData(b):changedTheme(b);
+  onData(b) {
+    return (widget.onData != null) ? widget.onData(b) : changedTheme(b);
   }
 
   @override
   void initState() {
     super.initState();
-    _brightness = widget.initial??Brightness.light ;
+    _brightness = widget.initial ?? Brightness.light;
     _data = onData(_brightness);
 
     loadBrightness().then((bool dark) {
@@ -108,14 +114,17 @@ class DynamicThemeState extends State<DynamicTheme> {
     });
     setBool(brightness);
   }
- static Brightness getBrightness(){
+
+  static Brightness getBrightness() {
     //return Brightness.light;
-    return LocalStorage().getBool(_sharedPreferencesKey)?Brightness.dark:Brightness.light;
+    return LocalStorage().getBool(_sharedPreferencesKey)
+        ? Brightness.dark
+        : Brightness.light;
   }
 
   setBool(Brightness brightness) {
     LocalStorage().setBool(
-      _sharedPreferencesKey, brightness == Brightness.dark ? true : false);
+        _sharedPreferencesKey, brightness == Brightness.dark ? true : false);
   }
 
   void setThemeData(ThemeData data) {

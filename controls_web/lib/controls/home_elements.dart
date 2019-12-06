@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 
-
 class ColumnScroll extends StatefulWidget {
   final List<Widget> children;
   final double spacing;
@@ -48,7 +47,6 @@ class _RowScrollState extends State<RowScroll> {
     ]);
   }
 }
-
 
 class SliverContents extends StatefulWidget {
   final Widget appBar;
@@ -217,12 +215,14 @@ class ApplienceTile extends StatelessWidget {
       String value,
       String title,
       Color color,
-      double width}) {
+      double width,
+      Functions onPressed}) {
     return ApplienceTile(
       value: value,
       title: title,
       color: color,
       image: image,
+      onPressed: onPressed,
       textAlign: TextAlign.end,
       padding: padding ?? EdgeInsets.only(right: 5),
       valueStyle: TextStyle(

@@ -7,9 +7,10 @@ class DashHorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool vertical;
   final bool animate;
+  final bool showValues;
 
   DashHorizontalBarChart(this.seriesList,
-      {this.vertical = false, this.animate});
+      {this.vertical = false, this.showValues = true, this.animate});
 
   /// Creates a [BarChart] with sample data and no transition.
   factory DashHorizontalBarChart.withSampleData() {
@@ -27,6 +28,9 @@ class DashHorizontalBarChart extends StatelessWidget {
       seriesList,
       animate: animate,
       vertical: vertical,
+      primaryMeasureAxis: (showValues)
+          ? null
+          : new charts.NumericAxisSpec(renderSpec: new charts.NoneRenderSpec()),
     );
   }
 
@@ -43,7 +47,7 @@ class DashHorizontalBarChart extends StatelessWidget {
   static List<charts.Series<ChartPair, String>> createSerie(
       {String id, List<ChartPair> data}) {
     return [
-      new charts.Series<ChartPair, String>(
+      charts.Series<ChartPair, String>(
         id: id,
         domainFn: (ChartPair sales, _) => sales.title,
         measureFn: (ChartPair sales, _) => sales.value,

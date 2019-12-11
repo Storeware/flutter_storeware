@@ -27,7 +27,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: widget.drawer,
-      appBar: appBar,
+      appBar: widget.appBar,
       body: Center(
         child: Column(children: [
           SizedBox(

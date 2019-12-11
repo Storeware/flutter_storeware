@@ -5,8 +5,17 @@ class ScaffoldSplash extends StatefulWidget {
   final Widget body;
   final Widget image;
   final String title;
+  final AppBar appBar;
+  final Drawer drawer;
   final Function onPressed;
-  ScaffoldSplash({Key key, this.title, this.image, this.onPressed, this.body})
+  ScaffoldSplash(
+      {Key key,
+      this.appBar,
+      this.drawer,
+      this.title,
+      this.image,
+      this.onPressed,
+      this.body})
       : super(key: key);
 
   @override
@@ -17,6 +26,8 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: widget.drawer,
+      appBar: appBar,
       body: Center(
         child: Column(children: [
           SizedBox(
@@ -30,6 +41,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
           SizedBox(
             height: 30,
           ),
+          if (widget.body != null) widget.body,
           RoundedButton(
             height: 40,
             width: 180,

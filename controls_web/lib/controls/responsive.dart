@@ -5,6 +5,7 @@ enum ResponsiveInfoScreen { mobile, tablet, desktop }
 class ResponseveInfo {
   Size _size;
   ResponsiveInfoScreen screen;
+  Orientation orientation;
   get size => _size;
   set size(x) {
     _size = x;
@@ -17,7 +18,7 @@ class ResponseveInfo {
   }
 
   get isTablet => screen == ResponsiveInfoScreen.tablet;
-  get isDesktop => screen = ResponsiveInfoScreen.desktop;
+  get isDesktop => screen == ResponsiveInfoScreen.desktop;
   get isMobile => screen == ResponsiveInfoScreen.mobile;
   ThemeData theme;
 }
@@ -27,13 +28,19 @@ class ResponsiveBuilder extends StatelessWidget {
   final bool maintainBottomViewPadding;
   final Widget Function(BuildContext, ResponseveInfo) builder;
   const ResponsiveBuilder(
-      {Key key, this.minimum, this.builder, this.maintainBottomViewPadding})
+      {Key key,
+      this.minimum = EdgeInsets.zero,
+      this.builder,
+      this.maintainBottomViewPadding = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ResponseveInfo info;
-    info.size = MediaQuery.of(context).size;
+    ResponseveInfo info = ResponseveInfo();
+    var mq = MediaQuery.of(context);
+    info.orientation = mq.orientation;
+    info.size = mq.size;
+
     info.theme = Theme.of(context);
     return SafeArea(
       minimum: minimum,

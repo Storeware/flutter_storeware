@@ -126,7 +126,7 @@ class FirestoreApp extends FirebaseApp {
   }
 
   static String formatCollection(nome) {
-    String r = 'lojas/${FirestoreApp.firestoreSuffix}/${nome}';
+    String r = 'lojas/${FirestoreApp.firestoreSuffix}/$nome';
     debug('formatCollection-> $r');
     return r;
   }
@@ -136,10 +136,11 @@ abstract class FirestoreModelClass<T extends DataModelItem>
     extends DataModelClass<T> {
   fs.DocumentSnapshot lastDocument;
   fs.DocumentSnapshot firstDocument;
+  String collectionName;
   @override
   Stream<fs.QuerySnapshot> snapshots({bool inativo}) {
     var r = FirestoreApp()
-        .collection(super.collectionName)
+        .collection(collectionName)
         .where('inativo', '==', inativo ?? false)
         .get();
     r.then((d) {
@@ -154,7 +155,7 @@ abstract class FirestoreModelClass<T extends DataModelItem>
   /// avaliando
   Stream<fs.QuerySnapshot> limit({String orderBy, int limit, bool inativo}) {
     var r = FirestoreApp()
-        .collection(super.collectionName)
+        .collection(collectionName)
         .where('inativo', '==', inativo ?? false)
         .orderBy(orderBy)
         .limit(limit)
@@ -173,7 +174,7 @@ abstract class FirestoreModelClass<T extends DataModelItem>
   Stream<fs.QuerySnapshot> startAfter(
       {String orderBy, int limit, bool inativo}) {
     var r = FirestoreApp()
-        .collection(super.collectionName)
+        .collection(collectionName)
         .where('inativo', '==', inativo ?? false)
         .orderBy(orderBy)
         .limit(limit)
@@ -190,7 +191,7 @@ abstract class FirestoreModelClass<T extends DataModelItem>
 
   Stream<fs.QuerySnapshot> endAt({String orderBy, int limit, bool inativo}) {
     var r = FirestoreApp()
-        .collection(super.collectionName)
+        .collection(collectionName)
         .where('inativo', '==', inativo ?? false)
         .orderBy(orderBy)
         .limit(limit)
@@ -206,11 +207,11 @@ abstract class FirestoreModelClass<T extends DataModelItem>
   }
 
   fs.CollectionReference getRef() {
-    return FirestoreApp().collection(super.collectionName);
+    return FirestoreApp().collection(collectionName);
   }
 
   Stream<fs.QuerySnapshot> getAll() {
-    var r = FirestoreApp().collection(super.collectionName).get();
+    var r = FirestoreApp().collection(collectionName).get();
     r.then((d) {
       if (d != null) {
         firstDocument = d.docs.first;
@@ -335,6 +336,9 @@ class BlocData<T> {
   }
 
   notifyChild() {}
+  close() {
+    _controller.close();
+  }
 }
 
 class ListDocuments {

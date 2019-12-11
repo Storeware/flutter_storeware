@@ -1,177 +1,274 @@
-import "dart:convert";
-import "package:intl/intl.dart";
-import 'package:intl/date_symbol_data_local.dart';
+import 'dart:async';
 
-/// chamada global para desativar em produção
-debug(texto){
-  print(texto);
-}
-error(texto){
-  print(texto);
-}
-/// usar para informações (não debug)
-info(texto){
-  print(texto);
-}
+import 'dart:convert';
 
-firebase_loading() {
-  initializeDateFormatting("pt_BR", null);
-}
-
-var defaultLang = 'pt_BR';
-
-enum DataState { dsBrowser, dsEdit, dsInsert, dsDelete }
-
-class DataFields {
-  Map<String, dynamic> data = {};
-  int get length => data.length;
-  dynamic value(key) => data[key];
-  List<String> keys() {
-    return data.keys.toList();
+/// Class Changed Events
+class DataNotifyChange<T> {
+  final _notifier = StreamController<T>.broadcast();
+  close() {
+    _notifier.close();
   }
 
-  List<dynamic> values() {
-    return data.values.toList();
+  notify(T value) {
+    _notifier.sink.add(value);
+  }
+
+  get stream => _notifier.stream;
+  get sink => _notifier.sink;
+}
+
+abstract class DataService {
+  Future<Map<String, dynamic>> post(String service, Map<String, dynamic> data,
+      {header}) async {
+    return null;
+  }
+
+  Future<Map<String, dynamic>> put(String service, Map<String, dynamic> data,
+      {header}) async {
+    return null;
+  }
+
+  Future<Map<String, dynamic>> patch(String service, Map<String, dynamic> data,
+      {header}) async {
+    return null;
+  }
+
+  Future<Map<String, dynamic>> delete(String service, Map<String, dynamic> data,
+      {header}) async {
+    return null;
+  }
+
+  Future<Map<String, dynamic>> send(String service, {header}) {
+    return null;
   }
 }
 
-
-DateTime toDate(d){
-  if (d is DateTime){
-    return dateTimeCombine(d,'00:00');
+abstract class DataItem {
+  fromMap(Map<String, dynamic> data);
+  Map<String, dynamic> toJson();
+  bool validate() {
+    return true;
   }
-  var s = d.toString();
-  if (s.contains('/')){
-    var v = s.substring(6,4)+'-'+s.substring(3,2)+'-'+s.substring(0,1);
-    return DateTime.tryParse(s);
+
+  /// Change Events
+  var _notifierItem;
+  void changed() {
+    if (_notifierItem != null) _notifierItem.notify(this);
   }
-   var dt = DateTime.tryParse((d ?? DateTime.now()).toString());
-   return dateTimeCombine(dt,'00:00');
+
+  Stream<DataItem> get notifier {
+    if (_notifierItem == null) _notifierItem = DataNotifyChange<DataItem>();
+    return _notifierItem.stream;
+  }
+
+  dispose() {
+    if (_notifierItem != null) _notifierItem.close();
+    _notifierItem = null;
+  }
+
+  dynamic byName(String key) {
+    var r = toJson();
+    return r[key];
+  }
 }
 
+abstract class DataModel {
+  final _changed = DataNotifyChange<dynamic>();
+  get notifier => _changed.stream;
+  notify(dynamic value) => notifier.sink.add(value);
 
+  static Map<String, dynamic> encodeValues(Map<String, dynamic> values,
+      {bool encodeFull = false}) {
+    Map<String, dynamic> m = {};
+    values.forEach((k, v) {
+      print(['data_model->encodeValues',k, v]);
+      if (v is String)
+        m[k] = encodeFull ? Uri.encodeFull(v) : v;
+      else if (v is DateTime)
+        m[k] = v.toIso8601String();
+      else
+        m[k] = v;
+      //TODO: Lists.
+    });
+    return m;
+  }
 
-DateTime dateTimeCombine(DateTime date, String time) {
-  var dt = date ?? DateTime.now();
-  var t = DateTime.tryParse('0000-00-00 '+time??'00:00');
-  return DateTime(
-      dt.year, dt.month, dt.day, t?.hour ?? 0, t?.minute ?? 0);
-}
-
-bool checaAgendaAlerta( DateTime d, {int minutos=15 }){
-  return  d.difference(  DateTime.now().subtract(Duration(minutes: minutos))).inMinutes<0;
-}
-
-String getDataExtensoAmigavel(DateTime data) {
-    if (data == null ) return '';
-    String r = '';
-    if (toDate(data) == toDate(DateTime.now())) {
-      r += 'Hoje as ';
-      r += '${formatTime(data)}';
-    } else {
-      var dif = data.difference(DateTime.now());
-      var d = dif.inHours;
-      if (d < 24) {
-        r = ' em $d horas';
-      } else {
-        var dias = dif.inDays;
-        r = ' em $dias dias';
+  static dynamic decodeValues(Map<String, dynamic> j) {
+    Map<String, dynamic> rt = {};
+    j.forEach((k, v) {
+      rt[k] = v;
+      if (v is String && v.length > 13) if (v.substring(10, 11) == 'T' &&
+          v.substring(13, 14) == ':') {
+        print([k, v, v is String, v.substring(10, 11)]);
+        try {
+          DateTime d = DateTime.tryParse(v);
+          print(['datetime', d]);
+          if (d != null) rt[k] = d;
+        } catch (e) {}
+        //TODO: Lists
       }
+    });
+    return rt;
+  }
+}
+
+class _TypeOf<T> {
+  Type get type => T;
+}
+
+abstract class DataRows<T extends DataItem> {
+  final _changed = DataNotifyChange<String>();
+  get notifier => _changed.stream;
+  notify(String value) {
+    try {
+      return _changed.sink.add(value);
+    } catch (e) {}
+    ;
+  }
+
+  T newItem();
+
+  final _itemChanged = DataNotifyChange<int>();
+  get itemNotifier => _itemChanged.stream;
+  itemChanged(dynamic value) => _itemChanged.sink.add(value);
+  dispose() {
+    _changed.close();
+    _itemChanged.close();
+  }
+
+  int rowNum = -1;
+  List<T> items = [];
+  bool _eof = true;
+  bool _bof = true;
+
+  get length => items.length;
+
+  int checkError(String response) {
+    var resp = json.decode(response);
+    if (resp['error'] != null) {
+      throw new StateError(resp['error']);
     }
-    return r;
+    return resp['rows'] ?? 1;
   }
 
-
-
-  String formatTime(d){
-    var s = d.toString();
-    var t = DateTime.tryParse(s);
-    if (t==null) return null;
-    //return TimeOfDay.fromDateTime(t).toString();
-    return "${t.hour.toString().padLeft(2,'0')}:${t.minute.toString().padLeft(2,'0')}";
+  execute(Function callback, {rest}) async {
+    return callback(rest).then((resp) {
+      return checkError(resp);
+    });
   }
 
-  DateTime stringToDateTime(String d){
-    return DateTime.tryParse(d);
-  }
-  String formatDateTime( String mask, DateTime d) {
-    return DateFormat(mask,defaultLang).format(d);
-  }
-
-
-
-  DateTime today(){
-    DateTime now = new DateTime.now();
-    DateTime date = new DateTime(now.year, now.month, now.day);
-    return date;
+  addItem(T item) {
+    items.add(item);
+    rowNum = items.length - 1;
+    rowChanged(0);
+    itemChanged(rowNum);
+    _itemChanged.notify(rowNum);
   }
 
-
-  double toDouble(v,{int dec}){
-    if (v==null) return 0;
-    String d = v.toString();
-    double r = double.tryParse( (d??'0.0').replaceAll(',', '.'));
-    if (dec!=null)
-      return double.parse(r.toStringAsFixed(dec));
-    return r;
+  toJson() {
+    List<Map<String, dynamic>> l = [];
+    items.forEach((f) {
+      l.add(f.toJson());
+    });
+    return l;
   }
 
-  String formatDouble(double v, dec){
-    return v.toStringAsFixed(dec);
-  }
-
-  String formatMoeda(double v,dec,{simbol='\$'}){
-    return simbol+' '+formatDouble(v,dec).replaceAll('.', ',');
-  }
-
-  String formatDate(DateTime d){
-    debug('data_model.formatDate-> $d');
-    if (d==null) return null;
-    return "${d.day.toString().padLeft(2,'0')}-${d.month.toString().padLeft(2,'0')}-${d.year.toString()} ";
-  }
-
-
-
-class DataModelItem  {
-  String id;
-  DataState _state = DataState.dsBrowser;
-
-
-  inserting() {
-    _state = DataState.dsInsert;
-    return this;
-  }
-
-  deleting() {
-    _state = DataState.dsDelete;
-    return this;
-  }
-
-  editing() {
-    _state = DataState.dsEdit;
-    return this;
-  }
-
-  get state => _state;
-  toJson() => {};
-  fromMap(Map<String, dynamic> json) {
-    return this;
-  }
-  clear(){
-    fromMap({});
-    return this;
-  }
   toString() {
     return json.encode(toJson());
   }
+
+  fromList(List<dynamic> list) {
+    items.clear();
+    list.forEach((e) {
+      items.add(newItem().fromMap(e));
+    });
+    first();
+    notify('');
+    _itemChanged.notify(rowNum);
+    return this;
+  }
+
+  rowChanged(skip) {
+    var old = rowNum;
+    rowNum += skip;
+    _eof = false;
+    _bof = false;
+    if (rowNum >= items.length) {
+      rowNum = items.length - 1;
+      _eof = true;
+    }
+    if (items.length == 0) {
+      rowNum = -1;
+    }
+    if (rowNum < 0) _bof = true;
+    if (rowNum != old) itemChanged(rowNum);
+  }
+
+  first() {
+    rowNum = 0;
+    rowChanged(0);
+    _itemChanged.notify(rowNum);
+    return getItem();
+  }
+
+  last() {
+    rowNum = items.length - 1;
+    rowChanged(0);
+    _itemChanged.notify(rowNum);
+    return getItem();
+  }
+
+  next() {
+    rowChanged(1);
+    return getItem();
+  }
+
+  prior() {
+    rowChanged(-1);
+    return getItem();
+  }
+
+  get eof {
+    return _eof;
+  }
+
+  get bof {
+    return _bof;
+  }
+
+  toList() {
+    return items;
+  }
+
+  T getItem() {
+    rowChanged(0);
+    if (!eof && !bof) {
+      return items[rowNum];
+    }
+    return null;
+  }
+
+  setItem(T it) {
+    rowChanged(0);
+    if (!eof || !bof)
+      addItem(it);
+    else
+      items[rowNum] = it;
+    _itemChanged.notify(rowNum);
+    return it;
+  }
+
+  deleteItem() {
+    rowChanged(0);
+    if (!eof && !bof) removeAt(rowNum);
+  }
+
+  removeAt(idx) {
+    items.removeAt(idx);
+    _itemChanged.notify(idx);
+  }
+
+  Iterator<T> iterator() => items.iterator;
+
+  get map => items.map;
 }
-
-abstract class DataModelClass<T> {
-   String collectionName;
-   getById(id);
-   enviar(T item);
-   snapshots({bool inativo});
-}
-
-
-

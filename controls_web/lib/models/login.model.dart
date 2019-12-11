@@ -1,4 +1,13 @@
-import '../drivers.dart';
+import '../drivers/events_bloc.dart';
+import '../drivers/firebase_functions.dart';
+
+import '../drivers/firebase_firestore.dart';
+
+import '../drivers/bloc_model.dart';
+
+import '../drivers/local_storage.dart';
+
+import '../drivers/data_model.dart';
 import 'package:flutter/material.dart';
 import '../views/logar_conta_view.dart';
 import '../views/logout_view.dart';
@@ -78,8 +87,13 @@ class LoginModel extends LoginModelBase {
   factory LoginModel() {
     return _instance;
   }
+  LoginModel._create();
+  static currentUser() {
+    return _instance;
+  }
+}
 
-class LoginModelBase extends AuthUser{
+class LoginModelBase extends AuthUser {
   LoginModelBase();
   final _notifier = BlocModel<String>();
   get conta => LocalStorage().getKey('conta');
@@ -91,7 +105,6 @@ class LoginModelBase extends AuthUser{
     }
   }
 
-  LoginModel._create();
   String get usuario => LocalStorage().getKey('usuario');
   set usuario(String x) {
     if (x != null) LocalStorage().setKey('usuario', x);
@@ -200,10 +213,6 @@ class LoginModelBase extends AuthUser{
 
   novoUsuario(userId, email, nome, token, peril, {String conta}) {
     UsuarioModel().novoUsuario(userId, email, nome, token, peril);
-  }
-
-  static currentUser() {
-    return _instance;
   }
 
   goLogar(context, String pushNext,

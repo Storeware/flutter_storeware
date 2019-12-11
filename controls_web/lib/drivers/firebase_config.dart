@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 String bdUserLogged = '';
@@ -23,19 +22,18 @@ class AssetsConfig {
   static get appId => _config.cfg['appId'];
 
   load() async {
-    if (config!=null) return config;
+    if (config != null) return config;
+    try {
       await rootBundle.loadString('config.json').then((f) {
         config = jsonDecode(f);
         //print('Carregrou config: '+f);
         return config;
       });
-    } catch(e){
-    }; return config;
-   
+    } catch (e) {}
+
+    return config;
   }
 }
-
-
 
 class FirebaseConfig {
   static final _singleton = FirebaseConfig._create();
@@ -47,6 +45,7 @@ class FirebaseConfig {
     String id = AssetsConfig.projectId;
     return 'https://us-central1-$id.cloudfunctions.net';
   }
+
   static init() async {
     if (!_singleton._inited) await AssetsConfig().load();
     _singleton._inited = true;

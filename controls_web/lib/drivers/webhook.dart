@@ -1,4 +1,5 @@
 import 'package:controls_data/rest_client.dart';
+import 'package:controls_firebase/firebase_config.dart';
 
 import '../classes.dart';
 

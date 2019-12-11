@@ -1,7 +1,9 @@
+import 'package:controls_firebase/firebase_firestore.dart';
+import 'package:controls_firebase/firebase_functions.dart';
+
 import '../drivers/events_bloc.dart';
 import '../drivers/bloc_model.dart';
 import 'package:controls_data/data.dart';
-import 'package:controls_data/data_model.dart';
 import 'package:flutter/material.dart';
 import '../views/logar_conta_view.dart';
 import '../views/logout_view.dart';
@@ -58,12 +60,12 @@ class UsuarioItem extends DataModelItem {
 
 /// AuthUser - Classe de autenticação a ser herdada
 abstract class AuthUser extends UsuarioItem {
-  bool isPerfil(String perfil_) {
-    return this.perfil.contains(perfil_);
+  bool isPerfil(String perfil) {
+    return this.perfil.contains(perfil);
   }
 
-  AuthUser setPerfil(perfil_) {
-    this._perfil = perfil_;
+  AuthUser setPerfil(perfil) {
+    this._perfil = perfil;
     return this;
   }
 

@@ -21,10 +21,10 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_data
-  controls_firestore:
+  controls_firebase:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_firestore
+      path: controls_firebase
 
 #dev_dependencies:
 #  build_runner: ^1.4.0

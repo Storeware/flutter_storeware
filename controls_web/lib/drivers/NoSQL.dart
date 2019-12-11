@@ -1,5 +1,5 @@
+import 'package:controls_firebase/firebase_firestore.dart';
 import 'package:firebase_web/firestore.dart';
-import 'package:controls_firestore/firestore.dart';
 
 class NoSQL {
   String _collection;

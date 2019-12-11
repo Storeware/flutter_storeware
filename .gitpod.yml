@@ -27,18 +27,19 @@ tasks:
       flutter channel master
       flutter upgrade
       yes | flutter doctor --android-licenses
-      cd /workspace/gitpod-flutter
+      cd /workspace/gitpod-flutter/controls_web
       flutter pub get
       flutter config --enable-web
       flutter doctor
     command: |
       echo "Ready to go!"
   - command: |
+      cd /workspace/gitpod-flutter/controls_web
       export PATH=$FLUTTER_HOME/bin:$ANDROID_HOME/bin:$ANDROID_HOME/platform-tools:$PATH
       flutter config --enable-web
       flutter upgrade
       #flutter pub get
-      
+
       #flutter doctor
       echo "Ready to start!"
 

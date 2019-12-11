@@ -21,15 +21,15 @@
     },
     {
       "name": "controls_data",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4b7af85dbbc24a61567fb536ab6c3062dd30b07e/controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-11d89e51bc02758230104865643b5f07b539cc0b/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.5"
     },
     {
       "name": "controls_firebase",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4b7af85dbbc24a61567fb536ab6c3062dd30b07e/controls_firebase",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-11d89e51bc02758230104865643b5f07b539cc0b/controls_firebase",
       "packageUri": "lib/",
-      "languageVersion": "2.1"
+      "languageVersion": "2.5"
     },
     {
       "name": "convert",
@@ -39,7 +39,7 @@
     },
     {
       "name": "crypto",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/crypto-2.1.3",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/crypto-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.1"
     },
@@ -117,7 +117,7 @@
     },
     {
       "name": "pedantic",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pedantic-1.8.0+1",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pedantic-1.9.0",
       "packageUri": "lib/",
       "languageVersion": "2.1"
     },
@@ -165,7 +165,7 @@
     },
     {
       "name": "universal_html",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_html-1.1.6",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_html-1.1.8",
       "packageUri": "lib/",
       "languageVersion": "2.4"
     },
@@ -189,9 +189,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/xml-3.5.0",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/xml-3.6.1",
       "packageUri": "lib/",
-      "languageVersion": "2.3"
+      "languageVersion": "2.6"
     },
     {
       "name": "zone_local",
@@ -206,7 +206,7 @@
       "languageVersion": "2.5"
     }
   ],
-  "generated": "2019-12-11T16:32:33.446920Z",
+  "generated": "2019-12-11T17:11:12.605232Z",
   "generator": "pub",
   "generatorVersion": "2.7.0-dev.2.1.flutter-8b8894648f"
 }

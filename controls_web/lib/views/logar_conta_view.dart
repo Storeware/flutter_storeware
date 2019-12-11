@@ -1,3 +1,4 @@
+import 'package:controls_firebase/firebase_firestore.dart';
 import 'package:controls_web/controls.dart';
 import 'package:controls_web/drivers.dart';
 import 'package:controls_web/models/resources.dart';
@@ -32,7 +33,7 @@ class LogarContaView extends StatefulWidget {
 class _LogarContaViewState extends State<LogarContaView> {
   @override
   Widget build(BuildContext context) {
-    debug('LogarContaView');
+    //debug('LogarContaView');
     return (widget.appBar == null)
         ? SliverScaffold(
             backgroundColor: widget.backgroundColor,
@@ -78,7 +79,7 @@ class _LogarContaViewState extends State<LogarContaView> {
           right: 20,
           child: Center(
             child: widget.image ??
-                Image.network(defaultLoginImagemSrc??Resources.entrar,
+                Image.network(defaultLoginImagemSrc ?? Resources.entrar,
                     height: size.height / 5, fit: BoxFit.fill),
           )),
       Positioned(

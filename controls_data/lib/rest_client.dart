@@ -102,12 +102,13 @@ class RestClient {
     return Uri.parse(formatUrl());
   }
 
+  String prefix = '';
   formatUrl() {
     String p = '';
     params.forEach((key, value) {
       p += (p == '' ? '?' : '&') + "$key=$value";
     });
-    return baseUrl + service + p;
+    return baseUrl + prefix + service + p;
   }
 
   addParameter(String key, value) {

@@ -1,8 +1,8 @@
+import 'package:controls_data/rest_client.dart';
+
 import '../classes.dart';
 
-import 'firebase_config.dart';
-
-import "rest_client.dart";
+import 'package:controls_data/data.dart';
 
 class WebHook extends RestClient with Base {
   WebHook({baseUrl}) {

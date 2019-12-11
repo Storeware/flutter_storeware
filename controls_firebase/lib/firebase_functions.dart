@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:controls_data/local_storage.dart';
+import 'package:controls_data/rest_client.dart';
+
 import 'firebase_config.dart';
-import 'rest_client.dart';
-import 'local_storage.dart';
 
 class FireFunctionsApp extends RestClient {
   FireFunctionsApp() {
@@ -19,7 +20,7 @@ class FireFunctionsApp extends RestClient {
       String conta}) async {
     tokenId = '';
     var b64 = 'Basic ' + base64.encode(utf8.encode(user + ':' + pass));
-    LocalStorage().setKey('usuarioBase',b64);
+    LocalStorage().setKey('usuarioBase', b64);
     autenticator(value: b64);
     addParameter('email', email);
     if (conta != null) addParameter('conta', conta);

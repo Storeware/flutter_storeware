@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:controls_data/data_model.dart';
 import 'package:firebase_web/firebase.dart';
 import 'package:firebase_web/firestore.dart' as fs;
-
-import 'data_model.dart';
 import 'package:uuid/uuid.dart';
 import 'firebase_config.dart';
 
@@ -21,7 +20,7 @@ class FirebaseApp {
         }
         if (_carregar) {
           try {
-            debug('firebase_loading()');
+            //debug('firebase_loading()');
             firebase_loading();
             debug('inializing FirestroeApp');
             initializeApp(
@@ -211,9 +210,7 @@ abstract class FirestoreModelClass<T extends DataModelItem>
   }
 
   Stream<fs.QuerySnapshot> getAll() {
-    var r = FirestoreApp()
-        .collection(super.collectionName)
-        .get();
+    var r = FirestoreApp().collection(super.collectionName).get();
     r.then((d) {
       if (d != null) {
         firstDocument = d.docs.first;

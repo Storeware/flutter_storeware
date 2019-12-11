@@ -16,15 +16,18 @@ dependencies:
   datetime_picker_formfield: ^0.4.3
   http: ^0.12.0+2
   meta: ^1.1.7
-  
 
+  controls_data:
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data
 
-dev_dependencies:
+#dev_dependencies:
 #  build_runner: ^1.4.0
 #  build_web_compilers: ^2.0.0
 #  pedantic: ^1.0.0
 
-dependency_overrides:
+#dependency_overrides:
 #  flutter_web:
 #    git:
 #      url: https://github.com/flutter/flutter_web
@@ -33,9 +36,8 @@ dependency_overrides:
 #    git:
 #      url: https://github.com/flutter/flutter_web
 #      path: packages/flutter_web_ui
-  
-flutter:
 
+flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

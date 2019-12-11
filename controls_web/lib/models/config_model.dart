@@ -1,5 +1,5 @@
 import "dart:convert";
-import "../drivers/local_storage.dart";
+import "package:controls_data/local_storage.dart";
 
 /// instance utilizada para criar ao entrar,
 /// na sequencia usar a mesma instancia
@@ -18,7 +18,7 @@ ConfigModel configModel;
 ///       * 23/09/2019 - alterado para ser abstract
 abstract class ConfigModel extends LocalStorageModel {
   ConfigModel() {
-    assert(configModel==null,"Não pode utilizar ConfigModel direto");
+    assert(configModel == null, "Não pode utilizar ConfigModel direto");
     //print('create instance of ConfigModel');
     configModel = this;
     this.storageName = 'config';

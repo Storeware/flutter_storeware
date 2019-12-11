@@ -20,6 +20,12 @@
       "languageVersion": "2.0"
     },
     {
+      "name": "controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4b7af85dbbc24a61567fb536ab6c3062dd30b07e/controls_data",
+      "packageUri": "lib/",
+      "languageVersion": "2.5"
+    },
+    {
       "name": "convert",
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/convert-2.1.1",
       "packageUri": "lib/",
@@ -194,7 +200,7 @@
       "languageVersion": "2.5"
     }
   ],
-  "generated": "2019-12-11T13:41:44.452919Z",
+  "generated": "2019-12-11T16:04:15.561216Z",
   "generator": "pub",
   "generatorVersion": "2.7.0-dev.2.1.flutter-8b8894648f"
 }

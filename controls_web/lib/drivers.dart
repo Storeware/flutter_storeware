@@ -1,9 +1,5 @@
-library  drivers;
-export "drivers/data_model.dart";
-export "drivers/firebase_config.dart";
-export "drivers/firebase_firestore.dart";
-export "drivers/firebase_functions.dart";
-export "drivers/rest_client.dart";
+library drivers;
+
 export "drivers/webhook.dart";
 export "drivers/bloc_model.dart";
 export "drivers/controllers.dart";

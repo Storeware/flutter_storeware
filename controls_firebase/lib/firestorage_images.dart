@@ -1,4 +1,4 @@
-import 'package:controls_web/drivers/firebase_firestore.dart';
+import 'package:firebase_firestore.dart';
 import 'package:firebase_web/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;

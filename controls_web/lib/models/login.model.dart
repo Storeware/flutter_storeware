@@ -1,13 +1,7 @@
 import '../drivers/events_bloc.dart';
-import '../drivers/firebase_functions.dart';
-
-import '../drivers/firebase_firestore.dart';
-
 import '../drivers/bloc_model.dart';
-
-import '../drivers/local_storage.dart';
-
-import '../drivers/data_model.dart';
+import 'package:controls_data/data.dart';
+import 'package:controls_data/data_model.dart';
 import 'package:flutter/material.dart';
 import '../views/logar_conta_view.dart';
 import '../views/logout_view.dart';

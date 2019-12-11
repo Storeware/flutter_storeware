@@ -1,7 +1,6 @@
 library controls_firebase;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'firebase_config.dart';
+export 'firebase_firestore.dart';
+export 'firebase_functions.dart';
+export 'firestorage_images.dart';

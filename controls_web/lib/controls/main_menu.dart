@@ -1,5 +1,6 @@
+import 'package:controls_data/data_model.dart';
+
 import 'panel.dart';
-import '../drivers/data_model.dart';
 import 'package:flutter/material.dart';
 import '../services/routes.dart';
 import '../models/login.model.dart';
@@ -60,21 +61,26 @@ class _MainMenuState extends State<MainMenu> {
   List<Widget> _create(items) {
     List<Widget> rt = [
       AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: widget.appBarElevation,
-          title: widget.title ?? Text('Ações'),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ), actions: widget.actions, ),
+        backgroundColor: Colors.transparent,
+        elevation: widget.appBarElevation,
+        title: widget.title ?? Text('Ações'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: widget.actions,
+      ),
       DrawerHeader(
           padding: EdgeInsets.all(0),
           decoration: BoxDecoration(
               color: Theme.of(context).primaryColor.withAlpha(20)),
-          child: Column(children:[
-            widget.extended ??PanelUserTile(user: widget.child, title: 'Ações', actions: widget.actions) ]))
+          child: Column(children: [
+            widget.extended ??
+                PanelUserTile(
+                    user: widget.child, title: 'Ações', actions: widget.actions)
+          ]))
     ];
     List<MenuItem> items = MenuModel().items;
     for (var i = 0; i < items.length; i++) {

@@ -27,7 +27,7 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "11d89e51bc02758230104865643b5f07b539cc0b"
+      resolved-ref: "91f80c112186a53ec1b4a8f2bf60aaca65e6b138"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -36,7 +36,7 @@ packages:
     description:
       path: controls_firebase
       ref: HEAD
-      resolved-ref: "11d89e51bc02758230104865643b5f07b539cc0b"
+      resolved-ref: "91f80c112186a53ec1b4a8f2bf60aaca65e6b138"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"

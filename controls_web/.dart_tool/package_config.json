@@ -21,13 +21,13 @@
     },
     {
       "name": "controls_data",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-11d89e51bc02758230104865643b5f07b539cc0b/controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-91f80c112186a53ec1b4a8f2bf60aaca65e6b138/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.5"
     },
     {
       "name": "controls_firebase",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-11d89e51bc02758230104865643b5f07b539cc0b/controls_firebase",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-91f80c112186a53ec1b4a8f2bf60aaca65e6b138/controls_firebase",
       "packageUri": "lib/",
       "languageVersion": "2.5"
     },
@@ -206,7 +206,7 @@
       "languageVersion": "2.5"
     }
   ],
-  "generated": "2019-12-11T17:11:12.605232Z",
+  "generated": "2019-12-11T17:14:51.687939Z",
   "generator": "pub",
   "generatorVersion": "2.7.0-dev.2.1.flutter-8b8894648f"
 }

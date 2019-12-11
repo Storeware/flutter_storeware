@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'package:controls_web/controls/defaults.dart';
-import 'package:controls_web/drivers/local_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:controls_data/data.dart';
 
 typedef ThemedWidgetBuilder = Widget Function(
     BuildContext context, ThemeData data);
 
 typedef ThemeDataWithBrightnessBuilder = ThemeData Function(
     Brightness brightness);
-
-
-
 
 themeLight(brightness) {
   //defaultTextStyleButton = produtoTextStyle(context);
@@ -19,29 +16,24 @@ themeLight(brightness) {
       fontFamily: 'Sans',
       scaffoldBackgroundColor: defaultScaffoldBackgroudColor,
       brightness: brightness);*/
-  return ThemeData.light() ;
+  return ThemeData.light();
 }
 
 themeBlack(bightness) {
 //  defaultTextStyleButton = produtoTextStyle(context);
-  var r = ThemeData(
-    fontFamily: 'Sans',
-    brightness: Brightness.dark
-    );
+  var r = ThemeData(fontFamily: 'Sans', brightness: Brightness.dark);
   defaultScaffoldBackgroudColor = r.scaffoldBackgroundColor;
   return r;
 }
 
 ThemeData changedTheme(brightness) {
   return (brightness == Brightness.light)
-          ? themeLight(Brightness.light)
-          : themeBlack( Brightness.dark);
+      ? themeLight(Brightness.light)
+      : themeBlack(Brightness.dark);
 }
 
-
 class DynamicTheme extends StatefulWidget {
-  const DynamicTheme(
-      {Key key, this.onData, this.builder, this.initial})
+  const DynamicTheme({Key key, this.onData, this.builder, this.initial})
       : super(key: key);
 
   final ThemedWidgetBuilder builder;
@@ -52,7 +44,8 @@ class DynamicTheme extends StatefulWidget {
   DynamicThemeState createState() => DynamicThemeState();
 
   static DynamicThemeState of(BuildContext context) {
-    return context.ancestorStateOfType(const TypeMatcher<DynamicThemeState>());
+    return context
+        .findAncestorStateOfType(); //const TypeMatcher<DynamicThemeState>());
   }
 }
 
@@ -67,17 +60,20 @@ class DynamicThemeState extends State<DynamicTheme> {
 
   Brightness get brightness => _brightness;
 
-  Color get backColor=> (brightness==Brightness.light)?defaultScaffoldBackgroudColor:Colors.black; 
-  Color get color=> (brightness==Brightness.light)?Colors.black:Colors.white; 
+  Color get backColor => (brightness == Brightness.light)
+      ? defaultScaffoldBackgroudColor
+      : Colors.black;
+  Color get color =>
+      (brightness == Brightness.light) ? Colors.black : Colors.white;
 
-  onData(b){
-    return (widget.onData!=null)? widget.onData(b):changedTheme(b);
+  onData(b) {
+    return (widget.onData != null) ? widget.onData(b) : changedTheme(b);
   }
 
   @override
   void initState() {
     super.initState();
-    _brightness = widget.initial??Brightness.light ;
+    _brightness = widget.initial ?? Brightness.light;
     _data = onData(_brightness);
 
     loadBrightness().then((bool dark) {
@@ -108,14 +104,17 @@ class DynamicThemeState extends State<DynamicTheme> {
     });
     setBool(brightness);
   }
- static Brightness getBrightness(){
+
+  static Brightness getBrightness() {
     //return Brightness.light;
-    return LocalStorage().getBool(_sharedPreferencesKey)?Brightness.dark:Brightness.light;
+    return LocalStorage().getBool(_sharedPreferencesKey)
+        ? Brightness.dark
+        : Brightness.light;
   }
 
   setBool(Brightness brightness) {
     LocalStorage().setBool(
-      _sharedPreferencesKey, brightness == Brightness.dark ? true : false);
+        _sharedPreferencesKey, brightness == Brightness.dark ? true : false);
   }
 
   void setThemeData(ThemeData data) {

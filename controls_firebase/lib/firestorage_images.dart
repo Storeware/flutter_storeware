@@ -1,7 +1,8 @@
-import 'package:firebase_firestore.dart';
 import 'package:firebase_web/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
+
+import 'firebase_firestore.dart';
 
 String firestore_clientId = 'm5';
 
@@ -19,8 +20,8 @@ class FirestorageImage extends StatelessWidget {
 
   Image _image;
 
-  ImageProvider imageProvider(){
-     return _image.image;
+  ImageProvider imageProvider() {
+    return _image.image;
   }
 
   static Future<String> getDownloadURL(src) async {

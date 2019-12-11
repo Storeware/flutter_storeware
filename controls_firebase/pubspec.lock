@@ -46,9 +46,11 @@ packages:
   controls_data:
     dependency: "direct main"
     description:
-      path: "..\\controls_data"
-      relative: true
-    source: path
+      path: controls_data
+      ref: HEAD
+      resolved-ref: "203d1eba871d824443f2e5719c4a38ff3237c1fc"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "0.0.1"
   convert:
     dependency: transitive
@@ -241,7 +243,7 @@ packages:
     source: hosted
     version: "1.1.6"
   universal_html:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: universal_html
       url: "https://pub.dartlang.org"

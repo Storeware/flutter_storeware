@@ -14,9 +14,10 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_data
-    
+
   firebase_web:
   uuid:
+  universal_html:
 
 dev_dependencies:
   flutter_test:

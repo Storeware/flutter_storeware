@@ -41,9 +41,11 @@ class ODataResult {
 
 class ODataBuilder extends StatelessWidget {
   final ODataQuery query;
+  final ODataClient client;
   final Function(BuildContext, ODataResult) builder;
   final initialData;
-  const ODataBuilder({Key key, this.initialData, this.query, this.builder})
+  const ODataBuilder(
+      {Key key, this.client, this.initialData, this.query, this.builder})
       : super(key: key);
 
   @override
@@ -55,7 +57,7 @@ class ODataBuilder extends StatelessWidget {
               "result": [initialData]
             }
           : null,
-      future: execute(query),
+      future: execute(client, query),
       builder: (context, response) {
         if (response.hasData) {
           var rst = ODataResult(json: response.data);
@@ -66,20 +68,24 @@ class ODataBuilder extends StatelessWidget {
     );
   }
 
-  Future execute(query) async {
-    var odata = ODataClient();
+  Future execute(ODataClient odata, query) async {
     return odata.send(query);
   }
 }
 
-class ODataClient {
+/*
+class ODataClient extends ODataClientBase {
   static final _singleton = ODataClient._create();
-  RestClient client = RestClient();
   ODataClient._create() {
     baseUrl = 'http://localhost:8886';
     prefix = '/v3/';
   }
   factory ODataClient() => _singleton;
+}
+*/
+
+class ODataClient {
+  RestClient client = RestClient();
   String get prefix => client.prefix;
   set prefix(String p) {
     client.prefix = p;

@@ -74,13 +74,17 @@ class ODataBuilder extends StatelessWidget {
 
 class ODataClient {
   static final _singleton = ODataClient._create();
+  RestClient client = RestClient();
   ODataClient._create() {
     baseUrl = 'http://localhost:8886';
     prefix = '/v3/';
   }
   factory ODataClient() => _singleton;
-  RestClient client = RestClient();
-  String prefix;
+  String get prefix => client.prefix;
+  set prefix(String p) {
+    client.prefix = p;
+  }
+
   get baseUrl => client.baseUrl;
   set baseUrl(x) {
     client.baseUrl = x;

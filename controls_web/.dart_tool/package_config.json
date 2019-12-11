@@ -26,12 +26,6 @@
       "languageVersion": "2.5"
     },
     {
-      "name": "controls_firebase",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-91f80c112186a53ec1b4a8f2bf60aaca65e6b138/controls_firebase",
-      "packageUri": "lib/",
-      "languageVersion": "2.5"
-    },
-    {
       "name": "convert",
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/convert-2.1.1",
       "packageUri": "lib/",
@@ -203,10 +197,10 @@
       "name": "controls_web",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.5"
+      "languageVersion": "2.4"
     }
   ],
-  "generated": "2019-12-11T17:14:51.687939Z",
+  "generated": "2019-12-11T21:47:47.790511Z",
   "generator": "pub",
   "generatorVersion": "2.7.0-dev.2.1.flutter-8b8894648f"
 }

@@ -52,15 +52,6 @@ packages:
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
-  controls_firebase:
-    dependency: transitive
-    description:
-      path: controls_firebase
-      ref: HEAD
-      resolved-ref: "91f80c112186a53ec1b4a8f2bf60aaca65e6b138"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "0.0.1"
   controls_web:
     dependency: "direct main"
     description:

@@ -5,7 +5,7 @@ author: amarildo lacerda<amarildo_51@msn.com>
 homepage: http://tireideletra.tech
 
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.4.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,10 +22,11 @@ dependencies:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_data
 
-  controls_firebase:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_firebase
+  # controls_firebase:
+  #   git:
+  #     url: https://github.com/amarildolacerda/flutter_dart.git
+  #     path: controls_firebase
+  #test: ^1.9.4
 
 #dev_dependencies:
 #  build_runner: ^1.4.0

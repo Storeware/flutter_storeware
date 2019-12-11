@@ -1,5 +1,5 @@
-import 'package:controls_firebase/firebase_firestore.dart';
-import 'package:controls_firebase/firebase_functions.dart';
+//import 'package:controls_firebase/firebase_firestore.dart';
+//import 'package:controls_firebase/firebase_functions.dart';
 
 import '../drivers/events_bloc.dart';
 import '../drivers/bloc_model.dart';
@@ -96,7 +96,7 @@ class LoginModelBase extends AuthUser {
   set conta(x) {
     print('setting conta: $x');
     if (x != null) {
-      dbfirestoreSuffix = x;
+      // dbfirestoreSuffix = x;
       LocalStorage().setKey('conta', x);
     }
   }
@@ -128,10 +128,11 @@ class LoginModelBase extends AuthUser {
     usuario = userId;
     this.email = email;
     debug('login.model->login.email $email Get Token for');
-    loginId = await FireFunctionsApp()
+    /* loginId = await FireFunctionsApp()
         .getToken(user: userId, pass: senha, email: email, conta: conta);
     debug(
         'login.model->login.login $loginId logado: $logado inativo: $inativo');
+  */
     if (logado) {
       this.conta = conta;
       LocalStorage().setKey('token', loginId);
@@ -148,20 +149,20 @@ class LoginModelBase extends AuthUser {
   Future<bool> validarConta(String conta, {Function(bool) next}) async {
     if ((conta ?? '') == '') return false;
     debug('login.model->pre-validarConta( $conta ) logado: $logado ');
-    return FirestoreApp().collection('lojas').doc(conta).get().then((doc) {
+    /*return FirestoreApp().collection('lojas').doc(conta).get().then((doc) {
       bool rt = (doc != null) && doc.id == conta && doc.exists;
       if (rt) dadosConta = doc.data();
       if (conta != null) dbfirestoreSuffix = conta;
       debug('login.model->validarConta( $conta ) $rt ${doc.id} ${doc}');
       if (next != null) return next(rt);
       return rt;
-    });
+    });*/
   }
 
   get requerLogin {
     bool r = (!logado || (conta == '') || (loginId == ''));
-    print('Conta de operação: $dbfirestoreSuffix');
-    if (dbfirestoreSuffix == null) r = true;
+    // print('Conta de operação: $dbfirestoreSuffix');
+    // if (dbfirestoreSuffix == null) r = true;
     return r;
   }
 
@@ -237,21 +238,22 @@ class LoginModelBase extends AuthUser {
 }
 
 /// UsarioModel - Classe de acesso de usuario no banco de dados
-class UsuarioModel extends FirestoreModelClass<UsuarioItem> {
+class UsuarioModel {
+  //extends FirestoreModelClass<UsuarioItem> {
   UsuarioModel() {
-    super.collectionName = 'usuarios';
+    //super.collectionName = 'usuarios';
   }
   @override
-  createItem() => UsuarioItem();
+  //createItem() => UsuarioItem();
   Future<dynamic> getByEmail(email) async {
-    var fb = FirestoreApp().instance;
-    var x = await fb.collection('usuarios').where('email', '==', email).get();
+    // var fb = FirestoreApp().instance;
+    /* var x = await fb.collection('usuarios').where('email', '==', email).get();
     if (!x.empty) {
       return x.docs[0].data();
     } else {
       print('não achou usuario');
       return null;
-    }
+    }*/
   }
 
   novoUsuario(userId, email, nome, token, perfil, {String conta}) {
@@ -262,13 +264,13 @@ class UsuarioModel extends FirestoreModelClass<UsuarioItem> {
     usr.id = userId;
     usr.token = token;
     usr.inserting();
-    return FirestoreApp().enviar('usuarios', usr.id, usr, conta: conta);
+    // return FirestoreApp().enviar('usuarios', usr.id, usr, conta: conta);
   }
 
   atualizarUsuario(UsuarioItem usr) {
     assert(usr.id != null, 'Não informou o id para atualizar usuário');
     usr.editing();
-    return FirestoreApp().enviar('usuarios', usr.id, usr);
+    //return FirestoreApp().enviar('usuarios', usr.id, usr);
   }
 
   currentUser() => LoginModel.currentUser();

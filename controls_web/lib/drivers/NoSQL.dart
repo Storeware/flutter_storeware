@@ -1,13 +1,14 @@
-import 'package:controls_firebase/firebase_firestore.dart';
+//import 'package:controls_firebase/firebase_firestore.dart';
 import 'package:firebase_web/firestore.dart';
 
 class NoSQL {
   String _collection;
   set(key, values) {
-    return FirestoreApp()
+    /*return FirestoreApp()
         .collection(_collection)
         .doc(key)
         .set(values, SetOptions(merge: true));
+        */
   }
 
   collection(collectionName) {
@@ -16,26 +17,28 @@ class NoSQL {
   }
 
   String insert(values) {
-    var qry = FirestoreApp().collection(_collection);
+    /* var qry = FirestoreApp().collection(_collection);
     var key = qry.id;
     qry.doc(key).set(values);
-    return key;
+    */
+    // return key;
   }
 
   get(key) {
-    return FirestoreApp().collection(_collection).doc(key).get();
+    //return FirestoreApp().collection(_collection).doc(key).get();
   }
 
   delete(key) {
-    return FirestoreApp().collection(_collection).doc(key).delete();
+    // return FirestoreApp().collection(_collection).doc(key).delete();
   }
 
   find(fieldPath, opStr, value, {num limit}) {
-    Query qry = FirestoreApp()
+    /* Query qry = FirestoreApp()
         .collection(_collection)
         .where(fieldPath, opStr, value)
         .limit(limit ?? 1000);
     return qry.get();
+    */
   }
 }
 

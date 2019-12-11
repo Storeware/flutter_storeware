@@ -1,4 +1,4 @@
-import 'package:controls_firebase/firebase_firestore.dart';
+//import 'package:controls_firebase/firebase_firestore.dart';
 import 'package:controls_web/controls.dart';
 import 'package:controls_web/drivers.dart';
 import 'package:controls_web/models/resources.dart';
@@ -180,7 +180,7 @@ class _LogarContaViewState extends State<LogarContaView> {
       _formKey.currentState.save();
       String u = usuario, s = senha, c = conta;
       LoginModel().validarConta(c).then((existe) {
-        print('Conta <$dbfirestoreSuffix> existe: $existe');
+        //print('Conta <$dbfirestoreSuffix> existe: $existe');
         if (!existe) {
           setState(() {
             mensagem = 'Conta não encontrada';
@@ -188,15 +188,15 @@ class _LogarContaViewState extends State<LogarContaView> {
           return;
         }
         if (widget.onLogin != null) {
-          print('Validando onLogin event conta $dbfirestoreSuffix');
+          // print('Validando onLogin event conta $dbfirestoreSuffix');
           if (widget.onLogin(u, s, c)) {
             LoginModel().conta = c;
             Routes.pushNamed(context, widget.pushNamed);
           }
         } else {
-          print('Buscando login para $dbfirestoreSuffix');
+          //print('Buscando login para $dbfirestoreSuffix');
           LoginModel().login(u, s, u, conta: c).then((x) {
-            print('login ok $x $dbfirestoreSuffix go: ${widget.pushNamed}');
+            //print('login ok $x $dbfirestoreSuffix go: ${widget.pushNamed}');
             Routes.pushNamed(context, widget.pushNamed ?? '/main');
           });
         }

@@ -13,7 +13,7 @@ dependencies:
   firebase_web: ^5.0.9
   uuid: ^2.0.2
   universal_html: ^1.1.6
-  datetime_picker_formfield: ^0.4.3
+  datetime_picker_formfield:
   http: ^0.12.0+2
   meta: ^1.1.7
 

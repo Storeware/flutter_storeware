@@ -20,7 +20,6 @@ firebase_loading() {
 
 var defaultLang = 'pt_BR';
 
-enum DataState { dsBrowser, dsEdit, dsInsert, dsDelete }
 
 class DataFields {
   Map<String, dynamic> data = {};
@@ -129,49 +128,3 @@ String getDataExtensoAmigavel(DateTime data) {
     if (d==null) return null;
     return "${d.day.toString().padLeft(2,'0')}-${d.month.toString().padLeft(2,'0')}-${d.year.toString()} ";
   }
-
-
-
-class DataModelItem  {
-  String id;
-  DataState _state = DataState.dsBrowser;
-
-
-  inserting() {
-    _state = DataState.dsInsert;
-    return this;
-  }
-
-  deleting() {
-    _state = DataState.dsDelete;
-    return this;
-  }
-
-  editing() {
-    _state = DataState.dsEdit;
-    return this;
-  }
-
-  get state => _state;
-  toJson() => {};
-  fromMap(Map<String, dynamic> json) {
-    return this;
-  }
-  clear(){
-    fromMap({});
-    return this;
-  }
-  toString() {
-    return json.encode(toJson());
-  }
-}
-
-abstract class DataModelClass<T> {
-   String collectionName;
-   getById(id);
-   enviar(T item);
-   snapshots({bool inativo});
-}
-
-
-

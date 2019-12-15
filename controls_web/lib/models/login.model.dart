@@ -1,16 +1,11 @@
-//import 'package:controls_firebase/firebase_firestore.dart';
-//import 'package:controls_firebase/firebase_functions.dart';
-
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/local_storage.dart';
-
-import '../drivers/events_bloc.dart';
-import '../drivers/bloc_model.dart';
-//import 'package:controls_data/data.dart';
+import 'package:controls_web/drivers/bloc_model.dart';
+import 'package:controls_web/drivers/events_bloc.dart';
+import 'package:controls_web/services/routes.dart';
+import 'package:controls_web/views/logar_conta_view.dart';
+import 'package:controls_web/views/logout_view.dart';
 import 'package:flutter/material.dart';
-import '../views/logar_conta_view.dart';
-import '../views/logout_view.dart';
-import '../services.dart';
 
 /// UsuarioItem
 /// Model para a estrutura da tabela de Usuarios

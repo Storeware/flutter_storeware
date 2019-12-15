@@ -1,11 +1,12 @@
-//import 'package:controls_firebase/firebase_firestore.dart';
-import 'package:controls_web/controls.dart';
-import 'package:controls_web/drivers.dart';
-import 'package:controls_web/models/resources.dart';
-import 'package:flutter/material.dart';
-import 'package:controls_web/services.dart';
+import 'package:controls_web/controls/rounded_button.dart';
+import 'package:controls_web/controls/sliver_scaffold.dart';
+import 'package:controls_web/controls/text_info.dart';
 import 'package:controls_web/drivers/events_bloc.dart';
-import '../models.dart';
+import 'package:controls_web/models/login.model.dart';
+import 'package:controls_web/models/resources.dart';
+import 'package:controls_web/services/routes.dart';
+import 'package:controls_web/services/translate.dart';
+import 'package:flutter/material.dart';
 
 String defaultLoginImagemSrc;
 

@@ -48,7 +48,7 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "203d1eba871d824443f2e5719c4a38ff3237c1fc"
+      resolved-ref: dbb3e2e5b519a8d8fa301729d6bf851bcafa17e2
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"

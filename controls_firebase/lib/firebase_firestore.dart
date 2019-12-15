@@ -5,6 +5,7 @@ import 'package:firebase_web/firestore.dart' as fs;
 import 'package:uuid/uuid.dart';
 import 'firebase_config.dart';
 import 'firebase_data_model.dart';
+import 'package:controls_data/data_model.dart';
 
 String dbfirestoreSuffix;
 

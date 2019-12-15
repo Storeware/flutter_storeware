@@ -25,7 +25,7 @@ class LoginNotify extends BlocModel<FauiUser> {
   }
 
   LoginNotify logar(userId, password) {
-    FauiUser user = faui.User;
+    FauiUser user = Faui.user;
     LoginModel().login(userId, password, user.email).then((x) {
       print(['login response:', x]);
       return change();
@@ -33,9 +33,9 @@ class LoginNotify extends BlocModel<FauiUser> {
   }
 
   LoginNotify change() {
-    FauiUser user = faui.User;
+    //FauiUser user = Faui.user;
     print('login change');
-    changeSink.add(faui.User);
+    changeSink.add(Faui.user);
     Translate().log();
     return this;
   }
@@ -63,7 +63,7 @@ class LoginView extends StatefulWidget {
                 if (canPop) Navigator.of(context).pop();
               },
               onRegisterUser: (email, nome) {
-                FauiUser user = faui.User;
+                FauiUser user = Faui.user;
                 LoginModel().novoUsuario(
                     user.userId, user.email, nome, user.token, 'usuario');
               },

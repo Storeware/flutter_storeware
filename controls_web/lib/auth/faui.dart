@@ -1,40 +1,43 @@
+import 'package:controls_web/auth/FauiAuthScreen.dart';
 import 'package:flutter/material.dart';
 
-import 'FauiAuthScreen.dart';
+//import 'FauiAuthScreen.dart';
 import 'FauiAuthState.dart';
 import 'FauiLocalStorage.dart';
 import 'faui_model.dart';
 
-class faui {
-  static FauiUser get User {
+class Faui {
+  static FauiUser get user {
     return FauiAuthState.User;
   }
 
-  static void set User(v) {
+  static set user(v) {
     FauiAuthState.User = v;
   }
 
-  static void SignOut() {
+  static void signOut() {
     FauiAuthState.User = null;
     FauiLocalStorage.DeleteUserLocally();
   }
 
-  static void SaveUserLocallyForSilentSignIn() {
+  static void saveUserLocallyForSilentSignIn() {
     FauiLocalStorage.SaveUserLocallyForSilentSignIn();
   }
 
-  static Future TrySignInSilently({
+  static Future trySignInSilently({
     @required String firebaseApiKey,
   }) async {
     return await FauiLocalStorage.TrySignInSilently(firebaseApiKey);
   }
 
-  static Widget BuildAuthScreen(
+  static Widget buildAuthScreen(
       {@required VoidCallback onExit,
       @required String firebaseApiKey,
       bool startWithRegistration = false}) {
     return FauiAuthScreen(
       onExit: onExit,
+      onRegisterUser: (a, b) {},
+      onLogin: (a, b) {},
       firebaseApiKey: firebaseApiKey,
       startWithRegistration: startWithRegistration,
     );

@@ -1,6 +1,7 @@
-import 'dart:html' hide VoidCallback;
+//import 'dart:html' hide VoidCallback;
 
 import 'package:flutter/material.dart';
+import 'package:universal_html/prefer_universal/html.dart' hide Text;
 import 'package:uuid/uuid.dart';
 
 import 'FauiAuthState.dart';
@@ -16,9 +17,9 @@ final double btnWidth = 140;
 final double btnRadius = 20;
 
 class FauiAuthScreen extends StatefulWidget {
-  final VoidCallback onExit;
+  final Function onExit;
   final Function(String, String) onLogin;
-  final Function(String,String) onRegisterUser;
+  final Function(String, String) onRegisterUser;
   final bool showTitle;
   final Color color;
   final String firebaseApiKey;
@@ -26,14 +27,14 @@ class FauiAuthScreen extends StatefulWidget {
   final Widget title;
 
   FauiAuthScreen(
-      {@required VoidCallback this.onExit,
-      @required String this.firebaseApiKey,
+      {@required this.onExit,
+      @required this.firebaseApiKey,
       this.title,
       @required this.onLogin,
       @required this.onRegisterUser,
       this.color,
       this.showTitle = true,
-      bool this.startWithRegistration});
+      this.startWithRegistration});
 
   @override
   _FauiAuthScreenState createState() => _FauiAuthScreenState();
@@ -99,7 +100,7 @@ class _FauiAuthScreenState extends State<FauiAuthScreen> {
 
   @override
   Widget build(BuildContext context) {
-    checkRedirect((widget.firebaseApiKey??'').isEmpty);
+    checkRedirect((widget.firebaseApiKey ?? '').isEmpty);
     switch (this._authScreen) {
       case AuthScreen.signIn:
         return _buildSignInScreen(context);
@@ -122,7 +123,7 @@ class _FauiAuthScreenState extends State<FauiAuthScreen> {
         new TextEditingController(text: this._name);
 
     @override
-    dispose(){
+    dispose() {
       emailController.dispose();
       nameController.dispose();
       super.dispose();
@@ -171,7 +172,8 @@ class _FauiAuthScreenState extends State<FauiAuthScreen> {
                   email: emailController.text,
                 );
 
-                widget.onRegisterUser(emailController.text,nameController.text);
+                widget.onRegisterUser(
+                    emailController.text, nameController.text);
 
                 this.switchScreen(AuthScreen.verifyEmail, emailController.text);
               } catch (e) {

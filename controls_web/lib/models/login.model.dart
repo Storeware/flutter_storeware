@@ -147,6 +147,7 @@ class LoginModelBase extends AuthUser {
   Future<bool> validarConta(String conta, {Function(bool) next}) async {
     if ((conta ?? '') == '') return false;
     debug('login.model->pre-validarConta( $conta ) logado: $logado ');
+    return true;
     /*return FirestoreApp().collection('lojas').doc(conta).get().then((doc) {
       bool rt = (doc != null) && doc.id == conta && doc.exists;
       if (rt) dadosConta = doc.data();
@@ -199,7 +200,7 @@ class LoginModelBase extends AuthUser {
       goEnter(context, pushOnOk);
       return false;
     }
-    return true;
+    //return true;
   }
 
   getByEmail(email) async {
@@ -241,7 +242,7 @@ class UsuarioModel {
   UsuarioModel() {
     //super.collectionName = 'usuarios';
   }
-  @override
+  //s@override
   //createItem() => UsuarioItem();
   Future<dynamic> getByEmail(email) async {
     // var fb = FirestoreApp().instance;

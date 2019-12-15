@@ -1,5 +1,4 @@
 import 'package:controls_data/data_model.dart';
-
 import 'panel.dart';
 import 'package:flutter/material.dart';
 import '../services/routes.dart';
@@ -215,13 +214,13 @@ class MenuItem extends DataModelItem {
       this.perfil = 'all',
       this.selected = false,
       this.acesso = 0.0});
-  MenuItem setPerfil(perfil_) {
-    this.perfil = perfil_;
+  MenuItem setPerfil(perfil) {
+    this.perfil = perfil;
     return this;
   }
 
-  bool isPerfil(perfil_) {
-    return this.perfil.contains(perfil_);
+  bool isPerfil(perfil) {
+    return this.perfil.contains(perfil);
   }
 
   MenuItem setAcesso(double acesso) {
@@ -246,7 +245,7 @@ class MenuModel {
   }
 
   get items => _list;
-  MenuModel._create() {}
+  MenuModel._create();
   item(int idx) => _list[idx];
 
   add(MenuItem item) {
@@ -255,7 +254,9 @@ class MenuModel {
   }
 
   static MenuItem addDivider() {
-    _instance.add(MenuItem('-', (x) {}));
+    MenuItem item = MenuItem('-', (x) {});
+    _instance.add(item);
+    return item;
   }
 
   static MenuItem addItem(String text, Function(BuildContext) click,

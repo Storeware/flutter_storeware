@@ -111,8 +111,8 @@ class _DataGridPageState extends State<DataGridPage> {
               ])
           ],
         ),
-        StreamBuilder(
-            stream: widget.dataSnap,
+        FutureBuilder(
+            future: widget.dataSnap,
             builder: (x, d) {
               print('grid->dataTable ${d.hasData}');
               _createDataSource(d.data);

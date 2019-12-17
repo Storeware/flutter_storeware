@@ -1,8 +1,8 @@
-import 'package:controls_web/controls.dart';
-import 'package:controls_web/services.dart';
-import 'package:firebase_web/firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:controls_web/controls/rounded_button.dart';
+import 'package:controls_web/controls/home_elements.dart';
+import 'package:controls_web/controls/defaults.dart';
 
 class DataGridPageColumn {
   String label;
@@ -89,7 +89,7 @@ class _DataGridPageState extends State<DataGridPage> {
             RoundedButton(
               height: 30,
               color: Theme.of(context).primaryColor,
-              buttonName: Translate.string('Novo'),
+              buttonName: 'Novo', //Translate.string('Novo'),
               onTap: () {
                 if (widget.onRowEdit != null) widget.onRowEdit({});
                 if (widget.canChange) widget.onNewClick();
@@ -112,9 +112,10 @@ class _DataGridPageState extends State<DataGridPage> {
           ],
         ),
         FutureBuilder(
+            // alterado de stream para future -
             future: widget.dataSnap,
             builder: (x, d) {
-              print('grid->dataTable ${d.hasData}');
+              print('grid->dataTable ${d.hasData} ${d.data}');
               _createDataSource(d.data);
               return StreamBuilder<bool>(
                   initialData: true,
@@ -150,7 +151,7 @@ class _DataGridPageState extends State<DataGridPage> {
         for (var item in widget.columns)
           if (!(item.hide ?? false))
             DataColumn(
-                label: Text(Translate.string(item.label)),
+                label: Text(item.label /*Translate.string(item.label)*/),
                 onSort: (colIdx, asc) {
                   ascendent = asc;
                   dataSortIndex = colIdx;
@@ -177,9 +178,11 @@ class _DataGridPageState extends State<DataGridPage> {
 
   List<Map<String, dynamic>> dataSource = [];
   _createDataSource(snaps) {
+    print('snpas: $snaps');
     dataSource = [];
     List<dynamic> docs = snaps != null ? snaps.docs : [];
     docs.forEach((f) {
+      print('doc: $f');
       var d = f.data();
       d['id'] = f.id;
       dataSource.add(d);
@@ -231,7 +234,7 @@ class _DataGridPageState extends State<DataGridPage> {
 
     return rows;
   }
-
+/*
   BoxDecoration _kSelectedDecoration() => BoxDecoration(
         //border: new Border(bottom: Divider.createBorderSide(context, width: 1.0)),
         color: selectedRowBackgroundColor,
@@ -244,6 +247,7 @@ class _DataGridPageState extends State<DataGridPage> {
         //border: new Border(bottom: Divider.createBorderSide(context, width: 1.0)),
         color: alternateRowBackgroundColorOdd,
       );
+*/
 }
 
 var selectedRowBackgroundColor = Colors.red; // Colors.grey[300];
@@ -318,7 +322,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
 
   _createAppBar() {
     print('createAppBar');
-    return appBarLight(title: widget.title, actions: widget.actions);
+    return AppBar(title: widget.title, actions: widget.actions);
   }
 
   createNavigationBar() => Container(
@@ -400,7 +404,10 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
       if (widget.onStateChange != null) widget.onStateChange('new');
       print('loading GridItemView');
       return DataGridItemView(
-        title: Row(children: [Text(Translate.string('Novo - ')), widget.title]),
+        title: Row(children: [
+          Text('Novo - ' /*Translate.string('Novo - ')*/),
+          widget.title
+        ]),
         data: _onGetValues(),
         columns: widget.columns,
         onSave: widget.onSave,
@@ -414,8 +421,10 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
       if (widget.onStateChange != null) widget.onStateChange('edit');
       //print(data);
       return DataGridItemView(
-        title: Row(
-            children: [Text(Translate.string('Alteração - ')), widget.title]),
+        title: Row(children: [
+          Text('Alteração - ' /*Translate.string('Alteração - ')*/),
+          widget.title
+        ]),
         data: data,
         columns: widget.columns,
         onSave: widget.onSave,
@@ -454,7 +463,7 @@ class _DataGridItemViewState extends State<DataGridItemView> {
   }
 
   _createAppBar() {
-    return appBarLight(title: widget.title, actions: [
+    return AppBar(title: widget.title, actions: [
       IconButton(
         icon: Icon(Icons.save),
         onPressed: () {
@@ -488,7 +497,7 @@ class _DataGridItemViewState extends State<DataGridItemView> {
             : !(item.readOnly ?? false),
         initialValue: (values[item.name] ?? '').toString(),
         decoration: InputDecoration(
-          labelText: Translate.string(item.label),
+          labelText: item.label, // Translate.string(item.label),
         ),
         validator: (value) {
           if (item.required && value.isEmpty) {
@@ -554,8 +563,9 @@ class _DataGridItemViewState extends State<DataGridItemView> {
       try {
         var s = Scaffold.of(context);
         if (s != null)
-          s.showSnackBar(
-              SnackBar(content: Text(Translate.string('Processando'))));
+          s.showSnackBar(SnackBar(
+              content:
+                  Text('Processando' /*Translate.string('Processando')*/)));
       } catch (x) {
         //
       }
@@ -575,7 +585,7 @@ class _DataGridItemViewState extends State<DataGridItemView> {
   }
 }
 
-CreateDataGridPageColumn(Map<String, dynamic> map, {bool showId = false}) {
+createDataGridPageColumn(Map<String, dynamic> map, {bool showId = false}) {
   return [
     for (var item in map.keys)
       if (item != 'inativo')

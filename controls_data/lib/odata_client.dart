@@ -22,18 +22,36 @@ class ODataQuery {
   });
 }
 
+class ODataDocument {
+  String id;
+  Map<String, dynamic> doc;
+  data() => doc;
+  dynamic operator [](String key) => doc[key];
+}
+
+class ODataDocuments {
+  /// compatibilidade com firebase
+  List<ODataDocument> docs;
+  get length => docs.length;
+}
+
 class ODataResult {
   int length = 0;
-  List<dynamic> data;
+  ODataDocuments _data = ODataDocuments();
   bool hasData = false;
+  get data => _data;
+  get docs => _data.docs;
   ODataResult({Map<String, dynamic> json}) {
     hasData = json != null;
     if (hasData) {
       length = json['rows'] ?? 0;
-      data = [];
+      _data.docs = [];
       var it = json['result'] ?? [];
       for (var item in it) {
-        data.add(item);
+        var doc = ODataDocument();
+        doc.id = item['id'];
+        doc.doc = item;
+        _data.docs.add(doc);
       }
     }
   }
@@ -61,6 +79,7 @@ class ODataBuilder extends StatelessWidget {
       builder: (context, response) {
         if (response.hasData) {
           var rst = ODataResult(json: response.data);
+          print(rst.data.docs.toString());
           return builder(context, rst);
         } else
           return builder(context, ODataResult(json: null));
@@ -96,8 +115,8 @@ class ODataClient {
     client.baseUrl = x;
   }
 
-  Future send(ODataQuery query) async {
-    String r = prefix + query.resource + '?';
+  send(ODataQuery query) async {
+    String r = query.resource + '?';
     if (query.select != null) r += '\$select=${query.select}&';
     if (query.filter != null) r += '\$filter=${query.filter}&';
     if (query.top != null) r += '\$top=${query.top}&';
@@ -105,6 +124,7 @@ class ODataClient {
     if (query.groupby != null) r += '\$groupby=${query.groupby}&';
     if (query.orderby != null) r += '\$orderby=${query.orderby}&';
     if (query.join != null) r += '\$join=${query.join}&';
+    print('endpoint: $r');
     return client.send(r).then((res) {
       return client.decode(res);
     });

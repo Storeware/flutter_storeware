@@ -142,7 +142,7 @@ class RestClient {
   Future<String> openUrl(Uri url, {String method, body}) async {
     _setHeader();
     http.Response resp;
-    //print('OpenUrl $method:$url');
+    print('OpenUrl $method:$url');
     //print(headers);
     if (method == 'GET') resp = await http.get(url, headers: headers);
     if (method == 'POST')

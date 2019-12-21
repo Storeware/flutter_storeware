@@ -42,14 +42,15 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
             height: 30,
           ),
           if (widget.body != null) widget.body,
-          RoundedButton(
-            height: 40,
-            width: 180,
-            buttonName: 'Entrar',
-            onTap: () {
-              if (widget.onPressed != null) widget.onPressed();
-            },
-          )
+          if (widget.onPressed != null)
+            RoundedButton(
+              height: 40,
+              width: 180,
+              buttonName: 'Entrar',
+              onTap: () {
+                if (widget.onPressed != null) widget.onPressed();
+              },
+            )
         ]),
       ),
     );

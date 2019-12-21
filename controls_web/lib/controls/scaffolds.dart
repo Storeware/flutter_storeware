@@ -58,7 +58,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
         ]),
       ),
       bottomNavigationBar: widget.bottomNavigationBar,
-      floatingActionButton: floatingActionButton,
+      floatingActionButton: widget.floatingActionButton,
     );
   }
 }

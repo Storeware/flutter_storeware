@@ -1,8 +1,7 @@
-import 'package:clientes/setup/config_app.dart';
 import 'package:controls_web/controls/rounded_button.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   final bool Function(String, String) onValidate;
   final String usuarioLabel;
   final String senhaLabel;
@@ -13,6 +12,8 @@ class LoginPage extends StatelessWidget {
   final Widget link;
   final Widget bottom;
   final Widget image;
+  final String userName;
+  final String userPassword;
   LoginPage({
     Key key,
     this.onValidate,
@@ -25,16 +26,32 @@ class LoginPage extends StatelessWidget {
     this.link,
     this.bottom,
     this.image,
+    this.userName,
+    this.userPassword,
   }) : super(key: key);
 
-  String cnpj;
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  String usuario;
+
   String senha;
+
+  @override
+  void initState() {
+    super.initState();
+    usuario = widget.userName ?? '';
+    senha = widget.userPassword ?? '';
+  }
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final double brd = (MediaQuery.of(context).size.width - maxWidth) / 2;
+    final double brd =
+        (MediaQuery.of(context).size.width - widget.maxWidth) / 2;
     return Form(
         key: _formKey,
         child: Padding(
@@ -48,25 +65,26 @@ class LoginPage extends StatelessWidget {
                 //height: 170,
                 title: Column(
                   children: <Widget>[
-                    if (image != null) image,
+                    if (widget.image != null) widget.image,
                     TextFormField(
-                        initialValue: cnpj,
+                        initialValue: usuario,
                         //controller: _cnpjController,
                         style: TextStyle(
                             fontSize: 16, fontStyle: FontStyle.normal),
                         decoration: InputDecoration(
                           //border: InputBorder.none,
-                          labelText: usuarioLabel,
+                          labelText: widget.usuarioLabel,
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Falta informar: $usuarioLabel';
+                            return 'Falta informar: ${widget.usuarioLabel}';
                           }
-                          if (value.length < minUsuario) return 'Inválido';
+                          if (value.length < widget.minUsuario)
+                            return 'Inválido';
                           return null;
                         },
                         onSaved: (x) {
-                          cnpj = x;
+                          usuario = x;
                         }),
                     TextFormField(
                         obscureText: true,
@@ -74,30 +92,30 @@ class LoginPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16, fontStyle: FontStyle.normal),
                         decoration: InputDecoration(
-                          labelText: senhaLabel,
+                          labelText: widget.senhaLabel,
                         ),
                         validator: (value) {
                           if (value.isEmpty) {
-                            return 'Falta informar: $senhaLabel';
+                            return 'Falta informar: ${widget.senhaLabel}';
                           }
-                          if (value.length < minSenha) return 'Inválido';
+                          if (value.length < widget.minSenha) return 'Inválido';
                           return null;
                         },
                         onSaved: (x) {
                           senha = x;
                         }),
-                    if (link != null) link,
+                    if (widget.link != null) widget.link,
                     SizedBox(
                       height: 10,
                     ),
                     RoundedButton(
                       width: 150,
-                      buttonName: buttonName,
+                      buttonName: widget.buttonName,
                       onTap: () {
                         validate();
                       },
                     ),
-                    if (bottom != null) bottom
+                    if (widget.bottom != null) widget.bottom
                   ],
                 ),
               ),
@@ -108,9 +126,7 @@ class LoginPage extends StatelessWidget {
 
   validate() {
     if (_formKey.currentState.validate()) {
-      if (onValidate != null) if (onValidate(cnpj, senha)) {
-        ConfigApp().cnpj = this.cnpj;
-        ConfigApp().password = this.senha;
+      if (widget.onValidate != null) if (widget.onValidate(usuario, senha)) {
         return true;
       }
     }

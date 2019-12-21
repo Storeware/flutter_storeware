@@ -33,6 +33,7 @@ class ODataDocuments {
   /// compatibilidade com firebase
   List<ODataDocument> docs;
   get length => docs.length;
+  dynamic operator [](int idx) => docs[idx];
 }
 
 class ODataResult {
@@ -49,6 +50,7 @@ class ODataResult {
       var it = json['result'] ?? [];
       for (var item in it) {
         var doc = ODataDocument();
+        //print(['doc', doc]);
         doc.id = item['id'];
         doc.doc = item;
         _data.docs.add(doc);
@@ -63,11 +65,16 @@ class ODataBuilder extends StatelessWidget {
   final Function(BuildContext, ODataResult) builder;
   final initialData;
   const ODataBuilder(
-      {Key key, this.client, this.initialData, this.query, this.builder})
+      {Key key,
+      this.client,
+      this.initialData,
+      @required this.query,
+      this.builder})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //print('futureBuilder');
     return FutureBuilder(
       initialData: (initialData != null)
           ? {
@@ -77,9 +84,11 @@ class ODataBuilder extends StatelessWidget {
           : null,
       future: execute(client, query),
       builder: (context, response) {
+        //print(['responsed....', response.hasData]);
         if (response.hasData) {
+          //print(['Response:', response.data]);
           var rst = ODataResult(json: response.data);
-          print(rst.data.docs.toString());
+          //print(rst.data.docs.toString());
           return builder(context, rst);
         } else
           return builder(context, ODataResult(json: null));
@@ -88,20 +97,11 @@ class ODataBuilder extends StatelessWidget {
   }
 
   Future execute(ODataClient odata, query) async {
-    return odata.send(query);
+    //print(['execute', odata]);
+    var odt = odata ?? ODataInst();
+    return odt.send(query);
   }
 }
-
-/*
-class ODataClient extends ODataClientBase {
-  static final _singleton = ODataClient._create();
-  ODataClient._create() {
-    baseUrl = 'http://localhost:8886';
-    prefix = '/v3/';
-  }
-  factory ODataClient() => _singleton;
-}
-*/
 
 class ODataClient {
   RestClient client = RestClient();
@@ -112,11 +112,13 @@ class ODataClient {
 
   get baseUrl => client.baseUrl;
   set baseUrl(x) {
+    //print('url: $x');
     client.baseUrl = x;
   }
 
   send(ODataQuery query) async {
     String r = query.resource + '?';
+    //print(['send:', r]);
     if (query.select != null) r += '\$select=${query.select}&';
     if (query.filter != null) r += '\$filter=${query.filter}&';
     if (query.top != null) r += '\$top=${query.top}&';
@@ -124,9 +126,15 @@ class ODataClient {
     if (query.groupby != null) r += '\$groupby=${query.groupby}&';
     if (query.orderby != null) r += '\$orderby=${query.orderby}&';
     if (query.join != null) r += '\$join=${query.join}&';
-    print('endpoint: $r');
+    //print('endpoint: $r');
     return client.send(r).then((res) {
       return client.decode(res);
     });
   }
+}
+
+class ODataInst extends ODataClient {
+  static final _singleton = ODataInst._create();
+  ODataInst._create();
+  factory ODataInst() => _singleton;
 }

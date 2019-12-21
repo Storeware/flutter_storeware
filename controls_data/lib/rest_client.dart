@@ -108,7 +108,9 @@ class RestClient {
     params.forEach((key, value) {
       p += (p == '' ? '?' : '&') + "$key=$value";
     });
-    return baseUrl + prefix + service + p;
+    String url = baseUrl + prefix + service + p;
+    print(['url:', url]);
+    return url;
   }
 
   addParameter(String key, value) {
@@ -164,6 +166,7 @@ class RestClient {
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
+
     return openUrl(url, method: method, body: body);
   }
 

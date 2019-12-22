@@ -35,5 +35,7 @@ void main() {
     expect(ACBrExtenso().valorToTexto(1.05), 'Um Real e Cinco Centavos');
     expect(ACBrExtenso().valorToTexto(2000.0555),
         'Dois Mil Reais e Seis Centavos');
+    expect(10.234.simpleRoundTo(-2), 10.23);
+    expect(10.234.roundTo(2), 10.23);
   });
 }

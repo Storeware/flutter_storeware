@@ -12,7 +12,8 @@ intToStrZero(int value, int decs) {
 
 num roundTo(double value, int decs) {
   if (decs < 0) decs = -decs;
-  return double.tryParse(value.toStringAsFixed(decs));
+  int fac = math.pow(10, decs);
+  return (value * fac).round() / fac;
 }
 
 num round(double value) {

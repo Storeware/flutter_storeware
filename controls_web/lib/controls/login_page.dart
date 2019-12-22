@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     if (widget.image != null) widget.image,
                     TextFormField(
-                      autofocus: true,
+                        autofocus: true,
                         initialValue: usuario,
                         //controller: _cnpjController,
                         style: TextStyle(
@@ -127,6 +127,7 @@ class _LoginPageState extends State<LoginPage> {
 
   validate() {
     if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
       if (widget.onValidate != null) if (widget.onValidate(usuario, senha)) {
         return true;
       }

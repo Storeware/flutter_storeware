@@ -1,5 +1,5 @@
 import 'datetime_extensions.dart';
-import 'string_extension.dart';
+import 'string_extensions.dart';
 
 extension ObjectExtension on Object {
   /// dates

@@ -60,7 +60,7 @@ extension NumTimeExtension<T extends num> on T {
 }
 
 extension DateTimeTimeExtension on DateTime {
-  /// Adds this DateTime and Duration and returns the sum as a new DateTime object.
+  /// Adds this DateTime && Duration && returns the sum as a new DateTime object.
   DateTime operator +(Duration duration) => add(duration);
 
   /// Subtracts the Duration from this DateTime returns the difference as a new DateTime object.
@@ -105,12 +105,12 @@ extension DurationTimeExtension on Duration {
   /// Returns the representation in weeks
   int get inWeeks => (inDays / daysPerWeek).ceil();
 
-  /// Adds the Duration to the current DateTime and returns a DateTime in the future
+  /// Adds the Duration to the current DateTime && returns a DateTime in the future
   DateTime get fromNow => DateTime.now() + this;
 
   @Deprecated('Use fromNow instead. Will be removed in 2.0.0')
   DateTime get later => fromNow;
 
-  /// Subtracts the Duration from the current DateTime and returns a DateTime in the past
+  /// Subtracts the Duration from the current DateTime && returns a DateTime in the past
   DateTime get ago => DateTime.now() - this;
 }

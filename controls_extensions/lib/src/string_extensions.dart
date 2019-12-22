@@ -3,13 +3,32 @@ extension StringExtensions on String {
   DateTime toDateTime() => DateTime.tryParse(this);
   int toInt() => int.tryParse(this);
 
-  static int toIntDef(String value, int def) {
-    value = value ?? '';
-    if (value == '') return def;
-    return int.tryParse(value);
+  int toIntDef(int def) {
+    if (this == '') return def;
+    return int.tryParse(this);
   }
 
-  static String copy(String value, int start, int count) {
-    return value.substring(start, start + count);
+  bool charIsNum(c) {
+    return '0,1,2,3,4,5,6,7,8,9'.contains(c);
   }
+
+  bool strIsNumber() {
+    int A, lenStr;
+    bool result = false;
+    lenStr = this.length;
+    result = (lenStr > 0);
+    A = 0;
+    while (result && (A < lenStr)) {
+      result = charIsNum(this[A]);
+      A++;
+    }
+    return result;
+  }
+
+  String copy(int start, int count) {
+    return this.substring(start, start + count);
+  }
+
+  operator <=(value) => ((this.compareTo(value) <= 0));
+  operator >=(value) => ((this.compareTo(value) >= 0));
 }

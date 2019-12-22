@@ -1,5 +1,6 @@
 import 'package:controls_extensions/src/ACBRExtenso.dart';
 import 'package:controls_extensions/src/ACBrUtil.dart';
+import 'package:controls_extensions/src/ACBrValidador.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:controls_extensions/extensions.dart';
@@ -37,5 +38,15 @@ void main() {
         'Dois Mil Reais e Seis Centavos');
     expect(10.234.simpleRoundTo(-2), 10.23);
     expect(10.234.roundTo(2), 10.23);
+  });
+
+  test('validador', () {
+    expect(validarCPF('05351151805') != '', true);
+    expect(validarCPF('05351151804'), '');
+    expect(validarCNPJ('08754527000113'), '');
+    expect(validarCNPJ('08754527000114') != '', true);
+    expect(validarCEP('09910470', fsComplemento: 'SP'), '');
+    expect(validarCEP('09910470', fsComplemento: 'RS') != '', true);
+    expect(validarCEP('09910470', fsComplemento: 'XX') != '', true);
   });
 }

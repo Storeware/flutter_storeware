@@ -2,7 +2,7 @@ import 'package:controls_data/data_model.dart';
 import 'panel.dart';
 import 'package:flutter/material.dart';
 import '../services/routes.dart';
-import '../models/login.model.dart';
+//import '../models/login.model.dart';
 
 /// MainMenu cria a navegação de um menu VERTICAL
 /// extended -> um objeto para fazer identificação de usuário e outros
@@ -91,7 +91,7 @@ class _MainMenuState extends State<MainMenu> {
 
   Widget _menuItem(context, MenuItem item) {
     if (item.logged != null) {
-      if (LoginModel().logado != item.logged) return Container();
+      //if (LoginModel().logado != item.logged) return Container();
     }
     List<MenuItem> items = item.items;
     if (items == null) {

@@ -7,16 +7,20 @@ class ScaffoldSplash extends StatefulWidget {
   final String title;
   final AppBar appBar;
   final Drawer drawer;
+  final Widget floatingActionButton;
+  final Widget bottomNavigationBar;
   final Function onPressed;
-  ScaffoldSplash(
-      {Key key,
-      this.appBar,
-      this.drawer,
-      this.title,
-      this.image,
-      this.onPressed,
-      this.body})
-      : super(key: key);
+  ScaffoldSplash({
+    Key key,
+    this.appBar,
+    this.drawer,
+    this.title,
+    this.image,
+    this.onPressed,
+    this.body,
+    this.floatingActionButton,
+    this.bottomNavigationBar,
+  }) : super(key: key);
 
   @override
   _ScaffoldSplashState createState() => _ScaffoldSplashState();
@@ -42,16 +46,19 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
             height: 30,
           ),
           if (widget.body != null) widget.body,
-          RoundedButton(
-            height: 40,
-            width: 180,
-            buttonName: 'Entrar',
-            onTap: () {
-              if (widget.onPressed != null) widget.onPressed();
-            },
-          )
+          if (widget.onPressed != null)
+            RoundedButton(
+              height: 40,
+              width: 180,
+              buttonName: 'Entrar',
+              onTap: () {
+                if (widget.onPressed != null) widget.onPressed();
+              },
+            )
         ]),
       ),
+      bottomNavigationBar: widget.bottomNavigationBar,
+      floatingActionButton: widget.floatingActionButton,
     );
   }
 }

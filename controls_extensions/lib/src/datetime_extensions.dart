@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'time_ago.dart';
 
 extension DateTimeExtension on DateTime {
   /// Format DateTime to custom mask
@@ -17,6 +18,14 @@ extension DateTimeExtension on DateTime {
   bool isLeapYear() {
     int value = this.year;
     return value % 400 == 0 || (value % 4 == 0 && value % 100 != 0);
+  }
+
+  String timeAgo({String lang}) {
+    int timeStamp = this.millisecondsSinceEpoch;
+    lang = lang ?? Intl.defaultLocale;
+    Language lg = Language.ENGLISH;
+    if (lang.indexOf('pt') >= 0) lg = Language.PORTUGUESE;
+    return TimeAgo.getTimeAgo(timeStamp, language: lg);
   }
 }
 

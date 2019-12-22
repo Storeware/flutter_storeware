@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:controls_extensions/extensions.dart';
 
 void main() {
+  DateTime t = DateTime.now().addHours(-1);
   test('Strings', () {
     expect('1232'.toDouble(), 1232);
     expect('2019-12-22T00:00:00'.toDateTime(), DateTime(2019, 12, 22));
@@ -15,6 +16,7 @@ void main() {
 
   test('DateTime', () {
     expect(DateTime(2019, 12, 19).format('MM-dd-yyyy'), '12-19-2019');
+    expect(t.timeAgo(lang: 'pt_BR'), 'uma hora atrás');
   });
 
   test('Double', () {

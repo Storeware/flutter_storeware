@@ -67,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     if (widget.image != null) widget.image,
                     TextFormField(
+                      autofocus: true,
                         initialValue: usuario,
                         //controller: _cnpjController,
                         style: TextStyle(

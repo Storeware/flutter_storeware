@@ -12,7 +12,7 @@ extension DateTimeExtension on DateTime {
   addDays(int value) => this.add(value.days);
 
   addHours(int value) => this.add(value.hours);
-  addMinute(int value) => this.add(value.minutes);
+  addMinutes(int value) => this.add(value.minutes);
 
   bool isLeapYear() {
     int value = this.year;

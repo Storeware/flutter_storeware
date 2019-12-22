@@ -1,0 +1,1 @@
+extension DoubleExtensions on double {}

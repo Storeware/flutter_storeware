@@ -16,4 +16,12 @@ void main() {
   test('DateTime', () {
     expect(DateTime(2019, 12, 19).format('MM-dd-yyyy'), '12-19-2019');
   });
+
+  test('Double', () {
+    expect(9.99.format('0.00', lang: 'en_US'), '9.99');
+    expect(9.99.format('0.00', lang: 'pt_BR'), '9,99');
+    expect(1009.99.format('#,###.00', lang: 'pt_BR'), '1.009,99');
+    expect(9.99.format('R\$ 0.00', lang: 'pt_BR'), 'R\$ 9,99');
+    expect(10.89.formatCurrency(), '\$10.89');
+  });
 }

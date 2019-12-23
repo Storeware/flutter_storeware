@@ -1,6 +1,3 @@
-//import 'dart:io';
-
-//import "package:universal_html/html.dart" as http;
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -105,11 +102,10 @@ class RestClient {
   String prefix = '';
   formatUrl() {
     String p = '';
-    params.forEach((key, value) {
+    (params ?? {}).forEach((key, value) {
       p += (p == '' ? '?' : '&') + "$key=$value";
     });
-    String url = baseUrl + prefix + service + p;
-    print(['url:', url]);
+    String url = (baseUrl ?? '') + (prefix ?? '') + (service ?? '') + (p ?? '');
     return url;
   }
 
@@ -123,7 +119,8 @@ class RestClient {
   }
 
   addHeader(String key, value) {
-    _headers[key] = value;
+    print('header add( $key : $value )');
+    _headers[key] = value ?? '';
     if (tokenId != null && _headers['authorization'] == null)
       autenticator(value: tokenId);
     return this;
@@ -138,41 +135,60 @@ class RestClient {
   }
 
   _setHeader() {
-    addHeader('Content-Type', contentType);
+    if ((contentType ?? '') != '') addHeader('Content-Type', contentType);
   }
 
-  Future<String> openUrl(Uri url, {String method, body}) async {
+  Future<String> openUrl(Uri url,
+      {String method, Map<String, dynamic> body}) async {
     _setHeader();
     http.Response resp;
-    print('OpenUrl $method:$url');
-    //print(headers);
-    if (method == 'GET') resp = await http.get(url, headers: headers);
-    if (method == 'POST')
-      resp = await http.post(url, body: body, headers: headers);
-    if (method == 'PUT')
-      resp = await http.put(url, body: body, headers: headers);
-    if (method == 'PATCH')
-      resp = await http.patch(url, body: body, headers: headers);
-    if (method == 'DELETE') resp = await http.delete(url, headers: headers);
-    _decodeResp(resp);
-    if (statusCode == 200) {
-      notify.send(resp.body);
-      return resp.body;
-    } else {
-      return throw (resp.body);
+    try {
+      if (method == 'GET') {
+        resp = await http.get(url, headers: headers);
+      } else if (method == 'POST') {
+        resp = await http.post(url,
+            body: (body is String) ? body : jsonEncode(body),
+            headers: {"Accept": "application/json"},
+            encoding: Encoding.getByName('utf-8')); //, headers: headers);
+      } else if (method == 'PUT')
+        resp = await http.put(url,
+            body: (body is String) ? body : jsonEncode(body),
+            headers: {"Accept": "application/json"},
+            encoding: Encoding.getByName('utf-8')); //, headers: headers);
+      else if (method == 'PATCH')
+        resp = await http.patch(url,
+            body: (body is String) ? body : jsonEncode(body),
+            headers: {"Accept": "application/json"},
+            encoding: Encoding.getByName('utf-8')); //, headers: headers);
+      else if (method == 'DELETE')
+        resp = await http.delete(url, headers: headers);
+      else
+        throw "Method inválido";
+      _decodeResp(resp);
+      print(resp);
+      if (statusCode == 200) {
+        notify.send(resp.body);
+        return resp.body;
+      } else {
+        print(resp.body);
+        return throw (resp.body);
+      }
+    } catch (e) {
+      print('$e');
+      throw e.message;
     }
   }
 
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
-
     return openUrl(url, method: method, body: body);
   }
 
   Future<String> post(String urlService, {body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
+    print(url);
     return openUrl(url, method: 'POST', body: body);
   }
 

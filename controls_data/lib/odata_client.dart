@@ -40,6 +40,10 @@ class ODataResult {
   int length = 0;
   ODataDocuments _data = ODataDocuments();
   bool hasData = false;
+  toList() async {
+    return [_data.docs];
+  }
+
   get data => _data;
   get docs => _data.docs;
   ODataResult({Map<String, dynamic> json}) {
@@ -129,6 +133,30 @@ class ODataClient {
     //print('endpoint: $r');
     return client.send(r).then((res) {
       return client.decode(res);
+    });
+  }
+
+  getOne(String resource) async {
+    return client.send(resource).then((res) {
+      return client.decode(res);
+    });
+  }
+
+  post(String resource, json) async {
+    return await client.post(resource, body: json).then((resp) {
+      return resp;
+    });
+  }
+
+  put(String resource, Map<String, dynamic> json) async {
+    return await client.put(resource, body: json).then((resp) {
+      return resp;
+    });
+  }
+
+  delete(String resource, Map<String, dynamic> json) async {
+    return await client.delete(resource, body: json).then((resp) {
+      return resp;
     });
   }
 }

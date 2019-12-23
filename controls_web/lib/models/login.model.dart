@@ -125,7 +125,7 @@ class LoginModelBase extends AuthUser {
       {String conta}) async {
     usuario = userId;
     this.email = email;
-    debug('login.model->login.email $email Get Token for');
+    //debug('login.model->login.email $email Get Token for');
     /* loginId = await FireFunctionsApp()
         .getToken(user: userId, pass: senha, email: email, conta: conta);
     debug(
@@ -146,7 +146,7 @@ class LoginModelBase extends AuthUser {
 
   Future<bool> validarConta(String conta, {Function(bool) next}) async {
     if ((conta ?? '') == '') return false;
-    debug('login.model->pre-validarConta( $conta ) logado: $logado ');
+    //debug('login.model->pre-validarConta( $conta ) logado: $logado ');
     return true;
     /*return FirestoreApp().collection('lojas').doc(conta).get().then((doc) {
       bool rt = (doc != null) && doc.id == conta && doc.exists;

@@ -119,7 +119,7 @@ class RestClient {
   }
 
   addHeader(String key, value) {
-    print('header add( $key : $value )');
+    //   print('header add( $key : $value )');
     _headers[key] = value ?? '';
     if (tokenId != null && _headers['authorization'] == null)
       autenticator(value: tokenId);
@@ -142,6 +142,7 @@ class RestClient {
       {String method, Map<String, dynamic> body}) async {
     _setHeader();
     http.Response resp;
+    print('$method : $url $body');
     try {
       if (method == 'GET') {
         resp = await http.get(url, headers: headers);

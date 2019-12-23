@@ -181,15 +181,15 @@ class _DataGridPageState extends State<DataGridPage> {
     dataSource = [];
     if (snaps == null) return dataSource;
     if (snaps.runtimeType.toString().contains('QuerySnapshot')) {
-      snaps.forEach((doc) {
-        doc.forEach((f) {
+      snaps.forEach((docs) {
+        docs.forEach((f) {
           var d = f.data();
           d['id'] = f.id;
           dataSource.add(d);
         });
       });
     } else
-      snaps.forEach((f) {
+      snaps.docs.forEach((f) {
         print('doc f: $f');
         var d = f.data();
         d['id'] = f.id;

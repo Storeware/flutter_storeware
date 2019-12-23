@@ -178,15 +178,23 @@ class _DataGridPageState extends State<DataGridPage> {
 
   List<Map<String, dynamic>> dataSource = [];
   _createDataSource(snaps) {
-    print('snpas: $snaps');
     dataSource = [];
-    List<dynamic> docs = snaps != null ? snaps.docs : [];
-    docs.forEach((f) {
-      print('doc: $f');
-      var d = f.data();
-      d['id'] = f.id;
-      dataSource.add(d);
-    });
+    if (snaps == null) return dataSource;
+    if (snaps.runtimeType.toString().contains('QuerySnapshot')) {
+      snaps.forEach((doc) {
+        doc.forEach((f) {
+          var d = f.data();
+          d['id'] = f.id;
+          dataSource.add(d);
+        });
+      });
+    } else
+      snaps.forEach((f) {
+        print('doc f: $f');
+        var d = f.data();
+        d['id'] = f.id;
+        dataSource.add(d);
+      });
     return dataSource;
   }
 

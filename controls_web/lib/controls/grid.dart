@@ -79,6 +79,9 @@ class _DataGridPageState extends State<DataGridPage> {
   }
 
   var _notifier = StreamController<bool>.broadcast();
+  _compareTo(String a, String b) {
+    return a.compareTo(b);
+  }
 
   _createBody(context) {
     return Column(
@@ -122,10 +125,16 @@ class _DataGridPageState extends State<DataGridPage> {
                   stream: _notifier.stream,
                   builder: (x, s) {
                     var col = widget.columns[dataSortIndex - 1];
-                    dataSource.sort((a, b) {
-                      return a[col.name].compareTo(b[col.name]) *
-                          (ascendent ? 1 : -1);
-                    });
+                    if (dataSource != null)
+                      dataSource.sort((a, b) {
+                        try {
+                          var r = _compareTo(a[col.name], (b[col.name])) *
+                              (ascendent ? 1 : -1);
+                          return r;
+                        } catch (e) {
+                          return 1;
+                        }
+                      });
 
                     return DataTable(
                       sortAscending: ascendent,

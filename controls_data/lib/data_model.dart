@@ -277,6 +277,10 @@ enum DataState { dsBrowser, dsEdit, dsInsert, dsDelete }
 class DataModelItem {
   String id;
   DataState _state = DataState.dsBrowser;
+  get isInserting => _state == DataState.dsInsert;
+  get isDeleting => _state == DataState.dsDelete;
+  get isEditing => _state == DataState.dsEdit;
+  get isBrowsing => _state == DataState.dsBrowser;
 
   inserting() {
     _state = DataState.dsInsert;

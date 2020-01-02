@@ -1053,3 +1053,66 @@ class ApplienceTag extends StatelessWidget {
     );
   }
 }
+
+
+class ApplienceReport extends StatelessWidget {
+  final Widget title;
+  final Widget footer;
+  final Color color;
+  final double width;
+  final double height;
+  final Widget body;
+  final double divider;
+  final double elevation;
+  final Alignment alignment;
+  final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisAlignment mainAxisAlignment;
+  const ApplienceReport(
+      {Key key,
+      this.title,
+      this.body,
+      this.footer,
+      this.divider = 1,
+      this.elevation = 1,
+      this.width = 180,
+      this.alignment = Alignment.centerLeft,
+      this.crossAxisAlignment = CrossAxisAlignment.start,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.height,
+      this.color})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: elevation,
+      child: Container(
+        width: width,
+        height: height,
+        color: color,
+        alignment: alignment,
+        child: Column(
+          crossAxisAlignment: crossAxisAlignment,
+          mainAxisAlignment: mainAxisAlignment,
+          children: <Widget>[
+            if (title != null) ...[
+              title,
+              if (divider > 0)
+                Divider(
+                  height: divider,
+                )
+            ],
+            if (body != null) body,
+            if (footer != null) ...[
+              if (divider > 0)
+                Divider(
+                  height: divider,
+                ),
+              footer
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}

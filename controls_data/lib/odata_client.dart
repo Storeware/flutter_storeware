@@ -20,6 +20,18 @@ class ODataQuery {
     this.orderby,
     this.join,
   });
+
+  String build() {
+    String r = resource + '?';
+    if (select != null) r += '\$select=${select}&';
+    if (filter != null) r += '\$filter=${filter}&';
+    if (top != null) r += '\$top=${top}&';
+    if (skip != null) r += '\$skip=${skip}&';
+    if (groupby != null) r += '\$groupby=${groupby}&';
+    if (orderby != null) r += '\$orderby=${orderby}&';
+    if (join != null) r += '\$join=${join}&';
+    return r;
+  }
 }
 
 class ODataDocument {

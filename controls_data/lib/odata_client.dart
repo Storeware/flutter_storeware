@@ -56,6 +56,10 @@ class ODataResult {
     return [_data.docs];
   }
 
+  operator [](int index) {
+    return docs[index];
+  }
+
   get data => _data;
   get docs => _data.docs;
   ODataResult({Map<String, dynamic> json}) {
@@ -66,7 +70,7 @@ class ODataResult {
       var it = json['result'] ?? [];
       for (var item in it) {
         var doc = ODataDocument();
-        //print(['doc', doc]);
+      
         doc.id = item['id'];
         doc.doc = item;
         _data.docs.add(doc);
@@ -100,11 +104,8 @@ class ODataBuilder extends StatelessWidget {
           : null,
       future: execute(client, query),
       builder: (context, response) {
-        //print(['responsed....', response.hasData]);
         if (response.hasData) {
-          //print(['Response:', response.data]);
           var rst = ODataResult(json: response.data);
-          //print(rst.data.docs.toString());
           return builder(context, rst);
         } else
           return builder(context, ODataResult(json: null));
@@ -113,7 +114,6 @@ class ODataBuilder extends StatelessWidget {
   }
 
   Future execute(ODataClient odata, query) async {
-    //print(['execute', odata]);
     var odt = odata ?? ODataInst();
     return odt.send(query);
   }
@@ -128,7 +128,6 @@ class ODataClient {
 
   get baseUrl => client.baseUrl;
   set baseUrl(x) {
-    //print('url: $x');
     client.baseUrl = x;
   }
 

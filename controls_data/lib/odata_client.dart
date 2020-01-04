@@ -133,16 +133,7 @@ class ODataClient {
   }
 
   send(ODataQuery query) async {
-    String r = query.resource + '?';
-    //print(['send:', r]);
-    if (query.select != null) r += '\$select=${query.select}&';
-    if (query.filter != null) r += '\$filter=${query.filter}&';
-    if (query.top != null) r += '\$top=${query.top}&';
-    if (query.skip != null) r += '\$skip=${query.skip}&';
-    if (query.groupby != null) r += '\$groupby=${query.groupby}&';
-    if (query.orderby != null) r += '\$orderby=${query.orderby}&';
-    if (query.join != null) r += '\$join=${query.join}&';
-    //print('endpoint: $r');
+    String r = query.build();
     return client.send(r).then((res) {
       return client.decode(res);
     });

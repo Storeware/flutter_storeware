@@ -53,10 +53,10 @@ class ODataResult {
   ODataDocuments _data = ODataDocuments();
   bool hasData = false;
   toList() async {
-    return [_data.docs];
+    return _data.docs.toList();
   }
 
-  operator [](int index) {
+  ODataDocument operator [](int index) {
     return docs[index];
   }
 

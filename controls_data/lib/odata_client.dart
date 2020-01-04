@@ -37,15 +37,15 @@ class ODataQuery {
 class ODataDocument {
   String id;
   Map<String, dynamic> doc;
-  data() => doc;
+  Map<String, dynamic> data() => doc;
   dynamic operator [](String key) => doc[key];
 }
 
 class ODataDocuments {
   /// compatibilidade com firebase
   List<ODataDocument> docs;
-  get length => docs.length;
-  dynamic operator [](int idx) => docs[idx];
+  int get length => docs.length;
+  Map<String, dynamic> operator [](int idx) => docs[idx].data();
 }
 
 class ODataResult {
@@ -60,21 +60,22 @@ class ODataResult {
     return docs[index];
   }
 
-  get data => _data;
-  get docs => _data.docs;
+  ODataDocuments get data => _data;
+  List<ODataDocument> get docs => _data.docs;
   ODataResult({Map<String, dynamic> json}) {
     hasData = json != null;
+    length = 0;
     if (hasData) {
       length = json['rows'] ?? 0;
       _data.docs = [];
       var it = json['result'] ?? [];
       for (var item in it) {
         var doc = ODataDocument();
-      
         doc.id = item['id'];
         doc.doc = item;
         _data.docs.add(doc);
       }
+      length = _data.docs.length;
     }
   }
 }

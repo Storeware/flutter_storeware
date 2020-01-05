@@ -174,7 +174,7 @@ class ODataInst extends ODataClient {
 
 abstract class ODataModelClass<T extends DataItem> {
   String collectionName;
-  var API;
+  ODataClient API;
   ODataModelClass({this.API});
   enviar(T item) {
     return API.post(collectionName, item.toJson());

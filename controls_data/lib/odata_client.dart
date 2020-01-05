@@ -195,7 +195,7 @@ abstract class ODataModelClass<T extends DataItem> {
   Future<ODataResult> snapshots(
       {String select,
       String filter,
-      Sgtring groupBy,
+      String groupBy,
       String orderBy,
       bool inativo = false,
       int top = 200,

@@ -1,5 +1,6 @@
 import 'rest_client.dart';
 import 'package:flutter/material.dart';
+import 'data_model.dart';
 
 class ODataQuery {
   final String resource;
@@ -169,4 +170,44 @@ class ODataInst extends ODataClient {
   static final _singleton = ODataInst._create();
   ODataInst._create();
   factory ODataInst() => _singleton;
+}
+
+abstract class ODataModelClass<T extends DataItem> {
+  String collectionName;
+  var API;
+  ODataModelClass({this.API});
+  enviar(T item) {
+    return API.post(collectionName, item.toJson());
+  }
+
+  post(T item) async {
+    return await API.post(collectionName, item.toJson());
+  }
+
+  put(T item) async {
+    return await API.put(collectionName, item.toJson());
+  }
+
+  delete(T item) async {
+    return await API.delete(collectionName, item.toJson());
+  }
+
+  Future<ODataResult> snapshots(
+      {String select,
+      String filter,
+      Sgtring groupBy,
+      String orderBy,
+      bool inativo = false,
+      int top = 200,
+      int skip = 0}) async {
+    return await API.send(ODataQuery(
+      resource: collectionName,
+      select: select ?? '*',
+      filter: filter ?? "inativo eq '${inativo ? "S" : "N"}' ",
+      top: top,
+      skip: skip,
+      groupby: groupBy,
+      orderby: orderBy,
+    ));
+  }
 }

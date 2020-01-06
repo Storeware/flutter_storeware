@@ -1,5 +1,11 @@
 import 'rest_client.dart';
 import 'package:flutter/material.dart';
+import 'data_model.dart';
+
+bool debugOn = false;
+void debug(dynamic x) {
+  if (debugOn) print(x);
+}
 
 class ODataQuery {
   final String resource;
@@ -38,27 +44,47 @@ class ODataDocuments {
 
 class ODataResult {
   int length = 0;
+  Map<String, dynamic> response;
   ODataDocuments _data = ODataDocuments();
   bool hasData = false;
   toList() async {
     return [_data.docs];
   }
 
+  static fromJson(Map<String, dynamic> json) {
+    return ODataResult(json: json);
+  }
+
+  ODataDocument operator [](int index) {
+    return _data[index];
+  }
+
   get data => _data;
   get docs => _data.docs;
   ODataResult({Map<String, dynamic> json}) {
-    hasData = json != null;
-    if (hasData) {
-      length = json['rows'] ?? 0;
-      _data.docs = [];
-      var it = json['result'] ?? [];
-      for (var item in it) {
-        var doc = ODataDocument();
-        //print(['doc', doc]);
-        doc.id = item['id'];
-        doc.doc = item;
-        _data.docs.add(doc);
+    _encode(json);
+  }
+  _encode(json) {
+    response = json;
+    try {
+      hasData = json != null;
+      debug(json);
+      if (hasData) {
+        length = json['rows'] ?? 0;
+        debug('length: $length');
+        _data.docs = [];
+        var it = json['result'] ?? [];
+        debug(['result', it]);
+        for (var item in it) {
+          var doc = ODataDocument();
+          doc.id = "${item['id']}";
+          doc.doc = item;
+          debug(item);
+          _data.docs.add(doc);
+        }
       }
+    } catch (e) {
+      print(e.message);
     }
   }
 }
@@ -165,4 +191,44 @@ class ODataInst extends ODataClient {
   static final _singleton = ODataInst._create();
   ODataInst._create();
   factory ODataInst() => _singleton;
+}
+
+abstract class ODataModelClass<T extends DataItem> {
+  String collectionName;
+  ODataClient API;
+  ODataModelClass({this.API});
+  enviar(T item) {
+    return API.post(collectionName, item.toJson());
+  }
+
+  post(T item) async {
+    return await API.post(collectionName, item.toJson());
+  }
+
+  put(T item) async {
+    return await API.put(collectionName, item.toJson());
+  }
+
+  delete(T item) async {
+    return await API.delete(collectionName, item.toJson());
+  }
+
+  Future<ODataResult> snapshots(
+      {String select,
+      String filter,
+      String groupBy,
+      String orderBy,
+      bool inativo = false,
+      int top = 200,
+      int skip = 0}) async {
+    return await API.send(ODataQuery(
+      resource: collectionName,
+      select: select ?? '*',
+      filter: filter ?? "inativo eq '${inativo ? "S" : "N"}' ",
+      top: top,
+      skip: skip,
+      groupby: groupBy,
+      orderby: orderBy,
+    ));
+  }
 }

@@ -44,13 +44,33 @@ class RestClient {
   RestClient({this.baseUrl}) {}
   /* decode json string to object */
   decode(String texto) {
-    return json.decode(texto);
+    return json.decode(texto, reviver: (k, v) {
+      if (v is String) {
+        RegExp exp =
+            new RegExp("^([0-9]{4})-(1[0-2]|0[1-9])-([0-3]{1})([0-9]{1})T");
+        var matches = exp.hasMatch(v);
+        try {
+          if (matches)
+            return DateTime.tryParse(v);
+          else
+            return v;
+        } catch (e) {
+          return v;
+        }
+      }
+      return v;
+    });
   }
 
   get observable => notify.stream;
   dispose() {}
   String encode(js) {
-    return json.encode(js);
+    return json.encode(js, reviver: (k, v) {
+      if (v is DateTime)
+        return v.toIso8601String();
+      else
+        return v;
+    });
   }
 
   /* convert String to List<int> */

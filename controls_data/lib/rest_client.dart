@@ -65,7 +65,7 @@ class RestClient {
   get observable => notify.stream;
   dispose() {}
   String encode(js) {
-    return json.encode(js, reviver: (k, v) {
+    return json.encode(js, toEncodable: (v) {
       if (v is DateTime)
         return v.toIso8601String();
       else

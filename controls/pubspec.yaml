@@ -16,7 +16,7 @@ dependencies:
   date_format:  
   #rxdart: 
   http:
-  shared_preferences:
+  #shared_preferences:
 
   #models:
   #  git:  

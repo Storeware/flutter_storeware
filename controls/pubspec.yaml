@@ -1,7 +1,7 @@
 name: controls
 description: storeware package.
-version: 0.0.1
-author:
+version: 0.0.2
+author: 
 homepage:
 
 environment:
@@ -10,18 +10,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cloud_firestore:
+  #cloud_firestore:
   intl:
-  datetime_picker_formfield:
+  #datetime_picker_formfield:
   date_format:  
-  rxdart: 
+  #rxdart: 
   http:
-  shared_preferences:
+  #shared_preferences:
 
-  models:
-    git:  
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: models
+  #models:
+  #  git:  
+  #    url: https://github.com/amarildolacerda/flutter_dart.git
+  #    path: models
 
 dev_dependencies:
   flutter_test:

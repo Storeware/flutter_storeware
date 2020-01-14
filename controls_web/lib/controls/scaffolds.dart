@@ -11,11 +11,13 @@ class ScaffoldSplash extends StatefulWidget {
   final Widget bottomNavigationBar;
   final Widget child;
   final Function onPressed;
+  final Color backgroundColor;
   ScaffoldSplash({
     Key key,
     this.appBar,
     this.drawer,
     this.title,
+    this.backgroundColor,
     this.image,
     this.onPressed,
     this.body,
@@ -32,6 +34,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.backgroundColor,
       drawer: widget.drawer,
       appBar: widget.appBar,
       body: Center(

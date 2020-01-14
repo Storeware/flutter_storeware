@@ -9,15 +9,19 @@ class ScaffoldSplash extends StatefulWidget {
   final Drawer drawer;
   final Widget floatingActionButton;
   final Widget bottomNavigationBar;
+  final Widget child;
   final Function onPressed;
+  final Color backgroundColor;
   ScaffoldSplash({
     Key key,
     this.appBar,
     this.drawer,
     this.title,
+    this.backgroundColor,
     this.image,
     this.onPressed,
     this.body,
+    this.child,
     this.floatingActionButton,
     this.bottomNavigationBar,
   }) : super(key: key);
@@ -30,6 +34,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: widget.backgroundColor,
       drawer: widget.drawer,
       appBar: widget.appBar,
       body: Center(
@@ -41,7 +46,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
           SizedBox(
             height: 40,
           ),
-          Text(widget.title),
+          Text(widget.title ?? ''),
           SizedBox(
             height: 30,
           ),
@@ -54,7 +59,8 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
               onTap: () {
                 if (widget.onPressed != null) widget.onPressed();
               },
-            )
+            ),
+          if (widget.child != null) widget.child,
         ]),
       ),
       bottomNavigationBar: widget.bottomNavigationBar,

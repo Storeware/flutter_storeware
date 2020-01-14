@@ -57,7 +57,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
                 if (widget.onPressed != null) widget.onPressed();
               },
             ),
-          if (widget.child != null) child,
+          if (widget.child != null) widget.child,
         ]),
       ),
       bottomNavigationBar: widget.bottomNavigationBar,

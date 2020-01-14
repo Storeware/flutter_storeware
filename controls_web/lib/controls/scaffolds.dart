@@ -9,6 +9,7 @@ class ScaffoldSplash extends StatefulWidget {
   final Drawer drawer;
   final Widget floatingActionButton;
   final Widget bottomNavigationBar;
+  final Widget child;
   final Function onPressed;
   ScaffoldSplash({
     Key key,
@@ -18,6 +19,7 @@ class ScaffoldSplash extends StatefulWidget {
     this.image,
     this.onPressed,
     this.body,
+    this.child,
     this.floatingActionButton,
     this.bottomNavigationBar,
   }) : super(key: key);
@@ -54,7 +56,8 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
               onTap: () {
                 if (widget.onPressed != null) widget.onPressed();
               },
-            )
+            ),
+          if (widget.child != null) child,
         ]),
       ),
       bottomNavigationBar: widget.bottomNavigationBar,

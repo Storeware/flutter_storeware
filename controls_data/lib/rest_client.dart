@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 String tokenId;
 
@@ -116,7 +117,9 @@ class RestClient {
   }
 
   Uri encodeUrl() {
-    return Uri.parse(formatUrl());
+    var r = formatUrl();
+    //print('url: $r');
+    return Uri.parse(r);
   }
 
   String prefix = '';
@@ -162,7 +165,7 @@ class RestClient {
       {String method, Map<String, dynamic> body}) async {
     _setHeader();
     http.Response resp;
-    print('$method : $url $body');
+    //print('$method : $url $body');
     try {
       if (method == 'GET') {
         resp = await http.get(url, headers: headers);
@@ -186,12 +189,12 @@ class RestClient {
       else
         throw "Method inválido";
       _decodeResp(resp);
-      print(resp);
+      //print(resp);
       if (statusCode == 200) {
         notify.send(resp.body);
         return resp.body;
       } else {
-        print(resp.body);
+        //print(resp.body);
         return throw (resp.body);
       }
     } catch (e) {
@@ -203,13 +206,18 @@ class RestClient {
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
+    //var url = formatUrl();
+    //print('url: $url');
+    //return Dio().get(url).then((resp) {
+    //  print(resp);
+    //});
     return openUrl(url, method: method, body: body);
   }
 
   Future<String> post(String urlService, {body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
-    print(url);
+    //print(url);
     return openUrl(url, method: 'POST', body: body);
   }
 

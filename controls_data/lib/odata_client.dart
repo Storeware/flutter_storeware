@@ -72,7 +72,7 @@ class ODataResult {
       debug(json);
       if (hasData) {
         rows = json['rows'] ?? 0;
-        debug('length: $length');
+        debug('rows: $rows');
         _data.docs = [];
         var it = json['result'] ?? [];
         debug(['result', it]);
@@ -85,7 +85,7 @@ class ODataResult {
         }
       }
     } catch (e) {
-      print(e.message);
+      print(e);
     }
   }
 }
@@ -157,7 +157,7 @@ class ODataClient {
     if (query.groupby != null) r += '\$groupby=${query.groupby}&';
     if (query.orderby != null) r += '\$orderby=${query.orderby}&';
     if (query.join != null) r += '\$join=${query.join}&';
-    //  print('endpoint: $r');
+    //print('endpoint: $r');
     return client.send(r).then((res) {
       return client.decode(res);
     });
@@ -169,14 +169,32 @@ class ODataClient {
     });
   }
 
-  post(String resource, json) async {
-    return await client.post(resource, body: json).then((resp) {
+  post(String resource, json, {bool removeNulls = true}) async {
+    Map<String, dynamic> data = {};
+    if (removeNulls) {
+      json.forEach((k, v) {
+        if (v != null) data[k] = v;
+      });
+    } else
+      data = json;
+
+    return await client.post(resource, body: data).then((resp) {
       return resp;
     });
   }
 
-  put(String resource, Map<String, dynamic> json) async {
-    return await client.put(resource, body: json).then((resp) {
+  put(String resource, Map<String, dynamic> json,
+      {bool removeNulls = true}) async {
+    /// remover os null
+    Map<String, dynamic> data = {};
+    if (removeNulls) {
+      json.forEach((k, v) {
+        if (v != null) data[k] = v;
+      });
+    } else
+      data = json;
+
+    return await client.put(resource, body: data).then((resp) {
       return resp;
     });
   }

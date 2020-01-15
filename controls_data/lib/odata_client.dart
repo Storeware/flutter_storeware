@@ -55,6 +55,9 @@ class ODataResult {
     return ODataResult(json: json);
   }
 
+  get first => _data.docs.first;
+  get last => _data.docs.last;
+
   ODataDocument operator [](int index) {
     return _data[index];
   }

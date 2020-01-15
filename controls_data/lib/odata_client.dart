@@ -43,12 +43,12 @@ class ODataDocuments {
 }
 
 class ODataResult {
-  int length = 0;
+  int rows = 0;
   Map<String, dynamic> response;
   ODataDocuments _data = ODataDocuments();
   bool hasData = false;
   toList() async {
-    return [_data.docs];
+    return _data.docs;
   }
 
   static fromJson(Map<String, dynamic> json) {
@@ -61,6 +61,7 @@ class ODataResult {
 
   get data => _data;
   get docs => _data.docs;
+  get length => _data.docs.length;
   ODataResult({Map<String, dynamic> json}) {
     _encode(json);
   }
@@ -70,7 +71,7 @@ class ODataResult {
       hasData = json != null;
       debug(json);
       if (hasData) {
-        length = json['rows'] ?? 0;
+        rows = json['rows'] ?? 0;
         debug('length: $length');
         _data.docs = [];
         var it = json['result'] ?? [];
@@ -156,7 +157,7 @@ class ODataClient {
     if (query.groupby != null) r += '\$groupby=${query.groupby}&';
     if (query.orderby != null) r += '\$orderby=${query.orderby}&';
     if (query.join != null) r += '\$join=${query.join}&';
-    //print('endpoint: $r');
+    //  print('endpoint: $r');
     return client.send(r).then((res) {
       return client.decode(res);
     });

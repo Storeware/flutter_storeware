@@ -46,7 +46,10 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
           SizedBox(
             height: 40,
           ),
-          Text(widget.title ?? ''),
+          Text(
+            widget.title ?? '',
+            softWrap: true,
+          ),
           SizedBox(
             height: 30,
           ),

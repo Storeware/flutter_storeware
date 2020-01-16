@@ -10,6 +10,14 @@ extension DoubleExtension on double {
     return oCcy.format(this);
   }
 
+  num min(num value) {
+    return (this < value) ? value : this;
+  }
+
+  num max(num value) {
+    return (this > value) ? value : this;
+  }
+
   num roundABNT(int decs) {
     return utils.roundABNT(this, decs);
   }

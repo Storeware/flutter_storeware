@@ -55,20 +55,26 @@ class ODataResult {
     return ODataResult(json: json);
   }
 
-  get first => _data.docs.first;
-  get last => _data.docs.last;
+/*
+  T as<T extends DataItem>(int index) {
+    T obj = T();
+    return obj.fromMap(docs[index].data());
+  }
+*/
+  ODataDocument get first => _data.docs.first;
+  ODataDocument get last => _data.docs.last;
 
   ODataDocument operator [](int index) {
     return _data[index];
   }
 
-  get data => _data;
-  get docs => _data.docs;
-  get length => _data.docs.length;
+  ODataDocuments get data => _data;
+  List<ODataDocument> get docs => _data.docs;
+  int get length => _data.docs.length;
   ODataResult({Map<String, dynamic> json}) {
     _encode(json);
   }
-  _encode(json) {
+  void _encode(json) {
     response = json;
     try {
       hasData = json != null;
@@ -144,7 +150,7 @@ class ODataClient {
     client.prefix = p;
   }
 
-  get baseUrl => client.baseUrl;
+  String get baseUrl => client.baseUrl;
   set baseUrl(x) {
     //print('url: $x');
     client.baseUrl = x;
@@ -217,6 +223,7 @@ class ODataInst extends ODataClient {
 
 abstract class ODataModelClass<T extends DataItem> {
   String collectionName;
+  String columns = '*';
   ODataClient API;
   ODataModelClass({this.API});
   enviar(T item) {
@@ -233,6 +240,15 @@ abstract class ODataModelClass<T extends DataItem> {
 
   delete(T item) async {
     return await API.delete(collectionName, item.toJson());
+  }
+
+  Future<ODataResult> search({String filter, String orderBy}) async {
+    var r = await API.send(ODataQuery(
+        resource: collectionName,
+        select: columns,
+        filter: filter,
+        orderby: orderBy));
+    return ODataResult(json: r);
   }
 
   Future<ODataResult> snapshots(

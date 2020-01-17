@@ -36,26 +36,30 @@ class DynamicTheme extends StatefulWidget {
   static light() {
     var th = ThemeData.light();
     return th.copyWith(
-        appBarTheme: th.appBarTheme.copyWith(
-      textTheme: TextTheme(
-        title: TextStyle(color: Colors.black),
+      appBarTheme: th.appBarTheme.copyWith(
+        textTheme: TextTheme(
+          title: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+        color: th.scaffoldBackgroundColor.withAlpha(120),
+        iconTheme: th.iconTheme.copyWith(color: Colors.black),
       ),
-      elevation: 0,
-      color: th.scaffoldBackgroundColor,
-      iconTheme: th.iconTheme.copyWith(color: Colors.black),
-    ));
+      scaffoldBackgroundColor: th.scaffoldBackgroundColor.withAlpha(120),
+    );
   }
 
   static dark() {
     var th = ThemeData.dark();
     return th.copyWith(
-        appBarTheme: th.appBarTheme.copyWith(
-            elevation: 0,
-            color: th.scaffoldBackgroundColor,
-            iconTheme: th.iconTheme.copyWith(color: Colors.white)));
+      appBarTheme: th.appBarTheme.copyWith(
+          elevation: 0,
+          color: th.scaffoldBackgroundColor.withAlpha(150),
+          iconTheme: th.iconTheme.copyWith(color: Colors.white)),
+      scaffoldBackgroundColor: th.scaffoldBackgroundColor.withAlpha(150),
+    );
   }
 
-  static changeTo(Brightness b) {
+  static ThemeData changeTo(Brightness b) {
     if (b == Brightness.light) {
       return light();
     }

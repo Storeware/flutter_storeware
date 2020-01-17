@@ -34,7 +34,7 @@ class DynamicTheme extends StatefulWidget {
   }
 
   static light(fontFamily) {
-    var th = ThemeData(fontFamily: fontFamily).light();
+    var th = ThemeData().light();
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
       textTheme: TextTheme(
@@ -47,7 +47,7 @@ class DynamicTheme extends StatefulWidget {
   }
 
   static dark(fontFamily) {
-    var th = ThemeData(fontFamily: fontFamily).dark();
+    var th = ThemeData().dark();
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
             elevation: 0,

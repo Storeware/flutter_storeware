@@ -33,37 +33,33 @@ class DynamicTheme extends StatefulWidget {
     return context.ancestorStateOfType(const TypeMatcher<DynamicThemeState>());
   }
 
-  static light() {
-    var th = ThemeData.light();
+  static light(fontFamily) {
+    var th = ThemeData(fontFamily: fontFamily).light();
     return th.copyWith(
-      appBarTheme: th.appBarTheme.copyWith(
-        textTheme: TextTheme(
-          title: TextStyle(color: Colors.black),
-        ),
-        elevation: 0,
-        color: th.scaffoldBackgroundColor.withAlpha(120),
-        iconTheme: th.iconTheme.copyWith(color: Colors.black),
+        appBarTheme: th.appBarTheme.copyWith(
+      textTheme: TextTheme(
+        title: TextStyle(color: Colors.black),
       ),
-      scaffoldBackgroundColor: th.scaffoldBackgroundColor.withAlpha(120),
-    );
+      elevation: 0,
+      color: th.scaffoldBackgroundColor,
+      iconTheme: th.iconTheme.copyWith(color: Colors.black),
+    ));
   }
 
-  static dark() {
-    var th = ThemeData.dark();
+  static dark(fontFamily) {
+    var th = ThemeData(fontFamily: fontFamily).dark();
     return th.copyWith(
-      appBarTheme: th.appBarTheme.copyWith(
-          elevation: 0,
-          color: th.scaffoldBackgroundColor.withAlpha(150),
-          iconTheme: th.iconTheme.copyWith(color: Colors.white)),
-      scaffoldBackgroundColor: th.scaffoldBackgroundColor.withAlpha(150),
-    );
+        appBarTheme: th.appBarTheme.copyWith(
+            elevation: 0,
+            color: th.scaffoldBackgroundColor,
+            iconTheme: th.iconTheme.copyWith(color: Colors.white)));
   }
 
-  static ThemeData changeTo(Brightness b) {
+  static changeTo(Brightness b, {fontFamily}) {
     if (b == Brightness.light) {
-      return light();
+      return light(fontFamily);
     }
-    return dark();
+    return dark(fontFamily);
   }
 }
 

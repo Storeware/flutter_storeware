@@ -42,6 +42,23 @@ extension DataExtensionNum on String {
   }
 }
 
+class ErrorNotify {
+  static final _singleton = ErrorNotify._create();
+  ErrorNotify._create();
+  factory ErrorNotify() => _singleton;
+  StreamController<String> _stream = StreamController<String>.broadcast();
+  get stream => _stream.stream;
+  notify(String text) {
+    _stream.sink.add(text);
+    return this;
+  }
+
+  static send(text) {
+    _singleton._stream.sink.add(text);
+    return text;
+  }
+}
+
 /// Class Changed Events
 class DataNotifyChange<T> {
   final _notifier = StreamController<T>.broadcast();

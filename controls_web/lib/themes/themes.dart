@@ -33,8 +33,8 @@ class DynamicTheme extends StatefulWidget {
     return context.ancestorStateOfType(const TypeMatcher<DynamicThemeState>());
   }
 
-  static light(fontFamily) {
-    var th = ThemeData().light();
+  static light({fontFamily}) {
+    var th = ThemeData(fontFamily: fontFamily, brightness: Brightness.light);
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
       textTheme: TextTheme(
@@ -46,8 +46,8 @@ class DynamicTheme extends StatefulWidget {
     ));
   }
 
-  static dark(fontFamily) {
-    var th = ThemeData().dark();
+  static dark({fontFamily}) {
+    var th = ThemeData(fontFamily: fontFamily, brightness: Brightness.dark);
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
             elevation: 0,
@@ -57,9 +57,9 @@ class DynamicTheme extends StatefulWidget {
 
   static changeTo(Brightness b, {fontFamily}) {
     if (b == Brightness.light) {
-      return light(fontFamily);
+      return light(fontFamily: fontFamily);
     }
-    return dark(fontFamily);
+    return dark(fontFamily: fontFamily);
   }
 }
 

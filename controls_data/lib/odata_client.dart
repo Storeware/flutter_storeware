@@ -242,11 +242,14 @@ abstract class ODataModelClass<T extends DataItem> {
     return await API.delete(collectionName, item.toJson());
   }
 
-  Future<ODataResult> search({String filter, String orderBy}) async {
+  Future<ODataResult> search(
+      {String filter, String orderBy, int top, int skip}) async {
     var r = await API.send(ODataQuery(
         resource: collectionName,
         select: columns,
         filter: filter,
+        top: top,
+        skip: skip,
         orderby: orderBy));
     return ODataResult(json: r);
   }

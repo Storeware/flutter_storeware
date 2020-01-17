@@ -166,7 +166,7 @@ class ODataClient {
     if (query.groupby != null) r += '\$groupby=${query.groupby}&';
     if (query.orderby != null) r += '\$orderby=${query.orderby}&';
     if (query.join != null) r += '\$join=${query.join}&';
-    //print('endpoint: $r');
+    print('endpoint: $r');
     return client.send(r).then((res) {
       return client.decode(res);
     });
@@ -244,14 +244,17 @@ abstract class ODataModelClass<T extends DataItem> {
 
   Future<ODataResult> search(
       {String filter, String orderBy, int top, int skip}) async {
-    var r = await API.send(ODataQuery(
-        resource: collectionName,
-        select: columns,
-        filter: filter,
-        top: top,
-        skip: skip,
-        orderby: orderBy));
-    return ODataResult(json: r);
+    return await API
+        .send(ODataQuery(
+            resource: collectionName,
+            select: columns,
+            filter: filter,
+            top: top ?? 0,
+            skip: skip ?? 0,
+            orderby: orderBy))
+        .then((r) {
+      return ODataResult(json: r);
+    });
   }
 
   Future<ODataResult> snapshots(

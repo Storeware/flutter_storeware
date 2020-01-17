@@ -54,3 +54,13 @@ extension CurrencyExtension on double {
   static get currencySymbol => NumberFormat().currencySymbol;
   String formatCurrency() => NumberFormat.simpleCurrency().format(this);
 }
+
+extension IntExtensions on int {
+  int min(int value) {
+    return (this < value) ? value : this;
+  }
+
+  int max(int value) {
+    return (this > value) ? value : this;
+  }
+}

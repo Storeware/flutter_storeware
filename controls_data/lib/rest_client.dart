@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
+//import 'package:dio/dio.dart';
 
 String tokenId;
 
@@ -13,7 +13,7 @@ class RestClientBloC<T> {
   }
 
   get sink => _controller.sink;
-  get stream => _controller.stream;
+  Stream<T> get stream => _controller.stream;
   void send(T reply) {
     sink.add(reply);
   }
@@ -44,14 +44,17 @@ class RestClient {
   Map<String, dynamic> jsonResponse;
   RestClient({this.baseUrl}) {}
   /* decode json string to object */
-  decode(String texto) {
+  dynamic decode(String texto) {
     return json.decode(texto, reviver: (k, v) {
       if (v is String) {
+        /// validação do dado como DateTime
         RegExp exp =
             new RegExp("^([0-9]{4})-(1[0-2]|0[1-9])-([0-3]{1})([0-9]{1})T");
         var matches = exp.hasMatch(v);
         try {
           if (matches)
+
+            /// É um DataTime
             return DateTime.tryParse(v);
           else
             return v;
@@ -206,6 +209,7 @@ class RestClient {
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     Uri url = encodeUrl();
+    print(url);
     //var url = formatUrl();
     //print('url: $url');
     //return Dio().get(url).then((resp) {

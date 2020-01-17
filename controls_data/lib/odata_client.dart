@@ -2,6 +2,9 @@ import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
 
+const errorConnectionMsg =
+    'Não executou a solicitação, provedor indisponível %s';
+
 bool debugOn = false;
 void debug(dynamic x) {
   if (debugOn) print(x);
@@ -244,17 +247,23 @@ abstract class ODataModelClass<T extends DataItem> {
 
   Future<ODataResult> search(
       {String filter, String orderBy, int top, int skip}) async {
-    return await API
-        .send(ODataQuery(
-            resource: collectionName,
-            select: columns,
-            filter: filter,
-            top: top ?? 0,
-            skip: skip ?? 0,
-            orderby: orderBy))
-        .then((r) {
-      return ODataResult(json: r);
-    });
+    try {
+      return await API
+          .send(ODataQuery(
+              resource: collectionName,
+              select: columns,
+              filter: filter,
+              top: top ?? 0,
+              skip: skip ?? 0,
+              orderby: orderBy))
+          .then((r) {
+        return ODataResult(json: r);
+      });
+    } catch (e) {
+      var s = errorConnectionMsg.replaceAll('%s', e.toString());
+      ErrorNotify.send(s);
+      throw s;
+    }
   }
 
   Future<ODataResult> snapshots(

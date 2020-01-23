@@ -54,6 +54,13 @@ class ODataResult {
     return _data.docs;
   }
 
+  static ODataResult item({Map<String, dynamic> json}) {
+    return ODataResult(json: {
+      "rows": 1,
+      "result": [json]
+    });
+  }
+
   static fromJson(Map<String, dynamic> json) {
     return ODataResult(json: json);
   }
@@ -155,7 +162,6 @@ class ODataClient {
 
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {
-    //print('url: $x');
     client.baseUrl = x;
   }
 
@@ -224,6 +230,8 @@ class ODataInst extends ODataClient {
   factory ODataInst() => _singleton;
 }
 
+get ODataClientDefault => ODataInst();
+
 abstract class ODataModelClass<T extends DataItem> {
   String collectionName;
   String columns = '*';
@@ -251,18 +259,18 @@ abstract class ODataModelClass<T extends DataItem> {
       return await API
           .send(ODataQuery(
               resource: collectionName,
-              select: columns,
-              filter: filter,
+              select: columns ?? '*',
+              filter: filter ?? '',
               top: top ?? 0,
               skip: skip ?? 0,
-              orderby: orderBy))
+              orderby: orderBy ?? ''))
           .then((r) {
         return ODataResult(json: r);
       });
     } catch (e) {
-      var s = errorConnectionMsg.replaceAll('%s', e.toString());
+      var s = '$errorConnectionMsg ${e}';
       ErrorNotify.send(s);
-      throw s;
+      //throw s;
     }
   }
 

@@ -328,10 +328,10 @@ AppBar appBarLight(
     Widget title,
     Widget leading,
     Color backgroundColor,
-    actions}) {
+    List<Widget> actions}) {
   return AppBar(
       backgroundColor: backgroundColor,
-      title: title ?? Text(text),
+      title: title ?? Text(text ?? ''),
       elevation: default_elevation,
       leading: leading,
       actions: actions);

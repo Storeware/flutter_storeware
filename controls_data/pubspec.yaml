@@ -13,6 +13,7 @@ dependencies:
   intl:
   universal_html:
   http:
+  dio:
 
 dev_dependencies:
   flutter_test:

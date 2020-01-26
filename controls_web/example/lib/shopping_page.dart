@@ -1,3 +1,4 @@
+import 'package:app/widget/button_double.dart';
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls/shopping.dart';
 
@@ -119,6 +120,16 @@ class _ShoppingViewDemoState extends State<ShoppingViewDemo> {
             style: Theme.of(context).textTheme.display1,
           ),
         ],
+      ),
+      bottomNavigationBar: Container(
+        height: 60,
+        color: Colors.grey,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            DoubleButton(),
+          ],
+        ),
       ),
 
       floatingActionButton: FloatingActionButton(

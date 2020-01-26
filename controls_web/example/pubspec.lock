@@ -44,7 +44,7 @@ packages:
     source: hosted
     version: "1.14.11"
   controls_data:
-    dependency: transitive
+    dependency: "direct main"
     description:
       path: controls_data
       ref: HEAD
@@ -55,9 +55,11 @@ packages:
   controls_web:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      path: controls_web
+      ref: HEAD
+      resolved-ref: "3259194dcc2f50f9cfe2f49e4d7cc5e4bbb44008"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "0.0.2"
   convert:
     dependency: transitive
@@ -306,5 +308,5 @@ packages:
     source: hosted
     version: "0.1.1"
 sdks:
-  dart: ">=2.5.0 <3.0.0"
+  dart: ">=2.7.0 <3.0.0"
   flutter: ">=1.0.0 <2.0.0"

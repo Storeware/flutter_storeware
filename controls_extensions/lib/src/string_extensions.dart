@@ -42,7 +42,7 @@ extension StringExtensions on String {
         r += r != '' ? ' ' : '';
       else
         r += ((r != '') ? ' ' : '') +
-            f.substring(0, 0).toUpperCase() +
+            f.substring(0, 1).toUpperCase() +
             f.substring(1).toLowerCase();
     });
     return r;

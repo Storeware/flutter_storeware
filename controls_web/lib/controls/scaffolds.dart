@@ -12,11 +12,13 @@ class ScaffoldSplash extends StatefulWidget {
   final Widget child;
   final Function onPressed;
   final Color backgroundColor;
+  final double topMargin;
   ScaffoldSplash({
     Key key,
     this.appBar,
     this.drawer,
     this.title,
+    this.topMargin = 30,
     this.backgroundColor,
     this.image,
     this.onPressed,
@@ -37,16 +39,19 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
       backgroundColor: widget.backgroundColor,
       drawer: widget.drawer,
       appBar: widget.appBar,
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(children: [
           SizedBox(
-            height: 70,
+            height: widget.topMargin,
           ),
           Container(child: Center(child: widget.image)),
           SizedBox(
             height: 40,
           ),
-          Text(widget.title ?? ''),
+          Text(
+            widget.title ?? '',
+            softWrap: true,
+          ),
           SizedBox(
             height: 30,
           ),

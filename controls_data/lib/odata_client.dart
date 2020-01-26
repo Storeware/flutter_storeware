@@ -2,6 +2,9 @@ import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
 
+const errorConnectionMsg =
+    'Não executou a solicitação, provedor indisponível %s';
+
 bool debugOn = false;
 void debug(dynamic x) {
   if (debugOn) print(x);
@@ -43,35 +46,52 @@ class ODataDocuments {
 }
 
 class ODataResult {
-  int length = 0;
+  int rows = 0;
   Map<String, dynamic> response;
   ODataDocuments _data = ODataDocuments();
   bool hasData = false;
   toList() async {
-    return [_data.docs];
+    return _data.docs;
+  }
+
+  static ODataResult item({Map<String, dynamic> json}) {
+    return ODataResult(json: {
+      "rows": 1,
+      "result": [json]
+    });
   }
 
   static fromJson(Map<String, dynamic> json) {
     return ODataResult(json: json);
   }
 
+/*
+  T as<T extends DataItem>(int index) {
+    T obj = T();
+    return obj.fromMap(docs[index].data());
+  }
+*/
+  ODataDocument get first => _data.docs.first;
+  ODataDocument get last => _data.docs.last;
+
   ODataDocument operator [](int index) {
     return _data[index];
   }
 
-  get data => _data;
-  get docs => _data.docs;
+  ODataDocuments get data => _data;
+  List<ODataDocument> get docs => _data.docs;
+  int get length => _data.docs.length;
   ODataResult({Map<String, dynamic> json}) {
     _encode(json);
   }
-  _encode(json) {
+  void _encode(json) {
     response = json;
     try {
       hasData = json != null;
       debug(json);
       if (hasData) {
-        length = json['rows'] ?? 0;
-        debug('length: $length');
+        rows = json['rows'] ?? 0;
+        debug('rows: $rows');
         _data.docs = [];
         var it = json['result'] ?? [];
         debug(['result', it]);
@@ -84,7 +104,7 @@ class ODataResult {
         }
       }
     } catch (e) {
-      print(e.message);
+      print(e);
     }
   }
 }
@@ -140,9 +160,8 @@ class ODataClient {
     client.prefix = p;
   }
 
-  get baseUrl => client.baseUrl;
+  String get baseUrl => client.baseUrl;
   set baseUrl(x) {
-    //print('url: $x');
     client.baseUrl = x;
   }
 
@@ -168,14 +187,32 @@ class ODataClient {
     });
   }
 
-  post(String resource, json) async {
-    return await client.post(resource, body: json).then((resp) {
+  post(String resource, json, {bool removeNulls = true}) async {
+    Map<String, dynamic> data = {};
+    if (removeNulls) {
+      json.forEach((k, v) {
+        if (v != null) data[k] = v;
+      });
+    } else
+      data = json;
+
+    return await client.post(resource, body: data).then((resp) {
       return resp;
     });
   }
 
-  put(String resource, Map<String, dynamic> json) async {
-    return await client.put(resource, body: json).then((resp) {
+  put(String resource, Map<String, dynamic> json,
+      {bool removeNulls = true}) async {
+    /// remover os null
+    Map<String, dynamic> data = {};
+    if (removeNulls) {
+      json.forEach((k, v) {
+        if (v != null) data[k] = v;
+      });
+    } else
+      data = json;
+
+    return await client.put(resource, body: data).then((resp) {
       return resp;
     });
   }
@@ -193,8 +230,11 @@ class ODataInst extends ODataClient {
   factory ODataInst() => _singleton;
 }
 
+get ODataClientDefault => ODataInst();
+
 abstract class ODataModelClass<T extends DataItem> {
   String collectionName;
+  String columns = '*';
   ODataClient API;
   ODataModelClass({this.API});
   enviar(T item) {
@@ -211,6 +251,27 @@ abstract class ODataModelClass<T extends DataItem> {
 
   delete(T item) async {
     return await API.delete(collectionName, item.toJson());
+  }
+
+  Future<ODataResult> search(
+      {String filter, String orderBy, int top, int skip}) async {
+    try {
+      return await API
+          .send(ODataQuery(
+              resource: collectionName,
+              select: columns ?? '*',
+              filter: filter ?? '',
+              top: top ?? 0,
+              skip: skip ?? 0,
+              orderby: orderBy ?? ''))
+          .then((r) {
+        return ODataResult(json: r);
+      });
+    } catch (e) {
+      var s = '$errorConnectionMsg ${e}';
+      ErrorNotify.send(s);
+      //throw s;
+    }
   }
 
   Future<ODataResult> snapshots(

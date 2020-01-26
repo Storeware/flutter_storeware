@@ -2,6 +2,63 @@ import 'dart:async';
 
 import 'dart:convert';
 
+extension DataExtensionBool on bool {
+  String toSN() => this ? 'S' : 'N';
+  String toTF() => this ? 'T' : 'F';
+}
+
+extension DataExtensionNum on String {
+  double toDouble({String def = '0'}) {
+    return double.tryParse(this ?? def);
+  }
+
+  String toSN() => toBool() ? 'S' : 'N';
+  int toInt({String def = '0'}) {
+    var value = this ?? def;
+    return int.tryParse(value);
+  }
+
+  bool toBool({String def = 'F'}) {
+    var value = this ?? def;
+    switch (def) {
+      case 'F':
+        return false;
+        break;
+      case 'T':
+        return true;
+        break;
+      case 'N':
+        return false;
+        break;
+      case 'Y':
+        return true;
+        break;
+      case 'S':
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
+}
+
+class ErrorNotify {
+  static final _singleton = ErrorNotify._create();
+  ErrorNotify._create();
+  factory ErrorNotify() => _singleton;
+  StreamController<String> _stream = StreamController<String>.broadcast();
+  get stream => _stream.stream;
+  notify(String text) {
+    _stream.sink.add(text);
+    return this;
+  }
+
+  static send(text) {
+    _singleton._stream.sink.add(text);
+    return text;
+  }
+}
+
 /// Class Changed Events
 class DataNotifyChange<T> {
   final _notifier = StreamController<T>.broadcast();
@@ -44,6 +101,7 @@ abstract class DataService {
 }
 
 abstract class DataItem {
+  String id;
   fromMap(Map<String, dynamic> data);
   Map<String, dynamic> toJson();
   bool validate() {
@@ -81,7 +139,7 @@ abstract class DataModel {
       {bool encodeFull = false}) {
     Map<String, dynamic> m = {};
     values.forEach((k, v) {
-      print(['data_model->encodeValues', k, v]);
+      //print(['data_model->encodeValues', k, v]);
       if (v is String)
         m[k] = encodeFull ? Uri.encodeFull(v) : v;
       else if (v is DateTime)
@@ -99,10 +157,10 @@ abstract class DataModel {
       rt[k] = v;
       if (v is String && v.length > 13) if (v.substring(10, 11) == 'T' &&
           v.substring(13, 14) == ':') {
-        print([k, v, v is String, v.substring(10, 11)]);
+        //print([k, v, v is String, v.substring(10, 11)]);
         try {
           DateTime d = DateTime.tryParse(v);
-          print(['datetime', d]);
+          //print(['datetime', d]);
           if (d != null) rt[k] = d;
         } catch (e) {}
         //TODO: Lists

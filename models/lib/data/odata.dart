@@ -6,7 +6,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class ODataKey {
   String name;
@@ -70,8 +71,7 @@ class OData extends _ODataBuilder {
 
   bool checkError({String data, String key = 'error'}) {
     var response = responseBody;
-    if (data!=null)
-       response = json.decode(data);
+    if (data != null) response = json.decode(data);
     if (response[key] != null) {
       throw new StateError(response[key]);
     }
@@ -88,7 +88,7 @@ class OData extends _ODataBuilder {
   }
 
   static Map<String, dynamic> encode(Map<String, dynamic> values) {
-    if (values==null) return null;
+    if (values == null) return null;
     Map<String, dynamic> m = {};
     (values ?? {}).forEach((k, v) {
       if (v is DateTime)
@@ -186,25 +186,31 @@ class OData extends _ODataBuilder {
       [Map<String, dynamic> body]) async {
     String _url = '${host}${url}';
     Map<String, String> headers = _setHeader();
-    http.Response resp;
-    if (method == 'GET') resp = await http.get(_url, headers: headers);
+    Response resp;
+    Dio dio = Dio(BaseOptions(headers: headers));
+    if (method == 'GET')
+      resp =
+          await dio.get(_url); // resp = await http.get(_url, headers: headers);
     if (method == 'POST')
-      resp = await http.post(_url, body: encode(body), headers: headers);
+      resp = await dio.post(_url, data: encode(body)); //, headers: headers);
     if (method == 'PUT')
-      resp = await http.put(_url, body: encode(body), headers: headers);
+      resp = await dio.put(_url, data: encode(body)); //, headers: headers);
     if (method == 'PATCH')
-      resp = await http.patch(_url, body: encode(body), headers: headers);
-    if (method == 'DELETE') resp = await http.delete(_url, headers: headers);
+      resp = await dio.patch(_url, data: encode(body)); //, headers: headers);
+    if (method == 'DELETE') resp = await dio.delete(_url); // headers: headers);
     statusCode = resp.statusCode;
     if (statusCode == 200) {
       try {
-        this.responseBody = json.decode(resp.body);
+        this.responseBody = {}; // json.decode(resp.data);
+        resp.data.forEach((k, v) {
+          this.responseBody[k] = v;
+        });
       } catch (e) {
         // invalid json
       }
-      return resp.body;
+      return jsonEncode(this.responseBody);
     } else {
-      return throw (resp.body);
+      return throw (resp.data);
     }
   }
 }

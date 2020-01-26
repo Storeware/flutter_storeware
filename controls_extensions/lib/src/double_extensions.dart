@@ -10,6 +10,14 @@ extension DoubleExtension on double {
     return oCcy.format(this);
   }
 
+  num min(num value) {
+    return (this < value) ? value : this;
+  }
+
+  num max(num value) {
+    return (this > value) ? value : this;
+  }
+
   num roundABNT(int decs) {
     return utils.roundABNT(this, decs);
   }
@@ -45,4 +53,14 @@ extension CurrencyExtension on double {
   static get currencyName => NumberFormat().currencyName;
   static get currencySymbol => NumberFormat().currencySymbol;
   String formatCurrency() => NumberFormat.simpleCurrency().format(this);
+}
+
+extension IntExtensions on int {
+  int min(int value) {
+    return (this < value) ? value : this;
+  }
+
+  int max(int value) {
+    return (this > value) ? value : this;
+  }
 }

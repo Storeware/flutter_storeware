@@ -14,14 +14,16 @@ class RestServer extends RestserverService {
   results({key = 'result'}) {
     return toList(key: key);
   }
-  Future<String> send(servico) async{
+
+  Future<String> send(servico) async {
     return openUrl('GET', servico);
   }
-  Map<String, dynamic>  result({Map<String,dynamic> data, key='result'}){
-    return value(data:data,key:key);
-  }
-  rows({key='rows'}){
-    return value(key:key);
+
+  Map<String, dynamic> result({Map<String, dynamic> data, key = 'result'}) {
+    return value(data: data, key: key);
   }
 
+  int rows({key = 'rows'}) {
+    return int.tryParse(value(key: key).toString());
+  }
 }

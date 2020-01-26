@@ -12,6 +12,10 @@ class BlocModel<T> {
   close() {
     _stream.close();
   }
+
+  void dispose() {
+    close();
+  }
 }
 
 class BlocNotifier<T> extends StatelessWidget {

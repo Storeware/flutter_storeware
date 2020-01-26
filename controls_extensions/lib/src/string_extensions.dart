@@ -31,4 +31,20 @@ extension StringExtensions on String {
 
   operator <=(value) => ((this.compareTo(value) <= 0));
   operator >=(value) => ((this.compareTo(value) >= 0));
+
+  String toUpperCapital() {
+    var lista = this.split(' ');
+    var excluir = ',de,ate,para,';
+    var r = '';
+    lista.forEach((f) {
+      // chce se é palavra que nao converte
+      if ((f.length == 1) || (excluir.contains(f.toLowerCase())))
+        r += r != '' ? ' ' : '';
+      else
+        r += ((r != '') ? ' ' : '') +
+            f.substring(0, 1).toUpperCase() +
+            f.substring(1).toLowerCase();
+    });
+    return r;
+  }
 }

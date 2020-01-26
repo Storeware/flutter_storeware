@@ -13,12 +13,14 @@ class ImageButton extends StatefulWidget {
   final Color subTitleColor;
   final double width;
   final double opacity;
+  final Widget leading;
   ImageButton(
       {Key key,
-      this.color ,
+      this.color,
       this.titleColor = Colors.white,
       this.onPressed,
       this.image,
+      this.leading,
       this.title = '',
       this.subTitle,
       this.subTitleColor = Colors.white,
@@ -26,9 +28,7 @@ class ImageButton extends StatefulWidget {
       this.width,
       this.height = 120.0,
       this.radius = 15.0})
-      : super(key: key){
-         
-      }
+      : super(key: key) {}
 
   _ImageButtonState createState() => _ImageButtonState();
 }
@@ -73,7 +73,6 @@ class _ImageButtonState extends State<ImageButton> {
                       width: double.maxFinite,
                       //color: widget.color,
                       height: widget.height,
-                      
                     ),
                   ),
                 ]),
@@ -90,7 +89,7 @@ class _ImageButtonState extends State<ImageButton> {
                                   BorderRadius.all(Radius.circular(100)),
                               color: widget.titleColor,
                             ),
-                            width:size.width / 5,
+                            width: size.width / 5,
                             child: Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: ClipRRect(
@@ -107,10 +106,15 @@ class _ImageButtonState extends State<ImageButton> {
                             widget.title.toUpperCase(),
                             style: TextStyle(color: widget.titleColor),
                             maxLines: 3,
-
                             softWrap: true,
                           ),
-                        ),widget.subTitle!=null? Divider (height: 10.0,color: Colors.white, ):Container(),
+                        ),
+                        widget.subTitle != null
+                            ? Divider(
+                                height: 10.0,
+                                color: Colors.white,
+                              )
+                            : Container(),
                         Padding(
                           padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                           child: Text(
@@ -123,6 +127,8 @@ class _ImageButtonState extends State<ImageButton> {
                         )
                       ],
                     )),
+                if (widget.leading != null)
+                  Positioned(top: 40, left: 5, child: widget.leading),
               ],
             ),
           ),

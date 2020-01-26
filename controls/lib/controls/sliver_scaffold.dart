@@ -1,15 +1,7 @@
+import 'defaults.dart';
 import 'package:flutter/material.dart';
 
 typedef WidgetListBuilderContext(BuildContext context, int index);
-
-bool navigateTo(context, onToPageFunc,
-    {String key, Function(String) permission}) {
-  if (permission != null) if (!permission(key)) {
-    return false;
-  }
-  Navigator.of(context).push(MaterialPageRoute(builder: (x) => onToPageFunc()));
-  return true;
-}
 
 class WidgetList {
   static List<Widget> count(context,
@@ -22,28 +14,24 @@ class WidgetList {
   }
 }
 
-//@immutable
+@immutable
 class SliverScaffold extends StatefulWidget {
   final AppBar appBar;
-  final EdgeInsets padding;
   final SliverAppBar sliverAppBar;
-  final List<SliverMultiBoxAdaptorWidget> slivers;
+  final List<Widget> slivers;
   final List<Widget> grid;
   final Widget body;
-  final Widget beforeBody;
-  final Widget afterBody;
-  final List<Widget>children;
   final Widget drawer;
   final Widget endDrawer;
   final double radius;
-  final Color backgroundColor;
+  Color backgroundColor;
   final Widget floatingActionButton;
   final Widget bottomNavigationBar;
   final afterLoaded;
   final ScrollController controller;
   final bool isScrollView;
-  final double topRadius;
-  final double bottomRadius;
+  double topRadius;
+  double bottomRadius;
   final bool reverse;
   final bool resizeToAvoidBottomPadding;
   final double gridMainAxisSpacing;
@@ -52,43 +40,42 @@ class SliverScaffold extends StatefulWidget {
   final int gridCrossAxisCount;
   final ExtendedAppBar extendedBar;
   final double bodyTop;
-  final List<SliverMultiBoxAdaptorWidget> bottomSlivers;
-  final int itemCount;
-  final Function(BuildContext, int) builder;
+  final double elevation;
+  final FloatingActionButtonLocation floatingActionButtonLocation;
   SliverScaffold(
       {Key key,
       this.appBar,
       this.sliverAppBar,
       this.slivers,
-      this.bottomSlivers,
       this.grid,
-      this.gridMainAxisSpacing = 1.0,
-      this.gridCrossAxisSpacing = 1.0,
-      this.gridChildAspectRatio = 8.0,
+      this.gridMainAxisSpacing = 10.0,
+      this.gridCrossAxisSpacing = 10.0,
+      this.gridChildAspectRatio = 2.0,
       this.gridCrossAxisCount = 1,
       this.resizeToAvoidBottomPadding = false,
       this.body,
-      this.children,
-      this.beforeBody,
-      this.afterBody,
-      this.padding,
       this.isScrollView = false,
       this.controller,
       this.reverse = false,
       this.drawer,
       this.endDrawer,
+      this.elevation,
       this.floatingActionButton,
       this.backgroundColor,
       this.bottomNavigationBar,
       this.afterLoaded,
       this.radius = 0.0,
-      this.topRadius = 0,
-      this.bottomRadius = 0,
+      this.topRadius,
+      this.bottomRadius,
       this.extendedBar,
-      this.itemCount,
-      this.builder,
+      this.floatingActionButtonLocation,
       this.bodyTop = 0})
-      : super(key: key);
+      : super(key: key) {
+    this.topRadius = this.topRadius ?? default_topScaffoldRadius;
+    this.bottomRadius = this.bottomRadius ?? default_bottomScaffoldRadius;
+    this.backgroundColor =
+        this.backgroundColor ?? defaultScaffoldBackgroudColor;
+  }
 
   static scrollable(
       {Key key,
@@ -164,41 +151,39 @@ class SliverScaffold extends StatefulWidget {
 class _SliverScaffoldState extends State<SliverScaffold> {
   List<Widget> _builder() {
     List<Widget> rt = [];
+    if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
+    //if (widget.extendedBar!=null) rt.add(widget.extendedBar);
     if (widget.slivers != null)
       widget.slivers.forEach((f) {
         rt.add(f);
       });
+    if (widget.grid != null) {
+      if (widget.extendedBar != null) widget.grid.insert(0, widget.extendedBar);
+      rt.add(
+        SliverGrid(
+          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+            mainAxisSpacing: widget.gridMainAxisSpacing,
+            crossAxisSpacing: widget.gridCrossAxisSpacing,
+            childAspectRatio: widget.gridChildAspectRatio,
+            crossAxisCount: widget.gridCrossAxisCount,
+          ),
+          delegate: new SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return widget.grid[index];
+            },
+            childCount: widget.grid.length,
+          ),
+        ),
+      );
+    }
     return rt;
-  }
-
-  _sliverGrid() {
-    var _grid = widget.grid ?? [];
-    return SliverGrid(
-      gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-        mainAxisSpacing: widget.gridMainAxisSpacing,
-        crossAxisSpacing: widget.gridCrossAxisSpacing,
-        childAspectRatio: widget.gridChildAspectRatio,
-        crossAxisCount: widget.gridCrossAxisCount,
-      ),
-      delegate: new SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return _grid[index];
-        },
-        childCount: _grid.length,
-      ),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    double gapBody =
-        (widget.extendedBar != null ? widget.extendedBar.height : 0) +
-            widget.bodyTop;
-    if (gapBody < 0) gapBody = 0;
     Widget _body = widget.body;
     if (widget.isScrollView) _body = SingleChildScrollView(child: widget.body);
     var theme = Theme.of(context);
-    var _backgroundColor = widget.backgroundColor ?? theme.primaryColor;
     var scf = Scaffold(
         resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
         key: widget.key,
@@ -206,95 +191,55 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         drawer: widget.drawer,
         endDrawer: widget.endDrawer,
         backgroundColor: widget.backgroundColor,
+        floatingActionButtonLocation: widget.floatingActionButtonLocation,
         floatingActionButton: widget.floatingActionButton,
         appBar: widget.appBar,
-        body: _clipRBody(
-            Stack(
-              children: <Widget>[
-                widget.extendedBar ?? Container(),
-                Column(children: [
-                  Container(
-                    height: gapBody,
-                  ),
-                  Expanded(
-                      child: Container(
-                    child: CustomScrollView(
-                      slivers: _scroolSlivers(_body),
-                    ),
+        body: Container(
+            height: double.maxFinite,
+            color: widget.backgroundColor ?? theme.primaryColor,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(widget.topRadius),
+                topRight: Radius.circular(widget.topRadius),
+                bottomLeft: Radius.circular(widget.bottomRadius),
+                bottomRight: Radius.circular(widget.bottomRadius),
+              ),
+              child: Container(
+                  color: widget.backgroundColor ??
+                      Theme.of(context).scaffoldBackgroundColor,
+                  child: NestedScrollView(
+                    controller: widget.controller,
+                    reverse: widget.reverse,
+                    headerSliverBuilder: (context, inner) {
+                      return _builder();
+                    },
+                    body: _createBody(_body),
                   )),
-                ]),
-              ],
-            ),
-            theme,
-            _backgroundColor));
+            )));
 
-    var rt;
-    if (widget.radius > 0)
-      rt = Container(
-          color: _backgroundColor,
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(widget.radius), child: scf));
-    else
-      rt = scf;
+    var rt = Container(
+        child: ClipRRect(
+            borderRadius: BorderRadius.circular(widget.radius), child: scf));
 
     if (widget.afterLoaded != null) widget.afterLoaded(scf);
 
     return rt;
   }
 
-  List<Widget> _scroolSlivers(Widget _body) {
-    List<Widget> rt = [];
-    if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
-
-    _builder().forEach((sliver){
-      rt.add(sliver);
-    });
-       
-
-    if (widget.grid != null) rt.add(_sliverGrid());
-
-    rt.add(
-        SliverList(delegate: SliverChildListDelegate([widget.beforeBody??Container(), _body ?? Container()])));
-    if (widget.children!=null)
-       SliverList(delegate: SliverChildListDelegate(widget.children));
-    rt.add(
-        SliverList(delegate: SliverChildListDelegate([widget.afterBody??Container()])));
-
-    if (widget.builder != null && widget.itemCount != null) {
-      List<Widget> r = [];
-      for (var i = 0; i < widget.itemCount; i++) {
-        r.add(widget.builder(context, i));
-      }
-      if (r.length > 0)
-        rt.add(SliverList(delegate: SliverChildListDelegate(r)));
+  Widget _createBody(Widget _body) {
+    if (widget.extendedBar != null) {
+      return ScaffoldLight(
+        extendedBar: widget.extendedBar,
+        bodyTop: widget.bodyTop,
+        body: _body,
+      );
+    } else {
+      return (widget.isScrollView
+          ? Scaffold(
+              resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+              body: (widget.body == null ? Text('no data.....') : _body))
+          : widget.body);
     }
-
-    if (widget.bottomSlivers != null)
-     widget.bottomSlivers.forEach((item){
-       rt.add(item);
-     });
-
-    return rt;
-  }
-
-  Widget _clipRBody(Widget _body, ThemeData theme, _backgroundColor) {
-    Widget r = Container(
-        color: _backgroundColor,
-        child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(widget.topRadius),
-              topRight: Radius.circular(widget.topRadius),
-              bottomLeft: Radius.circular(widget.bottomRadius),
-              bottomRight: Radius.circular(widget.bottomRadius),
-            ),
-            child:
-                Container(color: theme.scaffoldBackgroundColor, child: _body)));
-
-    if (widget.padding != null)
-      return Container(
-          color: _backgroundColor,
-          child: Padding(padding: widget.padding, child: r));
-    return r;
   }
 }
 
@@ -316,7 +261,7 @@ class ExtendedAppBar extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: child != null ? Wrap(children: [child]) : null,
+      child: Wrap(children: [child]),
       color: color,
     );
   }
@@ -378,68 +323,67 @@ class BoxContainer extends StatelessWidget {
   }
 }
 
-var bgColor = (Colors.blue[900]);
-
-AppBar appBarLight(context,
-    {Widget title, List<Widget> actions, Widget menu, backgroundColor}) {
-  //var bg = (backgroundColor ??= bgColor);
+AppBar appBarLight(
+    {String text,
+    Widget title,
+    Widget leading,
+    Color backgroundColor,
+    actions}) {
   return AppBar(
-    //iconTheme: IconThemeData(color: Colors.white),
-    //backgroundColor: bg,
-    leading: menu ??
-        IconButton(
-          icon: Image.asset('assets/voltar.png'),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-    title: title,
-    actions: actions,
-    elevation: 0.0,
-    //brightness: Brightness.light,
-  );
+      backgroundColor: backgroundColor,
+      title: title ?? Text(text),
+      elevation: default_elevation,
+      leading: leading,
+      actions: actions);
 }
 
 class ScaffoldLight extends StatefulWidget {
+  final String title;
   final Widget body;
-  final AppBar appBar;
-  final Widget drawer;
+  final ExtendedAppBar extendedBar;
+  final Widget appBar;
+  final double bodyTop;
   final Widget bottomNavigationBar;
   final Widget panelImage;
   final double extendedPanelHeigh;
   final Color backgroudColor;
-  final String title;
+  final Widget drawer;
   final Key scaffoldKey;
   ScaffoldLight(
       {Key key,
+      this.title,
       this.scaffoldKey,
+      this.drawer,
       this.body,
       this.appBar,
-      this.drawer,
-      this.bottomNavigationBar,
+      this.extendedBar,
       this.panelImage,
+      this.extendedPanelHeigh = 150,
       this.backgroudColor,
-      this.title,
-      this.extendedPanelHeigh = 150})
+      this.bottomNavigationBar,
+      this.bodyTop = 0})
       : super(key: key);
 
   _ScaffoldLightState createState() => _ScaffoldLightState();
 }
 
 class _ScaffoldLightState extends State<ScaffoldLight> {
-  appBar() {
-    return widget.appBar;
-  }
-
   @override
   Widget build(BuildContext context) {
-    var bg = bgColor;
+    Color bg = Theme.of(context).scaffoldBackgroundColor;
+    double h = 0;
+    if (widget.extendedBar != null) h = widget.extendedBar.height ?? 0;
     return Scaffold(
-        key: widget.scaffoldKey,
-        backgroundColor: widget.backgroudColor,
-        appBar: appBar(),
-        drawer: widget.drawer,
-        body: Stack(children: <Widget>[
+      key: widget.scaffoldKey,
+      appBar: widget.appBar,
+      backgroundColor: widget.backgroudColor,
+      drawer: widget.drawer,
+      body: Container(
+        color:
+            widget.backgroudColor ?? Theme.of(context).scaffoldBackgroundColor,
+        height: double.maxFinite,
+        child: Stack(children: [
+          if (widget.extendedBar != null) widget.extendedBar,
           Container(
               width: double.infinity,
               height: widget.extendedPanelHeigh,
@@ -451,8 +395,10 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
                             style: TextStyle(color: Colors.white, fontSize: 18))
                         : widget.panelImage,
                   ))),
-          widget.body,
+          widget.body
         ]),
-        bottomNavigationBar: widget.bottomNavigationBar);
+      ),
+      bottomNavigationBar: widget.bottomNavigationBar,
+    );
   }
 }

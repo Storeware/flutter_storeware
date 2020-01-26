@@ -175,7 +175,7 @@ class ODataClient {
     if (query.groupby != null) r += '\$groupby=${query.groupby}&';
     if (query.orderby != null) r += '\$orderby=${query.orderby}&';
     if (query.join != null) r += '\$join=${query.join}&';
-    print('endpoint: $r');
+    //print('endpoint: $r');
     return client.send(r).then((res) {
       return client.decode(res);
     });

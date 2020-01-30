@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
@@ -105,6 +107,8 @@ class ODataResult {
       }
     } catch (e) {
       print(e);
+      ErrorNotify.send('Não consegui obter dados do servidor OData');
+      rethrow;
     }
   }
 }
@@ -134,11 +138,8 @@ class ODataBuilder extends StatelessWidget {
           : null,
       future: execute(client, query),
       builder: (context, response) {
-        //print(['responsed....', response.hasData]);
         if (response.hasData) {
-          //print(['Response:', response.data]);
           var rst = ODataResult(json: response.data);
-          //print(rst.data.docs.toString());
           return builder(context, rst);
         } else
           return builder(context, ODataResult(json: null));
@@ -166,61 +167,86 @@ class ODataClient {
   }
 
   send(ODataQuery query) async {
-    String r = query.resource + '?';
-    //print(['send:', r]);
-    if (query.select != null) r += '\$select=${query.select}&';
-    if (query.filter != null) r += '\$filter=${query.filter}&';
-    if (query.top != null) r += '\$top=${query.top}&';
-    if (query.skip != null) r += '\$skip=${query.skip}&';
-    if (query.groupby != null) r += '\$groupby=${query.groupby}&';
-    if (query.orderby != null) r += '\$orderby=${query.orderby}&';
-    if (query.join != null) r += '\$join=${query.join}&';
-    //print('endpoint: $r');
-    return client.send(r).then((res) {
-      return client.decode(res);
-    });
+    try {
+      String r = query.resource + '?';
+      //print(['send:', r]);
+      if (query.select != null) r += '\$select=${query.select}&';
+      if (query.filter != null) r += '\$filter=${query.filter}&';
+      if (query.top != null) r += '\$top=${query.top}&';
+      if (query.skip != null) r += '\$skip=${query.skip}&';
+      if (query.groupby != null) r += '\$groupby=${query.groupby}&';
+      if (query.orderby != null) r += '\$orderby=${query.orderby}&';
+      if (query.join != null) r += '\$join=${query.join}&';
+      //print('endpoint: $r');
+      return client.send(r).then((res) {
+        return client.decode(res);
+      });
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   getOne(String resource) async {
-    return client.send(resource).then((res) {
-      return client.decode(res);
-    });
+    try {
+      return client.send(resource).then((res) {
+        return client.decode(res);
+      });
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   post(String resource, json, {bool removeNulls = true}) async {
     Map<String, dynamic> data = {};
-    if (removeNulls) {
-      json.forEach((k, v) {
-        if (v != null) data[k] = v;
-      });
-    } else
-      data = json;
+    try {
+      if (removeNulls) {
+        json.forEach((k, v) {
+          if (v != null) data[k] = v;
+        });
+      } else
+        data = json;
 
-    return await client.post(resource, body: data).then((resp) {
-      return resp;
-    });
+      return await client.post(resource, body: data).then((resp) {
+        return resp;
+      });
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   put(String resource, Map<String, dynamic> json,
       {bool removeNulls = true}) async {
     /// remover os null
     Map<String, dynamic> data = {};
-    if (removeNulls) {
-      json.forEach((k, v) {
-        if (v != null) data[k] = v;
-      });
-    } else
-      data = json;
+    try {
+      if (removeNulls) {
+        json.forEach((k, v) {
+          if (v != null) data[k] = v;
+        });
+      } else
+        data = json;
 
-    return await client.put(resource, body: data).then((resp) {
-      return resp;
-    });
+      return await client.put(resource, body: data).then((resp) {
+        return resp;
+      });
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   delete(String resource, Map<String, dynamic> json) async {
-    return await client.delete(resource, body: json).then((resp) {
-      return resp;
-    });
+    try {
+      return await client.delete(resource, body: json).then((resp) {
+        return resp;
+      });
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 }
 
@@ -238,19 +264,39 @@ abstract class ODataModelClass<T extends DataItem> {
   ODataClient API;
   ODataModelClass({this.API});
   enviar(T item) {
-    return API.post(collectionName, item.toJson());
+    try {
+      return API.post(collectionName, item.toJson());
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   post(T item) async {
-    return await API.post(collectionName, item.toJson());
+    try {
+      return await API.post(collectionName, item.toJson());
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   put(T item) async {
-    return await API.put(collectionName, item.toJson());
+    try {
+      return await API.put(collectionName, item.toJson());
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   delete(T item) async {
-    return await API.delete(collectionName, item.toJson());
+    try {
+      return await API.delete(collectionName, item.toJson());
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   Future<ODataResult> search(

@@ -80,12 +80,13 @@ class ShoppingPanel extends StatelessWidget {
                 ),
                 trailing ?? Container(),
               ]),
-            Text(subTitle,
-                style: subTitleStyle ??
-                    TextStyle(
-                      fontSize: 12,
-                    )),
-            Expanded(child: body ?? Container()),
+            if ((subTitle ?? '').length > 0)
+              Text(subTitle,
+                  style: subTitleStyle ??
+                      TextStyle(
+                        fontSize: 12,
+                      )),
+            if (body != null) Expanded(child: body),
             Row(children: [
               image ?? Container(),
               Expanded(child: Container()),
@@ -158,6 +159,7 @@ class ShoppingStatus extends StatelessWidget {
 }
 
 class ShoppingDescriptionPage extends StatelessWidget {
+  final String id;
   final Widget image;
   final Widget icon;
   final String title;
@@ -172,12 +174,14 @@ class ShoppingDescriptionPage extends StatelessWidget {
   final String buttonText;
   final Color buttonColor;
   final Function onPressed;
+  final Function(String, double) onQtdePressed;
   final Function onClose;
   final Widget button;
   final BoxDecoration decoration;
   final String fontFamily;
   const ShoppingDescriptionPage(
-      {this.image,
+      {this.id,
+      this.image,
       this.icon,
       this.title,
       this.fontFamily = 'Sans',
@@ -195,18 +199,22 @@ class ShoppingDescriptionPage extends StatelessWidget {
       this.onPressed,
       this.onClose,
       this.button,
+      this.onQtdePressed,
       Key key})
       : super(key: key);
 
   @override
   Widget build(context) {
+    print('detalhes');
+
     return Container(
+      color: (decoration == null) ? Colors.white30 : null,
       decoration: decoration,
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           SizedBox(
-            height: 30,
+            height: 10,
           ),
           if (image != null) image,
           if (icon != null)
@@ -230,11 +238,11 @@ class ShoppingDescriptionPage extends StatelessWidget {
                 ),
               ),
             ),
-          if (subTitle != null)
+          if ((subTitle ?? '').length > 0)
             SizedBox(
               height: 8,
             ),
-          if (subTitle != null)
+          if ((subTitle ?? '').length > 0)
             Container(
               alignment: Alignment.topLeft,
               child: Text(subTitle ?? '',
@@ -276,10 +284,11 @@ class ShoppingDescriptionPage extends StatelessWidget {
               spacing: 8,
               children: items,
             ),
-          SizedBox(
-            height: 8,
-          ),
-          if (description != null)
+          if ((description ?? '').length > 0)
+            SizedBox(
+              height: 8,
+            ),
+          if ((description ?? '').length > 0)
             Text(description,
                 style: TextStyle(
                     fontFamily: fontFamily,
@@ -301,18 +310,16 @@ class ShoppingDescriptionPage extends StatelessWidget {
             SizedBox(
               width: 5,
             ),
-            if (buttonText != null && onPressed != null)
-              ShoppingButton(
-                minWidth: 90,
+            if ((buttonText != null) && (onQtdePressed != null))
+              ShoppingQtdeButton(
                 child: Text(
-                  buttonText,
+                  buttonText ?? '',
                   style: TextStyle(
-                    //fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: () {
-                  if (onPressed != null) onPressed();
+                onPressed: (qtde) {
+                  if (onQtdePressed != null) onQtdePressed(id, qtde);
                 },
               ),
             SizedBox(
@@ -727,15 +734,84 @@ class ShoppingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      child: ShoppingCard(
-        child: child,
-        color: color,
-        maxWidth: maxWidth,
-        minWidth: minWidth,
+      child: Container(
+        child: Align(child: child),
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(30),
+        ),
+        width: minWidth,
         height: 32,
       ),
-      onTap: onPressed,
+      onTap: () {
+        onPressed();
+      },
       splashColor: Theme.of(context).primaryColor,
     );
+  }
+}
+
+class ShoppingQtdeButton extends StatefulWidget {
+  final Widget child;
+  final Function(double) onPressed;
+  ShoppingQtdeButton({Key key, this.child, this.onPressed}) : super(key: key);
+
+  @override
+  _ShoppingQtdeButtonState createState() => _ShoppingQtdeButtonState();
+}
+
+class _ShoppingQtdeButtonState extends State<ShoppingQtdeButton> {
+  double _qtde = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 42,
+      width: 200,
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          IconButton(
+              padding: EdgeInsets.all(0),
+              icon: Icon(Icons.plus_one),
+              onPressed: () {
+                setState(() {
+                  soma(-1);
+                });
+              }),
+          Padding(
+              padding: EdgeInsets.all(3),
+              child: Container(
+                color: Colors.white,
+                width: 32,
+                child: Center(child: Text(_qtde.toString())),
+              )),
+          IconButton(
+              padding: EdgeInsets.all(0),
+              icon: Icon(Icons.plus_one),
+              onPressed: () {
+                setState(() {
+                  soma(1);
+                });
+              }),
+          Expanded(
+              child: InkWell(
+            child: Align(child: widget.child),
+            onTap: () {
+              if (widget.onPressed != null) widget.onPressed(_qtde);
+            },
+          )),
+        ],
+      ),
+    );
+  }
+
+  soma(double q) {
+    _qtde += q;
+    if (_qtde < 0) _qtde = 0;
   }
 }

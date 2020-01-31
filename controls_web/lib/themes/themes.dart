@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:controls_data/local_storage.dart';
-import '../controls/defaults.dart';
+import 'package:controls_web/controls/defaults.dart';
 import 'package:flutter/material.dart';
 
 typedef ThemedWidgetBuilder = Widget Function(
@@ -55,11 +55,26 @@ class DynamicTheme extends StatefulWidget {
             iconTheme: th.iconTheme.copyWith(color: Colors.white)));
   }
 
-  static changeTo(Brightness b, {fontFamily}) {
+  static ThemeData changeTo(Brightness b, {fontFamily}) {
     if (b == Brightness.light) {
       return light(fontFamily: fontFamily);
     }
     return dark(fontFamily: fontFamily);
+  }
+}
+
+class DynamicThemeNotifier {
+  static final _singleton = DynamicThemeNotifier._create();
+  var notifier = StreamController<Brightness>.broadcast();
+  DynamicThemeNotifier._create();
+  factory DynamicThemeNotifier() => _singleton;
+  notify(Brightness b) {
+    notifier.sink.add(b);
+  }
+
+  get stream => notifier.stream;
+  dispose() {
+    notifier.close();
   }
 }
 
@@ -97,6 +112,11 @@ class DynamicThemeState extends State<DynamicTheme> {
         setState(() {});
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -144,6 +164,11 @@ class DynamicThemeState extends State<DynamicTheme> {
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, _data);
+    return StreamBuilder(
+        initialData: _data,
+        stream: DynamicThemeNotifier().stream,
+        builder: (x, y) {
+          return widget.builder(context, _data);
+        });
   }
 }

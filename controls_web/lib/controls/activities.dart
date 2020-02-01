@@ -525,21 +525,70 @@ class ActivityTextSection extends StatelessWidget {
   final String text;
   final Widget body;
   final Widget bottom;
+  final Color color;
+  final Color fontColor;
+  final double fontSize;
+  final int ordem;
+  final String ordemLabel;
+  final String Function(BuildContext, String) builder;
   const ActivityTextSection(
-      {Key key, this.appBar, this.title, this.text, this.body, this.bottom})
+      {Key key,
+      this.color,
+      this.fontColor,
+      this.ordem,
+      this.ordemLabel,
+      this.appBar,
+      this.title,
+      this.fontSize = 18,
+      this.text,
+      this.builder,
+      this.body,
+      this.bottom})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size);
-    return Column(
-      children: [
-        if (appBar != null) appBar,
-        if (title != null) Text(title),
-        if (body != null) body,
-        if (text != null) Text(text),
-        if (bottom != null) bottom,
-      ],
+    //print(MediaQuery.of(context).size);
+    var t = this.text;
+    if (this.builder != null) t = builder(context, text);
+    return ActivityPanel(
+      color: color ?? Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (appBar != null) appBar,
+            if (title != null)
+              Text(
+                  ((ordem != null)
+                          ? (((ordemLabel != null) ? '$ordemLabel ' : '') +
+                              '$ordem - ')
+                          : '') +
+                      (title ?? ''),
+                  style: TextStyle(
+                    fontSize: fontSize + 10,
+                    fontWeight: FontWeight.w300,
+                    color: fontColor ?? Colors.black45,
+                  )),
+            if (body != null) body,
+            if (text != null)
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 2,
+                  bottom: 2,
+                ),
+                child: Text(t,
+                    style: TextStyle(
+                      fontSize: fontSize,
+                      color: fontColor ?? Colors.black54,
+                    )),
+              ),
+            if (bottom != null) bottom,
+          ],
+        ),
+      ),
     );
   }
 }

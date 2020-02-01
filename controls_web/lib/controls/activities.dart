@@ -5,10 +5,16 @@ class ActivityPanel extends StatelessWidget {
   final Color color;
   final double height;
   final double width;
-  final double radius;
+  final double topRadius;
+  final double bottomRadius;
+  final double leftRadius;
+  final double rightRadius;
   const ActivityPanel(
       {Key key,
-      this.radius = 20,
+      this.topRadius = 20,
+      this.bottomRadius = 20,
+      this.leftRadius,
+      this.rightRadius,
       this.color,
       this.width,
       this.height,
@@ -21,12 +27,51 @@ class ActivityPanel extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(rightRadius ?? topRadius),
+            topLeft: Radius.circular(leftRadius ?? topRadius),
+            bottomLeft: Radius.circular(leftRadius ?? bottomRadius),
+            bottomRight: Radius.circular(rightRadius ?? bottomRadius)),
         color: color,
       ),
       child: child,
     );
   }
+
+  static header({Key key, radius = 20, color, width, height, child}) =>
+      ActivityPanel(
+        child: child,
+        topRadius: radius,
+        bottomRadius: 0,
+        color: color,
+        height: height,
+        width: width,
+      );
+  static bottom({Key key, radius = 20, color, width, height, child}) =>
+      ActivityPanel(
+        child: child,
+        topRadius: 0,
+        bottomRadius: radius,
+        color: color,
+        height: height,
+        width: width,
+      );
+  static left({Key key, radius = 20, color, width, height, child}) =>
+      ActivityPanel(
+        child: child,
+        leftRadius: radius,
+        color: color,
+        height: height,
+        width: width,
+      );
+  static right({Key key, radius = 20, color, width, height, child}) =>
+      ActivityPanel(
+        child: child,
+        rightRadius: radius,
+        color: color,
+        height: height,
+        width: width,
+      );
 }
 
 class ActivityTile extends StatelessWidget {
@@ -38,9 +83,11 @@ class ActivityTile extends StatelessWidget {
   final Color color;
   final Function onTap;
   final Widget trailing;
+  final double radius;
   const ActivityTile(
       {Key key,
       this.color,
+      this.radius = 0,
       this.avatarBackgroudColor,
       this.title,
       this.subtitle,
@@ -55,6 +102,8 @@ class ActivityTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4.0),
       child: ActivityPanel(
+        leftRadius: radius,
+        rightRadius: radius,
         color: color ?? Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -336,11 +385,12 @@ class ActivitySummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color cor = color ?? Theme.of(context).primaryColor;
-    Size size = MediaQuery.of(context).size;
+    //Size size = MediaQuery.of(context).size;
     return ActivityPanel(
         width: 300,
         height: 150,
-        radius: radius,
+        topRadius: radius,
+        bottomRadius: radius,
         color: cor.withAlpha(50),
         child: Column(
           children: <Widget>[

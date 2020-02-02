@@ -23,18 +23,21 @@ class ActivityPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(rightRadius ?? topRadius),
-            topLeft: Radius.circular(leftRadius ?? topRadius),
-            bottomLeft: Radius.circular(leftRadius ?? bottomRadius),
-            bottomRight: Radius.circular(rightRadius ?? bottomRadius)),
-        color: color,
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topRight: Radius.circular(rightRadius ?? topRadius),
+        topLeft: Radius.circular(leftRadius ?? topRadius),
+        bottomLeft: Radius.circular(leftRadius ?? bottomRadius),
+        bottomRight: Radius.circular(rightRadius ?? bottomRadius),
       ),
-      child: child,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: color,
+        ),
+        child: child,
+      ),
     );
   }
 

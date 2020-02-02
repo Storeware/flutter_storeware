@@ -12,7 +12,7 @@ class SidebarScaffold extends StatefulWidget {
   final SidebarPosition sidebarPosition;
 
   final bool sidebarVisible;
-
+  final bool canShowCompact;
   final Widget bottomNavigationBar;
 
   final bool resizeToAvoidBottomInset;
@@ -26,6 +26,7 @@ class SidebarScaffold extends StatefulWidget {
       this.sidebarVisible = true,
       this.sidebar,
       this.body,
+      this.canShowCompact = false,
       this.sidebarPosition = SidebarPosition.left,
       this.floatingActionButton,
       this.bottomNavigationBar,
@@ -54,6 +55,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
   Widget build(BuildContext context) {
     theme = Theme.of(context);
     Sidebar.position = widget.sidebarPosition;
+    Sidebar.canShowCompact = widget.canShowCompact;
     if (Sidebar().homeWidget == null) Sidebar().homeWidget = widget.body;
     return Scaffold(
       appBar: widget.appBar ?? AppBar(title: Text('sidebar')),
@@ -218,6 +220,8 @@ class Sidebar {
   static final _singleton = Sidebar._create();
 
   static var position = SidebarPosition.left;
+
+  static bool canShowCompact = false;
   Sidebar._create();
   factory Sidebar() => _singleton;
   var _pageStream = StreamController<Widget>.broadcast();
@@ -351,15 +355,16 @@ class SidebarHeader extends StatelessWidget {
                     ),
                   ),
                 )),
-                InkWell(
-                  child: Icon(
-                    Icons.view_compact,
-                    color: titleColor ?? theme.primaryTextTheme.title.color,
+                if (Sidebar.canShowCompact)
+                  InkWell(
+                    child: Icon(
+                      Icons.view_compact,
+                      color: titleColor ?? theme.primaryTextTheme.title.color,
+                    ),
+                    onTap: () {
+                      Sidebar().showCompact(compact: true);
+                    },
                   ),
-                  onTap: () {
-                    Sidebar().showCompact(compact: true);
-                  },
-                ),
                 if (trailing != null) Align(child: trailing),
                 if (Sidebar.position == SidebarPosition.right)
                   InkWell(

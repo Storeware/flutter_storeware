@@ -109,10 +109,23 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
 
   Widget buildExpandIcon() {
     if (Sidebar.position == SidebarPosition.right)
-      return Icon(Icons.view_column);
+      return ClipPath(
+        clipper: CustomMenuClipperRight(),
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.primaryColor.withAlpha(50),
+          ),
+          width: 20,
+          height: 70,
+          child: Align(
+            child: Text('|', style: TextStyle(color: Colors.black45)),
+          ),
+        ),
+      );
+//      return Icon(Icons.view_column);
     //return Icon(Icons.view_column);
     return ClipPath(
-      clipper: CustomMenuClipper(),
+      clipper: CustomMenuClipperLeft(),
       child: Container(
         decoration: BoxDecoration(
           color: theme.primaryColor.withAlpha(50),
@@ -397,27 +410,38 @@ class SidebarContainer extends StatelessWidget {
   }
 }
 
-class CustomMenuClipper extends CustomClipper<Path> {
+class CustomMenuClipperLeft extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    Paint paint = Paint();
-    paint.color = Colors.white;
-
-    final width = size.width;
-    final height = size.height;
-
-    Path path = Path();
+    print(size);
+    var path = new Path();
     path.moveTo(0, 0);
-    path.quadraticBezierTo(0, 8, 10, 16);
-    path.quadraticBezierTo(width - 1, height / 2 - 20, width, height / 2);
-    path.quadraticBezierTo(width + 1, height / 2 + 20, 10, height - 16);
-    path.quadraticBezierTo(0, height - 8, 0, height);
+    path.lineTo(20, 10);
+    path.lineTo(20, 60);
+    path.lineTo(0, 70);
     path.close();
+
     return path;
   }
 
   @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {
-    return true;
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class CustomMenuClipperRight extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    print(size);
+    var path = new Path();
+    path.moveTo(size.width, 0);
+    path.lineTo(0, 10);
+    path.lineTo(0, size.height - 10);
+    path.lineTo(size.width, size.height);
+    path.close();
+
+    return path;
   }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

@@ -642,3 +642,85 @@ class ActivityTextSection extends StatelessWidget {
     );
   }
 }
+
+class ActivityImage extends StatelessWidget {
+  final double width;
+  final double height;
+  final Widget image;
+  final Widget child;
+  final Widget title;
+  final Widget body;
+  final Color color;
+  final Color titleColor;
+  final Color childColor;
+  final double radius;
+  final Widget background;
+  const ActivityImage(
+      {Key key,
+      this.title,
+      this.body,
+      this.width = 200,
+      this.height = 300,
+      this.image,
+      this.childColor,
+      this.child,
+      this.color,
+      this.titleColor,
+      this.radius = 20,
+      this.background})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return ActivityPanel(
+      width: width,
+      height: height,
+      topRadius: radius,
+      bottomRadius: radius,
+      color: color ?? theme.scaffoldBackgroundColor,
+      child: Stack(
+        children: <Widget>[
+          if (background != null) background,
+          Column(
+            children: <Widget>[
+              if (title != null)
+                Container(
+                  decoration: BoxDecoration(
+                    color: titleColor ?? theme.primaryColor,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(radius),
+                      topRight: Radius.circular(radius),
+                      bottomRight: Radius.circular(radius),
+                    ),
+                  ),
+                  constraints: BoxConstraints(minHeight: 30),
+                  width: double.maxFinite,
+                  child: Align(child: title),
+                ),
+              (image != null)
+                  ? Expanded(child: image)
+                  : Expanded(child: body ?? Container()),
+              if (child != null)
+                Container(
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    color: childColor ?? theme.primaryColor.withAlpha(150),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(radius),
+                      topRight: Radius.circular(radius),
+                      bottomRight: Radius.circular(radius),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: child,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}

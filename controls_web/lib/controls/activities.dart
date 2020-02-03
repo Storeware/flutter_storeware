@@ -198,6 +198,7 @@ class ActivityButton extends StatelessWidget {
   final Function onPressed;
   final Color fontColor;
   final Color iconColor;
+  final TextStyle textStyle;
   const ActivityButton({
     Key key,
     this.icon,
@@ -206,6 +207,7 @@ class ActivityButton extends StatelessWidget {
     this.onPressed,
     this.fontColor,
     this.iconColor,
+    this.textStyle,
   }) : super(key: key);
 
   @override
@@ -228,11 +230,12 @@ class ActivityButton extends StatelessWidget {
             ),
             Text(
               title ?? '',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w300,
-                color: fontColor ?? Colors.black54,
-              ),
+              style: textStyle ??
+                  TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w300,
+                    color: fontColor ?? Colors.black54,
+                  ),
             ),
           ],
         ),
@@ -662,8 +665,8 @@ class ActivityImage extends StatelessWidget {
       {Key key,
       this.title,
       this.body,
-      this.width = 200,
-      this.height = 300,
+      this.width,
+      this.height = 200,
       this.image,
       this.childColor,
       this.child,
@@ -707,6 +710,9 @@ class ActivityImage extends StatelessWidget {
               if (child != null)
                 Container(
                   width: double.maxFinite,
+                  constraints: BoxConstraints(
+                    maxHeight: height,
+                  ),
                   decoration: BoxDecoration(
                     color: childColor ?? theme.primaryColor.withAlpha(150),
                     borderRadius: BorderRadius.only(

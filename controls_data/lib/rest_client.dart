@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-String tokenId;
-
 class RestClientBloC<T> {
   var _controller = StreamController<T>.broadcast();
   dispose() {
@@ -42,6 +40,7 @@ class RestClient {
   Map<String, String> _headers = {};
   Map<String, dynamic> jsonResponse;
   RestClient({this.baseUrl}) {}
+  String tokenId;
   /* decode json string to object */
   dynamic decode(String texto) {
     return json.decode(texto, reviver: (k, v) {
@@ -124,12 +123,17 @@ class RestClient {
   }
 
   String prefix = '';
-  formatUrl() {
+  formatUrl({path}) {
     String p = '';
     (params ?? {}).forEach((key, value) {
       p += (p == '' ? '?' : '&') + "$key=$value";
     });
-    String url = (baseUrl ?? '') + (prefix ?? '') + (service ?? '') + (p ?? '');
+    if (path != null) {
+      service = path;
+    }
+    String url = /*(baseUrl ?? '') +*/ (prefix ?? '') +
+        (service ?? '') +
+        (p ?? '');
     return url;
   }
 
@@ -141,6 +145,8 @@ class RestClient {
   setToken(value) {
     tokenId = value;
   }
+
+  getToken() => tokenId;
 
   addHeader(String key, value) {
     //   print('header add( $key : $value )');
@@ -164,34 +170,103 @@ class RestClient {
 
   Future<String> openUrl(String url,
       {String method, Map<String, dynamic> body}) async {
+    var resp = await openJson(url, method: method, body: body);
+    var rsp = jsonEncode(resp);
+    notify.send(rsp);
+    return rsp;
+  }
+
+  int connectionTimeout = 30000;
+  int receiveTimeout = 60000;
+  bool followRedirects = false;
+
+  Future<dynamic> openJson(String url,
+      {String method = 'GET', Map<String, dynamic> body}) async {
     _setHeader();
     Response resp;
-
-    Dio dio = Dio(BaseOptions(contentType: this.contentType));
+    print(_headers);
+    BaseOptions bo = BaseOptions(
+        connectTimeout: connectionTimeout,
+        followRedirects: followRedirects,
+        receiveTimeout: receiveTimeout,
+        baseUrl: this.baseUrl,
+        headers: _headers,
+        queryParameters: params,
+        contentType: this.contentType);
+    String uri = Uri.parse(url).toString();
+    Dio dio = Dio(bo);
+    print('URL: ${this.baseUrl} $uri, $contentType ');
 
     try {
       if (method == 'GET') {
-        resp = await dio.get(url);
+        resp = await dio.get(uri);
       } else if (method == 'POST') {
-        resp = await dio.post(url, data: body); //, headers: headers);
+        resp = await dio.post(uri, data: body); //, headers: headers);
       } else if (method == 'PUT')
-        resp = await dio.put(url, data: body); //, headers: headers);
+        resp = await dio.put(uri, data: body); //, headers: headers);
       else if (method == 'PATCH')
-        resp = await dio.patch(url, data: body); //, headers: headers);
+        resp = await dio.patch(uri, data: body); //, headers: headers);
       else if (method == 'DELETE')
-        resp = await dio.delete(url);
+        resp = await dio.delete(uri);
       else
         throw "Method inválido";
+
       _decodeResp(resp);
+
       if (statusCode == 200) {
-        var rsp = jsonEncode(resp.data);
-        notify.send(rsp);
-        return rsp;
+        return resp.data;
       } else {
         return throw (resp.data);
       }
     } catch (e) {
-      print('$e');
+      print('Error: $e');
+      throw e.message;
+    }
+  }
+
+  Stream openJsonAsync(String url,
+      {String method = 'GET', Map<String, dynamic> body}) {
+    _setHeader();
+    //Response resp;
+    print(_headers);
+    BaseOptions bo = BaseOptions(
+        connectTimeout: connectionTimeout,
+        followRedirects: followRedirects,
+        receiveTimeout: receiveTimeout,
+        baseUrl: this.baseUrl,
+        headers: _headers,
+        queryParameters: params,
+        contentType: this.contentType);
+    String uri = Uri.parse(url).toString();
+    Dio dio = Dio(bo);
+    print('URL: ${this.baseUrl} $uri, $contentType ');
+    Future<Response> ref;
+    try {
+      if (method == 'GET') {
+        ref = dio.get(uri);
+      } else if (method == 'POST') {
+        ref = dio.post(uri, data: body); //, headers: headers);
+      } else if (method == 'PUT')
+        ref = dio.put(uri, data: body); //, headers: headers);
+      else if (method == 'PATCH')
+        ref = dio.patch(uri, data: body); //, headers: headers);
+      else if (method == 'DELETE')
+        ref = dio.delete(uri);
+      else
+        throw "Method inválido";
+
+      ref.then((resp) {
+        _decodeResp(resp);
+
+        if (statusCode == 200) {
+          return resp.data;
+        } else {
+          return throw (resp.data);
+        }
+      });
+      return ref.asStream();
+    } catch (e) {
+      print('Error: $e');
       throw e.message;
     }
   }

@@ -42,6 +42,8 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
       drawer: widget.drawer,
       appBar: widget.appBar,
       body: SingleChildScrollView(
+          child: Padding(
+        padding: EdgeInsets.all(8),
         child: Column(children: [
           SizedBox(
             height: widget.topMargin,
@@ -69,7 +71,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
             ),
           if (widget.child != null) widget.child,
         ]),
-      ),
+      )),
       bottomNavigationBar: widget.bottomNavigationBar,
       floatingActionButton: widget.floatingActionButton,
     );

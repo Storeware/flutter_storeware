@@ -128,6 +128,7 @@ class ODataBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //print('futureBuilder');
     return FutureBuilder(
       initialData: (initialData != null)
           ? {
@@ -147,6 +148,7 @@ class ODataBuilder extends StatelessWidget {
   }
 
   Future execute(ODataClient odata, query) async {
+    //print(['execute', odata]);
     var odt = odata ?? ODataInst();
     return odt.send(query);
   }
@@ -167,6 +169,7 @@ class ODataClient {
   send(ODataQuery query) async {
     try {
       String r = query.resource + '?';
+      //print(['send:', r]);
       if (query.select != null) r += '\$select=${query.select}&';
       if (query.filter != null) r += '\$filter=${query.filter}&';
       if (query.top != null) r += '\$top=${query.top}&';
@@ -174,11 +177,9 @@ class ODataClient {
       if (query.groupby != null) r += '\$groupby=${query.groupby}&';
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
-      String p = client.formatUrl(path: r);
-      print('formatUrl: $p');
-      return await client.openJson(p, method: 'GET').then((res) {
-        print('result: $res');
-        return res;
+      //print('endpoint: $r');
+      return client.send(r).then((res) {
+        return client.decode(res);
       });
     } catch (e) {
       ErrorNotify.send('$e');

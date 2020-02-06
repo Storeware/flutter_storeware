@@ -42,8 +42,6 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
       drawer: widget.drawer,
       appBar: widget.appBar,
       body: SingleChildScrollView(
-          child: Padding(
-        padding: EdgeInsets.all(8),
         child: Column(children: [
           SizedBox(
             height: widget.topMargin,
@@ -52,10 +50,13 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
           SizedBox(
             height: 40,
           ),
-          Text(
-            widget.title ?? '',
-            softWrap: true,
-          ),
+          Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Text(
+                widget.title ?? '',
+                softWrap: true,
+                style: TextStyle(fontSize: 18),
+              )),
           SizedBox(
             height: 30,
           ),
@@ -71,7 +72,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
             ),
           if (widget.child != null) widget.child,
         ]),
-      )),
+      ),
       bottomNavigationBar: widget.bottomNavigationBar,
       floatingActionButton: widget.floatingActionButton,
     );

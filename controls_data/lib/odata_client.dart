@@ -274,9 +274,8 @@ class ODataInst extends ODataClient {
     cli.setToken(auth(user, pass));
     cli.addHeader('contaid', loja);
     var rsp = await cli.openJson(cli.formatUrl(path: 'login'), method: 'GET');
-    print(rsp);
     var token = rsp['token'];
-    client.setToken(token);
+    client.setToken('Bearer $token');
     client.addHeader('contaid', loja);
     return rsp['token'];
   }

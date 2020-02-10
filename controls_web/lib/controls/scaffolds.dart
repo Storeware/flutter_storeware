@@ -11,6 +11,7 @@ class ScaffoldSplash extends StatefulWidget {
   final Widget bottomNavigationBar;
   final Widget child;
   final Function onPressed;
+  final String buttonName;
   final Color backgroundColor;
   final double topMargin;
   ScaffoldSplash({
@@ -22,6 +23,7 @@ class ScaffoldSplash extends StatefulWidget {
     this.backgroundColor,
     this.image,
     this.onPressed,
+    this.buttonName,
     this.body,
     this.child,
     this.floatingActionButton,
@@ -48,10 +50,13 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
           SizedBox(
             height: 40,
           ),
-          Text(
-            widget.title ?? '',
-            softWrap: true,
-          ),
+          Padding(
+              padding: EdgeInsets.only(left: 15, right: 15),
+              child: Text(
+                widget.title ?? '',
+                softWrap: true,
+                style: TextStyle(fontSize: 18),
+              )),
           SizedBox(
             height: 30,
           ),
@@ -60,7 +65,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
             RoundedButton(
               height: 40,
               width: 180,
-              buttonName: 'Entrar',
+              buttonName: widget.buttonName ?? 'Entrar',
               onTap: () {
                 if (widget.onPressed != null) widget.onPressed();
               },

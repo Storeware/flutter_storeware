@@ -57,6 +57,10 @@ class ErrorNotify {
     _singleton._stream.sink.add(text);
     return text;
   }
+
+  dipose() {
+    _stream.close();
+  }
 }
 
 /// Class Changed Events

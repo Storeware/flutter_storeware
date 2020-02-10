@@ -29,12 +29,9 @@ extension StringExtensions on String {
     return this.substring(start, start + count);
   }
 
-  operator <=(value) => ((this.compareTo(value) <= 0));
-  operator >=(value) => ((this.compareTo(value) >= 0));
-
-  String toUpperCapital() {
+  toUpperCapital({except}) {
     var lista = this.split(' ');
-    var excluir = ',de,ate,para,';
+    var excluir = except ?? ',de,ate,para,';
     var r = '';
     lista.forEach((f) {
       // chce se é palavra que nao converte
@@ -47,4 +44,7 @@ extension StringExtensions on String {
     });
     return r;
   }
+
+  operator <=(value) => ((this.compareTo(value) <= 0));
+  operator >=(value) => ((this.compareTo(value) >= 0));
 }

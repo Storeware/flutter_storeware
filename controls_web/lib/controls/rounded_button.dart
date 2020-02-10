@@ -70,11 +70,12 @@ class RoundedButton extends StatelessWidget {
       this.textStyle,
       this.iconPosition = RoundedButtonIconPosition.left}) {
     if (buttonType == null) buttonType = defaultButtonType;
-    if (color==null) color = defaultButtonColor;
-    if (textColor==null) textColor = defaultTextButtonColor;
+    if (color == null) color = defaultButtonColor;
+    if (textColor == null) textColor = defaultTextButtonColor;
     if (textStyle == null) {
-      textStyle = defaultTextStyleButton??TextStyle(
-          color: textColor, fontSize: 16.0, fontWeight: FontWeight.bold);
+      textStyle = defaultTextStyleButton ??
+          TextStyle(
+              color: textColor, fontSize: 16.0, fontWeight: FontWeight.bold);
     }
   }
 
@@ -173,8 +174,12 @@ class RoundedButton extends StatelessWidget {
           child: Center(child: BadgeButton(value: badgeValue)));
     if (showBadge && badgePosition == BadgePosition.left)
       return Positioned(top: 0, left: 0, child: BadgeButton(value: badgeValue));
-    if (badgeValue==0) return Container();
-    return Positioned(left:0,top:5,right:0,child: Center(child:BadgeButton(value: badgeValue)));
+    if (badgeValue == 0) return Container();
+    return Positioned(
+        left: 0,
+        top: 5,
+        right: 0,
+        child: Center(child: BadgeButton(value: badgeValue)));
   }
 
   Widget _drawRounded() {
@@ -182,7 +187,8 @@ class RoundedButton extends StatelessWidget {
       return (new InkWell(
         onTap: onTap,
         child: new Container(
-          padding: EdgeInsets.all((roundLeft>0 && roundRight>0)?5.0:0.0),
+          padding:
+              EdgeInsets.all((roundLeft > 0 && roundRight > 0) ? 5.0 : 0.0),
           width: width,
           height: height,
           margin: new EdgeInsets.only(bottom: bottomMargin),
@@ -214,7 +220,8 @@ class RoundedButton extends StatelessWidget {
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                            if (barColor!=null) Container(width: barWidth, color: barColor),
+                            if (barColor != null)
+                              Container(width: barWidth, color: barColor),
                             Text(buttonName,
                                 style: textStyle, textAlign: TextAlign.center)
                           ])),
@@ -229,7 +236,7 @@ class RoundedButton extends StatelessWidget {
         ),
       ));
     else
-      return (new InkWell(
+      return (GestureDetector(
         onTap: onTap,
         child: new Container(
           width: width,
@@ -242,7 +249,7 @@ class RoundedButton extends StatelessWidget {
           ),
           child: Container(
             child: (this.child != null
-                ? Stack(children:[ Center(child:this.child),createBadge()])
+                ? Stack(children: [Center(child: this.child), createBadge()])
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[

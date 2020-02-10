@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -41,6 +41,7 @@ class RestClient {
   Map<String, dynamic> jsonResponse;
   RestClient({this.baseUrl}) {}
   String tokenId;
+  String authorization;
   /* decode json string to object */
   dynamic decode(String texto) {
     return json.decode(texto, reviver: (k, v) {
@@ -149,10 +150,11 @@ class RestClient {
   getToken() => tokenId;
 
   addHeader(String key, value) {
-    //   print('header add( $key : $value )');
     _headers[key] = value ?? '';
-    if (tokenId != null && _headers['authorization'] == null)
-      autenticator(value: tokenId);
+    if (authorization != null) {
+      _headers['authorization'] = authorization;
+    }
+    if (tokenId != null) _headers['token'] = tokenId;
     return this;
   }
 
@@ -184,7 +186,7 @@ class RestClient {
       {String method = 'GET', Map<String, dynamic> body}) async {
     _setHeader();
     Response resp;
-    print(_headers);
+    //print(_headers);
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
@@ -195,7 +197,7 @@ class RestClient {
         contentType: this.contentType);
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-    print('URL: ${this.baseUrl} $uri, $contentType ');
+    //print('URL: ${this.baseUrl}$uri, $contentType ');
 
     try {
       if (method == 'GET') {
@@ -210,7 +212,7 @@ class RestClient {
         resp = await dio.delete(uri);
       else
         throw "Method inválido";
-
+      //print('Response: $resp');
       _decodeResp(resp);
 
       if (statusCode == 200) {
@@ -228,7 +230,7 @@ class RestClient {
       {String method = 'GET', Map<String, dynamic> body}) {
     _setHeader();
     //Response resp;
-    print(_headers);
+    //print(_headers);
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
@@ -239,7 +241,7 @@ class RestClient {
         contentType: this.contentType);
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-    print('URL: ${this.baseUrl} $uri, $contentType ');
+    //print('URL: ${this.baseUrl} $uri, $contentType ');
     Future<Response> ref;
     try {
       if (method == 'GET') {
@@ -274,7 +276,7 @@ class RestClient {
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     var url = encodeUrl();
-    print(url);
+    //print(url);
     return openUrl(url, method: method, body: body);
   }
 

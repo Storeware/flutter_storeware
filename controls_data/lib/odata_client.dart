@@ -1,4 +1,4 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 
 import 'rest_client.dart';
@@ -176,7 +176,6 @@ class ODataClient {
   send(ODataQuery query) async {
     try {
       String r = query.resource + '?';
-      //print(['send:', r]);
       if (query.select != null) r += '\$select=${query.select}&';
       if (query.filter != null) r += '\$filter=${query.filter}&';
       if (query.top != null) r += '\$top=${query.top}&';
@@ -184,7 +183,6 @@ class ODataClient {
       if (query.groupby != null) r += '\$groupby=${query.groupby}&';
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
-      //print('endpoint: $r');
       return client.send(r).then((res) {
         return client.decode(res);
       });
@@ -269,13 +267,14 @@ class ODataInst extends ODataClient {
   }
 
   login(loja, user, pass) async {
-    var cli = RestClient(baseUrl: client.baseUrl);
-    cli.prefix = client.prefix;
+    RestClient cli = RestClient(baseUrl: baseUrl);
+    cli.prefix = prefix;
     cli.setToken(auth(user, pass));
     cli.addHeader('contaid', loja);
     var rsp = await cli.openJson(cli.formatUrl(path: 'login'), method: 'GET');
     var token = rsp['token'];
-    client.setToken('Bearer $token');
+    client.authorization = 'Bearer $token';
+    if (client.tokenId == null) client.setToken(auth(user, pass));
     client.addHeader('contaid', loja);
     return rsp['token'];
   }

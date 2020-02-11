@@ -5,6 +5,7 @@ import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
 
+
 const errorConnectionMsg =
     'Não executou a solicitação, provedor indisponível %s';
 

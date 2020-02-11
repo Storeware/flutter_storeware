@@ -155,7 +155,7 @@ class ODataBuilder extends StatelessWidget {
   }
 
   Future execute(ODataClient odata, query) async {
-    //print(['execute', odata]);
+    debug(['execute', odata]);
     var odt = odata ?? ODataInst();
     return odt.send(query);
   }
@@ -173,7 +173,6 @@ class ODataClient {
     client.baseUrl = x;
   }
 
-
   ODataClient clone() {
     var o = ODataClient();
     o.baseUrl = client.baseUrl;
@@ -183,10 +182,7 @@ class ODataClient {
     return o;
   }
 
-
-
-
-  send(ODataQuery query) async {
+  Future<dinamic> send(ODataQuery query) async {
     try {
       String r = query.resource + '?';
       if (query.select != null) r += '\$select=${query.select}&';
@@ -196,6 +192,7 @@ class ODataClient {
       if (query.groupby != null) r += '\$groupby=${query.groupby}&';
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
+      // print(r);
       return client.send(r).then((res) {
         return client.decode(res);
       });
@@ -226,7 +223,7 @@ class ODataClient {
       } else
         data = json;
 
-      return await client.post(resource, body: data).then((resp) {
+      return client.post(resource, body: data).then((resp) {
         return resp;
       });
     } catch (e) {
@@ -247,7 +244,7 @@ class ODataClient {
       } else
         data = json;
 
-      return await client.put(resource, body: data).then((resp) {
+      return client.put(resource, body: data).then((resp) {
         return resp;
       });
     } catch (e) {
@@ -258,7 +255,7 @@ class ODataClient {
 
   delete(String resource, Map<String, dynamic> json) async {
     try {
-      return await client.delete(resource, body: json).then((resp) {
+      return client.delete(resource, body: json).then((resp) {
         return resp;
       });
     } catch (e) {
@@ -271,9 +268,9 @@ class ODataClient {
     try {
       print(command);
       var url = client.formatUrl(path: 'open');
-      var rsp =
-          await client.openUrl(url + '?\$command=' + command, method: 'GET');
-      return rsp;
+      return client
+          .openUrl(url + '?\$command=' + command, method: 'GET')
+          .then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -283,8 +280,7 @@ class ODataClient {
   execute(String command) async {
     try {
       print(command);
-      var rsp = await client.patch('execute?\$command=' + command);
-      return rsp;
+      return client.patch('execute?\$command=' + command).then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -308,7 +304,9 @@ class ODataInst extends ODataClient {
     cli.prefix = prefix;
     cli.authorization = auth(user, pass);
     cli.addHeader('contaid', loja);
-    var rsp = await cli.openJson(cli.formatUrl(path: 'login'), method: 'GET');
+    var rsp = cli
+        .openJson(cli.formatUrl(path: 'login'), method: 'GET')
+        .then((x) => x);
     var token = rsp['token'];
     client.authorization = 'Bearer $token';
     if (client.tokenId == null) client.setToken(auth(user, pass));
@@ -330,7 +328,7 @@ abstract class ODataModelClass<T extends DataItem> {
   ODataModelClass({this.API});
   enviar(T item) {
     try {
-      return API.post(collectionName, item.toJson());
+      return API.post(collectionName, item.toJson()).then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -339,7 +337,7 @@ abstract class ODataModelClass<T extends DataItem> {
 
   post(T item) async {
     try {
-      return await API.post(collectionName, item.toJson());
+      return API.post(collectionName, item.toJson()).then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -348,7 +346,7 @@ abstract class ODataModelClass<T extends DataItem> {
 
   put(T item) async {
     try {
-      return await API.put(collectionName, item.toJson());
+      return API.put(collectionName, item.toJson()).then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -356,18 +354,19 @@ abstract class ODataModelClass<T extends DataItem> {
   }
 
   delete(T item) async {
-    try {
-      return await API.delete(collectionName, item.toJson());
-    } catch (e) {
-      ErrorNotify.send('$e');
-      rethrow;
-    }
+    return API
+        .delete(collectionName, item.toJson())
+        .then((x) => x)
+        .errorCatch((err) {
+      ErrorNotify.send('$err');
+      throw err;
+    });
   }
 
   Future<ODataResult> search(
       {String filter, String orderBy, int top, int skip}) async {
     try {
-      return await API
+      return API
           .send(ODataQuery(
               resource: collectionName,
               select: columns ?? '*',
@@ -393,14 +392,16 @@ abstract class ODataModelClass<T extends DataItem> {
       bool inativo = false,
       int top = 200,
       int skip = 0}) async {
-    return await API.send(ODataQuery(
-      resource: collectionName,
-      select: select ?? '*',
-      filter: filter ?? "inativo eq '${inativo ? "S" : "N"}' ",
-      top: top,
-      skip: skip,
-      groupby: groupBy,
-      orderby: orderBy,
-    ));
+    return API
+        .send(ODataQuery(
+          resource: collectionName,
+          select: select ?? '*',
+          filter: filter ?? "inativo eq '${inativo ? "S" : "N"}' ",
+          top: top,
+          skip: skip,
+          groupby: groupBy,
+          orderby: orderBy,
+        ))
+        .then((x) => x);
   }
 }

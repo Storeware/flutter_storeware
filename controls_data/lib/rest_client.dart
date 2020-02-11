@@ -203,7 +203,7 @@ class RestClient {
         );
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-    print('$method: ${this.baseUrl}$uri, $bo ');
+    //print('$method: ${this.baseUrl}$uri, $bo ');
 
     try {
       if (method == 'GET') {
@@ -282,26 +282,26 @@ class RestClient {
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     var url = encodeUrl();
-    return openUrl(url, method: method, body: body);
+    return openUrl(url, method: method, body: body).then((x) => x);
   }
 
   Future<String> post(String urlService, {body}) async {
     this.service = urlService;
     var url = encodeUrl();
     //print(url);
-    return openUrl(url, method: 'POST', body: body);
+    return openUrl(url, method: 'POST', body: body).then((x) => x);
   }
 
   Future<String> put(String urlService, {body}) async {
     this.service = urlService;
     var url = encodeUrl();
-    return openUrl(url, method: 'PUT', body: body);
+    return openUrl(url, method: 'PUT', body: body).then((x) => x);
   }
 
   Future<String> delete(String urlService, {body}) async {
     this.service = urlService;
     var url = encodeUrl();
-    return openUrl(url, method: 'DELETE', body: body);
+    return openUrl(url, method: 'DELETE', body: body).then((x) => x);
   }
 
   Future<String> patch(String urlService, {body, String contentType}) async {
@@ -312,7 +312,7 @@ class RestClient {
     if ((body != null) && (body is String)) {
       contentType = 'text/plain';
     }
-    print(contentType);
-    return openUrl(url, method: 'PATCH', body: body, contentType: contentType);
+    return openUrl(url, method: 'PATCH', body: body, contentType: contentType)
+        .then((x) => x);
   }
 }

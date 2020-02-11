@@ -173,6 +173,19 @@ class ODataClient {
     client.baseUrl = x;
   }
 
+
+  ODataClient clone() {
+    var o = ODataClient();
+    o.baseUrl = client.baseUrl;
+    o.prefix = client.prefix;
+    o.client = client.authorization;
+    o.client.setToken(client.tokenId);
+    return o;
+  }
+
+
+
+
   send(ODataQuery query) async {
     try {
       String r = query.resource + '?';

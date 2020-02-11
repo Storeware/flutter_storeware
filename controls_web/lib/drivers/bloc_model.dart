@@ -16,6 +16,22 @@ class BlocModel<T> {
   void dispose() {
     close();
   }
+
+  initial({T Function() next}) {
+    var r = next();
+    notify(r);
+    return stream;
+  }
+
+  Widget value(T value, {Widget Function(T) builder}) {
+    return StreamBuilder<T>(
+        stream: this.stream,
+        initialData: value,
+        builder: (ctx, snap) {
+          if (!snap.hasData) return Container();
+          return builder(snap.data);
+        });
+  }
 }
 
 class BlocNotifier<T> extends StatelessWidget {

@@ -5,7 +5,6 @@ import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
 
-
 const errorConnectionMsg =
     'Não executou a solicitação, provedor indisponível %s';
 
@@ -249,6 +248,30 @@ class ODataClient {
       return await client.delete(resource, body: json).then((resp) {
         return resp;
       });
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
+  }
+
+  patch(String command) async {
+    try {
+      var url = client.formatUrl(path: 'open');
+      var rsp = await client.patch(url, body: command);
+      print(rsp);
+      return rsp;
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
+  }
+
+  execute(String command) async {
+    try {
+      var url = client.formatUrl(path: 'execute');
+      var rsp = await client.patch(url, body: command);
+      print(rsp);
+      return rsp;
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;

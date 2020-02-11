@@ -41,7 +41,12 @@ class RestClient {
   Map<String, dynamic> jsonResponse;
   RestClient({this.baseUrl}) {}
   String tokenId;
-  String authorization;
+  String _authorization;
+  get authorization => _authorization;
+  set authorization(x) {
+    _authorization = x;
+  }
+
   /* decode json string to object */
   dynamic decode(String texto) {
     return json.decode(texto, reviver: (k, v) {

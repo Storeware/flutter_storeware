@@ -2,11 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:controls_data/data.dart';
 
-void main() {
+void main() async {
+  await LocalStorage().init();
   test('tetar ODataClient', () {
     final o = ODataClient();
-    o.prefix = 'http';
-    expect(o.prefix, 'http');
+    o.prefix = '/v3/';
+    expect(o.prefix, '/v3/');
   });
   test('testar LocalStorage', () {
     final f = LocalStorage();

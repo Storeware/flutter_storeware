@@ -176,8 +176,9 @@ class RestClient {
   }
 
   Future<String> openUrl(String url,
-      {String method, Map<String, dynamic> body}) async {
-    var resp = await openJson(url, method: method, body: body);
+      {String method, body, String contentType}) async {
+    var resp = await openJson(url,
+        method: method, body: body, contentType: contentType);
     var rsp = jsonEncode(resp);
     notify.send(rsp);
     return rsp;
@@ -188,10 +189,9 @@ class RestClient {
   bool followRedirects = false;
 
   Future<dynamic> openJson(String url,
-      {String method = 'GET', Map<String, dynamic> body}) async {
+      {String method = 'GET', body, String contentType}) async {
     _setHeader();
     Response resp;
-    //print(_headers);
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
@@ -199,10 +199,11 @@ class RestClient {
         baseUrl: this.baseUrl,
         headers: _headers,
         queryParameters: params,
-        contentType: this.contentType);
+        contentType: contentType ?? this.contentType // [e automatic no DIO??]
+        );
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-    //print('URL: ${this.baseUrl}$uri, $contentType ');
+    print('$method: ${this.baseUrl}$uri, $bo ');
 
     try {
       if (method == 'GET') {
@@ -281,7 +282,6 @@ class RestClient {
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
     var url = encodeUrl();
-    //print(url);
     return openUrl(url, method: method, body: body);
   }
 
@@ -304,9 +304,15 @@ class RestClient {
     return openUrl(url, method: 'DELETE', body: body);
   }
 
-  Future<String> patch(String urlService, {body}) async {
+  Future<String> patch(String urlService, {body, String contentType}) async {
     this.service = urlService;
     var url = encodeUrl();
-    return openUrl(url, method: 'PATCH', body: body);
+    contentType ??= this.contentType;
+
+    if ((body != null) && (body is String)) {
+      contentType = 'text/plain';
+    }
+    print(contentType);
+    return openUrl(url, method: 'PATCH', body: body, contentType: contentType);
   }
 }

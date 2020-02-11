@@ -254,11 +254,12 @@ class ODataClient {
     }
   }
 
-  patch(String command) async {
+  open(String command) async {
     try {
+      print(command);
       var url = client.formatUrl(path: 'open');
-      var rsp = await client.patch(url, body: command);
-      print(rsp);
+      var rsp =
+          await client.openUrl(url + '?\$command=' + command, method: 'GET');
       return rsp;
     } catch (e) {
       ErrorNotify.send('$e');
@@ -268,9 +269,8 @@ class ODataClient {
 
   execute(String command) async {
     try {
-      var url = client.formatUrl(path: 'execute');
-      var rsp = await client.patch(url, body: command);
-      print(rsp);
+      print(command);
+      var rsp = await client.patch('execute?\$command=' + command);
       return rsp;
     } catch (e) {
       ErrorNotify.send('$e');
@@ -293,7 +293,7 @@ class ODataInst extends ODataClient {
   login(loja, user, pass) async {
     RestClient cli = RestClient(baseUrl: baseUrl);
     cli.prefix = prefix;
-    cli.setToken(auth(user, pass));
+    cli.authorization = auth(user, pass);
     cli.addHeader('contaid', loja);
     var rsp = await cli.openJson(cli.formatUrl(path: 'login'), method: 'GET');
     var token = rsp['token'];
@@ -301,6 +301,10 @@ class ODataInst extends ODataClient {
     if (client.tokenId == null) client.setToken(auth(user, pass));
     client.addHeader('contaid', loja);
     return rsp['token'];
+  }
+
+  String formatUrl(String s) {
+    return client.formatUrl(path: s);
   }
 }
 

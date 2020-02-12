@@ -182,7 +182,7 @@ class ODataClient {
     return o;
   }
 
-  Future<dinamic> send(ODataQuery query) async {
+  Future<dynamic> send(ODataQuery query) async {
     try {
       String r = query.resource + '?';
       if (query.select != null) r += '\$select=${query.select}&';
@@ -192,8 +192,9 @@ class ODataClient {
       if (query.groupby != null) r += '\$groupby=${query.groupby}&';
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
-      // print(r);
+      print(r);
       return client.send(r).then((res) {
+        //print('response $res');
         return client.decode(res);
       });
     } catch (e) {
@@ -304,14 +305,15 @@ class ODataInst extends ODataClient {
     cli.prefix = prefix;
     cli.authorization = auth(user, pass);
     cli.addHeader('contaid', loja);
-    var rsp = cli
+    return cli
         .openJson(cli.formatUrl(path: 'login'), method: 'GET')
-        .then((x) => x);
-    var token = rsp['token'];
-    client.authorization = 'Bearer $token';
-    if (client.tokenId == null) client.setToken(auth(user, pass));
-    client.addHeader('contaid', loja);
-    return rsp['token'];
+        .then((rsp) {
+      var token = rsp['token'];
+      client.authorization = 'Bearer $token';
+      if (client.tokenId == null) client.setToken(auth(user, pass));
+      client.addHeader('contaid', loja);
+      return token;
+    });
   }
 
   String formatUrl(String s) {

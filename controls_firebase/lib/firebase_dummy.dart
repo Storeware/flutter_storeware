@@ -1,6 +1,7 @@
 import 'firebase_interfaces.dart';
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
+  FirebaseAppDriver();
   @override
   auth() {
     // TODO: implement auth
@@ -27,6 +28,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
 }
 
 class FirestoreDriver extends FirestoreDriverInterface {
+  FirestoreDriver();
   @override
   collection(String path) {
     // TODO: implement collection
@@ -35,6 +37,7 @@ class FirestoreDriver extends FirestoreDriverInterface {
 }
 
 class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
+  FirebaseAuthDriver();
   @override
   createLoginByEmail(email, senha) {
     // TODO: implement createLoginByEmail
@@ -79,6 +82,7 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
 }
 
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
+  FirebaseStorageDriver();
   @override
   Future<String> getDownloadURL(String path) {
     // TODO: implement getDownloadURL

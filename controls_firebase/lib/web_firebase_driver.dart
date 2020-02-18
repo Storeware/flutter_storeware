@@ -3,6 +3,7 @@ import 'package:firebase_web/firebase.dart' as fb;
 //import 'package:firebase_auth/firebase_auth.dart' as fa;
 
 abstract class FirebaseAppDriver extends FirebaseAppDriverInterface {
+  FirebaseAppDriver();
   static fb.App app;
   @override
   init(options) {
@@ -19,6 +20,7 @@ abstract class FirebaseAppDriver extends FirebaseAppDriverInterface {
 }
 
 abstract class FirestoreDriver extends FirestoreDriverInterface {
+  FirestoreDriver();
   @override
   collection(String path) {
     return fb.firestore().collection(path);
@@ -55,6 +57,7 @@ abstract class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
 }
 
 abstract class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
+  FirebaseAuthDriver();
   @override
   createLoginByEmail(email, senha) {
     return fb.auth().createUserWithEmailAndPassword(email, senha);

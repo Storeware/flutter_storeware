@@ -10,6 +10,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'firebase_interfaces.dart';
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
+  FirebaseAppDriver();
   FirebaseApp app;
   @override
   init(options) async {
@@ -46,6 +47,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
 }
 
 class FirestoreDriver extends FirestoreDriverInterface {
+  FirestoreDriver();
   @override
   collection(String path) {
     // TODO: implement collection
@@ -145,7 +147,7 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
 
 class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
   FirebaseAuth get instance => FirebaseAuth.instance;
-
+  FirebaseAuthDriver();
   @override
   signInWithEmail(email, senha) {
     return instance.signInWithEmailAndPassword(email: email, password: senha);

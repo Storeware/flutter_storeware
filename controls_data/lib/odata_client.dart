@@ -65,12 +65,9 @@ class ODataResult {
   toList() async {
     return _data.docs;
   }
-  
-  asMap(){
-    return [
-      for(var item in _data.docs)
-        item.data()
-    ]
+
+  asMap() {
+    return [for (var item in _data.docs) item.data()];
   }
 
   static ODataResult item({Map<String, dynamic> json}) {

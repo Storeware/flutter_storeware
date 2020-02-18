@@ -3,7 +3,7 @@ import 'dart:typed_data';
 // ignore_for_file:
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fs;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -30,7 +30,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   //var _storage;
   @override
   storage() {
-    return FirebaseStorage.instance;
+    return fs.FirebaseStorage.instance;
     //return FirebaseStorageDriver();
   }
 
@@ -68,21 +68,21 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   @override
   Future<int> uploadFileImage(String path, rawPath) async {
     String _fileName = buildPath(path);
-    StorageReference firebaseStorageRef =
+    fs.StorageReference firebaseStorageRef =
         FirebaseAppDriver().storage().ref().child(_fileName);
     print('$_fileName:$rawPath');
     final Directory systemTempDir = Directory.systemTemp;
     final File file = await new File('${systemTempDir.path}/temp.jpg').create();
     file.writeAsBytes(rawPath);
-    StorageUploadTask uploadTask = firebaseStorageRef.putFile(file);
-    StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
+    fs.StorageUploadTask uploadTask = firebaseStorageRef.putFile(file);
+    fs.StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     return taskSnapshot.bytesTransferred;
   }
 
   @override
   Future<String> getDownloadURL(String path) async {
     String _fileName = buildPath(path);
-    StorageReference firebaseStorageRef =
+    fs.StorageReference firebaseStorageRef =
         FirebaseAppDriver().storage().ref().child(_fileName);
     try {
       return firebaseStorageRef.getDownloadURL().then((x) {

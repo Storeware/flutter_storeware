@@ -15,8 +15,8 @@ void main() async {
     expect(tkn != null, true);
     expect(o.prefix, '/v3/');
 
-    print(await o.open("select * from sp_enviar_gostei('1',0,1 ) "));
-    print(await o.execute("select * from sp_enviar_gostei('1',0,1 ) "));
+    print(await o.open("select * from web_atualizar_gostei('1',0,1 ) "));
+    print(await o.execute("select * from web_atualizar_gostei('1',0,1 ) "));
 
     print('execute - finished');
     var rsp = await o.send(ODataQuery(

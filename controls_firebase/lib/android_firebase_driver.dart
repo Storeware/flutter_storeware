@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
-// ignore_for_file: 
+// ignore_for_file:
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,7 +12,7 @@ import 'firebase_interfaces.dart';
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseApp app;
   @override
-  init() async {
+  init(options) async {
     /* try {
       app = await FirebaseApp.configure(
           name: "selfandpay",
@@ -29,8 +29,9 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
 
   //var _storage;
   @override
-  FirebaseStorageDriver storage() {
-    return FirebaseStorageDriver();
+  FirebaseStorage storage() {
+    return FirebaseStorage.instance;
+    //return FirebaseStorageDriver();
   }
 
   @override
@@ -60,6 +61,10 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   @override
   init() {}
 
+  buildPath(p) {
+    return p;
+  }
+
   @override
   Future<int> uploadFileImage(String path, rawPath) async {
     String _fileName = buildPath(path);
@@ -67,7 +72,7 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
         FirebaseAppDriver().storage().ref().child(_fileName);
     print('$_fileName:$rawPath');
     final Directory systemTempDir = Directory.systemTemp;
-    final File file = await new File('${systemTempDir.path}/temp.png').create();
+    final File file = await new File('${systemTempDir.path}/temp.jpg').create();
     file.writeAsBytes(rawPath);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(file);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;

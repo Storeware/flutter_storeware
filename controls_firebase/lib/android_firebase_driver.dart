@@ -56,10 +56,7 @@ class FirestoreDriver extends FirestoreDriverInterface {
 }
 
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
-  static final _singleton = FirebaseStorageDriver._create();
-  FirebaseStorageDriver._create();
-  factory FirebaseStorageDriver() => _singleton;
-
+  FirebaseStorageDriver();
   @override
   init() {}
 

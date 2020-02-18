@@ -14,6 +14,7 @@ abstract class FirestoreDriverInterface {
 }
 
 abstract class FirebaseStorageDriverInterface {
+  FirebaseStorageDriverInterface();
   init() {}
   Future<int> uploadFileImage(String path, bytes);
   Future<String> getDownloadURL(String path);

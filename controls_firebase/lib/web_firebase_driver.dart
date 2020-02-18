@@ -26,6 +26,7 @@ abstract class FirestoreDriver extends FirestoreDriverInterface {
 }
 
 abstract class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
+  FirebaseStorageDriver();
   @override
   Future<String> getDownloadURL(String path) async {
     //print('ref: $path');

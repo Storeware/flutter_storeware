@@ -1,18 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
-//import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'local_storage_interface.dart';
-
-const debug = true;
 
 class PlataformLocalStorage extends LocalStorageInterface {
   var _prefs;
   String appFileName;
   File _file;
   init() async {
-    if (debug || Platform.isWindows) {
+    if (Platform.isWindows) {
       _prefs = {};
       //Directory appDocDir = await getApplicationDocumentsDirectory();
       appFileName = /*appDocDir.path +*/ 'checkout.config';
@@ -23,9 +21,8 @@ class PlataformLocalStorage extends LocalStorageInterface {
       } catch (e) {
         // nao existe o arquivo;
       }
-    }
-    //else
-    //    _prefs = await SharedPreferences.getInstance();
+    } else
+      _prefs = await SharedPreferences.getInstance();
   }
 
   @override

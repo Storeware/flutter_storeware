@@ -52,6 +52,9 @@ class ODataDocuments {
   dynamic operator [](int idx) => docs[idx];
   get first => docs.first;
   get last => docs.last;
+  asMap() {
+    return [for (var item in docs) item.data()];
+  }
 }
 
 class ODataResult {
@@ -61,6 +64,13 @@ class ODataResult {
   bool hasData = false;
   toList() async {
     return _data.docs;
+  }
+  
+  asMap(){
+    return [
+      for(var item in _data.docs)
+        item.data()
+    ]
   }
 
   static ODataResult item({Map<String, dynamic> json}) {

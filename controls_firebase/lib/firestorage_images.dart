@@ -1,21 +1,55 @@
-import 'package:firebase_web/firebase.dart';
+//import 'dart:io';
+
 import 'package:flutter/material.dart';
+//import 'package:flutter_cached/flutter_cached.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
+import 'firebase_driver.dart';
+import 'cached.dart';
 
-import 'firebase_firestore.dart';
-
-String firestore_clientId = 'm5';
-
-class FirestorageImage extends StatelessWidget {
+class FirestorageDownloadImage extends StatefulWidget {
   final String img;
   final double width;
   final double height;
   final BoxFit fit;
-  FirestorageImage({Key key, this.img, this.width, this.height, this.fit})
+  final String clientId;
+  final double radius;
+  final double padding;
+  final String alias;
+  final FilterQuality filterQuality;
+  final Function onLoaded;
+  FirestorageDownloadImage(
+      {Key key,
+      @required this.clientId,
+      @required this.img,
+      this.width,
+      this.radius = 10,
+      this.padding = 0,
+      this.height,
+      this.fit,
+      this.filterQuality = FilterQuality.medium,
+      this.onLoaded,
+      this.alias = ''})
       : super(key: key);
 
-  _get(src) {
-    return FirebaseApp.storageApp.ref(src).getDownloadURL();
+  static Future<String> getDownloadURL(src) async {
+    return await Cached.value<Future<String>>(src, builder: (x) {
+      return FirebaseApp().storage().getDownloadURL(x);
+    });
+  }
+
+  @override
+  _FirestorageDownloadImageState createState() =>
+      _FirestorageDownloadImageState();
+}
+
+class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
+  Future<String> _get(src) async {
+    return FirestorageDownloadImage.getDownloadURL(src);
+  }
+
+  String formatStoragePath(String path) {
+    if (!path.startsWith('/')) path = '/$path';
+    return '${widget.clientId}$path';
   }
 
   Image _image;
@@ -24,36 +58,29 @@ class FirestorageImage extends StatelessWidget {
     return _image.image;
   }
 
-  static Future<String> getDownloadURL(src) async {
-    Uri uri = await FirebaseApp.storageApp.ref(src).getDownloadURL();
-    print(uri.toFilePath());
-    return uri.toString();
-  }
-
   @override
   Widget build(BuildContext context) {
-    if ((img ?? '') == '')
+    if ((widget.img ?? '') == '')
       return Container(
-        height: height,
-        width: width,
+        height: widget.height,
+        width: widget.width,
       );
-    return FutureBuilder<Uri>(
-        future: _get(img),
+    return FutureBuilder<String>(
+        future: _get(formatStoragePath(widget.img)),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
-            return Container(
-              color: Colors.transparent,
-              height: width,
-              width: height,
+            return Align(
+              child: Icon(Icons.picture_in_picture),
             );
           var s = snapshot.data.toString();
-          _image = Image.network(
-            s,
-            width: width,
-            height: height,
-            fit: fit,
-          );
-          return _image;
+
+          return Cached.image(context, '$s.${widget.alias}', builder: (url) {
+            return Image.network(
+              s,
+              fit: widget.fit ?? BoxFit.cover,
+              filterQuality: widget.filterQuality,
+            );
+          });
         });
   }
 }
@@ -63,8 +90,8 @@ class FirestorageUploadImage extends StatefulWidget {
   final double height;
   final String img;
   final Function(String) onChange;
-  final String path;
-  String clientId;
+  //final String path;
+  final String clientId;
   final BoxFit fit;
   final double elevation;
   FirestorageUploadImage(
@@ -73,13 +100,11 @@ class FirestorageUploadImage extends StatefulWidget {
       this.width,
       this.height,
       this.onChange,
-      @required this.path,
-      clientId,
+      //@required this.path,
+      @required this.clientId,
       this.fit,
       this.elevation = 0})
-      : super(key: key) {
-    this.clientId = clientId ?? firestore_clientId;
-  }
+      : super(key: key);
   @override
   _FirestorageUploadImageState createState() => _FirestorageUploadImageState();
 }
@@ -105,10 +130,11 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
                 right: 10,
                 top: 10,
                 bottom: 40,
-                child: FirestorageImage(
+                child: FirestorageDownloadImage(
                   img: img,
                   height: widget.height,
                   fit: widget.fit,
+                  clientId: widget.clientId,
                 ),
               ),
               Positioned(
@@ -133,20 +159,20 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
 
   Future<String> urlDownload(html.File file, callback) async {
     String sFile = formatStoragePath(file.name);
-    StorageReference ref = FirebaseApp.storageApp.ref(sFile);
-    //print(sFile);
-    UploadTask uploadTask = await ref.put(file);
-    ref.getDownloadURL().then((x) {
-      callback(sFile);
+
+    FirebaseApp().storage().uploadFileImage(sFile, file);
+    return FirebaseApp().storage().getDownloadURL(sFile).then((x) {
+      callback(x);
+      return x;
     });
   }
 
-  String formatStoragePath(src) {
-    return '${widget.path}/${widget.clientId}/${src}';
+  String formatStoragePath(path) {
+    return '${widget.clientId}/$path';
   }
 
   String imageRefPath() {
-    return '${widget.path}/${widget.clientId}';
+    return '${widget.clientId}';
   }
 }
 

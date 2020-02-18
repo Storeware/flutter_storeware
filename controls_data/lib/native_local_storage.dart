@@ -31,7 +31,7 @@ class PlataformLocalStorage extends LocalStorageInterface {
       _prefs[key] = value;
       _file.writeAsString(jsonEncode(_prefs));
     } else
-      _prefs.setKey(key, value);
+      _prefs.setString(key, value);
   }
 
   @override
@@ -39,7 +39,7 @@ class PlataformLocalStorage extends LocalStorageInterface {
     if (Platform.isWindows)
       return _prefs[key];
     else
-      return _prefs.getKey(key);
+      return _prefs.getString(key);
   }
 
   @override

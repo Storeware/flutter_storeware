@@ -366,15 +366,22 @@ abstract class ODataModelClass<T extends DataItem> {
   }
 
   Future<ODataResult> search(
-      {String filter, String orderBy, int top, int skip}) async {
+      {String resource,
+      String select,
+      String filter,
+      String orderBy,
+      String groupBy,
+      int top,
+      int skip}) async {
     try {
       return API
           .send(ODataQuery(
-              resource: collectionName,
-              select: columns ?? '*',
+              resource: resource ?? collectionName,
+              select: select ?? columns ?? '*',
               filter: filter ?? '',
               top: top ?? 0,
               skip: skip ?? 0,
+              groupby: groupBy ?? '',
               orderby: orderBy ?? ''))
           .then((r) {
         return ODataResult(json: r);

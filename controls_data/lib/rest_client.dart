@@ -185,9 +185,9 @@ class RestClient {
     return rsp;
   }
 
-  int connectionTimeout = 30000;
+  int connectionTimeout = 5000;
   int receiveTimeout = 60000;
-  bool followRedirects = false;
+  bool followRedirects = true;
 
   Future<dynamic> openJson(String url,
       {String method = 'GET', body, String contentType}) async {
@@ -228,10 +228,13 @@ class RestClient {
         return throw (resp.data);
       }
     } catch (e) {
-      var error = e.response.data['error'];
+      var error = null;
+      if ((e.response != null) && (e.response.data != null))
+        error = e.response.data['error'];
+      error ??= e.message ?? '$e';
+      notifyError.send(error);
       print('Error: $error}');
-      notifyError.send(error ?? e.message);
-      throw error ?? e.message;
+      throw error;
     }
   }
 

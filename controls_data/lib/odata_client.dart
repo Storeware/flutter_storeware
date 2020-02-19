@@ -391,12 +391,14 @@ abstract class ODataModelClass<T extends DataItem> {
               groupby: groupBy ?? '',
               orderby: orderBy ?? ''))
           .then((r) {
+        /// show... voltou dados.
         return ODataResult(json: r);
       });
     } catch (e) {
+      /// ops,  não deu certo.
       var s = '$errorConnectionMsg ${e}';
       ErrorNotify.send(s);
-      //throw s;
+      rethrow;
     }
   }
 

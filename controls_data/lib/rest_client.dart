@@ -35,6 +35,7 @@ class RestClientProvider<T> extends StatelessWidget {
 
 class RestClient {
   RestClientBloC<String> notify = RestClientBloC<String>();
+  RestClientBloC<String> notifyError = RestClientBloC<String>();
   String service = '/';
   String accessControlAllowOrigin = '*';
   Map<String, String> _headers = {};
@@ -227,8 +228,10 @@ class RestClient {
         return throw (resp.data);
       }
     } catch (e) {
-      print('Error: $e');
-      throw e.message;
+      var error = e.response.data['error'];
+      print('Error: $error}');
+      notifyError.send(error ?? e.message);
+      throw error ?? e.message;
     }
   }
 

@@ -29,13 +29,19 @@ dependencies:
   dio:
 
   control_data_platform_web:
-    path: control_data_platform_web
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data/control_data_platform_web
 
   control_data_platform_android:
-    path: control_data_platform_android
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data/control_data_platform_android
 
   control_data_platform_windows:
-    path: control_data_platform_windows
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data/control_data_platform_windows
 
 dev_dependencies:
   flutter_test:

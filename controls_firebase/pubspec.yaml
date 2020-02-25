@@ -15,7 +15,7 @@ flutter:
       android:
         default_package: controls_firebase_platform_android
       windows:
-        default_package: controls_firebase_platform_windows
+        default_package: controls_firebase_platform_web
       ios:
         default_package: controls_firebase_platform_android
 
@@ -31,6 +31,10 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_data/controls_firebase_platform_web
+  controls_firebase_platform_android:
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data/controls_firebase_platform_android
 
   uuid:
 

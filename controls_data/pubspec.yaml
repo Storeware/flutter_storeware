@@ -29,13 +29,13 @@ dependencies:
   dio:
 
   control_data_platform_web:
-    path: ./control_data_platform_web
+    path: control_data_platform_web
 
   control_data_platform_android:
-    path: ./control_data_platform_android
+    path: control_data_platform_android
 
   control_data_platform_windows:
-    path: ./control_data_platform_windows
+    path: control_data_platform_windows
 
 dev_dependencies:
   flutter_test:

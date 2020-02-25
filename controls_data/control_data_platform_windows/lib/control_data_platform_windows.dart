@@ -1,6 +1,8 @@
-import 'local_storage_interface.dart';
+library control_data_platform_windows;
 
-class PlataformLocalStorage extends LocalStorageInterface {
+import 'package:control_data_platform_interface/control_data_platform_interface.dart';
+
+class PlatformLocalStorage extends LocalStorageInterface {
   Map<String, dynamic> items = {};
   init() async {
 //    _storage = await SharedPreferences.getInstance();

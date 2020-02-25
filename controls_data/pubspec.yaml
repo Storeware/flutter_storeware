@@ -1,22 +1,42 @@
 name: controls_data
 description: A new Flutter package project.
-version: 0.0.5
+version: 0.0.6
 author:
-homepage: http://tireideletra.com.br
+homepage: https://tireideletra.com.br
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
 
+flutter:
+  plugin:
+    platforms:
+      web:
+        default_package: control_data_platform_web
+      android:
+        default_package: control_data_platform_android
+      windows:
+        default_package: control_data_platform_windows
+      ios:
+        default_package: control_data_platform_android
+
 dependencies:
-  shared_preferences: ^0.5.6+1
+  #shared_preferences: ^0.5.6+1
   flutter:
     sdk: flutter
   intl:
-  universal_html:
+  #universal_html:
   #http:
   dio:
+
+  control_data_platform_web:
+    path: ./control_data_platform_web
+
+  control_data_platform_android:
+    path: ./control_data_platform_android
+
+  control_data_platform_windows:
+    path: ./control_data_platform_windows
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-flutter:

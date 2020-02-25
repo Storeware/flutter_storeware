@@ -1,3 +1,5 @@
+library control_data_platform_interface;
+
 abstract class LocalStorageInterface {
   init();
   setKey(String key, String value);

@@ -1,9 +1,11 @@
-import 'dart:convert';
-import "native_local_storage.dart"
-    if (dart.library.html) "html_local_storage.dart"
-    if (dart.library.windows) "widows_local_storage.dart";
+library local_storage;
 
-class LocalStorage extends PlataformLocalStorage {
+import "package:control_data_platform_android/control_data_platform_android.dart"
+    if (dart.library.html) "package:control_data_platform_web/control_data_platform_web.dart"
+    if (dart.library.io) "package:control_data_platform_android/control_data_platform_android.dart"
+    if (dart.library.windows) "package:control_data_platform_windows/control_data_platform_windows.dart";
+
+class LocalStorage extends PlatformLocalStorage {
   static final _singleton = LocalStorage._create();
   LocalStorage._create();
   factory LocalStorage() => _singleton;

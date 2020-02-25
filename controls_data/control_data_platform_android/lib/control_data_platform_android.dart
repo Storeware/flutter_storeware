@@ -1,11 +1,12 @@
+library control_data_platform_android;
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:control_data_platform_interface/control_data_platform_interface.dart';
 
-import 'local_storage_interface.dart';
-
-class PlataformLocalStorage extends LocalStorageInterface {
+class PlatformLocalStorage extends LocalStorageInterface {
   var _prefs;
   String appFileName;
   File _file;

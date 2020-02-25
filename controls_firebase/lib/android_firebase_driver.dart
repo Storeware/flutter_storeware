@@ -14,18 +14,21 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseApp app;
   @override
   init(options) async {
-    /* try {
+    /* try { /// a configuração é feita no ambiente
       app = await FirebaseApp.configure(
           name: "selfandpay",
           options: FirebaseOptions(
-            apiKey: "AIzaSyDXi7uALH0TIxeDoDvc_4VHVdp13BFFDNk",
-            googleAppID: "1:858174338114:android:38fb65e736f1465236e9db",
-            projectID: "selfandpay",
-            storageBucket: "selfandpay.appspot.com",
+            gcmSenderID: options['858174338114'],
+            databaseURL: options['databaseURL'],
+            apiKey: options['apiKey'],
+            googleAppID: options['appId'],
+            projectID: options['projectId'],
+            storageBucket: options['storageBucket'],
           ));
     } catch (e) {
       print('$e');
-    }*/
+    }
+    */
   }
 
   //var _storage;

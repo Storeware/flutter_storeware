@@ -1,6 +1,6 @@
 name: controls_firebase
 description: A new Flutter package project.
-version: 0.0.1
+version: 0.0.2
 author:
 homepage: http://tireideletra.com.br
 
@@ -30,11 +30,11 @@ dependencies:
   controls_firebase_platform_web:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_data/controls_firebase_platform_web
+      path: controls_firebase/controls_firebase_platform_web
   controls_firebase_platform_android:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_data/controls_firebase_platform_android
+      path: controls_firebase/controls_firebase_platform_android
 
   uuid:
 

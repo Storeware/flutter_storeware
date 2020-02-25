@@ -2,16 +2,15 @@ import 'package:flutter_test/flutter_test.dart';
 
 //import 'package:controls_firebase/firebase.dart';
 
-import 'package:controls_firebase/android_firebase_driver.dart';
-import 'package:controls_firebase/firebase_driver.dart' as fd;
+import 'package:controls_firebase/firebase_driver.dart' as fb;
 
 void main() {
   test('testar data movel', () {
-    var storage = FirebaseStorageDriver();
+    var storage = fb.FirebaseStorage();
     storage.init();
   });
   test('teatar driver', () {
-    var drv = fd.FirebaseStorage();
+    var drv = fb.FirebaseStorage();
     drv.init();
   });
 }

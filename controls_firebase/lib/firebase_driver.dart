@@ -1,6 +1,8 @@
+library controls_firebase_data;
 //import "web_firebase_driver.dart";
-import "web_firebase_driver.dart"
-    if (dart.library.io) 'android_firebase_driver.dart';
+
+import "package:controls_firebase_platform_web/controls_firebase_platform_web.dart"
+    if (dart.library.io) "package:controls_firebase_platform_android/controls_firebase_platform_android.dart";
 
 class FirebaseApp extends FirebaseAppDriver {
   static final FirebaseApp _singleton = FirebaseApp._create();

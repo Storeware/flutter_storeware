@@ -48,7 +48,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -57,7 +57,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -66,7 +66,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -75,7 +75,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -84,7 +84,7 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.6"
@@ -93,7 +93,7 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_android"
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -102,7 +102,7 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -111,7 +111,7 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_web"
       ref: HEAD
-      resolved-ref: cb524108d5dffc9998b0382c797077af07b34773
+      resolved-ref: "00fe79df4ce3bf990f1264ea81ada16190526693"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"

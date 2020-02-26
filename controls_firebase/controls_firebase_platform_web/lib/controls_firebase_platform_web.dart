@@ -77,6 +77,11 @@ abstract class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
   }
 
   @override
+  fb.User getCurrentUser() {
+    return currentUser;
+  }
+
+  @override
   logout() {
     return fb.auth().signOut();
   }

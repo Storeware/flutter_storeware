@@ -188,17 +188,16 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
-
     final AuthResult authResult = await _auth.signInWithCredential(credential);
-    final FirebaseUser user = authResult.user;
-
-    //assert(!user.isAnonymous);
-    //assert(await user.getIdToken() != null);
-
+    FirebaseUser user = authResult.user;
     currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
-
     return 'signInWithGoogle succeeded: $user';
+  }
+
+  @override
+  FirebaseUser getCurrentUser() {
+    return currentUser;
   }
 
   @override

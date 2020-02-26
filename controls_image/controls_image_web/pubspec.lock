@@ -48,7 +48,7 @@ packages:
     description:
       path: "controls_image/controls_image_interface"
       ref: HEAD
-      resolved-ref: "74f8ebad764a7198721b93503f50bb805a214bd7"
+      resolved-ref: "20ac388594507a3c56cdb855cca89bea5cff62c9"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"

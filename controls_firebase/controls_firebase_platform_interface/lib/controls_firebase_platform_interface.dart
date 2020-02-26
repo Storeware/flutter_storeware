@@ -31,4 +31,7 @@ abstract class FirebaseAuthDriverInterface {
   logout();
   signInWithGoogle();
   signOutGoogle();
+  getCurrentUser() {
+    return {};
+  }
 }

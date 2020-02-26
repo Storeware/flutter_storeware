@@ -46,30 +46,38 @@ packages:
   control_data_platform_android:
     dependency: "direct main"
     description:
-      path: control_data_platform_android
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_android"
+      ref: HEAD
+      resolved-ref: "54a0b362768ada089afee2971dff0f63e3a1be6b"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "0.0.1"
   control_data_platform_interface:
     dependency: transitive
     description:
-      path: control_data_platform_interface
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_interface"
+      ref: HEAD
+      resolved-ref: "54a0b362768ada089afee2971dff0f63e3a1be6b"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "0.0.1"
   control_data_platform_web:
     dependency: "direct main"
     description:
-      path: control_data_platform_web
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_web"
+      ref: HEAD
+      resolved-ref: "54a0b362768ada089afee2971dff0f63e3a1be6b"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "0.0.1"
   control_data_platform_windows:
     dependency: "direct main"
     description:
-      path: control_data_platform_windows
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_windows"
+      ref: HEAD
+      resolved-ref: "54a0b362768ada089afee2971dff0f63e3a1be6b"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "0.0.1"
   convert:
     dependency: transitive
@@ -98,7 +106,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.8"
+    version: "3.0.9"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -141,7 +149,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.0"
+    version: "0.16.1"
   matcher:
     dependency: transitive
     description:
@@ -183,28 +191,28 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.6+1"
+    version: "0.5.6+2"
   shared_preferences_macos:
     dependency: transitive
     description:
       name: shared_preferences_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1+5"
+    version: "0.0.1+6"
   shared_preferences_platform_interface:
     dependency: transitive
     description:
       name: shared_preferences_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.1"
+    version: "1.0.3"
   shared_preferences_web:
     dependency: transitive
     description:
       name: shared_preferences_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2+3"
+    version: "0.1.2+4"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -265,14 +273,14 @@ packages:
       name: universal_html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.8"
+    version: "1.1.15"
   universal_io:
     dependency: transitive
     description:
       name: universal_io
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.4"
+    version: "1.0.1"
   vector_math:
     dependency: transitive
     description:
@@ -293,7 +301,7 @@ packages:
       name: zone_local
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.1"
+    version: "0.1.2"
 sdks:
   dart: ">=2.7.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.4 <2.0.0"

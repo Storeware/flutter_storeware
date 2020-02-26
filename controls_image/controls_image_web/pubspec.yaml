@@ -11,6 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker_web:
+  universal_html:
+
   controls_image_interface:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

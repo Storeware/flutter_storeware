@@ -5,7 +5,7 @@ abstract class ControlsImageInterface {
     return UnimplementedError();
   }
 
-  pickFromCamera(imageQuality) {
+  pickFromCamera({imageQuality}) {
     return UnimplementedError();
   }
 }

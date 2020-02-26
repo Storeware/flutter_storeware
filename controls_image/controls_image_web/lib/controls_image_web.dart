@@ -14,7 +14,7 @@ class ControlsImage extends ControlsImageInterface {
   }
 
   @override
-  pickFromCamera(imageQuality) {
+  pickFromCamera({imageQuality}) {
     return UnimplementedError();
   }
 }

@@ -80,8 +80,9 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     final Directory systemTempDir = Directory.systemTemp;
     final File file = await new File('${systemTempDir.path}/temp.jpg').create();
     file.writeAsBytes(rawPath);
-    fs.StorageUploadTask uploadTask =
-        firebaseStorageRef.putFile(file, metadata);
+    fs.StorageMetadata md;
+    if (metadata != null) md = fs.StorageMetadata(customMetadata: metadata);
+    fs.StorageUploadTask uploadTask = firebaseStorageRef.putFile(file, md);
     fs.StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     return taskSnapshot.bytesTransferred;
   }

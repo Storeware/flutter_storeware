@@ -52,7 +52,11 @@ abstract class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     fb.StorageReference firebaseStorageRef =
         fb.storage(FirebaseAppDriver.app).ref(path);
     //print('$path:$rawPath');
-    fb.UploadTask uploadTask = firebaseStorageRef.put(rawPath, metadata);
+
+    fb.UploadMetadata md;
+    if (metadata != null) md = fb.UploadMetadata(customMetadata: metadata);
+
+    fb.UploadTask uploadTask = firebaseStorageRef.put(rawPath, md);
     fb.UploadTaskSnapshot taskSnapshot = uploadTask.snapshot;
     return taskSnapshot.bytesTransferred;
   }

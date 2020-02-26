@@ -1,7 +1,4 @@
 library controls_image;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+export 'package:controls_image_android/controls_image_android.dart'
+    if (dart.library.html) 'package:controls_image_web/controls_image_web.dart';

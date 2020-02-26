@@ -43,6 +43,33 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
+  controls_image_android:
+    dependency: "direct main"
+    description:
+      path: "controls_image/controls_image_android"
+      ref: HEAD
+      resolved-ref: e6259d1aa7c6e17d134b610cd54473543d0f9517
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
+  controls_image_interface:
+    dependency: transitive
+    description:
+      path: "controls_image/controls_image_interface"
+      ref: HEAD
+      resolved-ref: e6259d1aa7c6e17d134b610cd54473543d0f9517
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
+  controls_image_web:
+    dependency: "direct main"
+    description:
+      path: "controls_image/controls_image_web"
+      ref: HEAD
+      resolved-ref: e6259d1aa7c6e17d134b610cd54473543d0f9517
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
   convert:
     dependency: transitive
     description:
@@ -62,8 +89,20 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.6"
   flutter_test:
     dependency: "direct dev"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
@@ -74,6 +113,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  image_picker:
+    dependency: transitive
+    description:
+      name: image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.3+4"
+  image_picker_web:
+    dependency: transitive
+    description:
+      name: image_picker_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.6"
   matcher:
     dependency: transitive
     description:
@@ -179,3 +232,4 @@ packages:
     version: "3.5.0"
 sdks:
   dart: ">=2.4.0 <3.0.0"
+  flutter: ">=1.12.13 <2.0.0"

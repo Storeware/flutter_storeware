@@ -1,7 +1,13 @@
 library controls_image_android;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
+import 'package:controls_image_interface/controls_image_interface.dart';
+
+class ControlsImage extends ControlsImageInterface {
+  pickFromGallary({imageQuality}) {
+    return UnimplementedError();
+  }
+
+  pickFromCamera(imageQuality) {
+    return UnimplementedError();
+  }
 }

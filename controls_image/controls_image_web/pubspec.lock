@@ -43,6 +43,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.11"
+  controls_image_interface:
+    dependency: "direct main"
+    description:
+      path: "controls_image/controls_image_interface"
+      ref: HEAD
+      resolved-ref: "74f8ebad764a7198721b93503f50bb805a214bd7"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
   convert:
     dependency: transitive
     description:

@@ -72,7 +72,7 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   }
 
   @override
-  Future<int> uploadFileImage(String path, rawPath) async {
+  Future<int> uploadFileImage(String path, rawPath, {metadata}) async {
     String _fileName = buildPath(path);
     fs.StorageReference firebaseStorageRef =
         FirebaseAppDriver().storage().ref().child(_fileName);
@@ -80,7 +80,8 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     final Directory systemTempDir = Directory.systemTemp;
     final File file = await new File('${systemTempDir.path}/temp.jpg').create();
     file.writeAsBytes(rawPath);
-    fs.StorageUploadTask uploadTask = firebaseStorageRef.putFile(file);
+    fs.StorageUploadTask uploadTask =
+        firebaseStorageRef.putFile(file, metadata);
     fs.StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     return taskSnapshot.bytesTransferred;
   }

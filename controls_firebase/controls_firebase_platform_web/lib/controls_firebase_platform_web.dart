@@ -48,11 +48,11 @@ abstract class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   }
 
   @override
-  Future<int> uploadFileImage(String path, rawPath) async {
+  Future<int> uploadFileImage(String path, rawPath, {metadata}) async {
     fb.StorageReference firebaseStorageRef =
         fb.storage(FirebaseAppDriver.app).ref(path);
     //print('$path:$rawPath');
-    fb.UploadTask uploadTask = firebaseStorageRef.put(rawPath);
+    fb.UploadTask uploadTask = firebaseStorageRef.put(rawPath, metadata);
     fb.UploadTaskSnapshot taskSnapshot = uploadTask.snapshot;
     return taskSnapshot.bytesTransferred;
   }

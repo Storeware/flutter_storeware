@@ -2,7 +2,8 @@ library controls_firebase_platform_web;
 
 import 'package:controls_firebase_platform_interface/controls_firebase_platform_interface.dart';
 import 'package:firebase_web/firebase.dart' as fb;
-//import 'package:firebase_auth/firebase_auth.dart' as fa;
+
+export 'package:firebase_web/firebase.dart';
 
 abstract class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver();

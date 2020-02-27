@@ -1,7 +1,10 @@
 library controls_firebase;
 
-export "package:controls_firebase_platform_web/controls_firebase_platform_android.dart"
-    if (dart.library.html) "package:controls_firebase_platform_android/controls_firebase_platform_web.dart";
+
+import "package:controls_firebase_platform_android/controls_firebase_platform_android.dart"
+    if (dart.library.html) "package:controls_firebase_platform_web/controls_firebase_platform_web.dart";
+
+
 
 class FirebaseApp extends FirebaseAppDriver {
   static final FirebaseApp _singleton = FirebaseApp._create();

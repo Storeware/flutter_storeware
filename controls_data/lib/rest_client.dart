@@ -228,7 +228,7 @@ class RestClient {
         return throw (resp.data);
       }
     } catch (e) {
-      var error = null;
+      var error;
       if ((e.response != null) && (e.response.data != null))
         error = e.response.data['error'];
       error ??= e.message ?? '$e';

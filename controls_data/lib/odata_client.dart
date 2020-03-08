@@ -175,6 +175,9 @@ class ODataClient {
     client.prefix = p;
   }
 
+  get notifier => client.notify;
+  get errorNotifier => client.notifyError;
+
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {
     client.baseUrl = x;
@@ -199,7 +202,7 @@ class ODataClient {
       if (query.groupby != null) r += '\$groupby=${query.groupby}&';
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
-      print(r);
+      //print(r);
       return client.send(r).then((res) {
         //print('response $res');
         return client.decode(res);
@@ -272,9 +275,9 @@ class ODataClient {
     }
   }
 
-  open(String command) async {
+  Future<Object> open(String command) async {
     try {
-      print(command);
+      //    print(command);
       var url = client.formatUrl(path: 'open');
       return client
           .openUrl(url + '?\$command=' + command, method: 'GET')
@@ -285,10 +288,36 @@ class ODataClient {
     }
   }
 
+  Future<Map> openJson(String command) async {
+    try {
+      //    print(command);
+      var url = client.formatUrl(path: 'open');
+      return client
+          .openJson(url + '?\$command=' + command, method: 'GET')
+          .then((x) => x);
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
+  }
+
   execute(String command) async {
     try {
-      print(command);
+      //print(command);
       return client.patch('execute?\$command=' + command).then((x) => x);
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
+  }
+
+  Future<Map> executeJson(String command) async {
+    try {
+      //    print(command);
+      var url = client.formatUrl(path: 'execute');
+      return client
+          .openJson(url + '?\$command=' + command, method: 'PATCH')
+          .then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -300,7 +329,7 @@ class ODataInst extends ODataClient {
   static final _singleton = ODataInst._create();
   ODataInst._create();
   factory ODataInst() => _singleton;
-
+  DataNotifyChange loginNotifier = DataNotifyChange<Map>();
   auth(user, pass) {
     var bytes = utf8.encode('$user:$pass');
     var b64 = 'Basic ' + base64.encode(bytes);
@@ -319,6 +348,7 @@ class ODataInst extends ODataClient {
       client.authorization = 'Bearer $token';
       if (client.tokenId == null) client.setToken(auth(user, pass));
       client.addHeader('contaid', loja);
+      loginNotifier.notify(rsp);
       return token;
     });
   }

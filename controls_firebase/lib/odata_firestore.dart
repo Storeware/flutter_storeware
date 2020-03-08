@@ -8,8 +8,12 @@ class CloudV3 {
     client.prefix = '/v3';
   }
   set loja(x) {
-    client.prefix = '/v3/$x';
+    client.client.addHeader('contaid', x);
+    client.prefix = '/v3/';
   }
 
   factory CloudV3() => _singleton;
+  send(ODataQuery query) {
+    return client.send(query);
+  }
 }

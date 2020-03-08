@@ -27,6 +27,15 @@ extension DateTimeExtension on DateTime {
     if (lang.indexOf('pt') >= 0) lg = Language.PORTUGUESE;
     return TimeAgo.getTimeAgo(timeStamp, language: lg);
   }
+  
+  
+  toDate() {
+    return DateTime.parse(this.format('yyyy-mm-ddT00:00:00'));
+  }
+
+  toTime() {
+    return this - this.toDate();
+  }
 }
 
 /// credits: https://github.com/jogboms/time.dart

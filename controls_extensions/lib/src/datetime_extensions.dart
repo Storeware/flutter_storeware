@@ -28,10 +28,10 @@ extension DateTimeExtension on DateTime {
     return TimeAgo.getTimeAgo(timeStamp, language: lg);
   }
   
-  
   toDate() {
-    return DateTime.parse(this.format('yyyy-mm-ddT00:00:00'));
+    return DateTime.parse(this.format('yyyy-MM-dd'));
   }
+
 
   toTime() {
     return this - this.toDate();

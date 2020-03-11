@@ -16,12 +16,12 @@ ConfigModel configModel;
 /// na sequencia, usar configModel para acesso
 /// Auth: AL - Agosto/2019
 ///       * 23/09/2019 - alterado para ser abstract
-abstract class ConfigModel extends LocalStorageModel {
+class ConfigModel {
+  String storageName = 'configModel';
   ConfigModel() {
     assert(configModel == null, "Não pode utilizar ConfigModel direto");
     //print('create instance of ConfigModel');
     configModel = this;
-    this.storageName = 'config';
     restore();
   }
   static instance() => configModel;
@@ -29,6 +29,14 @@ abstract class ConfigModel extends LocalStorageModel {
     appBarElevation = m['appBarElevation'] ?? 0;
     lang = m['lang'] ?? 'pt_br';
     return this;
+  }
+
+  restore() {
+    fromMap(LocalStorage().getJson(storageName) ?? {});
+  }
+
+  save() {
+    LocalStorage().setJson(storageName, toJson());
   }
 
   toJson() {

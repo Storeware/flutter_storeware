@@ -33,6 +33,9 @@ dependencies:
 #  build_runner: ^1.4.0
 #  build_web_compilers: ^2.0.0
 #  pedantic: ^1.0.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
 
 #dependency_overrides:
 #  flutter_web:

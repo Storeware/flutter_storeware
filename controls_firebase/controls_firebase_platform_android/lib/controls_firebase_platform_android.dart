@@ -16,8 +16,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 export 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
-  FirebaseAppDriver();
+  FirebaseAppDriver() {
+    platform = FirebasePlatform.android;
+  }
   FirebaseApp app;
+  @override
   @override
   init(options) async {
     /* try { /// a configuração é feita no ambiente

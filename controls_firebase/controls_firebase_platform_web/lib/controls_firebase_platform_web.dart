@@ -6,7 +6,9 @@ import 'package:firebase_web/firebase.dart' as fb;
 export 'package:firebase_web/firebase.dart';
 
 abstract class FirebaseAppDriver extends FirebaseAppDriverInterface {
-  FirebaseAppDriver();
+  FirebaseAppDriver() {
+    platform = FirebasePlatform.webbrowser;
+  }
   static fb.App app;
   @override
   init(options) {

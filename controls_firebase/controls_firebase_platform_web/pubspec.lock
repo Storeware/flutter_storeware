@@ -48,10 +48,10 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: "0686acda15b0f706134ae39aeb9d5c6b3fc8bda8"
+      resolved-ref: "7a2cfaeaf44d05f4219900e0698947f4182a05c7"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "0.0.1"
+    version: "0.0.2"
   convert:
     dependency: transitive
     description:
@@ -227,7 +227,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.14"
+    version: "0.2.15"
   typed_data:
     dependency: transitive
     description:
@@ -241,7 +241,7 @@ packages:
       name: universal_html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.15"
+    version: "1.1.18"
   universal_io:
     dependency: transitive
     description:

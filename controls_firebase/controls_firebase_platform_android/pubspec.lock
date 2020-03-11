@@ -48,10 +48,10 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: "0686acda15b0f706134ae39aeb9d5c6b3fc8bda8"
+      resolved-ref: "7a2cfaeaf44d05f4219900e0698947f4182a05c7"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "0.0.1"
+    version: "0.0.2"
   convert:
     dependency: transitive
     description:
@@ -79,14 +79,14 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.4"
+    version: "0.15.5+2"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.5"
+    version: "1.1.7"
   firebase_auth_web:
     dependency: transitive
     description:
@@ -100,14 +100,14 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.4"
+    version: "0.4.4+2"
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.4"
   firebase_core_web:
     dependency: transitive
     description:
@@ -121,7 +121,7 @@ packages:
       name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.1"
+    version: "3.1.3"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -220,7 +220,21 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.1"
+    version: "1.6.5"
+  path_provider_macos:
+    dependency: transitive
+    description:
+      name: path_provider_macos
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
+  path_provider_platform_interface:
+    dependency: transitive
+    description:
+      name: path_provider_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   pedantic:
     dependency: transitive
     description:
@@ -242,6 +256,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.1"
+  plugin_platform_interface:
+    dependency: transitive
+    description:
+      name: plugin_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   quiver:
     dependency: transitive
     description:
@@ -267,7 +288,7 @@ packages:
       name: sqflite
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.1"
+    version: "1.2.2+1"
   stack_trace:
     dependency: transitive
     description:
@@ -309,7 +330,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.14"
+    version: "0.2.15"
   typed_data:
     dependency: transitive
     description:

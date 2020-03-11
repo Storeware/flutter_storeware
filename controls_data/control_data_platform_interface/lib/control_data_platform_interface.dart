@@ -1,5 +1,7 @@
 library control_data_platform_interface;
 
+import 'dart:convert';
+
 abstract class LocalStorageInterface {
   init();
   setKey(String key, String value);
@@ -17,4 +19,14 @@ abstract class LocalStorageInterface {
 
   int getInt(String key) => int.tryParse(getKey(key));
   setInt(key, value) => setKey(key, value.toString());
+
+  Map<String, dynamic> getJson(key) {
+    String v = getKey(key);
+    if (v == null) return null;
+    return jsonDecode(v);
+  }
+
+  setJson(key, Map<String, dynamic> value) {
+    return setKey(key, jsonEncode(value));
+  }
 }

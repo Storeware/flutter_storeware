@@ -1,11 +1,11 @@
-
 //import 'dart:io';
 
 //import "package:universal_html/html.dart" as http;
-import 'package:http/http.dart' as http;
+//import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 
 String tokenId;
 
@@ -99,8 +99,8 @@ class RestClient {
     return this;
   }
 
-  Uri encodeUrl() {
-    return Uri.parse(formatUrl());
+  String encodeUrl() {
+    return formatUrl();
   }
 
   formatUrl() {
@@ -128,67 +128,66 @@ class RestClient {
   }
 
   int statusCode = 0;
-  _decodeResp(http.Response resp) {
+  _decodeResp(Response resp) {
     statusCode = resp.statusCode;
-    if (resp.body != null) {
-      if (resp.headers.containsValue('application/json')) response = resp.body;
+    if (resp.data != null) {
+      jsonResponse = resp.data;
     }
   }
 
   _setHeader() {
-    addHeader('Content-Type', contentType);
+    addHeader('content-type', contentType);
     addHeader('Access-Control-Allow-Origin', accessControlAllowOrigin);
     //print(headers);
   }
 
-  Future<String> openUrl(Uri url, {String method, body}) async {
+  Future<String> openUrl(String url, {String method, body}) async {
     _setHeader();
-    http.Response resp;
+    Response resp;
     print('OpenUrl $method:$url');
-    if (method == 'GET') resp = await http.get(url, headers: headers);
-    if (method == 'POST')
-      resp = await http.post(url, body: body, headers: headers);
-    if (method == 'PUT')
-      resp = await http.put(url, body: body, headers: headers);
-    if (method == 'PATCH')
-      resp = await http.patch(url, body: body, headers: headers);
-    if (method == 'DELETE') resp = await http.delete(url, headers: headers);
+    Dio dio = Dio();
+    if (method == 'GET') resp = await dio.get(url);
+    if (method == 'POST') resp = await dio.post(url, data: body);
+    if (method == 'PUT') resp = await dio.put(url, data: body);
+    if (method == 'PATCH') resp = await dio.patch(url, data: body);
+    if (method == 'DELETE') resp = await dio.delete(url);
     _decodeResp(resp);
     if (statusCode == 200) {
-      notify.send(resp.body);
-      return resp.body;
+      var rsp = jsonEncode(resp.data);
+      notify.send(rsp);
+      return rsp;
     } else {
-      return throw (resp.body);
+      return throw (resp.data);
     }
   }
 
   Future<String> send(String urlService, {method = 'GET', body}) async {
     this.service = urlService;
-    Uri url = encodeUrl();
+    var url = encodeUrl();
     return openUrl(url, method: method, body: body);
   }
 
   Future<String> post(String urlService, {body}) async {
     this.service = urlService;
-    Uri url = encodeUrl();
+    var url = encodeUrl();
     return openUrl(url, method: 'POST', body: body);
   }
 
   Future<String> put(String urlService, {body}) async {
     this.service = urlService;
-    Uri url = encodeUrl();
+    var url = encodeUrl();
     return openUrl(url, method: 'PUT', body: body);
   }
 
   Future<String> delete(String urlService, {body}) async {
     this.service = urlService;
-    Uri url = encodeUrl();
+    var url = encodeUrl();
     return openUrl(url, method: 'DELETE', body: body);
   }
 
   Future<String> patch(String urlService, {body}) async {
     this.service = urlService;
-    Uri url = encodeUrl();
+    var url = encodeUrl();
     return openUrl(url, method: 'PATCH', body: body);
   }
 }

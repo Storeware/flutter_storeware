@@ -155,29 +155,28 @@ class NoticeTile extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Container(
-      decoration: BoxDecoration(color: color ?? theme.backgroundColor),
-      child: ListTile(
-        leading: leading,
-        trailing: trailing,
-        onTap: onTap,
-        dense: true,
-        selected: selected,
-
-        title: Text(title ?? '',
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: fontColor ?? theme.scaffoldBackgroundColor,
-            )),
-        subtitle: Column(children:[Text(subtitle ?? '',
-            style: TextStyle(
-              color: fontColor ?? theme.scaffoldBackgroundColor,
-              fontSize: fontSize * 0.7,
-            )),
-            if (child!=null) child,
-            ]
-      ),
-    );
+        decoration: BoxDecoration(color: color ?? theme.backgroundColor),
+        child: ListTile(
+          leading: leading,
+          trailing: trailing,
+          onTap: onTap,
+          dense: true,
+          selected: selected,
+          title: Text(title ?? '',
+              style: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: fontColor ?? theme.scaffoldBackgroundColor,
+              )),
+          subtitle: Column(children: [
+            Text(subtitle ?? '',
+                style: TextStyle(
+                  color: fontColor ?? theme.scaffoldBackgroundColor,
+                  fontSize: fontSize * 0.7,
+                )),
+            if (child != null) child,
+          ]),
+        ));
   }
 }
 

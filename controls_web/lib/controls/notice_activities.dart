@@ -135,7 +135,7 @@ class NoticeTile extends StatelessWidget {
   final Widget trailing;
   final Function onTap;
   final bool selected;
-  final Widget child;
+  final Widget body;
 
   NoticeTile(
       {this.title,
@@ -147,7 +147,7 @@ class NoticeTile extends StatelessWidget {
       this.leading,
       this.trailing,
       this.selected = false,
-      this.child,
+      this.body,
       this.onTap})
       : super(key: key);
 
@@ -162,20 +162,22 @@ class NoticeTile extends StatelessWidget {
           onTap: onTap,
           dense: true,
           selected: selected,
-          title: Text(title ?? '',
+          title: Column(
+            children: <Widget>[
+              Text(title ?? '',
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: fontColor ?? theme.scaffoldBackgroundColor,
+                  )),
+              if (body != null) body,
+            ],
+          ),
+          subtitle: Text(subtitle ?? '',
               style: TextStyle(
-                fontSize: fontSize,
-                fontWeight: FontWeight.bold,
                 color: fontColor ?? theme.scaffoldBackgroundColor,
+                fontSize: fontSize * 0.7,
               )),
-          subtitle: Column(children: [
-            Text(subtitle ?? '',
-                style: TextStyle(
-                  color: fontColor ?? theme.scaffoldBackgroundColor,
-                  fontSize: fontSize * 0.7,
-                )),
-            if (child != null) child,
-          ]),
         ));
   }
 }

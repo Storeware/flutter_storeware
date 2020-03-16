@@ -28,10 +28,12 @@ class NoticeTag extends StatelessWidget {
   final double height;
   final double radius;
   final TextStyle style;
+  final Widget content;
   const NoticeTag({
     Key key,
     this.icon,
     this.text,
+    this.content,
     this.tagColor,
     this.onPressed,
     this.width,
@@ -75,6 +77,7 @@ class NoticeTag extends StatelessWidget {
                               fontSize: 16, fontWeight: FontWeight.w500))),
             ),
           ),
+          if (content != null) content,
         ],
       ),
     );
@@ -132,6 +135,7 @@ class NoticeTile extends StatelessWidget {
   final Widget trailing;
   final Function onTap;
   final bool selected;
+  final Widget child;
 
   NoticeTile(
       {this.title,
@@ -143,6 +147,7 @@ class NoticeTile extends StatelessWidget {
       this.leading,
       this.trailing,
       this.selected = false,
+      this.child,
       this.onTap})
       : super(key: key);
 
@@ -157,17 +162,20 @@ class NoticeTile extends StatelessWidget {
         onTap: onTap,
         dense: true,
         selected: selected,
+
         title: Text(title ?? '',
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
               color: fontColor ?? theme.scaffoldBackgroundColor,
             )),
-        subtitle: Text(subtitle ?? '',
+        subtitle: Column(children:[Text(subtitle ?? '',
             style: TextStyle(
               color: fontColor ?? theme.scaffoldBackgroundColor,
               fontSize: fontSize * 0.7,
             )),
+            if (child!=null) child,
+            ]
       ),
     );
   }

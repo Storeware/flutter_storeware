@@ -129,9 +129,15 @@ class _SliverContentsState extends State<SliverContents> {
   }
 }
 
-createBoxDecoration({radius = 10.0, color = Colors.white}) => BoxDecoration(
+createBoxDecoration(
+        {radius = 10.0,
+        color = Colors.white,
+        borderColor: Colors.grey,
+        borderWidth = 0}) =>
+    BoxDecoration(
         color: color,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
+        border: Border.all(color: borderColor, width: borderWidth),
         boxShadow: [
           BoxShadow(
             color: Color(0xFF656565).withOpacity(0.15),
@@ -161,6 +167,7 @@ class ApplienceTile extends StatelessWidget {
   final double dividerHeight;
   final Function onPressed;
   final padding;
+  final borderWidth;
   final Widget chart;
   final textAlign;
   const ApplienceTile(
@@ -178,6 +185,7 @@ class ApplienceTile extends StatelessWidget {
       this.valueStyle,
       this.valueFontSize = 48,
       this.image,
+      this.borderWidth = 0,
       this.body,
       this.chart,
       this.appBar,
@@ -260,7 +268,7 @@ class ApplienceTile extends StatelessWidget {
 
     return Container(
       padding: padding,
-      decoration: createBoxDecoration(color: color),
+      decoration: createBoxDecoration(color: color, borderWidth: borderWidth),
       height: height,
       width: width,
       child: InkWell(

@@ -21,6 +21,9 @@ class _MainViewState extends State<MainView> {
           SizedBox(
             height: 70,
           ),
+          NoticeTile(
+            title: 'Olá Galera baljqçwelrkjçerk;s,fm erkj çqlwekrj oweiruç nm ',
+          ),
           Container(
               child: Center(child: Image.network(Constantes.imagemEntrar))),
           SizedBox(

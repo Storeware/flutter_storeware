@@ -118,67 +118,165 @@ class NoticeHeader extends StatelessWidget {
     return NoticeTile(
       title: title,
       color: color,
-      fontSize: fontSize,
-      subtitle: subtitle,
-      fontColor: fontColor,
+      //fontSize: fontSize,
+      //subtitle: subtitle,
+      //fontColor: fontColor,
     );
   }
 }
 
 class NoticeTile extends StatelessWidget {
-  final Color color;
+  final Widget image;
   final String title;
-  final double fontSize;
-  final String subtitle;
-  final Color fontColor;
-  final Widget leading;
-  final Widget trailing;
-  final Function onTap;
-  final bool selected;
+  final TextStyle titleStyle;
   final Widget body;
-
-  NoticeTile(
-      {this.title,
-      Key key,
-      this.fontSize = 18,
-      this.subtitle,
-      this.fontColor,
+  final double elevation;
+  final String value;
+  final TextStyle valueStyle;
+  final Color color;
+  final double titleFontSize;
+  final double valueFontSize;
+  final double height;
+  final double width;
+  final double top;
+  final double left;
+  final Widget appBar;
+  final Widget bottomBar;
+  final Widget topBar;
+  final double dividerHeight;
+  final Function onPressed;
+  final padding;
+  final Widget chart;
+  final textAlign;
+  const NoticeTile(
+      {Key key,
+      this.padding,
       this.color,
-      this.leading,
-      this.trailing,
-      this.selected = false,
+      this.top = 10,
+      this.left = 10,
+      this.title,
+      this.textAlign = TextAlign.center,
+      this.onPressed,
+      this.titleStyle,
+      this.titleFontSize = 16,
+      this.value,
+      this.valueStyle,
+      this.valueFontSize = 48,
+      this.image,
       this.body,
-      this.onTap})
+      this.chart,
+      this.appBar,
+      this.topBar,
+      this.bottomBar,
+      this.elevation = 0.0,
+      this.height,
+      this.dividerHeight = 0,
+      this.width})
       : super(key: key);
+
+  static status(
+      {padding,
+      Widget image,
+      String value,
+      String title,
+      Color color,
+      double width}) {
+    return NoticeTile(
+      padding: padding ?? EdgeInsets.only(right: 5),
+      value: value,
+      title: title,
+      color: color,
+      image: image,
+      valueStyle: TextStyle(
+          color: Colors.white, fontSize: 34, fontWeight: FontWeight.bold),
+      titleStyle: TextStyle(color: Colors.white, fontSize: 18),
+      width: width,
+    );
+  }
+
+  static panel(
+      {padding,
+      Widget image,
+      String value,
+      String title,
+      Color color,
+      double width,
+      Function onPressed}) {
+    return NoticeTile(
+      value: value,
+      title: title,
+      color: color,
+      image: image,
+      onPressed: onPressed,
+      textAlign: TextAlign.end,
+      padding: padding ?? EdgeInsets.only(right: 5),
+      valueStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 28,
+          fontFamily: 'Raleway',
+          fontWeight: FontWeight.bold),
+      titleStyle: TextStyle(color: Colors.white, fontSize: 14),
+      width: width,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    return Container(
-        decoration: BoxDecoration(color: color ?? theme.backgroundColor),
-        child: ListTile(
-          leading: leading,
-          trailing: trailing,
-          onTap: onTap,
-          dense: true,
-          selected: selected,
-          title: Column(
-            children: <Widget>[
-              Text(title ?? '',
-                  style: TextStyle(
-                    fontSize: fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: fontColor ?? theme.scaffoldBackgroundColor,
-                  )),
-              if (body != null) body,
-            ],
-          ),
-          subtitle: Text(subtitle ?? '',
-              style: TextStyle(
-                color: fontColor ?? theme.scaffoldBackgroundColor,
-                fontSize: fontSize * 0.7,
-              )),
-        ));
+    List<Widget> items = [];
+    if (value != null)
+      items.add(Text(value,
+          textAlign: textAlign,
+          style: valueStyle ??
+              TextStyle(
+                  color: theme.primaryColor,
+                  fontSize: valueFontSize,
+                  fontWeight: FontWeight.w200)));
+    if (body != null) items.add(body);
+
+    if (title != null)
+      items.add(Text(title,
+          textAlign: textAlign,
+          style: titleStyle ??
+              TextStyle(
+                  fontFamily: 'Sans',
+                  fontSize: titleFontSize,
+                  fontWeight: FontWeight.w500)));
+
+    return NoticeBox(
+        child: Container(
+      padding: padding,
+      decoration: createBoxDecoration(color: color),
+      height: height,
+      width: width,
+      child: InkWell(
+          onTap: onPressed,
+          splashColor: Theme.of(context).primaryColor,
+          child: Container(
+              child: Stack(children: [
+            Positioned(
+              left: left,
+              top: top,
+              child: image ?? Container(),
+            ),
+            Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    appBar ?? Container(),
+                    if (topBar != null) topBar,
+                    if (dividerHeight > 0)
+                      Container(
+                        height: dividerHeight,
+                        color: Colors.black54,
+                        width: double.infinity,
+                      ),
+                    ...items,
+                    bottomBar ?? Container()
+                  ]),
+            )
+          ]))),
+    ));
   }
 }
 
@@ -438,3 +536,14 @@ class NoticeValue extends StatelessWidget {
     );
   }
 }
+
+createBoxDecoration({radius = 10.0, color = Colors.white}) => BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.all(Radius.circular(radius)),
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFF656565).withOpacity(0.15),
+            blurRadius: 4.0,
+            spreadRadius: 1.0,
+          )
+        ]);

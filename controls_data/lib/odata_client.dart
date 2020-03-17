@@ -192,7 +192,7 @@ class ODataClient {
     return o;
   }
 
-  Future<dynamic> send(ODataQuery query) async {
+  Future<dynamic> send(ODataQuery query, {String cacheControl}) async {
     try {
       String r = query.resource + '?';
       if (query.select != null) r += '\$select=${query.select}&';
@@ -203,7 +203,7 @@ class ODataClient {
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
       //print(r);
-      return client.send(r).then((res) {
+      return client.send(r, cacheControl: cacheControl).then((res) {
         //print('response $res');
         return client.decode(res);
       });
@@ -409,17 +409,20 @@ abstract class ODataModelClass<T extends DataItem> {
       String orderBy,
       String groupBy,
       int top,
-      int skip}) async {
+      int skip,
+      String cacheControl}) async {
     try {
       return API
-          .send(ODataQuery(
-              resource: resource ?? collectionName,
-              select: select ?? columns ?? '*',
-              filter: filter ?? '',
-              top: top ?? 0,
-              skip: skip ?? 0,
-              groupby: groupBy ?? '',
-              orderby: orderBy ?? ''))
+          .send(
+              ODataQuery(
+                  resource: resource ?? collectionName,
+                  select: select ?? columns ?? '*',
+                  filter: filter ?? '',
+                  top: top ?? 0,
+                  skip: skip ?? 0,
+                  groupby: groupBy ?? '',
+                  orderby: orderBy ?? ''),
+              cacheControl: cacheControl)
           .then((r) {
         /// show... voltou dados.
         return ODataResult(json: r);

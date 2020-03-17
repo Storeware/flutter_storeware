@@ -172,14 +172,19 @@ class RestClient {
     }
   }
 
+  String cacheControl;
   _setHeader() {
     if ((contentType ?? '') != '') addHeader('content-type', contentType);
+    if (cacheControl != null) addHeader('Cache-Control', cacheControl);
   }
 
   Future<String> openUrl(String url,
-      {String method, body, String contentType}) async {
+      {String method, body, String contentType, String cacheControl}) async {
     var resp = await openJson(url,
-        method: method, body: body, contentType: contentType);
+        method: method,
+        body: body,
+        contentType: contentType,
+        cacheControl: cacheControl);
     var rsp = jsonEncode(resp);
     notify.send(rsp);
     return rsp;
@@ -190,15 +195,20 @@ class RestClient {
   bool followRedirects = true;
 
   Future<dynamic> openJson(String url,
-      {String method = 'GET', body, String contentType}) async {
+      {String method = 'GET',
+      body,
+      String contentType,
+      String cacheControl}) async {
     _setHeader();
+    final _h = _headers;
+    if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     Response resp;
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
         receiveTimeout: receiveTimeout,
         baseUrl: this.baseUrl,
-        headers: _headers,
+        headers: _h,
         queryParameters: params,
         contentType: contentType ?? this.contentType // [e automatic no DIO??]
         );
@@ -285,10 +295,12 @@ class RestClient {
     }
   }
 
-  Future<String> send(String urlService, {method = 'GET', body}) async {
+  Future<String> send(String urlService,
+      {method = 'GET', body, String cacheControl}) async {
     this.service = urlService;
     var url = encodeUrl();
-    return openUrl(url, method: method, body: body).then((x) => x);
+    return openUrl(url, method: method, body: body, cacheControl: cacheControl)
+        .then((x) => x);
   }
 
   Future<String> post(String urlService, {body}) async {

@@ -96,19 +96,19 @@ class DynamicThemeState extends State<DynamicTheme> {
       (brightness == Brightness.light) ? Colors.black : Colors.white;
 
   onData(b) {
-    print('onData $b');
+    //print('onData $b');
     return (widget.onData != null) ? widget.onData(b) : changedTheme(b);
   }
 
   @override
   void initState() {
     super.initState();
-    print('initState $_brightness');
+    //print('initState $_brightness');
     _brightness = widget.initial ?? Brightness.light;
     _data = onData(_brightness);
 
     loadBrightness().then((bool dark) {
-      print('loadBrightness $dark');
+      //print('loadBrightness $dark');
       _brightness = dark ? Brightness.dark : Brightness.light;
       _data = onData(_brightness);
       if (mounted) {
@@ -125,14 +125,14 @@ class DynamicThemeState extends State<DynamicTheme> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print('didChangeDependencies');
+    //print('didChangeDependencies');
     _data = onData(_brightness);
   }
 
   @override
   void didUpdateWidget(DynamicTheme oldWidget) {
     super.didUpdateWidget(oldWidget);
-    print('didUpdateWidget $_brightness');
+    //print('didUpdateWidget $_brightness');
     _data = onData(_brightness);
   }
 
@@ -146,34 +146,34 @@ class DynamicThemeState extends State<DynamicTheme> {
 
   static Brightness getBrightness() {
     //return Brightness.light;
-    print('getBrightness');
+    //print('getBrightness');
     return LocalStorage().getBool(_sharedPreferencesKey)
         ? Brightness.dark
         : Brightness.light;
   }
 
   setBool(Brightness brightness) {
-    print('setBool $brightness');
+    //print('setBool $brightness');
     LocalStorage().setBool(
         _sharedPreferencesKey, brightness == Brightness.dark ? true : false);
   }
 
   void setThemeData(ThemeData data) {
-    print('setTheme $data');
+    //print('setTheme $data');
     setState(() {
       _data = data;
     });
   }
 
   Future<bool> loadBrightness() async {
-    print('loadBrightness');
+    //print('loadBrightness');
     return LocalStorage().getBool(_sharedPreferencesKey) ??
         widget.initial == Brightness.dark;
   }
 
   @override
   Widget build(BuildContext context) {
-    print('build $_brightness');
+    //print('build $_brightness');
     return widget.builder(context, _data);
   }
 }

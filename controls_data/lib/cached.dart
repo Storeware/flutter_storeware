@@ -16,8 +16,8 @@ class Cached {
 
   static Image image(BuildContext context, String url,
       {Image Function(String) builder}) {
-    var item; //= _imageCached[url];
-//    if (item != null) return item;
+    var item = _imageCached[url];
+    if (item != null) return item;
     item = builder(url);
     if (item != null) _imageCached[url] = item;
     return item;

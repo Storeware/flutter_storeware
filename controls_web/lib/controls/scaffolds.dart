@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class ScaffoldSplash extends StatefulWidget {
   final Widget body;
   final Widget image;
+  final Widget toptitle;
   final String title;
   final AppBar appBar;
   final Drawer drawer;
@@ -18,6 +19,7 @@ class ScaffoldSplash extends StatefulWidget {
     Key key,
     this.appBar,
     this.drawer,
+    this.toptitle,
     this.title,
     this.topMargin = 30,
     this.backgroundColor,
@@ -50,13 +52,15 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
           SizedBox(
             height: 40,
           ),
-          Padding(
-              padding: EdgeInsets.only(left: 15, right: 15),
-              child: Text(
-                widget.title ?? '',
-                softWrap: true,
-                style: TextStyle(fontSize: 18),
-              )),
+          if (widget.toptitle != null) {widget.toptitle},
+          if (widget.title != null)
+            Padding(
+                padding: EdgeInsets.only(left: 15, right: 15),
+                child: Text(
+                  widget.title ?? '',
+                  softWrap: true,
+                  style: TextStyle(fontSize: 18),
+                )),
           SizedBox(
             height: 30,
           ),

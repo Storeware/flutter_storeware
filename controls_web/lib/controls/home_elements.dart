@@ -130,10 +130,10 @@ class _SliverContentsState extends State<SliverContents> {
 }
 
 createBoxDecoration(
-        {radius = 10.0,
+        {double radius = 10.0,
         color = Colors.white,
         borderColor: Colors.grey,
-        borderWidth = 0}) =>
+        double borderWidth = 0.0}) =>
     BoxDecoration(
         color: color,
         borderRadius: BorderRadius.all(Radius.circular(radius)),
@@ -166,10 +166,10 @@ class ApplienceTile extends StatelessWidget {
   final Widget topBar;
   final double dividerHeight;
   final Function onPressed;
-  final padding;
-  final borderWidth;
+  final EdgeInsets padding;
+  final double borderWidth;
   final Widget chart;
-  final textAlign;
+  final TextAlign textAlign;
   const ApplienceTile(
       {Key key,
       this.padding,
@@ -185,7 +185,7 @@ class ApplienceTile extends StatelessWidget {
       this.valueStyle,
       this.valueFontSize = 48,
       this.image,
-      this.borderWidth = 0,
+      this.borderWidth = 0.0,
       this.body,
       this.chart,
       this.appBar,

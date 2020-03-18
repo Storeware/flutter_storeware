@@ -49,11 +49,11 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
             height: widget.topMargin,
           ),
           Container(child: Center(child: widget.image)),
-          SizedBox(
-            height: 40,
-          ),
-          if (widget.toptitle != null) {widget.toptitle},
-          if (widget.title != null)
+          if (widget.toptitle != null) widget.toptitle,
+          if (widget.title != null) ...[
+            SizedBox(
+              height: 40,
+            ),
             Padding(
                 padding: EdgeInsets.only(left: 15, right: 15),
                 child: Text(
@@ -61,9 +61,10 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
                   softWrap: true,
                   style: TextStyle(fontSize: 18),
                 )),
-          SizedBox(
-            height: 30,
-          ),
+            SizedBox(
+              height: 30,
+            ),
+          ],
           if (widget.body != null) widget.body,
           if (widget.onPressed != null)
             RoundedButton(

@@ -57,7 +57,8 @@ abstract class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     //print('$path:$rawPath');
 
     fb.UploadMetadata md;
-    if (metadata != null) md = fb.UploadMetadata(customMetadata: metadata);
+    md = fb.UploadMetadata(
+        cacheControl: "Public, max-age=12345", customMetadata: metadata ?? {});
 
     fb.UploadTask uploadTask = firebaseStorageRef.put(rawPath, md);
     fb.UploadTaskSnapshot taskSnapshot = uploadTask.snapshot;

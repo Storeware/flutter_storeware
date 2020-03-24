@@ -1,4 +1,53 @@
+import 'package:controls_web/controls/rounded_button.dart';
 import 'package:flutter/material.dart';
+
+class ActivityInfo extends StatelessWidget {
+  final Widget title;
+  final String buttonName;
+  final onPressed;
+  final double width;
+  final double height;
+  final String text;
+  final Color color;
+  final Widget image;
+  const ActivityInfo(
+      {Key key,
+      this.title,
+      this.buttonName = 'OK',
+      this.onPressed,
+      this.width = 400,
+      this.height = 300,
+      this.text,
+      this.color,
+      this.image})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color ?? Colors.grey.withAlpha(20),
+      width: width,
+      height: height,
+      child: Column(
+        children: [
+          Expanded(
+              child: Stack(
+            children: <Widget>[
+              if (image != null) Positioned(left: 12, top: 12, child: image),
+              Center(
+                  child: title ?? Text(text, style: TextStyle(fontSize: 18))),
+            ],
+          )),
+          SizedBox(height: 5),
+          ActivityButton(
+            //icon: Icons.check,
+            title: buttonName,
+            onPressed: onPressed,
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 class ActivityPanel extends StatelessWidget {
   final Widget child;
@@ -212,33 +261,25 @@ class ActivityButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onPressed,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            if (image != null) image,
-            if (icon != null)
-              Icon(
-                icon,
-                size: 32,
-                color: iconColor ?? Colors.black87,
-              ),
-            SizedBox(
-              height: 10,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: <Widget>[
+          if (image != null) image,
+          if (icon != null)
+            Icon(
+              icon,
+              size: 32,
+              color: iconColor ?? Colors.black87,
             ),
-            Text(
-              title ?? '',
-              style: textStyle ??
-                  TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w300,
-                    color: fontColor ?? Colors.black54,
-                  ),
-            ),
-          ],
-        ),
+          SizedBox(
+            height: 10,
+          ),
+          RoundedButton(
+            buttonName: title,
+            onTap: onPressed,
+          )
+        ],
       ),
     );
   }
@@ -541,7 +582,7 @@ class ActivityBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var w = width * (value / 100);
-    print('$width $w');
+    //('$width $w');
     return Container(
       padding: EdgeInsets.only(left: 2, right: 2, bottom: 2, top: 2),
       width: width,
@@ -604,7 +645,7 @@ class ActivityTextSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print(MediaQuery.of(context).size);
+    //echo(MediaQuery.of(context).size);
     var t = this.text;
     if (this.builder != null) t = builder(context, text);
     return ActivityPanel(
@@ -655,6 +696,7 @@ class ActivityImage extends StatelessWidget {
   final Widget image;
   final Widget child;
   final Widget title;
+
   final Widget body;
   final Color color;
   final Color titleColor;

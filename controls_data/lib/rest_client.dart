@@ -248,8 +248,8 @@ class RestClient {
     }
   }
 
-  Stream openJsonAsync(String url,
-      {String method = 'GET', Map<String, dynamic> body}) {
+  openJsonAsync(String url,
+      {String method = 'GET', Map<String, dynamic> body, cacheControl}) async {
     _setHeader();
     //Response resp;
     //print(_headers);
@@ -279,7 +279,7 @@ class RestClient {
       else
         throw "Method inválido";
 
-      ref.then((resp) {
+      return ref.then((resp) {
         _decodeResp(resp);
 
         if (statusCode == 200) {
@@ -288,7 +288,7 @@ class RestClient {
           return throw (resp.data);
         }
       });
-      return ref.asStream();
+      
     } catch (e) {
       print('Error: $e');
       throw e.message;

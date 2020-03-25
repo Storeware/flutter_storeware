@@ -202,10 +202,12 @@ class ODataClient {
       if (query.groupby != null) r += '\$groupby=${query.groupby}&';
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
-      //print(r);
-      return client.send(r, cacheControl: cacheControl).then((res) {
+      client.service = r;
+      return client
+          .openJsonAsync(client.encodeUrl(), cacheControl: cacheControl)
+          .then((res) {
         //print('response $res');
-        return client.decode(res);
+        return res;
       });
     } catch (e) {
       ErrorNotify.send('$e');

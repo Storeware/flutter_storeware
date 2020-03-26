@@ -243,7 +243,7 @@ class RestClient {
         error = e.response.data['error'];
       error ??= e.message ?? '$e';
       notifyError.send(error);
-      print('Error: $error}');
+      print('Error: $error ${e.message} ');
       throw error;
     }
   }
@@ -253,14 +253,19 @@ class RestClient {
     _setHeader();
     //Response resp;
     //print(_headers);
+    final _h = _headers;
+    if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     BaseOptions bo = BaseOptions(
-        connectTimeout: connectionTimeout,
-        followRedirects: followRedirects,
-        receiveTimeout: receiveTimeout,
-        baseUrl: this.baseUrl,
-        headers: _headers,
-        queryParameters: params,
-        contentType: this.contentType);
+      connectTimeout: connectionTimeout,
+      followRedirects: followRedirects,
+      receiveTimeout: receiveTimeout,
+      baseUrl: this.baseUrl,
+      headers: _h,
+      //encoding: Encoding.getByName('utf-8'),
+      queryParameters: params,
+      contentType: Headers.formUrlEncodedContentType,
+      //contentType: this.contentType
+    );
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
     //print('URL: ${this.baseUrl} $uri, $contentType ');
@@ -288,7 +293,6 @@ class RestClient {
           return throw (resp.data);
         }
       });
-      
     } catch (e) {
       print('Error: $e');
       throw e.message;

@@ -426,7 +426,7 @@ abstract class ODataModelClass<T extends DataItem> {
                   orderby: orderBy ?? ''),
               cacheControl: cacheControl)
           .then((r) {
-        /// show... voltou dados.
+        //print(r);
         return ODataResult(json: r);
       });
     } catch (e) {

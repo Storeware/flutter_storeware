@@ -210,6 +210,7 @@ class RoundedButton extends StatelessWidget {
                         children: [this.child, if (showBadge) createBadge()]))
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       (icon != null
                           ? (iconPosition == RoundedButtonIconPosition.left
@@ -219,6 +220,7 @@ class RoundedButton extends StatelessWidget {
                       Expanded(
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
                               children: [
                             if (barColor != null)
                               Container(width: barWidth, color: barColor),
@@ -251,6 +253,7 @@ class RoundedButton extends StatelessWidget {
             child: (this.child != null
                 ? Stack(children: [Center(child: this.child), createBadge()])
                 : Row(
+                    mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       (icon != null ? Icon(icon) : Text('')),
@@ -264,7 +267,7 @@ class RoundedButton extends StatelessWidget {
 
   Widget _drawVertical() {
     return FlatButton(
-      child: Column(children: [
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(
           buttonName.toUpperCase(),
           textAlign: TextAlign.center,
@@ -281,6 +284,7 @@ class RoundedButton extends StatelessWidget {
         height: height,
         width: width,
         child: Row(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             (icon != null) ? Icon(icon) : Container(),
@@ -304,7 +308,7 @@ class RoundedButton extends StatelessWidget {
       onPressed: onTap,
       textColor: textColor,
       color: color,
-      child: Row(children: [
+      child: Row(mainAxisSize: MainAxisSize.min, children: [
         Text(
           buttonName,
           style: textStyle,

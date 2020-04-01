@@ -1,9 +1,8 @@
 library controls_firebase_platform_web;
 
+import 'package:cloud_firestore/cloud_firestore.dart' as fs;
 import 'package:controls_firebase_platform_interface/controls_firebase_platform_interface.dart';
 import 'package:firebase_web/firebase.dart' as fb;
-
-export 'package:firebase_web/firebase.dart';
 
 abstract class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
@@ -28,7 +27,7 @@ abstract class FirestoreDriver extends FirestoreDriverInterface {
   FirestoreDriver();
   @override
   collection(String path) {
-    return fb.firestore().collection(path);
+    return fs.Firestore.instance.collection(path);
   }
 }
 

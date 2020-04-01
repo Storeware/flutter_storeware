@@ -11,7 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   universal_html:
-  firebase_web:
+  cloud_firestore: ^0.13.4+2
+  firebase_web: ^5.0.9
 
   controls_firebase_platform_interface:
     git:

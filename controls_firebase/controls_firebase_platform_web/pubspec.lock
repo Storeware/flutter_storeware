@@ -101,8 +101,29 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.2.1"
-  firebase_core:
+  firebase_auth:
+    dependency: "direct main"
+    description:
+      name: firebase_auth
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.5+3"
+  firebase_auth_platform_interface:
     dependency: transitive
+    description:
+      name: firebase_auth_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.7"
+  firebase_auth_web:
+    dependency: transitive
+    description:
+      name: firebase_auth_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
+  firebase_core:
+    dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
@@ -122,13 +143,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.1+2"
-  firebase_web:
+  firebase_storage:
     dependency: "direct main"
     description:
-      name: firebase_web
+      name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.9"
+    version: "3.1.5"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -144,13 +165,27 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  googleapis_auth:
-    dependency: transitive
+  google_sign_in:
+    dependency: "direct main"
     description:
-      name: googleapis_auth
+      name: google_sign_in
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.11+1"
+    version: "4.3.0"
+  google_sign_in_platform_interface:
+    dependency: transitive
+    description:
+      name: google_sign_in_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.0"
+  google_sign_in_web:
+    dependency: transitive
+    description:
+      name: google_sign_in_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.4"
   html:
     dependency: transitive
     description:
@@ -235,13 +270,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.3"
-  service_worker:
-    dependency: transitive
-    description:
-      name: service_worker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.4"
   sky_engine:
     dependency: transitive
     description: flutter

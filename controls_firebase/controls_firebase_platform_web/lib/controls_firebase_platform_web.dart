@@ -32,7 +32,7 @@ abstract class FirebaseAppDriver extends FirebaseAppDriverInterface {
 abstract class FirestoreDriver extends FirestoreDriverInterface {
   FirestoreDriver();
   @override
-  collection(String path) {
+  cf.CollectionReference collection(String path) {
     return cf.Firestore.instance.collection(path);
   }
 }
@@ -114,6 +114,6 @@ abstract class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
 
   @override
   signOutGoogle() {
-    _googleSignIn.signOut();
+    return _googleSignIn.signOut();
   }
 }

@@ -49,7 +49,7 @@ class PageTabView extends StatefulWidget {
     this.actions,
     @required this.choices,
     this.initialIndex = 0,
-    this.tabColor,
+    this.tabColor = Colors.white,
     this.indicatorColor = Colors.blue,
     this.floatingActionButton,
     this.bottomNavigationBar,
@@ -159,10 +159,11 @@ class _TabBarViewState extends State<PageTabView>
                                                         constraints:
                                                             BoxConstraints(
                                                                 maxWidth: 2000),
-                                                        color:
-                                                            (snapshot.data == i)
-                                                                ? Colors.blue
-                                                                : Colors.white,
+                                                        color: (snapshot.data ==
+                                                                i)
+                                                            ? widget.tabColor
+                                                            : widget
+                                                                .indicatorColor,
                                                         //child:
                                                       );
                                                     })

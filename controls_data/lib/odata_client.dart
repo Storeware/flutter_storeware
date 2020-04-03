@@ -192,6 +192,21 @@ class ODataClient {
     return o;
   }
 
+  error(callback) {
+    errorNotifier.stream.listen(callback);
+    return this;
+  }
+
+  log(callback) {
+    client.notifyLog.stream.listen(callback);
+    return this;
+  }
+
+  data(callback) {
+    client.notify.stream.listen(callback);
+    return this;
+  }
+
   Future<dynamic> send(ODataQuery query, {String cacheControl}) async {
     try {
       String r = query.resource + '?';
@@ -203,6 +218,7 @@ class ODataClient {
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
       client.service = r;
+      client.notifyLog.send(r);
       return client
           .openJsonAsync(client.encodeUrl(), cacheControl: cacheControl)
           .then((res) {

@@ -14,6 +14,10 @@ class RestClientBloC<T> {
   void send(T reply) {
     sink.add(reply);
   }
+
+  void notify(T reply) {
+    sink.add(reply);
+  }
 }
 
 class RestClientProvider<T> extends StatelessWidget {
@@ -35,6 +39,7 @@ class RestClientProvider<T> extends StatelessWidget {
 
 class RestClient {
   RestClientBloC<String> notify = RestClientBloC<String>();
+  RestClientBloC<String> notifyLog = RestClientBloC<String>();
   RestClientBloC<String> notifyError = RestClientBloC<String>();
   String service = '/';
   String accessControlAllowOrigin = '*';
@@ -261,11 +266,14 @@ class RestClient {
       receiveTimeout: receiveTimeout,
       baseUrl: this.baseUrl,
       headers: _h,
+
+      /// The request Content-Type. The default value is "application/json; charset=utf-8".
       //encoding: Encoding.getByName('utf-8'),
       queryParameters: params,
-      contentType: Headers.formUrlEncodedContentType,
+      contentType: contentType, //formUrlEncodedContentType,
       //contentType: this.contentType
     );
+    //print([_h, body]);
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
     //print('URL: ${this.baseUrl} $uri, $contentType ');

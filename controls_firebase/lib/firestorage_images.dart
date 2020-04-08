@@ -1,10 +1,15 @@
-//import 'dart:io';
-
 import 'package:controls_data/cached.dart';
+import 'package:controls_data/data_model.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_cached/flutter_cached.dart';
+import 'package:toast/toast.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
-import 'firebase_driver.dart';
+import 'controls_firebase_platform_web.dart';
+
+class FirebaseApp extends FirebaseAppDriver {
+  static final _singleton = FirebaseApp._create();
+  FirebaseApp._create();
+  factory FirebaseApp() => _singleton;
+}
 
 class FirestorageDownloadImage extends StatefulWidget {
   final String img;
@@ -33,7 +38,7 @@ class FirestorageDownloadImage extends StatefulWidget {
 
   static Future<String> getDownloadURL(src) async {
     return await Cached.value<Future<String>>(src, builder: (x) {
-      return FirebaseApp().storage().getDownloadURL(x);
+      return FirebaseApp().storage().getDownloadURL(src);
     });
   }
 
@@ -48,6 +53,7 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
   }
 
   String formatStoragePath(String path) {
+    if (path.startsWith(widget.clientId)) return path;
     if (!path.startsWith('/')) path = '/$path';
     return '${widget.clientId}$path';
   }
@@ -58,6 +64,16 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
     return _image.image;
   }
 
+  loadImagem(s) {
+    return Cached.image(context, '$s.${widget.alias}', builder: (url) {
+      return Image.network(
+        s,
+        fit: widget.fit ?? BoxFit.cover,
+        filterQuality: widget.filterQuality,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if ((widget.img ?? '') == '')
@@ -65,6 +81,10 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
         height: widget.height,
         width: widget.width,
       );
+    if (widget.img.startsWith('http')) {
+      return loadImagem(widget.img);
+    }
+
     return FutureBuilder<String>(
         future: _get(formatStoragePath(widget.img)),
         builder: (context, snapshot) {
@@ -73,14 +93,7 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
               child: Icon(Icons.picture_in_picture),
             );
           var s = snapshot.data.toString();
-
-          return Cached.image(context, '$s.${widget.alias}', builder: (url) {
-            return Image.network(
-              s,
-              fit: widget.fit ?? BoxFit.cover,
-              filterQuality: widget.filterQuality,
-            );
-          });
+          return loadImagem(s);
         });
   }
 }
@@ -89,11 +102,15 @@ class FirestorageUploadImage extends StatefulWidget {
   final double width;
   final double height;
   final String img;
+  final String maskTo;
+  final String buttonTitle;
+  final int maxBytes;
   final Function(String) onChange;
   //final String path;
   final String clientId;
   final BoxFit fit;
   final double elevation;
+  final Map<String, String> metadata;
   FirestorageUploadImage(
       {Key key,
       this.img,
@@ -103,7 +120,11 @@ class FirestorageUploadImage extends StatefulWidget {
       //@required this.path,
       @required this.clientId,
       this.fit,
-      this.elevation = 0})
+      this.metadata,
+      this.elevation = 0,
+      this.maskTo,
+      this.buttonTitle,
+      this.maxBytes = 30000})
       : super(key: key);
   @override
   _FirestorageUploadImageState createState() => _FirestorageUploadImageState();
@@ -115,13 +136,15 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
     img = src;
   }
 
+  html.FileReader fileReader = html.FileReader();
   @override
   Widget build(BuildContext context) {
     _load(widget.img);
+    bool isFirebase = (widget.img == '') || (!widget.img.startsWith('http'));
     return Center(
       child: Container(
           width: widget.width,
-          height: widget.height,
+          height: (widget.height != null) ? widget.height + 30 : null,
           child: Card(
             elevation: widget.elevation,
             child: Stack(children: [
@@ -130,23 +153,36 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
                 right: 10,
                 top: 10,
                 bottom: 40,
-                child: FirestorageDownloadImage(
-                  img: img,
-                  height: widget.height,
-                  fit: widget.fit,
-                  clientId: widget.clientId,
-                ),
+                child: isFirebase
+                    ? FirestorageDownloadImage(
+                        img: img,
+                        height: widget.height,
+                        fit: widget.fit,
+                        clientId: widget.clientId,
+                      )
+                    : Image.network(
+                        img,
+                        fit: widget.fit,
+                        height: widget.height,
+                      ),
               ),
               Positioned(
                 bottom: 0,
                 child: FlatButton(
-                  child: Text('Carregar'),
+                  child: Text(widget.buttonTitle ?? 'Procurar uma imagem'),
                   onPressed: () {
-                    ImageToUpload().load((f) {
+                    ImageToUpload().load((f) async {
                       if (f != null) {
-                        var src = formatStoragePath(f.name);
-                        urlDownload(f, (x) {});
-                        widget.onChange(src);
+                        var size = f.size;
+                        print(size);
+                        if (size > widget.maxBytes)
+                          ErrorNotify().notify(
+                              'Imagem com $size bytes (max: ${widget.maxBytes} bytes)');
+                        else {
+                          urlDownload(f, (x) {
+                            widget.onChange(x);
+                          }, maskTo: widget.maskTo);
+                        }
                       }
                     });
                   },
@@ -157,17 +193,33 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
     );
   }
 
-  Future<String> urlDownload(html.File file, callback) async {
+  Future<String> urlDownload(file, callback, {String maskTo}) async {
     String sFile = formatStoragePath(file.name);
+    if ((maskTo != null) && (maskTo.indexOf('.') < 0)) {
+      var lst = sFile.split('/');
+      sFile = maskTo + lst.last;
+    } else if (maskTo.indexOf('.') > 0) sFile = maskTo;
 
-    FirebaseApp().storage().uploadFileImage(sFile, file);
-    return FirebaseApp().storage().getDownloadURL(sFile).then((x) {
-      callback(x);
-      return x;
+    html.FileReader fileReader = html.FileReader();
+    fileReader.onLoad.listen((data) async {
+      try {
+        var rawFile = fileReader.result;
+        var bytes = await FirebaseApp()
+            .storage()
+            .uploadFileImage(sFile, rawFile, metadata: widget.metadata);
+        FirebaseApp().storage().getDownloadURL(sFile).then((f) {
+          callback(sFile);
+        });
+      } on FormatException catch (e) {
+        print('Error ${e.message}');
+      }
     });
+    fileReader.readAsArrayBuffer(file);
+    return sFile;
   }
 
-  String formatStoragePath(path) {
+  String formatStoragePath(String path) {
+    if (path.startsWith(widget.clientId)) return path;
     return '${widget.clientId}/$path';
   }
 
@@ -177,7 +229,7 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
 }
 
 class ImageToUpload {
-  load(callback) async {
+  load(Function(html.File) callback) async {
     html.InputElement element = html.querySelector("#upload_image");
     if (element != null) element.remove();
     element = html.document.createElement("input");
@@ -186,7 +238,7 @@ class ImageToUpload {
     element.accept = "image/x-png,image/gif,image/jpeg";
     element.name = "upload_image";
     element.addEventListener('change', (x) {
-      html.File file = element.files[0];
+      var file = element.files[0];
       callback(file);
     });
     html.querySelector("html").querySelector('body').append(element);

@@ -1,53 +1,102 @@
-library controls_firebase_platform_web;
+library controls_firebase_platform_android;
 
-import 'package:cloud_firestore/cloud_firestore.dart' as cf;
+import 'dart:async';
+import 'dart:io';
+
+import 'dart:typed_data';
+// ignore_for_file:
 import 'package:controls_firebase_platform_interface/controls_firebase_platform_interface.dart';
-import 'package:firebase_core/firebase_core.dart' as fc;
-import 'package:firebase_storage/firebase_storage.dart' as fs;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_web/firebase.dart' as api;
+import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+export 'package:firebase_auth/firebase_auth.dart';
 
-fc.FirebaseApp _app;
-String _gs;
-
-abstract class FirebaseAppDriver extends FirebaseAppDriverInterface {
+class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
-    platform = FirebasePlatform.webbrowser;
+    platform = FirebasePlatform.android;
   }
+  var app;
+  var options;
   @override
-  init(o) async {
-    _gs = 'gs://' + o['storageBucket'];
-    var options = fc.FirebaseOptions(
-      apiKey: o['apiKey'],
-      projectID: o['projectId'],
-      databaseURL: o['databaseURL'],
-      storageBucket: o['storageBucket'],
-      googleAppID: o["appId"],
-      gcmSenderID: o["messagingSenderId"],
-    );
-    _app = await fc.FirebaseApp.configure(name: 'DEFAULT', options: options);
+  init(options) async {
+    this.options = options;
+    try {
+      /// a configuração é feita no ambiente
+      app = api.initializeApp(
+        // name: "selfandpay",
+        messagingSenderId: options['858174338114'],
+        databaseURL: options['databaseURL'],
+        apiKey: options['apiKey'],
+        //googleAppID: options['appId'],
+        projectId: options['projectId'],
+        storageBucket: options['storageBucket'],
+      );
+      print('carregou firebase');
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  //var _storage;
+  @override
+  FirebaseStorageDriver storage() {
+    return FirebaseStorageDriver(this);
+  }
+
+  @override
+  FirebaseAuthDriver auth() {
+    return FirebaseAuthDriver();
+  }
+
+  @override
+  FirestoreDriver firestore() {
+    return FirestoreDriver();
   }
 }
 
-abstract class FirestoreDriver extends FirestoreDriverInterface {
+class FirestoreDriver extends FirestoreDriverInterface {
   FirestoreDriver();
   @override
-  cf.CollectionReference collection(String path) {
-    return cf.Firestore.instance.collection(path);
+  collection(String path) {
+    return api.firestore().collection(path);
   }
 }
 
-abstract class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
-  FirebaseStorageDriver();
-  final fs.FirebaseStorage storage =
-      fs.FirebaseStorage(app: _app, storageBucket: _gs);
+class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
+  FirebaseAppDriver app;
+  FirebaseStorageDriver(FirebaseAppDriver app) {
+    this.app = app;
+  }
+  @override
+  init() {}
+
+  buildPath(p) {
+    return p;
+  }
+
+  @override
+  Future<int> uploadFileImage(String path, rawPath, {metadata}) async {
+    String _fileName = buildPath(path);
+    api.StorageReference firebaseStorageRef = api.storage().ref(_fileName);
+    api.UploadMetadata md;
+    md = api.UploadMetadata(
+        cacheControl: "Public, max-age=12345", customMetadata: metadata ?? {});
+    api.UploadTask uploadTask = firebaseStorageRef.put(rawPath, md);
+    return uploadTask.future.then((resp) {
+      //firebaseStorageRef.updateMetadata(md);
+      api.UploadTaskSnapshot taskSnapshot = uploadTask.snapshot;
+      return taskSnapshot.bytesTransferred;
+    });
+  }
+
   @override
   Future<String> getDownloadURL(String path) async {
-    //print('ref: $path');
-    fs.StorageReference firebaseStorageRef = this.storage.ref().child(path);
+    String _fileName = buildPath(path);
+    api.StorageReference firebaseStorageRef = api.storage().ref(_fileName);
     try {
       return firebaseStorageRef.getDownloadURL().then((x) {
-        //print('Retorno: $x');
         return x.toString();
       });
     } catch (e) {
@@ -56,64 +105,106 @@ abstract class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     }
   }
 
-  @override
-  Future<int> uploadFileImage(String path, rawPath, {metadata}) async {
-    fs.StorageReference firebaseStorageRef = storage.ref().child(path);
-    //print('$path:$rawPath');
+  List<String> naoTem = [];
+  clear() {
+    naoTem.clear();
+  }
 
-    fs.StorageMetadata md = fs.StorageMetadata(
-        cacheControl: "Public, max-age=12345", customMetadata: metadata ?? {});
-    fs.StorageUploadTask uploadTask = firebaseStorageRef.putData(rawPath, md);
-    fs.StorageTaskSnapshot taskSnapshot = uploadTask.lastSnapshot;
-    return taskSnapshot.bytesTransferred;
+  Future<File> _getSingleFile(context, path) async {
+    var url;
+    if (naoTem.indexOf(path) < 0) {
+      try {
+        url = await getDownloadURL(path);
+        if (url == '')
+          naoTem.add(path);
+        else
+          naoTem.remove(path);
+      } catch (e) {
+        naoTem.add(path);
+      }
+    } else {
+      url = path;
+    }
+    return DefaultCacheManager().getSingleFile(url);
+  }
+
+  Widget download(BuildContext context,
+      {String path,
+      double width,
+      double height,
+      Widget Function(File) builder,
+      Function(Uint8List) onComplete}) {
+    if ((path ?? '') == '') return Container();
+    return FutureBuilder<File>(
+        future: _getSingleFile(context, path),
+        builder: (x, y) {
+          if ((!y.hasData))
+            return (builder != null) ? builder(null) : Container();
+          if (onComplete != null)
+            y.data.readAsBytes().then((x) {
+              onComplete(x);
+            });
+          return ClipRRect(
+            borderRadius: new BorderRadius.circular(50),
+            child: (builder != null)
+                ? builder(y.data)
+                : Image.file(y.data, width: width, height: height),
+          );
+        });
   }
 }
 
-abstract class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
+class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
+  FirebaseAuth get instance => FirebaseAuth.instance;
   FirebaseAuthDriver();
+  @override
+  signInWithEmail(email, senha) {
+    return instance.signInWithEmailAndPassword(email: email, password: senha);
+  }
+
+  @override
+  signInAnonymously() => instance.signInAnonymously();
+  @override
+  createLoginByEmail(email, senha) =>
+      instance.createUserWithEmailAndPassword(email: email, password: senha);
+  @override
+  logout() => instance.signOut();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-  @override
-  createLoginByEmail(email, senha) {
-    return _auth.createUserWithEmailAndPassword(email: email, password: senha);
-  }
-
-  UserInfo currentUser;
-  @override
-  isSignedIn() {
-    return currentUser != null;
-  }
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   @override
-  Future<FirebaseUser> getCurrentUser() async {
-    return _auth.currentUser();
+  Future<bool> isSignedIn() async {
+    return await googleSignIn.isSignedIn();
   }
 
+  FirebaseUser currentUser;
   @override
-  logout() {
-    return _auth.signOut();
-  }
+  Future<String> signInWithGoogle() async {
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
 
-  @override
-  Future<FirebaseUser> signInAnonymously() async {
-    return _auth.signInAnonymously().then((user) {
-      this.currentUser = user.user;
-      return user.user;
-    });
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+    final AuthResult authResult = await _auth.signInWithCredential(credential);
+    FirebaseUser user = authResult.user;
+    currentUser = await _auth.currentUser();
+    assert(user.uid == currentUser.uid);
+    return 'signInWithGoogle succeeded: $user';
   }
 
   @override
-  signInWithEmail(String email, String senha) {
-    return _auth.signInWithEmailAndPassword(email: email, password: senha);
+  FirebaseUser getCurrentUser() {
+    return currentUser;
   }
 
   @override
-  signInWithGoogle() {
-    return _googleSignIn.signIn();
-  }
+  void signOutGoogle() async {
+    await googleSignIn.signOut();
 
-  @override
-  signOutGoogle() {
-    return _googleSignIn.signOut();
+    print("User Sign Out");
   }
 }

@@ -3,13 +3,7 @@ import 'package:controls_data/data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 import 'package:universal_html/prefer_universal/html.dart' as html;
-import 'controls_firebase_platform_web.dart';
-
-class FirebaseApp extends FirebaseAppDriver {
-  static final _singleton = FirebaseApp._create();
-  FirebaseApp._create();
-  factory FirebaseApp() => _singleton;
-}
+import 'firebase_driver.dart';
 
 class FirestorageDownloadImage extends StatefulWidget {
   final String img;

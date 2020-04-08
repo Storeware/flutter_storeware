@@ -65,10 +65,7 @@ class FirestoreDriver extends FirestoreDriverInterface {
 }
 
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
-  FirebaseAppDriver app;
-  FirebaseStorageDriver(FirebaseAppDriver app) {
-    this.app = app;
-  }
+  FirebaseStorageDriver();
   @override
   init() {}
 

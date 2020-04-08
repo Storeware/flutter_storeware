@@ -168,7 +168,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
     Sidebar.canShowCompact = widget.canShowCompact;
     if (Sidebar().homeWidget == null) Sidebar().homeWidget = widget.body;
     return Scaffold(
-      appBar: widget.appBar ?? AppBar(title: Text('sidebar')),
+      appBar: widget.appBar, //?? AppBar(title: Text('sidebar')),
       drawer: widget.drawer,
       key: widget.scaffoldKey,
       backgroundColor: widget.backgroundColor,

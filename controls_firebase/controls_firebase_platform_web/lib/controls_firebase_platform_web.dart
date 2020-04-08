@@ -42,7 +42,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   //var _storage;
   @override
   FirebaseStorageDriver storage() {
-    return FirebaseStorageDriver(this);
+    return FirebaseStorageDriver();
   }
 
   @override
@@ -65,7 +65,6 @@ class FirestoreDriver extends FirestoreDriverInterface {
 }
 
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
-  FirebaseStorageDriver();
   @override
   init() {}
 

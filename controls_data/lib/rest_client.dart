@@ -217,9 +217,11 @@ class RestClient {
         queryParameters: params,
         contentType: contentType ?? this.contentType // [e automatic no DIO??]
         );
+
+    notifyLog.send('$method: ${this.baseUrl}$url - $_h $body');
+
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-    //print('$method: ${this.baseUrl}$uri, $bo ');
 
     try {
       if (method == 'GET') {
@@ -256,8 +258,6 @@ class RestClient {
   openJsonAsync(String url,
       {String method = 'GET', Map<String, dynamic> body, cacheControl}) async {
     _setHeader();
-    //Response resp;
-    //print(_headers);
     final _h = _headers;
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     BaseOptions bo = BaseOptions(
@@ -273,7 +273,8 @@ class RestClient {
       contentType: contentType, //formUrlEncodedContentType,
       //contentType: this.contentType
     );
-    //print([_h, body]);
+    notifyLog.send('$method: ${this.baseUrl}$url - $_h $contentType');
+
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
     //print('URL: ${this.baseUrl} $uri, $contentType ');
@@ -296,6 +297,7 @@ class RestClient {
         _decodeResp(resp);
 
         if (statusCode == 200) {
+          notifyLog.notify(resp.data.toString());
           return resp.data;
         } else {
           return throw (resp.data);

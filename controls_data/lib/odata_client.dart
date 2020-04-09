@@ -295,10 +295,9 @@ class ODataClient {
 
   Future<Object> open(String command) async {
     try {
-      //    print(command);
       var url = client.formatUrl(path: 'open');
       return client
-          .openUrl(url + '?\$command=' + command, method: 'GET')
+          .openJsonAsync(url, body: {"command": command}, method: 'POST')
           .then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');

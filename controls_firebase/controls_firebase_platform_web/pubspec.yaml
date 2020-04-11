@@ -11,8 +11,12 @@ dependencies:
   flutter:
     sdk: flutter
   universal_html:
-  firebase_core:
+
+  firebase_auth: ^0.15.5+3
+  google_sign_in: ^4.0.0
+  firebase_web:
   firebase_storage:
+  flutter_cache_manager:
   controls_firebase_platform_interface:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

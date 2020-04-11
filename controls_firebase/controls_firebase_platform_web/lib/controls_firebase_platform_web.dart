@@ -11,7 +11,6 @@ import 'package:firebase_web/firebase.dart' as api;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-export 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {

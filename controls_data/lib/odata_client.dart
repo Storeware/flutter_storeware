@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
+import 'package:controls_web/drivers/bloc_model.dart';
 
 const errorConnectionMsg =
     'Não executou a solicitação, provedor indisponível %s';
@@ -11,6 +12,12 @@ const errorConnectionMsg =
 bool debugOn = false;
 void debug(dynamic x) {
   if (debugOn) print(x);
+}
+
+class LoginTokenChanged extends BlocModel<bool> {
+  static final _singleton = LoginTokenChanged._create();
+  LoginTokenChanged._create();
+  factory LoginTokenChanged() => _singleton;
 }
 
 class ODataQuery {
@@ -218,7 +225,6 @@ class ODataClient {
       if (query.orderby != null) r += '\$orderby=${query.orderby}&';
       if (query.join != null) r += '\$join=${query.join}&';
       client.service = r;
-      client.notifyLog.send(r);
       return client
           .openJsonAsync(client.encodeUrl(), cacheControl: cacheControl)
           .then((res) {
@@ -295,9 +301,10 @@ class ODataClient {
 
   Future<Object> open(String command) async {
     try {
+      //    print(command);
       var url = client.formatUrl(path: 'open');
       return client
-          .openJsonAsync(url, body: {"command": command}, method: 'POST')
+          .openUrl(url + '?\$command=' + command, method: 'GET')
           .then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
@@ -366,6 +373,7 @@ class ODataInst extends ODataClient {
       if (client.tokenId == null) client.setToken(auth(user, pass));
       client.addHeader('contaid', loja);
       loginNotifier.notify(rsp);
+      LoginTokenChanged().notify(true);
       return token;
     });
   }

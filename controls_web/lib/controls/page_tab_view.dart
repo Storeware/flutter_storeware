@@ -30,31 +30,33 @@ class PageTabView extends StatefulWidget {
   final List<Widget> tabActions;
   final double tabHeight;
   final Widget tabLeading;
+  final bool isScrollable;
   final Widget Function(TabController, TabChoice, int) tabBuilder;
   final Color iconColor;
   final Color indicatorColor;
   final Widget bottomNavigationBar;
   final Widget floatingActionButton;
   final Widget leading;
-  final Widget topBar;
+  final Widget appBar;
   final Size preferredSize;
   final bool automaticallyImplyLeading;
   PageTabView({
     this.title,
-    this.topBar,
+    this.appBar,
     this.tabBuilder,
-    this.elevation = 1.0,
+    this.elevation = 0.0,
     this.leading,
     this.automaticallyImplyLeading = true,
     this.actions,
+    this.isScrollable = false,
     @required this.choices,
     this.initialIndex = 0,
-    this.tabColor = Colors.white,
-    this.indicatorColor = Colors.blue,
+    this.tabColor = Colors.blue,
+    this.indicatorColor = Colors.white,
     this.floatingActionButton,
     this.bottomNavigationBar,
-    this.iconColor,
-    this.tabHeight = 42,
+    this.iconColor = Colors.white,
+    this.tabHeight = 55,
     this.tabActions,
     this.tabTitle,
     this.preferredSize,
@@ -67,7 +69,6 @@ class PageTabView extends StatefulWidget {
 class _TabBarViewState extends State<PageTabView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  //PageController _pageController = PageController();
   ThemeData theme;
   @override
   void initState() {
@@ -90,9 +91,10 @@ class _TabBarViewState extends State<PageTabView>
   }
 
   int indexSelected;
-  void _nextPage() {
-    var delta = 0;
-    final int newIndex = _tabController.index + delta;
+
+  void _nextPage({int delta = 0, int to}) {
+    int newIndex = _tabController.index + delta;
+    if (to != null) newIndex = to;
     if (newIndex < 0 || newIndex >= _tabController.length) return;
     _tabController.animateTo(newIndex);
     indexSelected = newIndex;
@@ -108,8 +110,31 @@ class _TabBarViewState extends State<PageTabView>
     return rt;
   }
 
+  createTab(ctrl, tc, idx, w) {
+    return InkWell(
+      child: Container(
+        padding: EdgeInsets.all(2),
+        width: w ?? 200,
+        height: widget.tabHeight,
+        color: widget.tabColor,
+        child: Column(
+          children: <Widget>[
+            Icon(tc.icon, size: 25, color: Colors.white),
+            Text(tc.title, style: TextStyle(fontSize: 18, color: Colors.white))
+          ],
+        ),
+      ),
+      onTap: () {
+        _nextPage(to: idx);
+        //if (widget.controller != null) widget.controller.animateTo(idx);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double w = size.width / widget.choices.length;
     theme = Theme.of(context);
     return Container(
       child: Scaffold(
@@ -121,84 +146,61 @@ class _TabBarViewState extends State<PageTabView>
             actions: widget.actions,
             bottom: PreferredSize(
               child: Column(children: [
-                if (widget.topBar != null) widget.topBar,
-                (widget.tabBuilder != null)
-                    ? Row(
-                        children: <Widget>[
-                          if (widget.tabLeading != null) widget.tabLeading,
-                          Expanded(
-                            child: Container(
-                                height: widget.tabHeight,
-                                constraints: BoxConstraints(maxWidth: 2000),
-                                child: ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: [
-                                      for (int i = 0;
-                                          i < widget.choices.length;
-                                          i++)
-                                        Container(
-                                            width:
-                                                widget.choices[i].width ?? 42,
-                                            child: Column(
-                                              children: <Widget>[
-                                                Expanded(
+                if (widget.appBar != null) widget.appBar,
+                Row(
+                  children: <Widget>[
+                    if (widget.tabLeading != null) widget.tabLeading,
+                    Expanded(
+                      child: Container(
+                          height: widget.tabHeight,
+                          constraints: BoxConstraints(maxWidth: 2000),
+                          child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                for (int i = 0; i < widget.choices.length; i++)
+                                  Container(
+                                      width: widget.choices[i].width ?? w,
+                                      child: Column(
+                                        children: <Widget>[
+                                          (widget.tabBuilder == null)
+                                              ? Expanded(
+                                                  child: createTab(
+                                                      _tabController,
+                                                      widget.choices[i],
+                                                      i,
+                                                      w))
+                                              : Expanded(
                                                   child: widget.tabBuilder(
                                                       _tabController,
                                                       widget.choices[i],
                                                       i),
                                                 ),
-                                                StreamBuilder<int>(
-                                                    stream:
-                                                        tabChangeEvent.stream,
-                                                    initialData: indexSelected,
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      //print(snapshot.data);
-                                                      return Container(
-                                                        height: 2,
-                                                        constraints:
-                                                            BoxConstraints(
-                                                                maxWidth: 2000),
-                                                        color: (snapshot.data ==
-                                                                i)
-                                                            ? widget.tabColor
-                                                            : widget
-                                                                .indicatorColor,
-                                                        //child:
-                                                      );
-                                                    })
-                                              ],
-                                            )),
-                                      if (widget.tabTitle != null)
-                                        widget.tabTitle,
-                                    ])),
-                          ),
-                          for (var item in widget.tabActions ?? []) item
-                        ],
-                      )
-                    : DefaultTabController(
-                        length: widget.choices.length,
-                        initialIndex: widget.initialIndex,
-                        child: TabBar(
-                            indicator: BoxDecoration(color: widget.tabColor),
-                            indicatorColor: widget.indicatorColor,
-                            controller: _tabController,
-                            tabs: widget.choices.map((choice) {
-                              return Tab(
-                                iconMargin: EdgeInsets.only(bottom: 5),
-                                child: Text(choice.title ?? '',
-                                    style: TextStyle(
-                                        color: choice.iconColor ??
-                                            widget.iconColor)),
-                                icon: choice.image ??
-                                    Icon(choice.icon ?? Icons.more_vert,
-                                        color: choice.iconColor ??
-                                            widget.iconColor),
-                              );
-                            }).toList())),
+                                          StreamBuilder<int>(
+                                              stream: tabChangeEvent.stream,
+                                              initialData: indexSelected,
+                                              builder: (context, snapshot) {
+                                                //print(snapshot.data);
+                                                return Container(
+                                                  height: 3,
+                                                  constraints: BoxConstraints(
+                                                      maxWidth: 2000),
+                                                  color: (snapshot.data != i)
+                                                      ? widget.tabColor
+                                                      : widget.indicatorColor,
+                                                  //child:
+                                                );
+                                              })
+                                        ],
+                                      )),
+                                if (widget.tabTitle != null) widget.tabTitle,
+                              ])),
+                    ),
+                    for (var item in widget.tabActions ?? []) item
+                  ],
+                )
               ]),
-              preferredSize:
-                  widget.preferredSize ?? Size.fromHeight(widget.tabHeight),
+              preferredSize: widget.preferredSize ??
+                  Size.fromHeight((widget.appBar != null) ? 55 : 0),
             )),
         body: TabBarView(
           controller: _tabController, //_pageController,

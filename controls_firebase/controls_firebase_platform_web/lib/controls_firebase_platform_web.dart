@@ -1,4 +1,4 @@
-library controls_firebase_platform_android;
+library controls_firebase_platform_web;
 
 import 'dart:async';
 import 'dart:io';

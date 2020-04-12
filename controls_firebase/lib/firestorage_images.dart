@@ -105,12 +105,14 @@ class FirestorageUploadImage extends StatefulWidget {
   final BoxFit fit;
   final double elevation;
   final Map<String, String> metadata;
+  final Function(bool) onProgress;
   FirestorageUploadImage(
       {Key key,
       this.img,
       this.width,
       this.height,
       this.onChange,
+      this.onProgress,
       //@required this.path,
       @required this.clientId,
       this.fit,
@@ -173,7 +175,12 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
                           ErrorNotify().notify(
                               'Imagem com $size bytes (max: ${widget.maxBytes} bytes)');
                         else {
+                          if (widget.onProgress != null)
+                            widget.onProgress(true);
                           urlDownload(f, (x) {
+                            if (widget.onProgress != null)
+                              widget.onProgress(false);
+
                             widget.onChange(x);
                           }, maskTo: widget.maskTo);
                         }

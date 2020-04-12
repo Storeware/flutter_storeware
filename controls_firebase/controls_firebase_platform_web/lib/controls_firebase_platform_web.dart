@@ -14,7 +14,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // temporario para testes
-class FirebaseApp extends FirebaseAppDriver {}
+// class FirebaseApp extends FirebaseAppDriver {}
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {

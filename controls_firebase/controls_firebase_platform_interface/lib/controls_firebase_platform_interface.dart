@@ -17,7 +17,12 @@ abstract class FirebaseAppDriverInterface {
 
 abstract class FirestoreDriverInterface {
   init() {}
-  collection(String path);
+  collection(String path) {}
+  getDoc(collection, doc) {}
+  setDoc(collection, doc, data, {merge = true}) {}
+  getWhere(collection, Object Function(Object) where) {}
+  getonSnapshot(collection, Object Function(Object) where) {}
+  genId(collection) {}
 }
 
 abstract class FirebaseStorageDriverInterface {

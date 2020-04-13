@@ -18,7 +18,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
-    platform = FirebasePlatform.android;
+    platform = FirebasePlatform.webbrowser;
   }
   var app;
   var options;

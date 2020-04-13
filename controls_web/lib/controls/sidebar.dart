@@ -2,116 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-/*
-/// Sample
-
-return SidebarScaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {
-            print('visible; ${Sidebar().visible}');
-            Sidebar().switchBar();
-          },
-        ),
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      sidebarColor: Colors.grey,
-      sidebarPosition: SidebarPosition.left,
-      sidebarVisible: false,
-      sidebar: SidebarContainer(
-          width: 150,
-          compactWidth: 50,
-          child: Column(
-            children: <Widget>[
-              SidebarHeader(title: 'header'),
-              //Divider(),
-              SidebarButton(
-                  image: Icon(
-                    Icons.add_to_photos,
-                    size: 32,
-                  ),
-                  onPressed: () {
-                    Sidebar().push(Pagina2());
-                  },
-                  //compact: true,
-                  title: 'add photos1'),
-              SidebarButton(
-                  image: Icon(
-                    Icons.home,
-                    size: 32,
-                  ),
-                  onPressed: () {
-                    Sidebar().goHome();
-                  },
-                  title: 'add photos2'),
-              SidebarButton(
-                  image: Icon(
-                    Icons.keyboard_hide,
-                    size: 32,
-                  ),
-                  onPressed: () {
-                    Sidebar().hide();
-                  },
-                  title: 'hide'),
-              SidebarButton(
-                  image: Icon(
-                    Icons.add_to_photos,
-                    size: 32,
-                  ),
-                  title: 'add photos4'),
-              SidebarButton(
-                image: Icon(
-                  Icons.add_to_photos,
-                  size: 32,
-                ),
-                title: 'compact',
-                onPressed: () {
-                  Sidebar().showCompact(compact: !Sidebar.compacted);
-                },
-              ),
-            ],
-          )),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-*/
-
 enum SidebarPosition { none, left, right }
 
 class SidebarScaffold extends StatefulWidget {
@@ -120,7 +10,7 @@ class SidebarScaffold extends StatefulWidget {
   final Widget floatingActionButton;
   final Widget sidebar;
   final SidebarPosition sidebarPosition;
-
+  final SidebarController controller;
   final bool sidebarVisible;
   final bool canShowCompact;
   final Widget bottomNavigationBar;
@@ -136,6 +26,7 @@ class SidebarScaffold extends StatefulWidget {
       this.sidebarVisible = true,
       this.sidebar,
       this.body,
+      @required this.controller,
       this.canShowCompact = false,
       this.sidebarPosition = SidebarPosition.left,
       this.floatingActionButton,
@@ -154,19 +45,27 @@ class SidebarScaffold extends StatefulWidget {
 }
 
 class _SidebarScaffoldState extends State<SidebarScaffold> {
+  SidebarController _controller;
   @override
   void initState() {
-    Sidebar().visible = widget.sidebarVisible;
+    _controller = widget.controller ?? SidebarController();
+    _controller.visible = widget.sidebarVisible;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   ThemeData theme;
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    Sidebar.position = widget.sidebarPosition;
-    Sidebar.canShowCompact = widget.canShowCompact;
-    if (Sidebar().homeWidget == null) Sidebar().homeWidget = widget.body;
+    _controller.position = widget.sidebarPosition;
+    _controller.canShowCompact = widget.canShowCompact;
+    if (_controller.homeWidget == null) _controller.homeWidget = widget.body;
     return Scaffold(
       appBar: widget.appBar, //?? AppBar(title: Text('sidebar')),
       drawer: widget.drawer,
@@ -175,7 +74,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       body: Stack(
         children: <Widget>[
-          if (Sidebar.position == SidebarPosition.left) buildHiddenButton(),
+          if (_controller.position == SidebarPosition.left) buildHiddenButton(),
           Row(
             children: <Widget>[
               if ((widget.sidebarPosition == SidebarPosition.left) &&
@@ -183,7 +82,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
                 buildSidebar(widget.sidebar),
               Expanded(
                 child: StreamBuilder<Widget>(
-                    stream: Sidebar().pageStream,
+                    stream: _controller.pageStream,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return widget.body;
                       return snapshot.data;
@@ -194,7 +93,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
                 buildSidebar(widget.sidebar),
             ],
           ),
-          if (Sidebar.position == SidebarPosition.right)
+          if (_controller.position == SidebarPosition.right)
             Positioned(right: 1, child: buildHiddenButton()),
         ],
       ),
@@ -204,15 +103,17 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
   }
 
   StreamBuilder<bool> buildHiddenButton() {
+    print(['hidded', widget.sidebarVisible]);
     return StreamBuilder<bool>(
-        stream: Sidebar().visibleStream,
-        initialData: Sidebar().visible,
+        stream: _controller.visibleStream,
+        initialData: widget.sidebarVisible,
         builder: (context, snapshot) {
           if (snapshot.data) return Container();
           return InkWell(
             child: buildExpandIcon(),
             onTap: () {
-              Sidebar().show();
+              print('click');
+              _controller.show();
             },
             //hoverColor: Colors.blue,
           );
@@ -220,7 +121,8 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
   }
 
   Widget buildExpandIcon() {
-    if (Sidebar.position == SidebarPosition.right)
+    print('expanded');
+    if (_controller.position == SidebarPosition.right)
       return ClipPath(
         clipper: CustomMenuClipperRight(),
         child: Container(
@@ -234,8 +136,6 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
           ),
         ),
       );
-//      return Icon(Icons.view_column);
-    //return Icon(Icons.view_column);
     return ClipPath(
       clipper: CustomMenuClipperLeft(),
       child: Container(
@@ -253,7 +153,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
 
   StreamBuilder<bool> buildSidebar(Widget wg) {
     return StreamBuilder<bool>(
-        stream: Sidebar().visibleStream,
+        stream: _controller.visibleStream,
         initialData: widget.sidebarVisible,
         builder: (context, snapshot) {
           print(snapshot.data);
@@ -276,11 +176,13 @@ class SidebarButton extends StatelessWidget {
   final Function onPressed;
   final double width;
   final double height;
+  final SidebarController controller;
   //final bool compact;
   SidebarButton(
       {Key key,
       this.height = 70,
       this.width = double.maxFinite,
+      @required this.controller,
       this.onPressed,
       this.color,
       this.image,
@@ -291,10 +193,11 @@ class SidebarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-        stream: Sidebar().compactStream,
-        initialData: Sidebar.compacted,
+        stream: controller.compactStream,
+        initialData: controller.compacted,
         builder: (context, snapshot) {
           bool cmpt = snapshot.data;
+          print('cmpt');
           return Padding(
             padding:
                 const EdgeInsets.only(top: 1, left: 2, right: 2, bottom: 1),
@@ -302,11 +205,12 @@ class SidebarButton extends StatelessWidget {
               hoverColor: Colors.blue,
               highlightColor: Colors.red,
               onTap: () {
+                print('onPressed');
                 if (onPressed != null) onPressed();
               },
               child: Container(
                 width: width,
-                height: (!cmpt) ? height : Sidebar.compactSize,
+                height: (!cmpt) ? height : controller.compactSize,
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -326,15 +230,12 @@ class SidebarButton extends StatelessWidget {
   }
 }
 
-class Sidebar {
-  static final _singleton = Sidebar._create();
+class SidebarController {
+  var position = SidebarPosition.left;
 
-  static var position = SidebarPosition.left;
-
-  static bool canShowCompact = false;
-  Sidebar._create();
-  factory Sidebar() => _singleton;
+  bool canShowCompact = false;
   var _pageStream = StreamController<Widget>.broadcast();
+
   List<Widget> _navigators = [];
   dispose() {
     _pageStream.close();
@@ -366,6 +267,7 @@ class Sidebar {
   get visibleStream => _visibleStream.stream;
   show() {
     visible = true;
+    print(visible);
     return _visibleStream.sink.add(true);
   }
 
@@ -389,13 +291,13 @@ class Sidebar {
     _showCompactStream.sink.add(compact);
   }
 
-  static get compacted => _singleton._compact;
-  static set compacted(value) {
-    _singleton._compact = value;
+  get compacted => _compact;
+  set compacted(value) {
+    _compact = value;
   }
 
-  static double compactSize;
-  static double width = 150;
+  double compactSize;
+  double width = 150;
 }
 
 class SidebarHeader extends StatelessWidget {
@@ -405,12 +307,14 @@ class SidebarHeader extends StatelessWidget {
   final Color color;
   final Color titleColor;
   final double height;
+  final SidebarController controller;
   const SidebarHeader({
     Key key,
     this.color,
     this.titleColor,
     this.title,
     this.leading,
+    @required this.controller,
     this.trailing,
     this.height = 40,
   }) : super(key: key);
@@ -424,66 +328,74 @@ class SidebarHeader extends StatelessWidget {
         color: color ?? theme.primaryColor,
       ),
       child: StreamBuilder<bool>(
-          stream: Sidebar().compactStream,
-          initialData: Sidebar.compacted,
+          stream: controller.compactStream,
+          initialData: controller.compacted,
           builder: (context, snapshot) {
             if (snapshot.data)
               return IconButton(
                 icon: Icon(
-                  (Sidebar.position == SidebarPosition.left)
+                  (controller.position == SidebarPosition.left)
                       ? Icons.arrow_right
                       : Icons.arrow_left,
-                  color: titleColor ?? theme.primaryTextTheme.title.color,
+                  color: titleColor ?? theme.primaryTextTheme.headline6.color,
                 ),
                 onPressed: () {
-                  Sidebar().showCompact(compact: false);
+                  print('showCompact');
+                  controller.showCompact(compact: false);
                 },
               );
             return Row(
               children: [
                 if (leading != null) Align(child: leading),
-                if (Sidebar.position == SidebarPosition.left)
+                if (controller.position == SidebarPosition.left)
                   InkWell(
                     child: Icon(
                       Icons.arrow_left,
-                      color: titleColor ?? theme.primaryTextTheme.title.color,
+                      color:
+                          titleColor ?? theme.primaryTextTheme.headline6.color,
                     ),
                     onTap: () {
-                      Sidebar().hide();
+                      print('hide');
+                      controller.hide();
                     },
                   ),
                 Expanded(
                     child: Align(
-                  alignment: (Sidebar.position == SidebarPosition.left)
+                  alignment: (controller.position == SidebarPosition.left)
                       ? Alignment.centerLeft
                       : Alignment.center,
                   child: Text(
                     title ?? '',
                     style: TextStyle(
-                      color: titleColor ?? theme.primaryTextTheme.title.color,
-                      fontSize: theme.primaryTextTheme.title.fontSize,
+                      color:
+                          titleColor ?? theme.primaryTextTheme.headline6.color,
+                      fontSize: theme.primaryTextTheme.headline6.fontSize,
                     ),
                   ),
                 )),
-                if (Sidebar.canShowCompact)
+                if (controller.canShowCompact)
                   InkWell(
                     child: Icon(
                       Icons.view_compact,
-                      color: titleColor ?? theme.primaryTextTheme.title.color,
+                      color:
+                          titleColor ?? theme.primaryTextTheme.headline6.color,
                     ),
                     onTap: () {
-                      Sidebar().showCompact(compact: true);
+                      print('showCompact-true');
+                      controller.showCompact(compact: true);
                     },
                   ),
                 if (trailing != null) Align(child: trailing),
-                if (Sidebar.position == SidebarPosition.right)
+                if (controller.position == SidebarPosition.right)
                   InkWell(
                     child: Icon(
                       Icons.arrow_right,
-                      color: titleColor ?? theme.primaryTextTheme.title.color,
+                      color:
+                          titleColor ?? theme.primaryTextTheme.headline6.color,
                     ),
                     onTap: () {
-                      Sidebar().hide();
+                      print('hide_');
+                      controller.hide();
                     },
                   ),
               ],
@@ -498,9 +410,11 @@ class SidebarContainer extends StatelessWidget {
   final Widget child;
   final bool compact;
   final double compactWidth;
+  final SidebarController controller;
   const SidebarContainer({
     Key key,
     this.width = 150,
+    @required this.controller,
     this.compactWidth = 50,
     this.compact = false,
     this.child,
@@ -508,14 +422,14 @@ class SidebarContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Sidebar.compactSize == null) {
-      Sidebar.compactSize = this.compactWidth;
-      Sidebar.compacted = this.compact;
-      Sidebar.width = this.width;
+    if (controller.compactSize == null) {
+      controller.compactSize = this.compactWidth;
+      controller.compacted = this.compact;
+      controller.width = this.width;
     }
     return StreamBuilder<bool>(
-        stream: Sidebar().compactStream,
-        initialData: Sidebar.compacted,
+        stream: controller.compactStream,
+        initialData: controller.compacted,
         builder: (context, snapshot) {
           return Container(
             width: (!snapshot.data) ? width : compactWidth,

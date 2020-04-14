@@ -18,19 +18,4 @@ class FirebaseApp extends FirebaseAppDriver {
     }
     return app;
   }
-
-  @override
-  FirebaseAuth auth() => FirebaseAuthDriver();
-  
-
-  @override
-  Firestore firestore() =>
-     FirebaseFirestoreDriver();
-  
-
-  @override
-  FirebaseStorage storage() =>
-    FirebaseStorageDriver();
-  
 }
-

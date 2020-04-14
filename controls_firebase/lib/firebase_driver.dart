@@ -20,42 +20,17 @@ class FirebaseApp extends FirebaseAppDriver {
   }
 
   @override
-  FirebaseAuth auth() {
-    return FirebaseAuth();
-  }
+  FirebaseAuth auth() => FirebaseAuthDriver();
+  
 
   @override
-  Firestore firestore() {
-    return Firestore();
-  }
+  Firestore firestore() =>
+     FirebaseFirestoreDriver();
+  
 
   @override
-  FirebaseStorage storage() {
-    //print('sstorage');
-    return FirebaseStorage();
-  }
+  FirebaseStorage storage() =>
+    FirebaseStorageDriver();
+  
 }
 
-class Firestore extends FirestoreDriver {
-  static final Firestore _singleton = Firestore._create();
-  Firestore._create();
-  factory Firestore() {
-    return _singleton;
-  }
-}
-
-class FirebaseAuth extends FirebaseAuthDriver {
-  static final FirebaseAuth _singleton = FirebaseAuth._create();
-  FirebaseAuth._create();
-  factory FirebaseAuth() {
-    return _singleton;
-  }
-}
-
-class FirebaseStorage extends FirebaseStorageDriver {
-  static FirebaseStorage _singleton = FirebaseStorage._create();
-  FirebaseStorage._create();
-  factory FirebaseStorage() {
-    return _singleton;
-  }
-}

@@ -14,7 +14,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // temporario para testes
-// class FirebaseApp extends FirebaseAppDriver {}
+class FirebaseApp extends FirebaseAppDriver {}
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
@@ -27,7 +27,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
     this.options = options;
     try {
       /// a configuração é feita no ambiente
-      if ( (api.apps ==null) ||  api.apps.isNotEmpty) {
+      if ((api.apps == null) || api.apps.isNotEmpty) {
         app = api.apps[0];
       } else
         app = api.initializeApp(
@@ -39,8 +39,8 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
           projectId: options['projectId'],
           storageBucket: options['storageBucket'],
         );
-	  return app;	
       print('carregou firebase');
+      return app;
     } catch (e) {
       print('$e');
     }
@@ -59,13 +59,16 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
 
   @override
   FirestoreDriver firestore() {
-    return FirestoreDriver();
+    return FirebaseFirestoreDriver();
   }
 }
 
-class FirestoreDriver extends FirestoreDriverInterface {
+class FirebaseFirestoreDriver extends FirestoreDriverInterface {
+  static final _singleton = FirebaseFirestoreDriver._create();
+  FirebaseFirestoreDriver._create();
+  factory FirebaseFirestoreDriver() => _singleton;
+
   var store = api.firestore();
-  FirestoreDriver();
   @override
   collection(String path) {
     return store.collection(path);
@@ -89,13 +92,16 @@ class FirestoreDriver extends FirestoreDriverInterface {
   }
 
   @override
-  setDoc(collection, doc, data, {merge = true}) {
-    Map<String, dynamic> d = data.removeWhere((k, v) => k == "id");
+  setDoc(String collection, String doc, Map<String, dynamic> data,
+      {merge = true}) {
+    Map<String, dynamic> d = data; //data.removeWhere((k, v) => k == "id");
     d['dtatualiz'] = DateTime.now().toIso8601String();
-    return store
-        .collection(collection)
-        .doc(doc)
-        .set(d, SetOptions(merge: merge));
+    d.remove('id');
+    var ref = api.firestore().collection(collection);
+    if (doc == null) return ref.add(d);
+    var refx = ref.doc(doc);
+   // print(['enviando', data]);
+    return refx.set(d, SetOptions(merge: merge));
   }
 
   @override
@@ -119,6 +125,10 @@ class FirestoreDriver extends FirestoreDriverInterface {
 }
 
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
+  static final _singleton = FirebaseStorageDriver._create();
+  factory FirebaseStorageDriver()=>_singleton;
+  FirebaseStorageDriver._create();
+
   @override
   init() {}
 
@@ -205,8 +215,12 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
 }
 
 class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
+  static final _singleton = FirebaseAuthDriver._create();
+  factory FirebaseAuthDriver()=>_singleton;
+
   FirebaseAuth get instance => FirebaseAuth.instance;
-  FirebaseAuthDriver();
+  FirebaseAuthDriver._create();
+  
   @override
   signInWithEmail(email, senha) {
     return instance.signInWithEmailAndPassword(email: email, password: senha);

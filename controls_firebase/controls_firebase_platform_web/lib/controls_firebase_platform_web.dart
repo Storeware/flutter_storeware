@@ -14,7 +14,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 // temporario para testes
-class FirebaseApp extends FirebaseAppDriver {}
+//class FirebaseApp extends FirebaseAppDriver {}
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
@@ -58,7 +58,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   }
 
   @override
-  FirestoreDriver firestore() {
+  FirebaseFirestoreDriver firestore() {
     return FirebaseFirestoreDriver();
   }
 }
@@ -100,7 +100,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     var ref = api.firestore().collection(collection);
     if (doc == null) return ref.add(d);
     var refx = ref.doc(doc);
-   // print(['enviando', data]);
+    // print(['enviando', data]);
     return refx.set(d, SetOptions(merge: merge));
   }
 
@@ -126,7 +126,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
 
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   static final _singleton = FirebaseStorageDriver._create();
-  factory FirebaseStorageDriver()=>_singleton;
+  factory FirebaseStorageDriver() => _singleton;
   FirebaseStorageDriver._create();
 
   @override
@@ -216,11 +216,11 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
 
 class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
   static final _singleton = FirebaseAuthDriver._create();
-  factory FirebaseAuthDriver()=>_singleton;
+  factory FirebaseAuthDriver() => _singleton;
 
   FirebaseAuth get instance => FirebaseAuth.instance;
   FirebaseAuthDriver._create();
-  
+
   @override
   signInWithEmail(email, senha) {
     return instance.signInWithEmailAndPassword(email: email, password: senha);

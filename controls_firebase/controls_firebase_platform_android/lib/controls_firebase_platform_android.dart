@@ -7,7 +7,9 @@ import 'dart:typed_data';
 // ignore_for_file:
 import 'package:controls_firebase_platform_interface/controls_firebase_platform_interface.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart' as api;
+import 'package:firebase/firebase.dart' as fb;
+import 'package:firebase/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -19,32 +21,34 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
     platform = FirebasePlatform.android;
   }
-  FirebaseApp app;
-  @override
+  api.FirebaseApp app;
   @override
   init(options) async {
-    /* try { /// a configuração é feita no ambiente
-      app = await FirebaseApp.configure(
-          name: "selfandpay",
-          options: FirebaseOptions(
-            gcmSenderID: options['858174338114'],
-            databaseURL: options['databaseURL'],
-            apiKey: options['apiKey'],
-            googleAppID: options['appId'],
-            projectID: options['projectId'],
-            storageBucket: options['storageBucket'],
-          ));
+    try {
+      /// a configuração é feita no ambiente
+      app = api.FirebaseApp.instance;
+      if (app == null)
+        app = await api.FirebaseApp.configure(
+            name: 'DEFAULT',
+            options: api.FirebaseOptions(
+              gcmSenderID: options['858174338114'],
+              databaseURL: options['databaseURL'],
+              apiKey: options['apiKey'],
+              googleAppID: options['appId'],
+              projectID: options['projectId'],
+              storageBucket: options['storageBucket'],
+            ));
+      print('Firebase Android Inited');
+      return app;
     } catch (e) {
       print('$e');
     }
-    */
   }
 
   //var _storage;
   @override
   storage() {
     return fs.FirebaseStorage.instance;
-    //return FirebaseStorageDriver();
   }
 
   @override
@@ -59,11 +63,57 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
 }
 
 class FirestoreDriver extends FirestoreDriverInterface {
+  var store = fb.firestore();
   FirestoreDriver();
   @override
   collection(String path) {
-    // TODO: implement collection
-    throw UnimplementedError();
+    return store.collection(path);
+  }
+
+  @override
+  Future<Map<String, dynamic>> getDoc(collection, doc) {
+    return store
+        .collection(collection)
+        .doc(doc)
+        .get()
+        .then((DocumentSnapshot x) {
+      if (!x.exists) return null;
+      return {"id": x.id, ...x.data()};
+    });
+  }
+
+  @override
+  genId(collection) {
+    store.collection(collection).doc().id;
+  }
+
+  @override
+  setDoc(collection, doc, data, {merge = true}) {
+    Map<String, dynamic> d = data.removeWhere((k, v) => k == "id");
+    d['dtatualiz'] = DateTime.now().toIso8601String();
+    return store
+        .collection(collection)
+        .doc(doc)
+        .set(d, SetOptions(merge: merge));
+  }
+
+  @override
+  getWhere(collection, Function(CollectionReference) where) {
+    CollectionReference ref = store.collection(collection);
+    Query rst = (where != null) ? where(ref) : ref;
+    return rst.get().then((QuerySnapshot doc) {
+      return doc.docs.map((f) {
+        return {"id": f.id, ...f.data()};
+      }).toList();
+    });
+  }
+
+  @override
+  Stream<QuerySnapshot> getonSnapshot(
+      collection, Function(CollectionReference) where) {
+    CollectionReference ref = store.collection(collection);
+    Query rst = (where != null) ? where(ref) : ref;
+    return rst.onSnapshot;
   }
 }
 

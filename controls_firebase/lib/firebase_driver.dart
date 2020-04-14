@@ -11,12 +11,12 @@ class FirebaseApp extends FirebaseAppDriver {
     return _singleton;
   }
   @override
-  init(options) {
+  init(options) async {
     if (callStack == 0) {
       callStack++;
-      //print('iniciando firebase');
-      super.init(options);
+      return super.init(options);
     }
+    return app;
   }
 
   @override

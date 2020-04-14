@@ -27,7 +27,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
     this.options = options;
     try {
       /// a configuração é feita no ambiente
-      if (api.apps.isNotEmpty) {
+      if ( (api.apps ==null) ||  api.apps.isNotEmpty) {
         app = api.apps[0];
       } else
         app = api.initializeApp(
@@ -39,6 +39,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
           projectId: options['projectId'],
           storageBucket: options['storageBucket'],
         );
+	  return app;	
       print('carregou firebase');
     } catch (e) {
       print('$e');

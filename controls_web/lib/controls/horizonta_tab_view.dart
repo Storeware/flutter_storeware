@@ -26,6 +26,7 @@ class HorizontalPageTabView extends StatefulWidget {
   final Widget title;
   final List<Widget> actions;
   final double elevation;
+  final SidebarController sidebarController;
   final Color tabColor;
   final Widget tabTitle;
   final List<Widget> tabActions;
@@ -47,6 +48,7 @@ class HorizontalPageTabView extends StatefulWidget {
     this.title,
     this.appBar,
     this.tabBuilder,
+    this.sidebarController,
     this.elevation = 0.0,
     this.leading,
     this.compacted = false,
@@ -75,8 +77,10 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ThemeData theme;
+  SidebarController sidebarController;
   @override
   void initState() {
+    sidebarController = widget.sidebarController ?? SidebarController();
     super.initState();
     indexSelected = widget.initialIndex;
     _tabController = TabController(vsync: this, length: widget.choices.length);
@@ -96,8 +100,6 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
   }
 
   int indexSelected;
-
-  SidebarController sidebarController = SidebarController();
 
   void _nextPage({int delta = 0, int to}) {
     int newIndex = _tabController.index + delta;

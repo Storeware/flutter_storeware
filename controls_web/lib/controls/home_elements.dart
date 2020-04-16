@@ -417,6 +417,7 @@ class ApplienceStatus extends StatelessWidget {
   final String value;
   final Color color;
   final String title;
+  final Widget child;
   final double valueFontSize;
   final Color fontColor;
   final Function onPressed;
@@ -431,6 +432,7 @@ class ApplienceStatus extends StatelessWidget {
       this.padding,
       this.image,
       this.title,
+      this.child,
       this.color = Colors.lightBlue,
       this.value,
       this.valueFontSize = 28,
@@ -488,6 +490,7 @@ class ApplienceStatus extends StatelessWidget {
                     fontFamily: 'Raleway',
                   ),
                 ),
+              if (child != null) child,
               if (value != null)
                 SizedBox(
                   height: 2,
@@ -498,7 +501,7 @@ class ApplienceStatus extends StatelessWidget {
                     child: Text(
                       title ?? '',
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 20,
                         color: fontColor,
                         // fontWeight: FontWeight.bold,
                         fontFamily: 'HelveticaNeue',

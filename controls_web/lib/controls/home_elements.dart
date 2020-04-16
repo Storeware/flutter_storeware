@@ -495,6 +495,7 @@ class ApplienceStatus extends StatelessWidget {
                 SizedBox(
                   height: 2,
                 ),
+              Divider(),
               if (title != null)
                 InkWell(
                     onTap: onPressed,

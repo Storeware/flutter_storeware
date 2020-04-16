@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum ResponsiveInfoScreen { mobile, tablet, desktop }
 
-class ResponseveInfo {
+class ResponsiveInfo {
   Size _size;
   ResponsiveInfoScreen screen;
   Orientation orientation;
@@ -21,12 +21,18 @@ class ResponseveInfo {
   get isDesktop => screen == ResponsiveInfoScreen.desktop;
   get isMobile => screen == ResponsiveInfoScreen.mobile;
   ThemeData theme;
+  ResponsiveInfo(BuildContext context) {
+    var mq = MediaQuery.of(context);
+    orientation = mq.orientation;
+    size = mq.size;
+    theme = Theme.of(context);
+  }
 }
 
 class ResponsiveBuilder extends StatelessWidget {
   final EdgeInsets minimum;
   final bool maintainBottomViewPadding;
-  final Widget Function(BuildContext, ResponseveInfo) builder;
+  final Widget Function(BuildContext, ResponsiveInfo) builder;
   const ResponsiveBuilder(
       {Key key,
       this.minimum = EdgeInsets.zero,
@@ -36,12 +42,7 @@ class ResponsiveBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ResponseveInfo info = ResponseveInfo();
-    var mq = MediaQuery.of(context);
-    info.orientation = mq.orientation;
-    info.size = mq.size;
-
-    info.theme = Theme.of(context);
+    ResponsiveInfo info = ResponsiveInfo(context);
     return SafeArea(
       minimum: minimum,
       maintainBottomViewPadding: maintainBottomViewPadding,

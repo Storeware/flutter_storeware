@@ -40,9 +40,11 @@ class PageTabView extends StatefulWidget {
   final Widget appBar;
   final Size preferredSize;
   final bool automaticallyImplyLeading;
+  final Color appBackgroundColor;
   PageTabView({
     this.title,
     this.appBar,
+    this.appBackgroundColor,
     this.tabBuilder,
     this.elevation = 0.0,
     this.leading,
@@ -119,14 +121,17 @@ class _TabBarViewState extends State<PageTabView>
         color: widget.tabColor,
         child: Column(
           children: <Widget>[
-            Icon(tc.icon, size: 25, color: Colors.white),
-            Text(tc.title, style: TextStyle(fontSize: 18, color: Colors.white))
+            Icon(tc.icon, size: 25, color: widget.iconColor),
+            Text(tc.title,
+                style: TextStyle(fontSize: 18, color: widget.iconColor))
           ],
         ),
       ),
       onTap: () {
-        _nextPage(to: idx);
-        //if (widget.controller != null) widget.controller.animateTo(idx);
+        if (widget.choices[idx].onPressed != null)
+          widget.choices[idx].onPressed();
+        else
+          _nextPage(to: idx);
       },
     );
   }
@@ -139,6 +144,7 @@ class _TabBarViewState extends State<PageTabView>
     return Container(
       child: Scaffold(
         appBar: AppBar(
+            backgroundColor: widget.appBackgroundColor,
             title: widget.title,
             elevation: widget.elevation,
             leading: widget.leading,
@@ -218,18 +224,21 @@ class _TabBarViewState extends State<PageTabView>
  */
 class TabChoice {
   final int index;
-  const TabChoice(
-      {this.iconColor,
-      this.index,
-      this.title,
-      this.icon,
-      this.image,
-      this.width,
-      this.child});
+  const TabChoice({
+    this.iconColor,
+    this.index,
+    this.title,
+    this.icon,
+    this.image,
+    this.width,
+    this.child,
+    this.onPressed,
+  });
   final double width;
   final String title;
   final IconData icon;
   final Widget child;
   final Widget image;
   final Color iconColor;
+  final Function onPressed;
 }

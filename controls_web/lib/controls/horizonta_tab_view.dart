@@ -155,6 +155,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                           stream: tabChangeEvent.stream,
                           initialData: indexSelected,
                           builder: (context, snapshot) {
+                            TabChoice tab = widget.choices[i];
                             return Container(
                               color: (snapshot.data == i)
                                   ? widget.indicatorColor
@@ -162,13 +163,13 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                               child: ListTile(
                                 title: sidebarController.compacted
                                     ? null
-                                    : Text(widget.choices[i].title,
+                                    : Text(tab.title,
                                         style: TextStyle(
                                           color: widget.iconColor,
                                         )),
-                                leading: (widget.choices[i].icon != null)
+                                leading: (tab.icon != null)
                                     ? Icon(
-                                        widget.choices[i].icon,
+                                        tab.icon,
                                         color: widget.iconColor,
                                       )
                                     : null,
@@ -202,14 +203,15 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
  */
 class TabChoice {
   final int index;
-  const TabChoice(
-      {this.iconColor,
-      this.index,
-      this.title,
-      this.icon,
-      this.image,
-      this.width,
-      this.child});
+  const TabChoice({
+    this.iconColor,
+    this.index,
+    this.title,
+    this.icon,
+    this.image,
+    this.width,
+    this.child,
+  });
   final double width;
   final String title;
   final IconData icon;

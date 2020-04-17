@@ -11,9 +11,12 @@ class DataGridPageColumn {
   dynamic controller;
   bool required = true;
   bool readOnly;
+  bool canOrder;
   final Function canChangeEvent;
   final double width;
   bool hide;
+  final TextAlign align;
+  final TextStyle style;
   final Function(dynamic) onGetValue;
   final Function(dynamic) onGetChild;
   final Function(dynamic) onEditChild;
@@ -24,6 +27,9 @@ class DataGridPageColumn {
       this.hide,
       this.onClick,
       this.readOnly,
+      this.align,
+      this.style,
+      this.canOrder = true,
       this.canChangeEvent,
       this.onGetValue,
       this.onGetChild,
@@ -83,21 +89,31 @@ class _DataGridPageState extends State<DataGridPage> {
     return a.compareTo(b);
   }
 
+  _numCompareTo(num a, num b) {
+    if (a == b) return 0;
+    if (a > b)
+      return 1;
+    else
+      return -1;
+  }
+
   _createBody(context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            RoundedButton(
-              height: 30,
-              color: Theme.of(context).primaryColor,
-              buttonName: 'Novo', //Translate.string('Novo'),
-              onTap: () {
-                if (widget.onRowEdit != null) widget.onRowEdit({});
-                if (widget.canChange) widget.onNewClick();
-              },
-            ),
+            if (widget.canChange)
+              RoundedButton(
+                height: 30,
+                color: Theme.of(context).primaryColor,
+                buttonName: 'Novo',
+                onTap: () {
+                  if (widget.onRowEdit != null) widget.onRowEdit({});
+                  if (widget.canChange) widget.onNewClick();
+                },
+              ),
             if (widget.onInactive != null)
               Row(children: [
                 Text(inactive ? 'inativos' : 'disponíveis'),
@@ -118,24 +134,32 @@ class _DataGridPageState extends State<DataGridPage> {
             // alterado de stream para future -
             future: widget.dataSnap,
             builder: (x, d) {
-              print('grid->dataTable ${d.hasData} ${d.data}');
+              if (!d.hasData) return Align(child: CircularProgressIndicator());
               _createDataSource(d.data);
+
               return StreamBuilder<bool>(
                   initialData: true,
                   stream: _notifier.stream,
                   builder: (x, s) {
-                    var col = widget.columns[dataSortIndex - 1];
-                    if (dataSource != null)
-                      dataSource.sort((a, b) {
-                        try {
-                          var r = _compareTo(a[col.name], (b[col.name])) *
-                              (ascendent ? 1 : -1);
-                          return r;
-                        } catch (e) {
-                          return 1;
-                        }
-                      });
-
+                    print('Builder ${s.data}:$dataSortIndex');
+                    if (dataSortIndex > -1) {
+                      var col = widget.columns[dataSortIndex];
+                      print(col.name);
+                      if (dataSource != null) if (col.canOrder)
+                        dataSource.sort((a, b) {
+                          try {
+                            if (a[col.name] is num)
+                              return _numCompareTo(a[col.name], b[col.name]) *
+                                  (ascendent ? 1 : -1);
+                            var r = _compareTo(a[col.name], (b[col.name])) *
+                                (ascendent ? 1 : -1);
+                            return r;
+                          } catch (e) {
+                            return 1;
+                          }
+                        });
+                    }
+                    print('DataTable...');
                     return DataTable(
                       sortAscending: ascendent,
                       sortColumnIndex: dataSortIndex,
@@ -155,28 +179,49 @@ class _DataGridPageState extends State<DataGridPage> {
   bool ascendent = true;
   int dataSortIndex = 1;
 
-  List<DataColumn> _columns(data) => <DataColumn>[
-        if (widget.onDeleteClick != null) DataColumn(label: Container()),
-        for (var item in widget.columns)
-          if (!(item.hide ?? false))
-            DataColumn(
-                label: Text(item.label /*Translate.string(item.label)*/),
-                onSort: (colIdx, asc) {
-                  ascendent = asc;
-                  dataSortIndex = colIdx;
-                  _notifier.sink.add(true);
-                }),
-      ];
+  List<DataColumn> _columns(data) {
+    //print('_column $data');
+    return <DataColumn>[
+      if (widget.onDeleteClick != null) DataColumn(label: Container()),
+      for (var item in widget.columns)
+        if (!(item.hide ?? false))
+          DataColumn(
+              label: Text(item.label ?? item.name ?? ''),
+              onSort: (colIdx, asc) {
+                ascendent = asc;
+                dataSortIndex = colIdx;
+                _notifier.sink.add(true);
+              }),
+    ];
+  }
+
+  TextAlign _genAlign(value) {
+    if (value is num) return TextAlign.right;
+    return TextAlign.left;
+  }
+
+  Alignment _genAlignment(TextAlign value) {
+    if (value == TextAlign.center) return Alignment.center;
+    if (value == TextAlign.right) return Alignment.centerRight;
+    return Alignment.centerLeft;
+  }
 
   generateValue(DataGridPageColumn item, d, index) {
     var v = d[item.name];
+    var _align = item.align ?? _genAlign(v);
     if (item.onGetValue != null) v = item.onGetValue(v);
     Widget g;
     if (item.onGetChild != null) g = item.onGetChild(v);
-    if (g == null) g = Text(v.toString() ?? '');
+    if (g == null)
+      g = Text(
+        v.toString() ?? '',
+        textAlign: _align,
+        style: item.style,
+      );
     return DataCell(
       Container(
         width: item.width,
+        alignment: _genAlignment(_align),
         child: g,
       ),
       onTap: () {
@@ -421,10 +466,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
       if (widget.onStateChange != null) widget.onStateChange('new');
       print('loading GridItemView');
       return DataGridItemView(
-        title: Row(children: [
-          Text('Novo - ' /*Translate.string('Novo - ')*/),
-          widget.title
-        ]),
+        title: Row(children: [Text('Novo - '), widget.title]),
         data: _onGetValues(),
         columns: widget.columns,
         onSave: widget.onSave,

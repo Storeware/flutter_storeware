@@ -9,6 +9,10 @@ class BlocModel<T> {
     sink.add(value);
   }
 
+  listen(Function(T) event) {
+    return stream.listen(event);
+  }
+
   close() {
     _stream.close();
   }

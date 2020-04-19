@@ -70,7 +70,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
       appBar: widget.appBar, //?? AppBar(title: Text('sidebar')),
       drawer: widget.drawer,
       key: widget.scaffoldKey,
-      backgroundColor: widget.backgroundColor,
+      backgroundColor: _controller.backgroudColor ?? widget.backgroundColor,
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       body: Stack(
         children: <Widget>[
@@ -231,9 +231,18 @@ class SidebarButton extends StatelessWidget {
 }
 
 class SidebarController {
+  SidebarController(
+      {this.color,
+      this.width = 180,
+      this.backgroudColor,
+      this.visible = true,
+      this.position,
+      this.canShowCompact = false,
+      this.compactSize,
+      this.homeWidget});
   var position = SidebarPosition.left;
 
-  bool canShowCompact = false;
+  bool canShowCompact;
   var _pageStream = StreamController<Widget>.broadcast();
 
   List<Widget> _navigators = [];
@@ -262,7 +271,7 @@ class SidebarController {
   get pageStream => _pageStream.stream;
 
   //------------- visibility
-  bool visible = true;
+  bool visible;
   var _visibleStream = StreamController<bool>.broadcast();
   get visibleStream => _visibleStream.stream;
   show() {
@@ -297,7 +306,9 @@ class SidebarController {
   }
 
   double compactSize;
-  double width = 150;
+  double width;
+  Color backgroudColor;
+  Color color;
 }
 
 class SidebarHeader extends StatelessWidget {
@@ -325,7 +336,7 @@ class SidebarHeader extends StatelessWidget {
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: color ?? theme.primaryColor,
+        color: controller.color ?? color ?? theme.primaryColor,
       ),
       child: StreamBuilder<bool>(
           stream: controller.compactStream,

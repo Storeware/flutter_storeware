@@ -145,7 +145,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
             compact: widget.compacted,
             compactWidth: 60,
             controller: sidebarController,
-            width: 180,
+            width: sidebarController.width,
             child: ListView(
               children: [
                 for (int i = 0; i < widget.choices.length; i++)

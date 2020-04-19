@@ -14,7 +14,6 @@ void debug(dynamic x) {
   if (debugOn) print(x);
 }
 
-
 extension DynamicExtension on dynamic {
   int toInt(value, {def = 0}) {
     if (value is int) return value;
@@ -23,14 +22,14 @@ extension DynamicExtension on dynamic {
     return def;
   }
 
-  double toDouble(value,{def=0.0}) {
+  double toDouble(value, {def = 0.0}) {
     if (value is double) return value;
     if (value is num) return value as double;
     if (value is String) return double.tryParse(value);
     return def;
   }
 
-  bool toBool(value,{def:false}) {
+  bool toBool(value, {def: false}) {
     if (value is bool) return value;
     if (value is num) return (value == 0) ? false : true;
     if (value is String) return (value == '1' || value == 'T');
@@ -43,7 +42,6 @@ extension DynamicExtension on dynamic {
     return def ?? DateTime.now();
   }
 }
-
 
 class LoginTokenChanged extends BlocModel<bool> {
   static final _singleton = LoginTokenChanged._create();
@@ -421,6 +419,21 @@ abstract class ODataModelClass<T extends DataItem> {
   String columns = '*';
   ODataClient API;
   ODataModelClass({this.API});
+
+  list({filter}) async {
+    return search(resource: collectionName, select: '*', filter: filter)
+        .then((ODataResult r) {
+      return r.asMap();
+    });
+  }
+
+  getOne({filter}) {
+    return search(resource: collectionName, select: '*', filter: filter, top: 1)
+        .then((ODataResult r) {
+      return r.first;
+    });
+  }
+
   enviar(T item) {
     try {
       return API.post(collectionName, item.toJson()).then((x) => x);
@@ -491,24 +504,28 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  Future<ODataResult> snapshots(
-      {String select,
-      String filter,
-      String groupBy,
-      String orderBy,
-      bool inativo = false,
-      int top = 200,
-      int skip = 0}) async {
+  Future<ODataResult> snapshots({
+    String select,
+    String filter,
+    String groupBy,
+    String orderBy,
+    bool inativo = false,
+    int top = 200,
+    int skip = 0,
+    String cacheControl,
+  }) async {
     return API
-        .send(ODataQuery(
-          resource: collectionName,
-          select: select ?? '*',
-          filter: filter ?? "inativo eq '${inativo ? "S" : "N"}' ",
-          top: top,
-          skip: skip,
-          groupby: groupBy,
-          orderby: orderBy,
-        ))
+        .send(
+            ODataQuery(
+              resource: collectionName,
+              select: select ?? '*',
+              filter: filter,
+              top: top,
+              skip: skip,
+              groupby: groupBy,
+              orderby: orderBy,
+            ),
+            cacheControl: cacheControl)
         .then((x) => x);
   }
 }

@@ -22,13 +22,12 @@ class Routes {
 
   static bool goHome(context, String name) {
     if (name == '/home' || name == '/') {
-      if (_singleton.onCallHome!=null){
+      if (_singleton.onCallHome != null) {
         var h = _singleton.onCallHome(context);
-        if (h!=null)
-          {
-            Navigator.of(context).pushReplacement(h);
-            return true;
-          }
+        if (h != null) {
+          Navigator.of(context).pushReplacement(h);
+          return true;
+        }
       }
       Navigator.of(context).pushReplacementNamed(name);
       return true;
@@ -36,20 +35,31 @@ class Routes {
     return false;
   }
 
+  static Route<dynamic> generateRoute(RouteSettings settings) {
+    var route = settings.name;
+    if (route == '') route = '/';
+    return MaterialPageRoute(settings: settings, builder: getRoute(route));
+  }
+
   static pushNamed(context, name) {
     if (!goHome(context, name)) {
       print('pushNamed: $name');
       var func = Routes().routes[name];
-      if (func != null) Navigator.of(context).push(MaterialPageRoute(builder:func));
+      if (func != null)
+        Navigator.of(context).push(MaterialPageRoute(builder: func));
     }
+  }
+
+  static getRoute(name) {
+    return Routes().routes[name];
   }
 
   static push(context, MaterialPageRoute page) {
     Navigator.of(context).push(page);
   }
 
-  static go(context, page){
-     Routes.push(context, MaterialPageRoute(builder:(x)=>page));
+  static go(context, page) {
+    Routes.push(context, MaterialPageRoute(builder: (x) => page));
   }
 
   static pushReplacement(context, MaterialPageRoute page) {
@@ -59,7 +69,8 @@ class Routes {
   static pushReplacementNamed(context, name) {
     if (!goHome(context, name)) {
       var func = Routes().routes[name];
-      if (func != null) Navigator.of(context).pushReplacement(MaterialPageRoute(builder:func));
+      if (func != null)
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: func));
     }
   }
 
@@ -72,7 +83,7 @@ class Routes {
       var func = Routes().routes[name];
       if (func != null) {
         Navigator.of(context).pop();
-        Navigator.push(context, MaterialPageRoute(builder:func));
+        Navigator.push(context, MaterialPageRoute(builder: func));
       }
       ;
     }

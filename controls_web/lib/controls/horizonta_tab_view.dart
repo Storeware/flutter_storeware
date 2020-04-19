@@ -38,6 +38,8 @@ class HorizontalPageTabView extends StatefulWidget {
   final Color iconColor;
   final Color indicatorColor;
   final Widget bottomNavigationBar;
+  final Widget pageBottom;
+  final AppBar pageAppBar;
   final Widget floatingActionButton;
   final Widget leading;
   final Widget appBar;
@@ -47,6 +49,8 @@ class HorizontalPageTabView extends StatefulWidget {
   HorizontalPageTabView({
     this.title,
     this.appBar,
+    this.pageAppBar,
+    this.pageBottom,
     this.tabBuilder,
     this.sidebarController,
     this.elevation = 0.0,
@@ -114,7 +118,11 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
     List<Widget> rt = [];
     if (widget.choices != null)
       widget.choices.forEach((c) {
-        rt.add(c.child);
+        rt.add(Scaffold(
+          appBar: c.appBar ?? widget.pageAppBar,
+          body: c.child,
+          bottomNavigationBar: c.bottomNavigationBar ?? widget.pageBottom,
+        ));
       });
     return rt;
   }
@@ -211,6 +219,8 @@ class TabChoice {
     this.image,
     this.width,
     this.child,
+    this.appBar,
+    this.bottomNavigationBar,
   });
   final double width;
   final String title;
@@ -218,4 +228,6 @@ class TabChoice {
   final Widget child;
   final Widget image;
   final Color iconColor;
+  final AppBar appBar;
+  final Widget bottomNavigationBar;
 }

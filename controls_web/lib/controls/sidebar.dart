@@ -231,6 +231,18 @@ class SidebarButton extends StatelessWidget {
 }
 
 class SidebarController {
+  final Widget bottom;
+  final AppBar appBar;
+  final Widget body;
+  final Widget bottomNavigationBar;
+  bool compacted;
+  double compactSize;
+  double width;
+  Color backgroudColor;
+  Color color;
+  double get currentWidth =>
+      (visible) ? ((compacted) ? compactSize : width) : 0;
+  bool visible;
   SidebarController(
       {this.color,
       this.width = 180,
@@ -238,7 +250,12 @@ class SidebarController {
       this.visible = true,
       this.position,
       this.canShowCompact = false,
-      this.compactSize,
+      this.compacted = false,
+      this.compactSize = 60,
+      this.appBar,
+      this.bottom,
+      this.body,
+      this.bottomNavigationBar,
       this.homeWidget});
   var position = SidebarPosition.left;
 
@@ -271,7 +288,6 @@ class SidebarController {
   get pageStream => _pageStream.stream;
 
   //------------- visibility
-  bool visible;
   var _visibleStream = StreamController<bool>.broadcast();
   get visibleStream => _visibleStream.stream;
   show() {
@@ -294,21 +310,10 @@ class SidebarController {
 
   var _showCompactStream = StreamController<bool>.broadcast();
   get compactStream => _showCompactStream.stream;
-  bool _compact = false;
   showCompact({compact = false}) {
-    _compact = compact;
+    compacted = compact;
     _showCompactStream.sink.add(compact);
   }
-
-  get compacted => _compact;
-  set compacted(value) {
-    _compact = value;
-  }
-
-  double compactSize;
-  double width;
-  Color backgroudColor;
-  Color color;
 }
 
 class SidebarHeader extends StatelessWidget {
@@ -440,11 +445,20 @@ class SidebarContainer extends StatelessWidget {
     }
     return StreamBuilder<bool>(
         stream: controller.compactStream,
-        initialData: controller.compacted,
+        initialData: controller?.compacted ?? false,
         builder: (context, snapshot) {
           return Container(
             width: (!snapshot.data) ? width : compactWidth,
-            child: child,
+            child: Scaffold(
+              appBar: controller?.appBar,
+              backgroundColor: controller?.color,
+              body: Column(children: [
+                if (controller?.body != null) controller.body,
+                Expanded(child: child),
+                controller?.bottom ?? Container()
+              ]),
+              bottomNavigationBar: controller?.bottomNavigationBar,
+            ),
           );
         });
   }

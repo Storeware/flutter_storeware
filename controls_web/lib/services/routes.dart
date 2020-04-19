@@ -41,12 +41,13 @@ class Routes {
     return MaterialPageRoute(settings: settings, builder: getRoute(route));
   }
 
-  static pushNamed(context, name) {
+  static pushNamed(context, name, {RouteSettings args}) {
     if (!goHome(context, name)) {
       print('pushNamed: $name');
       var func = Routes().routes[name];
       if (func != null)
-        Navigator.of(context).push(MaterialPageRoute(builder: func));
+        Navigator.of(context)
+            .push(MaterialPageRoute(settings: args, builder: func));
     }
   }
 
@@ -58,8 +59,9 @@ class Routes {
     Navigator.of(context).push(page);
   }
 
-  static go(context, page) {
-    Routes.push(context, MaterialPageRoute(builder: (x) => page));
+  static go(context, page, {RouteSettings args}) {
+    Routes.push(
+        context, MaterialPageRoute(settings: args, builder: (x) => page));
   }
 
   static pushReplacement(context, MaterialPageRoute page) {
@@ -78,12 +80,13 @@ class Routes {
     return Navigator.of(context).pop();
   }
 
-  static popAndPushNamed(context, String name) {
+  static popAndPushNamed(context, String name, {RouteSettings args}) {
     if (!goHome(context, name)) {
       var func = Routes().routes[name];
       if (func != null) {
         Navigator.of(context).pop();
-        Navigator.push(context, MaterialPageRoute(builder: func));
+        Navigator.push(
+            context, MaterialPageRoute(settings: args, builder: func));
       }
       ;
     }

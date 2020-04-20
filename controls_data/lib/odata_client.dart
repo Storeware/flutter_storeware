@@ -26,7 +26,8 @@ extension DynamicExtension on dynamic {
 
   double toDouble(value, {def = 0.0}) {
     if (value is double) return value;
-    if (value is num) return value as double;
+    if (value is int) return value + 0.0;
+    if (value is num) return value + 0.0;
     if (value is String) return double.tryParse(value);
     return def;
   }
@@ -358,8 +359,7 @@ class ODataClient {
 
   execute(String command) async {
     try {
-      //print(command);
-      return client.patch('execute?\$command=' + command).then((x) => x);
+      return client.post('command', body: {"command": command}).then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;

@@ -14,6 +14,8 @@ void debug(dynamic x) {
   if (debugOn) print(x);
 }
 
+enum ODataEventState { insert, update, delete }
+
 extension DynamicExtension on dynamic {
   int toInt(value, {def = 0}) {
     if (value is int) return value;
@@ -447,6 +449,7 @@ abstract class ODataModelClass<T extends DataItem> {
     try {
       return API.post(collectionName, item.toJson()).then((x) => x);
     } catch (e) {
+      print('$e');
       ErrorNotify.send('$e');
       rethrow;
     }
@@ -461,14 +464,30 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
+  send(ODataEventState event, T item) {
+    switch (event) {
+      case ODataEventState.insert:
+        return post(item);
+        break;
+      case ODataEventState.update:
+        return put(item);
+        break;
+      case ODataEventState.delete:
+        return delete(item);
+        break;
+      default:
+        return null;
+    }
+  }
+
   delete(T item) async {
-    return API
-        .delete(collectionName, item.toJson())
-        .then((x) => x)
-        .errorCatch((err) {
+    try {
+      return API.delete(collectionName, item.toJson()).then((x) => x);
+    } catch (err) {
       ErrorNotify.send('$err');
       throw err;
-    });
+    }
+    ;
   }
 
   Future<ODataResult> search(

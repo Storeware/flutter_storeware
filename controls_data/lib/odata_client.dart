@@ -499,6 +499,7 @@ abstract class ODataModelClass<T extends DataItem> {
       String groupBy,
       int top,
       int skip,
+      String join,
       String cacheControl}) async {
     try {
       return API
@@ -509,6 +510,7 @@ abstract class ODataModelClass<T extends DataItem> {
                   filter: filter ?? '',
                   top: top ?? 0,
                   skip: skip ?? 0,
+                  join: join,
                   groupby: groupBy ?? '',
                   orderby: orderBy ?? ''),
               cacheControl: cacheControl)

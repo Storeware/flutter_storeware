@@ -423,14 +423,15 @@ abstract class ODataModelClass<T extends DataItem> {
   ODataModelClass({this.API});
 
   list({filter}) async {
-    return search(resource: collectionName, select: '*', filter: filter)
+    return search(resource: collectionName, select: columns, filter: filter)
         .then((ODataResult r) {
       return r.asMap();
     });
   }
 
   getOne({filter}) {
-    return search(resource: collectionName, select: '*', filter: filter, top: 1)
+    return search(
+            resource: collectionName, select: columns, filter: filter, top: 1)
         .then((ODataResult r) {
       return r.first;
     });

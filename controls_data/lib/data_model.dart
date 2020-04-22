@@ -105,7 +105,7 @@ abstract class DataService {
 }
 
 abstract class DataItem {
-  String id;
+  dynamic id;
   fromMap(Map<String, dynamic> data);
   Map<String, dynamic> toJson();
   bool validate() {

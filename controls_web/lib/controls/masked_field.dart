@@ -314,10 +314,13 @@ class MaskedDatePicker extends StatefulWidget {
 
 class _MaskedDatePickerState extends State<MaskedDatePicker> {
   var changed = StreamController<DateTime>.broadcast();
+  DateFormat formatter;
+
   @override
   void initState() {
+    formatter = DateFormat(widget.format);
     if (widget.initialValue != null)
-      _dataController.text = (widget.initialValue).format(widget.format);
+      _dataController.text = formatter.format(widget.initialValue);
     super.initState();
   }
 
@@ -341,8 +344,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             suffixIcon: IconButton(
                 icon: Icon(Icons.calendar_today),
                 onPressed: () {
-                  _dataController.text =
-                      widget.initialValue.format(widget.format);
+                  _dataController.text = formatter.format(widget.initialValue);
                 })),
         validator: (x) {
           if (widget.validator != null)
@@ -351,7 +353,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
         },
         onTap: () {
           getDate().then((x) {
-            _dataController.text = x.format(widget.format);
+            _dataController.text = formatter.format(x);
 
             if (widget.onChanged != null) widget.onChanged(x);
           });

@@ -25,8 +25,6 @@ class TimeAgo {
       final mes = (diff ~/ MONTH_MILLIS);
       final ano = (diff ~/ YEAR_MILLIS);
 
-      print([ano, mes, dia, hora, min]);
-
       if (ano > 0)
         return 'mais de ${(ano).toStringAsFixed(0)} ano${(ano > 1) ? 's' : ''}';
       if (mes > 1)

@@ -18,6 +18,26 @@ class TimeAgo {
 
     int now = DateTime.now().millisecondsSinceEpoch;
     if (timeStamp > now || timeStamp <= 0) {
+      final int diff = timeStamp - now;
+      final hora = diff ~/ HOUR_MILLIS;
+      final min = diff ~/ MINUTE_MILLIS;
+      final dia = (diff ~/ DAY_MILLIS);
+      final mes = (diff ~/ MONTH_MILLIS);
+      final ano = (diff ~/ YEAR_MILLIS);
+
+      print([ano, mes, dia, hora, min]);
+
+      if (ano > 0)
+        return 'mais de ${(ano).toStringAsFixed(0)} ano${(ano > 1) ? 's' : ''}';
+      if (mes > 1)
+        return 'mais de ${(mes).toStringAsFixed(0)} mes${(mes > 1) ? 'es' : ''}';
+      if (dia > 0)
+        return 'em ${(dia).toStringAsFixed(0)} dia${(dia > 1) ? 's' : ''}';
+      if (hora > 0)
+        return 'em ${(hora).toStringAsFixed(0)} hr${(hora > 1) ? 's' : ''} ${((min - (hora * 60))).toStringAsFixed(0)} min${(min > 1) ? 's' : ''}';
+      if (min > 0)
+        return 'em ${(min).toStringAsFixed(0)} min${(min > 1) ? 's' : ''}';
+
       switch (language) {
         case Language.ENGLISH:
           return "just now";

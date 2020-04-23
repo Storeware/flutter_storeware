@@ -291,6 +291,99 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
   }
 }
 
+class MaskedDatePicker extends StatefulWidget {
+  final DateTime initialValue;
+  final Function(DateTime) validator;
+  final String labelText;
+  final Function(DateTime) onSaved;
+  final Function(DateTime) onChanged;
+  final String format;
+  MaskedDatePicker(
+      {Key key,
+      this.labelText,
+      this.initialValue,
+      this.format = "dd/MM/yyyy",
+      this.validator,
+      this.onChanged,
+      this.onSaved})
+      : super(key: key);
+
+  @override
+  _MaskedDatePickerState createState() => _MaskedDatePickerState();
+}
+
+class _MaskedDatePickerState extends State<MaskedDatePicker> {
+  var changed = StreamController<DateTime>.broadcast();
+  @override
+  void initState() {
+    if (widget.initialValue != null)
+      _dataController.text = (widget.initialValue).format(widget.format);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    changed.close();
+    super.dispose();
+  }
+
+  final TextEditingController _dataController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+        //initialValue: data.format(widget.format),
+        controller: _dataController,
+        keyboardType: TextInputType.phone,
+        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        decoration: InputDecoration(
+            labelText: widget.labelText,
+            suffixIcon: IconButton(
+                icon: Icon(Icons.calendar_today),
+                onPressed: () {
+                  _dataController.text =
+                      widget.initialValue.format(widget.format);
+                })),
+        validator: (x) {
+          if (widget.validator != null)
+            return widget.validator(DateTime.tryParse(x));
+          return null;
+        },
+        onTap: () {
+          getDate().then((x) {
+            _dataController.text = x.format(widget.format);
+
+            if (widget.onChanged != null) widget.onChanged(x);
+          });
+        },
+        onChanged: (x) {
+          widget.onChanged(DateTime.tryParse(x));
+        },
+        onSaved: (x) {
+          if (widget.onSaved != null)
+            return widget.onSaved(DateTime.tryParse(x));
+          return null;
+        });
+  }
+
+  Future<DateTime> getDate() {
+    // Imagine that this function is
+    // more complex and slow.
+    return showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2018),
+      lastDate: DateTime(2030),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child,
+        );
+      },
+    );
+  }
+}
+
 class MaskedCheckbox extends StatefulWidget {
   final String label;
   final bool value;

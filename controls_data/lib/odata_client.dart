@@ -169,12 +169,14 @@ class ODataResult {
 class ODataBuilder extends StatelessWidget {
   final ODataQuery query;
   final ODataClient client;
+  final String cacheControl;
   final Function(BuildContext, ODataResult) builder;
   final initialData;
   const ODataBuilder(
       {Key key,
       this.client,
       this.initialData,
+      this.cacheControl,
       @required this.query,
       this.builder})
       : super(key: key);
@@ -203,7 +205,7 @@ class ODataBuilder extends StatelessWidget {
   Future execute(ODataClient odata, query) async {
     debug(['execute', odata]);
     var odt = odata ?? ODataInst();
-    return odt.send(query);
+    return odt.send(query, cacheControl: cacheControl);
   }
 }
 

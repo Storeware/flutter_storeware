@@ -298,12 +298,14 @@ class MaskedDatePicker extends StatefulWidget {
   final Function(DateTime) onSaved;
   final Function(DateTime) onChanged;
   final String format;
+  final Widget prefix;
   MaskedDatePicker(
       {Key key,
       this.labelText,
       this.initialValue,
       this.format = "dd/MM/yyyy",
       this.validator,
+      this.prefix,
       this.onChanged,
       this.onSaved})
       : super(key: key);
@@ -341,6 +343,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
         style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
             labelText: widget.labelText,
+            prefix: widget.prefix,
             suffixIcon: IconButton(
                 icon: Icon(Icons.calendar_today),
                 onPressed: () {
@@ -393,10 +396,18 @@ class MaskedCheckbox extends StatefulWidget {
   final Widget trailing;
   final Function(bool) onChanged;
   final bool tristate;
+  final Color activeColor;
+  final Color checkColor;
+  final Color hoverColor;
+  final Color focusColor;
   MaskedCheckbox({
     Key key,
     this.label,
     this.value = true,
+    this.activeColor,
+    this.checkColor,
+    this.hoverColor,
+    this.focusColor,
     this.onChanged,
     this.leading,
     this.trailing,
@@ -428,6 +439,10 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
             stream: notifier.stream,
             builder: (context, snapshot) {
               return Checkbox(
+                activeColor: widget.activeColor,
+                checkColor: widget.checkColor,
+                hoverColor: widget.hoverColor,
+                focusColor: widget.focusColor,
                 tristate: widget.tristate,
                 value: snapshot.data,
                 onChanged: (x) {

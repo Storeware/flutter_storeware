@@ -425,7 +425,32 @@ abstract class ODataModelClass<T extends DataItem> {
   ODataModelClass({this.API});
 
   list({filter}) async {
-    return search(resource: collectionName, select: columns, filter: filter)
+    return search(
+      resource: collectionName,
+      select: columns,
+      filter: filter,
+    ).then((ODataResult r) {
+      return r.asMap();
+    });
+  }
+
+  listCached({filter, cacheControl}) async {
+    return search(
+            resource: collectionName,
+            select: columns,
+            filter: filter,
+            cacheControl: cacheControl ?? 'max-age=3600')
+        .then((ODataResult r) {
+      return r.asMap();
+    });
+  }
+
+  listNoCached({filter, cacheControl}) async {
+    return search(
+            resource: collectionName,
+            select: columns,
+            filter: filter,
+            cacheControl: cacheControl ?? 'no-cache')
         .then((ODataResult r) {
       return r.asMap();
     });

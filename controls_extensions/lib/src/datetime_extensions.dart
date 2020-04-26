@@ -27,14 +27,37 @@ extension DateTimeExtension on DateTime {
     if (lang.indexOf('pt') >= 0) lg = Language.PORTUGUESE;
     return TimeAgo.getTimeAgo(timeStamp, language: lg);
   }
-  
+
   toDate() {
     return DateTime.parse(this.format('yyyy-MM-dd'));
   }
 
-
   toTime() {
     return this - this.toDate();
+  }
+
+  startOfMonth() {
+    return DateTime(this.year, this.month, 1);
+  }
+
+  endOfMonth() {
+    return DateTime(this.year, this.month + 1, 0);
+  }
+
+  lastDayOfMonth() {
+    return endOfMonth().day;
+  }
+
+  startOfYear() {
+    return DateTime(this.year, 1, 1);
+  }
+
+  endOfYear() {
+    return DateTime(this.year, 12, 31);
+  }
+
+  toIso8601StringDate() {
+    return this.format('yyyy-MM-dd');
   }
 }
 

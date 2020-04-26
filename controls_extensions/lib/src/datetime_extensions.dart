@@ -59,6 +59,14 @@ extension DateTimeExtension on DateTime {
   toIso8601StringDate() {
     return this.format('yyyy-MM-dd');
   }
+
+  yesterday() {
+    return this.addDays(-1);
+  }
+
+  tomorrow() {
+    return this.addDays(1);
+  }
 }
 
 /// credits: https://github.com/jogboms/time.dart

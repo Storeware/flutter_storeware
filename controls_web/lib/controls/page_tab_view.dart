@@ -18,6 +18,17 @@ class PageTabViewController {
   }
 }
 
+class PageTabViewTheme {
+  static final _singleton = PageTabViewTheme._create();
+  PageTabViewTheme._create();
+  factory PageTabViewTheme() => _singleton;
+
+  Color appBackgroundColor = Colors.white;
+  Color indicatorColor = Colors.amber;
+  Color tabColor = Colors.white;
+  Color iconColor = Colors.black;
+}
+
 class PageTabView extends StatefulWidget {
   final List<TabChoice> choices;
   final PageTabViewController controller;
@@ -25,7 +36,9 @@ class PageTabView extends StatefulWidget {
   final Widget title;
   final List<Widget> actions;
   final double elevation;
+  final PageTabViewTheme theme;
   final Color tabColor;
+
   final Widget tabTitle;
   final List<Widget> tabActions;
   final double tabHeight;
@@ -44,7 +57,11 @@ class PageTabView extends StatefulWidget {
   PageTabView({
     this.title,
     this.appBar,
+    this.theme,
+    this.tabColor,
     this.appBackgroundColor,
+    this.iconColor,
+    this.indicatorColor,
     this.tabBuilder,
     this.elevation = 0.0,
     this.leading,
@@ -53,11 +70,8 @@ class PageTabView extends StatefulWidget {
     this.isScrollable = false,
     @required this.choices,
     this.initialIndex = 0,
-    this.tabColor = Colors.blue,
-    this.indicatorColor = Colors.white,
     this.floatingActionButton,
     this.bottomNavigationBar,
-    this.iconColor = Colors.white,
     this.tabHeight = 55,
     this.tabActions,
     this.tabTitle,
@@ -72,8 +86,21 @@ class _TabBarViewState extends State<PageTabView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ThemeData theme;
+  var tabChangeEvent = StreamController<int>.broadcast();
+  PageTabViewTheme tabTheme;
+  Color _tabColor;
+  Color _iconColor;
+  Color _indicatorColor;
+  Color _appBackgroundColor;
+
   @override
   void initState() {
+    tabTheme = widget.theme ?? PageTabViewTheme();
+    _tabColor = widget.tabColor ?? tabTheme.tabColor;
+    _iconColor = widget.iconColor ?? tabTheme.iconColor;
+    _indicatorColor = widget.indicatorColor ?? tabTheme.indicatorColor;
+    _appBackgroundColor =
+        widget.appBackgroundColor ?? tabTheme.appBackgroundColor;
     super.initState();
     indexSelected = widget.initialIndex;
     _tabController = TabController(vsync: this, length: widget.choices.length);
@@ -83,7 +110,6 @@ class _TabBarViewState extends State<PageTabView>
     }
   }
 
-  var tabChangeEvent = StreamController<int>.broadcast();
   @override
   void dispose() {
     _tabController.removeListener(_nextPage);
@@ -118,12 +144,11 @@ class _TabBarViewState extends State<PageTabView>
         padding: EdgeInsets.all(2),
         width: w ?? 200,
         height: widget.tabHeight,
-        color: widget.tabColor,
+        color: _tabColor,
         child: Column(
           children: <Widget>[
-            Icon(tc.icon, size: 25, color: widget.iconColor),
-            Text(tc.title,
-                style: TextStyle(fontSize: 18, color: widget.iconColor))
+            Icon(tc.icon, size: 25, color: _iconColor),
+            Text(tc.title, style: TextStyle(fontSize: 18, color: _iconColor))
           ],
         ),
       ),
@@ -144,7 +169,7 @@ class _TabBarViewState extends State<PageTabView>
     return Container(
       child: Scaffold(
         appBar: AppBar(
-            backgroundColor: widget.appBackgroundColor,
+            backgroundColor: _appBackgroundColor,
             title: widget.title,
             elevation: widget.elevation,
             leading: widget.leading,
@@ -191,8 +216,8 @@ class _TabBarViewState extends State<PageTabView>
                                                   constraints: BoxConstraints(
                                                       maxWidth: 2000),
                                                   color: (snapshot.data != i)
-                                                      ? widget.tabColor
-                                                      : widget.indicatorColor,
+                                                      ? _tabColor
+                                                      : _indicatorColor,
                                                   //child:
                                                 );
                                               })

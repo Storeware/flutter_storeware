@@ -162,7 +162,7 @@ class PaginatedGrid extends StatefulWidget {
   /// eventos de edição - permite criar novas janelas de edição para
   /// edição de dados -
   final bool Function(PaginatedGridController) onEditItem;
-  final bool Function(PaginatedGridController) onNewItem;
+  final bool Function(PaginatedGridController) onInsertItem;
   final Future<dynamic> Function(PaginatedGridController) onDeleteItem;
 
   final Function(PaginatedGridController) onRefresh;
@@ -170,15 +170,15 @@ class PaginatedGrid extends StatefulWidget {
   /// mudou a linha de edição
   final Function(bool, PaginatedGridController) onSelectChanged;
 
-  ///[onChangeEvent] evento que os dados foram editados e podem ser persistidos
+  ///[onPostEvent] evento que os dados foram editados e podem ser persistidos
   final Future<dynamic> Function(
-      PaginatedGridController, dynamic, PaginatedGridChangeEvent) onChangeEvent;
+      PaginatedGridController, dynamic, PaginatedGridChangeEvent) onPostEvent;
 
   /// indica se é para apresentar um barra de filtro dos dados de memoria
   final bool canFilter;
 
-  /// [canChange] flag indicando que o registro pode ser alterado
-  final bool canChange;
+  /// [canEdit] flag indicando que o registro pode ser alterado
+  final bool canEdit;
   final bool canDelete;
   final bool canInsert;
 
@@ -219,7 +219,7 @@ class PaginatedGrid extends StatefulWidget {
     this.columns,
     this.editSize,
     this.footerTrailling,
-    this.canChange = false,
+    this.canEdit = false,
     this.onPageChanged,
     this.rowsPerPage = 10,
     this.sortColumnIndex = 0,
@@ -227,7 +227,7 @@ class PaginatedGrid extends StatefulWidget {
     this.columnSpacing = 5,
     this.actions,
     this.onEditItem,
-    this.onNewItem,
+    this.onInsertItem,
     this.onDeleteItem,
     this.canFilter = false,
     this.onSelectChanged,
@@ -236,7 +236,7 @@ class PaginatedGrid extends StatefulWidget {
     this.onRefresh,
     this.onCellTap,
     this.onSelectAll,
-    this.onChangeEvent,
+    this.onPostEvent,
     this.columnStyle,
     this.showCheckboxColumn = false,
     this.sortAscending = true,
@@ -288,8 +288,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
     controller.statePage = this;
     _filter = '';
     postEvent = controller.postEvent.stream.listen((x) {
-      if (widget.onChangeEvent != null) {
-        widget.onChangeEvent(controller, x.data, x.event).then((b) {
+      if (widget.onPostEvent != null) {
+        widget.onPostEvent(controller, x.data, x.event).then((b) {
           if (b != null) {
             if (x.event == PaginatedGridChangeEvent.delete)
               controller.source.removeAt(controller.currentRow);
@@ -531,15 +531,15 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 
   buildAddButton() {
     if (widget.canInsert &&
-        ((widget.onNewItem != null) || (widget.onChangeEvent != null))) {
+        ((widget.onInsertItem != null) || (widget.onPostEvent != null))) {
       return FloatingActionButton(
         //    child: IconButton(
         child: Icon(Icons.add),
         onPressed: () {
           controller.data = null;
-          if (widget.onNewItem != null)
-            controller.changed(widget.onNewItem(controller));
-          else if (widget.onChangeEvent != null) {
+          if (widget.onInsertItem != null)
+            controller.changed(widget.onInsert Item(controller));
+          else if (widget.onPostEvent != null) {
             PaginatedGrid.show(context,
                 title: 'Novo registro',
                 child: PaginatedGridEditRow(
@@ -674,40 +674,42 @@ class PaginatedGridDataTableSource extends DataTableSource {
                 controller.widget.onSelectChanged(b, controller);
                 return b;
               }
-            : (controller.widget.canChange)
+            : (controller.widget.canEdit)
                 ? (b) {
                     setData(index, 0);
-                    return PaginatedGrid.show(
-                      controller.context,
-                      title: 'Alteração',
-                      actions: [
-                        if (controller.widget.canDelete)
-                          if (controller.widget.onDeleteItem != null)
-                            IconButton(
-                              icon: Icon(Icons.delete),
-                              onPressed: () {
-                                controller.widget
-                                    .onDeleteItem(controller)
-                                    .then((x) {
-                                  if (x) {
-                                    controller.removeAt(index);
-                                    Timer.run(() {
-                                      //print('pop');
-                                      Navigator.pop(controller.context);
-                                    });
-                                    controller.changed(b);
-                                  }
-                                });
-                              },
-                            )
-                      ],
-                      child: PaginatedGridEditRow(
-                        width: controller.widget.editSize?.width,
-                        height: controller.widget.editSize?.height,
-                        controller: controller,
-                        event: PaginatedGridChangeEvent.update,
-                      ),
-                    );
+                    return (controller.widget.onEditItem != null)
+                        ? controller.widget.onEditItem(controller)
+                        : PaginatedGrid.show(
+                            controller.context,
+                            title: 'Alteração',
+                            actions: [
+                              if (controller.widget.canDelete)
+                                if (controller.widget.onDeleteItem != null)
+                                  IconButton(
+                                    icon: Icon(Icons.delete),
+                                    onPressed: () {
+                                      controller.widget
+                                          .onDeleteItem(controller)
+                                          .then((x) {
+                                        if (x) {
+                                          controller.removeAt(index);
+                                          Timer.run(() {
+                                            //print('pop');
+                                            Navigator.pop(controller.context);
+                                          });
+                                          controller.changed(b);
+                                        }
+                                      });
+                                    },
+                                  )
+                            ],
+                            child: PaginatedGridEditRow(
+                              width: controller.widget.editSize?.width,
+                              height: controller.widget.editSize?.height,
+                              controller: controller,
+                              event: PaginatedGridChangeEvent.update,
+                            ),
+                          );
                   }
                 : null,
         cells: [
@@ -717,7 +719,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                   ? DataCell(Row(children: [
                       if (col.builder != null) col.builder(col.index, row),
                       if (col.builder == null)
-                        if (controller.widget.canChange)
+                        if (controller.widget.canEdit)
                           if (controller.widget.onEditItem != null)
                             IconButton(
                               icon: Icon(Icons.edit),

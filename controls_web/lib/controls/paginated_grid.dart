@@ -285,6 +285,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   @override
   void initState() {
     controller = widget.controller ?? PaginatedGridController();
+    controller.statePage = this;
     _filter = '';
     postEvent = controller.postEvent.stream.listen((x) {
       if (widget.onChangeEvent != null) {
@@ -385,7 +386,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                     return widget.onSort(a, b);
                   });
                 //print('girdRows: ${controller.originalSource.length}');
-                if (controller.columns == null) createColumns(snapshot.data);
+                if ((controller.columns ?? []).length == 0)
+                  createColumns(snapshot.data);
                 addVirtualColumn();
                 if (widget.beforeShow != null) widget.beforeShow(controller);
                 return Scaffold(
@@ -557,6 +559,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 
 class PaginatedGridController {
   BuildContext context;
+  _PaginatedGridState statePage;
   StreamController<bool> changedEvent = StreamController<bool>.broadcast();
   List<dynamic> source;
   List<PaginatedGridColumn> columns;
@@ -603,9 +606,20 @@ class PaginatedGridController {
     }
   }
 
+  changeTo(key, valueSearch, dadosTo) {
+    begin();
+    try {
+      for (var i = 0; i < source.length; i++)
+        if (source[i][key] == valueSearch) source[i] = dadosTo;
+    } finally {
+      end();
+    }
+  }
+
   StreamController<PaginatedGridEventData> postEvent =
       StreamController<PaginatedGridEventData>.broadcast();
-  changeRow(
+
+  _changeRow(
       int row, Map<String, dynamic> data, PaginatedGridChangeEvent event) {
     postEvent.sink
         .add(PaginatedGridEventData(currentRow: row, event: event, data: data));
@@ -613,6 +627,11 @@ class PaginatedGridController {
 
   removeAt(int rowIndex) {
     source.removeAt(rowIndex);
+    changed(true);
+  }
+
+  remove(item) {
+    source.remove(item);
     changed(true);
   }
 }
@@ -696,29 +715,32 @@ class PaginatedGridDataTableSource extends DataTableSource {
             if (col.visible)
               (col.isVirtual)
                   ? DataCell(Row(children: [
-                      if (controller.widget.canChange)
-                        if (controller.widget.onEditItem != null)
-                          IconButton(
-                            icon: Icon(Icons.edit),
-                            onPressed: () {
-                              setData(index, col.index);
-                              controller.changed(
-                                  controller.widget.onEditItem(controller));
-                            },
-                          ),
-                      if (controller.widget.canDelete)
-                        if (controller.widget.onDeleteItem != null)
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              setData(index, col.index);
-                              controller.widget
-                                  .onDeleteItem(controller)
-                                  .then((x) {
-                                if (x) controller.removeAt(index);
-                              });
-                            },
-                          )
+                      if (col.builder != null) col.builder(col.index, row),
+                      if (col.builder == null)
+                        if (controller.widget.canChange)
+                          if (controller.widget.onEditItem != null)
+                            IconButton(
+                              icon: Icon(Icons.edit),
+                              onPressed: () {
+                                setData(index, col.index);
+                                controller.changed(
+                                    controller.widget.onEditItem(controller));
+                              },
+                            ),
+                      if (col.builder == null)
+                        if (controller.widget.canDelete)
+                          if (controller.widget.onDeleteItem != null)
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                setData(index, col.index);
+                                controller.widget
+                                    .onDeleteItem(controller)
+                                    .then((x) {
+                                  if (x) controller.removeAt(index);
+                                });
+                              },
+                            )
                     ]))
                   : DataCell(
                       (col.builder != null)
@@ -818,9 +840,9 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
         //height: widget.height,
         constraints: BoxConstraints(
           minHeight: 300,
-          minWidth: 400,
-          maxHeight: widget.height,
-          maxWidth: widget.width,
+          minWidth: 200,
+          maxHeight: widget.height ?? size.height * 0.9,
+          maxWidth: widget.width ?? size.width * 0.9,
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -830,46 +852,47 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 for (var item in widget.controller.columns)
-                  (item.editBuilder != null)
-                      ? item.editBuilder(
-                          widget.controller, item, p[item.name], p)
-                      : TextFormField(
-                          autofocus: canFocus(item),
-                          maxLines: item.maxLines,
-                          maxLength: item.maxLength,
-                          enabled: canEdit(item),
-                          initialValue: (item.onGetValue != null)
-                              ? item.onGetValue(p[item.name])
-                              : (p[item.name] ?? '').toString(),
-                          style: TextStyle(
-                              fontSize: 16, fontStyle: FontStyle.normal),
-                          decoration: InputDecoration(
-                            labelText: item.label ?? item.name,
-                          ),
-                          validator: (value) {
-                            if (item.onValidate != null)
-                              return item.onValidate(value);
-                            if (item.required) if (value.isEmpty) {
-                              return (item.editInfo.replaceAll(
-                                  '{label}', item.label ?? item.name));
-                            }
+                  if (!item.isVirtual)
+                    (item.editBuilder != null)
+                        ? item.editBuilder(
+                            widget.controller, item, p[item.name], p)
+                        : TextFormField(
+                            autofocus: canFocus(item),
+                            maxLines: item.maxLines,
+                            maxLength: item.maxLength,
+                            enabled: canEdit(item),
+                            initialValue: (item.onGetValue != null)
+                                ? item.onGetValue(p[item.name])
+                                : (p[item.name] ?? '').toString(),
+                            style: TextStyle(
+                                fontSize: 16, fontStyle: FontStyle.normal),
+                            decoration: InputDecoration(
+                              labelText: item.label ?? item.name,
+                            ),
+                            validator: (value) {
+                              if (item.onValidate != null)
+                                return item.onValidate(value);
+                              if (item.required) if (value.isEmpty) {
+                                return (item.editInfo.replaceAll(
+                                    '{label}', item.label ?? item.name));
+                              }
 
-                            return null;
-                          },
-                          onSaved: (x) {
-                            if (item.onSetValue != null) {
-                              p[item.name] = item.onSetValue(x);
-                              return;
-                            }
-                            if (p[item.name] is int)
-                              p[item.name] = int.tryParse(x);
-                            else if (p[item.name] is double)
-                              p[item.name] = double.tryParse(x);
-                            else if (p[item.name] is bool)
-                              p[item.name] = x;
-                            else
-                              p[item.name] = x;
-                          }),
+                              return null;
+                            },
+                            onSaved: (x) {
+                              if (item.onSetValue != null) {
+                                p[item.name] = item.onSetValue(x);
+                                return;
+                              }
+                              if (p[item.name] is int)
+                                p[item.name] = int.tryParse(x);
+                              else if (p[item.name] is double)
+                                p[item.name] = double.tryParse(x);
+                              else if (p[item.name] is bool)
+                                p[item.name] = x;
+                              else
+                                p[item.name] = x;
+                            }),
                 Divider(),
                 FlatButton(
                   child: Text('Salvar'),
@@ -888,7 +911,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   _save(context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      widget.controller.changeRow(widget.controller.currentRow, p, _event);
+      widget.controller._changeRow(widget.controller.currentRow, p, _event);
       Navigator.pop(context);
     }
   }

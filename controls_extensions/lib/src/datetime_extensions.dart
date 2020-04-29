@@ -10,10 +10,12 @@ extension DateTimeExtension on DateTime {
 
   toTimeString() => DateFormat.Hms().format(this);
   toDateString() => DateFormat.yMd().format(this);
-  addDays(int value) => this.add(value.days);
 
-  addHours(int value) => this.add(value.hours);
-  addMinutes(int value) => this.add(value.minutes);
+  addDays(int value) => this.add(Duration(days: value));
+  addHours(int value) => this.add(Duration(hours: value));
+  addMinutes(int value) => this.add(Duration(minutes: value));
+  addMonths(int value) => DateTime(this.year, this.month + value, this.day);
+  addYears(int value) => DateTime(this.year + value, this.month, this.day);
 
   bool isLeapYear() {
     int value = this.year;
@@ -60,12 +62,17 @@ extension DateTimeExtension on DateTime {
     return this.format('yyyy-MM-dd');
   }
 
-  yesterday() {
-    return this.addDays(-1);
+  static DateTime yesterday() {
+    return today().addDays(-1);
   }
 
-  tomorrow() {
-    return this.addDays(1);
+  static DateTime tomorrow() {
+    return today().addDays(1);
+  }
+
+  static DateTime today() {
+    DateTime d = DateTime.now();
+    return DateTime(d.year, d.month, d.day);
   }
 }
 

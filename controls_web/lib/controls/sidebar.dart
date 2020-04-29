@@ -448,7 +448,8 @@ class SidebarContainer extends StatelessWidget {
         initialData: controller?.compacted ?? false,
         builder: (context, snapshot) {
           return Container(
-            width: (!snapshot.data) ? width : compactWidth,
+            width: controller
+                .currentWidth, //(!snapshot.data) ? width : compactWidth,
             child: Scaffold(
               appBar: controller?.appBar,
               backgroundColor: controller?.color,

@@ -133,64 +133,74 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
     return Container(
       child: SidebarScaffold(
         controller: sidebarController,
-        sidebarVisible: true,
-        canShowCompact: true,
+        sidebarVisible: sidebarController.visible,
+        canShowCompact: sidebarController.canShowCompact,
         sidebarPosition: SidebarPosition.left,
         appBar: widget.appBar ??
             AppBar(
               leading: IconButton(
                 icon: Icon(Icons.menu),
                 onPressed: () {
-                  sidebarController.showCompact(
-                      compact: !sidebarController.compacted);
+                  if (!sidebarController.canShowCompact) {
+                    (sidebarController.visible)
+                        ? sidebarController.hide()
+                        : sidebarController.show();
+                  } else
+                    sidebarController.showCompact(
+                        compact: !sidebarController.compacted);
                   tabChangeEvent.sink.add(indexSelected);
                 },
               ),
               title: widget.title,
               elevation: widget.elevation,
             ),
-        sidebar: SidebarContainer(
-            compact: widget.compacted,
-            compactWidth: 60,
-            controller: sidebarController,
-            width: sidebarController.width,
-            child: ListView(
-              children: [
-                for (int i = 0; i < widget.choices.length; i++)
-                  Column(
-                    children: <Widget>[
-                      StreamBuilder<int>(
-                          stream: tabChangeEvent.stream,
-                          initialData: indexSelected,
-                          builder: (context, snapshot) {
-                            TabChoice tab = widget.choices[i];
-                            return Container(
-                              color: (snapshot.data == i)
-                                  ? widget.indicatorColor
-                                  : widget.tabColor,
-                              child: ListTile(
-                                title: sidebarController.compacted
-                                    ? null
-                                    : Text(tab.title,
-                                        style: TextStyle(
-                                          color: widget.iconColor,
-                                        )),
-                                leading: (tab.icon != null)
-                                    ? Icon(
-                                        tab.icon,
-                                        color: widget.iconColor,
-                                      )
-                                    : null,
-                                onTap: () {
-                                  _tabController.animateTo(i);
-                                },
-                              ),
-                            );
-                          }),
+        sidebar: StreamBuilder<Object>(
+            initialData: sidebarController.visible,
+            stream: sidebarController.visibleStream,
+            builder: (context, snapshot) {
+              return SidebarContainer(
+                  compact: widget.compacted,
+                  compactWidth: sidebarController.compactSize,
+                  controller: sidebarController,
+                  width: sidebarController.width,
+                  child: ListView(
+                    children: [
+                      for (int i = 0; i < widget.choices.length; i++)
+                        Column(
+                          children: <Widget>[
+                            StreamBuilder<int>(
+                                stream: tabChangeEvent.stream,
+                                initialData: indexSelected,
+                                builder: (context, snapshot) {
+                                  TabChoice tab = widget.choices[i];
+                                  return Container(
+                                    color: (snapshot.data == i)
+                                        ? widget.indicatorColor
+                                        : widget.tabColor,
+                                    child: ListTile(
+                                      title: sidebarController.compacted
+                                          ? null
+                                          : Text(tab.title,
+                                              style: TextStyle(
+                                                color: widget.iconColor,
+                                              )),
+                                      leading: (tab.icon != null)
+                                          ? Icon(
+                                              tab.icon,
+                                              color: widget.iconColor,
+                                            )
+                                          : null,
+                                      onTap: () {
+                                        _tabController.animateTo(i);
+                                      },
+                                    ),
+                                  );
+                                }),
+                          ],
+                        )
                     ],
-                  )
-              ],
-            )),
+                  ));
+            }),
         sidebarColor: widget.tabColor,
         body: Padding(
           padding: widget.bodyPadding ?? EdgeInsets.all(8.0),

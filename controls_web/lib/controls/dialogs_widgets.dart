@@ -1,0 +1,383 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+
+class Dialogs {
+  static showModal(context,
+      {String title,
+      Widget child,
+      double width,
+      double height,
+      Color color,
+      Widget bottom}) async {
+    return showPage(context,
+        label: title,
+        width: width,
+        height: height,
+        child: Scaffold(
+          appBar: AppBar(title: Text(title)),
+          body: Column(
+            children: [
+              if (child != null) child,
+              if (bottom != null) bottom,
+            ],
+          ),
+        ));
+  }
+
+  static showPage(context,
+      {Widget child,
+      width,
+      height,
+      Alignment alignment,
+      String label = ''}) async {
+    Size size = MediaQuery.of(context).size;
+    return showGeneralDialog(
+      context: context,
+      barrierLabel: label,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 500),
+      barrierDismissible: true,
+      pageBuilder: (BuildContext context, Animation animation,
+          Animation secondaryAnimation) {
+        return Align(
+          alignment: alignment ?? Alignment.center,
+          child: Wrap(
+            children: [
+              Container(
+                width: width ?? size.width * 0.80,
+                height: height ?? size.height * 0.80,
+                child: Center(
+                  child: child,
+                ),
+              )
+            ],
+          ),
+        );
+      },
+      transitionBuilder: (_, anim, __, child) {
+        return ScaleTransition(
+          scale: anim,
+          child: child,
+        );
+      },
+    );
+  }
+
+  static showTimedDialog(context,
+      {int seconds = 10,
+      width: 250,
+      height: 150,
+      @required Widget child}) async {
+    var _closed = false;
+    Timer(Duration(seconds: seconds), () {
+      if (!_closed) Navigator.pop(context);
+    });
+    return showDialog(
+        context: context,
+        child: new SimpleDialog(
+          title: child,
+          children: <Widget>[
+            new SimpleDialogOption(
+              child: new Text('Ok'),
+              onPressed: () {
+                _closed = true;
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ));
+  }
+
+  static future<T>(T Function() builder) async {
+    return builder();
+  }
+
+  static showWaitDialog(context,
+      {String title, @required dynamic Function() onWaiting}) {
+    return showDialog(
+        context: context,
+        child: new SimpleDialog(title: Text(title ?? ''), children: <Widget>[
+          new SimpleDialogOption(
+            child: FutureBuilder(future: future(() {
+              return onWaiting();
+            }), builder: (x, y) {
+              if (!y.hasData) return Align(child: CircularProgressIndicator());
+              Timer.run(() {
+                Navigator.pop(context);
+              });
+              return Container();
+            }),
+          )
+        ]));
+  }
+}
+
+enum ProgressDialogType { Normal, Download, Percent }
+
+String _dialogMessage = "Carregando...";
+double _progress = 0.0, _maxProgress = 100.0;
+
+Widget _customBody;
+
+TextAlign _textAlign = TextAlign.left;
+Alignment _progressWidgetAlignment = Alignment.centerLeft;
+
+bool _isShowing = false;
+BuildContext _context, _dismissingContext;
+ProgressDialogType _progressDialogType;
+bool _barrierDismissible = true, _showLogs = false;
+
+TextStyle _progressTextStyle = TextStyle(
+        color: Colors.black, fontSize: 12.0, fontWeight: FontWeight.w400),
+    _messageStyle = TextStyle(
+        color: Colors.black, fontSize: 18.0, fontWeight: FontWeight.w600);
+
+double _dialogElevation = 8.0, _borderRadius = 8.0;
+Color _backgroundColor = Colors.white;
+Curve _insetAnimCurve = Curves.easeInOut;
+EdgeInsets _dialogPadding = const EdgeInsets.all(8.0);
+
+Widget _progressWidget = Image.asset(
+  'assets/double_ring_loading_io.gif',
+  package: 'progress_dialog',
+);
+
+class ProgressDialog {
+  _Body _dialog;
+
+  ProgressDialog(BuildContext context,
+      {ProgressDialogType type,
+      bool isDismissible,
+      bool showLogs,
+      Widget customBody}) {
+    _context = context;
+    _progressDialogType = type ?? ProgressDialogType.Normal;
+    _barrierDismissible = isDismissible ?? true;
+    _showLogs = showLogs ?? false;
+    _customBody = customBody ?? null;
+  }
+
+  void style(
+      {Widget child,
+      double progress,
+      double maxProgress,
+      String message,
+      Widget progressWidget,
+      Color backgroundColor,
+      TextStyle progressTextStyle,
+      TextStyle messageTextStyle,
+      double elevation,
+      TextAlign textAlign,
+      double borderRadius,
+      Curve insetAnimCurve,
+      EdgeInsets padding,
+      Alignment progressWidgetAlignment}) {
+    if (_isShowing) return;
+    if (_progressDialogType == ProgressDialogType.Download) {
+      _progress = progress ?? _progress;
+    }
+
+    _dialogMessage = message ?? _dialogMessage;
+    _maxProgress = maxProgress ?? _maxProgress;
+    _progressWidget = progressWidget ?? _progressWidget;
+    _backgroundColor = backgroundColor ?? _backgroundColor;
+    _messageStyle = messageTextStyle ?? _messageStyle;
+    _progressTextStyle = progressTextStyle ?? _progressTextStyle;
+    _dialogElevation = elevation ?? _dialogElevation;
+    _borderRadius = borderRadius ?? _borderRadius;
+    _insetAnimCurve = insetAnimCurve ?? _insetAnimCurve;
+    _textAlign = textAlign ?? _textAlign;
+    _progressWidget = child ?? _progressWidget;
+    _dialogPadding = padding ?? _dialogPadding;
+    _progressWidgetAlignment =
+        progressWidgetAlignment ?? _progressWidgetAlignment;
+  }
+
+  void update(
+      {double progress,
+      double maxProgress,
+      String message,
+      Widget progressWidget,
+      TextStyle progressTextStyle,
+      TextStyle messageTextStyle}) {
+    if (_progressDialogType == ProgressDialogType.Download) {
+      _progress = progress ?? _progress;
+    }
+
+    _dialogMessage = message ?? _dialogMessage;
+    _maxProgress = maxProgress ?? _maxProgress;
+    _progressWidget = progressWidget ?? _progressWidget;
+    _messageStyle = messageTextStyle ?? _messageStyle;
+    _progressTextStyle = progressTextStyle ?? _progressTextStyle;
+    _progress = progress ?? _progress;
+
+    if (_isShowing) _dialog.update();
+  }
+
+  bool isShowing() {
+    return _isShowing;
+  }
+
+  Future<bool> hide() async {
+    try {
+      if (_isShowing) {
+        _isShowing = false;
+        Navigator.of(_dismissingContext).pop();
+        if (_showLogs) debugPrint('ProgressDialog dismissed');
+        return Future.value(true);
+      } else {
+        if (_showLogs) debugPrint('ProgressDialog already dismissed');
+        return Future.value(false);
+      }
+    } catch (err) {
+      debugPrint('Seems there is an issue hiding dialog');
+      debugPrint(err);
+      return Future.value(false);
+    }
+  }
+
+  Future<bool> show() async {
+    try {
+      if (!_isShowing) {
+        _dialog = new _Body();
+        showDialog<dynamic>(
+          context: _context,
+          barrierDismissible: _barrierDismissible,
+          builder: (BuildContext context) {
+            _dismissingContext = context;
+            return WillPopScope(
+              onWillPop: () async => _barrierDismissible,
+              child: Dialog(
+                  backgroundColor: _backgroundColor,
+                  insetAnimationCurve: _insetAnimCurve,
+                  insetAnimationDuration: Duration(milliseconds: 100),
+                  elevation: _dialogElevation,
+                  shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(_borderRadius))),
+                  child: _dialog),
+            );
+          },
+        );
+        // Delaying the function for 200 milliseconds
+        // [Default transitionDuration of DialogRoute]
+        await Future.delayed(Duration(milliseconds: 200));
+        if (_showLogs) debugPrint('ProgressDialog shown');
+        _isShowing = true;
+        return true;
+      } else {
+        if (_showLogs) debugPrint("ProgressDialog already shown/showing");
+        return false;
+      }
+    } catch (err) {
+      _isShowing = false;
+      debugPrint('Exception while showing the dialog');
+      debugPrint(err);
+      return false;
+    }
+  }
+}
+
+// ignore: must_be_immutable
+class _Body extends StatefulWidget {
+  _BodyState _dialog = _BodyState();
+
+  update() {
+    _dialog.update();
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return _dialog;
+  }
+}
+
+class _BodyState extends State<_Body> {
+  update() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _isShowing = false;
+    if (_showLogs) debugPrint('ProgressDialog dismissed by back button');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _customBody ??
+        Container(
+          padding: _dialogPadding,
+          child: _progressDialogType == ProgressDialogType.Percent
+              ? Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Container(
+                      height: 100,
+                      constraints: BoxConstraints(maxWidth: 500),
+                      child: Column(mainAxisSize: MainAxisSize.min, children: [
+                        Expanded(
+                            child: Align(
+                          child: Text(_dialogMessage, style: _messageStyle),
+                        )),
+                        LinearProgressIndicator(
+                            value: _progress / _maxProgress),
+                      ])))
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const SizedBox(width: 8.0),
+                        Align(
+                          alignment: _progressWidgetAlignment,
+                          child: SizedBox(
+                            width: 60.0,
+                            height: 60.0,
+                            child: _progressWidget,
+                          ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: _progressDialogType ==
+                                  ProgressDialogType.Normal
+                              ? Text(
+                                  _dialogMessage,
+                                  textAlign: _textAlign,
+                                  style: _messageStyle,
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      SizedBox(height: 8.0),
+                                      Expanded(
+                                        child: Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                                child: Text(_dialogMessage,
+                                                    style: _messageStyle)),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 4.0),
+                                      Align(
+                                        alignment: Alignment.bottomRight,
+                                        child: Text("$_progress/$_maxProgress",
+                                            style: _progressTextStyle),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                        ),
+                        const SizedBox(width: 8.0)
+                      ],
+                    ),
+                  ],
+                ),
+        );
+  }
+}

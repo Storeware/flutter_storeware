@@ -750,7 +750,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                   ((col.numeric)
                                       ? Alignment.centerRight
                                       : Alignment.centerLeft),
-                              child: Text(doGetValue(col, row[col.name]),
+                              child: Text(doGetValue(col, row[col.name]) ?? '',
                                   style: col.style),
                             ),
                       onTap: ((controller.widget.onCellTap != null) ||

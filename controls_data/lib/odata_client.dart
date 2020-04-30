@@ -421,6 +421,7 @@ get ODataClientDefault => ODataInst();
 abstract class ODataModelClass<T extends DataItem> {
   String collectionName;
   String columns = '*';
+  String externalKeys = '';
   ODataClient API;
   ODataModelClass({this.API});
 
@@ -473,9 +474,22 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  post(T item) async {
+  removeExternalKeys(Map<String, dynamic> dados) {
+    externalKeys.split(',').forEach((key) {
+      dados.remove(key);
+    });
+    return dados;
+  }
+
+  post(item) async {
+    var d;
+    if (item is T)
+      d = item.toJson();
+    else
+      d = item;
     try {
-      return API.post(collectionName, item.toJson()).then((x) => x);
+      d = removeExternalKeys(d);
+      return API.post(collectionName, d).then((x) => x);
     } catch (e) {
       print('$e');
       ErrorNotify.send('$e');
@@ -483,9 +497,15 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  put(T item) async {
+  put(item) async {
+    var d;
+    if (item is T)
+      d = item.toJson();
+    else
+      d = item;
     try {
-      return API.put(collectionName, item.toJson()).then((x) => x);
+      d = removeExternalKeys(d);
+      return API.put(collectionName, d).then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -508,9 +528,15 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  delete(T item) async {
+  delete(item) async {
+    var d;
+    if (item is T)
+      d = item.toJson();
+    else
+      d = item;
+
     try {
-      return API.delete(collectionName, item.toJson()).then((x) => x);
+      return API.delete(collectionName, d).then((x) => x);
     } catch (err) {
       ErrorNotify.send('$err');
       throw err;

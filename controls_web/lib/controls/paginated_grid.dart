@@ -684,10 +684,19 @@ class PaginatedGridDataTableSource extends DataTableSource {
                             title: 'Alteração',
                             actions: [
                               if (controller.widget.canDelete)
-                                if (controller.widget.onDeleteItem != null)
-                                  IconButton(
-                                    icon: Icon(Icons.delete),
-                                    onPressed: () {
+                                IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () {
+                                    if (controller.widget.onDeleteItem == null)
+                                      controller
+                                          ._changeRow(
+                                              controller.currentRow,
+                                              controller.data,
+                                              PaginatedGridChangeEvent.delete)
+                                          .then((rsp) {
+                                        Navigator.pop(controller.context);
+                                      });
+                                    else
                                       controller.widget
                                           .onDeleteItem(controller)
                                           .then((x) {
@@ -700,8 +709,8 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                           controller.changed(b);
                                         }
                                       });
-                                    },
-                                  )
+                                  },
+                                )
                             ],
                             child: PaginatedGridEditRow(
                               width: controller.widget.editSize?.width,

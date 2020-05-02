@@ -84,7 +84,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
                 child: StreamBuilder<Widget>(
                     stream: _controller.pageStream,
                     builder: (context, snapshot) {
-                      if (!snapshot.hasData) return widget.body;
+                      if (!snapshot.hasData) return widget.body ?? Container();
                       return snapshot.data;
                     }),
               ),
@@ -103,7 +103,6 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
   }
 
   StreamBuilder<bool> buildHiddenButton() {
-    print(['hidded', widget.sidebarVisible]);
     return StreamBuilder<bool>(
         stream: _controller.visibleStream,
         initialData: widget.sidebarVisible,
@@ -112,7 +111,6 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
           return InkWell(
             child: buildExpandIcon(),
             onTap: () {
-              print('click');
               _controller.show();
             },
             //hoverColor: Colors.blue,
@@ -121,7 +119,6 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
   }
 
   Widget buildExpandIcon() {
-    print('expanded');
     if (_controller.position == SidebarPosition.right)
       return ClipPath(
         clipper: CustomMenuClipperRight(),
@@ -156,8 +153,8 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
         stream: _controller.visibleStream,
         initialData: widget.sidebarVisible,
         builder: (context, snapshot) {
-          print(snapshot.data);
-          if ((!snapshot.hasData) || (!snapshot.data)) return Container();
+          //print(snapshot.data);
+          if ((!snapshot.hasData) || (!snapshot.data)) return SizedBox();
           return Expanded(
             flex: 0,
             child: Container(
@@ -197,7 +194,7 @@ class SidebarButton extends StatelessWidget {
         initialData: controller.compacted,
         builder: (context, snapshot) {
           bool cmpt = snapshot.data;
-          print('cmpt');
+          //print('cmpt');
           return Padding(
             padding:
                 const EdgeInsets.only(top: 1, left: 2, right: 2, bottom: 1),
@@ -205,7 +202,7 @@ class SidebarButton extends StatelessWidget {
               hoverColor: Colors.blue,
               highlightColor: Colors.red,
               onTap: () {
-                print('onPressed');
+                //print('onPressed');
                 if (onPressed != null) onPressed();
               },
               child: Container(
@@ -292,7 +289,7 @@ class SidebarController {
   get visibleStream => _visibleStream.stream;
   show() {
     visible = true;
-    print(visible);
+    //print(visible);
     return _visibleStream.sink.add(true);
   }
 
@@ -356,7 +353,7 @@ class SidebarHeader extends StatelessWidget {
                   color: titleColor ?? theme.primaryTextTheme.headline6.color,
                 ),
                 onPressed: () {
-                  print('showCompact');
+                  //print('showCompact');
                   controller.showCompact(compact: false);
                 },
               );
@@ -371,7 +368,7 @@ class SidebarHeader extends StatelessWidget {
                           titleColor ?? theme.primaryTextTheme.headline6.color,
                     ),
                     onTap: () {
-                      print('hide');
+                      //print('hide');
                       controller.hide();
                     },
                   ),
@@ -397,7 +394,7 @@ class SidebarHeader extends StatelessWidget {
                           titleColor ?? theme.primaryTextTheme.headline6.color,
                     ),
                     onTap: () {
-                      print('showCompact-true');
+                      //print('showCompact-true');
                       controller.showCompact(compact: true);
                     },
                   ),
@@ -410,7 +407,7 @@ class SidebarHeader extends StatelessWidget {
                           titleColor ?? theme.primaryTextTheme.headline6.color,
                     ),
                     onTap: () {
-                      print('hide_');
+                      //print('hide_');
                       controller.hide();
                     },
                   ),
@@ -448,19 +445,20 @@ class SidebarContainer extends StatelessWidget {
         initialData: controller?.compacted ?? false,
         builder: (context, snapshot) {
           return Container(
-            width: controller
-                .currentWidth, //(!snapshot.data) ? width : compactWidth,
-            child: Scaffold(
-              appBar: controller?.appBar,
-              backgroundColor: controller?.color,
-              body: Column(children: [
-                if (controller?.body != null) controller.body,
-                Expanded(child: child),
-                controller?.bottom ?? Container()
-              ]),
-              bottomNavigationBar: controller?.bottomNavigationBar,
-            ),
-          );
+              width: controller
+                  .currentWidth, //(!snapshot.data) ? width : compactWidth,
+              child: Scaffold(
+                  appBar: controller?.appBar,
+                  backgroundColor: controller?.color,
+                  body:
+                      ((controller.body == null) && (controller.bottom == null))
+                          ? child ?? Container()
+                          : Column(children: [
+                              if (controller.body != null) controller.body,
+                              if (child != null) Expanded(child: child),
+                              if (controller.bottom != null) controller.bottom
+                            ]),
+                  bottomNavigationBar: controller?.bottomNavigationBar));
         });
   }
 }
@@ -468,7 +466,7 @@ class SidebarContainer extends StatelessWidget {
 class CustomMenuClipperLeft extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    print(size);
+    //print(size);
     var path = new Path();
     path.moveTo(0, 0);
     path.lineTo(20, 10);
@@ -486,7 +484,7 @@ class CustomMenuClipperLeft extends CustomClipper<Path> {
 class CustomMenuClipperRight extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {
-    print(size);
+    //print(size);
     var path = new Path();
     path.moveTo(size.width, 0);
     path.lineTo(0, 10);

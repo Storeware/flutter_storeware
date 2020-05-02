@@ -105,7 +105,7 @@ class ODataResult {
     return _data.docs;
   }
 
-  asMap() {
+  List<dynamic> asMap() {
     return [for (var item in _data.docs) item.data()];
   }
 
@@ -426,11 +426,23 @@ abstract class ODataModelClass<T extends DataItem> {
   ODataModelClass({this.API});
 
   list({filter}) async {
+    return search(resource: collectionName, select: columns, filter: filter)
+        .then((ODataResult r) {
+      return r.asMap();
+    });
+  }
+
+  query(
+      {filter, String select, int top, int skip, orderBy, cacheControl}) async {
     return search(
-      resource: collectionName,
-      select: columns,
-      filter: filter,
-    ).then((ODataResult r) {
+            resource: collectionName,
+            select: select ?? columns,
+            filter: filter,
+            top: top,
+            skip: skip,
+            orderBy: orderBy,
+            cacheControl: cacheControl)
+        .then((ODataResult r) {
       return r.asMap();
     });
   }
@@ -534,9 +546,9 @@ abstract class ODataModelClass<T extends DataItem> {
       d = item.toJson();
     else
       d = item;
-
     try {
-      return API.delete(collectionName, d).then((x) => x);
+      //return API.delete(collectionName, d).then((x) => x);
+      return API.post('delete/' + collectionName, d).then((x) => x);
     } catch (err) {
       ErrorNotify.send('$err');
       throw err;

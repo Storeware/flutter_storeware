@@ -94,12 +94,14 @@ class PaginatedGridColumn {
   int maxLength;
   bool placeHolder;
   bool folded;
+  Color color;
   PaginatedGridColumn({
     this.onEditIconPressed,
     this.numeric = false,
     this.autofocus = false,
     this.visible = true,
     this.maxLines,
+    this.color,
     this.maxLength,
     this.tooltip,
     this.align,
@@ -161,14 +163,14 @@ class PaginatedGrid extends StatefulWidget {
 
   /// eventos de edição - permite criar novas janelas de edição para
   /// edição de dados -
-  final bool Function(PaginatedGridController) onEditItem;
-  final bool Function(PaginatedGridController) onInsertItem;
+  final Future<dynamic> Function(PaginatedGridController) onEditItem;
+  final Future<dynamic> Function(PaginatedGridController) onInsertItem;
   final Future<dynamic> Function(PaginatedGridController) onDeleteItem;
 
   final Function(PaginatedGridController) onRefresh;
 
   /// mudou a linha de edição
-  final Function(bool, PaginatedGridController) onSelectChanged;
+  final Future<dynamic> Function(bool, PaginatedGridController) onSelectChanged;
 
   ///[onPostEvent] evento que os dados foram editados e podem ser persistidos
   final Future<dynamic> Function(
@@ -183,6 +185,8 @@ class PaginatedGrid extends StatefulWidget {
   final bool canInsert;
 
   final double columnSpacing;
+  final CrossAxisAlignment crossAxisAlignment;
+  final Color backgroundColor;
 
   /// mudou a pagina de navegação em memoria
   final Function(int) onPageChanged;
@@ -202,6 +206,8 @@ class PaginatedGrid extends StatefulWidget {
 
   /// [editSize] indica tamanho da janela de edição
   final Size editSize;
+  final Color oddRowColor;
+  final Color evenRowColor;
 
   /// envento onClick na celula
   final Function(PaginatedGridController) onCellTap;
@@ -212,15 +218,19 @@ class PaginatedGrid extends StatefulWidget {
     this.headingRowHeight = 56,
     this.horizontalMargin = 10,
     this.dragStartBehavior = DragStartBehavior.start,
+    this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.futureSource,
     this.availableRowsPerPage,
     this.onRowsPerPageChanged,
     this.footerLeading,
+    this.backgroundColor,
     this.columns,
     this.editSize,
     this.footerTrailling,
     this.canEdit = false,
     this.onPageChanged,
+    this.oddRowColor,
+    this.evenRowColor,
     this.rowsPerPage = 10,
     this.sortColumnIndex = 0,
     this.header,
@@ -247,7 +257,8 @@ class PaginatedGrid extends StatefulWidget {
     this.beforeShow,
     this.canDelete = false,
     this.canInsert = false,
-  }) : super(key: key);
+  })  : assert((canInsert || canDelete || canEdit) && (onPostEvent != null)),
+        super(key: key);
 
   @override
   _PaginatedGridState createState() => _PaginatedGridState();
@@ -303,6 +314,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 
             controller.changed(true);
           }
+          return b;
         });
         return;
       }
@@ -345,14 +357,15 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   }
 
   addVirtualColumn() {
-    int count = (widget.onEditItem == null) ? 0 : 1;
+    /*
+    int count = 0; // (widget.onEditItem == null) ? 0 : 1;
     controller.columns.forEach((col) {
-      if (col.isVirtual) count = 0;
+      if (col.isVirtual) count ;
     });
     if (count > 0)
       controller.columns
           .add(PaginatedGridColumn(isVirtual: true, label: '', sort: false));
-
+*/
     for (var i = 0; i < controller.columns.length; i++) {
       controller.columns[i].index = i;
     }
@@ -406,7 +419,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                 ? 0
                                 : widget.headerHeight,
                             dataRowHeight: widget.dataRowHeight,
-                            columnSpacing: widget.columnSpacing,
+                            columnSpacing: 0, //widget.columnSpacing,
                             footerTrailling: widget.footerTrailling,
                             footerLeading:
                                 widget.footerLeading ?? createPageNavigator(),
@@ -414,7 +427,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                               widget.header ?? Container(),
                               if (widget.canFilter)
                                 Container(
-                                  padding: EdgeInsets.only(left: 8),
+                                  //padding: EdgeInsets.only(left: 8),
                                   height: 60,
                                   width: 200,
                                   child: TextFormField(
@@ -448,8 +461,11 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             horizontalMargin: widget.horizontalMargin,
                             dragStartBehavior: widget.dragStartBehavior,
                             onRowsPerPageChanged: widget.onRowsPerPageChanged,
+                            color: widget.backgroundColor,
                             rowsPerPage: widget.rowsPerPage,
                             onPageChanged: widget.onPageChanged,
+                            //alignment: Alignment.center,
+                            crossAxisAlignment: widget.crossAxisAlignment,
                             columns: [
                               for (var i = 0;
                                   i < controller.columns.length;
@@ -665,6 +681,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
+    Color rowColor = ((index % 2) == 0)
+        ? controller.widget.evenRowColor ?? Colors.white
+        : controller.widget.oddRowColor ?? Colors.grey.withOpacity(0.1);
     Map<String, dynamic> row = controller.source[index];
     DataRow r = DataRow(
         key: UniqueKey(),
@@ -688,9 +707,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                   icon: Icon(Icons.delete),
                                   onPressed: () {
                                     if (controller.widget.onDeleteItem == null)
-                                      controller
-                                          ._changeRow(
-                                              controller.currentRow,
+                                      controller.widget
+                                          .onPostEvent(
+                                              controller,
                                               controller.data,
                                               PaginatedGridChangeEvent.delete)
                                           .then((rsp) {
@@ -756,14 +775,26 @@ class PaginatedGridDataTableSource extends DataTableSource {
                   : DataCell(
                       (col.builder != null)
                           ? col.builder(index, row)
-                          : Align(
-                              alignment: col.align ??
-                                  ((col.numeric)
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft),
-                              child: Text(doGetValue(col, row[col.name]) ?? '',
-                                  style: col.style),
-                            ),
+                          : Padding(
+                              padding: EdgeInsets.only(
+                                bottom: 1,
+                                top: 0,
+                              ),
+                              child: Container(
+                                  padding: EdgeInsets.only(
+                                    left: controller.widget.columnSpacing / 2,
+                                    right: controller.widget.columnSpacing / 2,
+                                  ),
+                                  color: col.color ?? rowColor,
+                                  child: Align(
+                                    alignment: col.align ??
+                                        ((col.numeric)
+                                            ? Alignment.centerRight
+                                            : Alignment.centerLeft),
+                                    child: Text(
+                                        doGetValue(col, row[col.name]) ?? '',
+                                        style: col.style),
+                                  ))),
                       onTap: ((controller.widget.onCellTap != null) ||
                               (col.onEditIconPressed != null))
                           ? () {
@@ -922,8 +953,11 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   _save(context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      widget.controller._changeRow(widget.controller.currentRow, p, _event);
-      Navigator.pop(context);
+      widget.controller.widget
+          .onPostEvent(widget.controller, p, _event)
+          .then((rsp) {
+        Navigator.pop(context);
+      });
     }
   }
 }

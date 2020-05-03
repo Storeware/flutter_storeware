@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/rendering.dart';
+import 'strap_widgets.dart';
 
 import 'paginated_data_table_ext.dart';
 
@@ -960,7 +961,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
                                 p[item.name] = x;
                             }),
                 Divider(),
-                FlatButton(
+                StrapButton(
                   child: Text('Salvar'),
                   onPressed: () {
                     _save(context);

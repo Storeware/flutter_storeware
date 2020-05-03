@@ -257,7 +257,9 @@ class PaginatedGrid extends StatefulWidget {
     this.beforeShow,
     this.canDelete = false,
     this.canInsert = false,
-  })  : assert((canInsert || canDelete || canEdit) && (onPostEvent != null)),
+  })  : assert(
+            (!(canInsert || canDelete || canEdit) && (onPostEvent == null)) ||
+                ((canInsert || canDelete || canEdit) && (onPostEvent != null))),
         super(key: key);
 
   @override
@@ -411,8 +413,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                         initialData: true,
                         stream: controller.changedEvent.stream,
                         builder: (context, snapshot) {
-                          controller.tableSource =
-                              PaginatedGridDataTableSource(controller, _filter);
+                          controller.tableSource = PaginatedGridDataTableSource(
+                              context, controller, _filter);
                           return PaginatedDataTableExtended(
                             headingRowHeight: widget.headingRowHeight,
                             headerHeight: (widget.header == null)
@@ -423,29 +425,31 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             footerTrailling: widget.footerTrailling,
                             footerLeading:
                                 widget.footerLeading ?? createPageNavigator(),
-                            header: ListView(children: [
-                              widget.header ?? Container(),
-                              if (widget.canFilter)
-                                Container(
-                                  //padding: EdgeInsets.only(left: 8),
-                                  height: 60,
-                                  width: 200,
-                                  child: TextFormField(
-                                      initialValue: _filter,
-                                      //controller: __filterController,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontStyle: FontStyle.normal),
-                                      decoration: InputDecoration(
-                                        //border: InputBorder.none,
-                                        labelText: 'filtro',
-                                      ),
-                                      onChanged: (x) {
-                                        _filter = x;
-                                        controller.changedEvent.sink.add(true);
-                                      }),
-                                ),
-                            ]),
+                            header: Column(
+                                crossAxisAlignment: widget.crossAxisAlignment,
+                                children: [
+                                  widget.header ?? Container(),
+                                  if (widget.canFilter)
+                                    Container(
+                                      height: 60,
+                                      width: 200,
+                                      child: TextFormField(
+                                          initialValue: _filter,
+                                          //controller: __filterController,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontStyle: FontStyle.normal),
+                                          decoration: InputDecoration(
+                                            //border: InputBorder.none,
+                                            labelText: 'filtro',
+                                          ),
+                                          onChanged: (x) {
+                                            _filter = x;
+                                            controller.changedEvent.sink
+                                                .add(true);
+                                          }),
+                                    ),
+                                ]),
                             actions: [
                               ...widget.actions ?? [],
                               if (widget.onRefresh != null)
@@ -623,10 +627,14 @@ class PaginatedGridController {
   }
 
   changeTo(key, valueSearch, dadosTo) {
+    print([key, valueSearch, dadosTo]);
     begin();
     try {
       for (var i = 0; i < source.length; i++)
-        if (source[i][key] == valueSearch) source[i] = dadosTo;
+        if (source[i][key] == valueSearch) {
+          print([source[i], dadosTo]);
+          source[i] = dadosTo;
+        }
     } finally {
       end();
     }
@@ -650,6 +658,11 @@ class PaginatedGridController {
     source.remove(item);
     changed(true);
   }
+
+  add(item) {
+    source.add(item);
+    changed(true);
+  }
 }
 
 class PaginatedGridEventData {
@@ -662,7 +675,8 @@ class PaginatedGridEventData {
 class PaginatedGridDataTableSource extends DataTableSource {
   final PaginatedGridController controller;
   final String filter;
-  PaginatedGridDataTableSource(this.controller, this.filter) {
+  final BuildContext context;
+  PaginatedGridDataTableSource(this.context, this.controller, this.filter) {
     controller.source = [];
     if (filter != '')
       controller.originalSource.forEach((x) {
@@ -768,6 +782,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                     .onDeleteItem(controller)
                                     .then((x) {
                                   if (x) controller.removeAt(index);
+                                  Navigator.of(context).pop();
                                 });
                               },
                             )

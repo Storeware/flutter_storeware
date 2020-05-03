@@ -458,11 +458,14 @@ abstract class ODataModelClass<T extends DataItem> {
     });
   }
 
-  listNoCached({filter, cacheControl}) async {
+  listNoCached({filter, top, skip, orderBy, select, cacheControl}) async {
     return search(
             resource: collectionName,
-            select: columns,
+            select: select ?? columns,
             filter: filter,
+            top: top,
+            skip: skip,
+            orderBy: orderBy,
             cacheControl: cacheControl ?? 'no-cache')
         .then((ODataResult r) {
       return r.asMap();

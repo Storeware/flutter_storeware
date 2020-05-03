@@ -83,7 +83,7 @@ class PaginatedGridColumn {
   final String Function(dynamic) onGetValue;
   final dynamic Function(dynamic) onSetValue;
   final String Function(dynamic) onValidate;
-  final Widget Function(int, Map<String, dynamic>) builder;
+  final Widget Function(int, Map<String, dynamic>, Color) builder;
   String tooltip;
   final Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
       Map<String, dynamic>) editBuilder;
@@ -394,16 +394,18 @@ class _PaginatedGridState extends State<PaginatedGrid> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
                   return Align(child: CircularProgressIndicator());
+                debugPrint('PaginatedGrid.future.builder');
                 controller.widget = widget;
                 controller.originalSource = snapshot.data;
                 if (widget.onSort != null)
                   controller.originalSource.sort((a, b) {
                     return widget.onSort(a, b);
                   });
-                //print('girdRows: ${controller.originalSource.length}');
+                print('girdRows: ${controller.originalSource.length}');
                 if ((controller.columns ?? []).length == 0)
                   createColumns(snapshot.data);
                 addVirtualColumn();
+                debugPrint('column created');
                 if (widget.beforeShow != null) widget.beforeShow(controller);
                 return Scaffold(
                   appBar: widget.appBar,
@@ -415,6 +417,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                         builder: (context, snapshot) {
                           controller.tableSource = PaginatedGridDataTableSource(
                               context, controller, _filter);
+                          debugPrint('init paginated extended');
                           return PaginatedDataTableExtended(
                             headingRowHeight: widget.headingRowHeight,
                             headerHeight: (widget.header == null)
@@ -627,7 +630,7 @@ class PaginatedGridController {
   }
 
   changeTo(key, valueSearch, dadosTo) {
-    print([key, valueSearch, dadosTo]);
+    debugPrint('changeTo $key $valueSearch $dadosTo');
     begin();
     try {
       for (var i = 0; i < source.length; i++)
@@ -759,7 +762,8 @@ class PaginatedGridDataTableSource extends DataTableSource {
             if (col.visible)
               (col.isVirtual)
                   ? DataCell(Row(children: [
-                      if (col.builder != null) col.builder(col.index, row),
+                      if (col.builder != null)
+                        col.builder(col.index, row, col.color ?? rowColor),
                       if (col.builder == null)
                         if (controller.widget.canEdit)
                           if (controller.widget.onEditItem != null)
@@ -872,7 +876,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   final _formKey = GlobalKey<FormState>();
   bool canEdit(PaginatedGridColumn col) {
     if (col.readOnly) return false;
-    if (col.isrimaryKey) {
+    if (col.isPrimaryKey) {
       if (_event == PaginatedGridChangeEvent.update) return false;
     }
     return true;

@@ -793,7 +793,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                     ]))
                   : DataCell(
                       (col.builder != null)
-                          ? col.builder(index, row)
+                          ? col.builder(index, row, col.color ?? rowColor)
                           : Padding(
                               padding: EdgeInsets.only(
                                 bottom: 1,

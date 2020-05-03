@@ -872,18 +872,24 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   final _formKey = GlobalKey<FormState>();
   bool canEdit(PaginatedGridColumn col) {
     if (col.readOnly) return false;
-    if (col.isPrimaryKey) {
+    if (col.isrimaryKey) {
       if (_event == PaginatedGridChangeEvent.update) return false;
     }
     return true;
   }
 
   bool _focused = false;
+  int _first = 0;
   bool canFocus(PaginatedGridColumn col) {
     if (_focused) return false;
     if (col.readOnly) return false;
     if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey)
       return false;
+
+    if (widget.event == PaginatedGridChangeEvent.insert) {
+      if (_first > 0) return false;
+    }
+    _first++;
     _focused = true;
     return true;
   }
@@ -891,6 +897,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    _first = 0;
     return SingleChildScrollView(
       child: Container(
         //width: widget.width,

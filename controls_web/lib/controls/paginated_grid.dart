@@ -83,7 +83,7 @@ class PaginatedGridColumn {
   final String Function(dynamic) onGetValue;
   final dynamic Function(dynamic) onSetValue;
   final String Function(dynamic) onValidate;
-  final Widget Function(int, Map<String, dynamic>, Color) builder;
+  final Widget Function(int, Map<String, dynamic>) builder;
   String tooltip;
   final Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
       Map<String, dynamic>) editBuilder;
@@ -762,8 +762,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
             if (col.visible)
               (col.isVirtual)
                   ? DataCell(Row(children: [
-                      if (col.builder != null)
-                        col.builder(col.index, row, col.color ?? rowColor),
+                      if (col.builder != null) col.builder(col.index, row),
                       if (col.builder == null)
                         if (controller.widget.canEdit)
                           if (controller.widget.onEditItem != null)
@@ -792,28 +791,27 @@ class PaginatedGridDataTableSource extends DataTableSource {
                             )
                     ]))
                   : DataCell(
-                      (col.builder != null)
-                          ? col.builder(index, row, col.color ?? rowColor)
-                          : Padding(
+                      Padding(
+                          padding: EdgeInsets.only(
+                            bottom: 1,
+                            top: 0,
+                          ),
+                          child: Container(
                               padding: EdgeInsets.only(
-                                bottom: 1,
-                                top: 0,
+                                left: controller.widget.columnSpacing / 2,
+                                right: controller.widget.columnSpacing / 2,
                               ),
-                              child: Container(
-                                  padding: EdgeInsets.only(
-                                    left: controller.widget.columnSpacing / 2,
-                                    right: controller.widget.columnSpacing / 2,
-                                  ),
-                                  color: col.color ?? rowColor,
-                                  child: Align(
-                                    alignment: col.align ??
-                                        ((col.numeric)
-                                            ? Alignment.centerRight
-                                            : Alignment.centerLeft),
-                                    child: Text(
-                                        doGetValue(col, row[col.name]) ?? '',
+                              color: col.color ?? rowColor,
+                              child: Align(
+                                alignment: col.align ??
+                                    ((col.numeric)
+                                        ? Alignment.centerRight
+                                        : Alignment.centerLeft),
+                                child: (col.builder != null)
+                                    ? col.builder(index, row)
+                                    : Text(doGetValue(col, row[col.name]) ?? '',
                                         style: col.style),
-                                  ))),
+                              ))),
                       onTap: ((controller.widget.onCellTap != null) ||
                               (col.onEditIconPressed != null))
                           ? () {

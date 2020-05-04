@@ -8,6 +8,8 @@ extension DateTimeExtension on DateTime {
     return formatter.format(this);
   }
 
+  dateFormat(String mask) => DateFormat(mask);
+
   toTimeString() => DateFormat.Hms().format(this);
   toDateString() => DateFormat.yMd().format(this);
 

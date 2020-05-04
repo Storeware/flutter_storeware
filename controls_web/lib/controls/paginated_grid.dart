@@ -763,7 +763,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
             if (col.visible)
               (col.isVirtual)
                   ? DataCell(Row(children: [
-                      if (col.builder != null) col.builder(col.index, row),
+                      if (col.builder != null) col.builder(index, row),
                       if (col.builder == null)
                         if (controller.widget.canEdit)
                           if (controller.widget.onEditItem != null)
@@ -962,7 +962,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
                             }),
                 Divider(),
                 StrapButton(
-                  child: Text('Salvar'),
+                  text: 'Salvar',
                   onPressed: () {
                     _save(context);
                   },

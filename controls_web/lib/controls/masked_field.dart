@@ -13,6 +13,8 @@ class MaskedTextField extends StatefulWidget {
   final TextAlign textAlign; //.center
   final Function(String) onSave;
   final Function(String) validator;
+  final int maxLength;
+
   final String mask;
   final TextEditingController controller;
   final TextInputType keyboardType;
@@ -22,6 +24,7 @@ class MaskedTextField extends StatefulWidget {
   final String match;
   final String sample;
   final String errorText;
+  final Function(String) onChanged;
   MaskedTextField({
     Key key,
     this.validator,
@@ -38,6 +41,8 @@ class MaskedTextField extends StatefulWidget {
     this.sample,
     this.errorText = 'Falta informar %1',
     this.fontSize = 16,
+    this.onChanged,
+    this.maxLength,
   }) : super(key: key);
 
   @override
@@ -150,6 +155,7 @@ class MaskedTextField extends StatefulWidget {
           {Key key,
           String label = 'Text',
           String initialValue,
+          int maxLength,
           onSave,
           String mask,
           TextInputType keyboardType = TextInputType.text,
@@ -161,6 +167,7 @@ class MaskedTextField extends StatefulWidget {
           mask: mask,
           initialValue: initialValue,
           onSave: onSave,
+          maxLength: maxLength,
           validator: validator,
           keyboardType: keyboardType,
           style: style);
@@ -171,10 +178,12 @@ class MaskedTextField extends StatefulWidget {
           String initialValue,
           Function(String) onSave,
           Function(String) validator,
+          controller,
           TextStyle style}) =>
       MaskedTextField(
           key: key,
           label: label,
+          controller: controller,
           mask: null,
           initialValue: initialValue,
           onSave: onSave,
@@ -259,6 +268,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
     return Container(
       child: TextFormField(
           textAlign: widget.textAlign ?? TextAlign.start,
+          maxLength: widget.maxLength,
           initialValue: (_controller == null) ? widget.initialValue : null,
           controller: _controller,
           style: widget.style ??
@@ -270,6 +280,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
                 : null,
           ),
           keyboardType: widget.keyboardType,
+          onChanged: widget.onChanged,
           validator: (value) {
             if (widget.match != null) {
               var r = RegExp(widget.match);

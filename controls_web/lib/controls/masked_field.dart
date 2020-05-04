@@ -310,6 +310,8 @@ class MaskedDatePicker extends StatefulWidget {
   final Function(DateTime) onChanged;
   final String format;
   final Widget prefix;
+  final DateTime firstDate;
+  final DateTime lastDate;
   MaskedDatePicker(
       {Key key,
       this.labelText,
@@ -318,6 +320,8 @@ class MaskedDatePicker extends StatefulWidget {
       this.validator,
       this.prefix,
       this.onChanged,
+      this.firstDate,
+      this.lastDate,
       this.onSaved})
       : super(key: key);
 
@@ -361,8 +365,17 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
                   _dataController.text = formatter.format(widget.initialValue);
                 })),
         validator: (x) {
-          if (widget.validator != null)
-            return widget.validator(DateTime.tryParse(x));
+          DateTime d = formatter.parse(x);
+          DateTime b = formatter.parse(x);
+          debugPrint('init Validate $x $d');
+          if (widget.firstDate != null) if (widget.firstDate.isAfter(d))
+            d = widget.firstDate;
+          if (widget.lastDate != null) if (widget.lastDate.isBefore(d))
+            d = widget.lastDate;
+
+          if (widget.validator != null) return widget.validator(d);
+          debugPrint('fim Validate $x $b $d');
+          _dataController.text = d.toString();
           return null;
         },
         onTap: () {
@@ -388,8 +401,8 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
     return showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2018),
-      lastDate: DateTime(2030),
+      firstDate: widget.firstDate ?? DateTime.now().add(Duration(days: 180)),
+      lastDate: widget.lastDate ?? DateTime(2030),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.light(),

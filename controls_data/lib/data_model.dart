@@ -132,6 +132,10 @@ abstract class DataItem {
     var r = toJson();
     return r[key];
   }
+
+  fromDateTime(DateTime dt) {
+    return dt.toIso8601String().substring(0, 19).replaceAll('T', ' ');
+  }
 }
 
 abstract class DataModel {

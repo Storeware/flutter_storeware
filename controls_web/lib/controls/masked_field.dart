@@ -618,30 +618,47 @@ class MaskedMoneyFormField extends StatelessWidget {
             initialValue: initialValue,
             decimalSeparator: ',',
             thousandSeparator: '.',
-            leftSymbol: '',
+            leftSymbol: leftSymbol + '  ',
             precision: precision ?? 2);
 
     _controller.afterChange = (mask, value) {
       //debugPrint(' mask: $mask , value: $value ');
     };
-    return TextFormField(
-        key: key,
-        controller: _controller,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          hintText: label,
-          prefixIcon: Text(leftSymbol),
-          //errorText: errorText,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (label != null)
+          Text(
+            label,
+            style: TextStyle(
+                fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+          ),
+        Container(
+          constraints: BoxConstraints(minWidth: 100, minHeight: 40),
+          child: TextFormField(
+              key: key,
+              controller: _controller,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: label,
+
+                //prefixIcon: Text(leftSymbol),
+                //prefixText: label,
+                //errorText: errorText,
+              ),
+              validator: (x) {
+                if ((errorText != null) && (x == '')) {
+                  return errorText;
+                }
+                return null;
+              },
+              maxLength: maxLength,
+              onSaved: (x) {
+                if (onSaved != null) onSaved(_controller.numberValue);
+              }),
         ),
-        validator: (x) {
-          if ((errorText != null) && (x == '')) {
-            return errorText;
-          }
-          return null;
-        },
-        maxLength: maxLength,
-        onSaved: (x) {
-          if (onSaved != null) onSaved(_controller.numberValue);
-        });
+      ],
+    );
   }
 }

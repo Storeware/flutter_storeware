@@ -377,7 +377,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   }
 
   doRefresh() {
-    print('doRefresh');
+    //print('doRefresh');
     setState(() {
       widget.onRefresh(controller);
     });
@@ -397,18 +397,18 @@ class _PaginatedGridState extends State<PaginatedGrid> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
                   return Align(child: CircularProgressIndicator());
-                debugPrint('PaginatedGrid.future.builder');
+                //debugPrint('PaginatedGrid.future.builder');
                 controller.widget = widget;
                 controller.originalSource = snapshot.data;
                 if (widget.onSort != null)
                   controller.originalSource.sort((a, b) {
                     return widget.onSort(a, b);
                   });
-                print('girdRows: ${controller.originalSource.length}');
+                //print('girdRows: ${controller.originalSource.length}');
                 if ((controller.columns ?? []).length == 0)
                   createColumns(snapshot.data);
                 addVirtualColumn();
-                debugPrint('column created');
+                //debugPrint('column created');
                 if (widget.beforeShow != null) widget.beforeShow(controller);
                 return Scaffold(
                   appBar: widget.appBar,
@@ -420,7 +420,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                         builder: (context, snapshot) {
                           controller.tableSource = PaginatedGridDataTableSource(
                               context, controller, _filter);
-                          debugPrint('init paginated extended');
+                          //debugPrint('init paginated extended');
                           return PaginatedDataTableExtended(
                             headingRowHeight: widget.headingRowHeight,
                             headerHeight: (widget.header == null)
@@ -636,12 +636,12 @@ class PaginatedGridController {
   }
 
   changeTo(key, valueSearch, dadosTo) {
-    debugPrint('changeTo $key $valueSearch $dadosTo');
+    //debugPrint('changeTo $key $valueSearch $dadosTo');
     begin();
     try {
       for (var i = 0; i < source.length; i++)
         if (source[i][key] == valueSearch) {
-          print([source[i], dadosTo]);
+          //print([source[i], dadosTo]);
           source[i] = dadosTo;
         }
     } finally {

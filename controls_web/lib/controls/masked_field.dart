@@ -599,6 +599,7 @@ class MaskedMoneyFormField extends StatelessWidget {
   final MoneyMaskedTextController controller;
   final String errorText;
   final int maxLength;
+  final dynamic Function(double) validator;
   const MaskedMoneyFormField({
     Key key,
     this.label,
@@ -608,6 +609,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.precision,
     this.controller,
     this.errorText,
+    this.validator,
     this.maxLength,
   }) : super(key: key);
 
@@ -642,12 +644,10 @@ class MaskedMoneyFormField extends StatelessWidget {
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: label,
-
-                //prefixIcon: Text(leftSymbol),
-                //prefixText: label,
-                //errorText: errorText,
               ),
               validator: (x) {
+                if (validator != null)
+                  return validator(_controller.numberValue);
                 if ((errorText != null) && (x == '')) {
                   return errorText;
                 }

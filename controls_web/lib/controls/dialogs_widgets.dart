@@ -30,6 +30,7 @@ class Dialogs {
       width,
       height,
       Alignment alignment,
+      bool fullPage = false,
       String label = ''}) async {
     Size size = MediaQuery.of(context).size;
     return showGeneralDialog(
@@ -45,8 +46,8 @@ class Dialogs {
           child: Wrap(
             children: [
               Container(
-                width: width ?? size.width * 0.80,
-                height: height ?? size.height * 0.80,
+                width: (fullPage) ? size.width : width ?? size.width * 0.90,
+                height: (fullPage) ? size.height : height ?? size.height * 0.90,
                 child: Center(
                   child: child,
                 ),

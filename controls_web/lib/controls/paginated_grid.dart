@@ -81,6 +81,7 @@ class PaginatedGridColumn {
   bool isPrimaryKey;
   final DataColumnSortCallback onSort;
   bool visible;
+  final double width;
   final String Function(dynamic) onGetValue;
   final dynamic Function(dynamic) onSetValue;
   final String Function(dynamic) onValidate;
@@ -104,6 +105,7 @@ class PaginatedGridColumn {
     this.maxLines,
     this.color,
     this.maxLength,
+    this.width,
     this.tooltip,
     this.align,
     this.style,
@@ -488,22 +490,25 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                       numeric: controller.columns[i].numeric,
                                       tooltip: controller.columns[i].tooltip,
                                       label: Align(
-                                        alignment:
-                                            (controller.columns[i].numeric ??
-                                                    false)
-                                                ? Alignment.centerRight
-                                                : controller.columns[i].align ??
-                                                    Alignment.centerLeft,
-                                        child: Text(
-                                            controller.columns[i].label ??
-                                                controller.columns[i].name,
-                                            textAlign: TextAlign.center,
-                                            style: widget.columnStyle ??
-                                                TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                )),
-                                      ))
+                                          alignment: (controller
+                                                      .columns[i].numeric ??
+                                                  false)
+                                              ? Alignment.centerRight
+                                              : controller.columns[i].align ??
+                                                  Alignment.centerLeft,
+                                          child: Container(
+                                            width: controller.columns[i].width,
+                                            child: Text(
+                                                controller.columns[i].label ??
+                                                    controller.columns[i].name,
+                                                textAlign: TextAlign.center,
+                                                style: widget.columnStyle ??
+                                                    TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 16,
+                                                    )),
+                                          )))
                             ],
                             source: controller.tableSource,
                             onSelectAll: widget.onSelectAll,

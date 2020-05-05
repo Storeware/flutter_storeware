@@ -7,7 +7,7 @@ class Cached {
   static final Map<String, Image> _imageCached = {};
   static final Map<String, dynamic> _cached = {};
 
-  static get cached => _cached;
+  static Map<String, dynamic> get cached => _cached;
 
   remove(key) {
     _cached.remove(key);
@@ -45,10 +45,11 @@ class Cached {
   }
 
   static clearLike(keyLike) {
-    for (int i = cached.keys.heigth - 1; i >= 0; i--) {
-      if (cached.keys[i].indexOf(keyLike) >= 0) {
+    for (int i = cached.keys.length - 1; i >= 0; i--) {
+      var key = cached.keys.elementAt(i);
+      if (key.indexOf(keyLike) >= 0) {
         print(keyLike);
-        cached.remove(cached.keys[i]);
+        cached.remove(cached[key]);
       }
     }
     return _singleton;

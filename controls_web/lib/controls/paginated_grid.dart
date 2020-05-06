@@ -200,7 +200,8 @@ class PaginatedGrid extends StatefulWidget {
   final Function(int) onRowsPerPageChanged;
   final AppBar appBar;
   final Widget footerLeading;
-  final Widget footerTrailling;
+  final Widget footerTrailing;
+  final double footerHeight;
 
   final double dataRowHeight;
   final double headingRowHeight;
@@ -226,10 +227,11 @@ class PaginatedGrid extends StatefulWidget {
     this.availableRowsPerPage,
     this.onRowsPerPageChanged,
     this.footerLeading,
+    this.footerHeight = 56,
     this.backgroundColor,
     this.columns,
     this.editSize,
-    this.footerTrailling,
+    this.footerTrailing,
     this.canEdit = false,
     this.onPageChanged,
     this.oddRowColor,
@@ -377,7 +379,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   }
 
   doRefresh() {
-    //print('doRefresh');
+    print('doRefresh');
     setState(() {
       widget.onRefresh(controller);
     });
@@ -397,18 +399,18 @@ class _PaginatedGridState extends State<PaginatedGrid> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
                   return Align(child: CircularProgressIndicator());
-                //debugPrint('PaginatedGrid.future.builder');
+                debugPrint('PaginatedGrid.future.builder');
                 controller.widget = widget;
                 controller.originalSource = snapshot.data;
                 if (widget.onSort != null)
                   controller.originalSource.sort((a, b) {
                     return widget.onSort(a, b);
                   });
-                //print('girdRows: ${controller.originalSource.length}');
+                print('girdRows: ${controller.originalSource.length}');
                 if ((controller.columns ?? []).length == 0)
                   createColumns(snapshot.data);
                 addVirtualColumn();
-                //debugPrint('column created');
+                debugPrint('column created');
                 if (widget.beforeShow != null) widget.beforeShow(controller);
                 return Scaffold(
                   appBar: widget.appBar,
@@ -420,7 +422,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                         builder: (context, snapshot) {
                           controller.tableSource = PaginatedGridDataTableSource(
                               context, controller, _filter);
-                          //debugPrint('init paginated extended');
+                          debugPrint('init paginated extended');
                           return PaginatedDataTableExtended(
                             headingRowHeight: widget.headingRowHeight,
                             headerHeight: (widget.header == null)
@@ -428,7 +430,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                 : widget.headerHeight,
                             dataRowHeight: widget.dataRowHeight,
                             columnSpacing: 0, //widget.columnSpacing,
-                            footerTrailling: widget.footerTrailling,
+                            footerTrailing: widget.footerTrailing,
                             footerLeading:
                                 widget.footerLeading ?? createPageNavigator(),
                             header: Column(
@@ -636,12 +638,12 @@ class PaginatedGridController {
   }
 
   changeTo(key, valueSearch, dadosTo) {
-    //debugPrint('changeTo $key $valueSearch $dadosTo');
+    debugPrint('changeTo $key $valueSearch $dadosTo');
     begin();
     try {
       for (var i = 0; i < source.length; i++)
         if (source[i][key] == valueSearch) {
-          //print([source[i], dadosTo]);
+          print([source[i], dadosTo]);
           source[i] = dadosTo;
         }
     } finally {
@@ -906,78 +908,100 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     _first = 0;
-    return SingleChildScrollView(
-      child: Container(
-        //width: widget.width,
-        //height: widget.height,
-        constraints: BoxConstraints(
-          minHeight: 300,
-          minWidth: 200,
-          maxHeight: widget.height ?? size.height * 0.9,
-          maxWidth: widget.width ?? size.width * 0.9,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var item in widget.controller.columns)
-                  if (!item.isVirtual)
-                    (item.editBuilder != null)
-                        ? item.editBuilder(
-                            widget.controller, item, p[item.name], p)
-                        : TextFormField(
-                            autofocus: canFocus(item),
-                            maxLines: item.maxLines,
-                            maxLength: item.maxLength,
-                            enabled: canEdit(item),
-                            initialValue: (item.onGetValue != null)
-                                ? item.onGetValue(p[item.name])
-                                : (p[item.name] ?? '').toString(),
-                            style: TextStyle(
-                                fontSize: 16, fontStyle: FontStyle.normal),
-                            decoration: InputDecoration(
-                              labelText: item.label ?? item.name,
-                            ),
-                            validator: (value) {
-                              if (item.onValidate != null)
-                                return item.onValidate(value);
-                              if (item.required) if (value.isEmpty) {
-                                return (item.editInfo.replaceAll(
-                                    '{label}', item.label ?? item.name));
-                              }
-
-                              return null;
-                            },
-                            onSaved: (x) {
-                              if (item.onSetValue != null) {
-                                p[item.name] = item.onSetValue(x);
-                                return;
-                              }
-                              if (p[item.name] is int)
-                                p[item.name] = int.tryParse(x);
-                              else if (p[item.name] is double)
-                                p[item.name] = double.tryParse(x);
-                              else if (p[item.name] is bool)
-                                p[item.name] = x;
-                              else
-                                p[item.name] = x;
-                            }),
-                Divider(),
-                StrapButton(
-                  text: 'Salvar',
-                  onPressed: () {
-                    _save(context);
-                  },
-                )
-              ],
+    return Container(
+      //width: widget.width,
+      //height: widget.height,
+      constraints: BoxConstraints(
+        minHeight: 300,
+        minWidth: 350,
+        maxHeight: widget.height ?? size.height * 0.95,
+        maxWidth: widget.width ?? size.width * 0.95,
+      ),
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  //mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    for (var item in widget.controller.columns)
+                      if (!item.isVirtual)
+                        (item.editBuilder != null)
+                            ? item.editBuilder(
+                                widget.controller, item, p[item.name], p)
+                            : Container(
+                                alignment: Alignment.center,
+                                width: 300,
+                                //height: 56,
+                                child: createFormField(item),
+                              ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                        width: 120,
+                        height: 40,
+                        alignment: Alignment.center,
+                        color: Colors.blue,
+                        child: StrapButton(
+                          text: 'Salvar',
+                          onPressed: () {
+                            _save(context);
+                          },
+                        )),
+                    SizedBox(
+                      height: 80,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
+  }
+
+  createFormField(item) {
+    return TextFormField(
+        autofocus: canFocus(item),
+        maxLines: item.maxLines,
+        maxLength: item.maxLength,
+        enabled: canEdit(item),
+        initialValue: (item.onGetValue != null)
+            ? item.onGetValue(p[item.name])
+            : (p[item.name] ?? '').toString(),
+        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        decoration: InputDecoration(
+          labelText: item.label ?? item.name,
+        ),
+        validator: (value) {
+          if (item.onValidate != null) return item.onValidate(value);
+          if (item.required) if (value.isEmpty) {
+            return (item.editInfo
+                .replaceAll('{label}', item.label ?? item.name));
+          }
+
+          return null;
+        },
+        onSaved: (x) {
+          if (item.onSetValue != null) {
+            p[item.name] = item.onSetValue(x);
+            return;
+          }
+          if (p[item.name] is int)
+            p[item.name] = int.tryParse(x);
+          else if (p[item.name] is double)
+            p[item.name] = double.tryParse(x);
+          else if (p[item.name] is bool)
+            p[item.name] = x;
+          else
+            p[item.name] = x;
+        });
   }
 
   _save(context) {

@@ -50,7 +50,7 @@ class PaginatedDataTableExtended extends StatefulWidget {
   /// The [rowsPerPage] and [availableRowsPerPage] must not be null (they
   /// both have defaults, though, so don't have to be specified).
   final Widget footerLeading;
-  final Widget footerTrailling;
+  final Widget footerTrailing;
   PaginatedDataTableExtended({
     Key key,
     @required this.header,
@@ -72,7 +72,8 @@ class PaginatedDataTableExtended extends StatefulWidget {
     this.initialFirstRowIndex = 0,
     this.onPageChanged,
     this.footerLeading,
-    this.footerTrailling,
+    this.footerTrailing,
+    this.footerHeight = 56,
     this.rowsPerPage = defaultRowsPerPage,
     this.availableRowsPerPage = const <int>[
       defaultRowsPerPage,
@@ -221,6 +222,7 @@ class PaginatedDataTableExtended extends StatefulWidget {
 
   /// {@macro flutter.widgets.scrollable.dragStartBehavior}
   final DragStartBehavior dragStartBehavior;
+  final double footerHeight;
 
   @override
   PaginatedDataTableExtendedState createState() =>
@@ -524,7 +526,7 @@ class PaginatedDataTableExtendedState
                           data: const IconThemeData(opacity: 0.54),
                           child: Container(
                             // TODO(bkonyi): this won't handle text zoom correctly, https://github.com/flutter/flutter/issues/48522
-                            height: 56.0,
+                            height: widget.footerHeight,
                             //width: double.maxFinite,
                             //alignment: Alignment.center,
                             child: SingleChildScrollView(
@@ -534,8 +536,8 @@ class PaginatedDataTableExtendedState
                               child: Row(
                                 children: [
                                   ...footerWidgets,
-                                  if (widget.footerTrailling != null)
-                                    widget.footerTrailling
+                                  if (widget.footerTrailing != null)
+                                    widget.footerTrailing
                                 ],
                               ),
                             ),

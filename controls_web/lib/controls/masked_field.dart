@@ -503,6 +503,7 @@ class MaskedSwitchFormField extends StatelessWidget {
     bool initialValue = value;
     return Row(mainAxisSize: MainAxisSize.min, children: [
       if (leading != null) leading,
+      if (label != null) Text(label ?? '' + '  '),
       StatefulBuilder(builder: (context, _setState) {
         return Switch(
             value: initialValue ?? false,
@@ -516,7 +517,6 @@ class MaskedSwitchFormField extends StatelessWidget {
               });
             });
       }),
-      if (label != null) Text(label ?? ''),
       if (trailing != null) trailing
     ]);
   }

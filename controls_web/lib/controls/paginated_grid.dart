@@ -290,6 +290,12 @@ class PaginatedGrid extends StatefulWidget {
   }
 }
 
+extension StringExtGrid on String {
+  toCapital() {
+    return this.substring(0, 1).toUpperCase() + this.substring(1, this.length);
+  }
+}
+
 class _PaginatedGridState extends State<PaginatedGrid> {
   PaginatedGridController controller;
 
@@ -300,6 +306,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 
   String _filter;
   StreamSubscription postEvent;
+
   @override
   void initState() {
     controller = widget.controller ?? PaginatedGridController();
@@ -346,7 +353,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
     Map<String, dynamic> row = source.first;
     if (row != null)
       row.forEach((k, v) {
-        controller.columns.add(PaginatedGridColumn(name: k, label: k));
+        controller.columns
+            .add(PaginatedGridColumn(name: k, label: k.toCapital()));
       });
   }
 
@@ -504,7 +512,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                             width: controller.columns[i].width,
                                             child: Text(
                                                 controller.columns[i].label ??
-                                                    controller.columns[i].name,
+                                                    controller.columns[i].name
+                                                        .toCapital(),
                                                 textAlign: TextAlign.center,
                                                 style: widget.columnStyle ??
                                                     TextStyle(
@@ -540,7 +549,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
             for (var i = widget.currentPage - 1;
                 i < widget.currentPage + 4;
                 i++)
-              if (i > 1) if ((n++) < 4) createNavButton(i)
+              if (i > 1)
+                if ((n++) < 4) createNavButton(i)
           ]),
         ),
       ),

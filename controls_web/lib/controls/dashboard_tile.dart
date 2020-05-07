@@ -25,7 +25,7 @@ class DashboardTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(2.0),
       child: ApplienceTile(
-        color: color ?? theme.appBarTheme.color,
+        color: color ?? theme.primaryColor,
         titleStyle: TextStyle(color: _textColor, fontSize: 18),
         valueStyle: TextStyle(color: _textColor, fontSize: 28),
         width: width,

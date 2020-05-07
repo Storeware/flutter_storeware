@@ -70,7 +70,9 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
       appBar: widget.appBar, //?? AppBar(title: Text('sidebar')),
       drawer: widget.drawer,
       key: widget.scaffoldKey,
-      backgroundColor: _controller.backgroudColor ?? widget.backgroundColor,
+      backgroundColor: _controller.backgroudColor ??
+          widget.backgroundColor ??
+          theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       body: Stack(
         children: <Widget>[

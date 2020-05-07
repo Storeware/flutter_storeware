@@ -62,11 +62,11 @@ class HorizontalPageTabView extends StatefulWidget {
     this.isScrollable = false,
     @required this.choices,
     this.initialIndex = 0,
-    this.tabColor = Colors.blue,
-    this.indicatorColor = Colors.indigo,
+    this.tabColor,
+    this.indicatorColor,
     this.floatingActionButton,
     this.bottomNavigationBar,
-    this.iconColor = Colors.white,
+    this.iconColor,
     this.tabHeight = 55,
     this.tabActions,
     this.tabTitle,
@@ -82,9 +82,13 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
   TabController _tabController;
   ThemeData theme;
   SidebarController sidebarController;
+  Color _tabColor;
+  Color _indicatorColor;
+  Color _iconColor;
   @override
   void initState() {
     sidebarController = widget.sidebarController ?? SidebarController();
+    //sidebarController.color =
     super.initState();
     indexSelected = widget.initialIndex;
     _tabController = TabController(vsync: this, length: widget.choices.length);
@@ -127,9 +131,16 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
     return rt;
   }
 
+  Color _sidebarColor;
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
+
+    _tabColor = widget.tabColor ?? theme.buttonTheme.colorScheme.secondary;
+    _indicatorColor = widget.indicatorColor ?? theme.primaryColorDark;
+    _iconColor = widget.iconColor ?? theme.primaryTextTheme.bodyText1.color;
+    _sidebarColor = sidebarController.color ?? theme.primaryColorLight;
+
     return Container(
       child: SidebarScaffold(
         controller: sidebarController,
@@ -175,19 +186,19 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                                   TabChoice tab = widget.choices[i];
                                   return Container(
                                     color: (snapshot.data == i)
-                                        ? widget.indicatorColor
-                                        : widget.tabColor,
+                                        ? _indicatorColor
+                                        : _tabColor,
                                     child: ListTile(
                                       title: sidebarController.compacted
                                           ? null
                                           : Text(tab.title,
                                               style: TextStyle(
-                                                color: widget.iconColor,
+                                                color: _iconColor,
                                               )),
                                       leading: (tab.icon != null)
                                           ? Icon(
                                               tab.icon,
-                                              color: widget.iconColor,
+                                              color: _iconColor,
                                             )
                                           : null,
                                       onTap: () {
@@ -201,7 +212,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                     ],
                   ));
             }),
-        sidebarColor: widget.tabColor,
+        sidebarColor: _sidebarColor,
         body: Padding(
           padding: widget.bodyPadding ?? EdgeInsets.all(8.0),
           child: TabBarView(

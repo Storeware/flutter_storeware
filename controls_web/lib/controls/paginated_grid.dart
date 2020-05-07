@@ -363,6 +363,12 @@ class _PaginatedGridState extends State<PaginatedGrid> {
       _sortColumnIndex = idx;
       _sortAscending = ascending;
       controller.source.sort((a, b) {
+        if (controller.columns[idx].numeric || a is double || a is int) {
+          return a[controller.columns[idx].name]
+                  .compareTo(b[controller.columns[idx].name]) *
+              (ascending ? 1 : -1);
+        }
+
         return a[controller.columns[idx].name]
                 .toString()
                 .compareTo(b[controller.columns[idx].name].toString()) *

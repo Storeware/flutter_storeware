@@ -5,13 +5,19 @@ class MiniBarChart extends StatefulWidget {
   final Color color;
   final Color barColor;
   final Map<String, num> data;
+  final int decimais;
+  final String prefix;
+  final String labelPrefix;
   final double height;
   const MiniBarChart(
       {Key key,
       this.width,
       this.barColor = Colors.black,
       this.data,
+      this.decimais = 0,
       this.height = 40,
+      this.prefix = '',
+      this.labelPrefix = '',
       this.color = Colors.lightBlue})
       : super(key: key);
 
@@ -51,7 +57,8 @@ class _MiniBarChartState extends State<MiniBarChart> {
       child: Padding(
         padding: const EdgeInsets.only(left: 1, right: 1),
         child: Tooltip(
-          message: '$key: $value',
+          message:
+              '${widget.labelPrefix}$key: ${widget.prefix}${value.toStringAsFixed(widget.decimais)}',
           child: Container(
             alignment: Alignment.bottomCenter,
             color: widget.barColor,

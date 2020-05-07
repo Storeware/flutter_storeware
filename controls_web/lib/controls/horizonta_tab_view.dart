@@ -169,48 +169,50 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
             initialData: sidebarController.visible,
             stream: sidebarController.visibleStream,
             builder: (context, snapshot) {
-              return SidebarContainer(
-                  compact: widget.compacted,
-                  compactWidth: sidebarController.compactSize,
-                  controller: sidebarController,
-                  width: sidebarController.width,
-                  child: ListView(
-                    children: [
-                      for (int i = 0; i < widget.choices.length; i++)
-                        Column(
-                          children: <Widget>[
-                            StreamBuilder<int>(
-                                stream: tabChangeEvent.stream,
-                                initialData: indexSelected,
-                                builder: (context, snapshot) {
-                                  TabChoice tab = widget.choices[i];
-                                  return Container(
-                                    color: (snapshot.data == i)
-                                        ? _indicatorColor
-                                        : _tabColor,
-                                    child: ListTile(
-                                      title: sidebarController.compacted
-                                          ? null
-                                          : Text(tab.title,
-                                              style: TextStyle(
-                                                color: _iconColor,
-                                              )),
-                                      leading: (tab.icon != null)
-                                          ? Icon(
-                                              tab.icon,
-                                              color: _iconColor,
-                                            )
-                                          : null,
-                                      onTap: () {
-                                        _tabController.animateTo(i);
-                                      },
-                                    ),
-                                  );
-                                }),
-                          ],
-                        )
-                    ],
-                  ));
+              return DefaultTextStyle(
+                  style: theme.primaryTextTheme.bodyText1,
+                  child: SidebarContainer(
+                      compact: widget.compacted,
+                      compactWidth: sidebarController.compactSize,
+                      controller: sidebarController,
+                      width: sidebarController.width,
+                      child: ListView(
+                        children: [
+                          for (int i = 0; i < widget.choices.length; i++)
+                            Column(
+                              children: <Widget>[
+                                StreamBuilder<int>(
+                                    stream: tabChangeEvent.stream,
+                                    initialData: indexSelected,
+                                    builder: (context, snapshot) {
+                                      TabChoice tab = widget.choices[i];
+                                      return Container(
+                                        color: (snapshot.data == i)
+                                            ? _indicatorColor
+                                            : _tabColor,
+                                        child: ListTile(
+                                          title: sidebarController.compacted
+                                              ? null
+                                              : Text(tab.title,
+                                                  style: TextStyle(
+                                                    color: _iconColor,
+                                                  )),
+                                          leading: (tab.icon != null)
+                                              ? Icon(
+                                                  tab.icon,
+                                                  color: _iconColor,
+                                                )
+                                              : null,
+                                          onTap: () {
+                                            _tabController.animateTo(i);
+                                          },
+                                        ),
+                                      );
+                                    }),
+                              ],
+                            )
+                        ],
+                      )));
             }),
         sidebarColor: _sidebarColor,
         body: Padding(
@@ -220,7 +222,11 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
             children: _pages(),
           ),
         ),
-        bottomNavigationBar: widget.bottomNavigationBar,
+        bottomNavigationBar: (widget.bottomNavigationBar != null)
+            ? DefaultTextStyle(
+                style: theme.primaryTextTheme.bodyText1,
+                child: widget.bottomNavigationBar)
+            : null,
         floatingActionButton: widget.floatingActionButton,
       ),
     );

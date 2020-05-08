@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'strap_widgets.dart';
 
 import 'paginated_data_table_ext.dart';
+import 'dialogs_widgets.dart';
 
 class PaginatedGridSample extends StatefulWidget {
   const PaginatedGridSample({Key key}) : super(key: key);
@@ -212,6 +213,7 @@ class PaginatedGrid extends StatefulWidget {
   final Size editSize;
   final Color oddRowColor;
   final Color evenRowColor;
+  final bool editFullPage;
 
   /// envento onClick na celula
   final Function(PaginatedGridController) onCellTap;
@@ -224,13 +226,14 @@ class PaginatedGrid extends StatefulWidget {
     this.dragStartBehavior = DragStartBehavior.start,
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.futureSource,
+    this.editSize,
+    this.editFullPage = false,
     this.availableRowsPerPage,
     this.onRowsPerPageChanged,
     this.footerLeading,
     this.footerHeight = 56,
     this.backgroundColor,
     this.columns,
-    this.editSize,
     this.footerTrailing,
     this.canEdit = false,
     this.onPageChanged,
@@ -594,6 +597,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                 child: PaginatedGridEditRow(
                   width: widget.editSize?.width,
                   height: widget.editSize?.height,
+                  fullPage: controller.widget.editFullPage,
                   controller: controller,
                   event: PaginatedGridChangeEvent.insert,
                 ));
@@ -741,49 +745,50 @@ class PaginatedGridDataTableSource extends DataTableSource {
                     setData(index, 0);
                     return (controller.widget.onEditItem != null)
                         ? controller.widget.onEditItem(controller)
-                        : PaginatedGrid.show(
+                        : Dialogs.showPage(
                             controller.context,
-                            title: 'Alteração',
-                            actions: [
-                              if (controller.widget.canDelete)
-                                Tooltip(
-                                    message: 'Excluir o item',
-                                    child: IconButton(
-                                      icon: Icon(Icons.delete),
-                                      onPressed: () {
-                                        if (controller.widget.onDeleteItem ==
-                                            null)
-                                          controller.widget
-                                              .onPostEvent(
-                                                  controller,
-                                                  controller.data,
-                                                  PaginatedGridChangeEvent
-                                                      .delete)
-                                              .then((rsp) {
-                                            Navigator.pop(controller.context);
-                                          });
-                                        else
-                                          controller.widget
-                                              .onDeleteItem(controller)
-                                              .then((x) {
-                                            if (x) {
-                                              controller.removeAt(index);
-                                              Timer.run(() {
-                                                //print('pop');
-                                                Navigator.pop(
-                                                    controller.context);
-                                              });
-                                              controller.changed(b);
-                                            }
-                                          });
-                                      },
-                                    )),
-                            ],
                             child: PaginatedGridEditRow(
+                              fullPage: controller.widget.editFullPage,
                               width: controller.widget.editSize?.width,
                               height: controller.widget.editSize?.height,
                               controller: controller,
                               event: PaginatedGridChangeEvent.update,
+                              title: 'Alteração',
+                              actions: [
+                                if (controller.widget.canDelete)
+                                  Tooltip(
+                                      message: 'Excluir o item',
+                                      child: IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () {
+                                          if (controller.widget.onDeleteItem ==
+                                              null)
+                                            controller.widget
+                                                .onPostEvent(
+                                                    controller,
+                                                    controller.data,
+                                                    PaginatedGridChangeEvent
+                                                        .delete)
+                                                .then((rsp) {
+                                              Navigator.pop(controller.context);
+                                            });
+                                          else
+                                            controller.widget
+                                                .onDeleteItem(controller)
+                                                .then((x) {
+                                              if (x) {
+                                                controller.removeAt(index);
+                                                Timer.run(() {
+                                                  //print('pop');
+                                                  Navigator.pop(
+                                                      controller.context);
+                                                });
+                                                controller.changed(b);
+                                              }
+                                            });
+                                        },
+                                      )),
+                              ],
                             ),
                           );
                   }
@@ -885,9 +890,19 @@ class PaginatedGridEditRow extends StatefulWidget {
   final double height;
   final PaginatedGridController controller;
   final PaginatedGridChangeEvent event;
-  const PaginatedGridEditRow(
-      {Key key, this.event, this.controller, this.width, this.height})
-      : super(key: key);
+  final String title;
+  final List<Widget> actions;
+  final bool fullPage;
+  const PaginatedGridEditRow({
+    Key key,
+    this.event,
+    this.controller,
+    this.width,
+    this.fullPage = false,
+    this.height,
+    this.title,
+    this.actions,
+  }) : super(key: key);
 
   @override
   _PaginatedGridEditRowState createState() => _PaginatedGridEditRowState();
@@ -938,20 +953,24 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
 
     double mh = widget.height ?? size.height * 0.95;
     double alvo =
-        ((widget.controller.columns.length + 1) * kToolbarHeight) + 32.0;
+        ((widget.controller.columns.length + 2) * kToolbarHeight) + 32.0;
     if (alvo < mh) mh = widget.height ?? alvo;
+    double mw = widget.width ?? 400;
 
     return Container(
+      height: (fullPage) ? size.height * 0.95 : mh,
       constraints: BoxConstraints(
-        minHeight: 300,
-        minWidth: 350,
-        maxHeight: mh,
-        maxWidth: widget.width ?? size.width * 0.95,
+        maxWidth: (fullPage)
+            ? size.width * 0.95
+            : mw, //  widget.width ?? size.width * 0.95,
       ),
       child: Scaffold(
+        appBar:
+            AppBar(title: Text(widget.title ?? ''), actions: widget.actions),
         body: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(left: 8.0, right: 8, top: 16, bottom: 16),
+            padding:
+                EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
             child: Center(
               child: Form(
                 key: _formKey,
@@ -993,6 +1012,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             ),
           ),
         ),
+        // ),
       ),
     );
   }

@@ -32,36 +32,58 @@ extension DateTimeExtension on DateTime {
     return TimeAgo.getTimeAgo(timeStamp, language: lg);
   }
 
-  toDate() {
-    return DateTime.parse(this.format('yyyy-MM-dd'));
+  DateTime toDate() {
+    return DateTime(this.year, this.month, this.day);
   }
 
-  toTime() {
-    return this - this.toDate();
+  DateTime toTime() {
+    return DateTime(0, 0, 0, this.hour, this.minute, this.second);
   }
 
-  startOfMonth() {
+  String toTimeSql() {
+    return this.toIso8601String().substring(11, 19);
+  }
+
+  String toDateTimeSql() {
+    return this.toIso8601String().substring(0, 19).replaceAll('T', ' ');
+  }
+
+  String toDateSql() {
+    return this.toIso8601String().substring(0, 10);
+  }
+
+  DateTime startOfDay() {
+    return DateTime(this.year, this.month, this.day);
+  }
+
+  DateTime endOfDay() {
+    return DateTime(this.year, this.month, this.day, 23, 59, 00);
+  }
+
+  DateTime startOfMonth() {
     return DateTime(this.year, this.month, 1);
   }
 
-  endOfMonth() {
+  double get hours => this.hour + ((this.minute / 60));
+
+  DateTime endOfMonth() {
     return DateTime(this.year, this.month + 1, 0);
   }
 
-  lastDayOfMonth() {
+  int lastDayOfMonth() {
     return endOfMonth().day;
   }
 
-  startOfYear() {
+  DateTime startOfYear() {
     return DateTime(this.year, 1, 1);
   }
 
-  endOfYear() {
+  DateTime endOfYear() {
     return DateTime(this.year, 12, 31);
   }
 
-  toIso8601StringDate() {
-    return this.format('yyyy-MM-dd');
+  DateTime toIso8601StringDate({format = 'yyyy-MM-dd'}) {
+    return this.format(format);
   }
 
   static DateTime yesterday() {
@@ -114,6 +136,11 @@ extension DateTimeTimeExtension on DateTime {
 
   /// Subtracts the Duration from this DateTime returns the difference as a new DateTime object.
   DateTime operator -(Duration duration) => subtract(duration);
+  //DateTime operator -=( int days)=> this.add(Duration(days:-days));
+
+  //DateTime operator +=( int days)=> this.add(Duration(days:days));
+  //DateTime operator ++()=> this.add(Duration(days:1));
+  //DateTime operator --()=>this.add(Duration(days:-1));
 
   /// Returns a range of dates to [to], exclusive start, inclusive end
   /// ```dart

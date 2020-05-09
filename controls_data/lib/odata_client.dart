@@ -45,6 +45,10 @@ extension DynamicExtension on dynamic {
     return def ?? DateTime.now();
   }
 
+  String toTimeSql(DateTime value) {
+    return value.toIso8601String().substring(11, 19);
+  }
+
   String toDateTimeSql(DateTime value) {
     return value.toIso8601String().substring(0, 19).replaceAll('T', ' ');
   }

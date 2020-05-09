@@ -44,6 +44,14 @@ extension DynamicExtension on dynamic {
     if (value is DateTime) return value;
     return def ?? DateTime.now();
   }
+
+  String toDateTimeSql(DateTime value) {
+    return value.toIso8601String().substring(0, 19).replaceAll('T', ' ');
+  }
+
+  String toDateSql(DateTime value) {
+    return value.toIso8601String().substring(0, 10);
+  }
 }
 
 class LoginTokenChanged extends BlocModel<bool> {
@@ -282,15 +290,22 @@ class ODataClient {
     }
   }
 
+  reviverTo(v) {
+    if (v is DateTime) return toDateTimeSql(v);
+    return v;
+  }
+
   post(String resource, json, {bool removeNulls = true}) async {
     Map<String, dynamic> data = {};
     try {
       if (removeNulls) {
         json.forEach((k, v) {
-          if (v != null) data[k] = v;
+          if (v != null) data[k] = reviverTo(v);
         });
       } else
-        data = json;
+        json.forEach((k, v) {
+          data[k] = reviverTo(v);
+        });
 
       return client.post(resource, body: data).then((resp) {
         return resp;
@@ -308,10 +323,12 @@ class ODataClient {
     try {
       if (removeNulls) {
         json.forEach((k, v) {
-          if (v != null) data[k] = v;
+          if (v != null) data[k] = reviverTo(v);
         });
       } else
-        data = json;
+        json.forEach((k, v) {
+          data[k] = reviverTo(v);
+        });
 
       return client.put(resource, body: data).then((resp) {
         return resp;

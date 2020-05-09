@@ -3,9 +3,9 @@ import 'time_ago.dart';
 
 extension DateTimeExtension on DateTime {
   /// Format DateTime to custom mask
-  format(String dateMask) {
+  format(String dateMask, [lang = 'pt-BR']) {
     var formatter = new DateFormat(dateMask);
-    return formatter.format(this);
+    return formatter.format(this, lang);
   }
 
   dateFormat(String mask) => DateFormat(mask);

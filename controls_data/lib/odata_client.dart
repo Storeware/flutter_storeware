@@ -40,7 +40,10 @@ extension DynamicExtension on dynamic {
   }
 
   DateTime toDateTime(value, {DateTime def}) {
-    if (value is String) return DateTime.tryParse(value);
+    if (value is String) {
+      int dif = (value.endsWith('Z') ? -3 : 0);
+      return DateTime.tryParse(value).add(Duration(hours: dif));
+    }
     if (value is DateTime) return value;
     return def ?? DateTime.now();
   }

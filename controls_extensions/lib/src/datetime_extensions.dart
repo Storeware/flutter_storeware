@@ -26,6 +26,12 @@ extension DateTimeExtension on DateTime {
     return value % 400 == 0 || (value % 4 == 0 && value % 100 != 0);
   }
 
+  bool between(DateTime a, DateTime b) {
+    var t = this.toDateTimeSql();
+    return (t.compareTo(a.toDateTimeSql()) == 1) &&
+        (t.compareTo(b.toDateTimeSql()) == -1);
+  }
+
   String timeAgo({String lang}) {
     int timeStamp = this.millisecondsSinceEpoch;
     lang = lang ?? Intl.defaultLocale;

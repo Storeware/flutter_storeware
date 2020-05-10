@@ -16,8 +16,10 @@ extension DateTimeExtension on DateTime {
   addDays(int value) => this.add(Duration(days: value));
   addHours(int value) => this.add(Duration(hours: value));
   addMinutes(int value) => this.add(Duration(minutes: value));
-  addMonths(int value) => DateTime(this.year, this.month + value, this.day);
-  addYears(int value) => DateTime(this.year + value, this.month, this.day);
+  addMonths(int value) => DateTime(this.year, this.month + value, this.day,
+      this.hour, this.minute, this.second);
+  addYears(int value) => DateTime(this.year + value, this.month, this.day,
+      this.hour, this.minute, this.second);
 
   bool isLeapYear() {
     int value = this.year;
@@ -52,12 +54,30 @@ extension DateTimeExtension on DateTime {
     return this.toIso8601String().substring(0, 10);
   }
 
+  DateTime endOfHour([int hour]) {
+    return DateTime(this.year, this.month, this.day, hour ?? this.hour, 59, 0);
+  }
+
+  DateTime startOfHour([int hour]) {
+    return DateTime(this.year, this.month, this.day, hour ?? this.hour, 0, 0);
+  }
+
   DateTime startOfDay() {
     return DateTime(this.year, this.month, this.day);
   }
 
   DateTime endOfDay() {
     return DateTime(this.year, this.month, this.day, 23, 59, 00);
+  }
+
+  ///  Obtem o primeiro dia da semana {first indica o primeiro dia da semana}
+  DateTime startOfWeek({first = 1}) {
+    return this.add(Duration(days: -(this.weekday - first)));
+  }
+
+  /// Obtem o ultimo dia da semana
+  DateTime endOfWeek({first = 1}) {
+    return this.add(Duration(days: (6 + first) - this.weekday));
   }
 
   DateTime startOfMonth() {

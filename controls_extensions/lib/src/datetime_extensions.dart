@@ -4,11 +4,11 @@ import 'time_ago.dart';
 extension DateTimeExtension on DateTime {
   /// Format DateTime to custom mask
   format(String dateMask, [lang = 'pt-BR']) {
-    var formatter = new DateFormat(dateMask);
-    return formatter.format(this, lang);
+    var formatter = new DateFormat(dateMask, lang);
+    return formatter.format(this);
   }
 
-  dateFormat(String mask) => DateFormat(mask);
+  dateFormat(String mask, [lang = 'pt-BR']) => DateFormat(mask, lang);
 
   toTimeString() => DateFormat.Hms().format(this);
   toDateString() => DateFormat.yMd().format(this);
@@ -84,6 +84,14 @@ extension DateTimeExtension on DateTime {
 
   DateTime toIso8601StringDate({format = 'yyyy-MM-dd'}) {
     return this.format(format);
+  }
+
+  DateTime dayBefore() {
+    return this.add(Duration(days: -1));
+  }
+
+  DateTime dayAfter() {
+    return this.add(Duration(days: 1));
   }
 
   static DateTime yesterday() {

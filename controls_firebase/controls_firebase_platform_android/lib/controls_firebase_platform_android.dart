@@ -225,13 +225,13 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
   signInWithEmail(email, senha) {
     return instance.signInWithEmailAndPassword(email: email, password: senha);
   }
-  get uid=> currentuser.uid;
+  
+  get uid => currentUser.uid;
   @override
   signInAnonymously() {
-    instance.onAuthStateChanged.listen((user){
-       currentUser = user;
-       _uid = currentUser.uid;
-     })
+    instance.onAuthStateChanged.listen((user) {
+      currentUser = user;
+    });
     return instance.signInAnonymously();
   }
 

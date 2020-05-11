@@ -65,10 +65,10 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
 class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   static final _singleton = FirebaseFirestoreDriver._create();
   FirebaseFirestoreDriver._create();
-  FirebaseFirestoreDriver()=>_singleton;
+  FirebaseFirestoreDriver() => _singleton;
 
   var store = fb.firestore();
-  
+
   @override
   collection(String path) {
     return store.collection(path);
@@ -121,13 +121,11 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   }
 }
 
-
-
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   static final _singleton = FirebaseStorageDriver._create();
   FirebaseStorageDriver._create();
-  factory FirebaseStorageDriver()=>_singleton;
-  
+  factory FirebaseStorageDriver() => _singleton;
+
   @override
   init() {}
 
@@ -219,17 +217,24 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
 
 class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
   static final _singleton = FirebaseAuthDriver._create();
-  factory FirebaseAuthDriver()=>_singleton;
+  factory FirebaseAuthDriver() => _singleton;
   FirebaseAuthDriver._create();
   FirebaseAuth get instance => FirebaseAuth.instance;
-  
+
   @override
   signInWithEmail(email, senha) {
     return instance.signInWithEmailAndPassword(email: email, password: senha);
   }
-
+  get uid=> currentuser.uid;
   @override
-  signInAnonymously() => instance.signInAnonymously();
+  signInAnonymously() {
+    instance.onAuthStateChanged.listen((user){
+       currentUser = user;
+       _uid = currentUser.uid;
+     })
+    return instance.signInAnonymously();
+  }
+
   @override
   createLoginByEmail(email, senha) =>
       instance.createUserWithEmailAndPassword(email: email, password: senha);

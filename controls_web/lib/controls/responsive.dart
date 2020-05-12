@@ -29,6 +29,38 @@ class ResponsiveInfo {
   }
 }
 
+class Responsive extends InheritedWidget {
+  final BuildContext context;
+  Responsive({
+    Key key,
+    @required this.context,
+    @required Widget child,
+  }) : super(key: key, child: child);
+  @override
+  bool updateShouldNotify(Responsive old) {
+    if (info == null) this._build(context);
+    return false;
+  }
+
+  static of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Responsive>();
+  }
+
+  ResponsiveInfo info;
+  _build(BuildContext context) {
+    print('ResponsiveInfo');
+    info = ResponsiveInfo(context);
+    return this;
+  }
+
+  get isTablet => info.isTablet;
+  get isDesktop => info.isDesktop;
+  get isMobile => info.isMobile;
+  get theme => info.theme;
+  get size => info.size;
+  get orientation => info.orientation;
+}
+
 class ResponsiveBuilder extends StatelessWidget {
   final EdgeInsets minimum;
   final bool maintainBottomViewPadding;

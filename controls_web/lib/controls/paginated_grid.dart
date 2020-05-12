@@ -958,9 +958,9 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
     double mw = widget.width ?? 400;
 
     return Container(
-      height: (fullPage) ? size.height * 0.95 : mh,
+      height: (widget.fullPage) ? size.height * 0.95 : mh,
       constraints: BoxConstraints(
-        maxWidth: (fullPage)
+        maxWidth: (widget.fullPage)
             ? size.width * 0.95
             : mw, //  widget.width ?? size.width * 0.95,
       ),

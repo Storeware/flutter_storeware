@@ -155,7 +155,7 @@ extension ColorExtension on Color {
     if (g != null) return g;
     g = getColorByName(str);
     if (g != Colors.transparent) return g;
-    print(str);
+    //print(str);
     Color c = def;
     try {
       if (str != null && str.startsWith('\$')) str = '0x' + str.substring(1);

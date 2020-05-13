@@ -38,20 +38,16 @@ class Responsive extends InheritedWidget {
   }) : super(key: key, child: child);
   @override
   bool updateShouldNotify(Responsive old) {
-    if (info == null) this._build(context);
     return false;
   }
 
   static of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<Responsive>();
+    Responsive r = context.dependOnInheritedWidgetOfExactType<Responsive>();
+    r.info = ResponsiveInfo(context);
+    return r;
   }
 
   ResponsiveInfo info;
-  _build(BuildContext context) {
-    print('ResponsiveInfo');
-    info = ResponsiveInfo(context);
-    return this;
-  }
 
   get isTablet => info.isTablet;
   get isDesktop => info.isDesktop;

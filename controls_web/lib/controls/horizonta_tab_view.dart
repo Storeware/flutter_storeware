@@ -197,8 +197,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                                         color: (snapshot.data == i)
                                             ? _indicatorColor
                                             : _tabColor,
-                                        child: ((sidebarController.compacted &&
-                                                widget.isMobile))
+                                        child: ((sidebarController.compacted))
                                             ? IconButton(
                                                 icon: Icon(
                                                   tab.icon,
@@ -229,7 +228,14 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                                                       )
                                                     : null,
                                                 onTap: () {
-                                                  _tabController.animateTo(i);
+                                                  if (tab.primary)
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (x) =>
+                                                                tab.child));
+                                                  else
+                                                    _tabController.animateTo(i);
                                                 },
                                               ),
                                       );

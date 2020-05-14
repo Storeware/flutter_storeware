@@ -26,10 +26,12 @@ class MaskedTextField extends StatefulWidget {
   final String sample;
   final String errorText;
   final Function(String) onChanged;
+  final bool autofocus;
   MaskedTextField({
     Key key,
     this.validator,
     this.initialValue,
+    this.autofocus = false,
     this.textAlign = TextAlign.start,
     @required this.onSaved,
     @required this.label,
@@ -54,19 +56,21 @@ class MaskedTextField extends StatefulWidget {
   }
 
   get showHelperText => _showHelperText;
-  static phone1(
-      {Key key,
-      String label = 'Celular',
-      String initialValue,
-      TextAlign textAlign,
-      controller,
-      onSaved,
-      String mask = '(00)00000-0000',
-      String match = r"^\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
-      Function(String) validator,
-      TextStyle style}) {
-    //echo('valor inicial: $initialValue');
+  static phone1({
+    Key key,
+    String label = 'Celular',
+    String initialValue,
+    TextAlign textAlign,
+    controller,
+    onSaved,
+    String mask = '(00)00000-0000',
+    String match = r"^\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
+    Function(String) validator,
+    TextStyle style,
+    bool autofocus = false,
+  }) {
     return MaskedTextField(
+        autofocus: autofocus,
         key: key,
         label: label,
         mask: mask,
@@ -81,18 +85,20 @@ class MaskedTextField extends StatefulWidget {
         style: style);
   }
 
-  static phone2(
-      {Key key,
-      String label = 'Celular',
-      String initialValue,
-      TextAlign textAlign,
-      onSaved,
-      String mask = '*00(00)00000-0000',
-      String match = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
-      Function(String) validator,
-      TextStyle style}) {
-    //echo('valor inicial: $initialValue');
+  static phone2({
+    Key key,
+    String label = 'Celular',
+    String initialValue,
+    TextAlign textAlign,
+    onSaved,
+    String mask = '*00(00)00000-0000',
+    String match = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
+    Function(String) validator,
+    TextStyle style,
+    bool autofocus = false,
+  }) {
     return MaskedTextField(
+        autofocus: autofocus,
         key: key,
         label: label,
         mask: mask,
@@ -106,14 +112,17 @@ class MaskedTextField extends StatefulWidget {
         style: style);
   }
 
-  static time(
-          {Key key,
-          String label = 'Hora',
-          String initialValue,
-          onSaved,
-          Function(String) validator,
-          TextStyle style}) =>
+  static time({
+    Key key,
+    String label = 'Hora',
+    String initialValue,
+    onSaved,
+    Function(String) validator,
+    TextStyle style,
+    bool autofocus = false,
+  }) =>
       MaskedTextField(
+          autofocus: autofocus,
           key: key,
           label: label,
           mask: "00:00",
@@ -125,15 +134,18 @@ class MaskedTextField extends StatefulWidget {
           keyboardType: TextInputType.phone,
           style: style);
 
-  static date(
-          {Key key,
-          String label = 'Data',
-          String initialValue,
-          onSaved,
-          String mask = 'dd/mm/yyyy',
-          Function(String) validator,
-          TextStyle style}) =>
+  static date({
+    Key key,
+    String label = 'Data',
+    String initialValue,
+    onSaved,
+    String mask = 'dd/mm/yyyy',
+    Function(String) validator,
+    TextStyle style,
+    bool autofocus = false,
+  }) =>
       MaskedTextField(
+          autofocus: autofocus,
           key: key,
           label: label,
           mask: "00/00/0000",
@@ -152,17 +164,20 @@ class MaskedTextField extends StatefulWidget {
           keyboardType: TextInputType.datetime,
           style: style);
 
-  static text(
-          {Key key,
-          String label = 'Text',
-          String initialValue,
-          int maxLength,
-          onSaved,
-          String mask,
-          TextInputType keyboardType = TextInputType.text,
-          Function(String) validator,
-          TextStyle style}) =>
+  static text({
+    Key key,
+    String label = 'Text',
+    String initialValue,
+    int maxLength,
+    onSaved,
+    String mask,
+    TextInputType keyboardType = TextInputType.text,
+    Function(String) validator,
+    TextStyle style,
+    bool autofocus = false,
+  }) =>
       MaskedTextField(
+          autofocus: autofocus,
           key: key,
           label: label,
           mask: mask,
@@ -173,15 +188,18 @@ class MaskedTextField extends StatefulWidget {
           keyboardType: keyboardType,
           style: style);
 
-  static email(
-          {Key key,
-          String label = 'Email',
-          String initialValue,
-          Function(String) onSaved,
-          Function(String) validator,
-          controller,
-          TextStyle style}) =>
+  static email({
+    Key key,
+    String label = 'Email',
+    String initialValue,
+    Function(String) onSaved,
+    Function(String) validator,
+    controller,
+    TextStyle style,
+    bool autofocus = false,
+  }) =>
       MaskedTextField(
+          autofocus: autofocus,
           key: key,
           label: label,
           controller: controller,
@@ -195,14 +213,17 @@ class MaskedTextField extends StatefulWidget {
           keyboardType: TextInputType.emailAddress,
           style: style);
 
-  static http(
-          {Key key,
-          String label = 'Host',
-          String initialValue,
-          onSaved,
-          Function(String) validator,
-          TextStyle style}) =>
+  static http({
+    Key key,
+    String label = 'Host',
+    String initialValue,
+    onSaved,
+    Function(String) validator,
+    TextStyle style,
+    bool autofocus = false,
+  }) =>
       MaskedTextField(
+          autofocus: autofocus,
           key: key,
           label: label,
           mask: null,
@@ -215,14 +236,15 @@ class MaskedTextField extends StatefulWidget {
           keyboardType: TextInputType.url,
           style: style);
 
-  static money(
-      {Key key,
-      String label = 'Valor',
-      double initialValue,
-      String errorText,
-      Function(double) onSaved,
-      leftSymbol = '',
-      precision = 2}) {
+  static money({
+    Key key,
+    String label = 'Valor',
+    double initialValue,
+    String errorText,
+    Function(double) onSaved,
+    leftSymbol = '',
+    precision = 2,
+  }) {
     return MaskedMoneyFormField(
       key: key,
       label: label,
@@ -269,6 +291,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
           maxLength: widget.maxLength,
           initialValue: (_controller == null) ? widget.initialValue : null,
           controller: _controller,
+          autofocus: widget.autofocus,
           style: widget.style ??
               TextStyle(fontSize: widget.fontSize, fontStyle: FontStyle.normal),
           decoration: InputDecoration(
@@ -466,7 +489,9 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
             value: (widget.tristate) ? value : value ?? false,
             onChanged: (x) {
               if (widget.onChanged != null) widget.onChanged(x);
-              notifier.add(x);
+              _setState(() {
+                value = x;
+              });
             },
           );
         }),

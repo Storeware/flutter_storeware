@@ -197,9 +197,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                                         color: (snapshot.data == i)
                                             ? _indicatorColor
                                             : _tabColor,
-                                        child: (tab.primary ||
-                                                (sidebarController.compacted &&
-                                                    widget.isMobile))
+                                        child: (tab.primary)
                                             ? IconButton(
                                                 icon: Icon(
                                                   tab.icon,

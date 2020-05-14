@@ -46,6 +46,7 @@ class HorizontalPageTabView extends StatefulWidget {
   final Size preferredSize;
   final bool automaticallyImplyLeading;
   final EdgeInsets bodyPadding;
+  final bool isMobile;
   HorizontalPageTabView({
     this.title,
     this.appBar,
@@ -60,6 +61,7 @@ class HorizontalPageTabView extends StatefulWidget {
     this.actions,
     this.bodyPadding,
     this.isScrollable = false,
+    this.isMobile = false,
     @required this.choices,
     this.initialIndex = 0,
     this.tabColor,
@@ -88,7 +90,8 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
   @override
   void initState() {
     sidebarController = widget.sidebarController ?? SidebarController();
-    //sidebarController.color =
+    sidebarController.isMobile = widget.isMobile;
+    if (widget.isMobile) sidebarController.compactSize = 50;
     super.initState();
     indexSelected = widget.initialIndex;
     _tabController = TabController(vsync: this, length: widget.choices.length);
@@ -148,23 +151,26 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
         canShowCompact: sidebarController.canShowCompact,
         sidebarPosition: SidebarPosition.left,
         appBar: widget.appBar ??
-            AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () {
-                  if (!sidebarController.canShowCompact) {
-                    (sidebarController.visible)
-                        ? sidebarController.hide()
-                        : sidebarController.show();
-                  } else
-                    sidebarController.showCompact(
-                        compact: !sidebarController.compacted);
-                  tabChangeEvent.sink.add(indexSelected);
-                },
-              ),
-              title: widget.title,
-              elevation: widget.elevation,
-            ),
+            PreferredSize(
+                preferredSize: Size.fromHeight(
+                    widget.isMobile ? 40 : 56), // here the desired height
+                child: AppBar(
+                  leading: IconButton(
+                    icon: Icon(Icons.menu),
+                    onPressed: () {
+                      if (!sidebarController.canShowCompact) {
+                        (sidebarController.visible)
+                            ? sidebarController.hide()
+                            : sidebarController.show();
+                      } else
+                        sidebarController.showCompact(
+                            compact: !sidebarController.compacted);
+                      tabChangeEvent.sink.add(indexSelected);
+                    },
+                  ),
+                  title: widget.title,
+                  elevation: widget.elevation,
+                )),
         sidebar: StreamBuilder<Object>(
             initialData: sidebarController.visible,
             stream: sidebarController.visibleStream,
@@ -177,6 +183,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                       controller: sidebarController,
                       width: sidebarController.width,
                       child: ListView(
+                        padding: widget.isMobile ? EdgeInsets.zero : null,
                         children: [
                           for (int i = 0; i < widget.choices.length; i++)
                             Column(
@@ -190,23 +197,40 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                                         color: (snapshot.data == i)
                                             ? _indicatorColor
                                             : _tabColor,
-                                        child: ListTile(
-                                          title: sidebarController.compacted
-                                              ? null
-                                              : Text(tab.title,
-                                                  style: TextStyle(
-                                                    color: _iconColor,
-                                                  )),
-                                          leading: (tab.icon != null)
-                                              ? Icon(
+                                        child: (tab.primary ||
+                                                (sidebarController.compacted &&
+                                                    widget.isMobile))
+                                            ? IconButton(
+                                                icon: Icon(
                                                   tab.icon,
                                                   color: _iconColor,
-                                                )
-                                              : null,
-                                          onTap: () {
-                                            _tabController.animateTo(i);
-                                          },
-                                        ),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (x) =>
+                                                              tab.child));
+                                                  //_tabController.animateTo(i);
+                                                })
+                                            : ListTile(
+                                                title:
+                                                    sidebarController.compacted
+                                                        ? null
+                                                        : Text(tab.title,
+                                                            style: TextStyle(
+                                                              color: _iconColor,
+                                                            )),
+                                                leading: (tab.icon != null)
+                                                    ? Icon(
+                                                        tab.icon,
+                                                        color: _iconColor,
+                                                      )
+                                                    : null,
+                                                onTap: () {
+                                                  _tabController.animateTo(i);
+                                                },
+                                              ),
                                       );
                                     }),
                               ],
@@ -247,8 +271,10 @@ class TabChoice {
     this.width,
     this.child,
     this.appBar,
+    this.primary = false,
     this.bottomNavigationBar,
   });
+  final bool primary;
   final double width;
   final String title;
   final IconData icon;

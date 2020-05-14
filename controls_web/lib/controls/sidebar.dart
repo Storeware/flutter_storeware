@@ -239,6 +239,7 @@ class SidebarController {
   double width;
   Color backgroudColor;
   Color color;
+  bool isMobile;
   double get currentWidth =>
       (visible) ? ((compacted) ? compactSize : width) : 0;
   bool visible;
@@ -248,6 +249,7 @@ class SidebarController {
       this.backgroudColor,
       this.visible = true,
       this.position,
+      this.isMobile = false,
       this.canShowCompact = false,
       this.compacted = false,
       this.compactSize = 60,

@@ -311,7 +311,9 @@ class _DataViewerState extends State<DataViewer> {
   Size size;
 
   createHeader() {
-    const bwidth = 350.0;
+    bool isSmall = size.width < 500;
+    int nActions = widget.actions?.length ?? 0;
+    double bwidth = 350.0 - (isSmall ? ((nActions) * kToolbarHeight) : 0.0);
     return LayoutBuilder(builder: (ctr, sizes) {
       return Form(
         child: SafeArea(
@@ -322,43 +324,37 @@ class _DataViewerState extends State<DataViewer> {
               child: Align(
                 child: Container(
                   width: bwidth,
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.center,
-                      //scrollDirection: Axis.horizontal,
-                      children: [
-                        Container(
-                          constraints: BoxConstraints(
-                              minWidth: 150, maxWidth: bwidth - 100),
-                          child: TextFormField(
-                            //initialValue: filtro,
-                            controller: _filtroController,
-                            style: TextStyle(
-                                fontSize: 16, fontStyle: FontStyle.normal),
-                            decoration: InputDecoration(
-                                //border: InputBorder.none,
-                                labelText: 'procurar por',
-                                suffixIcon: InkWell(
-                                    child: Icon(Icons.delete),
-                                    onTap: () {
-                                      _filtroController.text = '';
-                                    })),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          width: 100,
-                          child: StrapButton(
-                              type: StrapButtonType.light,
-                              text: 'abrir',
-                              onPressed: () {
-                                controller.filter = _filtroController.text;
-                                if (controller.onClearCache != null)
-                                  controller.onClearCache();
-                                if (widget.onSearchPressed != null)
-                                  widget.onSearchPressed();
-                                controller.goPage(1);
-                              }),
-                        ),
-                      ]),
+                  child: Row(children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _filtroController,
+                        style: TextStyle(
+                            fontSize: 16, fontStyle: FontStyle.normal),
+                        decoration: InputDecoration(
+                            labelText: 'procurar por',
+                            suffixIcon: InkWell(
+                                child: Icon(Icons.delete),
+                                onTap: () {
+                                  _filtroController.text = '';
+                                })),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      width: 95,
+                      child: StrapButton(
+                          type: StrapButtonType.light,
+                          text: 'abrir',
+                          onPressed: () {
+                            controller.filter = _filtroController.text;
+                            if (controller.onClearCache != null)
+                              controller.onClearCache();
+                            if (widget.onSearchPressed != null)
+                              widget.onSearchPressed();
+                            controller.goPage(1);
+                          }),
+                    ),
+                  ]),
                 ),
               )),
         ),

@@ -665,9 +665,10 @@ class PaginatedGridController {
     try {
       for (var i = 0; i < source.length; i++)
         if (source[i][key] == valueSearch) {
-          //print([source[i], dadosTo]);
           source[i] = dadosTo;
+          return;
         }
+      source.add(dadosTo);
     } finally {
       end();
     }
@@ -690,6 +691,17 @@ class PaginatedGridController {
   remove(item) {
     source.remove(item);
     changed(true);
+  }
+
+  removeByKey(key, value) {
+    int i = indexOf(key, value);
+    if (i >= 0) source.removeAt(i);
+  }
+
+  int indexOf(key, value) {
+    for (var i = 0; i < source.length; i++)
+      if (source[i][key] == value) return i;
+    return -1;
   }
 
   add(item) {
@@ -957,63 +969,65 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
     if (alvo < mh) mh = widget.height ?? alvo;
     double mw = widget.width ?? 400;
 
-    return Container(
-      height: (widget.fullPage) ? size.height * 0.95 : mh,
-      constraints: BoxConstraints(
-        maxWidth: (widget.fullPage)
-            ? size.width * 0.95
-            : mw, //  widget.width ?? size.width * 0.95,
-      ),
-      child: Scaffold(
-        appBar:
-            AppBar(title: Text(widget.title ?? ''), actions: widget.actions),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding:
-                EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
-            child: Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    for (var item in widget.controller.columns)
-                      if (!item.isVirtual)
-                        (item.editBuilder != null)
-                            ? item.editBuilder(
-                                widget.controller, item, p[item.name], p)
-                            : Container(
-                                alignment: Alignment.center,
-                                width: 300,
-                                //height: 56,
-                                child: createFormField(item),
-                              ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                        width: 120,
-                        height: kMinInteractiveDimension,
-                        alignment: Alignment.center,
-                        //color: Colors.blue,
-                        child: StrapButton(
-                          text: 'Salvar',
-                          onPressed: () {
-                            _save(context);
-                          },
-                        )),
-                    SizedBox(
-                      height: 80,
-                    ),
-                  ],
-                ),
+    return Scaffold(
+      appBar: AppBar(title: Text(widget.title ?? ''), actions: widget.actions),
+      body: Align(
+        alignment: Alignment.topCenter,
+        child: Container(
+          constraints: BoxConstraints(
+            maxHeight: (widget.fullPage) ? size.height * 0.95 : mh,
+            maxWidth: (widget.fullPage)
+                ? size.width * 0.95
+                : mw, //  widget.width ?? size.width * 0.95,
+          ),
+          child:
+              /*Padding(
+            padding: EdgeInsets.only(left: 8.0, right: 8, top: 0, bottom: 10),
+            child: */
+              SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  for (var item in widget.controller.columns)
+                    if (!item.isVirtual)
+                      (item.editBuilder != null)
+                          ? item.editBuilder(
+                              widget.controller, item, p[item.name], p)
+                          : Container(
+                              alignment: Alignment.center,
+                              width: 300,
+                              //height: 56,
+                              child: createFormField(item),
+                            ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      width: 120,
+                      height: kMinInteractiveDimension,
+                      alignment: Alignment.center,
+                      //color: Colors.blue,
+                      child: StrapButton(
+                        text: 'Salvar',
+                        onPressed: () {
+                          _save(context);
+                        },
+                      )),
+                  SizedBox(
+                    height: 80,
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        // ),
       ),
+
+      // ),
+      //),
     );
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum ResponsiveInfoScreen { mobile, tablet, desktop }
+enum ResponsiveInfoScreen { small, mobile, tablet, desktop }
 
 class ResponsiveInfo {
   Size _size;
@@ -9,6 +9,7 @@ class ResponsiveInfo {
   get size => _size;
   set size(x) {
     _size = x;
+    if (size.width < 500) screen = ResponsiveInfoScreen.small;
     if (size.width > 1200)
       screen = ResponsiveInfoScreen.desktop;
     else if (size.width < 800)
@@ -19,7 +20,12 @@ class ResponsiveInfo {
 
   get isTablet => screen == ResponsiveInfoScreen.tablet;
   get isDesktop => screen == ResponsiveInfoScreen.desktop;
-  get isMobile => screen == ResponsiveInfoScreen.mobile;
+  get isMobile =>
+      (screen == ResponsiveInfoScreen.mobile) ||
+      (screen == ResponsiveInfoScreen.small);
+  get isSmall => screen == ResponsiveInfoScreen.small;
+  get isMedium => (isMobile && (!isSmall));
+  get isLargest => size.width > 1800;
   ThemeData theme;
   ResponsiveInfo(BuildContext context) {
     var mq = MediaQuery.of(context);
@@ -52,6 +58,9 @@ class Responsive extends InheritedWidget {
   get isTablet => info.isTablet;
   get isDesktop => info.isDesktop;
   get isMobile => info.isMobile;
+  get isSmall => info.isSmall;
+  get isLargest => info.isLargest;
+  get isMedium => info.isMedium;
   get theme => info.theme;
   get size => info.size;
   get orientation => info.orientation;

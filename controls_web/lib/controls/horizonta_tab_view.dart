@@ -144,121 +144,213 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
     _iconColor = widget.iconColor ?? theme.primaryTextTheme.bodyText1.color;
     _sidebarColor = sidebarController.color ?? theme.primaryColorLight;
 
-    return Container(
-      child: SidebarScaffold(
-        controller: sidebarController,
-        sidebarVisible: sidebarController.visible,
-        canShowCompact: sidebarController.canShowCompact,
-        sidebarPosition: SidebarPosition.left,
-        appBar: widget.appBar ??
-            PreferredSize(
-                preferredSize: Size.fromHeight(
-                    widget.isMobile ? 40 : 56), // here the desired height
-                child: AppBar(
-                  leading: IconButton(
-                    icon: Icon(Icons.menu),
-                    onPressed: () {
-                      if (!sidebarController.canShowCompact) {
-                        (sidebarController.visible)
-                            ? sidebarController.hide()
-                            : sidebarController.show();
-                      } else
-                        sidebarController.showCompact(
-                            compact: !sidebarController.compacted);
-                      tabChangeEvent.sink.add(indexSelected);
-                    },
-                  ),
-                  title: widget.title,
-                  elevation: widget.elevation,
-                )),
-        sidebar: StreamBuilder<Object>(
-            initialData: sidebarController.visible,
-            stream: sidebarController.visibleStream,
-            builder: (context, snapshot) {
-              return DefaultTextStyle(
-                  style: theme.primaryTextTheme.bodyText1,
-                  child: SidebarContainer(
-                      compact: widget.compacted,
-                      compactWidth: sidebarController.compactSize,
-                      controller: sidebarController,
-                      width: sidebarController.width,
-                      child: ListView(
-                        padding: widget.isMobile ? EdgeInsets.zero : null,
-                        children: [
-                          for (int i = 0; i < widget.choices.length; i++)
-                            Column(
-                              children: <Widget>[
-                                StreamBuilder<int>(
-                                    stream: tabChangeEvent.stream,
-                                    initialData: indexSelected,
-                                    builder: (context, snapshot) {
-                                      TabChoice tab = widget.choices[i];
-                                      return Container(
-                                        color: (snapshot.data == i)
-                                            ? _indicatorColor
-                                            : _tabColor,
-                                        child: ((sidebarController.compacted))
-                                            ? IconButton(
-                                                icon: Icon(
-                                                  tab.icon,
-                                                  color: _iconColor,
-                                                ),
-                                                onPressed: () {
-                                                  if (tab.primary)
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (x) =>
-                                                                tab.child));
-                                                  else
-                                                    _tabController.animateTo(i);
-                                                })
-                                            : ListTile(
-                                                title:
-                                                    sidebarController.compacted
-                                                        ? null
-                                                        : Text(tab.title,
-                                                            style: TextStyle(
-                                                              color: _iconColor,
-                                                            )),
-                                                leading: (tab.icon != null)
-                                                    ? Icon(
+    return (widget.isMobile)
+        ? mobileBuild(context)
+        : Container(
+            child: SidebarScaffold(
+              controller: sidebarController,
+              sidebarVisible: sidebarController.visible,
+              canShowCompact: sidebarController.canShowCompact,
+              sidebarPosition: SidebarPosition.left,
+              appBar: widget.appBar ??
+                  PreferredSize(
+                      preferredSize: Size.fromHeight(
+                          widget.isMobile ? 40 : 56), // here the desired height
+                      child: AppBar(
+                        leading: IconButton(
+                          icon: Icon(Icons.menu),
+                          onPressed: () {
+                            if (!sidebarController.canShowCompact) {
+                              (sidebarController.visible)
+                                  ? sidebarController.hide()
+                                  : sidebarController.show();
+                            } else
+                              sidebarController.showCompact(
+                                  compact: !sidebarController.compacted);
+                            tabChangeEvent.sink.add(indexSelected);
+                          },
+                        ),
+                        title: widget.title,
+                        elevation: widget.elevation,
+                      )),
+              sidebar: StreamBuilder<Object>(
+                  initialData: sidebarController.visible,
+                  stream: sidebarController.visibleStream,
+                  builder: (context, snapshot) {
+                    return DefaultTextStyle(
+                        style: theme.primaryTextTheme.bodyText1,
+                        child: SidebarContainer(
+                            compact: widget.compacted,
+                            compactWidth: sidebarController.compactSize,
+                            controller: sidebarController,
+                            width: sidebarController.width,
+                            child: ListView(
+                              padding: widget.isMobile ? EdgeInsets.zero : null,
+                              children: [
+                                for (int i = 0; i < widget.choices.length; i++)
+                                  Column(
+                                    children: <Widget>[
+                                      StreamBuilder<int>(
+                                          stream: tabChangeEvent.stream,
+                                          initialData: indexSelected,
+                                          builder: (context, snapshot) {
+                                            TabChoice tab = widget.choices[i];
+                                            return Container(
+                                              color: (snapshot.data == i)
+                                                  ? _indicatorColor
+                                                  : _tabColor,
+                                              child: ((sidebarController
+                                                      .compacted))
+                                                  ? IconButton(
+                                                      icon: Icon(
                                                         tab.icon,
                                                         color: _iconColor,
-                                                      )
-                                                    : null,
-                                                onTap: () {
-                                                  if (tab.primary)
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (x) =>
-                                                                tab.child));
-                                                  else
-                                                    _tabController.animateTo(i);
-                                                },
-                                              ),
-                                      );
-                                    }),
+                                                      ),
+                                                      onPressed: () {
+                                                        if (tab.primary)
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (x) =>
+                                                                      tab.child));
+                                                        else
+                                                          _tabController
+                                                              .animateTo(i);
+                                                      })
+                                                  : ListTile(
+                                                      title: sidebarController
+                                                              .compacted
+                                                          ? null
+                                                          : Text(tab.title,
+                                                              style: TextStyle(
+                                                                color:
+                                                                    _iconColor,
+                                                              )),
+                                                      leading: (tab.icon !=
+                                                              null)
+                                                          ? Icon(
+                                                              tab.icon,
+                                                              color: _iconColor,
+                                                            )
+                                                          : null,
+                                                      onTap: () {
+                                                        if (tab.primary)
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (x) =>
+                                                                      tab.child));
+                                                        else
+                                                          _tabController
+                                                              .animateTo(i);
+                                                      },
+                                                    ),
+                                            );
+                                          }),
+                                    ],
+                                  )
                               ],
-                            )
-                        ],
-                      )));
-            }),
-        sidebarColor: _sidebarColor,
-        body: Padding(
-          padding: widget.bodyPadding ?? EdgeInsets.all(8.0),
-          child: TabBarView(
-            controller: _tabController, //_pageController,
-            children: _pages(),
+                            )));
+                  }),
+              sidebarColor: _sidebarColor,
+              body: Padding(
+                padding: widget.bodyPadding ?? EdgeInsets.all(8.0),
+                child: TabBarView(
+                  controller: _tabController, //_pageController,
+                  children: _pages(),
+                ),
+              ),
+              bottomNavigationBar: (widget.bottomNavigationBar != null)
+                  ? DefaultTextStyle(
+                      style: theme.primaryTextTheme.bodyText1,
+                      child: widget.bottomNavigationBar)
+                  : null,
+              floatingActionButton: widget.floatingActionButton,
+            ),
+          );
+  }
+
+  mobileBuild(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    int cols = size.width ~/ 200;
+    _tabColor = widget.tabColor ?? theme.buttonTheme.colorScheme.secondary;
+    _iconColor = widget.iconColor ?? theme.primaryTextTheme.bodyText1.color;
+    return Scaffold(
+      appBar: widget.appBar ??
+          AppBar(
+            elevation: widget.elevation,
+            automaticallyImplyLeading: false,
+            title: widget.title,
+            leading: widget.leading,
+            actions: [...widget.tabActions ?? [], ...widget.actions ?? []],
+          ),
+      bottomNavigationBar: (widget.bottomNavigationBar != null)
+          ? DefaultTextStyle(
+              style: theme.primaryTextTheme.bodyText1,
+              child: widget.bottomNavigationBar)
+          : null,
+      floatingActionButton: widget.floatingActionButton,
+      body: Center(
+        child: GridView.count(
+          crossAxisCount: cols,
+          children: List.generate(
+            widget.choices.length,
+            (index) {
+              TabChoice tab = widget.choices[index];
+              return Padding(
+                  padding: EdgeInsets.all(8),
+                  child: InkWell(
+                    child: Card(
+                      elevation: widget.elevation,
+                      color: _tabColor,
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              tab.icon,
+                              size: 80,
+                              color: _iconColor ??
+                                  theme.primaryTextTheme.bodyText1.color,
+                            ),
+                            Text(
+                              tab.title,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                                color: _iconColor ??
+                                    theme.primaryTextTheme.bodyText1.color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      if (tab.primary)
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (x) => tab.child),
+                        );
+                      else
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (x) => Scaffold(
+                              appBar: AppBar(
+                                  title: Text(
+                                tab.title,
+                              )),
+                              body: tab.child,
+                            ),
+                          ),
+                        );
+                    },
+                  ));
+            },
           ),
         ),
-        bottomNavigationBar: (widget.bottomNavigationBar != null)
-            ? DefaultTextStyle(
-                style: theme.primaryTextTheme.bodyText1,
-                child: widget.bottomNavigationBar)
-            : null,
-        floatingActionButton: widget.floatingActionButton,
       ),
     );
   }

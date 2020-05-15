@@ -273,6 +273,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
   mobileBuild(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     int cols = size.width ~/ 200;
+    if (size.width < 411) cols = 2;
     _tabColor = widget.tabColor ?? theme.buttonTheme.colorScheme.secondary;
     _iconColor = widget.iconColor ?? theme.primaryTextTheme.bodyText1.color;
     return Scaffold(
@@ -297,6 +298,8 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
             widget.choices.length,
             (index) {
               TabChoice tab = widget.choices[index];
+              if (widget.tabBuilder != null)
+                return widget.tabBuilder(_tabController, tab, index);
               return Padding(
                   padding: EdgeInsets.all(8),
                   child: InkWell(
@@ -316,6 +319,7 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                             ),
                             Text(
                               tab.title,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500,

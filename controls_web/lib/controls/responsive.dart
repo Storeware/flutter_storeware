@@ -9,7 +9,7 @@ class ResponsiveInfo {
   get size => _size;
   set size(x) {
     _size = x;
-    if (size.width < 500) screen = ResponsiveInfoScreen.small;
+    if (size.width < 450) screen = ResponsiveInfoScreen.small;
     if (size.width > 1200)
       screen = ResponsiveInfoScreen.desktop;
     else if (size.width < 800)

@@ -5,7 +5,7 @@ class CloudV3 {
   final client = ODataClient();
   CloudV3._create() {
     client.baseUrl = 'https://us-central1-selfandpay.cloudfunctions.net';
-    client.prefix = '/v3';
+    client.prefix = '/v3/';
   }
   set loja(x) {
     client.client.addHeader('contaid', x);

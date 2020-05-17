@@ -552,6 +552,17 @@ class MaskedDropDownFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (items.length == 0) items.add('');
+    String _value = value ?? '';
+
+    /// regulariza value que não consta da lista ;
+    if (!items.contains(_value)) {
+      /// se item não existe na lista, por branco
+      _value = '';
+
+      /// se branco não tem na lista, adicionar
+      if (!items.contains(_value)) items.insert(0, _value);
+    }
+
     return Container(
         padding: padding ?? EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -563,19 +574,19 @@ class MaskedDropDownFormField extends StatelessWidget {
               Container(
                 alignment: Alignment.bottomLeft,
                 height: 15,
-                child: Text(hintText,
+                child: Text(hintText ?? '',
                     style: TextStyle(
                         fontSize: 12, color: hintColor ?? Colors.black54)),
               ),
             DropdownButtonFormField(
               key: UniqueKey(),
-              items: items.map((String value) {
+              items: items.map((String label) {
                 return new DropdownMenuItem(
                     key: UniqueKey(),
-                    value: value,
+                    value: label ?? '',
                     child: Row(
                       children: <Widget>[
-                        Text(value),
+                        Text(label ?? ''),
                       ],
                     ));
               }).toList(),
@@ -584,7 +595,7 @@ class MaskedDropDownFormField extends StatelessWidget {
               onChanged: onChanged,
               validator: validator,
               onSaved: onSaved,
-              value: value,
+              value: _value,
               // decoration: InputDecoration(hintText: hintText),
             ),
             if (trailing != null) trailing

@@ -371,7 +371,7 @@ class _DataViewerState extends State<DataViewer> {
                 widget.headingRowHeight -
                 (widget.footerHeight * 2)) ~/
         widget.dataRowHeight;
-
+    if (_top <= 3) _top = 3;
     if (controller.top == null) controller.top = _top;
     return StreamBuilder<dynamic>(
         stream: controller.subscribeChanges.stream,

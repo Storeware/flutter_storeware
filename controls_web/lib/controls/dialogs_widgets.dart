@@ -47,9 +47,7 @@ class Dialogs {
               child: Container(
             width: (fullPage) ? size.width : width ?? size.width * 0.90,
             height: (fullPage) ? size.height : height ?? size.height * 0.90,
-            child: Center(
-              child: child,
-            ),
+            child: child,
           )),
         );
       },

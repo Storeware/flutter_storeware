@@ -93,6 +93,7 @@ class DualListViewer extends StatefulWidget {
   final Widget header;
   final Widget body;
   final Widget bottom;
+  final bool canDrag;
   final List<dynamic> options;
   final List<dynamic> items;
   //final String keyName;
@@ -112,6 +113,7 @@ class DualListViewer extends StatefulWidget {
     this.options,
     this.items,
     this.leftWidth = 200,
+    this.canDrag = true,
     //@required this.keyName,
     this.onInsert,
     this.onDelete,
@@ -166,11 +168,14 @@ class _DualListViewerState extends State<DualListViewer> {
                             index: -1,
                             controller: controller,
                             side: DragTargetDualListSide.left,
+                            canDrag: widget.canDrag,
                           ),
                           for (var i = 0; i < controller.options.length; i++)
                             Padding(
-                              padding: const EdgeInsets.only(right: 40),
+                              padding: EdgeInsets.only(
+                                  right: (widget.canDrag ? 40 : 8)),
                               child: DualListItemCard(
+                                  canDrag: widget.canDrag,
                                   side: DragTargetDualListSide.left,
                                   builder:
                                       widget.builderOption ?? widget.builder,
@@ -192,14 +197,17 @@ class _DualListViewerState extends State<DualListViewer> {
                             child: widget.itemsTitle,
                           ),
                         DragTargetDualListItem(
+                          canDrag: widget.canDrag,
                           index: -1,
                           controller: controller,
                           side: DragTargetDualListSide.right,
                         ),
                         for (var i = 0; i < controller.items.length; i++)
                           Padding(
-                            padding: const EdgeInsets.only(right: 40.0),
+                            padding: EdgeInsets.only(
+                                right: (widget.canDrag) ? 40.0 : 8),
                             child: DualListItemCard(
+                              canDrag: widget.canDrag,
                               side: DragTargetDualListSide.right,
                               builder: widget.builder,
                               data: DualListItemData(
@@ -235,9 +243,11 @@ class DualListItemData {
 class DraggableDualListItem extends StatelessWidget {
   final DualListItemData data;
   final DragTargetDualListSide side;
+  final bool canDrag;
   final Widget Function(DualListItemData, dynamic) builder;
   const DraggableDualListItem({
     Key key,
+    @required this.canDrag = true,
     @required this.data,
     @required this.builder,
     @required this.side,
@@ -245,24 +255,37 @@ class DraggableDualListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable<DualListItemData>(
-      data: data,
-      feedback: Container(width: 100, height: 50, color: Colors.grey),
-      child: InkWell(
-        child: builder(data, data.item),
-        onTap: () {
-          if (side == DragTargetDualListSide.left)
-            data.controller.moveTo(data.controller.items.length, data.item);
-          else if (side == DragTargetDualListSide.right)
-            data.controller.moveFrom(data.controller.options.length, data.item);
-        },
-      ),
-      childWhenDragging: Container(color: Colors.amber),
-      onDragCompleted: () {
-        //widget.controller.remove(widget.item);
-        // alterado para o target para controller sucesso sincronizado
-      },
-    );
+    return (!canDrag)
+        ? InkWell(
+            child: builder(data, data.item),
+            onTap: () {
+              if (side == DragTargetDualListSide.left)
+                data.controller.moveTo(data.controller.items.length, data.item);
+              else if (side == DragTargetDualListSide.right)
+                data.controller
+                    .moveFrom(data.controller.options.length, data.item);
+            },
+          )
+        : Draggable<DualListItemData>(
+            data: data,
+            feedback: Container(width: 100, height: 50, color: Colors.grey),
+            child: InkWell(
+              child: builder(data, data.item),
+              onTap: () {
+                if (side == DragTargetDualListSide.left)
+                  data.controller
+                      .moveTo(data.controller.items.length, data.item);
+                else if (side == DragTargetDualListSide.right)
+                  data.controller
+                      .moveFrom(data.controller.options.length, data.item);
+              },
+            ),
+            childWhenDragging: Container(color: Colors.amber),
+            onDragCompleted: () {
+              //widget.controller.remove(widget.item);
+              // alterado para o target para controller sucesso sincronizado
+            },
+          );
   }
 }
 
@@ -270,11 +293,13 @@ class DualListItemCard extends StatelessWidget {
   final DragTargetDualListSide side;
   final Widget Function(DualListItemData, dynamic) builder;
   final DualListItemData data;
+  final bool canDrag;
   const DualListItemCard({
     Key key,
     @required this.data,
     @required this.builder,
     @required this.side,
+    @required this.canDrag,
   }) : super(key: key);
 
   @override
@@ -287,12 +312,14 @@ class DualListItemCard extends StatelessWidget {
           side: side,
           builder: builder,
           data: data,
+          canDrag: canDrag,
         ),
         DragTargetDualListItem(
           key: UniqueKey(),
           controller: data.controller,
           index: data.index,
           side: side,
+          canDrag: canDrag,
         ),
       ],
     );
@@ -305,11 +332,13 @@ class DragTargetDualListItem extends StatefulWidget {
   final DragTargetDualListSide side;
   final int index;
   final DualListViewerController controller;
+  final bool canDrag;
 
   const DragTargetDualListItem({
     Key key,
     @required this.side,
     this.index,
+    @required this.canDrag,
     @required this.controller,
   }) : super(key: key);
 
@@ -333,38 +362,40 @@ class _DragTargetDualListItemState extends State<DragTargetDualListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return DragTarget<DualListItemData>(
-      onWillAccept: (value) {
-        return accepted = true;
-      },
-      onLeave: (value) {
-        return accepted = false;
-      },
-      onAccept: (value) {
-        if (widget.side == DragTargetDualListSide.left)
-          widget.controller.moveFrom(widget.index + 1, value.item);
-        else if (widget.side == DragTargetDualListSide.right)
-          widget.controller.moveTo(widget.index + 1, value.item);
-        setState(() {
-          accepted = false;
-        });
-        return accepted;
-      },
-      builder: (BuildContext context, List<dynamic> candidateData,
-          List<dynamic> rejectedData) {
-        return (accepted)
-            ? Container(
-                height: 50,
-                color: Colors.grey.withOpacity(0.9),
-              )
-            : DottedBorder(
-                color: Colors.grey.withOpacity(0.2),
-                child: Container(
-                  height: expanded() ? 50 : 5,
-                  color: Colors.grey.withOpacity(0.1),
-                ),
-              );
-      },
-    );
+    return (!widget.canDrag)
+        ? Container()
+        : DragTarget<DualListItemData>(
+            onWillAccept: (value) {
+              return accepted = true;
+            },
+            onLeave: (value) {
+              return accepted = false;
+            },
+            onAccept: (value) {
+              if (widget.side == DragTargetDualListSide.left)
+                widget.controller.moveFrom(widget.index + 1, value.item);
+              else if (widget.side == DragTargetDualListSide.right)
+                widget.controller.moveTo(widget.index + 1, value.item);
+              setState(() {
+                accepted = false;
+              });
+              return accepted;
+            },
+            builder: (BuildContext context, List<dynamic> candidateData,
+                List<dynamic> rejectedData) {
+              return (accepted)
+                  ? Container(
+                      height: 50,
+                      color: Colors.grey.withOpacity(0.9),
+                    )
+                  : DottedBorder(
+                      color: Colors.grey.withOpacity(0.2),
+                      child: Container(
+                        height: expanded() ? 50 : 5,
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                    );
+            },
+          );
   }
 }

@@ -8,6 +8,11 @@ extension DateTimeExtension on DateTime {
     return formatter.format(this);
   }
 
+  e(f) {
+    return this.format('E').substring(0, 1).toUpperCase() +
+        this.format(f ?? '');
+  }
+
   dateFormat(String mask, [lang = 'pt-BR']) => DateFormat(mask, lang);
 
   toTimeString() => DateFormat.Hms().format(this);

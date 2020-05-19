@@ -466,7 +466,9 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
             value: (widget.tristate) ? value : value ?? false,
             onChanged: (x) {
               if (widget.onChanged != null) widget.onChanged(x);
-              notifier.add(x);
+              _setState(() {
+                value = x;
+              });
             },
           );
         }),

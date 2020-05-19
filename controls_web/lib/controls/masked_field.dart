@@ -441,11 +441,8 @@ class MaskedCheckbox extends StatefulWidget {
 }
 
 class _MaskedCheckboxState extends State<MaskedCheckbox> {
-  StreamController<bool> notifier = StreamController<bool>.broadcast();
-
   @override
   void dispose() {
-    notifier.close();
     super.dispose();
   }
 

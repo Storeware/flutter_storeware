@@ -1,5 +1,6 @@
 import 'dart:async';
 
+//import 'package:controls_web/controls/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'sidebar.dart';
 
@@ -26,7 +27,10 @@ class HorizontalPageTabView extends StatefulWidget {
   final Widget title;
   final List<Widget> actions;
   final double elevation;
+  final Color backgroundColor;
   final SidebarController sidebarController;
+  final Color sidebarColor;
+
   final Color tabColor;
   final Widget tabTitle;
   final List<Widget> tabActions;
@@ -47,9 +51,13 @@ class HorizontalPageTabView extends StatefulWidget {
   final bool automaticallyImplyLeading;
   final EdgeInsets bodyPadding;
   final bool isMobile;
+  final Widget Function(BuildContext) backgroundBuilder;
+  final Widget Function(BuildContext) sidebarBackgroundBuilder;
   HorizontalPageTabView({
     this.title,
     this.appBar,
+    this.backgroundColor,
+    this.sidebarColor,
     this.pageAppBar,
     this.pageBottom,
     this.tabBuilder,
@@ -75,6 +83,8 @@ class HorizontalPageTabView extends StatefulWidget {
     this.preferredSize,
     this.tabLeading,
     this.controller,
+    this.backgroundBuilder,
+    this.sidebarBackgroundBuilder,
   });
   _HorizontalTabBarViewState createState() => _HorizontalTabBarViewState();
 }
@@ -180,79 +190,90 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
                     return DefaultTextStyle(
                         style: theme.primaryTextTheme.bodyText1,
                         child: SidebarContainer(
+                            color: widget.sidebarColor ?? theme.primaryColor,
                             compact: widget.compacted,
                             compactWidth: sidebarController.compactSize,
                             controller: sidebarController,
                             width: sidebarController.width,
-                            child: ListView(
-                              padding: widget.isMobile ? EdgeInsets.zero : null,
-                              children: [
-                                for (int i = 0; i < widget.choices.length; i++)
-                                  Column(
-                                    children: <Widget>[
-                                      StreamBuilder<int>(
-                                          stream: tabChangeEvent.stream,
-                                          initialData: indexSelected,
-                                          builder: (context, snapshot) {
-                                            TabChoice tab = widget.choices[i];
-                                            return Container(
-                                              color: (snapshot.data == i)
-                                                  ? _indicatorColor
-                                                  : _tabColor,
-                                              child: ((sidebarController
-                                                      .compacted))
-                                                  ? IconButton(
-                                                      icon: Icon(
-                                                        tab.icon,
-                                                        color: _iconColor,
+                            child: Stack(children: [
+                              if (widget.sidebarBackgroundBuilder != null)
+                                widget.sidebarBackgroundBuilder(context),
+                              ListView(
+                                padding:
+                                    widget.isMobile ? EdgeInsets.zero : null,
+                                children: [
+                                  for (int i = 0;
+                                      i < widget.choices.length;
+                                      i++)
+                                    Column(
+                                      children: <Widget>[
+                                        StreamBuilder<int>(
+                                            stream: tabChangeEvent.stream,
+                                            initialData: indexSelected,
+                                            builder: (context, snapshot) {
+                                              TabChoice tab = widget.choices[i];
+                                              return Container(
+                                                color: (snapshot.data == i)
+                                                    ? _indicatorColor
+                                                    : _tabColor,
+                                                child: ((sidebarController
+                                                        .compacted))
+                                                    ? IconButton(
+                                                        icon: Icon(
+                                                          tab.icon,
+                                                          color: _iconColor,
+                                                        ),
+                                                        onPressed: () {
+                                                          if (tab.primary)
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (x) =>
+                                                                        tab.child));
+                                                          else
+                                                            _tabController
+                                                                .animateTo(i);
+                                                        })
+                                                    : ListTile(
+                                                        title: sidebarController
+                                                                .compacted
+                                                            ? null
+                                                            : Text(tab.title,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color:
+                                                                      _iconColor,
+                                                                )),
+                                                        leading:
+                                                            (tab.icon != null)
+                                                                ? Icon(
+                                                                    tab.icon,
+                                                                    color:
+                                                                        _iconColor,
+                                                                  )
+                                                                : null,
+                                                        onTap: () {
+                                                          if (tab.primary)
+                                                            Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (x) =>
+                                                                        tab.child));
+                                                          else
+                                                            _tabController
+                                                                .animateTo(i);
+                                                        },
                                                       ),
-                                                      onPressed: () {
-                                                        if (tab.primary)
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (x) =>
-                                                                      tab.child));
-                                                        else
-                                                          _tabController
-                                                              .animateTo(i);
-                                                      })
-                                                  : ListTile(
-                                                      title: sidebarController
-                                                              .compacted
-                                                          ? null
-                                                          : Text(tab.title,
-                                                              style: TextStyle(
-                                                                color:
-                                                                    _iconColor,
-                                                              )),
-                                                      leading: (tab.icon !=
-                                                              null)
-                                                          ? Icon(
-                                                              tab.icon,
-                                                              color: _iconColor,
-                                                            )
-                                                          : null,
-                                                      onTap: () {
-                                                        if (tab.primary)
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder: (x) =>
-                                                                      tab.child));
-                                                        else
-                                                          _tabController
-                                                              .animateTo(i);
-                                                      },
-                                                    ),
-                                            );
-                                          }),
-                                    ],
-                                  )
-                              ],
-                            )));
+                                              );
+                                            }),
+                                      ],
+                                    )
+                                ],
+                              ),
+                            ])));
                   }),
               sidebarColor: _sidebarColor,
+              backgroundColor: widget.backgroundColor,
               body: Padding(
                 padding: widget.bodyPadding ?? EdgeInsets.all(8.0),
                 child: TabBarView(
@@ -277,86 +298,90 @@ class _HorizontalTabBarViewState extends State<HorizontalPageTabView>
     _tabColor = widget.tabColor ?? theme.buttonTheme.colorScheme.secondary;
     _iconColor = widget.iconColor ?? theme.primaryTextTheme.bodyText1.color;
     return Scaffold(
-      appBar: widget.appBar ??
-          AppBar(
-            elevation: widget.elevation,
-            automaticallyImplyLeading: false,
-            title: widget.title,
-            leading: widget.leading,
-            actions: [...widget.tabActions ?? [], ...widget.actions ?? []],
-          ),
-      bottomNavigationBar: (widget.bottomNavigationBar != null)
-          ? DefaultTextStyle(
-              style: theme.primaryTextTheme.bodyText1,
-              child: widget.bottomNavigationBar)
-          : null,
-      floatingActionButton: widget.floatingActionButton,
-      body: Center(
-        child: GridView.count(
-          crossAxisCount: cols,
-          children: List.generate(
-            widget.choices.length,
-            (index) {
-              TabChoice tab = widget.choices[index];
-              if (widget.tabBuilder != null)
-                return widget.tabBuilder(_tabController, tab, index);
-              return Padding(
-                  padding: EdgeInsets.all(8),
-                  child: InkWell(
-                    child: Card(
-                      elevation: widget.elevation,
-                      color: _tabColor,
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Icon(
-                              tab.icon,
-                              size: 80,
-                              color: _iconColor ??
-                                  theme.primaryTextTheme.bodyText1.color,
-                            ),
-                            Text(
-                              tab.title,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500,
-                                color: _iconColor ??
-                                    theme.primaryTextTheme.bodyText1.color,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    onTap: () {
-                      if (tab.primary)
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (x) => tab.child),
-                        );
-                      else
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (x) => Scaffold(
-                              appBar: AppBar(
-                                  title: Text(
-                                tab.title,
-                              )),
-                              body: tab.child,
+        backgroundColor: widget.backgroundColor,
+        appBar: widget.appBar ??
+            AppBar(
+              elevation: widget.elevation,
+              automaticallyImplyLeading: false,
+              title: widget.title,
+              leading: widget.leading,
+              actions: [...widget.tabActions ?? [], ...widget.actions ?? []],
+            ),
+        bottomNavigationBar: (widget.bottomNavigationBar != null)
+            ? DefaultTextStyle(
+                style: theme.primaryTextTheme.bodyText1,
+                child: widget.bottomNavigationBar)
+            : null,
+        floatingActionButton: widget.floatingActionButton,
+        body: Stack(children: [
+          if (widget.backgroundBuilder != null)
+            widget.backgroundBuilder(context),
+          Center(
+            child: GridView.count(
+              crossAxisCount: cols,
+              children: List.generate(
+                widget.choices.length,
+                (index) {
+                  TabChoice tab = widget.choices[index];
+                  if (widget.tabBuilder != null)
+                    return widget.tabBuilder(_tabController, tab, index);
+                  return Padding(
+                      padding: EdgeInsets.all(8),
+                      child: InkWell(
+                        child: Card(
+                          elevation: widget.elevation,
+                          color: _tabColor,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  tab.icon,
+                                  size: 80,
+                                  color: _iconColor ??
+                                      theme.primaryTextTheme.bodyText1.color,
+                                ),
+                                Text(
+                                  tab.title,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w500,
+                                    color: _iconColor ??
+                                        theme.primaryTextTheme.bodyText1.color,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        );
-                    },
-                  ));
-            },
+                        ),
+                        onTap: () {
+                          if (tab.primary)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (x) => tab.child),
+                            );
+                          else
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (x) => Scaffold(
+                                  appBar: AppBar(
+                                      title: Text(
+                                    tab.title,
+                                  )),
+                                  body: tab.child,
+                                ),
+                              ),
+                            );
+                        },
+                      ));
+                },
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ]));
   }
 }
 

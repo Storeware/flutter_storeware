@@ -234,6 +234,7 @@ class SidebarController {
   final AppBar appBar;
   final Widget body;
   final Widget bottomNavigationBar;
+  final Widget Function(BuildContext) backgroundBuilder;
   bool compacted;
   double compactSize;
   double width;
@@ -247,6 +248,7 @@ class SidebarController {
       {this.color,
       this.width = 180,
       this.backgroudColor,
+      this.backgroundBuilder,
       this.visible = true,
       this.position,
       this.isMobile = false,
@@ -425,9 +427,11 @@ class SidebarHeader extends StatelessWidget {
 class SidebarContainer extends StatelessWidget {
   final double width;
   final Widget child;
+  final Color color;
   final bool compact;
   final double compactWidth;
   final SidebarController controller;
+  final Widget Function(BuildContext) backgroundBuilder;
   const SidebarContainer({
     Key key,
     this.width = 150,
@@ -435,6 +439,8 @@ class SidebarContainer extends StatelessWidget {
     this.compactWidth = 50,
     this.compact = false,
     this.child,
+    this.color,
+    this.backgroundBuilder,
   }) : super(key: key);
 
   @override
@@ -449,19 +455,22 @@ class SidebarContainer extends StatelessWidget {
         initialData: controller?.compacted ?? false,
         builder: (context, snapshot) {
           return Container(
+              color: color ?? Colors.transparent,
               width: controller
                   .currentWidth, //(!snapshot.data) ? width : compactWidth,
               child: Scaffold(
                   appBar: controller?.appBar,
                   backgroundColor: controller?.color,
-                  body:
-                      ((controller.body == null) && (controller.bottom == null))
-                          ? child ?? Container()
-                          : Column(children: [
-                              if (controller.body != null) controller.body,
-                              if (child != null) Expanded(child: child),
-                              if (controller.bottom != null) controller.bottom
-                            ]),
+                  body: Stack(children: [
+                    if (backgroundBuilder != null) backgroundBuilder(context),
+                    ((controller.body == null) && (controller.bottom == null))
+                        ? child ?? Container()
+                        : Column(children: [
+                            if (controller.body != null) controller.body,
+                            if (child != null) Expanded(child: child),
+                            if (controller.bottom != null) controller.bottom
+                          ])
+                  ]),
                   bottomNavigationBar: controller?.bottomNavigationBar));
         });
   }

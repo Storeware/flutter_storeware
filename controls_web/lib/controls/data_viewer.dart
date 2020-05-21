@@ -255,6 +255,7 @@ class DataViewer extends StatefulWidget {
   final double dataRowHeight;
   final double headingRowHeight;
   final double footerHeight;
+  final Function(dynamic) onSelected;
 
   DataViewer({
     Key key,
@@ -267,6 +268,7 @@ class DataViewer extends StatefulWidget {
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
+    this.onSelected,
     this.footerHeight = kToolbarHeight,
     this.dataRowHeight = kMinInteractiveDimension,
     this.beforeShow,
@@ -385,6 +387,11 @@ class _DataViewerState extends State<DataViewer> {
               child: widget.child ??
                   PaginatedGrid(
                     actions: widget.actions,
+                    onSelectChanged: (widget.onSelected != null)
+                        ? (b, ctrl) {
+                            widget.onSelected(ctrl.data);
+                          }
+                        : null,
                     columnSpacing: 10,
                     onEditItem: widget.onEditItem,
                     onInsertItem: widget.onInsertItem,

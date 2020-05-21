@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 
 extension DataExtensionBool on bool {
   String toSN() => this ? 'S' : 'N';
@@ -104,6 +105,14 @@ abstract class DataService {
   }
 }
 
+class DataItemNotifier with ChangeNotifier {
+  dynamic value;
+  update(item) {
+    value = item;
+    notifyListeners();
+  }
+}
+
 abstract class DataItem {
   dynamic id;
   fromMap(Map<String, dynamic> data);
@@ -112,20 +121,18 @@ abstract class DataItem {
     return true;
   }
 
-  /// Change Events
-  var _notifierItem;
-  void changed() {
-    if (_notifierItem != null) _notifierItem.notify(this);
+  DataItem() {
+    notifier.value = this;
   }
 
-  Stream<DataItem> get notifier {
-    if (_notifierItem == null) _notifierItem = DataNotifyChange<DataItem>();
-    return _notifierItem.stream;
+  /// Change EventsDataItemNotifierDataItemNotifier
+  final DataItemNotifier notifier = DataItemNotifier();
+  void changed() {
+    notifier.update(this);
   }
 
   dispose() {
-    if (_notifierItem != null) _notifierItem.close();
-    _notifierItem = null;
+    notifier.dispose();
   }
 
   dynamic byName(String key) {

@@ -96,7 +96,8 @@ class ODataDocument {
   bool operator ==(item) {
     return id == item.id;
   }
-  //bool operator !=(item)=>this.id!=item.id;
+
+  ODataDocument({this.doc});
 }
 
 class ODataDocuments {
@@ -168,8 +169,11 @@ class ODataResult {
         for (var item in it) {
           var doc = ODataDocument();
           doc.id = "${item['id']}";
-          doc.doc = item;
-          debug(item);
+          doc.doc = {};
+          item.forEach((k, v) {
+            doc.doc[k] = v;
+          });
+          print(item);
           _data.docs.add(doc);
         }
       }

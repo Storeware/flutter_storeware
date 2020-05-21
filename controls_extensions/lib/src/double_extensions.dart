@@ -11,11 +11,11 @@ extension DoubleExtension on double {
   }
 
   num min(num value) {
-    return (this < value) ? value : this;
+    return (this > value) ? value : this;
   }
 
   num max(num value) {
-    return (this > value) ? value : this;
+    return (this < value) ? value : this;
   }
 
   num roundABNT(int decs) {
@@ -57,10 +57,10 @@ extension CurrencyExtension on double {
 
 extension IntExtensions on int {
   int min(int value) {
-    return (this < value) ? value : this;
+    return (this > value) ? value : this;
   }
 
   int max(int value) {
-    return (this > value) ? value : this;
+    return (this < value) ? value : this;
   }
 }

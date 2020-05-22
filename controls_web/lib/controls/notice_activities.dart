@@ -38,7 +38,7 @@ class NoticeTag extends StatelessWidget {
     this.onPressed,
     this.width,
     this.height = 60,
-    this.tagWidth = 3,
+    this.tagWidth = 6,
     this.radius = 5,
     this.style,
     this.border = 0,
@@ -68,8 +68,9 @@ class NoticeTag extends StatelessWidget {
               color: tagColor ?? theme.primaryColor),
           Expanded(
             child: ListTile(
+              contentPadding: EdgeInsets.zero,
               onTap: onPressed,
-              leading: icon ?? Icon(Icons.info),
+              leading: icon ?? Icon(Icons.info, size: 42),
               title: Center(
                   child: Text(text,
                       style: style ??

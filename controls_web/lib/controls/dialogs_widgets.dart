@@ -11,11 +11,11 @@ class Dialogs {
       Color color,
       Widget bottom}) async {
     return showPage(context,
-        label: title,
+        label: title ?? '',
         width: width,
         height: height,
         child: Scaffold(
-          appBar: AppBar(title: Text(title)),
+          appBar: AppBar(title: Text(title ?? '')),
           body: Column(
             children: [
               if (child != null) child,

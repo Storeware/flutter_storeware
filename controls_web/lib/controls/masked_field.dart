@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'flutter_masked_text.dart';
 import 'package:intl/intl.dart';
+import 'currency.dart';
 
 bool _showHelperText = true;
 
@@ -673,5 +674,173 @@ class MaskedMoneyFormField extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+
+
+
+class MaskedLabeled extends StatelessWidget {
+  const MaskedLabeled({
+    Key key,
+    this.label,
+    this.value,
+  }) : super(key: key);
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Theme.of(context).dividerColor,
+            width: 2.0,
+          ),
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label ?? '', style: TextStyle(fontSize: 12, color: Colors.grey)),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8, top: 4),
+            child: Text(value ?? ''),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MaskedLabledFormField extends StatelessWidget {
+  final String labelText;
+  final String initialValue;
+  final TextEditingController controller;
+
+  const MaskedLabledFormField(
+      {Key key, this.labelText, this.initialValue, this.controller})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController _controller =
+        this.controller ?? TextEditingController();
+    if (this.controller == null) _controller.text = initialValue ?? '';
+    return TextFormField(
+      controller: _controller,
+      decoration: InputDecoration(labelText: labelText),
+      readOnly: true,
+    );
+  }
+}
+
+class MaskedSearchFormField<T> extends StatelessWidget {
+  final T initialValue;
+  final TextEditingController controller;
+  final String Function(T) onGetValue;
+  final T Function(String) onSetValue;
+  final InputDecoration decoration;
+  final Function(T) validator;
+  final Function(T) onSaved;
+  final bool autofocus;
+  final TextStyle style;
+  final Future<T> Function() onSearch;
+  final IconData iconSearch;
+  final bool readOnly;
+  final String labelText;
+  final int maxLines;
+  final Function(T) onChanged;
+
+  const MaskedSearchFormField(
+      {Key key,
+      this.initialValue,
+      this.onGetValue,
+      this.decoration,
+      this.validator,
+      this.onSaved,
+      this.autofocus = false,
+      this.onSetValue,
+      //this.controller,
+      this.style,
+      this.onSearch,
+      this.iconSearch = Icons.search,
+      this.readOnly = false,
+      this.labelText,
+      this.maxLines = 1,
+      this.onChanged,
+      this.controller})
+      : super(key: key);
+
+  String getValue(T v) {
+    if (onGetValue != null)
+      return onGetValue(initialValue);
+    else
+      return (initialValue == null) ? '' : '$initialValue';
+  }
+
+  Type typeOf<T>() => T;
+  T setValue(String value) {
+    if (onSetValue != null) {
+      return onSetValue(value);
+    }
+
+    if (typeOf<T>() == typeOf<Money>()) return Money.tryParse(value) as T;
+    if (typeOf<T>() == typeOf<int>()) return int.tryParse(value) as T;
+    if (typeOf<T>() == typeOf<double>()) return double.tryParse(value) as T;
+    if (typeOf<T>() == typeOf<DateTime>()) return DateTime.tryParse(value) as T;
+    if (typeOf<T>() == typeOf<bool>()) return (value == 'true') as T;
+    return value as T;
+  }
+
+  getKeyboardType() {
+    if (typeOf<T>() == typeOf<Money>()) return TextInputType.phone;
+    if (typeOf<T>() == typeOf<int>()) return TextInputType.phone;
+    if (typeOf<T>() == typeOf<double>()) return TextInputType.number;
+
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final TextEditingController controller =
+        this.controller ?? TextEditingController();
+
+    controller.text = getValue(initialValue);
+
+    return TextFormField(
+        autofocus: autofocus,
+        controller: controller,
+        keyboardType: getKeyboardType(),
+        style: style ?? TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        decoration: decoration ??
+            InputDecoration(
+                labelText: labelText,
+                suffixIcon: IconButton(
+                    icon: Icon(iconSearch),
+                    onPressed: () {
+                      onSearch().then((item) {
+                        controller.text = getValue(item);
+                      });
+                    })),
+        enableSuggestions: true,
+        expands: maxLines > 1,
+        maxLines: maxLines,
+        minLines: 1,
+        readOnly: readOnly,
+        onChanged: (value) {
+          if (onChanged != null) onChanged(setValue(value));
+        },
+        validator: (value) {
+          if (validator != null) return validator(setValue(value));
+          return (setValue(value) == null) ? 'Valor inválido' : null;
+        },
+        onSaved: (x) {
+          T v = setValue(x);
+          onSaved(v);
+        });
   }
 }

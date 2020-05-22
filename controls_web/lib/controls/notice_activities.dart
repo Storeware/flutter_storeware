@@ -66,18 +66,19 @@ class NoticeTag extends StatelessWidget {
               width: tagWidth,
               height: height,
               color: tagColor ?? theme.primaryColor),
-          Expanded(
-            child: ListTile(
-              contentPadding: EdgeInsets.zero,
-              onTap: onPressed,
-              leading: icon ?? Icon(Icons.info, size: 42),
-              title: Center(
-                  child: Text(text,
-                      style: style ??
-                          TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500))),
+          if (text != null)
+            Expanded(
+              child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                onTap: onPressed,
+                leading: icon ?? Icon(Icons.info, size: 42),
+                title: Center(
+                    child: Text(text,
+                        style: style ??
+                            TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500))),
+              ),
             ),
-          ),
           if (content != null) content,
         ],
       ),

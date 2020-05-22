@@ -156,23 +156,56 @@ class Dialogs {
     context, {
     String text,
     width: 300,
-    height: 150,
+    height = 150,
+    Color color,
+    double radius = 15,
   }) {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (x) => SimpleDialog(
               children: [
-                NoticeTag(
+                Container(
                   width: width,
                   height: height,
-                  radius: 15,
-                  text: text,
-                  content: RoundedButton(
-                    buttonName: 'ok',
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(radius),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                          height: height,
+                          width: 8,
+                          color: Theme.of(context).primaryColor),
+                      Expanded(
+                        child: Row(children: [
+                          Align(
+                              alignment: Alignment.topLeft,
+                              child: Icon(Icons.info, size: 42)),
+                          Expanded(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(text ?? '',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(fontSize: 18)),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  RoundedButton(
+                                    buttonName: 'OK',
+                                    onTap: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ]),
+                          ),
+                        ]),
+                      ),
+                    ],
                   ),
                 ),
               ],

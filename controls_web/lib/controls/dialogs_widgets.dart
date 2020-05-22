@@ -157,13 +157,18 @@ class Dialogs {
     String text,
     width: 300,
     height = 150,
+    Widget icon,
     Color color,
+    double tagWidth,
+    Widget content,
     double radius = 15,
   }) {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
         builder: (x) => SimpleDialog(
+              contentPadding: EdgeInsets.zero,
+              titlePadding: EdgeInsets.zero,
               children: [
                 Container(
                   width: width,
@@ -176,22 +181,23 @@ class Dialogs {
                     children: [
                       Container(
                           height: height,
-                          width: 8,
+                          width: tagWidth ?? 8,
                           color: Theme.of(context).primaryColor),
                       Expanded(
                         child: Row(children: [
-                          Align(
-                              alignment: Alignment.topLeft,
-                              child: Icon(Icons.info, size: 42)),
+                          if (icon != null)
+                            Align(alignment: Alignment.topLeft, child: icon),
                           Expanded(
                             child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(text ?? '',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(fontSize: 18)),
+                                  if (text != null)
+                                    Text(text ?? '',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(fontSize: 18)),
+                                  if (content != null) content,
                                   SizedBox(
                                     height: 20,
                                   ),

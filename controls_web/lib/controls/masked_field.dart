@@ -367,14 +367,14 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
         validator: (x) {
           DateTime d = formatter.parse(x);
           DateTime b = formatter.parse(x);
-          debugPrint('init Validate $x $d');
+          // debugPrint('init Validate $x $d');
           if (widget.firstDate != null) if (widget.firstDate.isAfter(d))
             d = widget.firstDate;
           if (widget.lastDate != null) if (widget.lastDate.isBefore(d))
             d = widget.lastDate;
 
           if (widget.validator != null) return widget.validator(d);
-          debugPrint('fim Validate $x $b $d');
+          //debugPrint('fim Validate $x $b $d');
           _dataController.text = formatter.format(d);
           return null;
         },
@@ -676,9 +676,6 @@ class MaskedMoneyFormField extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class MaskedLabeled extends StatelessWidget {
   const MaskedLabeled({

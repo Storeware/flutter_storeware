@@ -128,9 +128,9 @@ class DataViewerController {
         return true;
       });
     else if (dataSource != null) {
-      debugPrint('doUpdate: $dados manual: $manual');
+      //debugPrint('doUpdate: $dados manual: $manual');
       return dataSource.put(dados).then((rst) {
-        debugPrint('respose: $rst');
+        //debugPrint('respose: $rst');
         if (!manual && (rst != null)) {
           paginatedController.changeTo(keyName, dados[keyName], dados);
         }
@@ -152,6 +152,15 @@ class DataViewerController {
 
   /// [PaginatedGridController] controller para paginação dos dados.
   PaginatedGridController paginatedController = PaginatedGridController();
+
+  edit(BuildContext context, Map<String, dynamic> data,
+      {String title,
+      double width,
+      double height,
+      PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
+    return paginatedController.edit(context, data,
+        title: title, width: width, height: height, event: event);
+  }
 }
 
 class DataViewerColumn extends PaginatedGridColumn {
@@ -288,6 +297,7 @@ class DataViewer extends StatefulWidget {
     this.height,
     this.width,
   })  : assert(source != null || controller != null),
+        assert((columns == null) || (columns.length > 1)),
         super(key: key);
 
   @override
@@ -306,6 +316,7 @@ class _DataViewerState extends State<DataViewer> {
               return widget.source;
             });
     if (widget.keyName != null) controller.keyName = widget.keyName;
+    //controller.viewer = this.widget;
     super.initState();
   }
 
@@ -378,7 +389,7 @@ class _DataViewerState extends State<DataViewer> {
     return StreamBuilder<dynamic>(
         stream: controller.subscribeChanges.stream,
         builder: (context, snapshot) {
-          print('subscribeChanges: ${snapshot.data}');
+          // print('subscribeChanges: ${snapshot.data}');
           return DefaultDataViewer(
             controller: widget.controller,
             child: Container(

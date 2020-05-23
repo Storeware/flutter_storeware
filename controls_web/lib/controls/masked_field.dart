@@ -500,7 +500,7 @@ class MaskedSwitchFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool initialValue = value;
+    bool initialValue = value ?? false;
     return Row(mainAxisSize: MainAxisSize.min, children: [
       if (leading != null) leading,
       if (label != null) Text(label ?? '' + '  '),

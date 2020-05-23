@@ -17,9 +17,14 @@ class DualListViewerController {
     items = items ?? [];
   }
   loadBy(String keyName, dynamic value) {
-    var it = options.firstWhere((item) {
-      return item[keyName] == value;
-    });
+    var it;
+    try {
+      it = options.firstWhere((item) {
+        return item[keyName] == value;
+      });
+    } catch (e) {
+      //
+    }
     if (it != null) {
       load(it);
     }

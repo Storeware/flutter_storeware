@@ -652,6 +652,40 @@ class PaginatedGridController {
     return null;
   }
 
+  edit(BuildContext context, Map<String, dynamic> data,
+      {String title,
+      double width,
+      double height,
+      PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
+    return PaginatedGrid.show(context,
+        title: title,
+        child: PaginatedGridEditRow(
+          data: data,
+          width: width,
+          height: height,
+          fullPage: false,
+          controller: this,
+          event: event,
+          actions: [
+            if (widget.canDelete)
+              Tooltip(
+                  message: 'Excluir o item',
+                  child: IconButton(
+                    icon: Icon(Icons.delete),
+                    onPressed: () {
+                      this.data = data;
+                      widget
+                          .onPostEvent(
+                              this, data, PaginatedGridChangeEvent.delete)
+                          .then((rsp) {
+                        Navigator.pop(context);
+                      });
+                    },
+                  )),
+          ],
+        ));
+  }
+
   clear() {
     originalSource.clear();
     source.clear();
@@ -916,6 +950,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
 }
 
 class PaginatedGridEditRow extends StatefulWidget {
+  final Map<String, dynamic> data;
   final double width;
   final double height;
   final PaginatedGridController controller;
@@ -927,6 +962,7 @@ class PaginatedGridEditRow extends StatefulWidget {
     Key key,
     this.event,
     this.controller,
+    this.data,
     this.width,
     this.fullPage = false,
     this.height,
@@ -947,7 +983,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
         ((widget.controller.data == null)
             ? PaginatedGridChangeEvent.insert
             : PaginatedGridChangeEvent.update);
-    p = widget.controller.data ?? {};
+    p = widget.data ?? widget.controller.data ?? {};
     super.initState();
   }
 

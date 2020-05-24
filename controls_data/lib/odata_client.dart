@@ -173,7 +173,7 @@ class ODataResult {
           item.forEach((k, v) {
             doc.doc[k] = v;
           });
-          print(item);
+          //print(item);
           _data.docs.add(doc);
         }
       }

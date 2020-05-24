@@ -57,7 +57,7 @@ class StrapButton extends StatelessWidget {
     @required this.onPressed,
     this.margin = 1,
     this.type = StrapButtonType.primary,
-    this.height = 35,
+    this.height = kMinInteractiveDimension,
     this.width,
     this.borderWidth = 1,
     this.radius = 5,

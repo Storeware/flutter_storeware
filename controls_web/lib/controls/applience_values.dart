@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'fonts.dart';
+
 class ApplienceValue extends StatelessWidget {
   final Color titleColor;
   final String title;
@@ -76,10 +78,7 @@ class _ApplienceContainerState extends State<ApplienceContainer> {
               if (widget.title != null)
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      widget.title,
-                      style: TextStyle(fontSize: 18),
-                    )),
+                    child: textBold(widget.title, size: 18)),
               buildPainel(),
             ],
           );

@@ -241,7 +241,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
             ),
             Expanded(
               child: MaterialButton(
-                visualDensity: VisualDensity.compact,
+                //visualDensity: VisualDensity.compact,
                 child: Center(
                     child: Text(widget.label ?? 'comprar',
                         style: TextStyle(
@@ -275,7 +275,7 @@ class ShowPriceWidget extends StatelessWidget {
   const ShowPriceWidget({
     Key key,
     this.simbol = 'R\$',
-    this.fontSize = 24,
+    this.fontSize = 18,
     @required this.precovenda,
     this.decimais = 2,
     //@required this.showDescript,

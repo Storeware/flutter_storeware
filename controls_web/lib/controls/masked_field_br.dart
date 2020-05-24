@@ -1,12 +1,12 @@
+import 'package:controls_web/controls/masked_field.dart';
 import 'package:flutter/material.dart';
-
-import 'masked_field.dart';
 
 extension MaskedTextFieldBr on MaskedTextField {
   static cpf(
           {Key key,
           String label = 'CPF',
           String initialValue,
+          onChanged,
           onSave,
           String mask = '000.000.000-00',
           String match, // = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
@@ -17,16 +17,18 @@ extension MaskedTextFieldBr on MaskedTextField {
           label: label,
           mask: mask,
           initialValue: initialValue ?? '',
-          onSave: onSave,
+          onSaved: onSave,
           validator: validator,
           sample: '000.000.000-00',
           match: match,
+          onChanged: onChanged,
           keyboardType: TextInputType.phone,
           style: style);
   static cep(
           {Key key,
           String label = 'CEP',
           String initialValue,
+          onChanged,
           onSave,
           String mask = '00000-000',
           String match, // = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
@@ -37,7 +39,8 @@ extension MaskedTextFieldBr on MaskedTextField {
           label: label,
           mask: mask,
           initialValue: initialValue ?? '',
-          onSave: onSave,
+          onChanged: onChanged,
+          onSaved: onSave,
           validator: validator,
           sample: '99999-999',
           match: match,
@@ -49,6 +52,7 @@ class MaskedEndereco extends StatefulWidget {
   final Function(Map<String, dynamic>) onSave;
   final Map<String, dynamic> initialValues;
   final double width;
+  final Function(String) onChanged;
   final String Function(Map<String, dynamic>) validator;
   MaskedEndereco({
     Key key,
@@ -56,6 +60,7 @@ class MaskedEndereco extends StatefulWidget {
     this.onSave,
     this.width,
     this.validator,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -64,6 +69,15 @@ class MaskedEndereco extends StatefulWidget {
 
 class _MaskedEnderecoState extends State<MaskedEndereco> {
   Map<String, dynamic> values;
+
+  //final TextEditingController _cepController = TextEditingController();
+
+  @override
+  void initState() {
+    //_cepController.text = values['cep'] ?? '';
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     values = widget.initialValues;
@@ -78,6 +92,7 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
             child: MaskedTextFieldBr.cep(
                 label: 'CEP',
                 initialValue: values['cep'] ?? '',
+                onChanged: widget.onChanged,
                 onSave: (x) {
                   values['cep'] = x;
                   doSave();
@@ -92,8 +107,9 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
             ),
             child: MaskedTextField.text(
                 label: 'num casa',
+                maxLength: 10,
                 initialValue: values['numero'] ?? '',
-                onSave: (x) {
+                onSaved: (x) {
                   values['numero'] = x;
                   doSave();
                 })),
@@ -104,12 +120,13 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
           child: Container(
               child: MaskedTextField.text(
                   label: 'complemento',
+                  maxLength: 60,
                   validator: (x) {
                     values['compl'] = x;
                     doValidator();
                   },
                   initialValue: values['compl'] ?? '',
-                  onSave: (x) {
+                  onSaved: (x) {
                     values['compl'] = x;
                     doSave();
                   })),

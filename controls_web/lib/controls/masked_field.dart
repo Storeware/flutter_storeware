@@ -26,6 +26,7 @@ class MaskedTextField extends StatefulWidget {
   final String match;
   final String sample;
   final String errorText;
+  final bool autofocus;
   final Function(String) onChanged;
   MaskedTextField({
     Key key,
@@ -38,6 +39,7 @@ class MaskedTextField extends StatefulWidget {
     this.keyboardType,
     this.controller,
     this.translator,
+    this.autofocus = false,
     this.style,
     this.match,
     this.sample,
@@ -65,12 +67,14 @@ class MaskedTextField extends StatefulWidget {
       String mask = '(00)00000-0000',
       String match = r"^\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
       Function(String) validator,
+      bool autofocus = false,
       TextStyle style}) {
     //echo('valor inicial: $initialValue');
     return MaskedTextField(
         key: key,
         label: label,
         mask: mask,
+        autofocus: autofocus,
         textAlign: textAlign,
         initialValue: initialValue ?? '',
         onSaved: onSaved,
@@ -91,12 +95,14 @@ class MaskedTextField extends StatefulWidget {
       String mask = '*00(00)00000-0000',
       String match = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
       Function(String) validator,
+      bool autofocus = false,
       TextStyle style}) {
     //echo('valor inicial: $initialValue');
     return MaskedTextField(
         key: key,
         label: label,
         mask: mask,
+        autofocus: autofocus,
         textAlign: textAlign,
         initialValue: initialValue ?? '+55(11)',
         onSaved: onSaved,
@@ -113,6 +119,7 @@ class MaskedTextField extends StatefulWidget {
           String initialValue,
           onSaved,
           Function(String) validator,
+          bool autofocus = false,
           TextStyle style}) =>
       MaskedTextField(
           key: key,
@@ -120,6 +127,7 @@ class MaskedTextField extends StatefulWidget {
           mask: "00:00",
           initialValue: initialValue,
           onSaved: onSaved,
+          autofocus: autofocus,
           validator: validator,
           sample: '12:59',
           match: r"([01]?[0-9]|2[0-3]):[0-5][0-9]",
@@ -268,6 +276,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
       child: TextFormField(
           textAlign: widget.textAlign ?? TextAlign.start,
           maxLength: widget.maxLength,
+          autofocus: widget.autofocus,
           initialValue: (_controller == null) ? widget.initialValue : null,
           controller: _controller,
           style: widget.style ??

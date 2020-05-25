@@ -4,18 +4,25 @@ import 'dart:io';
 
 /// A Calculator.import 'dart:io';
 import 'dart:typed_data';
+
 // ignore_for_file:
 import 'package:controls_firebase_platform_interface/controls_firebase_platform_interface.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart' as api;
-import 'package:firebase/firebase.dart' as fb;
-import 'package:firebase/firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as fs;
-import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' as fb;
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 export 'package:firebase_auth/firebase_auth.dart';
+
+/*
+import 'package:firebase/firebase.dart' as fb;
+import 'package:firebase/firestore.dart';
+
+
+*/
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
@@ -65,9 +72,9 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
 class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   static final _singleton = FirebaseFirestoreDriver._create();
   FirebaseFirestoreDriver._create();
-  FirebaseFirestoreDriver() => _singleton;
+  factory FirebaseFirestoreDriver() => _singleton;
 
-  var store = fb.firestore();
+  var store = fb.Firestore.instance;
 
   @override
   collection(String path) {
@@ -78,46 +85,44 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   Future<Map<String, dynamic>> getDoc(collection, doc) {
     return store
         .collection(collection)
-        .doc(doc)
+        .document(doc)
         .get()
-        .then((DocumentSnapshot x) {
+        .then((fb.DocumentSnapshot x) {
       if (!x.exists) return null;
-      return {"id": x.id, ...x.data()};
+      return {"id": x.documentID, ...x.data};
     });
   }
 
   @override
   genId(collection) {
-    store.collection(collection).doc().id;
+    store.collection(collection).document().documentID;
   }
 
   @override
   setDoc(collection, doc, data, {merge = true}) {
-    Map<String, dynamic> d = data.removeWhere((k, v) => k == "id");
+    data.removeWhere((k, v) => k == "id");
+    Map<String, dynamic> d = data;
     d['dtatualiz'] = DateTime.now().toIso8601String();
-    return store
-        .collection(collection)
-        .doc(doc)
-        .set(d, SetOptions(merge: merge));
+    return store.collection(collection).document(doc).setData(d, merge: merge);
   }
 
   @override
-  getWhere(collection, Function(CollectionReference) where) {
-    CollectionReference ref = store.collection(collection);
-    Query rst = (where != null) ? where(ref) : ref;
-    return rst.get().then((QuerySnapshot doc) {
-      return doc.docs.map((f) {
-        return {"id": f.id, ...f.data()};
+  getWhere(collection, Function(fb.CollectionReference) where) {
+    fb.CollectionReference ref = store.collection(collection);
+    fb.Query rst = (where != null) ? where(ref) : ref;
+    return rst.getDocuments().then((fb.QuerySnapshot doc) {
+      return doc.documents.map((f) {
+        return {"id": f.documentID, ...f.data};
       }).toList();
     });
   }
 
   @override
-  Stream<QuerySnapshot> getonSnapshot(
-      collection, Function(CollectionReference) where) {
-    CollectionReference ref = store.collection(collection);
-    Query rst = (where != null) ? where(ref) : ref;
-    return rst.onSnapshot;
+  Stream<fb.QuerySnapshot> getonSnapshot(
+      collection, Function(fb.CollectionReference) where) {
+    fb.CollectionReference ref = store.collection(collection);
+    fb.Query rst = (where != null) ? where(ref) : ref;
+    return rst.snapshots();
   }
 }
 

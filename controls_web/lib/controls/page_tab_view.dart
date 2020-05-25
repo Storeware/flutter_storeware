@@ -108,6 +108,7 @@ class _TabBarViewState extends State<PageTabView>
     if (widget.controller != null) {
       widget.controller.tabController = _tabController;
     }
+    _tabController.index = indexSelected;
   }
 
   @override
@@ -138,7 +139,21 @@ class _TabBarViewState extends State<PageTabView>
     return rt;
   }
 
-  createTab(ctrl, tc, idx, w) {
+  createTab(BuildContext context, ctrl, tc, idx, w) {
+    if (tc.title == null)
+      return IconButton(
+          icon: Icon(
+            tc.icon,
+            //size: 18,
+          ),
+          tooltip: tc.tooltip,
+          onPressed: () {
+            if (tc.index < 0) {
+              Navigator.pop(context);
+            } else
+              _nextPage(to: idx);
+          });
+
     return InkWell(
       child: Container(
         padding: EdgeInsets.all(2),
@@ -197,6 +212,7 @@ class _TabBarViewState extends State<PageTabView>
                                           (widget.tabBuilder == null)
                                               ? Expanded(
                                                   child: createTab(
+                                                      context,
                                                       _tabController,
                                                       widget.choices[i],
                                                       i,
@@ -259,7 +275,9 @@ class TabChoice {
     this.width,
     this.child,
     this.onPressed,
+    this.tooltip,
   });
+  final String tooltip;
   final double width;
   final String title;
   final IconData icon;

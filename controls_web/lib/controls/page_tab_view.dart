@@ -148,7 +148,8 @@ class _TabBarViewState extends State<PageTabView>
         child: Column(
           children: <Widget>[
             Icon(tc.icon, size: 25, color: _iconColor),
-            Text(tc.title, style: TextStyle(fontSize: 18, color: _iconColor))
+            if (tc.title != null)
+              Text(tc.title, style: TextStyle(fontSize: 18, color: _iconColor))
           ],
         ),
       ),

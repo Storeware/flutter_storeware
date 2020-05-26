@@ -11,7 +11,7 @@ const errorConnectionMsg =
 
 bool debugOn = false;
 void debug(dynamic x) {
-  if (debugOn) print(x);
+  if (debugOn) debugPrint(x);
 }
 
 enum ODataEventState { insert, update, delete }
@@ -173,7 +173,7 @@ class ODataResult {
           item.forEach((k, v) {
             doc.doc[k] = v;
           });
-          //print(item);
+          // print(item);
           _data.docs.add(doc);
         }
       }

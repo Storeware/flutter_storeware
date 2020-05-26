@@ -447,6 +447,7 @@ class ODataInst extends ODataClient {
 get ODataClientDefault => ODataInst();
 
 abstract class ODataModelClass<T extends DataItem> {
+  ODataClient CC;
   String collectionName;
   String columns = '*';
   String externalKeys = '';
@@ -541,7 +542,10 @@ abstract class ODataModelClass<T extends DataItem> {
       d = item;
     try {
       d = removeExternalKeys(d);
-      return API.post(collectionName, d).then((x) => x);
+      return API.post(collectionName, d).then((x) {
+        if (CC != null) CC.post(collectionName, d);
+        return x;
+      });
     } catch (e) {
       print('$e');
       ErrorNotify.send('$e');
@@ -557,7 +561,10 @@ abstract class ODataModelClass<T extends DataItem> {
       d = item;
     try {
       d = removeExternalKeys(d);
-      return API.put(collectionName, d).then((x) => x);
+      return API.put(collectionName, d).then((x) {
+        if (CC != null) CC.put(collectionName, d);
+        return x;
+      });
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -588,7 +595,11 @@ abstract class ODataModelClass<T extends DataItem> {
       d = item;
     try {
       //return API.delete(collectionName, d).then((x) => x);
-      return API.post('delete/' + collectionName, d).then((x) => x);
+      return API.post('delete/$collectionName', d).then((x) {
+        if (CC != null) CC.delete('delete/$collectionName', d);
+
+        return x;
+      });
     } catch (err) {
       ErrorNotify.send('$err');
       throw err;

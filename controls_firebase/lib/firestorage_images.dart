@@ -59,7 +59,7 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
   }
 
   loadImagem(s) {
-    return Cached.image(context, '$s.${widget.alias}', builder: (url) {
+    return Cached.image(context, '$s', builder: (url) {
       return Image.network(
         s,
         fit: widget.fit ?? BoxFit.cover,
@@ -156,11 +156,12 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
                         fit: widget.fit,
                         clientId: widget.clientId,
                       )
-                    : Image.network(
-                        img,
-                        fit: widget.fit,
-                        height: widget.height,
-                      ),
+                    : Cached.image(context, img,
+                        builder: (k) => Image.network(
+                              img,
+                              fit: widget.fit,
+                              height: widget.height,
+                            )),
               ),
               Positioned(
                 bottom: 0,

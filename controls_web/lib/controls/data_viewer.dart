@@ -41,6 +41,7 @@ class DataViewerController {
     this.onInsert,
     this.onUpdate,
     this.onDelete,
+    this.onChanged,
   });
   int page = 1;
   int top;
@@ -50,6 +51,7 @@ class DataViewerController {
   final Future<dynamic> Function(dynamic) onInsert;
   final Future<dynamic> Function(dynamic) onUpdate;
   final Future<dynamic> Function(dynamic) onDelete;
+  final Function(dynamic) onChanged;
 
   /// Evento indicando que pode limpar o cache;
   final Function() onClearCache;
@@ -88,6 +90,7 @@ class DataViewerController {
         int rows = rsp['rows'] ?? 1;
         if (rows > 0) {
           if (!manual && (rsp != null)) paginatedController.remove(dados);
+          if (onChanged != null) onChanged(dados);
           return true;
         }
         show('Não encontrei o registro para executar a tarefa');
@@ -105,15 +108,20 @@ class DataViewerController {
     if (onInsert != null)
       return onInsert(dados).then((r) {
         if (!manual && (rsp != null)) paginatedController.remove(dados);
+        if (onChanged != null) onChanged(dados);
         return true;
       });
     else if (dataSource != null) {
       return dataSource.post(dados).then((rsp) {
         if (!manual && (rsp != null)) paginatedController.add(dados);
+        if (onChanged != null) onChanged(dados);
         return true;
       });
     }
-    if (!manual && (rsp != null)) paginatedController.source.add(dados);
+    if (!manual && (rsp != null)) {
+      paginatedController.source.add(dados);
+      if (onChanged != null) onChanged(dados);
+    }
     return rsp;
   }
 
@@ -125,6 +133,7 @@ class DataViewerController {
     if (onUpdate != null)
       return onUpdate(dados).then((r) {
         if (!manual && (rsp != null)) paginatedController.remove(dados);
+        if (onChanged != null) onChanged(dados);
         return true;
       });
     else if (dataSource != null) {
@@ -134,11 +143,14 @@ class DataViewerController {
         if (!manual && (rst != null)) {
           paginatedController.changeTo(keyName, dados[keyName], dados);
         }
+        if (onChanged != null) onChanged(dados);
         return true;
       });
     }
-    if (!manual && (rsp != null))
+    if (!manual && (rsp != null)) {
       paginatedController.changeTo(keyName, dados[keyName], dados);
+      if (onChanged != null) onChanged(dados);
+    }
     return false;
   }
 

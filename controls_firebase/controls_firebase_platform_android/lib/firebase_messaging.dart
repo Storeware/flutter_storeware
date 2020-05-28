@@ -16,9 +16,9 @@ class FBMessaging extends FBMessagingInterface {
   }
 
   @override
-  Future<void> init() async {
+  Future<void> init(String keyPair) async {
     _mc = firebase.messaging();
-    _mc.usePublicVapidKey('FCM_SERVER_KEY');
+    _mc.usePublicVapidKey(keyPair); // 'FCM_SERVER_KEY');
     _mc.onMessage.listen((event) {
       _controller.add(event?.data);
     });
@@ -29,7 +29,7 @@ class FBMessaging extends FBMessagingInterface {
     return _mc.requestPermission();
   }
 
-  @override 
+  @override
   Future<String> getToken([bool force = false]) async {
     if (force || _token == null) {
       await requestPermission();
@@ -37,6 +37,4 @@ class FBMessaging extends FBMessagingInterface {
     }
     return _token;
   }
-
-
 }

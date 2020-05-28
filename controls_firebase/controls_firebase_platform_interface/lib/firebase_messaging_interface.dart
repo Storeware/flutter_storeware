@@ -9,7 +9,7 @@ abstract class FBMessagingInterface {
   void close() {
     _controller?.close();
   }
-  Future<void> init();
+  Future<void> init(String keyPair);
   Future requestPermission();
   Future<String> getToken([bool force = false]) ;
 }

@@ -3,9 +3,7 @@ import 'package:firebase/firebase.dart' as firebase;
 import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
 
 class FBMessaging extends FBMessagingInterface {
-  FBMessaging._();
-  static FBMessaging _instance = FBMessaging._();
-  static FBMessaging get instance => _instance;
+  FBMessaging();
   firebase.Messaging _mc;
   String _token;
 

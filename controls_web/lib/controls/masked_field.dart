@@ -760,6 +760,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   final String labelText;
   final int maxLines;
   final Function(T) onChanged;
+  final Function(bool, dynamic) onFocusChange;
 
   const MaskedSearchFormField(
       {Key key,
@@ -773,6 +774,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
       //this.controller,
       this.style,
       this.onSearch,
+      this.onFocusChange,
       this.iconSearch = Icons.search,
       this.readOnly = false,
       this.labelText,
@@ -812,41 +814,46 @@ class MaskedSearchFormField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController controller =
+    final TextEditingController _controller =
         this.controller ?? TextEditingController();
 
-    controller.text = getValue(initialValue);
+    _controller.text = getValue(initialValue);
 
-    return TextFormField(
-        autofocus: autofocus,
-        controller: controller,
-        keyboardType: getKeyboardType(),
-        style: style ?? TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
-        decoration: decoration ??
-            InputDecoration(
-                labelText: labelText,
-                suffixIcon: IconButton(
-                    icon: Icon(iconSearch),
-                    onPressed: () {
-                      onSearch().then((item) {
-                        controller.text = getValue(item);
-                      });
-                    })),
-        enableSuggestions: true,
-        expands: maxLines > 1,
-        maxLines: maxLines,
-        minLines: 1,
-        readOnly: readOnly,
-        onChanged: (value) {
-          if (onChanged != null) onChanged(setValue(value));
+    return Focus(
+        onFocusChange: (x) {
+          if (onFocusChange != null) onFocusChange(x, _controller.text);
         },
-        validator: (value) {
-          if (validator != null) return validator(setValue(value));
-          return (setValue(value) == null) ? 'Valor inválido' : null;
-        },
-        onSaved: (x) {
-          T v = setValue(x);
-          onSaved(v);
-        });
+        child: TextFormField(
+            autofocus: autofocus,
+            controller: _controller,
+            keyboardType: getKeyboardType(),
+            style:
+                style ?? TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            decoration: decoration ??
+                InputDecoration(
+                    labelText: labelText,
+                    suffixIcon: IconButton(
+                        icon: Icon(iconSearch),
+                        onPressed: () {
+                          onSearch().then((item) {
+                            _controller.text = getValue(item);
+                          });
+                        })),
+            enableSuggestions: true,
+            expands: maxLines > 1,
+            maxLines: maxLines,
+            minLines: 1,
+            readOnly: readOnly,
+            onChanged: (value) {
+              if (onChanged != null) onChanged(setValue(value));
+            },
+            validator: (value) {
+              if (validator != null) return validator(setValue(value));
+              return (setValue(value) == null) ? 'Valor inválido' : null;
+            },
+            onSaved: (x) {
+              T v = setValue(x);
+              onSaved(v);
+            }));
   }
 }

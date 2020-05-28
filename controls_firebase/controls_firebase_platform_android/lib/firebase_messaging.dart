@@ -12,10 +12,12 @@ class FBMessaging extends FBMessagingInterface {
   final _controller = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get stream => _controller.stream;
 
+  @override
   void close() {
     _controller?.close();
   }
 
+  @override
   Future<void> init() async {
     _mc = firebase.messaging();
     _mc.usePublicVapidKey('FCM_SERVER_KEY');
@@ -24,10 +26,12 @@ class FBMessaging extends FBMessagingInterface {
     });
   }
 
+  @override
   Future requestPermission() {
     return _mc.requestPermission();
   }
 
+  @override 
   Future<String> getToken([bool force = false]) async {
     if (force || _token == null) {
       await requestPermission();
@@ -35,4 +39,6 @@ class FBMessaging extends FBMessagingInterface {
     }
     return _token;
   }
+
+
 }

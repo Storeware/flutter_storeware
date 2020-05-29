@@ -139,7 +139,7 @@ class _TabBarViewState extends State<PageTabView>
     return rt;
   }
 
-  createTab(BuildContext context, ctrl, tc, idx, w) {
+  createTab(BuildContext context, ctrl, TabChoice tc, idx, w) {
     if (tc.title == null)
       return IconButton(
           icon: Icon(
@@ -162,7 +162,7 @@ class _TabBarViewState extends State<PageTabView>
         color: _tabColor,
         child: Column(
           children: <Widget>[
-            Icon(tc.icon, size: 25, color: _iconColor),
+            tc.image ?? Icon(tc.icon, size: 25, color: _iconColor),
             if (tc.title != null)
               Text(tc.title, style: TextStyle(fontSize: 18, color: _iconColor))
           ],

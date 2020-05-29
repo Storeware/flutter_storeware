@@ -6,11 +6,13 @@ class TabChoice {
   final IconData icon;
   final String title;
   final int index;
+  final Widget image;
   final bool primary;
   TabChoice({
     this.icon,
     this.child,
     this.title,
+    this.image,
     this.index,
     this.primary = false,
   });
@@ -88,8 +90,12 @@ class HorizontalTabView extends StatelessWidget {
                                         ? MaterialButton(
                                             child: Column(
                                               children: [
-                                                Icon(choices[index].icon,
-                                                    color: iconColor),
+                                                if (choices[index].image !=
+                                                    null)
+                                                  choices[index].image,
+                                                if (choices[index].icon != null)
+                                                  Icon(choices[index].icon,
+                                                      color: iconColor),
                                                 if (_index.value == index)
                                                   Text(choices[index].title,
                                                       style: TextStyle(
@@ -104,10 +110,13 @@ class HorizontalTabView extends StatelessWidget {
                                               _index.value = index;
                                             })
                                         : ListTile(
-                                            leading: Icon(
-                                              choices[index].icon,
-                                              color: iconColor,
-                                            ),
+                                            leading:
+                                                (choices[index].image != null)
+                                                    ? choices[index].image
+                                                    : Icon(
+                                                        choices[index].icon,
+                                                        color: iconColor,
+                                                      ),
                                             title: Text(choices[index].title,
                                                 style: TextStyle(
                                                     color: iconColor)),
@@ -163,12 +172,14 @@ class HorizontalTabView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Icon(
-                                  tab.icon,
-                                  size: 80,
-                                  color: iconColor ??
-                                      theme.primaryTextTheme.bodyText1.color,
-                                ),
+                                tab.image ??
+                                    Icon(
+                                      tab.icon,
+                                      size: 80,
+                                      color: iconColor ??
+                                          theme
+                                              .primaryTextTheme.bodyText1.color,
+                                    ),
                                 Text(
                                   tab.title,
                                   textAlign: TextAlign.center,

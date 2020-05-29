@@ -5,9 +5,11 @@ class TabChoice {
   IconData selectedIcon;
   String label;
   Widget child;
+  Widget image;
   int index;
   TabChoice({
     this.icon,
+    this.image,
     this.selectedIcon,
     this.label,
     this.index,
@@ -75,7 +77,7 @@ class TabViewRail extends StatelessWidget {
                 for (var tab in choices)
                   NavigationRailDestination(
                     label: Text(tab.label),
-                    icon: Icon(tab.icon),
+                    icon: tab.image ?? Icon(tab.icon),
                     selectedIcon: (tab.selectedIcon != null)
                         ? Icon(tab.selectedIcon)
                         : null,

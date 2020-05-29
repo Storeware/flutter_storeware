@@ -1,5 +1,6 @@
 import 'package:controls_web/controls/home_elements.dart';
 import 'package:flutter/material.dart';
+import 'package:controls_web/controls/responsive.dart';
 
 class DashboardIcon extends StatelessWidget {
   final IconData icon;
@@ -43,71 +44,78 @@ class DashboardTile extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     Color _color = color ?? theme.primaryColor;
-    Size size = MediaQuery.of(context).size;
-    bool isSmall = size.width < 450;
-    double w = (isSmall ? size.width : width ?? 180);
+    ResponsiveInfo responsive = ResponsiveInfo(context);
     return Theme(
         data: theme.copyWith(primaryColor: _color),
         child: Card(
-          color: _color.withAlpha(150),
-          child: Container(
-            width: w,
-            height: height,
-            //constraints: BoxConstraints(minHeight: 80),
-            child: Stack(
-              children: [
-                if (image != null)
-                  Positioned(
-                    bottom: this.titleHeight / 2,
-                    right: 4,
-                    child: Container(color: Colors.transparent, child: image),
-                  ),
-                if (icon != null)
-                  Positioned(
-                    left: 10,
-                    top: 10,
-                    child: icon,
-                  ),
-                Positioned(
-                  child: Column(mainAxisSize: MainAxisSize.min,
-                      //crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              if (value != null)
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(
-                                        fontSize: 32,
-                                        color: theme
-                                            .primaryTextTheme.bodyText1.color),
-                                  ),
-                                ),
-                              if (body != null) body,
-                            ],
-                          ),
-                        ),
-                        Container(
-                          alignment: Alignment.center,
-                          height: titleHeight,
-                          color: _color.withOpacity(0.2),
-                          child: Text(
-                            title ?? '',
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: theme.primaryTextTheme.bodyText1.color),
-                          ),
-                        ),
-                      ]),
+            color: _color.withAlpha(150),
+            child: LayoutBuilder(builder: (ctx, sizes) {
+              double w = (responsive.isSmall
+                  ? sizes.maxWidth
+                  : responsive.isMobile
+                      ? (sizes.maxWidth / 2) - 16
+                      : width ?? 180);
+              print(w);
+              return Container(
+                width: w,
+                height: height,
+                //constraints: BoxConstraints(minHeight: 80),
+                child: Stack(
+                  children: [
+                    if (image != null)
+                      Positioned(
+                        bottom: this.titleHeight / 2,
+                        right: 4,
+                        child:
+                            Container(color: Colors.transparent, child: image),
+                      ),
+                    if (icon != null)
+                      Positioned(
+                        left: 10,
+                        top: 10,
+                        child: icon,
+                      ),
+                    Positioned(
+                      child: Column(mainAxisSize: MainAxisSize.min,
+                          //crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (value != null)
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(
+                                            fontSize: 32,
+                                            color: theme.primaryTextTheme
+                                                .bodyText1.color),
+                                      ),
+                                    ),
+                                  if (body != null) body,
+                                ],
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              height: titleHeight,
+                              color: _color.withOpacity(0.2),
+                              child: Text(
+                                title ?? '',
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color:
+                                        theme.primaryTextTheme.bodyText1.color),
+                              ),
+                            ),
+                          ]),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-        ));
+              );
+            })));
   }
 }

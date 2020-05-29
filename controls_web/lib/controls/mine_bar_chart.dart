@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pacakge:controls_web/controls/overlay_container.dart';
 
 class MiniBarChart extends StatefulWidget {
   final double width;
@@ -65,6 +66,8 @@ class _MiniBarChartState extends State<MiniBarChart> {
     String key = widget.data.keys.toList()[index];
     num value = widget.data[key];
     num w = (widget.width - (count * 2)) / count;
+    if (w > 8) w = 8;
+    if (w < 2) w = 2;
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
@@ -74,17 +77,19 @@ class _MiniBarChartState extends State<MiniBarChart> {
                 '${widget.labelPrefix}$key: ${widget.prefix}${value.toStringAsFixed(widget.decimais)}',
             child: Container(
                 height: widget.height + (widget.showX ? 15 : 0),
-                child: Stack(children: [
+                child: Column(children: [
+                  Spacer(),
                   Container(
-                    //alignment: Alignment.bottomCenter,
+                    alignment: Alignment.bottom,
                     color: widget.barColor,
-                    width: 8,
+                    width: w,
                     height: ((maxValue > 0) ? (value / maxValue) : 0) *
                         widget.height,
                   ),
                   if ((widget.showX) && ((index % 5) == 0))
-                    Positioned(
-                        bottom: 0,
+                    OverlayContainer(
+                        show: true,
+                        position: OverlayContainerPosition.bottom,
                         child: Text(key, style: TextStyle(fontSize: 8))),
                 ])),
           )),

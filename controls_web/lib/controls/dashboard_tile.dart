@@ -55,7 +55,7 @@ class DashboardTile extends StatelessWidget {
                   : responsive.isMobile
                       ? (sizes.maxWidth / 2) - 16
                       : width ?? 180);
-              print(w);
+              //print(w);
               return Container(
                 width: w,
                 height: height,

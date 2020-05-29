@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'pacakge:controls_web/controls/overlay_container.dart';
+import 'package:controls_web/controls/overlay_container.dart';
 
 class MiniBarChart extends StatefulWidget {
   final double width;
   final Color color;
+  final Widget leading;
   final Color barColor;
   final Map<String, num> data;
   final int decimais;
@@ -15,6 +16,7 @@ class MiniBarChart extends StatefulWidget {
   const MiniBarChart(
       {Key key,
       this.width,
+      this.leading,
       this.barColor = Colors.black,
       this.data,
       this.decimais = 0,
@@ -52,14 +54,17 @@ class _MiniBarChartState extends State<MiniBarChart> {
           maxWidth: widget.width,
           maxHeight: widget.height,
         ),
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          //mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            for (var index = 0; index < widget.data.keys.length; index++)
-              createBar(index)
-          ],
-        ));
+        child: Stack(children: [
+          if (widget.leading != null) widget.leading,
+          ListView(
+            scrollDirection: Axis.horizontal,
+            //mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              for (var index = 0; index < widget.data.keys.length; index++)
+                createBar(index)
+            ],
+          )
+        ]));
   }
 
   createBar(int index) {
@@ -76,22 +81,26 @@ class _MiniBarChartState extends State<MiniBarChart> {
             message:
                 '${widget.labelPrefix}$key: ${widget.prefix}${value.toStringAsFixed(widget.decimais)}',
             child: Container(
-                height: widget.height + (widget.showX ? 15 : 0),
+                //height: widget.height + (widget.showX ? 15 : 0),
                 child: Column(children: [
-                  Spacer(),
-                  Container(
-                    alignment: Alignment.bottom,
-                    color: widget.barColor,
-                    width: w,
-                    height: ((maxValue > 0) ? (value / maxValue) : 0) *
-                        widget.height,
-                  ),
-                  if ((widget.showX) && ((index % 5) == 0))
-                    OverlayContainer(
-                        show: true,
-                        position: OverlayContainerPosition.bottom,
-                        child: Text(key, style: TextStyle(fontSize: 8))),
-                ])),
+              Spacer(),
+              Container(
+                alignment: Alignment.bottomCenter,
+                color: widget.barColor,
+                width: w,
+                height:
+                    ((maxValue > 0) ? (value / maxValue) : 0) * widget.height,
+              ),
+              if ((widget.showX) && ((index % 5) == 0))
+                OverlayContainer(
+                    show: true,
+                    position: OverlayContainerPosition(0, 0),
+                    child: Text(key,
+                        style: TextStyle(
+                          fontSize: 8,
+                          backgroundColor: Colors.transparent,
+                        ))),
+            ])),
           )),
     );
   }

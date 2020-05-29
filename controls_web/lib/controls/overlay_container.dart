@@ -222,6 +222,7 @@ class _OverlayContainerState extends State<OverlayContainer>
           top: offset.dy - widget.position.bottom,
           width: widget.asWideAsParent ? size.width : null,
           child: Material(
+            color: Colors.transparent,
             child: widget.child,
           ),
         );

@@ -126,7 +126,11 @@ class _CardGridState extends State<CardGrid> {
         initialData: widget.source,
         future: widget.futureSource,
         builder: (context, snapshot) {
-          if (snapshot.hasData) controller.source = snapshot.data;
+          if (snapshot.hasData) {
+            controller.source = snapshot.data;
+            if (controller.source.length == 0)
+              return Align(child: Text('Ops, não tem nada para mostrar'));
+          }
           return StreamBuilder(
               stream: controller.subscribeChanges.stream,
               builder: (context, snapshot) {

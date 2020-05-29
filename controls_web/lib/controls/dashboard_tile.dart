@@ -43,12 +43,15 @@ class DashboardTile extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     Color _color = color ?? theme.primaryColor;
+    Size size = MediaQuery.of(context).size;
+    bool isSmall = size.width < 450;
+    double w = (isSmall ? size.width : width ?? 180);
     return Theme(
         data: theme.copyWith(primaryColor: _color),
         child: Card(
           color: _color.withAlpha(150),
           child: Container(
-            width: width,
+            width: w,
             height: height,
             //constraints: BoxConstraints(minHeight: 80),
             child: Stack(

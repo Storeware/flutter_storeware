@@ -24,10 +24,10 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   var options;
   @override
   init(options) async {
-    this.options = options;
+    if (options != null) this.options = options;
     try {
       /// a configuração é feita no ambiente
-      if ((api.apps == null) || api.apps.isNotEmpty) {
+      if ((api.apps != null) || api.apps.isNotEmpty) {
         app = api.apps[0];
       } else
         app = api.initializeApp(

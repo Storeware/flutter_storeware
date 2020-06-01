@@ -250,8 +250,8 @@ class RoundedButton extends StatelessWidget {
             borderRadius: new BorderRadius.all(const Radius.circular(30.0)),
           ),
           child: Container(
-            child: (this.child != null
-                ? Stack(children: [Center(child: this.child), createBadge()])
+            child: (this.child != null)
+                ? this.child
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -259,7 +259,7 @@ class RoundedButton extends StatelessWidget {
                       (icon != null ? Icon(icon) : Text('')),
                       new Text(buttonName, style: textStyle),
                     ],
-                  )),
+                  ),
           ),
         ),
       ));

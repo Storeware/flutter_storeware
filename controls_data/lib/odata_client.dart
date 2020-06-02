@@ -623,12 +623,12 @@ abstract class ODataModelClass<T extends DataItem> {
               ODataQuery(
                   resource: resource ?? collectionName,
                   select: select ?? columns ?? '*',
-                  filter: filter ?? '',
-                  top: top ?? 0,
-                  skip: skip ?? 0,
+                  filter: filter,
+                  top: top,
+                  skip: skip,
                   join: join,
-                  groupby: groupBy ?? '',
-                  orderby: orderBy ?? ''),
+                  groupby: groupBy,
+                  orderby: orderBy),
               cacheControl: cacheControl)
           .then((r) {
         //print(r);

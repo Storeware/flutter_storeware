@@ -16,6 +16,27 @@ void debug(dynamic x) {
 
 enum ODataEventState { insert, update, delete }
 
+extension MapExtension on Map {
+  /// [fromMap] Update values from data
+  fromMap(Map<String, dynamic> data) {
+    data.keys.forEach((k) {
+      this[k] = data[k];
+    });
+    return this;
+  }
+
+  /// [copyWith] create new Map values with NO REFERENCE values
+  copyWith(Map<String, dynamic> data) {
+    var m = {}; // clone - NO Reference
+    this.keys.forEach((k) => m[k] = this[k]);
+    data.keys.forEach((k) => m[k] = data[k]);
+    return m;
+  }
+
+  valuesJoin({String separator = ','}) => this.values.join(separator);
+  keysJoin({String separator = ','}) => this.keys.join(separator);
+}
+
 extension DynamicExtension on dynamic {
   int toInt(value, {def = 0}) {
     if (value is int) return value;

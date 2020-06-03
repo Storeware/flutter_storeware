@@ -4,6 +4,7 @@ class CloudV3 {
   static final _singleton = CloudV3._create();
   final client = ODataClient();
   CloudV3._create() {
+    client.client.connectionTimeout = 15000;
     client.baseUrl = 'https://us-central1-selfandpay.cloudfunctions.net';
     client.prefix = '/v3/';
   }

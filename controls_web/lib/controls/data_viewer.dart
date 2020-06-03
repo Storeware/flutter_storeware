@@ -196,7 +196,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     placeHolder = false,
     label,
     editInfo = '{label}',
-    sort = true,
+    bool sort = true,
     builder,
     editBuilder,
     isVirtual = false,
@@ -277,6 +277,8 @@ class DataViewer extends StatefulWidget {
   final double headingRowHeight;
   final double footerHeight;
   final Function(dynamic) onSelected;
+  final Color evenRowColor; //: widget.evenRowColor,
+  final Color oddRowColor; //: widget.oddRowColor,
 
   DataViewer({
     Key key,
@@ -284,6 +286,8 @@ class DataViewer extends StatefulWidget {
     this.child,
     this.keyName,
     this.source,
+    this.evenRowColor,
+    this.oddRowColor,
     this.rowsPerPage,
     this.headerHeight = kMinInteractiveDimension * 1.7,
     this.headingRowHeight = kMinInteractiveDimension,
@@ -409,6 +413,9 @@ class _DataViewerState extends State<DataViewer> {
               width: widget.width,
               child: widget.child ??
                   PaginatedGrid(
+                    evenRowColor: widget.evenRowColor,
+                    oddRowColor: widget.oddRowColor,
+                    //sortColumnIndex: widget.sortColumnIndex,
                     actions: widget.actions,
                     onSelectChanged: (widget.onSelected != null)
                         ? (b, ctrl) {

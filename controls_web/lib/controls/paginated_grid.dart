@@ -792,9 +792,10 @@ class PaginatedGridDataTableSource extends DataTableSource {
 
   @override
   DataRow getRow(int index) {
+    ThemeData theme = Theme.of(context);
     Color rowColor = ((index % 2) == 0)
-        ? controller.widget.evenRowColor ?? Colors.white
-        : controller.widget.oddRowColor ?? Colors.grey.withOpacity(0.1);
+        ? controller.widget.evenRowColor ?? theme.primaryColor.withAlpha(50)
+        : controller.widget.oddRowColor ?? theme.primaryColor.withAlpha(30);
     Map<String, dynamic> row = controller.source[index];
     DataRow r = DataRow(
         key: UniqueKey(),

@@ -309,7 +309,7 @@ class DataViewer extends StatefulWidget {
     this.height,
     this.width,
   })  : assert(source != null || controller != null),
-        assert((columns == null) || (columns.length > 1)),
+        assert((columns == null) || (columns.length > 0)),
         super(key: key);
 
   @override

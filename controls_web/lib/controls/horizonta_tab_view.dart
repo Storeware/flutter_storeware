@@ -20,43 +20,67 @@ class TabChoice {
 
 enum HorizontalTabViewSiderBarType { hide, compact, show }
 
+class HorizontalTabViewController {
+  HorizontalTabView tabControl;
+  animateTo(int index) {
+    tabControl.animateTo(index);
+  }
+}
+
 class HorizontalTabView extends StatelessWidget {
   final List<TabChoice> choices;
+  final HorizontalTabViewController controller;
   final Color tabColor;
   final Color indicatorColor;
   final Color iconColor;
   final AppBar appBar;
+  final Color color;
+  final double width;
   final Color backgroundColor;
   final Widget pageBottom;
+  final EdgeInsets padding;
   final HorizontalTabViewSiderBarType sidebarType;
   final double elevation;
   final Widget floatingActionButton;
+  final Color tagColor;
+  final bool isMobile;
   HorizontalTabView({
     Key key,
     this.choices,
     this.appBar,
+    this.padding,
+    this.width,
     this.sidebarType,
+    this.controller,
+    this.tagColor = Colors.amber,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
     this.iconColor = Colors.white,
-    this.tabColor = Colors.blue,
+    this.tabColor = Colors.lightBlue,
     this.pageBottom,
+    this.isMobile,
+    this.color, //= Colors.lightBlue,
     this.elevation = 0,
     this.floatingActionButton,
   }) : super(key: key);
   final ValueNotifier<int> _index = ValueNotifier<int>(0);
+
+  animateTo(int index) {
+    _index.value = index;
+  }
+
   @override
   Widget build(BuildContext context) {
+    var _controller = controller ?? HorizontalTabViewController();
+    _controller.tabControl = this;
     ResponsiveInfo responsive = ResponsiveInfo(context);
 
-    if (responsive.isSmall) return mobileBuild(context);
+    if (isMobile ?? responsive.isSmall) return mobileBuild(context);
 
     HorizontalTabViewSiderBarType _sidebarType = sidebarType ??
-        (responsive.isSmall
-            ? HorizontalTabViewSiderBarType.hide
-            : (responsive.isMobile
-                ? HorizontalTabViewSiderBarType.compact
-                : HorizontalTabViewSiderBarType.show));
+        (isMobile ?? responsive.isMobile
+            ? HorizontalTabViewSiderBarType.compact
+            : HorizontalTabViewSiderBarType.show);
 
     return ValueListenableBuilder(
         valueListenable: _index,
@@ -73,8 +97,9 @@ class HorizontalTabView extends StatelessWidget {
                   children: [
                     if (_sidebarType != HorizontalTabViewSiderBarType.hide)
                       Container(
-                          width: [0.0, 100.0, 180.0][_sidebarType.index],
-                          color: Colors.transparent,
+                          width:
+                              width ?? [0.0, 100.0, 180.0][_sidebarType.index],
+                          color: color ?? Colors.transparent,
                           child: SizedBox.expand(
                             child: Column(
                               children: [
@@ -88,6 +113,7 @@ class HorizontalTabView extends StatelessWidget {
                                     child: (_sidebarType !=
                                             HorizontalTabViewSiderBarType.show)
                                         ? MaterialButton(
+                                            padding: EdgeInsets.zero,
                                             child: Column(
                                               children: [
                                                 if (choices[index].image !=
@@ -103,28 +129,37 @@ class HorizontalTabView extends StatelessWidget {
                                                         color: iconColor,
                                                         fontWeight:
                                                             FontWeight.w500,
-                                                      ))
+                                                      )),
                                               ],
                                             ),
                                             onPressed: () {
                                               _index.value = index;
                                             })
-                                        : ListTile(
-                                            leading:
-                                                (choices[index].image != null)
-                                                    ? choices[index].image
-                                                    : Icon(
-                                                        choices[index].icon,
-                                                        color: iconColor,
-                                                      ),
-                                            title: Text(choices[index].title,
-                                                style: TextStyle(
-                                                    color: iconColor)),
-                                            onTap: () {
-                                              _index.value = index;
-                                            },
-                                          ),
-                                  )
+                                        : Row(children: [
+                                            Container(
+                                                height: kToolbarHeight,
+                                                width: 5,
+                                                color: (_index.value == index)
+                                                    ? tagColor
+                                                    : tabColor),
+                                            Expanded(
+                                                child: ListTile(
+                                              leading:
+                                                  (choices[index].image != null)
+                                                      ? choices[index].image
+                                                      : Icon(
+                                                          choices[index].icon,
+                                                          color: iconColor,
+                                                        ),
+                                              title: Text(choices[index].title,
+                                                  style: TextStyle(
+                                                      color: iconColor)),
+                                              onTap: () {
+                                                _index.value = index;
+                                              },
+                                            )),
+                                          ]),
+                                  ),
                               ],
                             ),
                           )),
@@ -160,7 +195,7 @@ class HorizontalTabView extends StatelessWidget {
                 (index) {
                   TabChoice tab = choices[index];
                   return Padding(
-                      padding: EdgeInsets.all(8),
+                      padding: padding ?? EdgeInsets.all(8),
                       child: InkWell(
                         child: Container(
                           decoration: BoxDecoration(

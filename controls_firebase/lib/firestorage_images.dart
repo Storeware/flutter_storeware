@@ -1,9 +1,8 @@
 import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
+import 'package:controls_firebase/firebase_driver.dart';
 import 'package:flutter/material.dart';
-import 'package:toast/toast.dart';
-import 'package:universal_html/prefer_universal/html.dart' as html;
-import 'firebase_driver.dart';
+import 'package:universal_html/prefer_universal/html.dart' hide Text;
 
 class FirestorageDownloadImage extends StatefulWidget {
   final String img;
@@ -120,7 +119,7 @@ class FirestorageUploadImage extends StatefulWidget {
       this.elevation = 0,
       this.maskTo,
       this.buttonTitle,
-      this.maxBytes = 30000})
+      this.maxBytes = 100000})
       : super(key: key);
   @override
   _FirestorageUploadImageState createState() => _FirestorageUploadImageState();
@@ -132,83 +131,94 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
     img = src;
   }
 
-  html.FileReader fileReader = html.FileReader();
+  FileReader fileReader = FileReader();
   @override
   Widget build(BuildContext context) {
-    _load(widget.img);
-    bool isFirebase = (widget.img == '') || (!widget.img.startsWith('http'));
-    return Center(
-      child: Container(
-          width: widget.width,
-          height: (widget.height != null) ? widget.height + 30 : null,
-          child: Card(
-            elevation: widget.elevation,
-            child: Stack(children: [
-              Positioned(
-                left: 10,
-                right: 10,
-                top: 10,
-                bottom: 40,
-                child: isFirebase
-                    ? FirestorageDownloadImage(
-                        img: img,
-                        height: widget.height,
-                        fit: widget.fit,
-                        clientId: widget.clientId,
-                      )
-                    : Cached.image(context, img,
-                        builder: (k) => Image.network(
-                              img,
-                              fit: widget.fit,
+    ValueNotifier<String> img = ValueNotifier<String>(widget.img);
+    return ValueListenableBuilder<String>(
+        valueListenable: img,
+        builder: (a, _img, w) {
+          _load(_img);
+          print('carregando: $_img');
+          bool isFirebase = (_img == '') || (!_img.startsWith('http'));
+          return Center(
+            child: Container(
+                width: widget.width,
+                height: (widget.height != null) ? widget.height + 30 : null,
+                child: Card(
+                  elevation: widget.elevation,
+                  child: Stack(children: [
+                    Positioned(
+                      left: 10,
+                      right: 10,
+                      top: 10,
+                      bottom: 40,
+                      child: isFirebase
+                          ? FirestorageDownloadImage(
+                              img: _img,
                               height: widget.height,
-                            )),
-              ),
-              Positioned(
-                bottom: 0,
-                child: FlatButton(
-                  child: Text(widget.buttonTitle ?? 'Procurar uma imagem'),
-                  onPressed: () {
-                    ImageToUpload().load((f) async {
-                      if (f != null) {
-                        var size = f.size;
-                        print(size);
-                        if (size > widget.maxBytes)
-                          ErrorNotify().notify(
-                              'Imagem com $size bytes (max: ${widget.maxBytes} bytes)');
-                        else {
-                          if (widget.onProgress != null)
-                            widget.onProgress(true);
-                          urlDownload(f, (x) {
-                            if (widget.onProgress != null)
-                              widget.onProgress(false);
+                              fit: widget.fit,
+                              clientId: widget.clientId,
+                            )
+                          : Cached.image(context, _img,
+                              builder: (k) => Image.network(
+                                    _img,
+                                    fit: widget.fit,
+                                    height: widget.height,
+                                  )),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: FlatButton(
+                        child:
+                            Text(widget.buttonTitle ?? 'Procurar uma imagem'),
+                        onPressed: () {
+                          ImageToUpload().load((f) async {
+                            if (f != null) {
+                              var size = f.size;
+                              print(size);
+                              if (size > widget.maxBytes)
+                                ErrorNotify().notify(
+                                    'Imagem com $size bytes (max: ${widget.maxBytes} bytes)');
+                              else {
+                                if (widget.onProgress != null)
+                                  widget.onProgress(true);
+                                urlDownload(f, (x) {
+                                  if (widget.onProgress != null)
+                                    widget.onProgress(false);
 
-                            widget.onChange(x);
-                          }, maskTo: widget.maskTo);
-                        }
-                      }
-                    });
-                  },
-                ),
-              )
-            ]),
-          )),
-    );
+                                  widget.onChange(x);
+                                  print('nova imagem $x');
+                                  img.value = x;
+                                }, maskTo: widget.maskTo);
+                              }
+                            }
+                          });
+                        },
+                      ),
+                    )
+                  ]),
+                )),
+          );
+        });
   }
 
-  Future<String> urlDownload(file, callback, {String maskTo}) async {
+  Future<String> urlDownload(File file, callback, {String maskTo}) async {
     String sFile = formatStoragePath(file.name);
     if ((maskTo != null) && (maskTo.indexOf('.') < 0)) {
       var lst = sFile.split('/');
       sFile = maskTo + lst.last;
     } else if (maskTo.indexOf('.') > 0) sFile = maskTo;
 
-    html.FileReader fileReader = html.FileReader();
+    FileReader fileReader = FileReader();
     fileReader.onLoad.listen((data) async {
       try {
         var rawFile = fileReader.result;
-        var bytes = await FirebaseApp()
+        print('pronto para pegar dados do arquivo: $sFile');
+        await FirebaseApp()
             .storage()
-            .uploadFileImage(sFile, rawFile, metadata: widget.metadata);
+            .uploadFileImage(sFile, rawFile, metadata: widget.metadata)
+            .then((rsp) => print(rsp));
         FirebaseApp().storage().getDownloadURL(sFile).then((f) {
           callback(sFile);
         });
@@ -216,6 +226,7 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
         print('Error ${e.message}');
       }
     });
+    print('$file');
     fileReader.readAsArrayBuffer(file);
     return sFile;
   }
@@ -231,19 +242,21 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
 }
 
 class ImageToUpload {
-  load(Function(html.File) callback) async {
-    html.InputElement element = html.querySelector("#upload_image");
-    if (element != null) element.remove();
-    element = html.document.createElement("input");
-    element.type = 'file';
+  load(Function(File) callback) async {
+    //html.InputElement element = html.querySelector("#upload_image");
+    //if (element != null) element.remove();
+    //element = html.document.createElement("input");
+    FileUploadInputElement element = FileUploadInputElement();
     element.id = "upload_image";
     element.accept = "image/x-png,image/gif,image/jpeg";
     element.name = "upload_image";
-    element.addEventListener('change', (x) {
-      var file = element.files[0];
-      callback(file);
+    element.onChange.listen((e) {
+      final files = element.files;
+      if (files.length == 1) {
+        final File file = files[0];
+        callback(file);
+      }
     });
-    html.querySelector("html").querySelector('body').append(element);
     element.click();
     return null;
   }

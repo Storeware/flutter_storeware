@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+Color primaryColor = Colors.blue;
+
 enum StrapButtonType {
   primary,
   secondary,
@@ -13,7 +15,7 @@ enum StrapButtonType {
 }
 strapColor(StrapButtonType type) {
   return [
-    Colors.blue,
+    primaryColor,
     Colors.grey,
     Colors.green,
     Colors.red,
@@ -65,6 +67,8 @@ class StrapButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+    primaryColor = theme.primaryColor;
     return Container(
       height: height,
       width: width,
@@ -72,7 +76,8 @@ class StrapButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(radius),
         border:
             Border.all(width: borderWidth, color: Colors.grey.withOpacity(0.2)),
-        color: strapColor(type),
+        color:
+            (type == StrapButtonType.primary) ? primaryColor : strapColor(type),
       ),
       child: FlatButton(
         child: Padding(

@@ -12,18 +12,26 @@ class MiniBarChart extends StatefulWidget {
   final String labelPrefix;
   final double height;
   final bool showX;
+  final double heightX;
   final double maxValue;
+  final double left;
+  final double right;
+  final double gap;
   const MiniBarChart(
       {Key key,
       this.width,
       this.leading,
       this.barColor = Colors.black,
       this.data,
+      this.left = 1,
+      this.gap = 1.5,
+      this.right = 1,
       this.decimais = 0,
       this.height = 40,
       this.prefix = '',
       this.labelPrefix = '',
       this.showX = false,
+      this.heightX = 8,
       this.maxValue,
       this.color = Colors.lightBlue})
       : super(key: key);
@@ -46,6 +54,7 @@ class _MiniBarChartState extends State<MiniBarChart> {
     if (widget.maxValue != null) maxValue = widget.maxValue;
 
     return Container(
+        padding: EdgeInsets.only(left: widget.left, right: widget.right),
         alignment: Alignment.bottomCenter,
         color: widget.color,
         //width: widget.width,
@@ -54,29 +63,32 @@ class _MiniBarChartState extends State<MiniBarChart> {
           maxWidth: widget.width,
           maxHeight: widget.height,
         ),
-        child: Stack(children: [
-          if (widget.leading != null) widget.leading,
-          ListView(
-            scrollDirection: Axis.horizontal,
-            //mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for (var index = 0; index < widget.data.keys.length; index++)
-                createBar(index)
-            ],
-          )
-        ]));
+        child: LayoutBuilder(builder: (x, y) {
+          return Stack(children: [
+            if (widget.leading != null) widget.leading,
+            ListView(
+              scrollDirection: Axis.horizontal,
+              //mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                for (var index = 0; index < widget.data.keys.length; index++)
+                  createBar(index, y.maxWidth, widget.data.keys.length)
+              ],
+            )
+          ]);
+        }));
   }
 
-  createBar(int index) {
+  createBar(int index, double width, int n) {
     String key = widget.data.keys.toList()[index];
     num value = widget.data[key];
-    num w = (widget.width - (count * 2)) / count;
+    num w = (width - (n * widget.gap) - widget.left ?? 0 - widget.right ?? 0) /
+        count;
     if (w > 8) w = 8;
-    if (w < 2) w = 2;
+    if (w < 1) w = 1;
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-          padding: const EdgeInsets.only(left: 1, right: 1),
+          padding: EdgeInsets.only(left: widget.gap / 2, right: widget.gap / 2),
           child: Tooltip(
             message:
                 '${widget.labelPrefix}$key: ${widget.prefix}${value.toStringAsFixed(widget.decimais)}',
@@ -88,18 +100,21 @@ class _MiniBarChartState extends State<MiniBarChart> {
                 alignment: Alignment.bottomCenter,
                 color: widget.barColor,
                 width: w,
-                height:
-                    ((maxValue > 0) ? (value / maxValue) : 0) * widget.height,
+                height: ((maxValue > 0) ? (value / maxValue) : 0) *
+                    (widget.height - (widget.showX ? widget.heightX : 0)),
               ),
-              if ((widget.showX) && ((index % 5) == 0))
-                OverlayContainer(
-                    show: true,
-                    position: OverlayContainerPosition(0, 0),
-                    child: Text(key,
-                        style: TextStyle(
-                          fontSize: 8,
-                          backgroundColor: Colors.transparent,
-                        ))),
+              if (widget.showX)
+                Container(
+                    height: widget.heightX,
+                    //    show: true,
+                    //    position: OverlayContainerPosition(0, 0),
+                    child: (index % 5) != 0
+                        ? null
+                        : Text(key,
+                            style: TextStyle(
+                              fontSize: widget.heightX,
+                              backgroundColor: Colors.transparent,
+                            ))),
             ])),
           )),
     );

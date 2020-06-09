@@ -152,6 +152,7 @@ class PaginatedGrid extends StatefulWidget {
 
   final List<Widget> actions;
   final int currentPage;
+  final double elevation;
 
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
@@ -227,6 +228,7 @@ class PaginatedGrid extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.futureSource,
     this.editSize,
+    this.elevation = 0,
     this.editFullPage = false,
     this.availableRowsPerPage,
     this.onRowsPerPageChanged,
@@ -458,6 +460,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                               context, controller, _filter);
                           //debugPrint('init paginated extended');
                           return PaginatedDataTableExtended(
+                            elevation: widget.elevation,
                             headingRowHeight: widget.headingRowHeight,
                             headerHeight: (widget.header == null)
                                 ? 0
@@ -794,8 +797,8 @@ class PaginatedGridDataTableSource extends DataTableSource {
   DataRow getRow(int index) {
     ThemeData theme = Theme.of(context);
     Color rowColor = ((index % 2) == 0)
-        ? controller.widget.evenRowColor ?? theme.primaryColor.withAlpha(50)
-        : controller.widget.oddRowColor ?? theme.primaryColor.withAlpha(30);
+        ? controller.widget.evenRowColor ?? theme.primaryColor.withAlpha(10)
+        : controller.widget.oddRowColor ?? theme.primaryColor.withAlpha(3);
     Map<String, dynamic> row = controller.source[index];
     DataRow r = DataRow(
         key: UniqueKey(),

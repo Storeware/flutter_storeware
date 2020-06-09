@@ -246,6 +246,7 @@ class DataViewer extends StatefulWidget {
   final List<PaginatedGridColumn> columns;
   final double height;
   final double width;
+  final double elevation;
 
   /// se permite editar um dado - default: true;
   final bool canEdit;
@@ -287,6 +288,7 @@ class DataViewer extends StatefulWidget {
     this.keyName,
     this.source,
     this.evenRowColor,
+    this.elevation = 0,
     this.oddRowColor,
     this.rowsPerPage,
     this.headerHeight = kMinInteractiveDimension * 1.7,
@@ -413,6 +415,7 @@ class _DataViewerState extends State<DataViewer> {
               width: widget.width,
               child: widget.child ??
                   PaginatedGrid(
+                    elevation: widget.elevation,
                     evenRowColor: widget.evenRowColor,
                     oddRowColor: widget.oddRowColor,
                     //sortColumnIndex: widget.sortColumnIndex,

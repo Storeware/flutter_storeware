@@ -17,9 +17,25 @@ class TabChoice {
 }
 
 class TopTabViewController {
+  final Function(int, TabChoice) onSelectedItem;
+  TopTabViewController({this.onSelectedItem});
   _VerticalTabViewState tabView;
-  animateTo(int index) => tabView.animateTo(index);
-  animateChild(Widget child) => tabView.animateChild(child);
+  animateTo(int index) {
+    if (tabView != null) tabView.animateTo(index);
+  }
+
+  animateChild(Widget child) {
+    if (tabView != null) tabView.animateChild(child);
+  }
+
+  goHome() {
+    if (tabView != null) tabView.goHome();
+  }
+
+  selectedItem(int index, TabChoice item) {
+    if (tabView != null) tabView.selectedItem(index, item);
+    if (onSelectedItem != null) onSelectedItem(index, item);
+  }
 }
 
 class VerticalTabView extends StatefulWidget {
@@ -28,8 +44,8 @@ class VerticalTabView extends StatefulWidget {
   final Widget leading;
   final int activeIndex;
   final Widget title;
-  final Widget body;
-  final double elevator;
+  final Widget home;
+  final double elevation;
   final double height;
   final List<Widget> actions;
   final TopTabViewController controller;
@@ -43,11 +59,11 @@ class VerticalTabView extends StatefulWidget {
   const VerticalTabView(
       {Key key,
       this.choices,
-      this.body,
+      this.home,
       this.leading,
       this.actions,
       this.height = 80,
-      this.elevator = 0,
+      this.elevation = 0,
       this.titleColor,
       this.indicatorColor,
       this.title,
@@ -75,14 +91,14 @@ class _VerticalTabViewState extends State<VerticalTabView> {
     _controller = widget.controller ?? TopTabViewController();
     _controller.tabView = this;
 
-    _child = widget.body ?? widget.choices[_index.value].child;
+    _child = widget.home ?? widget.choices[_index.value].child;
     super.initState();
   }
 
   animateTo(int index) {
     _index.value = index;
     if (widget.choices[_index.value].child != null)
-      animateChild(widget.choices[_index.value].child);
+      widget.controller.selectedItem(index, widget.choices[_index.value]);
   }
 
   animateChild(Widget child) {
@@ -91,19 +107,18 @@ class _VerticalTabViewState extends State<VerticalTabView> {
     });
   }
 
-  selectedItem(int index, int item) {
+  selectedItem(int index, TabChoice item) {
     _index.value = index;
-    animateChild(widget.choices[index].items[item].child);
+    animateChild(item.child);
   }
 
-  Color _indicatorColor;
-  Color _titleColor;
+  goHome() {
+    animateChild(widget.home);
+  }
+
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    var _color = widget.titleColor ?? theme.primaryColor;
-    _titleColor = _color;
-    _indicatorColor = widget.indicatorColor ?? Colors.white.withAlpha(50);
+    //ThemeData theme = Theme.of(context);
     return Scaffold(
       drawer: widget.drawer,
       floatingActionButton: widget.floatingActionButton,
@@ -111,28 +126,92 @@ class _VerticalTabViewState extends State<VerticalTabView> {
       bottomSheet: widget.bottomSheet,
       backgroundColor: widget.backgroundColor,
       appBar: AppBar(
-        backgroundColor: widget.titleColor,
-        automaticallyImplyLeading: false,
-        leading: widget.leading,
-        elevation: widget.elevator,
-        actions: [
-          for (var i = 0; i < widget.choices.length; i++)
-            (widget.choices[i].items != null)
-                ? buildPopupMenuButton(i, theme)
-                : (widget.choices[i].tooltip != null)
-                    ? Tooltip(
-                        message: widget.choices[i].tooltip,
-                        child: buildMaterialButton(i, theme))
-                    : buildMaterialButton(i, theme),
-          if (widget.actions != null) ...widget.actions,
-        ],
-        title: widget.title,
-      ),
+          elevation: widget.elevation,
+          title: TopAppBar(
+            controller: _controller,
+            title: widget.title,
+            elevation: widget.elevation,
+            actions: widget.actions,
+            leading: widget.leading,
+            height: widget.height,
+            indicatorColor: widget.indicatorColor,
+            choices: widget.choices,
+            selected: _index.value,
+            titleColor: widget.titleColor,
+          )),
       body: Column(
         children: [
           Expanded(child: _child ?? Container()),
         ],
       ),
+    );
+  }
+}
+
+class TopAppBar extends StatefulWidget {
+  final Color titleColor, indicatorColor;
+  final Widget leading;
+  final List<TabChoice> choices;
+  final double elevation;
+  final List<Widget> actions;
+  final Widget title;
+  final int selected;
+  final double height;
+  final TopTabViewController controller;
+  TopAppBar(
+      {Key key,
+      this.titleColor,
+      this.leading,
+      this.choices,
+      this.elevation = 0,
+      this.actions,
+      this.title,
+      this.selected,
+      this.height,
+      @required this.controller,
+      this.indicatorColor})
+      : super(key: key);
+
+  @override
+  _TopAppBarState createState() => _TopAppBarState();
+}
+
+class _TopAppBarState extends State<TopAppBar> {
+  ValueNotifier<int> _index = ValueNotifier<int>(0);
+
+  Color _indicatorColor, _titleColor;
+
+  index(int idx) {
+    _index.value = idx;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('build');
+    _index.value = widget.selected;
+    ThemeData theme = Theme.of(context);
+
+    var _color = widget.titleColor ?? theme.primaryColor;
+    _titleColor = _color;
+    _indicatorColor = widget.indicatorColor ?? Colors.white.withAlpha(50);
+
+    return AppBar(
+      backgroundColor: widget.titleColor,
+      automaticallyImplyLeading: false,
+      leading: widget.leading,
+      elevation: widget.elevation,
+      actions: [
+        for (var i = 0; i < widget.choices.length; i++)
+          (widget.choices[i].items != null)
+              ? buildPopupMenuButton(i, theme)
+              : (widget.choices[i].tooltip != null)
+                  ? Tooltip(
+                      message: widget.choices[i].tooltip,
+                      child: buildMaterialButton(i, theme))
+                  : buildMaterialButton(i, theme),
+        if (widget.actions != null) ...widget.actions,
+      ],
+      title: widget.title,
     );
   }
 
@@ -152,7 +231,7 @@ class _VerticalTabViewState extends State<VerticalTabView> {
                         style: theme.primaryTextTheme.bodyText1),
               ),
               onSelected: (x) {
-                selectedItem(i, x);
+                selectedItem(i, widget.choices[i].items[x]);
               },
               itemBuilder: (x) {
                 return [
@@ -176,5 +255,15 @@ class _VerticalTabViewState extends State<VerticalTabView> {
             onPressed: () {
               animateTo(i);
             }));
+  }
+
+  animateTo(int idx) {
+    _index.value = idx;
+    widget.controller.animateTo(idx);
+  }
+
+  selectedItem(int idx, TabChoice item) {
+    _index.value = idx;
+    widget.controller.selectedItem(idx, item);
   }
 }

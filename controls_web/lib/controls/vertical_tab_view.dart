@@ -126,13 +126,13 @@ class _VerticalTabViewState extends State<VerticalTabView> {
       bottomSheet: widget.bottomSheet,
       backgroundColor: widget.backgroundColor,
       appBar: AppBar(
+          leading: widget.leading,
           elevation: widget.elevation,
           title: TopAppBar(
             controller: _controller,
             title: widget.title,
             elevation: widget.elevation,
             actions: widget.actions,
-            leading: widget.leading,
             height: widget.height,
             indicatorColor: widget.indicatorColor,
             choices: widget.choices,

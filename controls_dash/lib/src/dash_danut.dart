@@ -1,12 +1,19 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:controls_dash/controls_dash.dart';
 import 'package:flutter/material.dart';
-import 'chart_pair.dart';
 
 class DashDanutChart extends StatelessWidget {
   final List<charts.Series> seriesList;
+  final int arcWidth;
   final bool animate;
+  final bool showLabels;
 
-  DashDanutChart(this.seriesList, {this.animate});
+  DashDanutChart(
+    this.seriesList, {
+    this.arcWidth = 60,
+    this.animate,
+    this.showLabels = false,
+  });
 
   /// Creates a [PieChart] with sample data and no transition.
   static withSampleData() {
@@ -25,7 +32,7 @@ class DashDanutChart extends StatelessWidget {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<ChartPair, String>> createSerie(
-      {String id, List<ChartPair> data}) {
+      {String id, List<ChartPair> data, bool showLabel = true}) {
     return [
       new charts.Series<ChartPair, String>(
         id: id,
@@ -33,7 +40,8 @@ class DashDanutChart extends StatelessWidget {
         measureFn: (ChartPair sales, _) => sales.value,
         data: data,
         // Set a label accessor to control the text of the arc label.
-        labelAccessorFn: (ChartPair row, _) => '${row.title}',
+        labelAccessorFn: (ChartPair row, _) =>
+            '${(showLabel) ? row.title : row.value}',
       )
     ];
   }
@@ -42,23 +50,36 @@ class DashDanutChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return new charts.PieChart(seriesList,
         animate: animate,
-        // Configure the width of the pie slices to 60px. The remaining space in
-        // the chart will be left as a hole in the center.
-        //
-        // [ArcLabelDecorator] will automatically position the label inside the
-        // arc if the label will fit. If the label will not fit, it will draw
-        // outside of the arc with a leader line. Labels can always display
-        // inside or outside using [LabelPosition].
-        //
-        // Text style for inside / outside can be controlled independently by
-        // setting [insideLabelStyleSpec] and [outsideLabelStyleSpec].
-        //
-        // Example configuring different styles for inside/outside:
-        //       new charts.ArcLabelDecorator(
-        //          insideLabelStyleSpec: new charts.TextStyleSpec(...),
-        //          outsideLabelStyleSpec: new charts.TextStyleSpec(...)),
+        behaviors: [
+          if (showLabels)
+            new charts.DatumLegend(
+              // Positions for "start" and "end" will be left and right respectively
+              // for widgets with a build context that has directionality ltr.
+              // For rtl, "start" and "end" will be right and left respectively.
+              // Since this example has directionality of ltr, the legend is
+              // positioned on the right side of the chart.
+              position: charts.BehaviorPosition.end,
+              // By default, if the position of the chart is on the left or right of
+              // the chart, [horizontalFirst] is set to false. This means that the
+              // legend entries will grow as new rows first instead of a new column.
+              horizontalFirst: false,
+              // This defines the padding around each legend entry.
+              cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+              // Set [showMeasures] to true to display measures in series legend.
+              showMeasures: false,
+              // Configure the measure value to be shown by default in the legend.
+              legendDefaultMeasure: charts.LegendDefaultMeasure.firstValue,
+              // Optionally provide a measure formatter to format the measure value.
+              // If none is specified the value is formatted as a decimal.
+              measureFormatter: (num value) {
+                return value == null ? '-' : '$value';
+              },
+            ),
+        ],
         defaultRenderer: new charts.ArcRendererConfig(
-            arcWidth: 60,
-            arcRendererDecorators: [new charts.ArcLabelDecorator()]));
+            arcWidth: arcWidth,
+            arcRendererDecorators: [
+              new charts.ArcLabelDecorator(),
+            ]));
   }
 }

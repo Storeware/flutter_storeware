@@ -98,7 +98,7 @@ class _VerticalTabViewState extends State<VerticalTabView> {
   animateTo(int index) {
     _index.value = index;
     if (widget.choices[_index.value].child != null)
-      widget.controller.selectedItem(index, widget.choices[_index.value]);
+      selectedItem(index, widget.choices[_index.value]);
   }
 
   animateChild(Widget child) {
@@ -187,7 +187,7 @@ class _TopAppBarState extends State<TopAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
+    // print('build');
     _index.value = widget.selected;
     ThemeData theme = Theme.of(context);
 
@@ -253,13 +253,8 @@ class _TopAppBarState extends State<TopAppBar> {
                     style: theme.primaryTextTheme
                         .bodyText1), //TextStyle(color:theme.primaryTextTheme.bodyText1.color ) ),
             onPressed: () {
-              animateTo(i);
+              selectedItem(i, widget.choices[i]);
             }));
-  }
-
-  animateTo(int idx) {
-    _index.value = idx;
-    widget.controller.animateTo(idx);
   }
 
   selectedItem(int idx, TabChoice item) {

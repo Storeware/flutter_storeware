@@ -1,6 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:controls_dash/controls_dash.dart';
 import 'package:flutter/material.dart';
+import 'package:charts_common/src/common/color.dart' as gcolor;
 
 class DashDanutChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -32,14 +33,21 @@ class DashDanutChart extends StatelessWidget {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<ChartPair, String>> createSerie(
-      {String id, List<ChartPair> data, bool showLabel = true}) {
+      {String id,
+      List<ChartPair> data,
+      Color color = Colors.blue,
+      bool showLabel = true}) {
+    var r = color.red;
+    var g = color.green;
+    var b = color.blue;
+    var x = 255 ~/ (data.length + 1);
     return [
       new charts.Series<ChartPair, String>(
         id: id,
         domainFn: (ChartPair sales, _) => sales.title,
         measureFn: (ChartPair sales, _) => sales.value,
         data: data,
-        // Set a label accessor to control the text of the arc label.
+        colorFn: (p, i) => gcolor.Color(r: r, g: g, b: g, a: 255 - (i * x)),
         labelAccessorFn: (ChartPair row, _) =>
             '${(showLabel) ? row.title : row.value}',
       )

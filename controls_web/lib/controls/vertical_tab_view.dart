@@ -16,9 +16,9 @@ class TabChoice {
       this.items});
 }
 
-class TopTabViewController {
+class VerticalTabViewController {
   final Function(int, TabChoice) onSelectedItem;
-  TopTabViewController({this.onSelectedItem});
+  VerticalTabViewController({this.onSelectedItem});
   _VerticalTabViewState tabView;
   animateTo(int index) {
     if (tabView != null) tabView.animateTo(index);
@@ -42,17 +42,17 @@ class VerticalTabView extends StatefulWidget {
   final List<TabChoice> choices;
   final Drawer drawer;
   final Widget leading;
-  final int activeIndex;
+  final int initialIndex;
   final Widget title;
   final Widget home;
   final double elevation;
   final double height;
   final List<Widget> actions;
-  final TopTabViewController controller;
+  final VerticalTabViewController controller;
   final Color titleColor;
   final Color indicatorColor;
-  final FloatingActionButton floatingActionButton;
-  final BottomNavigationBar bottomNavigationBar;
+  final Widget floatingActionButton;
+  final Widget bottomNavigationBar;
   final Widget bottomSheet;
   final Color backgroundColor;
 
@@ -69,7 +69,7 @@ class VerticalTabView extends StatefulWidget {
       this.title,
       this.controller,
       this.drawer,
-      this.activeIndex = 0,
+      this.initialIndex = 0,
       this.floatingActionButton,
       this.bottomNavigationBar,
       this.bottomSheet,
@@ -83,12 +83,12 @@ class VerticalTabView extends StatefulWidget {
 class _VerticalTabViewState extends State<VerticalTabView> {
   ValueNotifier<int> _index = ValueNotifier<int>(0);
   Widget _child;
-  TopTabViewController _controller;
+  VerticalTabViewController _controller;
 
   @override
   void initState() {
-    _index.value = widget.activeIndex;
-    _controller = widget.controller ?? TopTabViewController();
+    _index.value = widget.initialIndex;
+    _controller = widget.controller ?? VerticalTabViewController();
     _controller.tabView = this;
 
     _child = widget.home ?? widget.choices[_index.value].child;
@@ -98,7 +98,7 @@ class _VerticalTabViewState extends State<VerticalTabView> {
   animateTo(int index) {
     _index.value = index;
     if (widget.choices[_index.value].child != null)
-      widget.controller.selectedItem(index, widget.choices[_index.value]);
+      selectedItem(index, widget.choices[_index.value]);
   }
 
   animateChild(Widget child) {
@@ -157,7 +157,7 @@ class TopAppBar extends StatefulWidget {
   final Widget title;
   final int selected;
   final double height;
-  final TopTabViewController controller;
+  final VerticalTabViewController controller;
   TopAppBar(
       {Key key,
       this.titleColor,
@@ -187,7 +187,7 @@ class _TopAppBarState extends State<TopAppBar> {
 
   @override
   Widget build(BuildContext context) {
-    print('build');
+    // print('build');
     _index.value = widget.selected;
     ThemeData theme = Theme.of(context);
 
@@ -253,13 +253,8 @@ class _TopAppBarState extends State<TopAppBar> {
                     style: theme.primaryTextTheme
                         .bodyText1), //TextStyle(color:theme.primaryTextTheme.bodyText1.color ) ),
             onPressed: () {
-              animateTo(i);
+              selectedItem(i, widget.choices[i]);
             }));
-  }
-
-  animateTo(int idx) {
-    _index.value = idx;
-    widget.controller.animateTo(idx);
   }
 
   selectedItem(int idx, TabChoice item) {

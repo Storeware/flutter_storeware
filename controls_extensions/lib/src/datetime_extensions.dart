@@ -18,13 +18,16 @@ extension DateTimeExtension on DateTime {
   toTimeString() => DateFormat.Hms().format(this);
   toDateString() => DateFormat.yMd().format(this);
 
-  addDays(int value) => this.add(Duration(days: value));
-  addHours(int value) => this.add(Duration(hours: value));
-  addMinutes(int value) => this.add(Duration(minutes: value));
-  addMonths(int value) => DateTime(this.year, this.month + value, this.day,
-      this.hour, this.minute, this.second);
-  addYears(int value) => DateTime(this.year + value, this.month, this.day,
-      this.hour, this.minute, this.second);
+  DateTime addDays(int value) {
+    return add(Duration(days: value));
+  }
+
+  DateTime addHours(int value) => add(Duration(hours: value));
+  DateTime addMinutes(int value) => add(Duration(minutes: value));
+  DateTime addMonths(int value) =>
+      DateTime(year, month + value, day, this.hour, this.minute, this.second);
+  DateTime addYears(int value) => DateTime(this.year + value, this.month,
+      this.day, this.hour, this.minute, this.second);
 
   bool isLeapYear() {
     int value = this.year;

@@ -2,6 +2,7 @@ library html_container_web;
 
 import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
+import 'dart:html';
 
 import 'package:html_container_interface/html_container_interface.dart';
 
@@ -9,14 +10,31 @@ class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
 class HtmlIFrameViewImpls extends StatelessWidget {
+  final double width;
+  final double height;
   final String src;
+  final String allow;
   HtmlIFrameViewImpls({
     this.src,
+    this.width,
+    this.height,
+    this.allow,
   });
-
+  final IFrameElement _iframeElement = IFrameElement();
   @override
   Widget build(BuildContext context) {
-    return Text('$src');
+    return HtmlElementContainerImpls<IFrameElement>(
+        viewType: 'iframeElement',
+        builder: (typ) {
+          _iframeElement.src = src;
+          if (width != null) _iframeElement.width = '$width';
+          if (height != null) _iframeElement.height = '$height';
+          _iframeElement.setAttribute(
+              'allow',
+              allow ??
+                  "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
+          return _iframeElement;
+        });
   }
 }
 

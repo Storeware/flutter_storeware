@@ -11,16 +11,26 @@ class HtmlElementContainerControllerImpls<T>
 
 class HtmlIFrameViewImpls extends StatelessWidget {
   final String src;
+  final double width;
+  final double height;
+  final String allow;
+
   HtmlIFrameViewImpls({
     this.src,
+    this.width,
+    this.height,
+    this.allow,
   });
 
   @override
   Widget build(BuildContext context) {
+    String _width = (width != null) ? ' width="$width" ' : '';
+    String _height = (height != null) ? ' height="$height" ' : '';
+    String _allow = (allow != null) ? ' allow="$allow" ' : '';
     return Container(
         child: WebView(
       initialUrl: Uri.dataFromString(
-              '<html><body><iframe src="$src"></iframe></body></html>',
+              '<html><body><iframe $_width $_height src="$src" $_allow></iframe></body></html>',
               mimeType: 'text/html')
           .toString(),
       javascriptMode: JavascriptMode.unrestricted,

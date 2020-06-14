@@ -17,7 +17,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
   final String scrolling;
   final String style;
   final int border;
-  final String innerHtml;
+  final String srcdoc;
   HtmlIFrameViewImpls({
     this.src,
     this.width,
@@ -26,7 +26,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
     this.scrolling,
     this.style,
     this.border = 0,
-    this.innerHtml,
+    this.srcdoc,
   });
   final IFrameElement _iframeElement = IFrameElement();
   @override
@@ -46,7 +46,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
               'allow',
               allow ??
                   "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
-          if (innerHtml != null) _iframeElement.srcdoc = innerHtml;
+          if (srcdoc != null) _iframeElement.srcdoc = srcdoc;
 
           return _iframeElement;
         });

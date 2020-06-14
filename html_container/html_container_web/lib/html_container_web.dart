@@ -15,12 +15,16 @@ class HtmlIFrameViewImpls extends StatelessWidget {
   final String src;
   final String allow;
   final String scrolling;
+  final String style;
+  final int border;
   HtmlIFrameViewImpls({
     this.src,
     this.width,
     this.height,
     this.allow,
     this.scrolling,
+    this.style,
+    this.border = 0,
   });
   final IFrameElement _iframeElement = IFrameElement();
   @override
@@ -31,10 +35,11 @@ class HtmlIFrameViewImpls extends StatelessWidget {
           _iframeElement.src = src;
           if (width != null) _iframeElement.width = '$width';
           if (height != null) _iframeElement.height = '$height';
-          _iframeElement.setAttribute('border', "0");
-          _iframeElement.setAttribute('frameBorder', "0");
+          _iframeElement.setAttribute('border', "$border");
+          _iframeElement.setAttribute('frameBorder', "$border");
           if (scrolling != null)
             _iframeElement.setAttribute('scrolling', scrolling);
+          if (style != null) _iframeElement.setAttribute('style', style);
           _iframeElement.setAttribute(
               'allow',
               allow ??

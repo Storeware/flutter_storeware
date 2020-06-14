@@ -11,6 +11,20 @@ class HtmlElementContainerController<T>
 
 class HtmlIFrameView extends HtmlIFrameViewImpls {
   HtmlIFrameView(
-      {Key key, String src, double width, double height, String allow})
-      : super(src: src, width: width, height: height, allow: allow);
+      {Key key,
+      String src,
+      String style,
+      String width,
+      String height,
+      int border,
+      String scrolling,
+      String allow})
+      : super(
+            src: src,
+            width: width,
+            scrolling: scrolling,
+            style: style,
+            border: border,
+            height: height,
+            allow: allow);
 }

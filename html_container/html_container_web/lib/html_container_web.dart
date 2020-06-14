@@ -23,7 +23,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
   final IFrameElement _iframeElement = IFrameElement();
   @override
   Widget build(BuildContext context) {
-    return HtmlElementContainerImpls<IFrameElement>(
+    return const HtmlElementContainerImpls<IFrameElement>(
         viewType: 'iframeElement',
         builder: (typ) {
           _iframeElement.src = src;
@@ -31,7 +31,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
           if (height != null) _iframeElement.height = '$height';
           _iframeElement.setAttribute('border', "0");
           _iframeElement.setAttribute('frameBorder', "0");
-          _iframeElement.setAttribute('scrolling', 'no');
+          //_iframeElement.setAttribute('scrolling', 'no');
           _iframeElement.setAttribute(
               'allow',
               allow ??

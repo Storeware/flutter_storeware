@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 //import 'dart:ui' as ui;
 
 import 'package:html_container_interface/html_container_interface.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
@@ -16,7 +17,14 @@ class HtmlIFrameViewImpls extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text('$src');
+    return Container(
+        child: WebView(
+      initialUrl: Uri.dataFromString(
+              '<html><body><iframe src="$src"></iframe></body></html>',
+              mimeType: 'text/html')
+          .toString(),
+      javascriptMode: JavascriptMode.unrestricted,
+    ));
   }
 }
 

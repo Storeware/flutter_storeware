@@ -3,18 +3,21 @@ library html_container_web;
 import 'package:flutter/widgets.dart';
 import 'dart:ui' as ui;
 
-class HtmlElementContainerController<T> {
-  T value;
-}
+import 'package:html_container_interface/html_container_interface.dart';
 
-class HtmlElementContainer<T> extends StatelessWidget {
-  final String viewType;
-  final HtmlElementContainerController controller;
+class HtmlElementContainerControllerImpls<T>
+    extends HtmlElementContainerControllerInterfaced<T> {}
+
+class HtmlElementContainerImpls<T> extends StatelessWidget
+    implements HtmlElementContainerControllerInterfaced<T> {
+  /* final String viewType;
+  final HtmlElementContainerControllerImpls controller;
   final double width;
   final double height;
   final Function(T) onComplete;
   final T Function(String) builder;
-  const HtmlElementContainer(
+ */
+  HtmlElementContainerImpls(
       {Key key,
       @required this.viewType,
       this.onComplete,
@@ -46,4 +49,7 @@ class HtmlElementContainer<T> extends StatelessWidget {
       return elem;
     });
   }
+
+  @override
+  T value;
 }

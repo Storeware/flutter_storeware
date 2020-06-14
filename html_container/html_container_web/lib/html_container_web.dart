@@ -46,7 +46,8 @@ class HtmlIFrameViewImpls extends StatelessWidget {
               'allow',
               allow ??
                   "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
-          if (innerHtml != null) _iframeElement.innerHtml = innerHtml;
+          if (innerHtml != null) _iframeElement.srcdoc = innerHtml;
+
           return _iframeElement;
         });
   }

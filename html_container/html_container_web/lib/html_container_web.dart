@@ -8,16 +8,21 @@ import 'package:html_container_interface/html_container_interface.dart';
 class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
-class HtmlElementContainerImpls<T> extends StatelessWidget
-    implements HtmlElementContainerControllerInterfaced<T> {
-  /* final String viewType;
+class HtmlIFrameViewImpls {
+  final String src;
+  HtmlIFrameViewImpls({
+    this.src,
+  });
+}
+
+class HtmlElementContainerImpls<T> extends StatelessWidget {
+  final String viewType;
   final HtmlElementContainerControllerImpls controller;
   final double width;
   final double height;
   final Function(T) onComplete;
   final T Function(String) builder;
- */
-  HtmlElementContainerImpls(
+  const HtmlElementContainerImpls(
       {Key key,
       @required this.viewType,
       this.onComplete,
@@ -49,7 +54,4 @@ class HtmlElementContainerImpls<T> extends StatelessWidget
       return elem;
     });
   }
-
-  @override
-  T value;
 }

@@ -53,6 +53,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  html_container_interface:
+    dependency: "direct main"
+    description:
+      path: "html_container/html_container_interface"
+      ref: HEAD
+      resolved-ref: a4e6ba715caf6cb092ad4a82cef4e4968e13ff11
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:

@@ -10,20 +10,22 @@ class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
 class HtmlIFrameViewImpls extends StatelessWidget {
-  final double width;
-  final double height;
+  final String width;
+  final String height;
   final String src;
   final String allow;
+  final String scrolling;
   HtmlIFrameViewImpls({
     this.src,
     this.width,
     this.height,
     this.allow,
+    this.scrolling,
   });
   final IFrameElement _iframeElement = IFrameElement();
   @override
   Widget build(BuildContext context) {
-    return const HtmlElementContainerImpls<IFrameElement>(
+    return HtmlElementContainerImpls<IFrameElement>(
         viewType: 'iframeElement',
         builder: (typ) {
           _iframeElement.src = src;
@@ -31,7 +33,8 @@ class HtmlIFrameViewImpls extends StatelessWidget {
           if (height != null) _iframeElement.height = '$height';
           _iframeElement.setAttribute('border', "0");
           _iframeElement.setAttribute('frameBorder', "0");
-          //_iframeElement.setAttribute('scrolling', 'no');
+          if (scrolling != null)
+            _iframeElement.setAttribute('scrolling', scrolling);
           _iframeElement.setAttribute(
               'allow',
               allow ??

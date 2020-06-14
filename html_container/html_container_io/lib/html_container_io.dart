@@ -16,6 +16,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
   final String allow;
   final String scrolling;
   final String style;
+  final String innerHtml;
   final int border;
 
   HtmlIFrameViewImpls({
@@ -25,6 +26,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
     this.allow,
     this.scrolling,
     this.style,
+    this.innerHtml,
     this.border = 0,
   });
 
@@ -35,12 +37,13 @@ class HtmlIFrameViewImpls extends StatelessWidget {
     String _allow = (allow != null) ? ' allow="$allow" ' : '';
     String _scrolling = (scrolling != null) ? ' scrolling="$scrolling" ' : '';
     String _style = (style != null) ? ' style="$style" ' : '';
+    String _innerHtml = (innerHtml != null) ? innerHtml : '';
     String _border =
         (border != null) ? ' border="$border" frameBorder="$border" ' : '';
     return Container(
         child: WebView(
       initialUrl: Uri.dataFromString(
-              '<html><body><iframe $_width $_height $_scrolling $_style $_border src="$src" $_allow></iframe></body></html>',
+              '<html><body><iframe $_width $_height $_scrolling $_style $_border src="$src" $_allow>$_innerHtml</iframe></body></html>',
               mimeType: 'text/html')
           .toString(),
       javascriptMode: JavascriptMode.unrestricted,

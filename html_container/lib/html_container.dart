@@ -18,9 +18,11 @@ class HtmlIFrameView extends HtmlIFrameViewImpls {
       String height,
       int border,
       String scrolling,
+      String innerHtml,
       String allow})
       : super(
             src: src,
+            innerHtml: innerHtml,
             width: width,
             scrolling: scrolling,
             style: style,

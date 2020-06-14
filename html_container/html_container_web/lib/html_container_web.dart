@@ -8,11 +8,16 @@ import 'package:html_container_interface/html_container_interface.dart';
 class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
-class HtmlIFrameViewImpls {
+class HtmlIFrameViewImpls extends StatelessWidget {
   final String src;
   HtmlIFrameViewImpls({
     this.src,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('$src');
+  }
 }
 
 class HtmlElementContainerImpls<T> extends StatelessWidget {

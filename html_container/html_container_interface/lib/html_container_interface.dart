@@ -1,6 +1,6 @@
 library html_container_interface;
 
-class HtmlElementContainerControllerInterfaced<T> {
+abstract class HtmlElementContainerControllerInterfaced<T> {
   T value;
 }
 

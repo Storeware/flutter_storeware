@@ -2,7 +2,7 @@ name: html_container_interface
 description: A new Flutter package project.
 version: 0.0.1
 author:
-homepage:
+homepage: www
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -10,10 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  html_container_interface:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: html_container/html_container_interface
 
 dev_dependencies:
   flutter_test:

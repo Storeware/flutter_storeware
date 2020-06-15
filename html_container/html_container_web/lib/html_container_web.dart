@@ -29,9 +29,10 @@ class HtmlIFrameViewImpls extends StatelessWidget {
     this.srcdoc,
   });
   final IFrameElement _iframeElement = IFrameElement();
+  final DivElement div = DivElement();
   @override
   Widget build(BuildContext context) {
-    return HtmlElementContainerImpls<IFrameElement>(
+    return HtmlElementContainerImpls<DivElement>(
         viewType: 'iframeElement',
         builder: (typ) {
           if (src != null) _iframeElement.src = src;
@@ -47,8 +48,8 @@ class HtmlIFrameViewImpls extends StatelessWidget {
               allow ??
                   "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
           if (srcdoc != null) _iframeElement.srcdoc = srcdoc;
-
-          return _iframeElement;
+          div.children.add(_iframeElement);
+          return div;
         });
   }
 }

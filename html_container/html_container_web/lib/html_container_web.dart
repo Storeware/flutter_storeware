@@ -29,7 +29,10 @@ class HtmlIFrameViewImpls extends StatelessWidget {
     this.srcdoc,
   });
   final IFrameElement _iframeElement = IFrameElement();
-  final DivElement div = DivElement();
+  final DivElement div = DivElement()
+    ..contentEditable = 'true'
+    ..style.width = '100%'
+    ..style.height = '100%';
   @override
   Widget build(BuildContext context) {
     return HtmlElementContainerImpls<DivElement>(

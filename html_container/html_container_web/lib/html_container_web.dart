@@ -9,7 +9,7 @@ import 'package:html_container_interface/html_container_interface.dart';
 class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
-class HtmlIFrameViewImpls extends StatelessWidget {
+class HtmlIFrameViewImpls extends StatefulWidget {
   final String width;
   final String height;
   final String src;
@@ -28,30 +28,46 @@ class HtmlIFrameViewImpls extends StatelessWidget {
     this.border = 0,
     this.srcdoc,
   });
-  final IFrameElement _iframeElement = IFrameElement();
-  final DivElement div = DivElement()
-    ..contentEditable = 'true'
-    ..style.width = '100%'
-    ..style.height = '100%';
+
+  @override
+  _HtmlIFrameViewImplsState createState() => _HtmlIFrameViewImplsState();
+}
+
+class _HtmlIFrameViewImplsState extends State<HtmlIFrameViewImpls> {
+  IFrameElement _iframeElement;
+
+  DivElement div;
+
+  @override
+  void initState() {
+    super.initState();
+    _iframeElement = IFrameElement();
+    div = DivElement()
+      ..contentEditable = 'true'
+      ..style.width = '100%'
+      ..style.height = '100%';
+  }
+
   @override
   Widget build(BuildContext context) {
     return HtmlElementContainerImpls<DivElement>(
         viewType: 'iframeElement',
         builder: (typ) {
-          if (src != null) _iframeElement.src = src;
-          _iframeElement.width = width ?? '100%';
-          _iframeElement.height = height ?? '100%';
-          _iframeElement.setAttribute('border', "${border ?? 0}");
-          _iframeElement.setAttribute('frameBorder', "${border ?? 0}");
-          if (scrolling != null)
-            _iframeElement.setAttribute('scrolling', scrolling);
-          if (style != null) _iframeElement.setAttribute('style', style);
-          if (allow != null)
+          if (widget.src != null) _iframeElement.src = widget.src;
+          _iframeElement.width = widget.width ?? '100%';
+          _iframeElement.height = widget.height ?? '100%';
+          _iframeElement.setAttribute('border', "${widget.border ?? 0}");
+          _iframeElement.setAttribute('frameBorder', "${widget.border ?? 0}");
+          if (widget.scrolling != null)
+            _iframeElement.setAttribute('scrolling', widget.scrolling);
+          if (widget.style != null)
+            _iframeElement.setAttribute('style', widget.style);
+          if (widget.allow != null)
             _iframeElement.setAttribute(
                 'allow',
-                allow ??
+                widget.allow ??
                     "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
-          if (srcdoc != null) _iframeElement.srcdoc = srcdoc;
+          if (widget.srcdoc != null) _iframeElement.srcdoc = widget.srcdoc;
           div.children.add(_iframeElement);
           return div;
         });

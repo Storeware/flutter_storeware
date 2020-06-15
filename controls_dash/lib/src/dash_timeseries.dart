@@ -79,7 +79,45 @@ class DashTimeSeriesBar extends StatelessWidget {
 /// Sample time series data type.
 class TimeSeriesSales {
   final DateTime time;
-  final int sales;
+  final double sales;
 
   TimeSeriesSales(this.time, this.sales);
+}
+
+class DashTimeSeriesLine extends StatelessWidget {
+  final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
+  final bool animate;
+
+  DashTimeSeriesLine(this.seriesList, {this.animate});
+
+  @override
+  Widget build(BuildContext context) {
+    return new charts.TimeSeriesChart(
+      seriesList,
+      animate: animate,
+      // Set the default renderer to a bar renderer.
+      // This can also be one of the custom renderers of the time series chart.
+      defaultRenderer: new charts.LineRendererConfig<DateTime>(),
+      // It is recommended that default interactions be turned off if using bar
+      // renderer, because the line point highlighter is the default for time
+      // series chart.
+      defaultInteractions: false,
+      // If default interactions were removed, optionally add select nearest
+      // and the domain highlighter that are typical for bar charts.
+      behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
+    );
+  }
+
+  static List<charts.Series<TimeSeriesSales, DateTime>> createSerie(
+      {String id, List<TimeSeriesSales> data}) {
+    return [
+      new charts.Series<TimeSeriesSales, DateTime>(
+        id: id,
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: data,
+      )
+    ];
+  }
 }

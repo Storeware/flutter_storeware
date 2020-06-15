@@ -8,3 +8,4 @@ export 'src/dash_gauge.dart';
 export 'src/dash_hbar.dart';
 export 'src/dash_pie.dart';
 export 'src/dash_timeseries.dart';
+export 'src/dash_line_chart.dart';

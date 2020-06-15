@@ -19,7 +19,9 @@ class DashboardIcon extends StatelessWidget {
 
 class DashboardTile extends StatelessWidget {
   final String value;
+  final TextStyle valueStyle;
   final String title;
+  final TextStyle titleStyle;
   final double titleHeight;
   final Color color;
   final Widget image;
@@ -30,7 +32,9 @@ class DashboardTile extends StatelessWidget {
   const DashboardTile(
       {Key key,
       this.value,
+      this.valueStyle,
       this.title,
+      this.titleStyle,
       this.color,
       this.image,
       this.icon,
@@ -51,9 +55,11 @@ class DashboardTile extends StatelessWidget {
             color: _color.withAlpha(150),
             child: LayoutBuilder(builder: (ctx, sizes) {
               double w = (responsive.isSmall
-                  ? sizes.maxWidth
+                  ? (sizes.maxWidth)
                   : responsive.isMobile
-                      ? (sizes.maxWidth / 2) - 16
+                      ? ((width * 2) < sizes.maxWidth)
+                          ? (sizes.maxWidth / 2) - 16
+                          : width
                       : width ?? 180);
               //print(w);
               return Container(
@@ -89,10 +95,11 @@ class DashboardTile extends StatelessWidget {
                                       alignment: Alignment.center,
                                       child: Text(
                                         value,
-                                        style: TextStyle(
-                                            fontSize: 32,
-                                            color: theme.primaryTextTheme
-                                                .bodyText1.color),
+                                        style: valueStyle ??
+                                            TextStyle(
+                                                fontSize: 32,
+                                                color: theme.primaryTextTheme
+                                                    .bodyText1.color),
                                       ),
                                     ),
                                   if (body != null) body,
@@ -105,10 +112,11 @@ class DashboardTile extends StatelessWidget {
                               color: _color.withOpacity(0.2),
                               child: Text(
                                 title ?? '',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color:
-                                        theme.primaryTextTheme.bodyText1.color),
+                                style: titleStyle ??
+                                    TextStyle(
+                                        fontSize: 18,
+                                        color: theme
+                                            .primaryTextTheme.bodyText1.color),
                               ),
                             ),
                           ]),

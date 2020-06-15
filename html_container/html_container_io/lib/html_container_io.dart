@@ -9,6 +9,19 @@ import 'package:webview_flutter/webview_flutter.dart';
 class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
+class HtmlDivImpls extends StatelessWidget {
+  final Widget child;
+  const HtmlDivImpls({
+    Key key,
+    this.child,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(child: child);
+  }
+}
+
 class HtmlIFrameViewImpls extends StatelessWidget {
   final String src;
   final String width;

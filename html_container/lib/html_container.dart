@@ -9,6 +9,10 @@ class HtmlElementContainer<T> extends HtmlElementContainerImpls<T> {}
 class HtmlElementContainerController<T>
     extends HtmlElementContainerControllerImpls<T> {}
 
+class HtmlDiv extends HtmlDivImpls {
+  HtmlDiv({Key key, Widget child}) : super(key: key, child: child);
+}
+
 class HtmlIFrameView extends HtmlIFrameViewImpls {
   HtmlIFrameView(
       {Key key,

@@ -96,15 +96,19 @@ class HtmlElementContainerImpls<T> extends StatelessWidget {
     T elem = builder(viewType);
     if (controller != null) controller.value = elem;
     if (onComplete != null) onComplete(elem);
-    return Container(
-        child: FutureBuilder(
-            future: getViewType(viewType, elem),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) return Container();
-              return HtmlElementView(
-                viewType: viewType,
-              );
-            }));
+    return Directionality(
+        textDirection: TextDirection.ltr,
+        child: Container(
+            width: width,
+            height: height,
+            child: FutureBuilder(
+                future: getViewType(viewType, elem),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return Container();
+                  return HtmlElementView(
+                    viewType: viewType,
+                  );
+                })));
   }
 
   getViewType(viewType, elem) async {

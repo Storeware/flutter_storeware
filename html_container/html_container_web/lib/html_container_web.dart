@@ -41,15 +41,16 @@ class HtmlIFrameViewImpls extends StatelessWidget {
           if (src != null) _iframeElement.src = src;
           _iframeElement.width = width ?? '100%';
           _iframeElement.height = height ?? '100%';
-          _iframeElement.setAttribute('border', "$border");
-          _iframeElement.setAttribute('frameBorder', "$border");
+          _iframeElement.setAttribute('border', "$border??0");
+          _iframeElement.setAttribute('frameBorder', "$border??0");
           if (scrolling != null)
             _iframeElement.setAttribute('scrolling', scrolling);
           if (style != null) _iframeElement.setAttribute('style', style);
-          _iframeElement.setAttribute(
-              'allow',
-              allow ??
-                  "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
+          if (allow != null)
+            _iframeElement.setAttribute(
+                'allow',
+                allow ??
+                    "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
           if (srcdoc != null) _iframeElement.srcdoc = srcdoc;
           div.children.add(_iframeElement);
           return div;

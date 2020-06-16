@@ -1,123 +1,141 @@
-/// Example of a time series chart using a bar renderer.
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:controls_web/controls/home_elements.dart';
 import 'package:flutter/material.dart';
+import 'package:controls_web/controls/responsive.dart';
 
-class DashTimeSeriesBar extends StatelessWidget {
-  final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
-  final bool animate;
-
-  DashTimeSeriesBar(this.seriesList, {this.animate});
-
-  /// Creates a [TimeSeriesChart] with sample data and no transition.
-  factory DashTimeSeriesBar.withSampleData() {
-    return new DashTimeSeriesBar(
-      _createSampleData(),
-      // Disable animations for image tests.
-      animate: false,
-    );
-  }
+class DashboardIcon extends StatelessWidget {
+  final IconData icon;
+  final double size;
+  const DashboardIcon({Key key, this.icon, this.size = 32}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new charts.TimeSeriesChart(
-      seriesList,
-      animate: animate,
-      // Set the default renderer to a bar renderer.
-      // This can also be one of the custom renderers of the time series chart.
-      defaultRenderer: new charts.BarRendererConfig<DateTime>(),
-      // It is recommended that default interactions be turned off if using bar
-      // renderer, because the line point highlighter is the default for time
-      // series chart.
-      defaultInteractions: false,
-      // If default interactions were removed, optionally add select nearest
-      // and the domain highlighter that are typical for bar charts.
-      behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
+    return Icon(
+      icon,
+      size: size,
+      color: Theme.of(context).primaryColor.withOpacity(0.5),
     );
   }
-
-  /// Create one series with sample hard coded data.
-  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData() {
-    return createSerie(id: 'vendas', data: [
-      new TimeSeriesSales(new DateTime(2017, 9, 1), 5),
-      new TimeSeriesSales(new DateTime(2017, 9, 2), 5),
-      new TimeSeriesSales(new DateTime(2017, 9, 3), 25),
-      new TimeSeriesSales(new DateTime(2017, 9, 4), 100),
-      new TimeSeriesSales(new DateTime(2017, 9, 5), 75),
-      new TimeSeriesSales(new DateTime(2017, 9, 6), 88),
-      new TimeSeriesSales(new DateTime(2017, 9, 7), 65),
-      new TimeSeriesSales(new DateTime(2017, 9, 8), 91),
-      new TimeSeriesSales(new DateTime(2017, 9, 9), 100),
-      new TimeSeriesSales(new DateTime(2017, 9, 10), 111),
-      new TimeSeriesSales(new DateTime(2017, 9, 11), 90),
-      new TimeSeriesSales(new DateTime(2017, 9, 12), 50),
-      new TimeSeriesSales(new DateTime(2017, 9, 13), 40),
-      new TimeSeriesSales(new DateTime(2017, 9, 14), 30),
-      new TimeSeriesSales(new DateTime(2017, 9, 15), 40),
-      new TimeSeriesSales(new DateTime(2017, 9, 16), 50),
-      new TimeSeriesSales(new DateTime(2017, 9, 17), 30),
-      new TimeSeriesSales(new DateTime(2017, 9, 18), 35),
-      new TimeSeriesSales(new DateTime(2017, 9, 19), 40),
-      new TimeSeriesSales(new DateTime(2017, 9, 20), 32),
-      new TimeSeriesSales(new DateTime(2017, 9, 21), 31),
-    ]);
-  }
-
-  static List<charts.Series<TimeSeriesSales, DateTime>> createSerie(
-      {String id, List<TimeSeriesSales> data}) {
-    return [
-      new charts.Series<TimeSeriesSales, DateTime>(
-        id: id,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data,
-      )
-    ];
-  }
 }
 
-/// Sample time series data type.
-class TimeSeriesSales {
-  final DateTime time;
-  final double sales;
-
-  TimeSeriesSales(this.time, this.sales);
-}
-
-class DashTimeSeriesLine extends StatelessWidget {
-  final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
-  final bool animate;
-
-  DashTimeSeriesLine(this.seriesList, {this.animate});
+class DashboardTile extends StatelessWidget {
+  final String value;
+  final TextStyle valueStyle;
+  final String title;
+  final TextStyle titleStyle;
+  final double titleHeight;
+  final Color color;
+  final Widget image;
+  final Widget icon;
+  final Widget body;
+  final double width;
+  final double height;
+  final Widget left;
+  const DashboardTile(
+      {Key key,
+      this.value,
+      this.valueStyle,
+      this.title,
+      this.titleStyle,
+      this.color,
+      this.image,
+      this.icon,
+      this.titleHeight = 25,
+      this.width = 180,
+      this.height = 80,
+      this.left,
+      this.body})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new charts.TimeSeriesChart(
-      seriesList,
-      animate: animate,
-      // Set the default renderer to a bar renderer.
-      // This can also be one of the custom renderers of the time series chart.
-      defaultRenderer: new charts.LineRendererConfig<DateTime>(),
-      // It is recommended that default interactions be turned off if using bar
-      // renderer, because the line point highlighter is the default for time
-      // series chart.
-      defaultInteractions: false,
-      // If default interactions were removed, optionally add select nearest
-      // and the domain highlighter that are typical for bar charts.
-      behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
-    );
-  }
-
-  static List<charts.Series<TimeSeriesSales, DateTime>> createSerie(
-      {String id, List<TimeSeriesSales> data}) {
-    return [
-      new charts.Series<TimeSeriesSales, DateTime>(
-        id: id,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (TimeSeriesSales sales, _) => sales.time,
-        measureFn: (TimeSeriesSales sales, _) => sales.sales,
-        data: data,
-      )
-    ];
+    ThemeData theme = Theme.of(context);
+    Color _color = color ?? theme.primaryColor;
+    ResponsiveInfo responsive = ResponsiveInfo(context);
+    return Theme(
+        data: theme.copyWith(primaryColor: _color),
+        child: Card(
+            color: _color.withAlpha(150),
+            child: LayoutBuilder(builder: (ctx, sizes) {
+              double w = (responsive.isSmall
+                  ? (sizes.maxWidth)
+                  : responsive.isMobile
+                      ? ((width * 2) < sizes.maxWidth)
+                          ? (sizes.maxWidth / 2) - 16
+                          : width
+                      : width ?? 180);
+              //print(w);
+              return Container(
+                width: w,
+                height: height,
+                //constraints: BoxConstraints(minHeight: 80),
+                child: Stack(
+                  children: [
+                    if (image != null)
+                      Positioned(
+                        bottom: this.titleHeight / 2,
+                        right: 4,
+                        child:
+                            Container(color: Colors.transparent, child: image),
+                      ),
+                    if (icon != null)
+                      Positioned(
+                        left: 10,
+                        top: 10,
+                        child: icon,
+                      ),
+                    Positioned(
+                      child: Column(mainAxisSize: MainAxisSize.min,
+                          //crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (value != null)
+                                    Container(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        value,
+                                        style: valueStyle ??
+                                            TextStyle(
+                                                fontSize: 32,
+                                                color: theme.primaryTextTheme
+                                                    .bodyText1.color),
+                                      ),
+                                    ),
+                                  if (left != null)
+                                    Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          left,
+                                          if (body != null)
+                                            Expanded(child: body)
+                                        ]),
+                                  if (left == null)
+                                    if (body != null) Expanded(child: body),
+                                ],
+                              ),
+                            ),
+                            if (title != null)
+                              Container(
+                                alignment: Alignment.center,
+                                height: titleHeight,
+                                color: _color.withOpacity(0.2),
+                                child: Text(
+                                  title ?? '',
+                                  style: titleStyle ??
+                                      TextStyle(
+                                          fontSize: 18,
+                                          color: theme.primaryTextTheme
+                                              .bodyText1.color),
+                                ),
+                              ),
+                          ]),
+                    ),
+                  ],
+                ),
+              );
+            })));
   }
 }

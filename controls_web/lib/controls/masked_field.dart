@@ -486,7 +486,7 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
   }
 }
 
-class MaskedSwitchFormField extends StatelessWidget {
+class MaskedSwitchFormField extends StatefulWidget {
   final bool value;
   final String label;
   final Color activeTrackColor;
@@ -508,27 +508,42 @@ class MaskedSwitchFormField extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _MaskedSwitchFormFieldState createState() => _MaskedSwitchFormFieldState();
+}
+
+class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
+    with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
-    bool initialValue = value ?? false;
+    super.build(context);
+    ValueNotifier<bool> initialValue = ValueNotifier<bool>(widget.value);
+
     return Row(mainAxisSize: MainAxisSize.min, children: [
-      if (leading != null) leading,
-      if (label != null) Text(label ?? '' + '  '),
-      StatefulBuilder(builder: (context, _setState) {
-        return Switch(
-            value: initialValue ?? false,
-            activeColor: activeColor,
-            activeTrackColor: activeTrackColor,
-            autofocus: autofocus,
-            onChanged: (b) {
-              if (onChanged != null) onChanged(b);
-              _setState(() {
-                initialValue = b;
-              });
-            });
-      }),
-      if (trailing != null) trailing
+      if (widget.leading != null) widget.leading,
+      if (widget.label != null) Text(widget.label ?? '' + '  '),
+      ValueListenableBuilder(
+          valueListenable: initialValue,
+          builder: (
+            BuildContext context,
+            bool value,
+            Widget child,
+          ) {
+            return Switch(
+                value: initialValue.value,
+                activeColor: widget.activeColor,
+                activeTrackColor: widget.activeTrackColor,
+                autofocus: widget.autofocus,
+                onChanged: (b) {
+                  if (widget.onChanged != null) widget.onChanged(b);
+                  initialValue.value = b;
+                });
+          }),
+      if (widget.trailing != null) widget.trailing
     ]);
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class MaskedDropDownFormField extends StatelessWidget {

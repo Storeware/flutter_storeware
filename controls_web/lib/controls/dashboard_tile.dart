@@ -30,16 +30,28 @@ class DashboardTile extends StatelessWidget {
   final double width;
   final double height;
   final Widget left;
+  final double borderRadius;
+  final double avatarRadius;
+  final Widget avatarChild;
+  final Color avatarColor;
+  final double avatarMargin;
+  final double elevation;
   const DashboardTile(
       {Key key,
       this.value,
+      this.elevation = 2,
       this.valueStyle,
       this.title,
       this.titleStyle,
       this.color,
+      this.borderRadius = 15,
+      this.avatarMargin = -20,
       this.image,
       this.icon,
       this.titleHeight = 25,
+      this.avatarRadius = 30,
+      this.avatarColor,
+      this.avatarChild,
       this.width = 180,
       this.height = 80,
       this.left,
@@ -54,6 +66,11 @@ class DashboardTile extends StatelessWidget {
     return Theme(
         data: theme.copyWith(primaryColor: _color),
         child: Card(
+            elevation: elevation,
+            shape: RoundedRectangleBorder(
+              //side: BorderSide(color: Colors.white70, width: 1),
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
             color: _color.withAlpha(150),
             child: LayoutBuilder(builder: (ctx, sizes) {
               double w = (responsive.isSmall
@@ -70,6 +87,15 @@ class DashboardTile extends StatelessWidget {
                 //constraints: BoxConstraints(minHeight: 80),
                 child: Stack(
                   children: [
+                    Positioned(
+                      top: avatarMargin,
+                      left: avatarMargin,
+                      child: CircleAvatar(
+                        backgroundColor: avatarColor ?? brighten(_color, 50),
+                        radius: avatarRadius,
+                        child: avatarChild,
+                      ),
+                    ),
                     if (image != null)
                       Positioned(
                         bottom: this.titleHeight / 2,
@@ -138,4 +164,21 @@ class DashboardTile extends StatelessWidget {
               );
             })));
   }
+}
+
+Color darken(Color c, [int percent = 10]) {
+  assert(1 <= percent && percent <= 100);
+  var f = 1 - percent / 100;
+  return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
+      (c.blue * f).round());
+}
+
+Color brighten(Color c, [int percent = 10]) {
+  assert(1 <= percent && percent <= 100);
+  var p = percent / 100;
+  return Color.fromARGB(
+      c.alpha,
+      c.red + ((255 - c.red) * p).round(),
+      c.green + ((255 - c.green) * p).round(),
+      c.blue + ((255 - c.blue) * p).round());
 }

@@ -1134,7 +1134,6 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             return (item.editInfo
                 .replaceAll('{label}', item.label ?? item.name));
           }
-
           return null;
         },
         onSaved: (x) {

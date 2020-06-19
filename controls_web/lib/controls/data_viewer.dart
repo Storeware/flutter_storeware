@@ -177,32 +177,34 @@ class DataViewerController {
 
 class DataViewerColumn extends PaginatedGridColumn {
   DataViewerColumn({
-    onEditIconPressed,
-    numeric = false,
-    autofocus = false,
-    visible = true,
-    maxLines,
-    color,
-    maxLength,
-    width,
-    tooltip,
-    align,
-    style,
-    name,
-    required = false,
-    readOnly = false,
-    isPrimaryKey = false,
+    Function(PaginatedGridController) onEditIconPressed,
+    bool numeric = false,
+    bool autofocus = false,
+    bool visible = true,
+    int maxLines,
+    Color color,
+    int maxLength,
+    double width,
+    String tooltip,
+    Alignment align,
+    TextStyle style,
+    String name,
+    bool required = false,
+    bool readOnly = false,
+    bool isPrimaryKey = false,
     onSort,
-    placeHolder = false,
-    label,
-    editInfo = '{label}',
+    bool placeHolder = false,
+    String label,
+    String editInfo = '{label}',
     bool sort = true,
-    builder,
-    editBuilder,
-    isVirtual = false,
-    onGetValue,
-    onSetValue,
-    onValidate,
+    Widget Function(int, Map<String, dynamic>) builder,
+    Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
+            Map<String, dynamic>)
+        editBuilder,
+    bool isVirtual = false,
+    String Function(dynamic) onGetValue,
+    final dynamic Function(dynamic) onSetValue,
+    final String Function(dynamic) onValidate,
     folded,
   }) : super(
           onEditIconPressed: onEditIconPressed,
@@ -280,11 +282,12 @@ class DataViewer extends StatefulWidget {
   final Function(dynamic) onSelected;
   final Color evenRowColor; //: widget.evenRowColor,
   final Color oddRowColor; //: widget.oddRowColor,
-
+  final bool oneRowAutoEdit;
   DataViewer({
     Key key,
     this.controller,
     this.child,
+    this.oneRowAutoEdit = false,
     this.keyName,
     this.source,
     this.evenRowColor,
@@ -422,7 +425,7 @@ class _DataViewerState extends State<DataViewer> {
                     actions: widget.actions,
                     onSelectChanged: (widget.onSelected != null)
                         ? (b, ctrl) {
-                            widget.onSelected(ctrl.data);
+                            return widget.onSelected(ctrl.data);
                           }
                         : null,
                     columnSpacing: 10,
@@ -452,6 +455,7 @@ class _DataViewerState extends State<DataViewer> {
                     canInsert: widget.canInsert,
                     canDelete: widget.canDelete,
                     footerHeight: widget.footerHeight,
+                    oneRowAutoEdit: widget.oneRowAutoEdit,
                     futureSource: (controller.future != null)
                         ? controller.future()
                         : null,

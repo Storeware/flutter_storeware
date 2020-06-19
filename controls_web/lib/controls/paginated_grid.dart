@@ -140,6 +140,7 @@ class PaginatedGrid extends StatefulWidget {
 
   /// dados a serem apresentados
   final List<dynamic> source;
+  final bool oneRowAutoEdit;
 
   /// colunas de apresentação dos dados
   final List<PaginatedGridColumn> columns;
@@ -232,6 +233,7 @@ class PaginatedGrid extends StatefulWidget {
     this.editFullPage = false,
     this.availableRowsPerPage,
     this.onRowsPerPageChanged,
+    this.oneRowAutoEdit = false,
     this.footerLeading,
     this.footerHeight = 56,
     this.backgroundColor,
@@ -436,8 +438,9 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                 if (!snapshot.hasData)
                   return Align(child: CircularProgressIndicator());
                 //debugPrint('PaginatedGrid.future.builder');
-                controller.widget = widget;
                 controller.originalSource = snapshot.data;
+
+                controller.widget = widget;
                 if (widget.onSort != null)
                   controller.originalSource.sort((a, b) {
                     return widget.onSort(a, b);
@@ -448,6 +451,15 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                 addVirtualColumn();
                 //debugPrint('column created');
                 if (widget.beforeShow != null) widget.beforeShow(controller);
+
+                if (widget.oneRowAutoEdit &&
+                    (controller.originalSource.length == 1)) {
+                  /// entra em edição automatico.
+                  Timer.run(() {
+                    controller.edit(context, controller.originalSource[0],
+                        title: 'Alteração');
+                  });
+                }
                 return Scaffold(
                   appBar: widget.appBar,
                   floatingActionButton: buildAddButton(),
@@ -655,6 +667,42 @@ class PaginatedGridController {
     return null;
   }
 
+  editPage(
+    context,
+    data, {
+    String title,
+    double width,
+    double height,
+    bool inScaffold = true,
+    PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update,
+  }) {
+    return PaginatedGridEditRow(
+      data: data,
+      width: width,
+      height: height,
+      fullPage: false,
+      controller: this,
+      inScaffold: inScaffold,
+      event: event,
+      actions: [
+        if (widget.canDelete)
+          Tooltip(
+              message: 'Excluir o item',
+              child: IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  this.data = data;
+                  widget
+                      .onPostEvent(this, data, PaginatedGridChangeEvent.delete)
+                      .then((rsp) {
+                    Navigator.pop(context);
+                  });
+                },
+              )),
+      ],
+    );
+  }
+
   edit(BuildContext context, Map<String, dynamic> data,
       {String title,
       double width,
@@ -662,31 +710,8 @@ class PaginatedGridController {
       PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
     return PaginatedGrid.show(context,
         title: title,
-        child: PaginatedGridEditRow(
-          data: data,
-          width: width,
-          height: height,
-          fullPage: false,
-          controller: this,
-          event: event,
-          actions: [
-            if (widget.canDelete)
-              Tooltip(
-                  message: 'Excluir o item',
-                  child: IconButton(
-                    icon: Icon(Icons.delete),
-                    onPressed: () {
-                      this.data = data;
-                      widget
-                          .onPostEvent(
-                              this, data, PaginatedGridChangeEvent.delete)
-                          .then((rsp) {
-                        Navigator.pop(context);
-                      });
-                    },
-                  )),
-          ],
-        ));
+        child: editPage(context, data,
+            title: title, width: width, height: height, event: event));
   }
 
   clear() {
@@ -813,52 +838,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                     setData(index, 0);
                     return (controller.widget.onEditItem != null)
                         ? controller.widget.onEditItem(controller)
-                        : Dialogs.showPage(
-                            controller.context,
-                            child: PaginatedGridEditRow(
-                              fullPage: controller.widget.editFullPage,
-                              width: controller.widget.editSize?.width,
-                              height: controller.widget.editSize?.height,
-                              controller: controller,
-                              event: PaginatedGridChangeEvent.update,
-                              title: 'Alteração',
-                              actions: [
-                                if (controller.widget.canDelete)
-                                  Tooltip(
-                                      message: 'Excluir o item',
-                                      child: IconButton(
-                                        icon: Icon(Icons.delete),
-                                        onPressed: () {
-                                          if (controller.widget.onDeleteItem ==
-                                              null)
-                                            controller.widget
-                                                .onPostEvent(
-                                                    controller,
-                                                    controller.data,
-                                                    PaginatedGridChangeEvent
-                                                        .delete)
-                                                .then((rsp) {
-                                              Navigator.pop(controller.context);
-                                            });
-                                          else
-                                            controller.widget
-                                                .onDeleteItem(controller)
-                                                .then((x) {
-                                              if (x) {
-                                                controller.removeAt(index);
-                                                Timer.run(() {
-                                                  //print('pop');
-                                                  Navigator.pop(
-                                                      controller.context);
-                                                });
-                                                controller.changed(b);
-                                              }
-                                            });
-                                        },
-                                      )),
-                              ],
-                            ),
-                          );
+                        : doEditItem(index, b);
                   }
                 : null,
         cells: [
@@ -938,6 +918,48 @@ class PaginatedGridDataTableSource extends DataTableSource {
     return r;
   }
 
+  doEditItem(index, bool b) {
+    return Dialogs.showPage(
+      controller.context,
+      child: PaginatedGridEditRow(
+        fullPage: controller.widget.editFullPage,
+        width: controller.widget.editSize?.width,
+        height: controller.widget.editSize?.height,
+        controller: controller,
+        event: PaginatedGridChangeEvent.update,
+        title: 'Alteração',
+        actions: [
+          if (controller.widget.canDelete)
+            Tooltip(
+                message: 'Excluir o item',
+                child: IconButton(
+                  icon: Icon(Icons.delete),
+                  onPressed: () {
+                    if (controller.widget.onDeleteItem == null)
+                      controller.widget
+                          .onPostEvent(controller, controller.data,
+                              PaginatedGridChangeEvent.delete)
+                          .then((rsp) {
+                        Navigator.pop(controller.context);
+                      });
+                    else
+                      controller.widget.onDeleteItem(controller).then((x) {
+                        if (x) {
+                          controller.removeAt(index);
+                          Timer.run(() {
+                            //print('pop');
+                            Navigator.pop(controller.context);
+                          });
+                          controller.changed(b);
+                        }
+                      });
+                  },
+                )),
+        ],
+      ),
+    );
+  }
+
   doGetValue(PaginatedGridColumn col, dynamic v) {
     if (col.onGetValue == null) return (v ?? '').toString();
     return col.onGetValue(v);
@@ -962,6 +984,7 @@ class PaginatedGridEditRow extends StatefulWidget {
   final String title;
   final List<Widget> actions;
   final bool fullPage;
+  final bool inScaffold;
   const PaginatedGridEditRow({
     Key key,
     this.event,
@@ -969,6 +992,7 @@ class PaginatedGridEditRow extends StatefulWidget {
     this.data,
     this.width,
     this.fullPage = false,
+    this.inScaffold = true,
     this.height,
     this.title,
     this.actions,
@@ -1027,62 +1051,66 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
     if (alvo < mh) mh = widget.height ?? alvo;
     double mw = widget.width ?? 400;
 
-    return Container(
-      height: (widget.fullPage) ? size.height * 0.95 : mh,
-      constraints: BoxConstraints(
-        maxWidth: (widget.fullPage)
-            ? size.width * 0.95
-            : mw, //  widget.width ?? size.width * 0.95,
-      ),
-      child: Scaffold(
-        appBar:
-            AppBar(title: Text(widget.title ?? ''), actions: widget.actions),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding:
-                EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
-            child: Center(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    for (var item in widget.controller.columns)
-                      if (!item.isVirtual)
-                        (item.editBuilder != null)
-                            ? item.editBuilder(
-                                widget.controller, item, p[item.name], p)
-                            : Container(
-                                alignment: Alignment.center,
-                                width: 300,
-                                //height: 56,
-                                child: createFormField(item),
-                              ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                        width: 120,
-                        height: kMinInteractiveDimension,
-                        alignment: Alignment.center,
-                        //color: Colors.blue,
-                        child: StrapButton(
-                          text: 'Salvar',
-                          onPressed: () {
-                            _save(context);
-                          },
-                        )),
-                    SizedBox(
-                      height: 80,
-                    ),
-                  ],
-                ),
-              ),
+    return (!widget.inScaffold)
+        ? buildPage()
+        : Container(
+            height: (widget.fullPage) ? size.height * 0.95 : mh,
+            constraints: BoxConstraints(
+              maxWidth: (widget.fullPage)
+                  ? size.width * 0.95
+                  : mw, //  widget.width ?? size.width * 0.95,
             ),
+            child: Scaffold(
+              appBar: AppBar(
+                  title: Text(widget.title ?? ''), actions: widget.actions),
+              body: SingleChildScrollView(child: buildPage()),
+            ),
+            // ),
+            //),
+          );
+  }
+
+  Widget buildPage() {
+    return Padding(
+      padding: EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
+      child: Center(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              for (var item in widget.controller.columns)
+                if (!item.isVirtual)
+                  (item.editBuilder != null)
+                      ? item.editBuilder(
+                          widget.controller, item, p[item.name], p)
+                      : Container(
+                          alignment: Alignment.center,
+                          width: 300,
+                          //height: 56,
+                          child: createFormField(item),
+                        ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                  width: 120,
+                  height: kMinInteractiveDimension,
+                  alignment: Alignment.center,
+                  //color: Colors.blue,
+                  child: StrapButton(
+                    text: 'Salvar',
+                    onPressed: () {
+                      _save(context);
+                    },
+                  )),
+              SizedBox(
+                height: 80,
+              ),
+            ],
           ),
         ),
-        // ),
       ),
     );
   }

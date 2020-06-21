@@ -143,12 +143,13 @@ class CleanContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    var _selectedColor = selectedColor ?? theme.dividerColor;
+    var _selectedColor = selectedColor ?? Colors.grey.shade300;
+    var _color = color ?? theme.scaffoldBackgroundColor;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: (selected) ? _selectedColor : color,
+        color: (selected) ? _selectedColor : _color,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(leftRadius ?? radius ?? 10),
           topRight: Radius.circular(rightRadius ?? radius ?? 10),

@@ -114,6 +114,8 @@ class CleanButton extends StatelessWidget {
 class CleanContainer extends StatelessWidget {
   final Widget child;
   final Color color;
+  final bool selected;
+  final Color selectedColor;
   final double radius;
   final double leftRadius;
   final double rightRadius;
@@ -132,6 +134,8 @@ class CleanContainer extends StatelessWidget {
     this.height,
     this.leftRadius,
     this.rightRadius,
+    this.selected = false,
+    this.selectedColor,
     this.border,
     this.borderColor,
   }) : super(key: key);
@@ -139,11 +143,12 @@ class CleanContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    var _selectedColor = selectedColor ?? theme.dividerColor;
     return Container(
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: color,
+        color: (selected) ? _selectedColor : color,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(leftRadius ?? radius ?? 10),
           topRight: Radius.circular(rightRadius ?? radius ?? 10),
@@ -178,8 +183,20 @@ class ActionButton extends StatelessWidget {
   final Function() onPressed;
   final Color color;
   final TextStyle style;
+  final bool selected;
+  final Color selectedColor;
+  final double width;
+  final double height;
   const ActionButton(
-      {Key key, this.label, this.onPressed, this.color, this.style})
+      {Key key,
+      this.label,
+      this.onPressed,
+      this.color,
+      this.selectedColor,
+      this.style,
+      this.width,
+      this.height,
+      this.selected = false})
       : super(key: key);
 
   @override
@@ -190,7 +207,8 @@ class ActionButton extends StatelessWidget {
       onTap: onPressed,
       child: CleanContainer(
         radius: 30,
-        color: color,
+        width: width, height: height,
+        color: (selected) ? selectedColor ?? theme.dividerColor : color,
         // label: label,
         // labelColor: Colors.black87,
         // onPressed: onPressed,
@@ -204,6 +222,7 @@ class ActionButton extends StatelessWidget {
                 theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w300),
             child: Text(
               label,
+              textAlign: TextAlign.center,
             ),
           ),
         ),

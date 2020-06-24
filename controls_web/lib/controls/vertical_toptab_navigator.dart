@@ -7,12 +7,14 @@ class VerticalToptabNavigator extends StatefulWidget {
   final int initialIndex;
   final Color indicatorColor;
   final Color selectedColor;
+  final List<Widget> actions;
   VerticalToptabNavigator(
       {Key key,
       @required this.choices,
       this.onSelectItem,
       this.initialIndex = 0,
       this.selectedColor,
+      this.actions,
       this.indicatorColor = Colors.amber})
       : super(key: key);
 
@@ -66,7 +68,8 @@ class _VerticalToptabNavigatorState extends State<VerticalToptabNavigator> {
                   active.value = index;
                 },
               ),
-            )
+            ),
+          if (widget.actions != null) ...widget.actions,
         ]),
       ),
     );

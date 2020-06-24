@@ -4,6 +4,7 @@ export 'src/string_extensions.dart';
 export 'src/double_extensions.dart';
 export 'src/datetime_extensions.dart';
 export 'src/object_extensions.dart';
+export 'src/color_extensions.dart';
 
 extension DynamicExtension on dynamic {
   String toStr(value, {def = ''}) {
@@ -40,5 +41,4 @@ extension DynamicExtension on dynamic {
     if (value is DateTime) return value;
     return def ?? DateTime.now();
   }
-
 }

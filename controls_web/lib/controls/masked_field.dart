@@ -534,6 +534,7 @@ class MaskedSwitchFormField extends StatefulWidget {
   final Function(bool) onChanged;
   final Widget leading;
   final Widget trailing;
+  final bool readOnly;
   MaskedSwitchFormField({
     Key key,
     this.value,
@@ -541,6 +542,7 @@ class MaskedSwitchFormField extends StatefulWidget {
     this.activeTrackColor,
     this.activeColor,
     this.autofocus = false,
+    this.readOnly = false,
     this.onChanged,
     this.leading,
     this.trailing,
@@ -573,8 +575,10 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
                 activeTrackColor: widget.activeTrackColor,
                 autofocus: widget.autofocus,
                 onChanged: (b) {
-                  if (widget.onChanged != null) widget.onChanged(b);
-                  initialValue.value = b;
+                  if (!widget.readOnly) {
+                    if (widget.onChanged != null) widget.onChanged(b);
+                    initialValue.value = b;
+                  }
                 });
           }),
       if (widget.trailing != null) widget.trailing

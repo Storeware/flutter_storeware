@@ -32,12 +32,13 @@ extension DynamicExtension on dynamic {
     return def;
   }
 
-  DateTime toDateTime(value, {DateTime def}) {
+  DateTime toDateTime(value, {DateTime def, int z = -3}) {
     if (value is String) {
-      int dif = (value.endsWith('Z')) ? -3 : 0;
+      int dif = (value.endsWith('Z')) ? z : 0;
       return DateTime.tryParse(value).add(Duration(hours: dif));
     }
     if (value is DateTime) return value;
     return def ?? DateTime.now();
   }
+
 }

@@ -310,6 +310,8 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
   }
 }
 
+enum MaskedDatePickerType { day, time, dayAndTime }
+
 class MaskedDatePicker extends StatefulWidget {
   final DateTime initialValue;
   final Function(DateTime) validator;
@@ -320,6 +322,7 @@ class MaskedDatePicker extends StatefulWidget {
   final Widget prefix;
   final DateTime firstDate;
   final DateTime lastDate;
+  final MaskedDatePickerType type;
   final TextEditingController controller;
   MaskedDatePicker(
       {Key key,
@@ -329,6 +332,7 @@ class MaskedDatePicker extends StatefulWidget {
       this.format = "dd/MM/yyyy",
       this.validator,
       this.prefix,
+      this.type = MaskedDatePickerType.day,
       this.onChanged,
       this.firstDate,
       this.lastDate,
@@ -375,7 +379,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
                 })),
         validator: (x) {
           DateTime d = formatter.parse(x);
-          DateTime b = formatter.parse(x);
+          //DateTime b = formatter.parse(x);
           // debugPrint('init Validate $x $d');
           if (widget.firstDate != null) if (widget.firstDate.isAfter(d))
             d = widget.firstDate;
@@ -388,11 +392,32 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
           return null;
         },
         onTap: () {
-          getDate().then((x) {
-            _dataController.text = formatter.format(x);
+          if (widget.type == MaskedDatePickerType.day)
+            getDate().then((x) {
+              _dataController.text = formatter.format(x);
 
-            if (widget.onChanged != null) widget.onChanged(x);
-          });
+              if (widget.onChanged != null) widget.onChanged(x);
+            });
+          if (widget.type == MaskedDatePickerType.time)
+            getTime().then((TimeOfDay h) {
+              var d1 = formatter.parse(_dataController.text);
+              var d = DateTime(d1.year, d1.month, d1.day)
+                  .add(Duration(hours: h.hour))
+                  .add(Duration(minutes: h.minute));
+              _dataController.text = formatter.format(d);
+              if (widget.onChanged != null) widget.onChanged(d);
+            });
+          if (widget.type == MaskedDatePickerType.dayAndTime)
+            getDate().then((x) {
+              var d1 = x;
+              getTime().then((h) {
+                var d = DateTime(d1.year, d1.month, d1.day)
+                    .add(Duration(hours: h.hour))
+                    .add(Duration(minutes: h.minute));
+                _dataController.text = formatter.format(d);
+                if (widget.onChanged != null) widget.onChanged(d);
+              });
+            });
         },
         onChanged: (x) {
           widget.onChanged(formatter.parse(x));
@@ -409,8 +434,22 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
     return showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: widget.firstDate ?? DateTime.now().add(Duration(days: 180)),
+      firstDate: widget.firstDate ?? DateTime.now().add(Duration(days: -180)),
       lastDate: widget.lastDate ?? DateTime(2030),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.light(),
+          child: child,
+        );
+      },
+    );
+  }
+
+  Future<TimeOfDay> getTime() {
+    return showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(
+          hour: widget.initialValue.hour, minute: widget.initialValue.minute),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.light(),

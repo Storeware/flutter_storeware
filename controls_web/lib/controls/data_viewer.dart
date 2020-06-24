@@ -486,7 +486,5 @@ class _DataViewerState extends State<DataViewer> {
             ),
           );
         });
-    
-    
   }
 }

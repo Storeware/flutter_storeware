@@ -80,18 +80,18 @@ class PaginatedGridColumn {
   bool required;
   bool readOnly;
   bool isPrimaryKey;
-  final DataColumnSortCallback onSort;
+  DataColumnSortCallback onSort;
   bool visible;
   final double width;
-  final String Function(dynamic) onGetValue;
-  final dynamic Function(dynamic) onSetValue;
-  final String Function(dynamic) onValidate;
-  final Widget Function(int, Map<String, dynamic>) builder;
+  String Function(dynamic) onGetValue;
+  dynamic Function(dynamic) onSetValue;
+  String Function(dynamic) onValidate;
+  Widget Function(int, Map<String, dynamic>) builder;
   String tooltip;
-  final Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
+  Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
       Map<String, dynamic>) editBuilder;
 
-  final Function(PaginatedGridController) onEditIconPressed;
+  Function(PaginatedGridController) onEditIconPressed;
   bool autofocus;
   int maxLines;
   int maxLength;
@@ -347,9 +347,6 @@ class _PaginatedGridState extends State<PaginatedGrid> {
             else
               controller.source[x.currentRow] = x.data;
 
-//            if (controller.widget.onSort != null)
-//              controller.source.sort((a, b) => controller.widget.onSort(a, b));
-
             controller.changed(true);
           }
           return b;
@@ -377,8 +374,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
     Map<String, dynamic> row = source.first;
     if (row != null)
       row.forEach((k, v) {
-        controller.columns
-            .add(PaginatedGridColumn(name: k, label: k.toCapital()));
+        controller.columns.add(PaginatedGridColumn(
+            name: k, label: k.replaceAll('_', ' ').toCapital()));
       });
   }
 
@@ -402,22 +399,12 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   }
 
   addVirtualColumn() {
-    /*
-    int count = 0; // (widget.onEditItem == null) ? 0 : 1;
-    controller.columns.forEach((col) {
-      if (col.isVirtual) count ;
-    });
-    if (count > 0)
-      controller.columns
-          .add(PaginatedGridColumn(isVirtual: true, label: '', sort: false));
-*/
     for (var i = 0; i < controller.columns.length; i++) {
       controller.columns[i].index = i;
     }
   }
 
   doRefresh() {
-    //print('doRefresh');
     setState(() {
       widget.onRefresh(controller);
     });
@@ -437,7 +424,6 @@ class _PaginatedGridState extends State<PaginatedGrid> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData)
                   return Align(child: CircularProgressIndicator());
-                //debugPrint('PaginatedGrid.future.builder');
                 controller.originalSource = snapshot.data;
 
                 controller.widget = widget;
@@ -445,11 +431,9 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                   controller.originalSource.sort((a, b) {
                     return widget.onSort(a, b);
                   });
-                //print('girdRows: ${controller.originalSource.length}');
                 if ((controller.columns ?? []).length == 0)
                   createColumns(snapshot.data);
                 addVirtualColumn();
-                //debugPrint('column created');
                 if (widget.beforeShow != null) widget.beforeShow(controller);
 
                 if (widget.oneRowAutoEdit &&
@@ -581,8 +565,6 @@ class _PaginatedGridState extends State<PaginatedGrid> {
     return Padding(
       padding: const EdgeInsets.only(left: 14, right: 60),
       child: Container(
-        //constraints:
-        //BoxConstraints(maxWidth: MediaQuery.of(context).size.width - 60),
         child: Align(
           alignment: Alignment.centerLeft,
           child: Row(children: [

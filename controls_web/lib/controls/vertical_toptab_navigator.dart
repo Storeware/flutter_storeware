@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-
-class TabChoice {
-  Widget Function() builder;
-  String text;
-  bool visible;
-  TabChoice({this.builder, this.text, this.visible = true});
-}
+import 'tab_choice.dart';
 
 class VerticalToptabNavigator extends StatefulWidget {
   final List<TabChoice> choices;

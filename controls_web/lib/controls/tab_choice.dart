@@ -6,5 +6,12 @@ class TabChoice {
   Widget title;
   bool visible;
   int index;
-  TabChoice({this.builder, this.text, this.visible = true});
+  Widget image;
+  TabChoice(
+      {this.builder,
+      this.image,
+      this.title,
+      this.index,
+      this.text,
+      this.visible = true});
 }

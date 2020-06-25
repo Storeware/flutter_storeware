@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-class TabChoice {
+class TabChoice<T> {
+  T data;
   Widget Function() builder;
   String label;
   Widget title;
@@ -13,6 +14,7 @@ class TabChoice {
   bool primary;
   TabChoice(
       {this.builder,
+      this.data,
       this.image,
       this.title,
       this.index,
@@ -22,5 +24,5 @@ class TabChoice {
       this.selectedIcon,
       this.primary = false,
       this.visible = true})
-      : assert(((child != null) || (builder != null)));
+      : assert(builder != null || child != null);
 }

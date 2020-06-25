@@ -287,7 +287,7 @@ class TimeAgo {
         case Language.PORTUGUESE:
           return (difference / MONTH_MILLIS < 2)
               ? "um mês atrás"
-              : "${(difference / MONTH_MILLIS).toString().split(".")[0]} meses antes";
+              : "${(difference / MONTH_MILLIS).toString().split(".")[0]} meses atrás";
         case Language.JAPANESE:
           return (difference / MONTH_MILLIS < 2)
               ? "一ヶ月前"

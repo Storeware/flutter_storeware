@@ -12,6 +12,7 @@ class TabChoice<T> {
   IconData icon;
   IconData selectedIcon;
   bool primary;
+  Widget trailing;
   TabChoice(
       {this.builder,
       this.data,
@@ -21,6 +22,7 @@ class TabChoice<T> {
       this.label,
       this.child,
       this.icon,
+      this.trailing,
       this.selectedIcon,
       this.primary = false,
       this.visible = true})

@@ -1,8 +1,8 @@
 import 'package:controls_web/controls/tab_choice.dart';
 import 'package:flutter/material.dart';
 
-class HorizontalTab extends StatefulWidget {
-  final List<TabChoice> choices;
+class HorizontalTab<T> extends StatefulWidget {
+  final List<TabChoice<T>> choices;
   final double width;
   final int initialIndex;
   final Color indicatorColor;
@@ -12,7 +12,7 @@ class HorizontalTab extends StatefulWidget {
   final Widget header;
   final Widget body;
 
-  final Function(int, TabChoice) onSelectItem;
+  final Function(int, TabChoice<T>) onSelectItem;
   const HorizontalTab({
     Key key,
     this.choices,
@@ -43,6 +43,9 @@ class _HorizontalTabState extends State<HorizontalTab> {
     selectedColor =
         widget.selectedColor ?? color.withOpacity(0.5); //color.withAlpha(100);
     _index = ValueNotifier<int>(widget.initialIndex);
+    if (widget.initialIndex >= 0) if (widget.onSelectItem != null)
+      widget.onSelectItem(
+          widget.initialIndex, widget.choices[widget.initialIndex]);
     return Container(
       width: widget.width,
       child: Column(
@@ -64,6 +67,7 @@ class _HorizontalTabState extends State<HorizontalTab> {
 
   buildItem(idx) {
     TabChoice tab = widget.choices[idx];
+    if (tab.icon != null) tab.image = Icon(tab.icon);
     return GestureDetector(
       child: ValueListenableBuilder(
         valueListenable: _index,
@@ -94,6 +98,7 @@ class _HorizontalTabState extends State<HorizontalTab> {
                               textAlign: TextAlign.center,
                             )),
                     if (tab.image != null) Expanded(child: Container()),
+                    if (tab.trailing != null) tab.trailing
                   ],
                 )),
                 Container(

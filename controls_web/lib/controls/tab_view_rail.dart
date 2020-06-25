@@ -1,21 +1,5 @@
 import 'package:flutter/material.dart';
-
-class TabChoice {
-  IconData icon;
-  IconData selectedIcon;
-  String label;
-  Widget child;
-  Widget image;
-  int index;
-  TabChoice({
-    this.icon,
-    this.image,
-    this.selectedIcon,
-    this.label,
-    this.index,
-    this.child,
-  });
-}
+import 'package:controls_web/controls/tab_choice.dart';
 
 enum TabViewRailPosition { left, rigth }
 

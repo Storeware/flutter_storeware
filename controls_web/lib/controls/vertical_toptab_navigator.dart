@@ -54,10 +54,10 @@ class _VerticalToptabNavigatorState extends State<VerticalToptabNavigator> {
                           Expanded(
                               child: Align(
                                   alignment: Alignment.center,
-                                  child: Text(widget.choices[index].text))),
+                                  child: Text(widget.choices[index].label))),
                           Container(
                               height: 2,
-                              width: widget.choices[index].text.length * 14.0,
+                              width: widget.choices[index].label.length * 14.0,
                               color: (active.value == index)
                                   ? widget.indicatorColor
                                   : null)

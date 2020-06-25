@@ -1,22 +1,6 @@
 import 'package:controls_web/controls/responsive.dart';
 import 'package:flutter/material.dart';
-
-class TabChoice {
-  final Widget child;
-  final IconData icon;
-  final String title;
-  final int index;
-  final Widget image;
-  final bool primary;
-  TabChoice({
-    this.icon,
-    this.child,
-    this.title,
-    this.image,
-    this.index,
-    this.primary = false,
-  });
-}
+import 'package:controls_web/controls/tab_choice.dart';
 
 enum HorizontalTabViewSiderBarType { hide, compact, show }
 
@@ -123,13 +107,14 @@ class HorizontalTabView extends StatelessWidget {
                                                   Icon(choices[index].icon,
                                                       color: iconColor),
                                                 if (_index.value == index)
-                                                  Text(choices[index].title,
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        color: iconColor,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      )),
+                                                  choices[index].title ??
+                                                      Text(choices[index].label,
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: iconColor,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          )),
                                               ],
                                             ),
                                             onPressed: () {
@@ -151,9 +136,10 @@ class HorizontalTabView extends StatelessWidget {
                                                           choices[index].icon,
                                                           color: iconColor,
                                                         ),
-                                              title: Text(choices[index].title,
-                                                  style: TextStyle(
-                                                      color: iconColor)),
+                                              title: choices[index].title ??
+                                                  Text(choices[index].label,
+                                                      style: TextStyle(
+                                                          color: iconColor)),
                                               onTap: () {
                                                 _index.value = index;
                                               },
@@ -167,7 +153,12 @@ class HorizontalTabView extends StatelessWidget {
                     Expanded(
                       child: Scaffold(
                           backgroundColor: Colors.transparent,
-                          body: choices[_index.value].child),
+                          body: Builder(builder: (x) {
+                            if (choices[_index.value].child == null)
+                              choices[_index.value].child =
+                                  choices[_index.value].builder();
+                            return choices[_index.value].child;
+                          })),
                     )
                   ],
                 ),
@@ -215,16 +206,18 @@ class HorizontalTabView extends StatelessWidget {
                                           theme
                                               .primaryTextTheme.bodyText1.color,
                                     ),
-                                Text(
-                                  tab.title,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500,
-                                    color: iconColor ??
-                                        theme.primaryTextTheme.bodyText1.color,
-                                  ),
-                                ),
+                                tab.title ??
+                                    Text(
+                                      tab.label,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: iconColor ??
+                                            theme.primaryTextTheme.bodyText1
+                                                .color,
+                                      ),
+                                    ),
                               ],
                             ),
                           ),
@@ -233,20 +226,27 @@ class HorizontalTabView extends StatelessWidget {
                           if (tab.primary)
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (x) => tab.child),
+                              MaterialPageRoute(builder: (x) {
+                                if (tab.child == null)
+                                  tab.child = tab.builder();
+                                return tab.child;
+                              }),
                             );
                           else
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                builder: (x) => Scaffold(
+                              MaterialPageRoute(builder: (x) {
+                                if (tab.child == null)
+                                  tab.child = tab.builder();
+                                return Scaffold(
                                   appBar: AppBar(
-                                      title: Text(
-                                    tab.title,
-                                  )),
+                                      title: tab.title ??
+                                          Text(
+                                            tab.label,
+                                          )),
                                   body: tab.child,
-                                ),
-                              ),
+                                );
+                              }),
                             );
                         },
                       ));

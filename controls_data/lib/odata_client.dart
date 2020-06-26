@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 
 import 'rest_client.dart';
@@ -555,6 +555,8 @@ abstract class ODataModelClass<T extends DataItem> {
     return dados;
   }
 
+  afterChangeEvent(item) {}
+
   post(item) async {
     var d;
     if (item is T)
@@ -565,6 +567,7 @@ abstract class ODataModelClass<T extends DataItem> {
       d = removeExternalKeys(d);
       return API.post(collectionName, d).then((x) {
         if (CC != null) CC.post(collectionName, d);
+        afterChangeEvent(d);
         return x;
       });
     } catch (e) {
@@ -584,6 +587,7 @@ abstract class ODataModelClass<T extends DataItem> {
       d = removeExternalKeys(d);
       return API.put(collectionName, d).then((x) {
         if (CC != null) CC.put(collectionName, d);
+        afterChangeEvent(d);
         return x;
       });
     } catch (e) {

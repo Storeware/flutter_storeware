@@ -6,6 +6,7 @@ class HorizontalTab<T> extends StatefulWidget {
   final double width;
   final int initialIndex;
   final Color indicatorColor;
+  final Color iconColor;
   final Color color;
   final Color selectedColor;
   final Widget footer;
@@ -21,6 +22,7 @@ class HorizontalTab<T> extends StatefulWidget {
     this.indicatorColor = Colors.amber,
     this.onSelectItem,
     this.color,
+    this.iconColor,
     this.selectedColor,
     this.footer,
     this.header,
@@ -36,9 +38,11 @@ class _HorizontalTabState extends State<HorizontalTab> {
   get index => _index.value;
   Color color;
   Color selectedColor;
+  Color _iconColor;
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    _iconColor = widget.iconColor ?? Colors.black87;
     color = widget.color ?? theme.primaryColor;
     selectedColor =
         widget.selectedColor ?? color.withOpacity(0.5); //color.withAlpha(100);
@@ -67,7 +71,7 @@ class _HorizontalTabState extends State<HorizontalTab> {
 
   buildItem(idx) {
     TabChoice tab = widget.choices[idx];
-    if (tab.icon != null) tab.image = Icon(tab.icon);
+    if (tab.icon != null) tab.image = Icon(tab.icon, color: _iconColor);
     return GestureDetector(
       child: ValueListenableBuilder(
         valueListenable: _index,
@@ -93,10 +97,9 @@ class _HorizontalTabState extends State<HorizontalTab> {
                         //width: double.maxFinite,
                         alignment: Alignment.center,
                         child: tab.title ??
-                            Text(
-                              tab.label,
-                              textAlign: TextAlign.center,
-                            )),
+                            Text(tab.label,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(color: _iconColor))),
                     if (tab.image != null) Expanded(child: Container()),
                     if (tab.trailing != null) tab.trailing
                   ],

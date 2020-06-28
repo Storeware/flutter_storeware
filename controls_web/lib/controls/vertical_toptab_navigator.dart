@@ -1,35 +1,131 @@
+import 'package:controls_web/controls/tab_choice.dart';
 import 'package:flutter/material.dart';
-import 'tab_choice.dart';
+//import 'tab_choice.dart';
 
-class VerticalToptabNavigator extends StatefulWidget {
+class VerticalTopTabNavigatorController {
+  _VerticalTopTabNavigatorState parent;
+  animateTo(index) => parent.animateTo(index);
+  get activeIndex => parent.activeIndex;
+}
+
+class VerticalTopTabView extends StatefulWidget {
+  final List<Widget> actions;
+  final List<TabChoice> choices;
+  final VerticalTopTabNavigatorController controller;
+  final int initialIndex;
+  final Color iconColor;
+  final TextStyle style;
+  final Color indicatorColor;
+  final Color selectedColor;
+
+  const VerticalTopTabView(
+      {Key key,
+      this.initialIndex = 0,
+      this.indicatorColor = Colors.amber,
+      this.selectedColor,
+      this.actions,
+      this.choices,
+      this.controller,
+      this.iconColor,
+      this.style})
+      : super(key: key);
+
+  @override
+  _VerticalTopTabViewState createState() => _VerticalTopTabViewState();
+}
+
+class _VerticalTopTabViewState extends State<VerticalTopTabView> {
+  VerticalTopTabNavigatorController controller;
+  ValueNotifier<Widget> _child;
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller ?? VerticalTopTabNavigatorController();
+    _child = ValueNotifier<Widget>(Container());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        VerticalTopTabNavigator(
+          actions: widget.actions,
+          choices: widget.choices,
+          controller: controller,
+          iconColor: widget.iconColor,
+          initialIndex: widget.initialIndex,
+          indicatorColor: widget.indicatorColor,
+          selectedColor: widget.selectedColor,
+          onSelectItem: (index, tab) {
+            if (tab.child == null) tab.child = tab.builder();
+            _child.value = tab.child;
+          },
+        ),
+        Expanded(
+            child: ValueListenableBuilder<Widget>(
+                valueListenable: _child,
+                builder: (a, widget, c) => _child.value ?? Container())),
+      ],
+    );
+  }
+}
+
+class VerticalTopTabNavigator extends StatefulWidget {
   final List<TabChoice> choices;
   final Function(int, TabChoice) onSelectItem;
   final int initialIndex;
   final Color indicatorColor;
   final Color selectedColor;
   final List<Widget> actions;
-  VerticalToptabNavigator(
+  final Color tabColor;
+  final Color iconColor;
+  final TextStyle style;
+  final VerticalTopTabNavigatorController controller;
+  VerticalTopTabNavigator(
       {Key key,
       @required this.choices,
       this.onSelectItem,
       this.initialIndex = 0,
       this.selectedColor,
       this.actions,
-      this.indicatorColor = Colors.amber})
+      this.controller,
+      this.indicatorColor = Colors.amber,
+      this.iconColor,
+      this.style,
+      this.tabColor})
       : super(key: key);
 
   @override
-  _VerticalToptabNavigatorState createState() =>
-      _VerticalToptabNavigatorState();
+  _VerticalTopTabNavigatorState createState() =>
+      _VerticalTopTabNavigatorState();
 }
 
-class _VerticalToptabNavigatorState extends State<VerticalToptabNavigator> {
+class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   ValueNotifier<int> active;
+  VerticalTopTabNavigatorController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = widget.controller ?? VerticalTopTabNavigatorController();
+    controller.parent = this;
+  }
+
+  animateTo(index) {
+    widget.onSelectItem(index, widget.choices[index]);
+    active.value = index;
+  }
+
+  get activeIndex => active.value;
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    Color _iconColor = widget.iconColor ?? theme.primaryColor;
+    Color _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
+    Color _selectedColor =
+        widget.selectedColor ?? theme.scaffoldBackgroundColor;
     if (active == null) {
-      active = ValueNotifier<int>(widget.initialIndex);
+      active = ValueNotifier<int>(widget.initialIndex ?? 0);
       if (active.value >= 0)
         widget.onSelectItem(active.value, widget.choices[active.value]);
     }
@@ -43,9 +139,8 @@ class _VerticalToptabNavigatorState extends State<VerticalToptabNavigator> {
           Expanded(child: Container()),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
-              color: (active.value == index) ? widget.selectedColor : null,
+              color: (active.value == index) ? _selectedColor : _tabColor,
               child: InkWell(
-                //color: (active.value == index) ? widget.selectedColor : null,
                 child: (!widget.choices[index].visible)
                     ? Container()
                     : Column(
@@ -54,7 +149,9 @@ class _VerticalToptabNavigatorState extends State<VerticalToptabNavigator> {
                           Expanded(
                               child: Align(
                                   alignment: Alignment.center,
-                                  child: Text(widget.choices[index].label))),
+                                  child: Text(widget.choices[index].label,
+                                      style: widget.style ??
+                                          TextStyle(color: _iconColor)))),
                           Container(
                               height: 2,
                               width: widget.choices[index].label.length * 14.0,

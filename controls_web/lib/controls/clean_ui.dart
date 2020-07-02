@@ -114,9 +114,8 @@ class CleanButton extends StatelessWidget {
 class CleanContainer extends StatelessWidget {
   final Widget child;
   final Color color;
-  final bool selected;
-  final Color selectedColor;
   final double radius;
+  final EdgeInsets padding;
   final double leftRadius;
   final double rightRadius;
   final double width;
@@ -134,29 +133,35 @@ class CleanContainer extends StatelessWidget {
     this.height,
     this.leftRadius,
     this.rightRadius,
-    this.selected = false,
-    this.selectedColor,
     this.border,
     this.borderColor,
+    this.padding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    var _selectedColor = selectedColor ?? Colors.grey.shade300;
-    var _color = color ?? theme.scaffoldBackgroundColor;
     return Container(
       width: width,
       height: height,
+      padding: padding,
       decoration: BoxDecoration(
-        color: (selected) ? _selectedColor : _color,
+        color: color,
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(leftRadius ?? radius ?? 10),
-          topRight: Radius.circular(rightRadius ?? radius ?? 10),
-          bottomLeft: Radius.circular(leftRadius ?? radius ?? 10),
-          bottomRight: Radius.circular(rightRadius ?? radius ?? 10),
+          topLeft: ((leftRadius ?? 0) < 0)
+              ? Radius.zero
+              : Radius.circular(leftRadius ?? radius ?? 10),
+          topRight: ((rightRadius ?? 0) < 0)
+              ? Radius.zero
+              : Radius.circular(rightRadius ?? radius ?? 10),
+          bottomLeft: ((leftRadius ?? 0) < 0)
+              ? Radius.zero
+              : Radius.circular(leftRadius ?? radius ?? 10),
+          bottomRight: ((rightRadius ?? 0) < 0)
+              ? Radius.zero
+              : Radius.circular(rightRadius ?? radius ?? 10),
         ),
-        border: (border == null)
+        border: ((border ?? 0) == 0)
             ? null
             : Border.all(
                 color: borderColor ??
@@ -183,36 +188,36 @@ class ActionButton extends StatelessWidget {
   final String label;
   final Function() onPressed;
   final Color color;
+  final Color selectedColor;
   final TextStyle style;
   final bool selected;
-  final Color selectedColor;
-  final double width;
-  final double height;
+  final double radius;
+  final Color borderColor;
   const ActionButton(
       {Key key,
       this.label,
       this.onPressed,
       this.color,
-      this.selectedColor,
       this.style,
-      this.width,
-      this.height,
-      this.selected = false})
+      this.radius = 12,
+      this.selected = false,
+      this.selectedColor = Colors.grey,
+      this.borderColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return InkWell(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(radius),
       onTap: onPressed,
       child: CleanContainer(
-        radius: 30,
-        width: width, height: height,
-        color: (selected) ? selectedColor ?? theme.dividerColor : color,
+        radius: radius,
+        color: (selected) ? selectedColor : color,
         // label: label,
         // labelColor: Colors.black87,
         // onPressed: onPressed,
+        borderColor: borderColor ?? theme.primaryColor,
         border: 1,
         elevation: 0,
         //child: FlatButton(
@@ -223,7 +228,6 @@ class ActionButton extends StatelessWidget {
                 theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w300),
             child: Text(
               label,
-              textAlign: TextAlign.center,
             ),
           ),
         ),
@@ -330,17 +334,18 @@ class LabeledColumn extends StatelessWidget {
       ];
 }
 
-class ButtonAvatar extends StatelessWidget {
+class AvatarButton extends StatelessWidget {
   final Widget icon;
   final String label;
   final Widget child;
   final Widget footer;
   final double width;
   final Color color;
+  final double border;
   final Color avatarBackgoundColor;
   final Color avatarForegoundColor;
   final Function() onPressed;
-  const ButtonAvatar(
+  const AvatarButton(
       {Key key,
       this.icon,
       this.label,
@@ -350,7 +355,8 @@ class ButtonAvatar extends StatelessWidget {
       this.width,
       this.color,
       this.avatarBackgoundColor,
-      this.avatarForegoundColor})
+      this.avatarForegoundColor,
+      this.border = 1})
       : super(key: key);
 
   @override
@@ -367,7 +373,8 @@ class ButtonAvatar extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return CleanContainer(
       elevation: 0,
-      border: 0,
+      border: border,
+      borderColor: theme.primaryColor,
       color: color,
       width: width,
       child: Padding(

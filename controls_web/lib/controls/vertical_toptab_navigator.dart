@@ -139,6 +139,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           Expanded(child: Container()),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
+              padding: EdgeInsets.only(left: 8, right: 8),
               color: (active.value == index) ? _selectedColor : _tabColor,
               child: InkWell(
                 child: (!widget.choices[index].visible)
@@ -151,10 +152,12 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                   alignment: Alignment.center,
                                   child: Text(widget.choices[index].label,
                                       style: widget.style ??
-                                          TextStyle(color: _iconColor)))),
+                                          TextStyle(
+                                              color: _iconColor,
+                                              fontSize: 14)))),
                           Container(
                               height: 2,
-                              width: widget.choices[index].label.length * 14.0,
+                              width: widget.choices[index].label.length * 8.0,
                               color: (active.value == index)
                                   ? widget.indicatorColor
                                   : null)

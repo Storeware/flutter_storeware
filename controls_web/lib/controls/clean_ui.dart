@@ -258,29 +258,38 @@ class LabeledRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        title ??
-            Text(label ?? '',
-                style: theme.textTheme
-                    .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
-        SizedBox(
-          height: 5,
-        ),
-        DefaultTextStyle(
-          style: (style ?? theme.textTheme.subtitle2).copyWith(
-              fontWeight: FontWeight.w300,
-              color: theme.textTheme.subtitle2.color),
-          child: SafeArea(
-            child: Row(
-                mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
-                children: [for (var item in children) ...doitem(item)]),
-          ),
-        ),
-      ],
-    );
+    return Container(
+        width: double.maxFinite,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (title != null) title,
+            if (label != null) ...[
+              Text(label ?? '',
+                  style: theme.textTheme
+                      .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
+              SizedBox(
+                height: 5,
+              )
+            ],
+            DefaultTextStyle(
+              style: (style ?? theme.textTheme.subtitle2).copyWith(
+                  fontWeight: FontWeight.w300,
+                  color: theme.textTheme.subtitle2.color),
+              child: SafeArea(
+                child: Wrap(
+                    //alignment: WrapAlignment.start,
+                    //crossAxisAlignment: WrapCrossAlignment.start,
+                    //runAlignment: WrapAlignment.start,
+                    //mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
+                    direction: Axis.horizontal,
+                    children: [for (var item in children) ...doitem(item)]),
+              ),
+            ),
+          ],
+        ));
   }
 
   doitem(item) => [
@@ -308,13 +317,15 @@ class LabeledColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          title ??
-              Text(label ?? '',
-                  style: theme.textTheme
-                      .headline6), //.copyWith(fontWeight: FontWeight.bold)),
-          SizedBox(
-            height: 5,
-          ),
+          if (title != null) title,
+          if (label != null) ...[
+            Text(label ?? '',
+                style: theme.textTheme
+                    .headline6), //.copyWith(fontWeight: FontWeight.bold)),
+            SizedBox(
+              height: 5,
+            )
+          ],
           DefaultTextStyle(
             style:
                 theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w300),

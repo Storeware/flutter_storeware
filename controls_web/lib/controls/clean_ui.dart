@@ -208,12 +208,13 @@ class ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    Color _color = color ?? theme.buttonColor;
     return InkWell(
       borderRadius: BorderRadius.circular(radius),
       onTap: onPressed,
       child: CleanContainer(
         radius: radius,
-        color: (selected) ? selectedColor : color,
+        color: (selected) ? selectedColor : _color,
         // label: label,
         // labelColor: Colors.black87,
         // onPressed: onPressed,

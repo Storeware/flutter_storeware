@@ -17,6 +17,7 @@ class VerticalTopTabView extends StatefulWidget {
   final TextStyle style;
   final Color indicatorColor;
   final Color selectedColor;
+  final Widget leading;
 
   const VerticalTopTabView(
       {Key key,
@@ -27,6 +28,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.choices,
       this.controller,
       this.iconColor,
+      this.leading,
       this.style})
       : super(key: key);
 
@@ -52,6 +54,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           actions: widget.actions,
           choices: widget.choices,
           controller: controller,
+          leading: widget.leading,
           iconColor: widget.iconColor,
           initialIndex: widget.initialIndex,
           indicatorColor: widget.indicatorColor,
@@ -77,6 +80,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final Color indicatorColor;
   final Color selectedColor;
   final List<Widget> actions;
+  final Widget leading;
   final Color tabColor;
   final Color iconColor;
   final TextStyle style;
@@ -87,6 +91,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.onSelectItem,
       this.initialIndex = 0,
       this.selectedColor,
+      this.leading,
       this.actions,
       this.controller,
       this.indicatorColor = Colors.amber,
@@ -136,7 +141,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       child: ValueListenableBuilder<int>(
         valueListenable: active,
         builder: (a, b, w) => Row(children: [
-          Expanded(child: Container()),
+          Expanded(child: Container(child: widget.leading)),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
               padding: EdgeInsets.only(left: 8, right: 8),

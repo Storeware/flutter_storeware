@@ -114,8 +114,9 @@ class CleanButton extends StatelessWidget {
 class CleanContainer extends StatelessWidget {
   final Widget child;
   final Color color;
+  final bool selected;
+  final Color selectedColor;
   final double radius;
-  final EdgeInsets padding;
   final double leftRadius;
   final double rightRadius;
   final double width;
@@ -133,35 +134,29 @@ class CleanContainer extends StatelessWidget {
     this.height,
     this.leftRadius,
     this.rightRadius,
+    this.selected = false,
+    this.selectedColor,
     this.border,
     this.borderColor,
-    this.padding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    var _selectedColor = selectedColor ?? Colors.grey.shade300;
+    var _color = color ?? theme.scaffoldBackgroundColor;
     return Container(
       width: width,
       height: height,
-      padding: padding,
       decoration: BoxDecoration(
-        color: color,
+        color: (selected) ? _selectedColor : _color,
         borderRadius: BorderRadius.only(
-          topLeft: ((leftRadius ?? 0) < 0)
-              ? Radius.zero
-              : Radius.circular(leftRadius ?? radius ?? 10),
-          topRight: ((rightRadius ?? 0) < 0)
-              ? Radius.zero
-              : Radius.circular(rightRadius ?? radius ?? 10),
-          bottomLeft: ((leftRadius ?? 0) < 0)
-              ? Radius.zero
-              : Radius.circular(leftRadius ?? radius ?? 10),
-          bottomRight: ((rightRadius ?? 0) < 0)
-              ? Radius.zero
-              : Radius.circular(rightRadius ?? radius ?? 10),
+          topLeft: Radius.circular(leftRadius ?? radius ?? 10),
+          topRight: Radius.circular(rightRadius ?? radius ?? 10),
+          bottomLeft: Radius.circular(leftRadius ?? radius ?? 10),
+          bottomRight: Radius.circular(rightRadius ?? radius ?? 10),
         ),
-        border: ((border ?? 0) == 0)
+        border: (border == null)
             ? null
             : Border.all(
                 color: borderColor ??
@@ -188,52 +183,58 @@ class ActionButton extends StatelessWidget {
   final String label;
   final Function() onPressed;
   final Color color;
-  final Color selectedColor;
   final TextStyle style;
   final bool selected;
+  final Color selectedColor;
+  final double width;
+  final double height;
+  final Widget child;
   final double radius;
-  final Color borderColor;
   const ActionButton(
       {Key key,
       this.label,
       this.onPressed,
+      this.radius = 15,
       this.color,
+      this.selectedColor,
       this.style,
-      this.radius = 12,
-      this.selected = false,
-      this.selectedColor = Colors.grey,
-      this.borderColor})
+      this.width,
+      this.height,
+      this.child,
+      this.selected = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Color _color = color ?? theme.buttonColor;
     return InkWell(
       borderRadius: BorderRadius.circular(radius),
       onTap: onPressed,
       child: CleanContainer(
-        radius: radius,
-        color: (selected) ? selectedColor : _color,
+        radius: 30,
+        width: width, height: height,
+        color: (selected) ? selectedColor ?? theme.dividerColor : color,
         // label: label,
         // labelColor: Colors.black87,
         // onPressed: onPressed,
-        borderColor: borderColor ?? theme.primaryColor,
         border: 1,
         elevation: 0,
         //child: FlatButton(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: DefaultTextStyle(
-            style: style ??
-                theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w300),
-            child: Text(
-              label,
-            ),
-          ),
+              style: style ??
+                  theme.textTheme.subtitle2
+                      .copyWith(fontWeight: FontWeight.w300),
+              child: Column(children: [
+                if (child != null) child,
+                if (label != null)
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                  ),
+              ])),
         ),
-        //  onPressed: onPressed,
-        //),
       ),
     );
   }
@@ -259,38 +260,29 @@ class LabeledRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Container(
-        width: double.maxFinite,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (title != null) title,
-            if (label != null) ...[
-              Text(label ?? '',
-                  style: theme.textTheme
-                      .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
-              SizedBox(
-                height: 5,
-              )
-            ],
-            DefaultTextStyle(
-              style: (style ?? theme.textTheme.subtitle2).copyWith(
-                  fontWeight: FontWeight.w300,
-                  color: theme.textTheme.subtitle2.color),
-              child: SafeArea(
-                child: Wrap(
-                    //alignment: WrapAlignment.start,
-                    //crossAxisAlignment: WrapCrossAlignment.start,
-                    //runAlignment: WrapAlignment.start,
-                    //mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
-                    direction: Axis.horizontal,
-                    children: [for (var item in children) ...doitem(item)]),
-              ),
-            ),
-          ],
-        ));
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        title ??
+            Text(label ?? '',
+                style: theme.textTheme
+                    .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
+        SizedBox(
+          height: 5,
+        ),
+        DefaultTextStyle(
+          style: (style ?? theme.textTheme.subtitle2).copyWith(
+              fontWeight: FontWeight.w300,
+              color: theme.textTheme.subtitle2.color),
+          child: SafeArea(
+            child: Row(
+                mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
+                children: [for (var item in children) ...doitem(item)]),
+          ),
+        ),
+      ],
+    );
   }
 
   doitem(item) => [
@@ -318,15 +310,13 @@ class LabeledColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (title != null) title,
-          if (label != null) ...[
-            Text(label ?? '',
-                style: theme.textTheme
-                    .headline6), //.copyWith(fontWeight: FontWeight.bold)),
-            SizedBox(
-              height: 5,
-            )
-          ],
+          title ??
+              Text(label ?? '',
+                  style: theme.textTheme
+                      .headline6), //.copyWith(fontWeight: FontWeight.bold)),
+          SizedBox(
+            height: 5,
+          ),
           DefaultTextStyle(
             style:
                 theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w300),
@@ -346,18 +336,17 @@ class LabeledColumn extends StatelessWidget {
       ];
 }
 
-class AvatarButton extends StatelessWidget {
+class ButtonAvatar extends StatelessWidget {
   final Widget icon;
   final String label;
   final Widget child;
   final Widget footer;
   final double width;
   final Color color;
-  final double border;
   final Color avatarBackgoundColor;
   final Color avatarForegoundColor;
   final Function() onPressed;
-  const AvatarButton(
+  const ButtonAvatar(
       {Key key,
       this.icon,
       this.label,
@@ -367,8 +356,7 @@ class AvatarButton extends StatelessWidget {
       this.width,
       this.color,
       this.avatarBackgoundColor,
-      this.avatarForegoundColor,
-      this.border = 1})
+      this.avatarForegoundColor})
       : super(key: key);
 
   @override
@@ -385,8 +373,7 @@ class AvatarButton extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return CleanContainer(
       elevation: 0,
-      border: border,
-      borderColor: theme.primaryColor,
+      border: 0,
       color: color,
       width: width,
       child: Padding(
@@ -413,6 +400,44 @@ class AvatarButton extends StatelessWidget {
                     fontSize: 12, color: theme.textTheme.bodyText1.color),
                 child: footer,
               ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ActionText extends StatelessWidget {
+  final String label;
+  final String sublabel;
+  final Color color;
+  final TextStyle style;
+  final double radius;
+  const ActionText(
+      {Key key,
+      this.label,
+      this.sublabel,
+      this.color,
+      this.style,
+      this.radius = 5})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    TextStyle _style = style ?? theme.textTheme.button;
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          color: color ?? theme.scaffoldBackgroundColor,
+          border: Border.all(width: 1, color: theme.dividerColor)),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text(label, style: _style),
+            Text(sublabel,
+                style: _style.copyWith(fontSize: (_style.fontSize ?? 12) * 0.8))
           ],
         ),
       ),

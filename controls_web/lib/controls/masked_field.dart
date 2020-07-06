@@ -686,7 +686,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.label,
     this.initialValue,
     this.onSaved,
-    this.leftSymbol,
+    this.leftSymbol = '',
     this.precision,
     this.controller,
     this.errorText,

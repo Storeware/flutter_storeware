@@ -114,6 +114,7 @@ class DataItemNotifier with ChangeNotifier {
 }
 
 abstract class DataItem {
+  DataState state = DataState.dsBrowser;
   dynamic id;
   fromMap(Map<String, dynamic> data);
   Map<String, dynamic> toJson();

@@ -418,34 +418,40 @@ class ActionText extends StatelessWidget {
   final Color color;
   final TextStyle style;
   final double radius;
+  final Function() onPressed;
   const ActionText(
       {Key key,
       this.label,
       this.sublabel,
       this.color,
       this.style,
+      this.onPressed,
       this.radius = 5})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TextStyle _style = style ?? theme.textTheme.button;
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(radius),
-          color: color ?? theme.scaffoldBackgroundColor,
-          border: Border.all(width: 1, color: theme.dividerColor)),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Text(label, style: _style),
-            Text(sublabel,
-                style: _style.copyWith(fontSize: (_style.fontSize ?? 12) * 0.8))
-          ],
+    TextStyle _style = style ?? theme.textTheme.bodyText1;
+    return InkWell(
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(radius),
+            color: color ?? theme.scaffoldBackgroundColor,
+            border: Border.all(width: 1, color: theme.dividerColor)),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Text(label, style: _style),
+              Text(sublabel,
+                  style:
+                      _style.copyWith(fontSize: (_style.fontSize ?? 12) * 0.8))
+            ],
+          ),
         ),
       ),
+      onTap: () => onPressed(),
     );
   }
 }

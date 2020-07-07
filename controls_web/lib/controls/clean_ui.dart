@@ -246,14 +246,16 @@ class LabeledRow extends StatelessWidget {
   final double spacing;
   final MainAxisAlignment mainAxisAlignment;
   final List<Widget> children;
+  final double top;
   final TextStyle style;
   const LabeledRow(
       {Key key,
       this.label,
       this.children,
       this.title,
+      this.top = 8,
       this.mainAxisAlignment,
-      this.spacing = 2,
+      this.spacing = 0,
       this.style})
       : super(key: key);
 
@@ -264,12 +266,15 @@ class LabeledRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: top,
+        ),
         title ??
             Text(label ?? '',
                 style: theme.textTheme
                     .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
         SizedBox(
-          height: 5,
+          height: spacing,
         ),
         DefaultTextStyle(
           style: (style ?? theme.textTheme.subtitle2).copyWith(

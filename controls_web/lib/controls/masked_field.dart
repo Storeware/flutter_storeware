@@ -33,9 +33,9 @@ class MaskedTextField extends StatefulWidget {
     this.validator,
     this.initialValue,
     this.textAlign = TextAlign.start,
-    @required this.onSaved,
+    this.onSaved,
     @required this.label,
-    @required this.mask,
+    this.mask,
     this.keyboardType,
     this.controller,
     this.translator,
@@ -303,9 +303,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
                     ? widget.errorText.replaceFirst('%1', widget.label)
                     : null;
           },
-          onSaved: (x) {
-            if (widget.onSaved != null) widget.onSaved(x);
-          }),
+          onSaved: widget.onSaved),
     );
   }
 }

@@ -1,16 +1,16 @@
 name: controls_dash
 description: Adds for charts_flutter
-version: 0.0.1
+version: 0.0.2
 homepage: http://tireideletra.com.br
 
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  charts_flutter: ^0.8.1
+  charts_flutter: 
 
 dev_dependencies:
   flutter_test:

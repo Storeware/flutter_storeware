@@ -12,6 +12,8 @@ flutter:
     platforms:
       web:
         default_package: controls_firebase_platform_web
+      linux:  
+        default_package: controls_firebase_platform_android
       android:
         default_package: controls_firebase_platform_android
       windows:

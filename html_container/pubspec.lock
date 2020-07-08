@@ -43,47 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.13"
-  controls_image_android:
-    dependency: "direct main"
-    description:
-      path: "controls_image/controls_image_android"
-      ref: HEAD
-      resolved-ref: "20ac388594507a3c56cdb855cca89bea5cff62c9"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "0.0.1"
-  controls_image_interface:
-    dependency: transitive
-    description:
-      path: "controls_image/controls_image_interface"
-      ref: HEAD
-      resolved-ref: "20ac388594507a3c56cdb855cca89bea5cff62c9"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "0.0.1"
-  controls_image_web:
-    dependency: "direct main"
-    description:
-      path: "controls_image/controls_image_web"
-      ref: HEAD
-      resolved-ref: "20ac388594507a3c56cdb855cca89bea5cff62c9"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "0.0.1"
-  convert:
-    dependency: transitive
-    description:
-      name: convert
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
-  csslib:
-    dependency: transitive
-    description:
-      name: csslib
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.16.1"
   fake_async:
     dependency: transitive
     description:
@@ -96,44 +55,38 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_plugin_android_lifecycle:
-    dependency: transitive
-    description:
-      name: flutter_plugin_android_lifecycle
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.6"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_web_plugins:
-    dependency: transitive
-    description: flutter
-    source: sdk
-    version: "0.0.0"
-  html:
+  html_container_interface:
     dependency: transitive
     description:
-      name: html
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.14.0+3"
-  image_picker:
-    dependency: transitive
+      path: "html_container/html_container_interface"
+      ref: HEAD
+      resolved-ref: "33feb6193b3e62b25295baf99abac844238a61e8"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
+  html_container_io:
+    dependency: "direct main"
     description:
-      name: image_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.6.3+4"
-  image_picker_web:
-    dependency: transitive
+      path: "html_container/html_container_io"
+      ref: HEAD
+      resolved-ref: "33feb6193b3e62b25295baf99abac844238a61e8"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
+  html_container_web:
+    dependency: "direct main"
     description:
-      name: image_picker_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.6"
+      path: "html_container/html_container_web"
+      ref: HEAD
+      resolved-ref: "33feb6193b3e62b25295baf99abac844238a61e8"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
   matcher:
     dependency: transitive
     description:
@@ -155,13 +108,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  petitparser:
-    dependency: transitive
-    description:
-      name: petitparser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.4.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -216,20 +162,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
-  universal_html:
-    dependency: transitive
-    description:
-      name: universal_html
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.15"
-  universal_io:
-    dependency: transitive
-    description:
-      name: universal_io
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   vector_math:
     dependency: transitive
     description:
@@ -237,20 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
-  xml:
+  webview_flutter:
     dependency: transitive
     description:
-      name: xml
+      name: webview_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.0"
-  zone_local:
-    dependency: transitive
-    description:
-      name: zone_local
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.2"
+    version: "0.3.22+1"
 sdks:
   dart: ">=2.9.0-14.0.dev <3.0.0"
-  flutter: ">=1.12.13 <2.0.0"
+  flutter: ">=1.12.13+hotfix.5"

@@ -1,6 +1,6 @@
 name: controls_data
 description: A new Flutter package project.
-version: 0.0.7
+version: 0.0.8
 author:
 homepage: https://tireideletra.com.br
 
@@ -12,10 +12,12 @@ flutter:
     platforms:
       web:
         default_package: control_data_platform_web
+      linux:
+        default_package: control_data_platform_android
       android:
         default_package: control_data_platform_android
       windows:
-        default_package: control_data_platform_windows
+        default_package: control_data_platform_android
       ios:
         default_package: control_data_platform_android
 

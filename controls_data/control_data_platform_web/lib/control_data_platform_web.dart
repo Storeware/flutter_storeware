@@ -1,6 +1,6 @@
 library control_data_platform_web;
 
-import 'package:universal_html/prefer_sdk/html.dart';
+import 'package:universal_html/html.dart';
 import 'package:control_data_platform_interface/control_data_platform_interface.dart';
 
 class PlatformLocalStorage extends LocalStorageInterface {

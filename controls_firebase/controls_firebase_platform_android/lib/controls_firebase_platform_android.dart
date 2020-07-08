@@ -2,7 +2,6 @@ library controls_firebase_platform_android;
 
 import 'dart:io';
 
-/// A Calculator.import 'dart:io';
 import 'dart:typed_data';
 
 // ignore_for_file:
@@ -16,13 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 export 'package:firebase_auth/firebase_auth.dart';
-
-/*
-import 'package:firebase/firebase.dart' as fb;
-import 'package:firebase/firestore.dart';
-
-
-*/
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
@@ -55,7 +47,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   //var _storage;
   @override
   storage() {
-    return fs.FirebaseStorage.instance;
+    return FirebaseStorageDriver(); //fs.FirebaseStorage.instance;
   }
 
   @override

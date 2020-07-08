@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:firebase/firebase.dart' as firebase;
-import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
+//import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
 
-class FBMessaging extends FBMessagingInterface {
+class FBMessaging {
+  //extends FBMessagingInterface {
   FBMessaging();
   firebase.Messaging _mc;
   String _token;
@@ -10,12 +11,12 @@ class FBMessaging extends FBMessagingInterface {
   final _controller = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get stream => _controller.stream;
 
-  @override
+  //@override
   void close() {
     _controller?.close();
   }
 
-  @override
+  //@override
   Future<void> init(String keyPair) async {
     _mc = firebase.messaging();
     _mc.usePublicVapidKey(keyPair); // 'FCM_SERVER_KEY');

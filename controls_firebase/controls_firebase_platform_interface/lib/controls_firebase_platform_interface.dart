@@ -1,13 +1,14 @@
 library controls_firebase_platform_interface;
 //import 'dart:typed_data';
 
-enum FirebasePlatform { android, windows, webbrowser }
+enum FirebasePlatform { android, windows, webbrowser, linux }
 
 abstract class FirebaseAppDriverInterface {
   FirebasePlatform platform = FirebasePlatform.webbrowser;
   get isAndroid => platform == FirebasePlatform.android;
   get isWebBrowser => platform == FirebasePlatform.webbrowser;
   get isWindows => platform == FirebasePlatform.windows;
+  get isLinux => platform == FirebasePlatform.linux;
   init(options);
   storage();
   firestore();

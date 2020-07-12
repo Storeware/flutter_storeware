@@ -488,3 +488,197 @@ class _DataViewerState extends State<DataViewer> {
         });
   }
 }
+
+class DataViewerGroup {
+  final String title;
+  final List<String> children;
+
+  DataViewerGroup({this.title, this.children});
+}
+
+class DataViewerEditGroupedPage extends StatefulWidget {
+  final String title;
+  final Map<String, dynamic> data;
+  final List<DataViewerGroup> grouped;
+  final DataViewerController controller;
+  final bool canEdit, canInsert, canDelete;
+  final PaginatedGridChangeEvent event;
+  const DataViewerEditGroupedPage({
+    Key key,
+    @required this.data,
+    @required this.grouped,
+    @required this.controller,
+    this.title,
+    this.canEdit = false,
+    this.canInsert = false,
+    this.canDelete = false,
+    @required this.event,
+  }) : super(key: key);
+
+  @override
+  _DataViewEditGroupedPageState createState() =>
+      _DataViewEditGroupedPageState();
+}
+
+class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
+  ThemeData theme;
+  final _formKey = GlobalKey<FormState>();
+  @override
+  Widget build(BuildContext context) {
+    theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title ?? 'Edição'),
+        actions: [
+          if (widget.canDelete)
+            IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () {
+                  widget.controller.doDelete(widget.data).then((rsp) {
+                    Navigator.pop(context);
+                  });
+                }),
+        ],
+      ),
+      body: SingleChildScrollView(
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (var row in widget.grouped) createRow(row, widget.data),
+                Divider(),
+                if (widget.canEdit || widget.canInsert)
+                  Container(
+                      alignment: Alignment.center,
+                      child: StrapButton(
+                        text: 'Salvar',
+                        onPressed: () {
+                          _save(context);
+                        },
+                      )),
+              ]),
+        ),
+      )),
+    );
+  }
+
+  createRow(DataViewerGroup rows, Map<String, dynamic> data) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (rows.title != null)
+          Container(
+              color: theme.primaryColor.withAlpha(50),
+              alignment: Alignment.centerLeft,
+              height: kMinInteractiveDimension * 0.6,
+              child: Text(rows.title, style: theme.textTheme.caption)),
+        Wrap(
+          direction: Axis.horizontal,
+          children: [for (var column in rows.children) createColumn(column)],
+        ),
+      ],
+    );
+  }
+
+  createColumn(column) {
+    var ctrl = (widget.controller.paginatedController);
+    var col = ctrl.findColumn(column);
+    if (col == null) return (Text('null $column'));
+    var edit;
+    if (col.editBuilder != null)
+      edit = col.editBuilder(ctrl, col, widget.data, widget.data);
+    if (edit == null) {
+      edit = createFormField(col);
+    }
+    return Container(
+        padding: EdgeInsets.only(right: 8),
+        height: kToolbarHeight,
+        width: col.width ?? 150,
+        child: edit ?? Text('${widget.data[column]}'));
+  }
+
+  bool _focused = false;
+  int _first = 0;
+  bool canFocus(PaginatedGridColumn col) {
+    if (_focused) return false;
+    if (col.readOnly) return false;
+    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey)
+      return false;
+
+    if (widget.event == PaginatedGridChangeEvent.insert) {
+      if (_first > 0) return false;
+    }
+    _first++;
+    _focused = true;
+    return true;
+  }
+
+  get p => widget.data;
+  createFormField(PaginatedGridColumn item) {
+    return TextFormField(
+        autofocus: canFocus(item),
+        maxLines: item.maxLines,
+        maxLength: item.maxLength,
+        enabled: widget.canEdit || widget.canInsert,
+        initialValue: (item.onGetValue != null)
+            ? item.onGetValue(p[item.name])
+            : (p[item.name] ?? '').toString(),
+        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        decoration: InputDecoration(
+          labelText: item.label ?? item.name,
+        ),
+        validator: (value) {
+          if (item.onValidate != null) return item.onValidate(value);
+          if (item.required) if (value.isEmpty) {
+            return (item.editInfo
+                .replaceAll('{label}', item.label ?? item.name));
+          }
+
+          return null;
+        },
+        onSaved: (x) {
+          if (item.onSetValue != null) {
+            p[item.name] = item.onSetValue(x);
+            return;
+          }
+          if (p[item.name] is int)
+            p[item.name] = int.tryParse(x);
+          else if (p[item.name] is double)
+            p[item.name] = double.tryParse(x);
+          else if (p[item.name] is bool)
+            p[item.name] = x;
+          else
+            p[item.name] = x;
+        });
+  }
+
+  _save(context) {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      doPostEvent(
+              widget.controller.paginatedController, widget.data, widget.event)
+          .then((rsp) {
+        Navigator.pop(context);
+      });
+    }
+  }
+
+  doPostEvent(PaginatedGridController ctrl, dynamic dados,
+      PaginatedGridChangeEvent event) async {
+    if (event == PaginatedGridChangeEvent.delete) {
+      return widget.controller.doDelete(dados, manual: false);
+    }
+    if (event == PaginatedGridChangeEvent.insert) {
+      return widget.controller.doInsert(dados, manual: false);
+    }
+    if (event == PaginatedGridChangeEvent.update) {
+      return widget.controller.doUpdate(dados, manual: false);
+    }
+    return false;
+  }
+}

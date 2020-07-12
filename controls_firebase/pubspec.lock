@@ -7,7 +7,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.1"
+    version: "2.4.2"
   boolean_selector:
     dependency: transitive
     description:
@@ -69,7 +69,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -78,7 +78,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.2"
@@ -87,7 +87,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -96,7 +96,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -105,25 +105,34 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "0.0.8"
+    version: "0.0.9"
+  controls_firebase_linux:
+    dependency: "direct main"
+    description:
+      path: "controls_firebase/controls_firebase_linux"
+      ref: HEAD
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
   controls_firebase_platform_android:
     dependency: "direct main"
     description:
       path: "controls_firebase/controls_firebase_platform_android"
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "0.0.2"
+    version: "0.0.4"
   controls_firebase_platform_interface:
     dependency: transitive
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.5"
@@ -132,10 +141,19 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_web"
       ref: HEAD
-      resolved-ref: "9fef7c6e0aa7d80d977e30098fcec344037dd8c4"
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.5"
+  controls_firebase_windows:
+    dependency: "direct main"
+    description:
+      path: "controls_firebase/controls_firebase_windows"
+      ref: HEAD
+      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "0.0.1"
   convert:
     dependency: transitive
     description:
@@ -191,7 +209,7 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.5+3"
+    version: "0.16.1"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
@@ -212,7 +230,7 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.4+3"
+    version: "0.4.5"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -430,7 +448,14 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.7+3"
+    version: "0.5.8"
+  shared_preferences_linux:
+    dependency: transitive
+    description:
+      name: shared_preferences_linux
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.2+1"
   shared_preferences_macos:
     dependency: transitive
     description:
@@ -484,7 +509,7 @@ packages:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.9.3"
+    version: "1.9.5"
   stream_channel:
     dependency: transitive
     description:
@@ -571,4 +596,4 @@ packages:
     version: "0.1.2"
 sdks:
   dart: ">=2.9.0-14.0.dev <3.0.0"
-  flutter: ">=1.12.13+hotfix.5 <2.0.0"
+  flutter: ">=1.17.0 <2.0.0"

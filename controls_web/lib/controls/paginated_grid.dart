@@ -82,7 +82,7 @@ class PaginatedGridColumn {
   bool isPrimaryKey;
   DataColumnSortCallback onSort;
   bool visible;
-  final double width;
+  double width;
   String Function(dynamic) onGetValue;
   dynamic Function(dynamic) onSetValue;
   String Function(dynamic) onValidate;

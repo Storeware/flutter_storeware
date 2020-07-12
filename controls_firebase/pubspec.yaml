@@ -43,7 +43,7 @@ dependencies:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_firebase/controls_firebase_linux
 
-  controls_firebase_linux:
+  controls_firebase_windows:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_firebase/controls_firebase_windows

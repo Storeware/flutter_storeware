@@ -9,6 +9,7 @@ export 'firebase_config.dart';
 export 'firebase_functions.dart';
 export 'firestorage_images.dart';
 export 'firebase_data_model.dart';
+export 'firebase_driver.dart';
 
 class FBPushNotification extends FBMessaging {
   static final _singleton = FBPushNotification._create();

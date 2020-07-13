@@ -1,8 +1,5 @@
 library control_data_platform_android;
 
-//import 'dart:convert';
-//import 'dart:io';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:control_data_platform_interface/control_data_platform_interface.dart';
 
@@ -16,13 +13,13 @@ class PlatformLocalStorage extends LocalStorageInterface {
   @override
   setKey(String key, String value) {
     init();
-    _prefs.setString(key, value);
+    if (_prefs != null) _prefs.setString(key, value);
   }
 
   @override
   String getKey(String key) {
     init();
-    return _prefs.getString(key);
+    return _prefs?.getString(key) ?? '';
   }
 
   @override
@@ -34,7 +31,7 @@ class PlatformLocalStorage extends LocalStorageInterface {
   @override
   setBool(key, value) {
     init();
-    return _prefs.setBool(key, value);
+    if (_prefs != null) return _prefs.setBool(key, value);
   }
 
   @override

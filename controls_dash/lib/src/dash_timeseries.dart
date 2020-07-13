@@ -79,7 +79,7 @@ class DashTimeSeriesBar extends StatelessWidget {
 /// Sample time series data type.
 class TimeSeriesSales {
   final DateTime time;
-  final double sales;
+  final num sales;
 
   TimeSeriesSales(this.time, this.sales);
 }

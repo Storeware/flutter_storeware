@@ -29,8 +29,8 @@ class Dialogs {
 
   static showPage(context,
       {Widget child,
-      width,
-      height,
+      double width,
+      double height,
       Alignment alignment,
       bool fullPage = false,
       String label = ''}) async {

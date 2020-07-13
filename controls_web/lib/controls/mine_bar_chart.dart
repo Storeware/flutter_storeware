@@ -23,15 +23,15 @@ class MiniBarChart extends StatefulWidget {
       this.leading,
       this.barColor = Colors.black,
       this.data,
-      this.left = 1,
+      this.left = 1.0,
       this.gap = 1.5,
-      this.right = 1,
+      this.right = 1.0,
       this.decimais = 0,
-      this.height = 40,
+      this.height = 40.0,
       this.prefix = '',
       this.labelPrefix = '',
       this.showX = false,
-      this.heightX = 8,
+      this.heightX = 8.0,
       this.maxValue,
       this.color = Colors.lightBlue})
       : super(key: key);
@@ -41,7 +41,7 @@ class MiniBarChart extends StatefulWidget {
 }
 
 class _MiniBarChartState extends State<MiniBarChart> {
-  num maxValue = 0;
+  num maxValue = 0.0;
   int count = 0;
 
   @override

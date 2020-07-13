@@ -96,7 +96,7 @@ class DataViewerHelper {
     if (column != null) {
       column.numeric = true;
       column.builder = (idx, row) {
-        double v = row[column.name] ?? 0;
+        double v = (row[column.name] ?? 0.0) + 0.0;
         return Text(v.toStringAsFixed(decimais));
       };
       column.editBuilder = (a, b, c, row) {

@@ -1,10 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 
 import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
-import 'package:controls_web/drivers/bloc_model.dart';
 
 const errorConnectionMsg =
     'Não executou a solicitação, provedor indisponível %s';
@@ -15,6 +14,17 @@ void debug(dynamic x) {
 }
 
 enum ODataEventState { insert, update, delete }
+
+class BlocModelX<T> {
+  var _stream = StreamController<T>.broadcast();
+  dispose() {
+    _stream.close();
+  }
+
+  notify(T value) => _stream.sink.add(value);
+  get stream => _stream;
+  get sink => _stream.sink;
+}
 
 extension MapExtension on Map {
   /// [fromMap] Update values from data
@@ -82,7 +92,7 @@ extension DynamicExtension on dynamic {
   }
 }
 
-class LoginTokenChanged extends BlocModel<bool> {
+class LoginTokenChanged extends BlocModelX<bool> {
   static final _singleton = LoginTokenChanged._create();
   LoginTokenChanged._create();
   factory LoginTokenChanged() => _singleton;

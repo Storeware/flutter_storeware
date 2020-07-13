@@ -28,7 +28,7 @@ class PlatformLocalStorage extends LocalStorageInterface {
   @override
   bool getBool(key) {
     init();
-    return _prefs.getBool(key);
+    return _prefs?.getBool(key) ?? false;
   }
 
   @override

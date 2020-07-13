@@ -1,3 +1,6 @@
 /controls/doc
 /controls/.vs
 /controls/*.lock
+/android
+/camera_capture
+/ios

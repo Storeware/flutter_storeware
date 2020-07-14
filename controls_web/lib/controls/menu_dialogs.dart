@@ -58,18 +58,19 @@ class _MenuDialogState extends State<MenuDialog> {
 //cria cada item do menu
   Widget _tiles(String text, IconData icon, int item, Function onTap) {
     return ListTile(
-      leading: Icon(icon),
-      onTap: onTap,
-      selected: item == itemSelect,
-      title: Text(
-        text,
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    );
+        leading: (icon != null) ? Icon(icon) : null,
+        onTap: onTap,
+        selected: item == itemSelect,
+        title: MaterialButton(
+            child: Text(text,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))));
   }
+
+  ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     return Material(child: _listMenu());
   }
 }

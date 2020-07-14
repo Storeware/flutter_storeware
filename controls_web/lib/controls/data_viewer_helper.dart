@@ -2,9 +2,19 @@ import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:flutter/widgets.dart';
 //import 'package:controls_data/odata_client.dart';
-import 'package:controls_extensions/extensions.dart';
+import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
+
+DateTime _toDateTime(value, {DateTime def, zone = -3}) {
+  if (value is String) {
+    int dif = (value.endsWith('Z') ? zone : 0);
+    return DateTime.tryParse(value).add(Duration(hours: dif));
+  }
+  if (value is DateTime) return value;
+  return def ?? DateTime.now();
+}
 
 /// [DataViewerHelper] extende funcionalidade para DataViewer / PaginatedGrid
+///
 class DataViewerHelper {
   /// [DataViewerHelper.simnaoColumn] Define coluna  S ou N na visualização
   static simnaoColumn(PaginatedGridColumn column) {
@@ -56,14 +66,14 @@ class DataViewerHelper {
         /// visualiza switch no grid
         dynamic v = row[column.name];
         if (v == null) return Text('');
-        DateTime d = DateTime.tryParse(v);
+        DateTime d = _toDateTime(v); //DateTime.tryParse(v);
         if (d == null) return Text('');
         return Text(d.format(mask));
       };
       column.editBuilder = (a, b, c, row) {
         /// define switch para edição
         dynamic v = row[column.name];
-        DateTime d = DateTime.tryParse(v) ?? DateTime.now();
+        DateTime d = _toDateTime(v);
         return MaskedDatePicker(
           format: mask,
           labelText: column.label,

@@ -41,16 +41,19 @@ class MiniBarChart extends StatefulWidget {
 }
 
 class _MiniBarChartState extends State<MiniBarChart> {
-  num maxValue = 0.0;
+  double maxValue = 0.0;
   int count = 0;
 
   @override
   Widget build(BuildContext context) {
+    if (widget.data.keys.length == 0) return Container();
+    double v = 0;
     widget.data.keys.forEach((k) {
-      var v = widget.data[k];
+      v = widget.data[k];
       if (v > maxValue) maxValue = v;
       count++;
     });
+    if (maxValue <= 0) return Container();
     if (widget.maxValue != null) maxValue = widget.maxValue;
 
     return Container(
@@ -99,7 +102,7 @@ class _MiniBarChartState extends State<MiniBarChart> {
               Container(
                 alignment: Alignment.bottomCenter,
                 color: widget.barColor,
-                width: w,
+                width: w + 0.0,
                 height: ((maxValue > 0) ? (value / maxValue) : 0) *
                     (widget.height - (widget.showX ? widget.heightX : 0)),
               ),

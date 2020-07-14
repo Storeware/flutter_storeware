@@ -47,9 +47,9 @@ class _MiniBarChartState extends State<MiniBarChart> {
   @override
   Widget build(BuildContext context) {
     if (widget.data.keys.length == 0) return Container();
-    double v = 0;
+    double v = 0.0;
     widget.data.keys.forEach((k) {
-      v = widget.data[k];
+      v = widget.data[k] + 0.0;
       if (v > maxValue) maxValue = v;
       count++;
     });

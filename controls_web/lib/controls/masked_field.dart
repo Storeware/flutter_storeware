@@ -368,7 +368,8 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
         //initialValue: data.format(widget.format),
         controller: _dataController,
         keyboardType: TextInputType.phone,
-        style: theme.textTheme.bodyText1 //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        style: theme.textTheme
+            .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
             labelText: widget.labelText,
             prefix: widget.prefix,
@@ -642,12 +643,12 @@ class MaskedDropDownFormField extends StatelessWidget {
             if (leading != null) leading,
             if (hintText != null)
               Container(
-                alignment: Alignment.bottomLeft,
-                height: 15,
-                child: Text(hintText ?? '',
-                    style: theme.inputDecorationTheme.hintStyle) //TextStyle(
-                        //fontSize: 12, color: hintColor ?? Colors.black54)),
-              ),
+                  alignment: Alignment.bottomLeft,
+                  height: 15,
+                  child: Text(hintText ?? '',
+                      style: theme.inputDecorationTheme.hintStyle) //TextStyle(
+                  //fontSize: 12, color: hintColor ?? Colors.black54)),
+                  ),
             DropdownButtonFormField(
               key: UniqueKey(),
               items: items.map((String label) {
@@ -719,7 +720,7 @@ class MaskedMoneyFormField extends StatelessWidget {
           Text(
             label,
             style: theme.textTheme.caption, //TextStyle(
-                //fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+            //fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
           ),
         Container(
           constraints: BoxConstraints(minWidth: 100, minHeight: 40),
@@ -902,8 +903,9 @@ class MaskedSearchFormField<T> extends StatelessWidget {
             autofocus: autofocus,
             controller: _controller,
             keyboardType: getKeyboardType(),
-            style:
-                style ?? theme.textTheme.bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            style: style ??
+                theme.textTheme
+                    .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
             decoration: decoration ??
                 InputDecoration(
                     labelText: labelText,

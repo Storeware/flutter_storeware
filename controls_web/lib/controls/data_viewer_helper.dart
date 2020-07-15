@@ -17,20 +17,57 @@ DateTime _toDateTime(value, {DateTime def, zone = -3}) {
 ///
 class DataViewerHelper {
   /// [DataViewerHelper.simnaoColumn] Define coluna  S ou N na visualização
+
+  static _simnaoFn(p) {
+    var t = p['t'];
+    var v = p['v'];
+    var f = p['f'];
+    if ((t == null) && (v != null)) {
+      if (v is bool) {
+        t = true;
+        f = false;
+      }
+      if (v is int) {
+        t = 1;
+        f = 0;
+      }
+      if (v is double) {
+        t = 1.0;
+        f = 0.0;
+      }
+    }
+    t ??= 'S';
+    f ??= 'N';
+  }
+
   static simnaoColumn(PaginatedGridColumn column,
-      {dynamic trueValue, dynamic falseValue}) {
-    trueValue ??= 'S';
-    falseValue ??= 'N';
+      {dynamic trueValue,
+      dynamic falseValue,
+      Color color,
+      Color inactiveTrackColor}) {
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
+        DataViewerHelper._simnaoFn(
+            {'v': row[column.name], 't': trueValue, 'f': falseValue});
         return MaskedSwitchFormField(
+            activeColor: color,
+            activeTrackColor: (color != null) ? color.lighten(50) : null,
+            inactiveTrackColor: inactiveTrackColor ??
+                ((color != null) ? color.lighten(80) : null),
             readOnly: true,
             value: (row[column.name] ?? falseValue) == trueValue);
       };
       column.editBuilder = (a, b, c, row) {
+        DataViewerHelper._simnaoFn(
+            {'v': row[column.name], 't': trueValue, 'f': falseValue});
+
         /// define switch para edição
         return MaskedSwitchFormField(
+          activeColor: color,
+          activeTrackColor: (color != null) ? color.lighten(50) : null,
+          inactiveTrackColor: inactiveTrackColor ??
+              ((color != null) ? color.lighten(80) : null),
           label: column.label ?? column.name,
           value: (row[column.name] ?? falseValue) == trueValue,
           onChanged: (x) {

@@ -62,10 +62,13 @@ class _MenuDialogState extends State<MenuDialog> {
         leading: (icon != null) ? Icon(icon) : null,
         onTap: onTap,
         selected: item == itemSelect,
-        title: MaterialButton(
-            child: Text(text,
-                textAlign: TextAlign.left,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))));
+        title: Align(
+            alignment: Alignment.centerLeft,
+            child: MaterialButton(
+                child: Text(text,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16)))));
   }
 
   ThemeData theme;

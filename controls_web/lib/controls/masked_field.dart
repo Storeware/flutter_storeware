@@ -272,6 +272,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
       child: TextFormField(
           textAlign: widget.textAlign ?? TextAlign.start,
@@ -280,7 +281,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
           initialValue: (_controller == null) ? widget.initialValue : null,
           controller: _controller,
           style: widget.style ??
-              TextStyle(fontSize: widget.fontSize, fontStyle: FontStyle.normal),
+              theme.textTheme.bodyText1.copyWith(fontSize: widget.fontSize),
           decoration: InputDecoration(
             labelText: '${widget.label}',
             helperText: !_showHelperText
@@ -362,11 +363,12 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return TextFormField(
         //initialValue: data.format(widget.format),
         controller: _dataController,
         keyboardType: TextInputType.phone,
-        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        style: theme.textTheme.bodyText1 //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
             labelText: widget.labelText,
             prefix: widget.prefix,
@@ -618,6 +620,7 @@ class MaskedDropDownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     if (items.length == 0) items.add('');
     String _value = value ?? '';
 
@@ -642,8 +645,8 @@ class MaskedDropDownFormField extends StatelessWidget {
                 alignment: Alignment.bottomLeft,
                 height: 15,
                 child: Text(hintText ?? '',
-                    style: TextStyle(
-                        fontSize: 12, color: hintColor ?? Colors.black54)),
+                    style: theme.inputDecorationTheme.hintStyle) //TextStyle(
+                        //fontSize: 12, color: hintColor ?? Colors.black54)),
               ),
             DropdownButtonFormField(
               key: UniqueKey(),
@@ -696,6 +699,7 @@ class MaskedMoneyFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     var _controller = controller ??
         MoneyMaskedTextController(
             initialValue: initialValue,
@@ -714,8 +718,8 @@ class MaskedMoneyFormField extends StatelessWidget {
         if (label != null)
           Text(
             label,
-            style: TextStyle(
-                fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+            style: theme.textTheme.caption, //TextStyle(
+                //fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
           ),
         Container(
           constraints: BoxConstraints(minWidth: 100, minHeight: 40),
@@ -748,14 +752,17 @@ class MaskedLabeled extends StatelessWidget {
   const MaskedLabeled({
     Key key,
     this.label,
+    this.sublabel,
     this.value,
   }) : super(key: key);
 
   final String label;
   final String value;
+  final String sublabel;
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
       decoration: BoxDecoration(
         border: Border(
@@ -769,23 +776,32 @@ class MaskedLabeled extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label ?? '', style: TextStyle(fontSize: 12, color: Colors.grey)),
+          Row(children: [
+            Expanded(
+                child: Text(label ?? '',
+                    style: theme.textTheme
+                        .caption)), //TextStyle(fontSize: 12, color: Colors.grey))),
+            if (sublabel != null)
+              Text(sublabel, style: theme.textTheme.caption),
+          ]),
           Padding(
-            padding: const EdgeInsets.only(bottom: 8, top: 4),
-            child: Text(value ?? ''),
-          ),
+              padding: const EdgeInsets.only(bottom: 8, top: 4),
+              child: Text(value ?? '',
+                  style: theme.textTheme
+                      .bodyText1) // TextStyle(fontSize: 14, color: Colors.grey)),
+              ),
         ],
       ),
     );
   }
 }
 
-class MaskedLabledFormField extends StatelessWidget {
+class MaskedLabeledFormField extends StatelessWidget {
   final String labelText;
   final String initialValue;
   final TextEditingController controller;
 
-  const MaskedLabledFormField(
+  const MaskedLabeledFormField(
       {Key key, this.labelText, this.initialValue, this.controller})
       : super(key: key);
 
@@ -872,6 +888,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     final TextEditingController _controller =
         this.controller ?? TextEditingController();
 
@@ -886,7 +903,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
             controller: _controller,
             keyboardType: getKeyboardType(),
             style:
-                style ?? TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+                style ?? theme.textTheme.bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
             decoration: decoration ??
                 InputDecoration(
                     labelText: labelText,

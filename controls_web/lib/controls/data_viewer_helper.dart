@@ -17,20 +17,24 @@ DateTime _toDateTime(value, {DateTime def, zone = -3}) {
 ///
 class DataViewerHelper {
   /// [DataViewerHelper.simnaoColumn] Define coluna  S ou N na visualização
-  static simnaoColumn(PaginatedGridColumn column) {
+  static simnaoColumn(PaginatedGridColumn column,
+      {dynamic trueValue, dynamic falseValue}) {
+    trueValue ??= 'S';
+    falseValue ??= 'N';
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
         return MaskedSwitchFormField(
-            readOnly: true, value: (row[column.name] ?? 'N') == 'S');
+            readOnly: true,
+            value: (row[column.name] ?? falseValue) == trueValue);
       };
       column.editBuilder = (a, b, c, row) {
         /// define switch para edição
         return MaskedSwitchFormField(
-          label: column.label,
-          value: (row[column.name] ?? 'N') == 'S',
+          label: column.label ?? column.name,
+          value: (row[column.name] ?? falseValue) == trueValue,
           onChanged: (x) {
-            row[column.name] = x ? 'S' : 'N';
+            row[column.name] = x ? trueValue : falseValue;
           },
         );
       };

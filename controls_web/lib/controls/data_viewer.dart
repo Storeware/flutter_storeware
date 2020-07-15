@@ -597,7 +597,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
-        height: kToolbarHeight,
+        height: kToolbarHeight + 4,
         width: col.width ?? 150,
         child: edit ?? Text('${widget.data[column]}'));
   }

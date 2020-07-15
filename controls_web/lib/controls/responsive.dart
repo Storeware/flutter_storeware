@@ -25,6 +25,7 @@ class ResponsiveInfo {
   get isSmall => size.width < 450;
   get isMedium => (isMobile && (!isSmall));
   get isLargest => size.width > 1800;
+  get isSmalest => size.width < 350;
   ThemeData theme;
   ResponsiveInfo(BuildContext context) {
     var mq = MediaQuery.of(context);

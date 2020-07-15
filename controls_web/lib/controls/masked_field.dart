@@ -526,7 +526,7 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
 class MaskedSwitchFormField extends StatefulWidget {
   final bool value;
   final String label;
-  final Color activeTrackColor;
+  final Color activeTrackColor, inactiveTrackColor;
   final Color activeColor;
   final bool autofocus;
   final Function(bool) onChanged;
@@ -539,6 +539,7 @@ class MaskedSwitchFormField extends StatefulWidget {
     this.label,
     this.activeTrackColor,
     this.activeColor,
+    this.inactiveTrackColor,
     this.autofocus = false,
     this.readOnly = false,
     this.onChanged,
@@ -571,6 +572,7 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
                 value: initialValue.value,
                 activeColor: widget.activeColor,
                 activeTrackColor: widget.activeTrackColor,
+                inactiveTrackColor: widget.inactiveTrackColor,
                 autofocus: widget.autofocus,
                 onChanged: (b) {
                   if (!widget.readOnly) {

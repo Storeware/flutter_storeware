@@ -25,12 +25,13 @@ class MenuDialog extends StatefulWidget {
       {List<MenuChoice> choices,
       String title,
       double width = 300,
-      double height = 200,
+      double height,
       Color color}) async {
+    double h = height ?? (58 * (choices.length + 1));
     return Dialogs.showModal(context,
-        title: title,
+        title: title ?? 'Menu',
         width: width,
-        height: height,
+        height: h + 0.0,
         child: MenuDialog(
           choices: choices,
         ),
@@ -63,6 +64,7 @@ class _MenuDialogState extends State<MenuDialog> {
         selected: item == itemSelect,
         title: MaterialButton(
             child: Text(text,
+                textAlign: TextAlign.left,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16))));
   }
 

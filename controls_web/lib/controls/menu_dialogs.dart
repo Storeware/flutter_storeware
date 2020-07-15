@@ -27,7 +27,7 @@ class MenuDialog extends StatefulWidget {
       double width = 300,
       double height,
       Color color}) async {
-    double h = height ?? (58 * (choices.length + 1));
+    var h = height ?? (58 * (choices.length + 1));
     return Dialogs.showModal(context,
         title: title ?? 'Menu',
         width: width,

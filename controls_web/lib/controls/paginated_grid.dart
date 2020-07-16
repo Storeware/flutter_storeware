@@ -198,7 +198,7 @@ class PaginatedGrid extends StatefulWidget {
 
   final double columnSpacing;
   final CrossAxisAlignment crossAxisAlignment;
-  final Color backgroundColor;
+  //final Color backgroundColor;
 
   /// mudou a pagina de navegação em memoria
   final Function(int) onPageChanged;
@@ -242,7 +242,7 @@ class PaginatedGrid extends StatefulWidget {
     this.oneRowAutoEdit = false,
     this.footerLeading,
     this.footerHeight = 56,
-    this.backgroundColor,
+    //this.backgroundColor,
     this.columns,
     this.footerTrailing,
     this.canEdit = false,
@@ -453,6 +453,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                 return Scaffold(
                   appBar: widget.appBar,
                   floatingActionButton: buildAddButton(),
+                  backgroundColor: theme.scaffoldBackgroundColor,
                   body: SingleChildScrollView(
                     child: StreamBuilder<bool>(
                         initialData: true,
@@ -514,7 +515,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             horizontalMargin: widget.horizontalMargin,
                             dragStartBehavior: widget.dragStartBehavior,
                             onRowsPerPageChanged: widget.onRowsPerPageChanged,
-                            color: widget.backgroundColor,
+                            color: //widget.backgroundColor ??
+                                theme.scaffoldBackgroundColor,
                             rowsPerPage: widget.rowsPerPage,
                             onPageChanged: widget.onPageChanged,
                             //alignment: Alignment.center,

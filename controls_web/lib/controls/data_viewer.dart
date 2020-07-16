@@ -197,6 +197,8 @@ class DataViewerColumn extends PaginatedGridColumn {
     String label,
     String editInfo = '{label}',
     bool sort = true,
+    double editWidth,
+    double editHeight,
     Widget Function(int, Map<String, dynamic>) builder,
     Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
             Map<String, dynamic>)
@@ -215,6 +217,8 @@ class DataViewerColumn extends PaginatedGridColumn {
           color: color,
           maxLength: maxLength,
           width: width,
+          editWidth: editWidth,
+          editHeight: editHeight,
           tooltip: tooltip,
           align: align,
           style: style,
@@ -599,8 +603,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
-        height: kToolbarHeight + 4,
-        width: col.width ?? 150,
+        height: col.editHeight ?? kToolbarHeight + 4,
+        width: col.editWidth ?? col.width ?? 150,
         child: edit ?? Text('${widget.data[column]}'));
   }
 

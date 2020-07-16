@@ -101,7 +101,8 @@ class DataViewerHelper {
     }
   }
 
-  static dateTimeColumn(PaginatedGridColumn column, {mask = 'dd/MM/yyyy'}) {
+  static dateTimeColumn(PaginatedGridColumn column,
+      {mask = 'dd/MM/yyyy', DateTime firstDate, DateTime lastDate}) {
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
@@ -116,6 +117,8 @@ class DataViewerHelper {
         dynamic v = row[column.name];
         DateTime d = _toDateTime(v);
         return MaskedDatePicker(
+          firstDate: firstDate,
+          lastDate: lastDate,
           format: mask,
           labelText: column.label,
           initialValue: d,

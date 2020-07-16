@@ -209,6 +209,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     bool sort = true,
     double editWidth,
     double editHeight,
+    Function(dynamic) onFocusChanged,
     Widget Function(int, Map<String, dynamic>) builder,
     Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
             Map<String, dynamic>)
@@ -233,6 +234,7 @@ class DataViewerColumn extends PaginatedGridColumn {
           align: align,
           style: style,
           name: name,
+          onFocusChanged: onFocusChanged,
           required: required,
           readOnly: readOnly,
           isPrimaryKey: isPrimaryKey,
@@ -605,7 +607,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     var col;
     var ctrl;
 
-    if (widget.controller != null) {
+    if (widget.controller.columns != null) {
       ctrl = widget.controller;
       col = ctrl.findColumn(column);
     } else {
@@ -650,39 +652,44 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
             : (p[item.name] ?? '').toString());
-    return TextFormField(
-        autofocus: canFocus(item),
-        maxLines: item.maxLines,
-        maxLength: item.maxLength,
-        enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
-        controller: txt_controller,
-        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
-        decoration: InputDecoration(
-          labelText: item.label ?? item.name,
-        ),
-        validator: (value) {
-          if (item.onValidate != null) return item.onValidate(value);
-          if (item.required) if (value.isEmpty) {
-            return (item.editInfo
-                .replaceAll('{label}', item.label ?? item.name));
-          }
-
-          return null;
+    return Focus(
+        onFocusChange: (b) {
+          if (!b) if (item.onFocusChanged != null)
+            item.onFocusChanged(txt_controller.text);
         },
-        onSaved: (x) {
-          if (item.onSetValue != null) {
-            p[item.name] = item.onSetValue(x);
-            return;
-          }
-          if (p[item.name] is int)
-            p[item.name] = int.tryParse(x);
-          else if (p[item.name] is double)
-            p[item.name] = double.tryParse(x);
-          else if (p[item.name] is bool)
-            p[item.name] = x;
-          else
-            p[item.name] = x;
-        });
+        child: TextFormField(
+            autofocus: canFocus(item),
+            maxLines: item.maxLines,
+            maxLength: item.maxLength,
+            enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
+            controller: txt_controller,
+            style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            decoration: InputDecoration(
+              labelText: item.label ?? item.name,
+            ),
+            validator: (value) {
+              if (item.onValidate != null) return item.onValidate(value);
+              if (item.required) if (value.isEmpty) {
+                return (item.editInfo
+                    .replaceAll('{label}', item.label ?? item.name));
+              }
+
+              return null;
+            },
+            onSaved: (x) {
+              if (item.onSetValue != null) {
+                p[item.name] = item.onSetValue(x);
+                return;
+              }
+              if (p[item.name] is int)
+                p[item.name] = int.tryParse(x);
+              else if (p[item.name] is double)
+                p[item.name] = double.tryParse(x);
+              else if (p[item.name] is bool)
+                p[item.name] = x;
+              else
+                p[item.name] = x;
+            }));
   }
 
   _save(context) {

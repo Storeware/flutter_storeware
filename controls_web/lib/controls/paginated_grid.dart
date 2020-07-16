@@ -85,6 +85,7 @@ class PaginatedGridColumn {
   double width;
   double editWidth;
   double editHeight;
+  Function(dynamic) onFocusChanged;
   String Function(dynamic) onGetValue;
   dynamic Function(dynamic) onSetValue;
   String Function(dynamic) onValidate;
@@ -112,6 +113,7 @@ class PaginatedGridColumn {
     this.tooltip,
     this.editWidth,
     this.editHeight,
+    this.onFocusChanged,
     this.align,
     this.style,
     this.name,
@@ -1104,42 +1106,49 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
     );
   }
 
-  createFormField(item) {
-    return TextFormField(
-        autofocus: canFocus(item),
-        maxLines: item.maxLines,
-        maxLength: item.maxLength,
-        enabled: canEdit(item),
-        initialValue: (item.onGetValue != null)
+  createFormField(PaginatedGridColumn item) {
+    final TextEditingController _valueController = TextEditingController(
+        text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
-            : (p[item.name] ?? '').toString(),
-        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
-        decoration: InputDecoration(
-          labelText: item.label ?? item.name,
-        ),
-        validator: (value) {
-          if (item.onValidate != null) return item.onValidate(value);
-          if (item.required) if (value.isEmpty) {
-            return (item.editInfo
-                .replaceAll('{label}', item.label ?? item.name));
-          }
-
-          return null;
+            : (p[item.name] ?? '').toString());
+    return Focus(
+        onFocusChange: (b) {
+          if (!b) if (item.onFocusChanged != null)
+            item.onFocusChanged(_valueController.text);
         },
-        onSaved: (x) {
-          if (item.onSetValue != null) {
-            p[item.name] = item.onSetValue(x);
-            return;
-          }
-          if (p[item.name] is int)
-            p[item.name] = int.tryParse(x);
-          else if (p[item.name] is double)
-            p[item.name] = double.tryParse(x);
-          else if (p[item.name] is bool)
-            p[item.name] = x;
-          else
-            p[item.name] = x;
-        });
+        child: TextFormField(
+            autofocus: canFocus(item),
+            maxLines: item.maxLines,
+            maxLength: item.maxLength,
+            enabled: canEdit(item),
+            controller: _valueController,
+            style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            decoration: InputDecoration(
+              labelText: item.label ?? item.name,
+            ),
+            validator: (value) {
+              if (item.onValidate != null) return item.onValidate(value);
+              if (item.required) if (value.isEmpty) {
+                return (item.editInfo
+                    .replaceAll('{label}', item.label ?? item.name));
+              }
+
+              return null;
+            },
+            onSaved: (x) {
+              if (item.onSetValue != null) {
+                p[item.name] = item.onSetValue(x);
+                return;
+              }
+              if (p[item.name] is int)
+                p[item.name] = int.tryParse(x);
+              else if (p[item.name] is double)
+                p[item.name] = double.tryParse(x);
+              else if (p[item.name] is bool)
+                p[item.name] = x;
+              else
+                p[item.name] = x;
+            }));
   }
 
   _save(context) {

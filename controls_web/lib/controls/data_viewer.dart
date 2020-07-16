@@ -550,7 +550,9 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 for (var row in widget.grouped) createRow(row, widget.data),
-                Divider(),
+                SizedBox(
+                  height: 15,
+                ),
                 if (widget.canEdit || widget.canInsert)
                   Container(
                       alignment: Alignment.center,
@@ -620,14 +622,16 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
 
   get p => widget.data;
   createFormField(PaginatedGridColumn item) {
+    final TextEditingController txt_controller = TextEditingController(
+        text: (item.onGetValue != null)
+            ? item.onGetValue(p[item.name])
+            : (p[item.name] ?? '').toString());
     return TextFormField(
         autofocus: canFocus(item),
         maxLines: item.maxLines,
         maxLength: item.maxLength,
-        enabled: widget.canEdit || widget.canInsert,
-        initialValue: (item.onGetValue != null)
-            ? item.onGetValue(p[item.name])
-            : (p[item.name] ?? '').toString(),
+        enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
+        controller: txt_controller,
         style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
           labelText: item.label ?? item.name,

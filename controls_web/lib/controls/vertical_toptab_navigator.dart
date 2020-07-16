@@ -6,6 +6,11 @@ class VerticalTopTabNavigatorController {
   _VerticalTopTabNavigatorState parent;
   animateTo(index) => parent.animateTo(index);
   get activeIndex => parent.activeIndex;
+  showPage(Widget page) {
+    if (pageView != null) pageView.showPage(page);
+  }
+
+  _VerticalTopTabViewState pageView;
 }
 
 class VerticalTopTabView extends StatefulWidget {
@@ -43,7 +48,12 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
   void initState() {
     super.initState();
     controller = widget.controller ?? VerticalTopTabNavigatorController();
+    controller.pageView = this;
     _child = ValueNotifier<Widget>(Container());
+  }
+
+  showPage(Widget page) {
+    _child.value = page;
   }
 
   @override

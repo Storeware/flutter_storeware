@@ -776,8 +776,10 @@ class PaginatedGridController {
   }
 
   add(item) {
-    source.add(item);
-    changed(true);
+    if (source != null) {
+      source.add(item);
+      changed(true);
+    }
   }
 }
 

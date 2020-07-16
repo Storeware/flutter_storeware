@@ -792,6 +792,8 @@ class MaskedLabeled extends StatelessWidget {
               Padding(
                   padding: EdgeInsets.only(bottom: 8, top: 4),
                   child: Text(value ?? '',
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
                       style: theme.textTheme
                           .bodyText1) // TextStyle(fontSize: 14, color: Colors.grey)),
                   ),

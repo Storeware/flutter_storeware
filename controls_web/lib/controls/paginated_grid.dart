@@ -83,6 +83,8 @@ class PaginatedGridColumn {
   DataColumnSortCallback onSort;
   bool visible;
   double width;
+  double editWidth;
+  double editHeight;
   String Function(dynamic) onGetValue;
   dynamic Function(dynamic) onSetValue;
   String Function(dynamic) onValidate;
@@ -108,6 +110,8 @@ class PaginatedGridColumn {
     this.maxLength,
     this.width,
     this.tooltip,
+    this.editWidth,
+    this.editHeight,
     this.align,
     this.style,
     this.name,

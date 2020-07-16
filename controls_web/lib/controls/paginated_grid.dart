@@ -604,7 +604,9 @@ class _PaginatedGridState extends State<PaginatedGrid> {
         onPressed: () {
           controller.data = null;
           if (widget.onInsertItem != null)
-            controller.changed(widget.onInsertItem(controller));
+            widget.onInsertItem(controller).then((rsp) {
+              controller.changed(rsp);
+            });
           else if (widget.onPostEvent != null) {
             PaginatedGrid.show(context,
                 title: 'Novo registro',

@@ -286,7 +286,7 @@ class DataViewer extends StatefulWidget {
   /// pressionou o botam abrir da barra de filtro
   final Function() onSearchPressed;
   final CrossAxisAlignment crossAxisAlignment;
-  final Color backgroundColor;
+  //final Color backgroundColor;
 
   /// altura da linha de header de coluna
   final double headerHeight;
@@ -324,7 +324,7 @@ class DataViewer extends StatefulWidget {
     this.canInsert = false,
     this.canSearch = true,
     this.crossAxisAlignment = CrossAxisAlignment.center,
-    this.backgroundColor,
+    //this.backgroundColor,
     this.title,
     this.onInsertItem,
     this.onEditItem,
@@ -449,7 +449,7 @@ class _DataViewerState extends State<DataViewer> {
                     onInsertItem: widget.onInsertItem,
                     onDeleteItem: widget.onDeleteItem,
                     crossAxisAlignment: widget.crossAxisAlignment,
-                    backgroundColor: widget.backgroundColor,
+                    //backgroundColor: widget.backgroundColor,
                     headerHeight: (widget.canSearch || widget.header != null)
                         ? widget.headerHeight
                         : 0,

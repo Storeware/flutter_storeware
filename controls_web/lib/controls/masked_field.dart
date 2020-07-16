@@ -755,45 +755,49 @@ class MaskedLabeled extends StatelessWidget {
     this.label,
     this.sublabel,
     this.value,
+    this.padding,
   }) : super(key: key);
 
   final String label;
   final String value;
   final String sublabel;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Theme.of(context).dividerColor,
-            width: 2.0,
-          ),
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(children: [
-            Expanded(
-                child: Text(label ?? '',
-                    style: theme.textTheme
-                        .caption)), //TextStyle(fontSize: 12, color: Colors.grey))),
-            if (sublabel != null)
-              Text(sublabel, style: theme.textTheme.caption),
-          ]),
-          Padding(
-              padding: const EdgeInsets.only(bottom: 8, top: 4),
-              child: Text(value ?? '',
-                  style: theme.textTheme
-                      .bodyText1) // TextStyle(fontSize: 14, color: Colors.grey)),
+    return Padding(
+        padding: padding ?? EdgeInsets.only(left: 4, bottom: 2),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).dividerColor,
+                width: 2.0,
               ),
-        ],
-      ),
-    );
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                Expanded(
+                    child: Text(label ?? '',
+                        style: theme.textTheme
+                            .caption)), //TextStyle(fontSize: 12, color: Colors.grey))),
+                if (sublabel != null)
+                  Text(sublabel, style: theme.textTheme.caption),
+              ]),
+              Padding(
+                  padding: EdgeInsets.only(bottom: 8, top: 4),
+                  child: Text(value ?? '',
+                      style: theme.textTheme
+                          .bodyText1) // TextStyle(fontSize: 14, color: Colors.grey)),
+                  ),
+            ],
+          ),
+        ));
   }
 }
 

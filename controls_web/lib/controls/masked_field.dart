@@ -323,6 +323,7 @@ class MaskedDatePicker extends StatefulWidget {
   final DateTime lastDate;
   final MaskedDatePickerType type;
   final TextEditingController controller;
+  final bool readOnly;
   MaskedDatePicker(
       {Key key,
       this.labelText,
@@ -335,6 +336,7 @@ class MaskedDatePicker extends StatefulWidget {
       this.onChanged,
       this.firstDate,
       this.lastDate,
+      this.readOnly = false,
       this.onSaved})
       : super(key: key);
 
@@ -365,7 +367,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return TextFormField(
-        //initialValue: data.format(widget.format),
+        readOnly: widget.readOnly,
         controller: _dataController,
         keyboardType: TextInputType.phone,
         style: theme.textTheme
@@ -375,9 +377,12 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             prefix: widget.prefix,
             suffixIcon: IconButton(
                 icon: Icon(Icons.calendar_today),
-                onPressed: () {
-                  _dataController.text = formatter.format(widget.initialValue);
-                })),
+                onPressed: (widget.readOnly)
+                    ? null
+                    : () {
+                        _dataController.text =
+                            formatter.format(widget.initialValue);
+                      })),
         validator: (x) {
           DateTime d = formatter.parse(x);
           //DateTime b = formatter.parse(x);
@@ -393,6 +398,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
           return null;
         },
         onTap: () {
+          if (widget.readOnly) return;
           if (widget.type == MaskedDatePickerType.day)
             getDate().then((x) {
               _dataController.text = formatter.format(x);

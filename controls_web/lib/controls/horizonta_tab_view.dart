@@ -39,7 +39,7 @@ class HorizontalTabView extends StatelessWidget {
     this.tagColor = Colors.amber,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
-    this.iconColor = Colors.white,
+    this.iconColor, //= Colors.white,
     this.tabColor = Colors.lightBlue,
     this.pageBottom,
     this.isMobile,
@@ -53,6 +53,7 @@ class HorizontalTabView extends StatelessWidget {
     _index.value = index;
   }
 
+  Color _iconColor;
   @override
   Widget build(BuildContext context) {
     var _controller = controller ?? HorizontalTabViewController();
@@ -65,13 +66,14 @@ class HorizontalTabView extends StatelessWidget {
         (isMobile ?? responsive.isMobile
             ? HorizontalTabViewSiderBarType.compact
             : HorizontalTabViewSiderBarType.show);
+    ThemeData theme = Theme.of(context);
+    _iconColor = iconColor ?? theme.tabBarTheme.labelColor;
 
     return ValueListenableBuilder(
         valueListenable: _index,
         builder: (a, b, c) {
           return Theme(
-              data: ThemeData.light()
-                  .copyWith(scaffoldBackgroundColor: Colors.transparent),
+              data: theme.copyWith(scaffoldBackgroundColor: Colors.transparent),
               child: Scaffold(
                 backgroundColor: backgroundColor,
                 appBar: appBar,
@@ -105,13 +107,13 @@ class HorizontalTabView extends StatelessWidget {
                                                   choices[index].image,
                                                 if (choices[index].icon != null)
                                                   Icon(choices[index].icon,
-                                                      color: iconColor),
+                                                      color: _iconColor),
                                                 if (_index.value == index)
                                                   choices[index].title ??
                                                       Text(choices[index].label,
                                                           style: TextStyle(
                                                             fontSize: 12,
-                                                            color: iconColor,
+                                                            color: _iconColor,
                                                             fontWeight:
                                                                 FontWeight.w500,
                                                           )),
@@ -134,12 +136,12 @@ class HorizontalTabView extends StatelessWidget {
                                                       ? choices[index].image
                                                       : Icon(
                                                           choices[index].icon,
-                                                          color: iconColor,
+                                                          color: _iconColor,
                                                         ),
                                               title: choices[index].title ??
                                                   Text(choices[index].label,
                                                       style: TextStyle(
-                                                          color: iconColor)),
+                                                          color: _iconColor)),
                                               onTap: () {
                                                 _index.value = index;
                                               },
@@ -202,7 +204,7 @@ class HorizontalTabView extends StatelessWidget {
                                     Icon(
                                       tab.icon,
                                       size: 80,
-                                      color: iconColor ??
+                                      color: _iconColor ??
                                           theme
                                               .primaryTextTheme.bodyText1.color,
                                     ),
@@ -213,7 +215,7 @@ class HorizontalTabView extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
-                                        color: iconColor ??
+                                        color: _iconColor ??
                                             theme.primaryTextTheme.bodyText1
                                                 .color,
                                       ),

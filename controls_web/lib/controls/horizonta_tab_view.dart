@@ -18,6 +18,7 @@ class HorizontalTabView extends StatelessWidget {
   final Color indicatorColor;
   final Color iconColor;
   final AppBar appBar;
+  final Widget sidebarHeader, sidebarFooter;
   final Color color;
   final double width;
   final Color backgroundColor;
@@ -45,6 +46,8 @@ class HorizontalTabView extends StatelessWidget {
     this.isMobile,
     this.color, //= Colors.lightBlue,
     this.elevation = 0,
+    this.sidebarHeader,
+    this.sidebarFooter,
     this.floatingActionButton,
   }) : super(key: key);
   final ValueNotifier<int> _index = ValueNotifier<int>(0);
@@ -89,6 +92,7 @@ class HorizontalTabView extends StatelessWidget {
                           child: SizedBox.expand(
                             child: Column(
                               children: [
+                                if (sidebarHeader != null) sidebarHeader,
                                 for (var index = 0;
                                     index < choices.length;
                                     index++)
@@ -146,6 +150,8 @@ class HorizontalTabView extends StatelessWidget {
                                                 _index.value = index;
                                               },
                                             )),
+                                            if (sidebarFooter != null)
+                                              sidebarFooter,
                                           ]),
                                   ),
                               ],

@@ -1,8 +1,10 @@
 name: controls_firebase
 description: A new Flutter package project.
-version: 0.1.0
+version: 0.2.0
 author:
 homepage: http://tireideletra.com.br
+
+
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -18,6 +20,9 @@ flutter:
         default_package: controls_firebase_platform_android
       windows:
         default_package: controls_firebase_windows
+      macos:
+        default_package: controls_firebase_macos
+
       ios:
         default_package: controls_firebase_platform_android
 

@@ -6,6 +6,7 @@ import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/constants.dart';
 
 class DefaultDataViewer extends InheritedWidget {
   final DataViewerController controller;
@@ -310,7 +311,7 @@ class DataViewer extends StatefulWidget {
     this.elevation = 0,
     this.oddRowColor,
     this.rowsPerPage,
-    this.headerHeight = kMinInteractiveDimension * 1.7,
+    this.headerHeight = kToolbarHeight + 48,
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
@@ -359,6 +360,7 @@ class _DataViewerState extends State<DataViewer> {
 
   final TextEditingController _filtroController = TextEditingController();
   Size size;
+  ThemeData theme;
 
   createHeader() {
     bool isSmall = size.width < 500;
@@ -368,7 +370,7 @@ class _DataViewerState extends State<DataViewer> {
       return Form(
         child: SafeArea(
           child: Container(
-              height: 60,
+              height: kToolbarHeight + 4,
               width: sizes.maxWidth,
               alignment: Alignment.center,
               child: Align(
@@ -378,8 +380,9 @@ class _DataViewerState extends State<DataViewer> {
                     Expanded(
                       child: TextFormField(
                         controller: _filtroController,
-                        style: TextStyle(
-                            fontSize: 16, fontStyle: FontStyle.normal),
+                        style: theme.textTheme.bodyText1,
+                        /*TextStyle(
+                            fontSize: 16, fontStyle: FontStyle.normal),*/
                         decoration: InputDecoration(
                             labelText: 'procurar por',
                             suffixIcon: InkWell(
@@ -390,10 +393,10 @@ class _DataViewerState extends State<DataViewer> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      width: 95,
+                      padding: EdgeInsets.symmetric(vertical: 5), // ios usa 5
+                      width: 90,
                       child: StrapButton(
-                          type: StrapButtonType.light,
+                          //type: StrapButtonType.primary ,
                           text: 'abrir',
                           onPressed: () {
                             controller.filter = _filtroController.text;
@@ -414,6 +417,7 @@ class _DataViewerState extends State<DataViewer> {
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     size = MediaQuery.of(context).size;
     int _top = (widget.height ??
             ((size.height * 0.90) - kToolbarHeight - 20) -

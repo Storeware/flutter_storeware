@@ -19,6 +19,7 @@ class HorizontalTabView extends StatelessWidget {
   final Color iconColor;
   final AppBar appBar;
   final Widget sidebarHeader, sidebarFooter;
+  final Color sidebarBackgroundColor;
   final Color color;
   final double width;
   final Color backgroundColor;
@@ -48,6 +49,7 @@ class HorizontalTabView extends StatelessWidget {
     this.elevation = 0,
     this.sidebarHeader,
     this.sidebarFooter,
+    this.sidebarBackgroundColor,
     this.floatingActionButton,
   }) : super(key: key);
   final ValueNotifier<int> _index = ValueNotifier<int>(0);
@@ -88,7 +90,9 @@ class HorizontalTabView extends StatelessWidget {
                       Container(
                           width:
                               width ?? [0.0, 100.0, 180.0][_sidebarType.index],
-                          color: color ?? Colors.transparent,
+                          color: sidebarBackgroundColor ??
+                              color ??
+                              Colors.transparent,
                           child: SizedBox.expand(
                             child: Column(
                               children: [
@@ -99,7 +103,7 @@ class HorizontalTabView extends StatelessWidget {
                                   Container(
                                     color: (_index.value == index)
                                         ? indicatorColor
-                                        : tabColor,
+                                        : tabColor ?? sidebarBackgroundColor,
                                     child: (_sidebarType !=
                                             HorizontalTabViewSiderBarType.show)
                                         ? MaterialButton(

@@ -378,7 +378,8 @@ class ActivityCard extends StatelessWidget {
                           ),
                   ),
                 ),
-                Column(
+                Expanded(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title ?? '',
@@ -397,7 +398,7 @@ class ActivityCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
+                )),
               ],
             ),
             Wrap(
@@ -407,7 +408,7 @@ class ActivityCard extends StatelessWidget {
               //crossAxisAlignment: WrapCrossAlignment.center,
               runSpacing: 2,
 
-              spacing: spacing ?? 24,
+              spacing: spacing ?? 8,
               //alignment: WrapAlignment.start,
               //scrollDirection: Axis.horizontal,
               //mainAxisAlignment: MainAxisAlignment.spaceAround,

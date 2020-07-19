@@ -30,6 +30,7 @@ class HorizontalTabView extends StatelessWidget {
   final Widget floatingActionButton;
   final Color tagColor;
   final bool isMobile;
+  final double tabHeight;
   HorizontalTabView({
     Key key,
     this.choices,
@@ -39,6 +40,7 @@ class HorizontalTabView extends StatelessWidget {
     this.sidebarType,
     this.controller,
     this.tagColor = Colors.amber,
+    this.tabHeight,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
     this.iconColor, //= Colors.white,
@@ -132,28 +134,37 @@ class HorizontalTabView extends StatelessWidget {
                                             })
                                         : Row(children: [
                                             Container(
-                                                height: kToolbarHeight,
+                                                height:
+                                                    tabHeight ?? kToolbarHeight,
                                                 width: 5,
                                                 color: (_index.value == index)
                                                     ? tagColor
                                                     : tabColor),
                                             Expanded(
-                                                child: ListTile(
-                                              leading:
-                                                  (choices[index].image != null)
-                                                      ? choices[index].image
-                                                      : Icon(
-                                                          choices[index].icon,
-                                                          color: _iconColor,
-                                                        ),
-                                              title: choices[index].title ??
-                                                  Text(choices[index].label,
-                                                      style: TextStyle(
-                                                          color: _iconColor)),
-                                              onTap: () {
-                                                _index.value = index;
-                                              },
-                                            )),
+                                              child: Container(
+                                                  height: tabHeight,
+                                                  child: ListTile(
+                                                    leading: (choices[index]
+                                                                .image !=
+                                                            null)
+                                                        ? choices[index].image
+                                                        : Icon(
+                                                            choices[index].icon,
+                                                            color: _iconColor,
+                                                          ),
+                                                    title: choices[index]
+                                                            .title ??
+                                                        Text(
+                                                            choices[index]
+                                                                .label,
+                                                            style: TextStyle(
+                                                                color:
+                                                                    _iconColor)),
+                                                    onTap: () {
+                                                      _index.value = index;
+                                                    },
+                                                  )),
+                                            ),
                                             if (sidebarFooter != null)
                                               sidebarFooter,
                                           ]),

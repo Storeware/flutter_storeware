@@ -326,6 +326,7 @@ class ActivityCard extends StatelessWidget {
   final double spacing;
   final TextStyle style;
   final Color titleColor;
+  final double avatarSize;
   const ActivityCard(
       {Key key,
       this.color,
@@ -337,6 +338,7 @@ class ActivityCard extends StatelessWidget {
       this.image,
       this.children,
       this.spacing,
+      this.avatarSize = 42,
       this.height,
       this.width})
       : super(key: key);
@@ -363,8 +365,8 @@ class ActivityCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
-                    width: 60,
-                    height: 60,
+                    width: avatarSize,
+                    height: avatarSize,
                     child: (image != null)
                         ? CircleAvatar(
                             backgroundColor:

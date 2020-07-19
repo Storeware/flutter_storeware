@@ -321,6 +321,7 @@ class ActivityCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+  final Widget image;
   final Color color;
   final double spacing;
   final TextStyle style;
@@ -333,6 +334,7 @@ class ActivityCard extends StatelessWidget {
       this.style,
       this.titleColor,
       this.icon,
+      this.image,
       this.children,
       this.spacing,
       this.height,
@@ -363,12 +365,17 @@ class ActivityCard extends StatelessWidget {
                   child: Container(
                     width: 60,
                     height: 60,
-                    child: ActivityAvatar(
-                      avatarBackgroudColor:
-                          theme.primaryTextTheme.bodyText1.color,
-                      iconColor: theme.textTheme.button.color,
-                      icon: icon ?? Icons.person_pin,
-                    ),
+                    child: (image != null)
+                        ? CircleAvatar(
+                            backgroundColor:
+                                theme.primaryTextTheme.bodyText1.color,
+                            child: image)
+                        : ActivityAvatar(
+                            avatarBackgroudColor:
+                                theme.primaryTextTheme.bodyText1.color,
+                            iconColor: theme.textTheme.button.color,
+                            icon: icon ?? Icons.person_pin,
+                          ),
                   ),
                 ),
                 Column(

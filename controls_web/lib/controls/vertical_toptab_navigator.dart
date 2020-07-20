@@ -23,12 +23,14 @@ class VerticalTopTabView extends StatefulWidget {
   final Color indicatorColor;
   final Color selectedColor;
   final Widget leading;
+  final double spacing;
 
   const VerticalTopTabView(
       {Key key,
       this.initialIndex = 0,
       this.indicatorColor = Colors.amber,
       this.selectedColor,
+      this.spacing = 4,
       this.actions,
       this.choices,
       this.controller,
@@ -69,6 +71,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           initialIndex: widget.initialIndex,
           indicatorColor: widget.indicatorColor,
           selectedColor: widget.selectedColor,
+          spacing: widget.spacing,
           onSelectItem: (index, tab) {
             if (tab.child == null) tab.child = tab.builder();
             _child.value = tab.child;
@@ -94,6 +97,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final Color tabColor;
   final Color iconColor;
   final TextStyle style;
+  final double spacing;
   final VerticalTopTabNavigatorController controller;
   VerticalTopTabNavigator(
       {Key key,
@@ -103,6 +107,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.selectedColor,
       this.leading,
       this.actions,
+      this.spacing = 4,
       this.controller,
       this.indicatorColor = Colors.amber,
       this.iconColor,
@@ -154,7 +159,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           Expanded(child: Container(child: widget.leading)),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
-              padding: EdgeInsets.only(left: 8, right: 8),
+              padding:
+                  EdgeInsets.only(left: widget.spacing, right: widget.spacing),
               color: (active.value == index) ? _selectedColor : _tabColor,
               child: InkWell(
                 child: (!widget.choices[index].visible)

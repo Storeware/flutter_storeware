@@ -35,7 +35,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.controller,
       this.iconColor,
       this.leading,
-      this.spacing,
+      this.spacing = 4,
       this.style})
       : super(key: key);
 
@@ -159,8 +159,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           Expanded(child: Container(child: widget.leading)),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
-              padding:
-                  EdgeInsets.only(left: widget.spacing, right: widget.spacing),
+              padding: EdgeInsets.only(
+                  left: widget.spacing ?? 4, right: widget.spacing ?? 4),
               color: (active.value == index) ? _selectedColor : _tabColor,
               child: InkWell(
                 child: (!widget.choices[index].visible)

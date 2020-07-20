@@ -13,6 +13,7 @@ class TabChoice<T> {
   IconData selectedIcon;
   bool primary;
   Widget trailing;
+  int count;
   TabChoice(
       {this.builder,
       this.data,
@@ -22,6 +23,7 @@ class TabChoice<T> {
       this.label,
       this.child,
       this.icon,
+      this.count,
       this.trailing,
       this.selectedIcon,
       this.primary = false,

@@ -15,6 +15,7 @@ class HorizontalTabView extends StatelessWidget {
   final List<TabChoice> choices;
   final HorizontalTabViewController controller;
   final Color tabColor;
+  final Color sidebarBackgroundColor;
   final Color indicatorColor;
   final Color iconColor;
   final AppBar appBar;
@@ -29,12 +30,15 @@ class HorizontalTabView extends StatelessWidget {
   final Widget floatingActionButton;
   final Color tagColor;
   final bool isMobile;
+  final double tabHeight;
   HorizontalTabView({
     Key key,
     this.choices,
     this.appBar,
     this.padding,
     this.width,
+    this.tabHeight,
+    this.sidebarBackgroundColor,
     this.sidebarType,
     this.controller,
     this.tagColor = Colors.amber,
@@ -88,7 +92,9 @@ class HorizontalTabView extends StatelessWidget {
                       Container(
                           width:
                               width ?? [0.0, 100.0, 180.0][_sidebarType.index],
-                          color: color ?? Colors.transparent,
+                          color: sidebarBackgroundColor ??
+                              color ??
+                              Colors.transparent,
                           child: SizedBox.expand(
                             child: Column(
                               children: [
@@ -128,28 +134,37 @@ class HorizontalTabView extends StatelessWidget {
                                             })
                                         : Row(children: [
                                             Container(
-                                                height: kToolbarHeight,
+                                                height:
+                                                    tabHeight ?? kToolbarHeight,
                                                 width: 5,
                                                 color: (_index.value == index)
                                                     ? tagColor
                                                     : tabColor),
                                             Expanded(
-                                                child: ListTile(
-                                              leading:
-                                                  (choices[index].image != null)
-                                                      ? choices[index].image
-                                                      : Icon(
-                                                          choices[index].icon,
-                                                          color: _iconColor,
-                                                        ),
-                                              title: choices[index].title ??
-                                                  Text(choices[index].label,
-                                                      style: TextStyle(
-                                                          color: _iconColor)),
-                                              onTap: () {
-                                                _index.value = index;
-                                              },
-                                            )),
+                                                child: Container(
+                                                    height: tabHeight,
+                                                    child: ListTile(
+                                                      leading: (choices[index]
+                                                                  .image !=
+                                                              null)
+                                                          ? choices[index].image
+                                                          : Icon(
+                                                              choices[index]
+                                                                  .icon,
+                                                              color: _iconColor,
+                                                            ),
+                                                      title: choices[index]
+                                                              .title ??
+                                                          Text(
+                                                              choices[index]
+                                                                  .label,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      _iconColor)),
+                                                      onTap: () {
+                                                        _index.value = index;
+                                                      },
+                                                    ))),
                                             if (sidebarFooter != null)
                                               sidebarFooter,
                                           ]),

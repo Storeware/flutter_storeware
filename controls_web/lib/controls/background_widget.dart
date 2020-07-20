@@ -1,4 +1,4 @@
-import 'package:checkout/app/config/loja_config.dart';
+//import 'package:checkout/app/config/loja_config.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundWidget extends StatelessWidget {
@@ -21,7 +21,7 @@ class BackgroundWidget extends StatelessWidget {
         if (topNavigationBar != null) topNavigationBar,
         Positioned(
           bottom: 1,
-          child: image ?? LojaConfig.backgroundImage,
+          child: image, //?? LojaConfig.backgroundImage,
         ),
         if (bottomNavigationBar != null)
           Align(alignment: Alignment.bottomCenter, child: bottomNavigationBar),

@@ -523,12 +523,14 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final DataViewerController controller;
   final bool canEdit, canInsert, canDelete;
   final PaginatedGridChangeEvent event;
+  final double dataRowHeight;
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
     @required this.grouped,
     @required this.controller,
     this.title,
+    this.dataRowHeight,
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
@@ -629,7 +631,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
-        height: col.editHeight ?? kToolbarHeight + 4,
+        height: widget.dataRowHeight ?? col.editHeight ?? kToolbarHeight + 8,
         width: col.editWidth ?? col.width ?? 150,
         child: edit ?? Text('${widget.data[column]}'));
   }

@@ -1,198 +1,267 @@
-import 'package:controls_web/controls/tab_choice.dart';
+import 'package:controls_web/controls/responsive.dart';
 import 'package:flutter/material.dart';
-//import 'tab_choice.dart';
+import 'package:controls_web/controls/tab_choice.dart';
 
-class VerticalTopTabNavigatorController {
-  _VerticalTopTabNavigatorState parent;
-  animateTo(index) => parent.animateTo(index);
-  get activeIndex => parent.activeIndex;
-  showPage(Widget page) {
-    if (pageView != null) pageView.showPage(page);
+enum HorizontalTabViewSiderBarType { hide, compact, show }
+
+class HorizontalTabViewController {
+  HorizontalTabView tabControl;
+  animateTo(int index) {
+    tabControl.animateTo(index);
   }
-
-  _VerticalTopTabViewState pageView;
 }
 
-class VerticalTopTabView extends StatefulWidget {
-  final List<Widget> actions;
+class HorizontalTabView extends StatelessWidget {
   final List<TabChoice> choices;
-  final VerticalTopTabNavigatorController controller;
-  final int initialIndex;
-  final Color iconColor;
-  final TextStyle style;
-  final Color indicatorColor;
-  final Color selectedColor;
-  final Widget leading;
-  final double spacing;
-
-  const VerticalTopTabView(
-      {Key key,
-      this.initialIndex = 0,
-      this.indicatorColor = Colors.amber,
-      this.selectedColor,
-      this.actions,
-      this.choices,
-      this.controller,
-      this.iconColor,
-      this.leading,
-      this.spacing = 4,
-      this.style})
-      : super(key: key);
-
-  @override
-  _VerticalTopTabViewState createState() => _VerticalTopTabViewState();
-}
-
-class _VerticalTopTabViewState extends State<VerticalTopTabView> {
-  VerticalTopTabNavigatorController controller;
-  ValueNotifier<Widget> _child;
-  @override
-  void initState() {
-    super.initState();
-    controller = widget.controller ?? VerticalTopTabNavigatorController();
-    controller.pageView = this;
-    _child = ValueNotifier<Widget>(Container());
-  }
-
-  showPage(Widget page) {
-    _child.value = page;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        VerticalTopTabNavigator(
-          actions: widget.actions,
-          choices: widget.choices,
-          controller: controller,
-          leading: widget.leading,
-          iconColor: widget.iconColor,
-          initialIndex: widget.initialIndex,
-          indicatorColor: widget.indicatorColor,
-          selectedColor: widget.selectedColor,
-          spacing: widget.spacing,
-          onSelectItem: (index, tab) {
-            if (tab.child == null) tab.child = tab.builder();
-            _child.value = tab.child;
-          },
-        ),
-        Expanded(
-            child: ValueListenableBuilder<Widget>(
-                valueListenable: _child,
-                builder: (a, widget, c) => _child.value ?? Container())),
-      ],
-    );
-  }
-}
-
-class VerticalTopTabNavigator extends StatefulWidget {
-  final List<TabChoice> choices;
-  final Function(int, TabChoice) onSelectItem;
-  final int initialIndex;
-  final Color indicatorColor;
-  final Color selectedColor;
-  final List<Widget> actions;
-  final Widget leading;
+  final HorizontalTabViewController controller;
   final Color tabColor;
+  final Color indicatorColor;
   final Color iconColor;
-  final TextStyle style;
-  final double spacing;
-  final VerticalTopTabNavigatorController controller;
-  VerticalTopTabNavigator(
-      {Key key,
-      @required this.choices,
-      this.onSelectItem,
-      this.spacing = 4,
-      this.initialIndex = 0,
-      this.selectedColor,
-      this.leading,
-      this.actions,
-      this.controller,
-      this.indicatorColor = Colors.amber,
-      this.iconColor,
-      this.style,
-      this.tabColor})
-      : super(key: key);
+  final AppBar appBar;
+  final Widget sidebarHeader, sidebarFooter;
+  final Color color;
+  final double width;
+  final Color backgroundColor;
+  final Widget pageBottom;
+  final EdgeInsets padding;
+  final HorizontalTabViewSiderBarType sidebarType;
+  final double elevation;
+  final Widget floatingActionButton;
+  final Color tagColor;
+  final bool isMobile;
+  HorizontalTabView({
+    Key key,
+    this.choices,
+    this.appBar,
+    this.padding,
+    this.width,
+    this.sidebarType,
+    this.controller,
+    this.tagColor = Colors.amber,
+    this.indicatorColor = Colors.blue,
+    this.backgroundColor,
+    this.iconColor, //= Colors.white,
+    this.tabColor = Colors.lightBlue,
+    this.pageBottom,
+    this.isMobile,
+    this.color, //= Colors.lightBlue,
+    this.elevation = 0,
+    this.sidebarHeader,
+    this.sidebarFooter,
+    this.floatingActionButton,
+  }) : super(key: key);
+  final ValueNotifier<int> _index = ValueNotifier<int>(0);
 
-  @override
-  _VerticalTopTabNavigatorState createState() =>
-      _VerticalTopTabNavigatorState();
-}
-
-class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
-  ValueNotifier<int> active;
-  VerticalTopTabNavigatorController controller;
-  @override
-  void initState() {
-    super.initState();
-    controller = widget.controller ?? VerticalTopTabNavigatorController();
-    controller.parent = this;
+  animateTo(int index) {
+    _index.value = index;
   }
 
-  animateTo(index) {
-    widget.onSelectItem(index, widget.choices[index]);
-    active.value = index;
-  }
-
-  get activeIndex => active.value;
-
+  Color _iconColor;
   @override
   Widget build(BuildContext context) {
+    var _controller = controller ?? HorizontalTabViewController();
+    _controller.tabControl = this;
+    ResponsiveInfo responsive = ResponsiveInfo(context);
+
+    if (isMobile ?? responsive.isSmall) return mobileBuild(context);
+
+    HorizontalTabViewSiderBarType _sidebarType = sidebarType ??
+        (isMobile ?? responsive.isMobile
+            ? HorizontalTabViewSiderBarType.compact
+            : HorizontalTabViewSiderBarType.show);
     ThemeData theme = Theme.of(context);
-    Color _iconColor = widget.iconColor ?? theme.primaryColor;
-    Color _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
-    Color _selectedColor =
-        widget.selectedColor ?? theme.scaffoldBackgroundColor;
-    if (active == null) {
-      active = ValueNotifier<int>(widget.initialIndex ?? 0);
-      if (active.value >= 0)
-        widget.onSelectItem(active.value, widget.choices[active.value]);
-    }
-    return Container(
-      padding: const EdgeInsets.all(3.0),
-      height: 36,
-      width: double.maxFinite,
-      child: ValueListenableBuilder<int>(
-        valueListenable: active,
-        builder: (a, b, w) => Row(children: [
-          Expanded(child: Container(child: widget.leading)),
-          for (var index = 0; index < widget.choices.length; index++)
-            Container(
-              padding: EdgeInsets.only(
-                  left: widget.spacing ?? 4, right: widget.spacing ?? 4),
-              color: (active.value == index) ? _selectedColor : _tabColor,
-              child: InkWell(
-                child: (!widget.choices[index].visible)
-                    ? Container()
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(widget.choices[index].label,
-                                      style: widget.style ??
-                                          TextStyle(
-                                              color: _iconColor,
-                                              fontSize: 14)))),
-                          Container(
-                              height: 2,
-                              width: widget.choices[index].label.length * 8.0,
-                              color: (active.value == index)
-                                  ? widget.indicatorColor
-                                  : null)
-                        ],
-                      ),
-                onTap: () {
-                  widget.onSelectItem(index, widget.choices[index]);
-                  active.value = index;
+    _iconColor = iconColor ?? theme.tabBarTheme.labelColor;
+
+    return ValueListenableBuilder(
+        valueListenable: _index,
+        builder: (a, b, c) {
+          return Theme(
+              data: theme.copyWith(scaffoldBackgroundColor: Colors.transparent),
+              child: Scaffold(
+                backgroundColor: backgroundColor,
+                appBar: appBar,
+                bottomNavigationBar: pageBottom,
+                floatingActionButton: floatingActionButton,
+                body: Row(
+                  children: [
+                    if (_sidebarType != HorizontalTabViewSiderBarType.hide)
+                      Container(
+                          width:
+                              width ?? [0.0, 100.0, 180.0][_sidebarType.index],
+                          color: color ?? Colors.transparent,
+                          child: SizedBox.expand(
+                            child: Column(
+                              children: [
+                                if (sidebarHeader != null) sidebarHeader,
+                                for (var index = 0;
+                                    index < choices.length;
+                                    index++)
+                                  Container(
+                                    color: (_index.value == index)
+                                        ? indicatorColor
+                                        : tabColor,
+                                    child: (_sidebarType !=
+                                            HorizontalTabViewSiderBarType.show)
+                                        ? MaterialButton(
+                                            padding: EdgeInsets.zero,
+                                            child: Column(
+                                              children: [
+                                                if (choices[index].image !=
+                                                    null)
+                                                  choices[index].image,
+                                                if (choices[index].icon != null)
+                                                  Icon(choices[index].icon,
+                                                      color: _iconColor),
+                                                if (_index.value == index)
+                                                  choices[index].title ??
+                                                      Text(choices[index].label,
+                                                          style: TextStyle(
+                                                            fontSize: 12,
+                                                            color: _iconColor,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          )),
+                                              ],
+                                            ),
+                                            onPressed: () {
+                                              _index.value = index;
+                                            })
+                                        : Row(children: [
+                                            Container(
+                                                height: kToolbarHeight,
+                                                width: 5,
+                                                color: (_index.value == index)
+                                                    ? tagColor
+                                                    : tabColor),
+                                            Expanded(
+                                                child: ListTile(
+                                              leading:
+                                                  (choices[index].image != null)
+                                                      ? choices[index].image
+                                                      : Icon(
+                                                          choices[index].icon,
+                                                          color: _iconColor,
+                                                        ),
+                                              title: choices[index].title ??
+                                                  Text(choices[index].label,
+                                                      style: TextStyle(
+                                                          color: _iconColor)),
+                                              onTap: () {
+                                                _index.value = index;
+                                              },
+                                            )),
+                                            if (sidebarFooter != null)
+                                              sidebarFooter,
+                                          ]),
+                                  ),
+                              ],
+                            ),
+                          )),
+                    //VerticalDivider(),
+                    Expanded(
+                      child: Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: Builder(builder: (x) {
+                            if (choices[_index.value].child == null)
+                              choices[_index.value].child =
+                                  choices[_index.value].builder();
+                            return choices[_index.value].child;
+                          })),
+                    )
+                  ],
+                ),
+              ));
+        });
+  }
+
+  mobileBuild(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    ThemeData theme = Theme.of(context);
+    int cols = size.width ~/ 200;
+    if (size.width < 411) cols = 2;
+    return Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: appBar,
+        bottomNavigationBar: pageBottom,
+        floatingActionButton: floatingActionButton,
+        body: Stack(children: [
+          Center(
+            child: GridView.count(
+              primary: false,
+              crossAxisCount: cols,
+              children: List.generate(
+                choices.length,
+                (index) {
+                  TabChoice tab = choices[index];
+                  return Padding(
+                      padding: padding ?? EdgeInsets.all(8),
+                      child: InkWell(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                tab.image ??
+                                    Icon(
+                                      tab.icon,
+                                      size: 80,
+                                      color: _iconColor ??
+                                          theme
+                                              .primaryTextTheme.bodyText1.color,
+                                    ),
+                                tab.title ??
+                                    Text(
+                                      tab.label,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500,
+                                        color: _iconColor ??
+                                            theme.primaryTextTheme.bodyText1
+                                                .color,
+                                      ),
+                                    ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          if (tab.primary)
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (x) {
+                                if (tab.child == null)
+                                  tab.child = tab.builder();
+                                return tab.child;
+                              }),
+                            );
+                          else
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (x) {
+                                if (tab.child == null)
+                                  tab.child = tab.builder();
+                                return Scaffold(
+                                  appBar: AppBar(
+                                      title: tab.title ??
+                                          Text(
+                                            tab.label,
+                                          )),
+                                  body: tab.child,
+                                );
+                              }),
+                            );
+                        },
+                      ));
                 },
               ),
             ),
-          if (widget.actions != null) ...widget.actions,
-        ]),
-      ),
-    );
+          ),
+        ]));
   }
 }

@@ -691,6 +691,7 @@ class MaskedMoneyFormField extends StatelessWidget {
   final String errorText;
   final int maxLength;
   final dynamic Function(double) validator;
+  final Function(double) onFocusChanged;
   const MaskedMoneyFormField({
     Key key,
     this.label,
@@ -699,6 +700,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.leftSymbol = '',
     this.precision,
     this.controller,
+    this.onFocusChanged,
     this.errorText,
     this.validator,
     this.maxLength,
@@ -730,25 +732,30 @@ class MaskedMoneyFormField extends StatelessWidget {
           ),
         Container(
           constraints: BoxConstraints(minWidth: 100, minHeight: 40),
-          child: TextFormField(
-              key: key,
-              controller: _controller,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: label,
-              ),
-              validator: (x) {
-                if (validator != null)
-                  return validator(_controller.numberValue);
-                if ((errorText != null) && (x == '')) {
-                  return errorText;
-                }
-                return null;
+          child: Focus(
+              onFocusChange: (b) {
+                if (!b && (onFocusChanged != null))
+                  onFocusChanged(_controller.numberValue);
               },
-              maxLength: maxLength,
-              onSaved: (x) {
-                if (onSaved != null) onSaved(_controller.numberValue);
-              }),
+              child: TextFormField(
+                  key: key,
+                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: label,
+                  ),
+                  validator: (x) {
+                    if (validator != null)
+                      return validator(_controller.numberValue);
+                    if ((errorText != null) && (x == '')) {
+                      return errorText;
+                    }
+                    return null;
+                  },
+                  maxLength: maxLength,
+                  onSaved: (x) {
+                    if (onSaved != null) onSaved(_controller.numberValue);
+                  })),
         ),
       ],
     );

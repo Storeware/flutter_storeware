@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'tab_choice.dart';
 
+/*
 class TabChoice {
   int index;
   String text;
@@ -15,6 +17,7 @@ class TabChoice {
       this.tooltip,
       this.items});
 }
+*/
 
 class VerticalTabViewController {
   final Function(int, TabChoice) onSelectedItem;
@@ -226,7 +229,7 @@ class _TopAppBarState extends State<TopAppBar> {
                 alignment: Alignment.center,
                 height: widget.height,
                 child: widget.choices[i].title ??
-                    Text(widget.choices[i].text,
+                    Text(widget.choices[i].label,
                         textAlign: TextAlign.center,
                         style: theme.primaryTextTheme.bodyText1),
               ),
@@ -237,7 +240,7 @@ class _TopAppBarState extends State<TopAppBar> {
                 return [
                   for (var x = 0; x < widget.choices[i].items.length; x++)
                     PopupMenuItem<int>(
-                        value: x, child: Text(widget.choices[i].items[x].text))
+                        value: x, child: Text(widget.choices[i].items[x].label))
                 ];
               },
             ));
@@ -249,7 +252,7 @@ class _TopAppBarState extends State<TopAppBar> {
         builder: (ctx, x, w) => MaterialButton(
             color: (x == i) ? _indicatorColor : _titleColor,
             child: widget.choices[i].title ??
-                Text(widget.choices[i].text ?? '',
+                Text(widget.choices[i].label ?? '',
                     style: theme.primaryTextTheme
                         .bodyText1), //TextStyle(color:theme.primaryTextTheme.bodyText1.color ) ),
             onPressed: () {

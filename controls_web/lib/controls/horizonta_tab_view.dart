@@ -20,6 +20,7 @@ class HorizontalTabView extends StatelessWidget {
   final Color iconColor;
   final AppBar appBar;
   final Widget sidebarHeader, sidebarFooter;
+  final int mobileCrossCount;
   final Color color;
   final double width;
   final Color backgroundColor;
@@ -42,6 +43,7 @@ class HorizontalTabView extends StatelessWidget {
     this.sidebarType,
     this.controller,
     this.tagColor = Colors.amber,
+    this.mobileCrossCount,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
     this.iconColor, //= Colors.white,
@@ -192,8 +194,9 @@ class HorizontalTabView extends StatelessWidget {
   mobileBuild(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     ThemeData theme = Theme.of(context);
-    int cols = size.width ~/ 200;
-    if (size.width < 411) cols = 2;
+    int cols = mobileCrossCount ?? size.width ~/ 150;
+    if (size.width < mobileCrossCount ?? 2) cols = mobileCrossCount ?? 2;
+
     return Scaffold(
         backgroundColor: backgroundColor,
         appBar: appBar,
@@ -237,8 +240,7 @@ class HorizontalTabView extends StatelessWidget {
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
                                         color: _iconColor ??
-                                            theme.primaryTextTheme.bodyText1
-                                                .color,
+                                            theme.TextTheme.button.color,
                                       ),
                                     ),
                               ],

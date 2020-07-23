@@ -1,5 +1,7 @@
 import 'package:controls_web/controls/tab_choice.dart';
 import 'package:flutter/material.dart';
+
+import 'swipe_detector.dart';
 //import 'tab_choice.dart';
 
 class VerticalTopTabNavigatorController {
@@ -46,20 +48,26 @@ class VerticalTopTabView extends StatefulWidget {
 class _VerticalTopTabViewState extends State<VerticalTopTabView> {
   VerticalTopTabNavigatorController controller;
   ValueNotifier<Widget> _child;
+  int position;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? VerticalTopTabNavigatorController();
     controller.pageView = this;
     _child = ValueNotifier<Widget>(Container());
+    position = widget.initialIndex;
   }
 
   showPage(Widget page) {
     _child.value = page;
   }
 
+  get maxIndex => widget.choices.length - 1;
+  get minIndex => 0;
   @override
   Widget build(BuildContext context) {
+    DateTime ultimo = DateTime.now();
+    int newIndex = widget.initialIndex;
     return Column(
       children: [
         VerticalTopTabNavigator(
@@ -73,14 +81,34 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           selectedColor: widget.selectedColor,
           spacing: widget.spacing,
           onSelectItem: (index, tab) {
-            if (tab.child == null) tab.child = tab.builder();
+            position = index;
+            tab.child ??= tab.builder();
             _child.value = tab.child;
           },
         ),
         Expanded(
-            child: ValueListenableBuilder<Widget>(
-                valueListenable: _child,
-                builder: (a, widget, c) => _child.value ?? Container())),
+          child: ValueListenableBuilder<Widget>(
+            valueListenable: _child,
+            builder: (a, widget, c) => AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                child: SwipeDetector(
+                  child: _child.value ?? Container(),
+                  onSwipeRight: () {
+                    print(['right', position, maxIndex]);
+                    if (position > 0) controller.animateTo(position - 1);
+                  },
+                  onSwipeLeft: () {
+                    print(['left', position]);
+                    if (position < maxIndex) controller.animateTo(position + 1);
+                  },
+                ),
+                switchInCurve: Curves.ease,
+                transitionBuilder: (widget, animation) => ScaleTransition(
+                      scale: animation,
+                      child: widget,
+                    )),
+          ),
+        ),
       ],
     );
   }

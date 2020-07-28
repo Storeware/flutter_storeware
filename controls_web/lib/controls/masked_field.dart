@@ -920,10 +920,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     final TextEditingController _controller =
-        this.controller ?? TextEditingController();
-
-    _controller.text = getValue(initialValue);
-
+        this.controller ?? TextEditingController(text: getValue(initialValue));
     return Focus(
         canRequestFocus: false,
         onFocusChange: (x) {

@@ -7,7 +7,7 @@ import 'package:control_data_platform_interface/control_data_platform_interface.
 
 class PlatformLocalStorage extends LocalStorageInterface {
   Map<String, dynamic> items = {};
-  String appFileName = 'storage.config';
+  String appFileName = 'storage.json';
   File _file;
 
   init() async {

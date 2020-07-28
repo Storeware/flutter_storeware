@@ -17,7 +17,7 @@ flutter:
       android:
         default_package: control_data_platform_android
       windows:
-        default_package: control_data_platform_android
+        default_package: control_data_platform_windows
       ios:
         default_package: control_data_platform_android
 

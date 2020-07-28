@@ -902,6 +902,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
     if (typeOf<T>() == typeOf<Money>()) return Money.tryParse(value) as T;
     if (typeOf<T>() == typeOf<int>()) return int.tryParse(value) as T;
     if (typeOf<T>() == typeOf<double>()) return double.tryParse(value) as T;
+    if (typeOf<T>() == typeOf<num>()) return double.tryParse(value) as T;
     if (typeOf<T>() == typeOf<DateTime>()) return DateTime.tryParse(value) as T;
     if (typeOf<T>() == typeOf<bool>()) return (value == 'true') as T;
     return value as T;

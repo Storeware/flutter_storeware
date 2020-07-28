@@ -377,9 +377,9 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             decoration: InputDecoration(
                 labelText: widget.labelText,
                 prefix: widget.prefix,
-                suffixIcon: IconButton(
-                    icon: Icon(Icons.calendar_today),
-                    onPressed: (widget.readOnly)
+                suffixIcon: GestureDetector(
+                    child: Icon(Icons.calendar_today),
+                    onTap: (widget.readOnly)
                         ? null
                         : () {
                             _dataController.text =
@@ -445,7 +445,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: widget.firstDate ?? DateTime.now().add(Duration(days: -180)),
-      lastDate: widget.lastDate ?? DateTime(2030),
+      lastDate: widget.lastDate ?? DateTime(DateTime.now().year + 10),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.light(),
@@ -937,9 +937,11 @@ class MaskedSearchFormField<T> extends StatelessWidget {
             decoration: decoration ??
                 InputDecoration(
                     labelText: labelText,
-                    suffixIcon: IconButton(
-                        icon: Icon(iconSearch),
-                        onPressed: () {
+                    suffixIcon: GestureDetector(
+                        //focusNode: FocusNode(
+                        //    canRequestFocus: false, onKey: (a, b) => false),
+                        child: Icon(iconSearch),
+                        onTap: () {
                           onSearch().then((item) {
                             _controller.text = getValue(item);
                           });

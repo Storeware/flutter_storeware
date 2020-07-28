@@ -738,6 +738,7 @@ class MaskedMoneyFormField extends StatelessWidget {
             constraints: BoxConstraints(minWidth: 100),
             height: kToolbarHeight + 3,
             child: Focus(
+                canRequestFocus: false,
                 onFocusChange: (b) {
                   if (!b && (onFocusChanged != null))
                     onFocusChanged(_controller.numberValue);
@@ -923,6 +924,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
     _controller.text = getValue(initialValue);
 
     return Focus(
+        canRequestFocus: false,
         onFocusChange: (x) {
           if (onFocusChange != null)
             onFocusChange(x, setValue(_controller.text));

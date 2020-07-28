@@ -862,7 +862,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   final String labelText;
   final int maxLines;
   final Function(T) onChanged;
-  final Function(bool, dynamic) onFocusChange;
+  final Function(bool, T) onFocusChange;
 
   const MaskedSearchFormField(
       {Key key,
@@ -924,7 +924,8 @@ class MaskedSearchFormField<T> extends StatelessWidget {
 
     return Focus(
         onFocusChange: (x) {
-          if (onFocusChange != null) onFocusChange(x, _controller.text);
+          if (onFocusChange != null)
+            onFocusChange(x, setValue(_controller.text));
         },
         child: TextFormField(
             autofocus: autofocus,

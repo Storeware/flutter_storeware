@@ -272,6 +272,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
       child: TextFormField(
           textAlign: widget.textAlign ?? TextAlign.start,
@@ -280,7 +281,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
           initialValue: (_controller == null) ? widget.initialValue : null,
           controller: _controller,
           style: widget.style ??
-              TextStyle(fontSize: widget.fontSize, fontStyle: FontStyle.normal),
+              theme.textTheme.bodyText1.copyWith(fontSize: widget.fontSize),
           decoration: InputDecoration(
             labelText: '${widget.label}',
             helperText: !_showHelperText
@@ -322,6 +323,7 @@ class MaskedDatePicker extends StatefulWidget {
   final DateTime lastDate;
   final MaskedDatePickerType type;
   final TextEditingController controller;
+  final bool readOnly;
   MaskedDatePicker(
       {Key key,
       this.labelText,
@@ -334,6 +336,7 @@ class MaskedDatePicker extends StatefulWidget {
       this.onChanged,
       this.firstDate,
       this.lastDate,
+      this.readOnly = false,
       this.onSaved})
       : super(key: key);
 
@@ -362,19 +365,24 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return TextFormField(
-        //initialValue: data.format(widget.format),
+        readOnly: widget.readOnly,
         controller: _dataController,
         keyboardType: TextInputType.phone,
-        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        style: theme.textTheme
+            .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
             labelText: widget.labelText,
             prefix: widget.prefix,
             suffixIcon: IconButton(
                 icon: Icon(Icons.calendar_today),
-                onPressed: () {
-                  _dataController.text = formatter.format(widget.initialValue);
-                })),
+                onPressed: (widget.readOnly)
+                    ? null
+                    : () {
+                        _dataController.text =
+                            formatter.format(widget.initialValue);
+                      })),
         validator: (x) {
           DateTime d = formatter.parse(x);
           //DateTime b = formatter.parse(x);
@@ -390,6 +398,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
           return null;
         },
         onTap: () {
+          if (widget.readOnly) return;
           if (widget.type == MaskedDatePickerType.day)
             getDate().then((x) {
               _dataController.text = formatter.format(x);
@@ -526,7 +535,7 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
 class MaskedSwitchFormField extends StatefulWidget {
   final bool value;
   final String label;
-  final Color activeTrackColor;
+  final Color activeTrackColor, inactiveTrackColor;
   final Color activeColor;
   final bool autofocus;
   final Function(bool) onChanged;
@@ -539,6 +548,7 @@ class MaskedSwitchFormField extends StatefulWidget {
     this.label,
     this.activeTrackColor,
     this.activeColor,
+    this.inactiveTrackColor,
     this.autofocus = false,
     this.readOnly = false,
     this.onChanged,
@@ -571,6 +581,7 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
                 value: initialValue.value,
                 activeColor: widget.activeColor,
                 activeTrackColor: widget.activeTrackColor,
+                inactiveTrackColor: widget.inactiveTrackColor,
                 autofocus: widget.autofocus,
                 onChanged: (b) {
                   if (!widget.readOnly) {
@@ -616,6 +627,7 @@ class MaskedDropDownFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     if (items.length == 0) items.add('');
     String _value = value ?? '';
 
@@ -637,12 +649,12 @@ class MaskedDropDownFormField extends StatelessWidget {
             if (leading != null) leading,
             if (hintText != null)
               Container(
-                alignment: Alignment.bottomLeft,
-                height: 15,
-                child: Text(hintText ?? '',
-                    style: TextStyle(
-                        fontSize: 12, color: hintColor ?? Colors.black54)),
-              ),
+                  alignment: Alignment.bottomLeft,
+                  height: 15,
+                  child: Text(hintText ?? '',
+                      style: theme.inputDecorationTheme.hintStyle) //TextStyle(
+                  //fontSize: 12, color: hintColor ?? Colors.black54)),
+                  ),
             DropdownButtonFormField(
               key: UniqueKey(),
               items: items.map((String label) {
@@ -679,6 +691,7 @@ class MaskedMoneyFormField extends StatelessWidget {
   final String errorText;
   final int maxLength;
   final dynamic Function(double) validator;
+  final Function(double) onFocusChanged;
   const MaskedMoneyFormField({
     Key key,
     this.label,
@@ -687,6 +700,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.leftSymbol = '',
     this.precision,
     this.controller,
+    this.onFocusChanged,
     this.errorText,
     this.validator,
     this.maxLength,
@@ -694,6 +708,7 @@ class MaskedMoneyFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     var _controller = controller ??
         MoneyMaskedTextController(
             initialValue: initialValue,
@@ -712,30 +727,35 @@ class MaskedMoneyFormField extends StatelessWidget {
         if (label != null)
           Text(
             label,
-            style: TextStyle(
-                fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+            style: theme.textTheme.caption, //TextStyle(
+            //fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
           ),
         Container(
           constraints: BoxConstraints(minWidth: 100, minHeight: 40),
-          child: TextFormField(
-              key: key,
-              controller: _controller,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: label,
-              ),
-              validator: (x) {
-                if (validator != null)
-                  return validator(_controller.numberValue);
-                if ((errorText != null) && (x == '')) {
-                  return errorText;
-                }
-                return null;
+          child: Focus(
+              onFocusChange: (b) {
+                if (!b && (onFocusChanged != null))
+                  onFocusChanged(_controller.numberValue);
               },
-              maxLength: maxLength,
-              onSaved: (x) {
-                if (onSaved != null) onSaved(_controller.numberValue);
-              }),
+              child: TextFormField(
+                  key: key,
+                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    hintText: label,
+                  ),
+                  validator: (x) {
+                    if (validator != null)
+                      return validator(_controller.numberValue);
+                    if ((errorText != null) && (x == '')) {
+                      return errorText;
+                    }
+                    return null;
+                  },
+                  maxLength: maxLength,
+                  onSaved: (x) {
+                    if (onSaved != null) onSaved(_controller.numberValue);
+                  })),
         ),
       ],
     );
@@ -746,44 +766,62 @@ class MaskedLabeled extends StatelessWidget {
   const MaskedLabeled({
     Key key,
     this.label,
+    this.sublabel,
     this.value,
+    this.padding,
   }) : super(key: key);
 
   final String label;
   final String value;
+  final String sublabel;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Theme.of(context).dividerColor,
-            width: 2.0,
+    ThemeData theme = Theme.of(context);
+    return Padding(
+        padding: padding ?? EdgeInsets.only(left: 4, bottom: 2),
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Theme.of(context).dividerColor,
+                width: 2.0,
+              ),
+            ),
           ),
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(label ?? '', style: TextStyle(fontSize: 12, color: Colors.grey)),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8, top: 4),
-            child: Text(value ?? ''),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(children: [
+                Expanded(
+                    child: Text(label ?? '',
+                        style: theme.textTheme
+                            .caption)), //TextStyle(fontSize: 12, color: Colors.grey))),
+                if (sublabel != null)
+                  Text(sublabel, style: theme.textTheme.caption),
+              ]),
+              Padding(
+                  padding: EdgeInsets.only(bottom: 8, top: 4),
+                  child: Text(value ?? '',
+                      softWrap: true,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme
+                          .bodyText1) // TextStyle(fontSize: 14, color: Colors.grey)),
+                  ),
+            ],
           ),
-        ],
-      ),
-    );
+        ));
   }
 }
 
-class MaskedLabledFormField extends StatelessWidget {
+class MaskedLabeledFormField extends StatelessWidget {
   final String labelText;
   final String initialValue;
   final TextEditingController controller;
 
-  const MaskedLabledFormField(
+  const MaskedLabeledFormField(
       {Key key, this.labelText, this.initialValue, this.controller})
       : super(key: key);
 
@@ -870,6 +908,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     final TextEditingController _controller =
         this.controller ?? TextEditingController();
 
@@ -883,8 +922,9 @@ class MaskedSearchFormField<T> extends StatelessWidget {
             autofocus: autofocus,
             controller: _controller,
             keyboardType: getKeyboardType(),
-            style:
-                style ?? TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            style: style ??
+                theme.textTheme
+                    .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
             decoration: decoration ??
                 InputDecoration(
                     labelText: labelText,

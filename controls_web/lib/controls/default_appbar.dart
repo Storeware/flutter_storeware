@@ -1,7 +1,7 @@
-import 'package:checkout/app/widget/linear_icons.dart';
+//import 'package:checkout/app/widget/linear_icons.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-
+//import 'package:flutter_modular/flutter_modular.dart';
+/*
 AppBar defaultAppBar({String title}) {
   return AppBar(
     leading: Row(children: [
@@ -15,3 +15,4 @@ AppBar defaultAppBar({String title}) {
     title: Text(title),
   );
 }
+*/

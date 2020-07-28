@@ -13,15 +13,21 @@ class TabChoice<T> {
   IconData selectedIcon;
   bool primary;
   Widget trailing;
+  int count;
+  String tooltip;
+  List<TabChoice> items;
   TabChoice(
       {this.builder,
       this.data,
       this.image,
       this.title,
+      this.items,
+      this.tooltip,
       this.index,
       this.label,
       this.child,
       this.icon,
+      this.count,
       this.trailing,
       this.selectedIcon,
       this.primary = false,

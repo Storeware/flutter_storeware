@@ -1,11 +1,18 @@
 import 'package:controls_web/controls/tab_choice.dart';
 import 'package:flutter/material.dart';
+
+import 'swipe_detector.dart';
 //import 'tab_choice.dart';
 
 class VerticalTopTabNavigatorController {
   _VerticalTopTabNavigatorState parent;
   animateTo(index) => parent.animateTo(index);
   get activeIndex => parent.activeIndex;
+  showPage(Widget page) {
+    if (pageView != null) pageView.showPage(page);
+  }
+
+  _VerticalTopTabViewState pageView;
 }
 
 class VerticalTopTabView extends StatefulWidget {
@@ -18,12 +25,14 @@ class VerticalTopTabView extends StatefulWidget {
   final Color indicatorColor;
   final Color selectedColor;
   final Widget leading;
+  final double spacing;
 
   const VerticalTopTabView(
       {Key key,
       this.initialIndex = 0,
       this.indicatorColor = Colors.amber,
       this.selectedColor,
+      this.spacing = 4,
       this.actions,
       this.choices,
       this.controller,
@@ -39,15 +48,26 @@ class VerticalTopTabView extends StatefulWidget {
 class _VerticalTopTabViewState extends State<VerticalTopTabView> {
   VerticalTopTabNavigatorController controller;
   ValueNotifier<Widget> _child;
+  int position;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? VerticalTopTabNavigatorController();
+    controller.pageView = this;
     _child = ValueNotifier<Widget>(Container());
+    position = widget.initialIndex;
   }
 
+  showPage(Widget page) {
+    _child.value = page;
+  }
+
+  get maxIndex => widget.choices.length - 1;
+  get minIndex => 0;
   @override
   Widget build(BuildContext context) {
+    DateTime ultimo = DateTime.now();
+    int newIndex = widget.initialIndex;
     return Column(
       children: [
         VerticalTopTabNavigator(
@@ -59,15 +79,36 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           initialIndex: widget.initialIndex,
           indicatorColor: widget.indicatorColor,
           selectedColor: widget.selectedColor,
+          spacing: widget.spacing,
           onSelectItem: (index, tab) {
-            if (tab.child == null) tab.child = tab.builder();
+            position = index;
+            tab.child ??= tab.builder();
             _child.value = tab.child;
           },
         ),
         Expanded(
-            child: ValueListenableBuilder<Widget>(
-                valueListenable: _child,
-                builder: (a, widget, c) => _child.value ?? Container())),
+          child: ValueListenableBuilder<Widget>(
+            valueListenable: _child,
+            builder: (a, widget, c) => AnimatedSwitcher(
+                duration: Duration(milliseconds: 500),
+                child: SwipeDetector(
+                  child: _child.value ?? Container(),
+                  onSwipeRight: () {
+                    print(['right', position, maxIndex]);
+                    if (position > 0) controller.animateTo(position - 1);
+                  },
+                  onSwipeLeft: () {
+                    print(['left', position]);
+                    if (position < maxIndex) controller.animateTo(position + 1);
+                  },
+                ),
+                switchInCurve: Curves.ease,
+                transitionBuilder: (widget, animation) => ScaleTransition(
+                      scale: animation,
+                      child: widget,
+                    )),
+          ),
+        ),
       ],
     );
   }
@@ -84,6 +125,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final Color tabColor;
   final Color iconColor;
   final TextStyle style;
+  final double spacing;
   final VerticalTopTabNavigatorController controller;
   VerticalTopTabNavigator(
       {Key key,
@@ -93,6 +135,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.selectedColor,
       this.leading,
       this.actions,
+      this.spacing = 4,
       this.controller,
       this.indicatorColor = Colors.amber,
       this.iconColor,
@@ -144,7 +187,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           Expanded(child: Container(child: widget.leading)),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
-              padding: EdgeInsets.only(left: 8, right: 8),
+              padding:
+                  EdgeInsets.only(left: widget.spacing, right: widget.spacing),
               color: (active.value == index) ? _selectedColor : _tabColor,
               child: InkWell(
                 child: (!widget.choices[index].visible)

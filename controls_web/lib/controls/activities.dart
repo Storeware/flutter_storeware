@@ -321,22 +321,36 @@ class ActivityCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+  final Widget image;
   final Color color;
   final double spacing;
+  final TextStyle style;
+  final Color titleColor;
+  final double avatarSize;
   const ActivityCard(
       {Key key,
       this.color,
       this.title,
       this.subtitle,
+      this.style,
+      this.titleColor,
       this.icon,
+      this.image,
       this.children,
       this.spacing,
+      this.avatarSize = 42,
       this.height,
       this.width})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    TextStyle _style = style ??
+        theme.primaryTextTheme.headline5.copyWith(
+          color: titleColor,
+          fontWeight: FontWeight.bold,
+        );
     return ActivityPanel(
       color: color ?? Theme.of(context).primaryColor.withAlpha(200),
       height: height,
@@ -351,31 +365,42 @@ class ActivityCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
-                    width: 60,
-                    height: 60,
-                    child: ActivityAvatar(
-                      avatarBackgroudColor: Colors.white,
-                      iconColor: Colors.black,
-                      icon: icon ?? Icons.person_pin,
-                    ),
+                    width: avatarSize,
+                    height: avatarSize,
+                    child: (image != null)
+                        ? CircleAvatar(
+                            backgroundColor:
+                                theme.primaryTextTheme.bodyText1.color,
+                            child: image)
+                        : ActivityAvatar(
+                            avatarBackgroudColor:
+                                theme.primaryTextTheme.bodyText1.color,
+                            iconColor: theme.textTheme.button.color,
+                            icon: icon ?? Icons.person_pin,
+                          ),
                   ),
                 ),
-                Column(
+                Expanded(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title ?? '',
-                        style: TextStyle(
-                          fontSize: 32,
-                          color: Colors.white,
-                        )),
-                    Text(subtitle ?? '',
-                        style: TextStyle(
-                          color: Colors.white60,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w300,
-                        )),
+                        style: _style ??
+                            TextStyle(
+                              fontSize: 32,
+                              color: Colors.white,
+                            )),
+                    Text(
+                      subtitle ?? '',
+                      style: theme.primaryTextTheme.headline6.copyWith(
+                        color: titleColor,
+                        fontSize:
+                            theme.primaryTextTheme.headline6.fontSize * 0.8,
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
                   ],
-                ),
+                )),
               ],
             ),
             Wrap(
@@ -385,7 +410,7 @@ class ActivityCard extends StatelessWidget {
               //crossAxisAlignment: WrapCrossAlignment.center,
               runSpacing: 2,
 
-              spacing: spacing ?? 24,
+              spacing: spacing ?? 8,
               //alignment: WrapAlignment.start,
               //scrollDirection: Axis.horizontal,
               //mainAxisAlignment: MainAxisAlignment.spaceAround,

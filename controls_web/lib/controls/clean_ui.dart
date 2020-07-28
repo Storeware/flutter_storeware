@@ -419,12 +419,17 @@ class ActionText extends StatelessWidget {
   final TextStyle style;
   final double radius;
   final Function() onPressed;
+  final double height, width;
+  final Widget child;
   const ActionText(
       {Key key,
       this.label,
       this.sublabel,
       this.color,
       this.style,
+      this.height,
+      this.width,
+      this.child,
       this.onPressed,
       this.radius = 5})
       : super(key: key);
@@ -435,6 +440,8 @@ class ActionText extends StatelessWidget {
     TextStyle _style = style ?? theme.textTheme.bodyText1;
     return InkWell(
       child: Container(
+        width: width,
+        height: height,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(radius),
             color: color ?? theme.scaffoldBackgroundColor,
@@ -443,10 +450,12 @@ class ActionText extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Text(label, style: _style),
-              Text(sublabel,
-                  style:
-                      _style.copyWith(fontSize: (_style.fontSize ?? 12) * 0.8))
+              if (child != null) child,
+              if (label != null) Text(label, style: _style),
+              if (sublabel != null)
+                Text(sublabel,
+                    style: _style.copyWith(
+                        fontSize: (_style.fontSize ?? 12) * 0.8))
             ],
           ),
         ),

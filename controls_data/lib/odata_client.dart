@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 
 import 'rest_client.dart';
@@ -70,13 +70,22 @@ extension DynamicExtension on dynamic {
     return def;
   }
 
-  DateTime toDateTime(value, {DateTime def}) {
+  DateTime toDateTime(value, {DateTime def, zone = -3}) {
     if (value is String) {
-      int dif = (value.endsWith('Z') ? -3 : 0);
+      int dif = (value.endsWith('Z') ? zone : 0);
       return DateTime.tryParse(value).add(Duration(hours: dif));
     }
     if (value is DateTime) return value;
     return def ?? DateTime.now();
+  }
+
+  DateTime toDate(value, {DateTime def}) {
+    if (value is String) {
+      def = DateTime.tryParse(value.substring(0, 10)) ?? DateTime.now();
+    }
+    if (value is DateTime) def = value;
+    def ??= DateTime.now();
+    return DateTime(def.year, def.month, def.day);
   }
 
   String toTimeSql(DateTime value) {

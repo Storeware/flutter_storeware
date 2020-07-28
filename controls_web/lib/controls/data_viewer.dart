@@ -6,6 +6,7 @@ import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/constants.dart';
 
 class DefaultDataViewer extends InheritedWidget {
   final DataViewerController controller;
@@ -42,6 +43,7 @@ class DataViewerController {
     this.onUpdate,
     this.onDelete,
     this.onChanged,
+    this.columns,
   });
   int page = 1;
   int top;
@@ -52,6 +54,7 @@ class DataViewerController {
   final Future<dynamic> Function(dynamic) onUpdate;
   final Future<dynamic> Function(dynamic) onDelete;
   final Function(dynamic) onChanged;
+  List<PaginatedGridColumn> columns;
 
   /// Evento indicando que pode limpar o cache;
   final Function() onClearCache;
@@ -71,6 +74,14 @@ class DataViewerController {
 
   /// [DataViewerController.skip] indica as linhas iniciais a saltar na busca da API
   get skip => (page - 1) * top;
+
+  findColumn(name) {
+    var index = -1;
+    for (int i = 0; i < columns.length; i++)
+      if (columns[i].name == name) index = i;
+    if (index > -1) return columns[index];
+    return null;
+  }
 
   /// executa  delete de um linha
   doDelete(dados, {manual = false}) {
@@ -197,6 +208,9 @@ class DataViewerColumn extends PaginatedGridColumn {
     String label,
     String editInfo = '{label}',
     bool sort = true,
+    double editWidth,
+    double editHeight,
+    Function(dynamic) onFocusChanged,
     Widget Function(int, Map<String, dynamic>) builder,
     Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
             Map<String, dynamic>)
@@ -215,10 +229,13 @@ class DataViewerColumn extends PaginatedGridColumn {
           color: color,
           maxLength: maxLength,
           width: width,
+          editWidth: editWidth,
+          editHeight: editHeight,
           tooltip: tooltip,
           align: align,
           style: style,
           name: name,
+          onFocusChanged: onFocusChanged,
           required: required,
           readOnly: readOnly,
           isPrimaryKey: isPrimaryKey,
@@ -270,7 +287,7 @@ class DataViewer extends StatefulWidget {
   /// pressionou o botam abrir da barra de filtro
   final Function() onSearchPressed;
   final CrossAxisAlignment crossAxisAlignment;
-  final Color backgroundColor;
+  //final Color backgroundColor;
 
   /// altura da linha de header de coluna
   final double headerHeight;
@@ -294,7 +311,7 @@ class DataViewer extends StatefulWidget {
     this.elevation = 0,
     this.oddRowColor,
     this.rowsPerPage,
-    this.headerHeight = kMinInteractiveDimension * 1.7,
+    this.headerHeight = kToolbarHeight + 48,
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
@@ -308,7 +325,7 @@ class DataViewer extends StatefulWidget {
     this.canInsert = false,
     this.canSearch = true,
     this.crossAxisAlignment = CrossAxisAlignment.center,
-    this.backgroundColor,
+    //this.backgroundColor,
     this.title,
     this.onInsertItem,
     this.onEditItem,
@@ -337,12 +354,13 @@ class _DataViewerState extends State<DataViewer> {
               return widget.source;
             });
     if (widget.keyName != null) controller.keyName = widget.keyName;
-    //controller.viewer = this.widget;
+    controller.columns ??= widget.columns;
     super.initState();
   }
 
   final TextEditingController _filtroController = TextEditingController();
   Size size;
+  ThemeData theme;
 
   createHeader() {
     bool isSmall = size.width < 500;
@@ -352,7 +370,7 @@ class _DataViewerState extends State<DataViewer> {
       return Form(
         child: SafeArea(
           child: Container(
-              height: 60,
+              height: kToolbarHeight + 4,
               width: sizes.maxWidth,
               alignment: Alignment.center,
               child: Align(
@@ -362,8 +380,9 @@ class _DataViewerState extends State<DataViewer> {
                     Expanded(
                       child: TextFormField(
                         controller: _filtroController,
-                        style: TextStyle(
-                            fontSize: 16, fontStyle: FontStyle.normal),
+                        style: theme.textTheme.bodyText1,
+                        /*TextStyle(
+                            fontSize: 16, fontStyle: FontStyle.normal),*/
                         decoration: InputDecoration(
                             labelText: 'procurar por',
                             suffixIcon: InkWell(
@@ -374,10 +393,10 @@ class _DataViewerState extends State<DataViewer> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      width: 95,
+                      padding: EdgeInsets.symmetric(vertical: 5), // ios usa 5
+                      width: 90,
                       child: StrapButton(
-                          type: StrapButtonType.light,
+                          //type: StrapButtonType.primary ,
                           text: 'abrir',
                           onPressed: () {
                             controller.filter = _filtroController.text;
@@ -398,6 +417,7 @@ class _DataViewerState extends State<DataViewer> {
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     size = MediaQuery.of(context).size;
     int _top = (widget.height ??
             ((size.height * 0.90) - kToolbarHeight - 20) -
@@ -433,7 +453,7 @@ class _DataViewerState extends State<DataViewer> {
                     onInsertItem: widget.onInsertItem,
                     onDeleteItem: widget.onDeleteItem,
                     crossAxisAlignment: widget.crossAxisAlignment,
-                    backgroundColor: widget.backgroundColor,
+                    //backgroundColor: widget.backgroundColor,
                     headerHeight: (widget.canSearch || widget.header != null)
                         ? widget.headerHeight
                         : 0,
@@ -447,7 +467,7 @@ class _DataViewerState extends State<DataViewer> {
                       if (widget.beforeShow != null)
                         return widget.beforeShow(p);
                     },
-                    columns: widget.columns,
+                    columns: controller.columns,
                     source: widget.source,
                     rowsPerPage: widget.rowsPerPage ?? _top,
                     currentPage: controller.page,
@@ -503,12 +523,14 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final DataViewerController controller;
   final bool canEdit, canInsert, canDelete;
   final PaginatedGridChangeEvent event;
+  final double dataRowHeight;
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
     @required this.grouped,
     @required this.controller,
     this.title,
+    this.dataRowHeight,
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
@@ -550,7 +572,9 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 for (var row in widget.grouped) createRow(row, widget.data),
-                Divider(),
+                SizedBox(
+                  height: 15,
+                ),
                 if (widget.canEdit || widget.canInsert)
                   Container(
                       alignment: Alignment.center,
@@ -586,19 +610,29 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   }
 
   createColumn(column) {
-    var ctrl = (widget.controller.paginatedController);
-    var col = ctrl.findColumn(column);
+    var col;
+    var ctrl;
+
+    if (widget.controller.columns != null) {
+      ctrl = widget.controller;
+      col = ctrl.findColumn(column);
+    } else {
+      ctrl = widget.controller.paginatedController;
+      col = ctrl.findColumn(column);
+    }
+
     if (col == null) return (Text('null $column'));
     var edit;
     if (col.editBuilder != null)
-      edit = col.editBuilder(ctrl, col, widget.data, widget.data);
+      edit = col.editBuilder(
+          widget.controller.paginatedController, col, widget.data, widget.data);
     if (edit == null) {
       edit = createFormField(col);
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
-        height: kToolbarHeight,
-        width: col.width ?? 150,
+        height: widget.dataRowHeight ?? col.editHeight ?? kToolbarHeight + 8,
+        width: col.editWidth ?? col.width ?? 150,
         child: edit ?? Text('${widget.data[column]}'));
   }
 
@@ -619,42 +653,49 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   }
 
   get p => widget.data;
-  createFormField(PaginatedGridColumn item) {
-    return TextFormField(
-        autofocus: canFocus(item),
-        maxLines: item.maxLines,
-        maxLength: item.maxLength,
-        enabled: widget.canEdit || widget.canInsert,
-        initialValue: (item.onGetValue != null)
+  createFormField(item) {
+    final TextEditingController txt_controller = TextEditingController(
+        text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
-            : (p[item.name] ?? '').toString(),
-        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
-        decoration: InputDecoration(
-          labelText: item.label ?? item.name,
-        ),
-        validator: (value) {
-          if (item.onValidate != null) return item.onValidate(value);
-          if (item.required) if (value.isEmpty) {
-            return (item.editInfo
-                .replaceAll('{label}', item.label ?? item.name));
-          }
-
-          return null;
+            : (p[item.name] ?? '').toString());
+    return Focus(
+        onFocusChange: (b) {
+          if (!b) if (item.onFocusChanged != null)
+            item.onFocusChanged(txt_controller.text);
         },
-        onSaved: (x) {
-          if (item.onSetValue != null) {
-            p[item.name] = item.onSetValue(x);
-            return;
-          }
-          if (p[item.name] is int)
-            p[item.name] = int.tryParse(x);
-          else if (p[item.name] is double)
-            p[item.name] = double.tryParse(x);
-          else if (p[item.name] is bool)
-            p[item.name] = x;
-          else
-            p[item.name] = x;
-        });
+        child: TextFormField(
+            autofocus: canFocus(item),
+            maxLines: item.maxLines,
+            maxLength: item.maxLength,
+            enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
+            controller: txt_controller,
+            style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            decoration: InputDecoration(
+              labelText: item.label ?? item.name,
+            ),
+            validator: (value) {
+              if (item.onValidate != null) return item.onValidate(value);
+              if (item.required) if (value.isEmpty) {
+                return (item.editInfo
+                    .replaceAll('{label}', item.label ?? item.name));
+              }
+
+              return null;
+            },
+            onSaved: (x) {
+              if (item.onSetValue != null) {
+                p[item.name] = item.onSetValue(x);
+                return;
+              }
+              if (p[item.name] is int)
+                p[item.name] = int.tryParse(x);
+              else if (p[item.name] is double)
+                p[item.name] = double.tryParse(x);
+              else if (p[item.name] is bool)
+                p[item.name] = x;
+              else
+                p[item.name] = x;
+            }));
   }
 
   _save(context) {

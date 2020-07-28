@@ -1,5 +1,6 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_io/io.dart';
 
 class MenuChoice {
   final IconData icon;
@@ -25,12 +26,14 @@ class MenuDialog extends StatefulWidget {
       {List<MenuChoice> choices,
       String title,
       double width = 300,
-      double height = 200,
+      double height,
       Color color}) async {
+    var h = height ?? (kToolbarHeight * (choices.length + 1));
+    if (Platform.isIOS) h += kToolbarHeight;
     return Dialogs.showModal(context,
-        title: title,
+        title: title ?? 'Menu',
         width: width,
-        height: height,
+        height: h + 0.0,
         child: MenuDialog(
           choices: choices,
         ),
@@ -58,18 +61,23 @@ class _MenuDialogState extends State<MenuDialog> {
 //cria cada item do menu
   Widget _tiles(String text, IconData icon, int item, Function onTap) {
     return ListTile(
-      leading: Icon(icon),
-      onTap: onTap,
-      selected: item == itemSelect,
-      title: Text(
-        text,
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    );
+        leading: (icon != null) ? Icon(icon) : null,
+        onTap: onTap,
+        selected: item == itemSelect,
+        title: Align(
+            alignment: Alignment.centerLeft,
+            child: MaterialButton(
+                child: Text(text,
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16)))));
   }
+
+  ThemeData theme;
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     return Material(child: _listMenu());
   }
 }

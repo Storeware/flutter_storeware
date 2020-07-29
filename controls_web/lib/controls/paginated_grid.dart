@@ -98,6 +98,7 @@ class PaginatedGridColumn {
   bool autofocus;
   int maxLines;
   int maxLength;
+  int minLength;
   bool placeHolder;
   bool folded;
   Color color;
@@ -109,6 +110,7 @@ class PaginatedGridColumn {
     this.maxLines,
     this.color,
     this.maxLength,
+    this.minLength,
     this.width,
     this.tooltip,
     this.editWidth,
@@ -612,7 +614,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
         onPressed: () {
           controller.data = null;
           if (widget.onInsertItem != null)
-            widget.onInsertItem(controller).then((rsp) {
+            widget.onInsertItem(controller)?.then((rsp) {
               controller.changed(rsp);
             });
           else if (widget.onPostEvent != null) {

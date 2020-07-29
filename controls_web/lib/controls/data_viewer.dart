@@ -195,6 +195,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     int maxLines,
     Color color,
     int maxLength,
+    int minLength,
     double width,
     String tooltip,
     Alignment align,
@@ -228,6 +229,7 @@ class DataViewerColumn extends PaginatedGridColumn {
           maxLines: maxLines,
           color: color,
           maxLength: maxLength,
+          minLength: minLength,
           width: width,
           editWidth: editWidth,
           editHeight: editHeight,
@@ -631,8 +633,10 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
-        height: widget.dataRowHeight ?? col.editHeight ?? kToolbarHeight + 8,
-        width: col.editWidth ?? col.width ?? 150,
+        height: widget.dataRowHeight ??
+            (col.editHeight ??
+                kToolbarHeight + (((col.maxLength ?? 0) > 0) ? 24.0 : 8)),
+        width: col.editWidth ?? col.width ?? 150.0,
         child: edit ?? Text('${widget.data[column]}'));
   }
 
@@ -681,6 +685,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
             return (item.editInfo
                 .replaceAll('{label}', item.label ?? item.name));
           }
+          if ((item.minLength != null) && (value.length < item.minLength))
+            return 'Texto insuficientes (min: ${item.minLength} caracteres)';
 
           return null;
         },

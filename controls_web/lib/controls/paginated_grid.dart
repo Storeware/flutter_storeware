@@ -433,7 +433,6 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                 if (!snapshot.hasData)
                   return Align(child: CircularProgressIndicator());
                 controller.originalSource = snapshot.data;
-
                 controller.widget = widget;
                 if (widget.onSort != null)
                   controller.originalSource.sort((a, b) {
@@ -612,7 +611,11 @@ class _PaginatedGridState extends State<PaginatedGrid> {
         //    child: IconButton(
         child: Icon(Icons.add),
         onPressed: () {
-          controller.data = null;
+          controller.data = {};
+          if (controller.beforeChange != null)
+            controller.beforeChange(
+                controller.data, PaginatedGridChangeEvent.insert);
+
           if (widget.onInsertItem != null)
             widget.onInsertItem(controller)?.then((rsp) {
               controller.changed(rsp);
@@ -637,6 +640,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 }
 
 class PaginatedGridController {
+  var parent;
   BuildContext context;
   _PaginatedGridState statePage;
   StreamController<bool> changedEvent = StreamController<bool>.broadcast();
@@ -648,11 +652,14 @@ class PaginatedGridController {
   int currentColumn = 0;
   Map<String, dynamic> data;
   List<dynamic> originalSource;
+  Function(dynamic, PaginatedGridChangeEvent) beforeChange;
+
   dispose() {
     changedEvent.close();
     postEvent.close();
   }
 
+  get self => this;
   PaginatedGridColumn findColumn(name) {
     var index = -1;
     for (int i = 0; i < columns.length; i++)
@@ -670,6 +677,8 @@ class PaginatedGridController {
     bool inScaffold = true,
     PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update,
   }) {
+    if (beforeChange != null) beforeChange(this.data, event);
+
     return PaginatedGridEditRow(
       data: data,
       title: title,
@@ -737,11 +746,12 @@ class PaginatedGridController {
     //debugPrint('changeTo $key $valueSearch $dadosTo');
     begin();
     try {
-      for (var i = 0; i < source.length; i++)
-        if (source[i][key] == valueSearch) {
-          //print([source[i], dadosTo]);
-          source[i] = dadosTo;
-        }
+      if (source != null)
+        for (var i = 0; i < source.length; i++)
+          if (source[i][key] == valueSearch) {
+            //print([source[i], dadosTo]);
+            source[i] = dadosTo;
+          }
     } finally {
       end();
     }
@@ -916,6 +926,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
   }
 
   doEditItem(index, bool b) {
+    if (controller.beforeChange != null)
+      controller.beforeChange(controller.data, PaginatedGridChangeEvent.update);
+
     return Dialogs.showPage(
       controller.context,
       child: PaginatedGridEditRow(
@@ -1118,6 +1131,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             ? item.onGetValue(p[item.name])
             : (p[item.name] ?? '').toString());
     return Focus(
+        canRequestFocus: false,
         onFocusChange: (b) {
           if (!b) if (item.onFocusChanged != null)
             item.onFocusChanged(_valueController.text);

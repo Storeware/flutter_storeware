@@ -27,15 +27,18 @@ class DataViewerController {
   final ODataModelClass dataSource;
 
   /// Function de busca dos dados
-  final Function() future;
+  Function() future;
+  final Function(dynamic, PaginatedGridChangeEvent) beforeChange;
 
   /// [DataViewerController.keyName] utilizado para localizar uma linha na pilha
   String keyName;
   DataViewerController({
-    @required this.future,
+    this.future,
     this.context,
     this.dataSource,
     this.onValidate,
+    this.beforeChange,
+    Function(DataViewerController) futureExtended,
     this.top,
     @required this.keyName,
     this.onClearCache,
@@ -44,10 +47,17 @@ class DataViewerController {
     this.onDelete,
     this.onChanged,
     this.columns,
-  });
+  }) {
+    if (futureExtended != null) {
+      this.future = () => futureExtended(this);
+    }
+    paginatedController.parent = this;
+  }
   int page = 1;
   int top;
-  String filter = '';
+  String get filter => filterValue.value;
+  set filter(String v) => filterValue.value = v;
+  ValueNotifier filterValue = ValueNotifier<String>('');
 
   /// Eventos para customização de registro
   final Future<dynamic> Function(dynamic) onInsert;
@@ -59,6 +69,11 @@ class DataViewerController {
   /// Evento indicando que pode limpar o cache;
   final Function() onClearCache;
 
+  /// Lista de dados
+  //List<dynamic> source;
+  set source(List<Map<String, dynamic>> data) => paginatedController.source;
+  get source => paginatedController.source;
+
   /// Observer que notifica mudança dos dados
   BlocModel<int> subscribeChanges = BlocModel<int>();
   goPage(x) {
@@ -68,9 +83,6 @@ class DataViewerController {
   }
 
   final BuildContext context;
-
-  /// Lista de dados
-  List<dynamic> source;
 
   /// [DataViewerController.skip] indica as linhas iniciais a saltar na busca da API
   get skip => (page - 1) * top;
@@ -134,6 +146,11 @@ class DataViewerController {
       if (onChanged != null) onChanged(dados);
     }
     return rsp;
+  }
+
+  reopen() {
+    page = 1;
+    subscribeChanges.notify(-1);
   }
 
   /// Update um linha
@@ -280,11 +297,13 @@ class DataViewer extends StatefulWidget {
 
   /// se o header de filtro esta habilitado - default: true;
   final bool canSearch;
-  final String title;
+  final Widget title;
+  final Widget subtitle;
   final Future<dynamic> Function(PaginatedGridController) onInsertItem;
   final Future<dynamic> Function(PaginatedGridController) onEditItem;
   final Future<dynamic> Function(PaginatedGridController) onDeleteItem;
   final List<Widget> actions;
+  final Widget leading;
 
   /// pressionou o botam abrir da barra de filtro
   final Function() onSearchPressed;
@@ -329,11 +348,13 @@ class DataViewer extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     //this.backgroundColor,
     this.title,
+    this.subtitle,
     this.onInsertItem,
     this.onEditItem,
     this.onSearchPressed,
     this.onDeleteItem,
     this.actions,
+    this.leading,
     this.height,
     this.width,
   })  : assert(source != null || controller != null),
@@ -357,6 +378,7 @@ class _DataViewerState extends State<DataViewer> {
             });
     if (widget.keyName != null) controller.keyName = widget.keyName;
     controller.columns ??= widget.columns;
+    controller.paginatedController.beforeChange = controller.beforeChange;
     super.initState();
   }
 
@@ -371,47 +393,57 @@ class _DataViewerState extends State<DataViewer> {
     return LayoutBuilder(builder: (ctr, sizes) {
       return Form(
         child: SafeArea(
-          child: Container(
-              height: kToolbarHeight + 4,
-              width: sizes.maxWidth,
-              alignment: Alignment.center,
-              child: Align(
-                child: Container(
-                  width: bwidth,
-                  child: Row(children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _filtroController,
-                        style: theme.textTheme.bodyText1,
-                        /*TextStyle(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.title != null) widget.title,
+              Container(
+                  height: kToolbarHeight + 4,
+                  width: sizes.maxWidth,
+                  alignment: Alignment.center,
+                  child: Align(
+                    child: Container(
+                        width: bwidth,
+                        child: Column(children: [
+                          Row(children: [
+                            if (widget.leading != null) widget.leading,
+                            Expanded(
+                              child: TextFormField(
+                                controller: _filtroController,
+                                style: theme.textTheme.bodyText1,
+                                /*TextStyle(
                             fontSize: 16, fontStyle: FontStyle.normal),*/
-                        decoration: InputDecoration(
-                            labelText: 'procurar por',
-                            suffixIcon: InkWell(
-                                child: Icon(Icons.delete),
-                                onTap: () {
-                                  _filtroController.text = '';
-                                })),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 5), // ios usa 5
-                      width: 90,
-                      child: StrapButton(
-                          //type: StrapButtonType.primary ,
-                          text: 'abrir',
-                          onPressed: () {
-                            controller.filter = _filtroController.text;
-                            if (controller.onClearCache != null)
-                              controller.onClearCache();
-                            if (widget.onSearchPressed != null)
-                              widget.onSearchPressed();
-                            controller.goPage(1);
-                          }),
-                    ),
-                  ]),
-                ),
-              )),
+                                decoration: InputDecoration(
+                                    labelText: 'procurar por',
+                                    suffixIcon: InkWell(
+                                        child: Icon(Icons.delete),
+                                        onTap: () {
+                                          _filtroController.text = '';
+                                        })),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5), // ios usa 5
+                              width: 90,
+                              child: StrapButton(
+                                  //type: StrapButtonType.primary ,
+                                  text: 'abrir',
+                                  onPressed: () {
+                                    controller.filter = _filtroController.text;
+                                    if (controller.onClearCache != null)
+                                      controller.onClearCache();
+                                    if (widget.onSearchPressed != null)
+                                      widget.onSearchPressed();
+                                    controller.goPage(1);
+                                  }),
+                            ),
+                          ]),
+                        ])),
+                  )),
+              if (widget.subtitle != null) widget.subtitle,
+            ],
+          ),
         ),
       );
     });
@@ -670,6 +702,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           item.onFocusChanged(txt_controller.text);
       },
       child: TextFormField(
+        readOnly: (item.isPrimaryKey || item.readOnly),
         autofocus: canFocus(item),
         maxLines: item.maxLines,
         maxLength: item.maxLength,

@@ -558,6 +558,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final bool canEdit, canInsert, canDelete;
   final PaginatedGridChangeEvent event;
   final double dataRowHeight;
+  final Function(dynamic) onSaved;
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
@@ -568,6 +569,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
+    this.onSaved,
     @required this.event,
   }) : super(key: key);
 
@@ -744,9 +746,9 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   _save(context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      doPostEvent(
-              widget.controller.paginatedController, widget.data, widget.event)
+      doPostEvent(widget.controller.paginatedController, p, widget.event)
           .then((rsp) {
+        if (widget.onSaved != null) widget.onSaved(p);
         Navigator.pop(context);
       });
     }

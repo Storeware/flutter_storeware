@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 class TabChoice<T> {
   T data;
   Widget Function() builder;
+  Function() onPressed;
   String label;
   Widget title;
   bool visible;
@@ -20,6 +21,7 @@ class TabChoice<T> {
       {this.builder,
       this.data,
       this.image,
+      this.onPressed,
       this.title,
       this.items,
       this.tooltip,

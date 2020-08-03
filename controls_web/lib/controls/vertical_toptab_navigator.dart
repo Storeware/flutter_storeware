@@ -164,14 +164,17 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   }
 
   get activeIndex => active.value;
-
+  //ValueNotifier<bool> bShowDrownMenu;
+  Color _iconColor;
+  Color _tabColor;
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Color _iconColor = widget.iconColor ?? theme.primaryColor;
-    Color _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
+    _iconColor = widget.iconColor ?? theme.primaryColor;
+    _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
     Color _selectedColor =
         widget.selectedColor ?? theme.scaffoldBackgroundColor;
+    //bShowDrownMenu = ValueNotifier<bool>(false);
     if (active == null) {
       active = ValueNotifier<int>(widget.initialIndex ?? 0);
       if (active.value >= 0)
@@ -197,24 +200,37 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Expanded(
-                              child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(widget.choices[index].label,
-                                      style: widget.style ??
-                                          TextStyle(
-                                              color: _iconColor,
-                                              fontSize: 14)))),
+                              child: (widget.choices[index].items != null)
+                                  ? Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 8),
+                                      child: showDrownMenu(
+                                          index, widget.choices[index].items),
+                                    )
+                                  : Align(
+                                      alignment: Alignment.center,
+                                      child: buildLabel(index))),
                           Container(
                               height: 2,
-                              width: widget.choices[index].label.length * 8.0,
+                              width:
+                                  (widget.choices[index].label.length * 8.0) +
+                                      ((widget.choices[index].items != null)
+                                          ? 20
+                                          : 0),
                               color: (active.value == index)
                                   ? widget.indicatorColor
-                                  : null)
+                                  : null),
                         ],
                       ),
                 onTap: () {
-                  widget.onSelectItem(index, widget.choices[index]);
-                  active.value = index;
+                  var choice = widget.choices[index];
+                  if ((choice.items ?? []).length > 0) {
+                    active.value = index;
+                    //bShowDrownMenu.value = true;
+                  } else {
+                    widget.onSelectItem(index, widget.choices[index]);
+                    active.value = index;
+                  }
                 },
               ),
             ),
@@ -222,5 +238,31 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
         ]),
       ),
     );
+  }
+
+  buildLabel(index) {
+    return Text(widget.choices[index].label,
+        style: widget.style ?? TextStyle(color: _iconColor, fontSize: 14));
+  }
+
+  showDrownMenu(int mainIndex, List<TabChoice> items) {
+    return DropdownButtonHideUnderline(
+        child: DropdownButton<int>(
+      //value: 0,
+      //underline: Text('xxx'),
+      hint: buildLabel(mainIndex),
+      items: [
+        for (int item = 0; item < items.length; item++)
+          DropdownMenuItem(
+            value: item,
+            child: Text(items[item].label),
+          )
+      ],
+      onChanged: (index) {
+        active.value = mainIndex;
+        //bShowDrownMenu.value = false;
+        widget.onSelectItem(index, items[index]);
+      },
+    ));
   }
 }

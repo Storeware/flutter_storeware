@@ -219,7 +219,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                               width:
                                   (widget.choices[index].label.length * 8.0) +
                                       ((widget.choices[index].items != null)
-                                          ? 20
+                                          ? 30
                                           : 0),
                               color: (active.value == index)
                                   ? widget.indicatorColor
@@ -245,8 +245,9 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   }
 
   buildLabel(index) {
-    return Text(widget.choices[index].label,
-        style: widget.style ?? TextStyle(color: _iconColor, fontSize: 14));
+    return widget.choices[index].title ??
+        Text(widget.choices[index].label,
+            style: widget.style ?? TextStyle(color: _iconColor, fontSize: 14));
   }
 
   showDrownMenu(int mainIndex, List<TabChoice> items) {
@@ -256,7 +257,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       items: [
         for (int item = 0; item < items.length; item++)
           ((items[item].label ?? '') == '-')
-              ? DropdownMenuItem(child: items[item].title ?? Divider())
+              ? DropdownMenuItem(
+                  value: -item, child: items[item].title ?? Divider())
               : DropdownMenuItem(
                   value: item,
                   child: items[item].title ?? Text(items[item].label),

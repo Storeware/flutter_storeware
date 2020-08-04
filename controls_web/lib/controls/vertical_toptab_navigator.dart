@@ -82,8 +82,12 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           spacing: widget.spacing,
           onSelectItem: (index, tab) {
             position = index;
-            tab.child ??= tab.builder();
-            _child.value = tab.child;
+            if (tab.onPressed != null)
+              tab.onPressed();
+            else {
+              tab.child ??= tab.builder();
+              _child.value = tab.child;
+            }
           },
         ),
         Expanded(
@@ -248,20 +252,20 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   showDrownMenu(int mainIndex, List<TabChoice> items) {
     return DropdownButtonHideUnderline(
         child: DropdownButton<int>(
-      //value: 0,
-      //underline: Text('xxx'),
       hint: buildLabel(mainIndex),
       items: [
         for (int item = 0; item < items.length; item++)
-          DropdownMenuItem(
-            value: item,
-            child: Text(items[item].label),
-          )
+          ((items[item].label ?? '') == '-')
+              ? DropdownMenuItem(child: items[item].title ?? Divider())
+              : DropdownMenuItem(
+                  value: item,
+                  child: items[item].title ?? Text(items[item].label),
+                )
       ],
       onChanged: (index) {
         active.value = mainIndex;
-        //bShowDrownMenu.value = false;
-        widget.onSelectItem(index, items[index]);
+        if ((items[index].label ?? '') != '-')
+          widget.onSelectItem(index, items[index]);
       },
     ));
   }

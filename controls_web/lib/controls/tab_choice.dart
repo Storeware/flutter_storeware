@@ -34,6 +34,7 @@ class TabChoice<T> {
       this.selectedIcon,
       this.primary = false,
       this.visible = true})
-      : assert((label ?? '') == '-' ||
+      : assert(items != null ||
+            (label ?? '') == '-' ||
             (builder != null || child != null || onPressed != null));
 }

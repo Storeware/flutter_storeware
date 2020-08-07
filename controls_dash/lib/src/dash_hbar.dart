@@ -7,10 +7,19 @@ class DashHorizontalBarChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool vertical;
   final bool animate;
-  final bool showValues;
+  final bool showValues, showDomainAxis;
+  final int barRadius;
+  final bool showAxisLine;
+  final Function(ChartPair) onSelected;
 
   DashHorizontalBarChart(this.seriesList,
-      {this.vertical = false, this.showValues = true, this.animate});
+      {this.vertical = false,
+      this.showValues = true,
+      this.animate,
+      this.barRadius = 15,
+      this.onSelected,
+      this.showAxisLine = true,
+      this.showDomainAxis = true});
 
   /// Creates a [BarChart] with sample data and no transition.
   factory DashHorizontalBarChart.withSampleData() {
@@ -20,18 +29,53 @@ class DashHorizontalBarChart extends StatelessWidget {
       animate: false,
     );
   }
+  _onSelectionChanged(charts.SelectionModel model) {
+    final selectedDatum = model.selectedDatum;
+    if (selectedDatum.isNotEmpty) {
+      var dados = selectedDatum.first.datum;
+      if (onSelected != null) onSelected(dados);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     // For horizontal bar charts, set the [vertical] flag to false.
-    return new charts.BarChart(
-      seriesList,
-      animate: animate,
-      vertical: vertical,
-      primaryMeasureAxis: (showValues)
-          ? null
-          : new charts.NumericAxisSpec(renderSpec: new charts.NoneRenderSpec()),
-    );
+    return new charts.BarChart(seriesList,
+        animate: animate,
+        vertical: vertical,
+        //barRendererDecorator: ,
+        selectionModels: [
+          new charts.SelectionModelConfig(
+            type: charts.SelectionModelType.info,
+            changedListener: _onSelectionChanged,
+          )
+        ],
+        behaviors: [
+          // Add this behavior to show initial hint animation that will pan to the
+          // final desired viewport.
+          // The duration of the animation can be adjusted by pass in
+          // [hintDuration]. By default this is 3000ms.
+          new charts.InitialHintBehavior(maxHintTranslate: 4.0),
+          // Optionally add a pan or pan and zoom behavior.
+          // If pan/zoom is not added, the viewport specified remains the viewport
+          new charts.PanAndZoomBehavior(),
+        ],
+        defaultRenderer: new charts.BarRendererConfig(
+            // By default, bar renderer will draw rounded bars with a constant
+            // radius of 100.
+            // To not have any rounded corners, use [NoCornerStrategy]
+            // To change the radius of the bars, use [ConstCornerStrategy]
+
+            cornerStrategy: charts.ConstCornerStrategy(barRadius)),
+        primaryMeasureAxis: (showValues)
+            ? null
+            : new charts.NumericAxisSpec(
+                renderSpec: new charts.NoneRenderSpec()),
+        domainAxis: (showDomainAxis)
+            ? charts.OrdinalAxisSpec(
+                showAxisLine: showAxisLine,
+              )
+            : charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()));
   }
 
   /// Create one series with sample hard coded data.

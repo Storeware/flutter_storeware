@@ -1,9 +1,17 @@
-/// Horizontal bar chart example
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'chart_pair.dart';
-import 'package:flutter/material.dart';
+import 'dart:math';
 
-class DashHorizontalBarChart extends StatelessWidget {
+/// Horizontal bar chart example
+import 'package:charts_flutter/src/text_element.dart' as ChartText;
+import 'package:charts_flutter/src/text_style.dart' as ChartStyle;
+import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter/flutter.dart';
+import 'package:controls_dash/controls_dash.dart';
+//import 'chart_pair.dart';
+import 'package:flutter/material.dart';
+//import 'package:charts_flutter/src/text_style.dart' as style;
+//import 'package:charts_flutter/src/text_element.dart' as te;
+
+class DashHorizontalBarChart extends StatefulWidget {
   final List<charts.Series> seriesList;
   final bool vertical;
   final bool animate;
@@ -29,54 +37,8 @@ class DashHorizontalBarChart extends StatelessWidget {
       animate: false,
     );
   }
-  _onSelectionChanged(charts.SelectionModel model) {
-    final selectedDatum = model.selectedDatum;
-    if (selectedDatum.isNotEmpty) {
-      var dados = selectedDatum.first.datum;
-      if (onSelected != null) onSelected(dados);
-    }
-  }
-
   @override
-  Widget build(BuildContext context) {
-    // For horizontal bar charts, set the [vertical] flag to false.
-    return new charts.BarChart(seriesList,
-        animate: animate,
-        vertical: vertical,
-        //barRendererDecorator: ,
-        selectionModels: [
-          new charts.SelectionModelConfig(
-            type: charts.SelectionModelType.info,
-            changedListener: _onSelectionChanged,
-          )
-        ],
-        behaviors: [
-          // Add this behavior to show initial hint animation that will pan to the
-          // final desired viewport.
-          // The duration of the animation can be adjusted by pass in
-          // [hintDuration]. By default this is 3000ms.
-          new charts.InitialHintBehavior(maxHintTranslate: 4.0),
-          // Optionally add a pan or pan and zoom behavior.
-          // If pan/zoom is not added, the viewport specified remains the viewport
-          new charts.PanAndZoomBehavior(),
-        ],
-        defaultRenderer: new charts.BarRendererConfig(
-            // By default, bar renderer will draw rounded bars with a constant
-            // radius of 100.
-            // To not have any rounded corners, use [NoCornerStrategy]
-            // To change the radius of the bars, use [ConstCornerStrategy]
-
-            cornerStrategy: charts.ConstCornerStrategy(barRadius)),
-        primaryMeasureAxis: (showValues)
-            ? null
-            : new charts.NumericAxisSpec(
-                renderSpec: new charts.NoneRenderSpec()),
-        domainAxis: (showDomainAxis)
-            ? charts.OrdinalAxisSpec(
-                showAxisLine: showAxisLine,
-              )
-            : charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()));
-  }
+  _DashHorizontalBarChartState createState() => _DashHorizontalBarChartState();
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<ChartPair, String>> _createSampleData() {
@@ -98,5 +60,93 @@ class DashHorizontalBarChart extends StatelessWidget {
         data: data,
       )
     ];
+  }
+}
+
+class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
+  String textSelected;
+
+  _onSelectionChanged(charts.SelectionModel model) {
+    final selectedDatum = model.selectedDatum;
+    if (selectedDatum.isNotEmpty) {
+      ChartPair dados = selectedDatum.first.datum;
+      textSelected = '${dados.value.toInt()}';
+      if (widget.onSelected != null)
+        widget.onSelected(dados);
+      else
+        setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // For horizontal bar charts, set the [vertical] flag to false.
+    Size size = MediaQuery.of(context).size;
+    return new charts.BarChart(widget.seriesList,
+        animate: widget.animate,
+        vertical: widget.vertical,
+        //barRendererDecorator: ,
+        selectionModels: [
+          new charts.SelectionModelConfig(
+            type: charts.SelectionModelType.info,
+            changedListener: _onSelectionChanged,
+          )
+        ],
+        behaviors: (!widget.vertical)
+            ? null
+            : [
+                new charts.LinePointHighlighter(
+                    symbolRenderer: CustomCircleSymbolRenderer(
+                        size: size, onGetValue: () => textSelected ?? '?')),
+                new charts.SelectNearest(
+                    eventTrigger: charts.SelectionTrigger.tapAndDrag)
+              ],
+        defaultRenderer: new charts.BarRendererConfig(
+            // By default, bar renderer will draw rounded bars with a constant
+            // radius of 100.
+            // To not have any rounded corners, use [NoCornerStrategy]
+            // To change the radius of the bars, use [ConstCornerStrategy]
+
+            cornerStrategy: charts.ConstCornerStrategy(widget.barRadius)),
+        primaryMeasureAxis: (widget.showValues)
+            ? null
+            : new charts.NumericAxisSpec(
+                renderSpec: new charts.NoneRenderSpec()),
+        domainAxis: (widget.showDomainAxis)
+            ? charts.OrdinalAxisSpec(
+                showAxisLine: widget.showAxisLine,
+              )
+            : charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()));
+  }
+}
+
+//---
+class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
+  final Size size;
+  final String Function() onGetValue;
+
+  CustomCircleSymbolRenderer({@required this.onGetValue, this.size});
+
+  @override
+  void paint(charts.ChartCanvas canvas, Rectangle bounds,
+      {List dashPattern,
+      charts.Color fillColor,
+      charts.FillPatternType fillPattern,
+      charts.Color strokeColor,
+      double strokeWidthPx}) {
+    super.paint(canvas, bounds,
+        dashPattern: dashPattern,
+        fillColor: fillColor,
+        strokeColor: strokeColor,
+        strokeWidthPx: strokeWidthPx);
+
+    String text = onGetValue();
+
+    ChartStyle.TextStyle textStyle = ChartStyle.TextStyle();
+
+    textStyle.color = Color.black;
+    textStyle.fontSize = 15;
+    canvas.drawText(ChartText.TextElement(text, style: textStyle),
+        (bounds.left).round() - 20, (bounds.top - 20).round());
   }
 }

@@ -572,7 +572,14 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
 
     return Row(mainAxisSize: MainAxisSize.min, children: [
       if (widget.leading != null) widget.leading,
-      if (widget.label != null) Text(widget.label ?? '' + '  '),
+      if (widget.label != null)
+        Expanded(
+          child: Text(
+            widget.label ?? '' + '  ',
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ValueListenableBuilder(
           valueListenable: initialValue,
           builder: (
@@ -662,13 +669,14 @@ class MaskedDropDownFormField extends StatelessWidget {
               key: UniqueKey(),
               items: items.map((String label) {
                 return new DropdownMenuItem(
-                    key: UniqueKey(),
-                    value: label ?? '',
-                    child: Row(
-                      children: <Widget>[
-                        Text(label ?? ''),
-                      ],
-                    ));
+                  key: UniqueKey(),
+                  value: label ?? '',
+                  child: Text(
+                    label ?? '',
+                    //softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
               }).toList(),
               isDense: true,
               isExpanded: true,

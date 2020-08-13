@@ -95,6 +95,10 @@ class DataViewerController {
     return null;
   }
 
+  createColumns(List<Map<String, dynamic>> source) {
+    paginatedController.createColumns(source);
+  }
+
   /// executa  delete de um linha
   doDelete(dados, {manual = false}) {
     if (onClearCache != null) onClearCache();
@@ -285,6 +289,7 @@ class DataViewer extends StatefulWidget {
   final double height;
   final double width;
   final double elevation;
+  final bool canSort;
 
   /// se permite editar um dado - default: true;
   final bool canEdit;
@@ -336,6 +341,7 @@ class DataViewer extends StatefulWidget {
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
+    this.canSort = true,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
     this.dataRowHeight = kMinInteractiveDimension,
@@ -473,6 +479,7 @@ class _DataViewerState extends State<DataViewer> {
               child: widget.child ??
                   PaginatedGrid(
                     elevation: widget.elevation,
+                    canSort: widget.canSort,
                     evenRowColor: widget.evenRowColor,
                     oddRowColor: widget.oddRowColor,
                     //sortColumnIndex: widget.sortColumnIndex,
@@ -501,8 +508,9 @@ class _DataViewerState extends State<DataViewer> {
                       if (widget.beforeShow != null)
                         return widget.beforeShow(p);
                     },
-                    columns: controller.columns,
-                    source: widget.source,
+                    columns: controller.columns ??
+                        controller.paginatedController.columns,
+                    source: widget.source ?? controller.source,
                     rowsPerPage: widget.rowsPerPage ?? _top,
                     currentPage: controller.page,
                     canEdit: widget.canEdit,

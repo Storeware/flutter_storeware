@@ -162,6 +162,7 @@ class PaginatedGrid extends StatefulWidget {
   final List<Widget> actions;
   final int currentPage;
   final double elevation;
+  final bool canSort;
 
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
@@ -244,6 +245,7 @@ class PaginatedGrid extends StatefulWidget {
     this.oneRowAutoEdit = false,
     this.footerLeading,
     this.footerHeight = 56,
+    this.canSort = true,
     //this.backgroundColor,
     this.columns,
     this.footerTrailing,
@@ -378,13 +380,14 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   }
 
   createColumns(List<dynamic> source) {
-    controller.columns = [];
+    controller.createColumns(source);
+    /*  controller.columns = [];
     Map<String, dynamic> row = source.first;
     if (row != null)
       row.forEach((k, v) {
         controller.columns.add(PaginatedGridColumn(
             name: k, label: k.replaceAll('_', ' ').toCapital()));
-      });
+      });*/
   }
 
   _sort(int idx, bool ascending) {
@@ -528,11 +531,14 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                   i++)
                                 if (controller.columns[i].visible)
                                   DataColumn(
-                                      onSort: controller.columns[i].onSort ??
-                                              (controller.columns[i].sort)
-                                          ? (int columnIndex, bool ascending) =>
-                                              _sort(columnIndex, ascending)
-                                          : (a, b) => null,
+                                      onSort: (widget.canSort)
+                                          ? controller.columns[i].onSort ??
+                                                  (controller.columns[i].sort)
+                                              ? (int columnIndex,
+                                                      bool ascending) =>
+                                                  _sort(columnIndex, ascending)
+                                              : (a, b) => null
+                                          : null,
                                       numeric: controller.columns[i].numeric,
                                       tooltip: controller.columns[i].tooltip,
                                       label: Align(
@@ -544,17 +550,31 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                                   Alignment.centerLeft,
                                           child: Container(
                                             width: controller.columns[i].width,
-                                            child: Text(
-                                                controller.columns[i].label ??
-                                                    controller.columns[i].name
-                                                        .toCapital(),
-                                                textAlign: TextAlign.center,
-                                                style: widget.columnStyle ??
-                                                    TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                    )),
+                                            child: Builder(builder: (ctx) {
+                                              var labels = (controller
+                                                          .columns[i].label ??
+                                                      controller.columns[i].name
+                                                          .toCapital())
+                                                  .split('|');
+                                              return Column(children: [
+                                                for (var l in labels)
+                                                  Expanded(
+                                                      flex: 1,
+                                                      child: Text(l,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: widget
+                                                                  .columnStyle ??
+                                                              TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 16,
+                                                              )))
+                                              ]);
+                                            }),
                                           )))
                             ],
                             source: controller.tableSource,
@@ -641,6 +661,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 
 class PaginatedGridController {
   var parent;
+
   BuildContext context;
   _PaginatedGridState statePage;
   StreamController<bool> changedEvent = StreamController<bool>.broadcast();
@@ -716,6 +737,24 @@ class PaginatedGridController {
         title: title,
         child: editPage(context, data,
             title: title, width: width, height: height, event: event));
+  }
+
+  createColumns(List<Map<String, dynamic>> source) {
+    columns = [];
+    Map<String, dynamic> row = source.first;
+    if (row != null)
+      row.forEach((k, v) {
+        var numeric = false;
+        if (v is double) numeric = true;
+        columns.add(
+          PaginatedGridColumn(
+            name: k,
+            label: k.replaceAll('_', ' ').toCapital(),
+            numeric: numeric,
+            //width: 120,
+          ),
+        );
+      });
   }
 
   clear() {

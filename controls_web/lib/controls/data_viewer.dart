@@ -46,13 +46,12 @@ class DataViewerController {
     this.onUpdate,
     this.onDelete,
     this.onChanged,
-    List<PaginatedGridColumn> columns,
+    this.columns,
   }) {
     if (futureExtended != null) {
       this.future = () => futureExtended(this);
     }
     paginatedController.parent = this;
-    if (columns != null) paginatedController.columns = columns;
   }
   int page = 1;
   int top;
@@ -65,19 +64,15 @@ class DataViewerController {
   final Future<dynamic> Function(dynamic) onUpdate;
   final Future<dynamic> Function(dynamic) onDelete;
   final Function(dynamic) onChanged;
-  //List<PaginatedGridColumn> columns;
+  List<PaginatedGridColumn> columns;
 
   /// Evento indicando que pode limpar o cache;
   final Function() onClearCache;
 
   /// Lista de dados
   //List<dynamic> source;
-  set source(List<dynamic> data) => paginatedController.source;
+  set source(List<Map<String, dynamic>> data) => paginatedController.source;
   get source => paginatedController.source;
-  get columns => paginatedController.columns;
-  set columns(values) {
-    paginatedController.columns = values;
-  }
 
   /// Observer que notifica mudança dos dados
   BlocModel<int> subscribeChanges = BlocModel<int>();
@@ -100,7 +95,7 @@ class DataViewerController {
     return null;
   }
 
-  createColumns(List<dynamic> source) {
+  createColumns(List<Map<String, dynamic>> source) {
     paginatedController.createColumns(source);
   }
 
@@ -287,7 +282,7 @@ class DataViewer extends StatefulWidget {
   final String keyName;
   final DataViewerController controller;
   final Widget child;
-  final List<dynamic> source;
+  final List<Map<String, dynamic>> source;
   final int rowsPerPage;
   final Function(dynamic) beforeShow;
   final List<PaginatedGridColumn> columns;
@@ -664,10 +659,10 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
 
     if (widget.controller.columns != null) {
       ctrl = widget.controller;
-      col = ctrl.findColumn(column);
+      col = ctrl?.findColumn(column);
     } else {
       ctrl = widget.controller.paginatedController;
-      col = ctrl.findColumn(column);
+      col = ctrl?.findColumn(column);
     }
 
     if (col == null) return (Text('null $column'));

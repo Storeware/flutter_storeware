@@ -1,6 +1,6 @@
 import 'package:controls_web/controls/sidebar.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
-import 'package:dotted_border/dotted_border.dart';
+//import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class DualListViewerController {
@@ -393,7 +393,7 @@ class _DragTargetDualListItemState extends State<DragTargetDualListItem> {
                       height: 50,
                       color: Colors.grey.withOpacity(0.9),
                     )
-                  : DottedBorder(
+                  : Container(
                       color: Colors.grey.withOpacity(0.2),
                       child: Container(
                         height: expanded() ? 50 : 5,

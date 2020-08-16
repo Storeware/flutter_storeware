@@ -341,6 +341,75 @@ class LabeledColumn extends StatelessWidget {
       ];
 }
 
+class Labeled extends StatelessWidget {
+  final String label;
+  final Widget title;
+  final double spacing;
+  final WrapAlignment alignment;
+  final WrapCrossAlignment crossAxisAlignment;
+  final Axis direction;
+  final List<Widget> children;
+  final double top, runSpacing;
+  final TextStyle style;
+  const Labeled(
+      {Key key,
+      this.label,
+      this.title,
+      this.spacing = 1,
+      this.alignment = WrapAlignment.start,
+      this.crossAxisAlignment = WrapCrossAlignment.start,
+      this.children,
+      this.direction = Axis.horizontal,
+      this.top = 8,
+      this.runSpacing = 1,
+      this.style})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: top,
+        ),
+        title ??
+            Text(label ?? '',
+                style: theme.textTheme
+                    .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
+        SizedBox(
+          height: 5,
+        ),
+        DefaultTextStyle(
+          style: (style ?? theme.textTheme.subtitle2).copyWith(
+              fontWeight: FontWeight.w300,
+              color: theme.textTheme.subtitle2.color),
+          child: SafeArea(
+            child: Wrap(
+              alignment: alignment,
+              crossAxisAlignment: crossAxisAlignment,
+              direction: direction,
+              spacing: spacing,
+              runSpacing: runSpacing,
+              //mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
+              children: [for (var item in children) ...doitem(item)],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  doitem(item) => [
+        item,
+        SizedBox(
+          width: spacing,
+        )
+      ];
+}
+
 class ButtonAvatar extends StatelessWidget {
   final Widget icon;
   final String label;
@@ -451,9 +520,11 @@ class ActionText extends StatelessWidget {
           child: Column(
             children: [
               if (child != null) child,
-              if (label != null) Text(label, style: _style),
+              if (label != null)
+                Text(label, textAlign: TextAlign.center, style: _style),
               if (sublabel != null)
                 Text(sublabel,
+                    textAlign: TextAlign.center,
                     style: _style.copyWith(
                         fontSize: (_style.fontSize ?? 12) * 0.8))
             ],

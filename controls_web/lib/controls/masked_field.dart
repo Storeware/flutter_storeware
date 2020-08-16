@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 //import 'flutter_masked_text.dart';
 import 'package:intl/intl.dart';
-import 'currency.dart';
+import 'package:controls_web/controls/currency.dart';
 
 bool _showHelperText = true;
 
@@ -366,73 +366,76 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return TextFormField(
-        readOnly: widget.readOnly,
-        controller: _dataController,
-        keyboardType: TextInputType.phone,
-        style: theme.textTheme
-            .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
-        decoration: InputDecoration(
-            labelText: widget.labelText,
-            prefix: widget.prefix,
-            suffixIcon: IconButton(
-                icon: Icon(Icons.calendar_today),
-                onPressed: (widget.readOnly)
-                    ? null
-                    : () {
-                        _dataController.text =
-                            formatter.format(widget.initialValue);
-                      })),
-        validator: (x) {
-          DateTime d = formatter.parse(x);
-          //DateTime b = formatter.parse(x);
-          // debugPrint('init Validate $x $d');
-          if (widget.firstDate != null) if (widget.firstDate.isAfter(d))
-            d = widget.firstDate;
-          if (widget.lastDate != null) if (widget.lastDate.isBefore(d))
-            d = widget.lastDate;
+    return Padding(
+        padding: EdgeInsets.only(top: 3),
+        child: TextFormField(
+            readOnly: widget.readOnly,
+            controller: _dataController,
+            keyboardType: TextInputType.phone,
+            style: theme.textTheme
+                .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+            decoration: InputDecoration(
+                labelText: widget.labelText,
+                prefix: widget.prefix,
+                suffixIcon: GestureDetector(
+                    child: Icon(Icons.calendar_today),
+                    onTap: (widget.readOnly)
+                        ? null
+                        : () {
+                            _dataController.text =
+                                formatter.format(widget.initialValue);
+                          })),
+            validator: (x) {
+              DateTime d = formatter.parse(x);
+              //DateTime b = formatter.parse(x);
+              // debugPrint('init Validate $x $d');
+              if (widget.firstDate != null) if (widget.firstDate.isAfter(d))
+                d = widget.firstDate;
+              if (widget.lastDate != null) if (widget.lastDate.isBefore(d))
+                d = widget.lastDate;
 
-          if (widget.validator != null) return widget.validator(d);
-          //debugPrint('fim Validate $x $b $d');
-          _dataController.text = formatter.format(d);
-          return null;
-        },
-        onTap: () {
-          if (widget.readOnly) return;
-          if (widget.type == MaskedDatePickerType.day)
-            getDate().then((x) {
-              _dataController.text = formatter.format(x);
-
-              if (widget.onChanged != null) widget.onChanged(x);
-            });
-          if (widget.type == MaskedDatePickerType.time)
-            getTime().then((TimeOfDay h) {
-              var d1 = formatter.parse(_dataController.text);
-              var d = DateTime(d1.year, d1.month, d1.day)
-                  .add(Duration(hours: h.hour))
-                  .add(Duration(minutes: h.minute));
+              if (widget.validator != null) return widget.validator(d);
+              //debugPrint('fim Validate $x $b $d');
               _dataController.text = formatter.format(d);
-              if (widget.onChanged != null) widget.onChanged(d);
-            });
-          if (widget.type == MaskedDatePickerType.dayAndTime)
-            getDate().then((x) {
-              var d1 = x;
-              getTime().then((h) {
-                var d = DateTime(d1.year, d1.month, d1.day)
-                    .add(Duration(hours: h.hour))
-                    .add(Duration(minutes: h.minute));
-                _dataController.text = formatter.format(d);
-                if (widget.onChanged != null) widget.onChanged(d);
-              });
-            });
-        },
-        onChanged: (x) {
-          widget.onChanged(formatter.parse(x));
-        },
-        onSaved: (x) {
-          if (widget.onSaved != null) return widget.onSaved(formatter.parse(x));
-          return null;
-        });
+              return null;
+            },
+            onTap: () {
+              if (widget.readOnly) return;
+              if (widget.type == MaskedDatePickerType.day)
+                getDate().then((x) {
+                  _dataController.text = formatter.format(x);
+
+                  if (widget.onChanged != null) widget.onChanged(x);
+                });
+              if (widget.type == MaskedDatePickerType.time)
+                getTime().then((TimeOfDay h) {
+                  var d1 = formatter.parse(_dataController.text);
+                  var d = DateTime(d1.year, d1.month, d1.day)
+                      .add(Duration(hours: h.hour))
+                      .add(Duration(minutes: h.minute));
+                  _dataController.text = formatter.format(d);
+                  if (widget.onChanged != null) widget.onChanged(d);
+                });
+              if (widget.type == MaskedDatePickerType.dayAndTime)
+                getDate().then((x) {
+                  var d1 = x;
+                  getTime().then((h) {
+                    var d = DateTime(d1.year, d1.month, d1.day)
+                        .add(Duration(hours: h.hour))
+                        .add(Duration(minutes: h.minute));
+                    _dataController.text = formatter.format(d);
+                    if (widget.onChanged != null) widget.onChanged(d);
+                  });
+                });
+            },
+            onChanged: (x) {
+              widget.onChanged(formatter.parse(x));
+            },
+            onSaved: (x) {
+              if (widget.onSaved != null)
+                return widget.onSaved(formatter.parse(x));
+              return null;
+            }));
   }
 
   Future<DateTime> getDate() {
@@ -442,7 +445,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: widget.firstDate ?? DateTime.now().add(Duration(days: -180)),
-      lastDate: widget.lastDate ?? DateTime(2030),
+      lastDate: widget.lastDate ?? DateTime(DateTime.now().year + 10),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.light(),
@@ -569,7 +572,14 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
 
     return Row(mainAxisSize: MainAxisSize.min, children: [
       if (widget.leading != null) widget.leading,
-      if (widget.label != null) Text(widget.label ?? '' + '  '),
+      if (widget.label != null)
+        Expanded(
+          child: Text(
+            widget.label ?? '' + '  ',
+            textAlign: TextAlign.right,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
       ValueListenableBuilder(
           valueListenable: initialValue,
           builder: (
@@ -659,13 +669,14 @@ class MaskedDropDownFormField extends StatelessWidget {
               key: UniqueKey(),
               items: items.map((String label) {
                 return new DropdownMenuItem(
-                    key: UniqueKey(),
-                    value: label ?? '',
-                    child: Row(
-                      children: <Widget>[
-                        Text(label ?? ''),
-                      ],
-                    ));
+                  key: UniqueKey(),
+                  value: label ?? '',
+                  child: Text(
+                    label ?? '',
+                    //softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                );
               }).toList(),
               isDense: true,
               isExpanded: true,
@@ -691,6 +702,7 @@ class MaskedMoneyFormField extends StatelessWidget {
   final String errorText;
   final int maxLength;
   final dynamic Function(double) validator;
+  final Function(double) onFocusChanged;
   const MaskedMoneyFormField({
     Key key,
     this.label,
@@ -699,6 +711,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.leftSymbol = '',
     this.precision,
     this.controller,
+    this.onFocusChanged,
     this.errorText,
     this.validator,
     this.maxLength,
@@ -714,44 +727,54 @@ class MaskedMoneyFormField extends StatelessWidget {
             thousandSeparator: '.',
             leftSymbol: leftSymbol + '  ',
             precision: precision ?? 2);
-
+    _controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: _controller.text.length));
     _controller.afterChange = (mask, value) {
       //debugPrint(' mask: $mask , value: $value ');
     };
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (label != null)
-          Text(
-            label,
-            style: theme.textTheme.caption, //TextStyle(
-            //fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
-          ),
-        Container(
-          constraints: BoxConstraints(minWidth: 100, minHeight: 40),
-          child: TextFormField(
-              key: key,
-              controller: _controller,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                hintText: label,
-              ),
-              validator: (x) {
-                if (validator != null)
-                  return validator(_controller.numberValue);
-                if ((errorText != null) && (x == '')) {
-                  return errorText;
-                }
-                return null;
-              },
-              maxLength: maxLength,
-              onSaved: (x) {
-                if (onSaved != null) onSaved(_controller.numberValue);
-              }),
-        ),
-      ],
-    );
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          /*if (label != null)
+            Text(
+              label,
+              style: theme.textTheme.caption, //TextStyle(
+              //fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
+            ),*/
+          Container(
+            constraints: BoxConstraints(minWidth: 100),
+            height: kToolbarHeight + 3,
+            child: Focus(
+                canRequestFocus: false,
+                onFocusChange: (b) {
+                  if (!b && (onFocusChanged != null))
+                    onFocusChanged(_controller.numberValue);
+                },
+                child: TextFormField(
+                    key: key,
+                    controller: _controller,
+                    keyboardType: TextInputType.number,
+                    autofocus: true,
+                    textAlign: TextAlign.right,
+                    decoration: InputDecoration(
+                      //hintText: label,
+                      labelText: label,
+                    ),
+                    validator: (x) {
+                      if (validator != null)
+                        return validator(_controller.numberValue);
+                      if ((errorText != null) && (x == '')) {
+                        return errorText;
+                      }
+                      return null;
+                    },
+                    maxLength: maxLength,
+                    onSaved: (x) {
+                      if (onSaved != null) onSaved(_controller.numberValue);
+                    })),
+          )
+        ]);
   }
 }
 
@@ -773,8 +796,9 @@ class MaskedLabeled extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Padding(
-        padding: padding ?? EdgeInsets.only(left: 4, bottom: 2),
+        padding: padding ?? EdgeInsets.only(left: 4), //, bottom: 2),
         child: Container(
+          height: kToolbarHeight + 3,
           decoration: BoxDecoration(
             border: Border(
               bottom: BorderSide(
@@ -847,7 +871,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   final String labelText;
   final int maxLines;
   final Function(T) onChanged;
-  final Function(bool, dynamic) onFocusChange;
+  final Function(bool, T) onFocusChange;
 
   const MaskedSearchFormField(
       {Key key,
@@ -886,6 +910,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
     if (typeOf<T>() == typeOf<Money>()) return Money.tryParse(value) as T;
     if (typeOf<T>() == typeOf<int>()) return int.tryParse(value) as T;
     if (typeOf<T>() == typeOf<double>()) return double.tryParse(value) as T;
+    if (typeOf<T>() == typeOf<num>()) return double.tryParse(value) as T;
     if (typeOf<T>() == typeOf<DateTime>()) return DateTime.tryParse(value) as T;
     if (typeOf<T>() == typeOf<bool>()) return (value == 'true') as T;
     return value as T;
@@ -903,13 +928,12 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     final TextEditingController _controller =
-        this.controller ?? TextEditingController();
-
-    _controller.text = getValue(initialValue);
-
+        this.controller ?? TextEditingController(text: getValue(initialValue));
     return Focus(
+        canRequestFocus: false,
         onFocusChange: (x) {
-          if (onFocusChange != null) onFocusChange(x, _controller.text);
+          if (onFocusChange != null)
+            onFocusChange(x, setValue(_controller.text));
         },
         child: TextFormField(
             autofocus: autofocus,
@@ -921,9 +945,11 @@ class MaskedSearchFormField<T> extends StatelessWidget {
             decoration: decoration ??
                 InputDecoration(
                     labelText: labelText,
-                    suffixIcon: IconButton(
-                        icon: Icon(iconSearch),
-                        onPressed: () {
+                    suffixIcon: GestureDetector(
+                        //focusNode: FocusNode(
+                        //    canRequestFocus: false, onKey: (a, b) => false),
+                        child: Icon(iconSearch),
+                        onTap: () {
                           onSearch().then((item) {
                             _controller.text = getValue(item);
                           });

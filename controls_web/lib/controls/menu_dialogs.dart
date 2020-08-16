@@ -1,5 +1,6 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_io/io.dart';
 
 class MenuChoice {
   final IconData icon;
@@ -27,7 +28,8 @@ class MenuDialog extends StatefulWidget {
       double width = 300,
       double height,
       Color color}) async {
-    var h = height ?? (58 * (choices.length + 1));
+    var h = height ?? (kToolbarHeight * (choices.length + 1));
+    if (Platform.isIOS) h += kToolbarHeight;
     return Dialogs.showModal(context,
         title: title ?? 'Menu',
         width: width,

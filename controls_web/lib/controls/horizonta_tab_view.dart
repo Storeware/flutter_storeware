@@ -15,10 +15,12 @@ class HorizontalTabView extends StatelessWidget {
   final List<TabChoice> choices;
   final HorizontalTabViewController controller;
   final Color tabColor;
+  final Color sidebarBackgroundColor;
   final Color indicatorColor;
   final Color iconColor;
   final AppBar appBar;
   final Widget sidebarHeader, sidebarFooter;
+  final int mobileCrossCount;
   final Color color;
   final double width;
   final Color backgroundColor;
@@ -29,15 +31,23 @@ class HorizontalTabView extends StatelessWidget {
   final Widget floatingActionButton;
   final Color tagColor;
   final bool isMobile;
+  final double tabHeight;
+  final AppBar sidebarAppBar;
+  final Drawer sidebarDrawer;
   HorizontalTabView({
     Key key,
     this.choices,
     this.appBar,
+    this.sidebarAppBar,
+    this.sidebarDrawer,
     this.padding,
     this.width,
+    this.tabHeight,
+    this.sidebarBackgroundColor,
     this.sidebarType,
     this.controller,
     this.tagColor = Colors.amber,
+    this.mobileCrossCount,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
     this.iconColor, //= Colors.white,
@@ -86,17 +96,27 @@ class HorizontalTabView extends StatelessWidget {
                   children: [
                     if (_sidebarType != HorizontalTabViewSiderBarType.hide)
                       Container(
-                          width:
-                              width ?? [0.0, 100.0, 180.0][_sidebarType.index],
-                          color: color ?? Colors.transparent,
+                          width: [
+                            0.0,
+                            100.0,
+                            width ?? 180.0
+                          ][_sidebarType.index],
+                          color: sidebarBackgroundColor ??
+                              color ??
+                              Colors.transparent,
                           child: SizedBox.expand(
-                            child: Column(
+                              child: Scaffold(
+                            appBar: sidebarAppBar,
+                            drawer: sidebarDrawer,
+                            body: SingleChildScrollView(
+                                child: Column(
                               children: [
                                 if (sidebarHeader != null) sidebarHeader,
                                 for (var index = 0;
                                     index < choices.length;
                                     index++)
                                   Container(
+                                    alignment: Alignment.centerLeft,
                                     color: (_index.value == index)
                                         ? indicatorColor
                                         : tabColor,
@@ -128,35 +148,49 @@ class HorizontalTabView extends StatelessWidget {
                                             })
                                         : Row(children: [
                                             Container(
-                                                height: kToolbarHeight,
+                                                height:
+                                                    tabHeight ?? kToolbarHeight,
                                                 width: 5,
                                                 color: (_index.value == index)
                                                     ? tagColor
                                                     : tabColor),
                                             Expanded(
-                                                child: ListTile(
-                                              leading:
-                                                  (choices[index].image != null)
-                                                      ? choices[index].image
-                                                      : Icon(
-                                                          choices[index].icon,
-                                                          color: _iconColor,
-                                                        ),
-                                              title: choices[index].title ??
-                                                  Text(choices[index].label,
-                                                      style: TextStyle(
-                                                          color: _iconColor)),
-                                              onTap: () {
-                                                _index.value = index;
-                                              },
-                                            )),
+                                                child: Container(
+                                                    height: tabHeight,
+                                                    child: ListTile(
+                                                      leading: (choices[index]
+                                                                  .image !=
+                                                              null)
+                                                          ? choices[index].image
+                                                          : (choices[index]
+                                                                      .icon !=
+                                                                  null)
+                                                              ? Icon(
+                                                                  choices[index]
+                                                                      .icon,
+                                                                  color:
+                                                                      _iconColor,
+                                                                )
+                                                              : null,
+                                                      title: choices[index]
+                                                              .title ??
+                                                          Text(
+                                                              choices[index]
+                                                                  .label,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      _iconColor)),
+                                                      onTap: () {
+                                                        _index.value = index;
+                                                      },
+                                                    ))),
                                             if (sidebarFooter != null)
                                               sidebarFooter,
                                           ]),
                                   ),
                               ],
-                            ),
-                          )),
+                            )),
+                          ))),
                     //VerticalDivider(),
                     Expanded(
                       child: Scaffold(
@@ -177,8 +211,9 @@ class HorizontalTabView extends StatelessWidget {
   mobileBuild(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     ThemeData theme = Theme.of(context);
-    int cols = size.width ~/ 200;
-    if (size.width < 411) cols = 2;
+    int cols = mobileCrossCount ?? size.width ~/ 150;
+    if (size.width < mobileCrossCount ?? 2) cols = mobileCrossCount ?? 2;
+
     return Scaffold(
         backgroundColor: backgroundColor,
         appBar: appBar,
@@ -222,8 +257,7 @@ class HorizontalTabView extends StatelessWidget {
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
                                         color: _iconColor ??
-                                            theme.primaryTextTheme.bodyText1
-                                                .color,
+                                            theme.textTheme.button.color,
                                       ),
                                     ),
                               ],

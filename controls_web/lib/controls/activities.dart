@@ -321,10 +321,12 @@ class ActivityCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
+  final Widget image;
   final Color color;
   final double spacing;
   final TextStyle style;
   final Color titleColor;
+  final double avatarSize;
   const ActivityCard(
       {Key key,
       this.color,
@@ -333,8 +335,10 @@ class ActivityCard extends StatelessWidget {
       this.style,
       this.titleColor,
       this.icon,
+      this.image,
       this.children,
       this.spacing,
+      this.avatarSize = 42,
       this.height,
       this.width})
       : super(key: key);
@@ -361,17 +365,23 @@ class ActivityCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Container(
-                    width: 60,
-                    height: 60,
-                    child: ActivityAvatar(
-                      avatarBackgroudColor:
-                          theme.primaryTextTheme.bodyText1.color,
-                      iconColor: theme.textTheme.button.color,
-                      icon: icon ?? Icons.person_pin,
-                    ),
+                    width: avatarSize,
+                    height: avatarSize,
+                    child: (image != null)
+                        ? CircleAvatar(
+                            backgroundColor:
+                                theme.primaryTextTheme.bodyText1.color,
+                            child: image)
+                        : ActivityAvatar(
+                            avatarBackgroudColor:
+                                theme.primaryTextTheme.bodyText1.color,
+                            iconColor: theme.textTheme.button.color,
+                            icon: icon ?? Icons.person_pin,
+                          ),
                   ),
                 ),
-                Column(
+                Expanded(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(title ?? '',
@@ -390,7 +400,7 @@ class ActivityCard extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
+                )),
               ],
             ),
             Wrap(
@@ -400,7 +410,7 @@ class ActivityCard extends StatelessWidget {
               //crossAxisAlignment: WrapCrossAlignment.center,
               runSpacing: 2,
 
-              spacing: spacing ?? 24,
+              spacing: spacing ?? 8,
               //alignment: WrapAlignment.start,
               //scrollDirection: Axis.horizontal,
               //mainAxisAlignment: MainAxisAlignment.spaceAround,

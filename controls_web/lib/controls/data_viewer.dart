@@ -6,6 +6,7 @@ import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/src/material/constants.dart';
 
 class DefaultDataViewer extends InheritedWidget {
   final DataViewerController controller;
@@ -26,15 +27,18 @@ class DataViewerController {
   final ODataModelClass dataSource;
 
   /// Function de busca dos dados
-  final Function() future;
+  Function() future;
+  final Function(dynamic, PaginatedGridChangeEvent) beforeChange;
 
   /// [DataViewerController.keyName] utilizado para localizar uma linha na pilha
   String keyName;
   DataViewerController({
-    @required this.future,
+    this.future,
     this.context,
     this.dataSource,
     this.onValidate,
+    this.beforeChange,
+    Function(DataViewerController) futureExtended,
     this.top,
     @required this.keyName,
     this.onClearCache,
@@ -43,10 +47,17 @@ class DataViewerController {
     this.onDelete,
     this.onChanged,
     this.columns,
-  });
+  }) {
+    if (futureExtended != null) {
+      this.future = () => futureExtended(this);
+    }
+    paginatedController.parent = this;
+  }
   int page = 1;
   int top;
-  String filter = '';
+  String get filter => filterValue.value;
+  set filter(String v) => filterValue.value = v;
+  ValueNotifier filterValue = ValueNotifier<String>('');
 
   /// Eventos para customização de registro
   final Future<dynamic> Function(dynamic) onInsert;
@@ -58,6 +69,11 @@ class DataViewerController {
   /// Evento indicando que pode limpar o cache;
   final Function() onClearCache;
 
+  /// Lista de dados
+  //List<dynamic> source;
+  set source(List<Map<String, dynamic>> data) => paginatedController.source;
+  get source => paginatedController.source;
+
   /// Observer que notifica mudança dos dados
   BlocModel<int> subscribeChanges = BlocModel<int>();
   goPage(x) {
@@ -68,9 +84,6 @@ class DataViewerController {
 
   final BuildContext context;
 
-  /// Lista de dados
-  List<dynamic> source;
-
   /// [DataViewerController.skip] indica as linhas iniciais a saltar na busca da API
   get skip => (page - 1) * top;
 
@@ -80,6 +93,10 @@ class DataViewerController {
       if (columns[i].name == name) index = i;
     if (index > -1) return columns[index];
     return null;
+  }
+
+  createColumns(List<Map<String, dynamic>> source) {
+    paginatedController.createColumns(source);
   }
 
   /// executa  delete de um linha
@@ -133,6 +150,11 @@ class DataViewerController {
       if (onChanged != null) onChanged(dados);
     }
     return rsp;
+  }
+
+  reopen() {
+    page = 1;
+    subscribeChanges.notify(-1);
   }
 
   /// Update um linha
@@ -194,6 +216,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     int maxLines,
     Color color,
     int maxLength,
+    int minLength,
     double width,
     String tooltip,
     Alignment align,
@@ -227,6 +250,7 @@ class DataViewerColumn extends PaginatedGridColumn {
           maxLines: maxLines,
           color: color,
           maxLength: maxLength,
+          minLength: minLength,
           width: width,
           editWidth: editWidth,
           editHeight: editHeight,
@@ -265,6 +289,7 @@ class DataViewer extends StatefulWidget {
   final double height;
   final double width;
   final double elevation;
+  final bool canSort;
 
   /// se permite editar um dado - default: true;
   final bool canEdit;
@@ -277,11 +302,13 @@ class DataViewer extends StatefulWidget {
 
   /// se o header de filtro esta habilitado - default: true;
   final bool canSearch;
-  final String title;
+  final Widget title;
+  final Widget subtitle;
   final Future<dynamic> Function(PaginatedGridController) onInsertItem;
   final Future<dynamic> Function(PaginatedGridController) onEditItem;
   final Future<dynamic> Function(PaginatedGridController) onDeleteItem;
   final List<Widget> actions;
+  final Widget leading;
 
   /// pressionou o botam abrir da barra de filtro
   final Function() onSearchPressed;
@@ -310,10 +337,11 @@ class DataViewer extends StatefulWidget {
     this.elevation = 0,
     this.oddRowColor,
     this.rowsPerPage,
-    this.headerHeight = kMinInteractiveDimension * 1.7,
+    this.headerHeight = kToolbarHeight + 48,
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
+    this.canSort = true,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
     this.dataRowHeight = kMinInteractiveDimension,
@@ -326,11 +354,13 @@ class DataViewer extends StatefulWidget {
     this.crossAxisAlignment = CrossAxisAlignment.center,
     //this.backgroundColor,
     this.title,
+    this.subtitle,
     this.onInsertItem,
     this.onEditItem,
     this.onSearchPressed,
     this.onDeleteItem,
     this.actions,
+    this.leading,
     this.height,
     this.width,
   })  : assert(source != null || controller != null),
@@ -354,11 +384,13 @@ class _DataViewerState extends State<DataViewer> {
             });
     if (widget.keyName != null) controller.keyName = widget.keyName;
     controller.columns ??= widget.columns;
+    controller.paginatedController.beforeChange = controller.beforeChange;
     super.initState();
   }
 
   final TextEditingController _filtroController = TextEditingController();
   Size size;
+  ThemeData theme;
 
   createHeader() {
     bool isSmall = size.width < 500;
@@ -367,46 +399,57 @@ class _DataViewerState extends State<DataViewer> {
     return LayoutBuilder(builder: (ctr, sizes) {
       return Form(
         child: SafeArea(
-          child: Container(
-              height: 60,
-              width: sizes.maxWidth,
-              alignment: Alignment.center,
-              child: Align(
-                child: Container(
-                  width: bwidth,
-                  child: Row(children: [
-                    Expanded(
-                      child: TextFormField(
-                        controller: _filtroController,
-                        style: TextStyle(
-                            fontSize: 16, fontStyle: FontStyle.normal),
-                        decoration: InputDecoration(
-                            labelText: 'procurar por',
-                            suffixIcon: InkWell(
-                                child: Icon(Icons.delete),
-                                onTap: () {
-                                  _filtroController.text = '';
-                                })),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 12),
-                      width: 95,
-                      child: StrapButton(
-                          type: StrapButtonType.light,
-                          text: 'abrir',
-                          onPressed: () {
-                            controller.filter = _filtroController.text;
-                            if (controller.onClearCache != null)
-                              controller.onClearCache();
-                            if (widget.onSearchPressed != null)
-                              widget.onSearchPressed();
-                            controller.goPage(1);
-                          }),
-                    ),
-                  ]),
-                ),
-              )),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (widget.title != null) widget.title,
+              Container(
+                  height: kToolbarHeight + 4,
+                  width: sizes.maxWidth,
+                  alignment: Alignment.center,
+                  child: Align(
+                    child: Container(
+                        width: bwidth,
+                        child: Column(children: [
+                          Row(children: [
+                            if (widget.leading != null) widget.leading,
+                            Expanded(
+                              child: TextFormField(
+                                controller: _filtroController,
+                                style: theme.textTheme.bodyText1,
+                                /*TextStyle(
+                            fontSize: 16, fontStyle: FontStyle.normal),*/
+                                decoration: InputDecoration(
+                                    labelText: 'procurar por',
+                                    suffixIcon: InkWell(
+                                        child: Icon(Icons.delete),
+                                        onTap: () {
+                                          _filtroController.text = '';
+                                        })),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5), // ios usa 5
+                              width: 90,
+                              child: StrapButton(
+                                  //type: StrapButtonType.primary ,
+                                  text: 'abrir',
+                                  onPressed: () {
+                                    controller.filter = _filtroController.text;
+                                    if (controller.onClearCache != null)
+                                      controller.onClearCache();
+                                    if (widget.onSearchPressed != null)
+                                      widget.onSearchPressed();
+                                    controller.goPage(1);
+                                  }),
+                            ),
+                          ]),
+                        ])),
+                  )),
+              if (widget.subtitle != null) widget.subtitle,
+            ],
+          ),
         ),
       );
     });
@@ -414,6 +457,7 @@ class _DataViewerState extends State<DataViewer> {
 
   @override
   Widget build(BuildContext context) {
+    theme = Theme.of(context);
     size = MediaQuery.of(context).size;
     int _top = (widget.height ??
             ((size.height * 0.90) - kToolbarHeight - 20) -
@@ -435,6 +479,7 @@ class _DataViewerState extends State<DataViewer> {
               child: widget.child ??
                   PaginatedGrid(
                     elevation: widget.elevation,
+                    canSort: widget.canSort,
                     evenRowColor: widget.evenRowColor,
                     oddRowColor: widget.oddRowColor,
                     //sortColumnIndex: widget.sortColumnIndex,
@@ -463,8 +508,9 @@ class _DataViewerState extends State<DataViewer> {
                       if (widget.beforeShow != null)
                         return widget.beforeShow(p);
                     },
-                    columns: controller.columns,
-                    source: widget.source,
+                    columns: controller.columns ??
+                        controller.paginatedController.columns,
+                    source: widget.source ?? controller.source,
                     rowsPerPage: widget.rowsPerPage ?? _top,
                     currentPage: controller.page,
                     canEdit: widget.canEdit,
@@ -519,15 +565,19 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final DataViewerController controller;
   final bool canEdit, canInsert, canDelete;
   final PaginatedGridChangeEvent event;
+  final double dataRowHeight;
+  final Function(dynamic) onSaved;
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
     @required this.grouped,
     @required this.controller,
     this.title,
+    this.dataRowHeight,
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
+    this.onSaved,
     @required this.event,
   }) : super(key: key);
 
@@ -609,10 +659,10 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
 
     if (widget.controller.columns != null) {
       ctrl = widget.controller;
-      col = ctrl.findColumn(column);
+      col = ctrl?.findColumn(column);
     } else {
       ctrl = widget.controller.paginatedController;
-      col = ctrl.findColumn(column);
+      col = ctrl?.findColumn(column);
     }
 
     if (col == null) return (Text('null $column'));
@@ -625,8 +675,10 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
-        height: col.editHeight ?? kToolbarHeight + 4,
-        width: col.editWidth ?? col.width ?? 150,
+        height: widget.dataRowHeight ??
+            (col.editHeight ??
+                kToolbarHeight + (((col.maxLength ?? 0) > 0) ? 24.0 : 8)),
+        width: col.editWidth ?? col.width ?? 150.0,
         child: edit ?? Text('${widget.data[column]}'));
   }
 
@@ -653,51 +705,58 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
             ? item.onGetValue(p[item.name])
             : (p[item.name] ?? '').toString());
     return Focus(
-        onFocusChange: (b) {
-          if (!b) if (item.onFocusChanged != null)
-            item.onFocusChanged(txt_controller.text);
-        },
-        child: TextFormField(
-            autofocus: canFocus(item),
-            maxLines: item.maxLines,
-            maxLength: item.maxLength,
-            enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
-            controller: txt_controller,
-            style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
-            decoration: InputDecoration(
-              labelText: item.label ?? item.name,
-            ),
-            validator: (value) {
-              if (item.onValidate != null) return item.onValidate(value);
-              if (item.required) if (value.isEmpty) {
-                return (item.editInfo
-                    .replaceAll('{label}', item.label ?? item.name));
-              }
+      //descendantsAreFocusable: canFocus(item),
+      canRequestFocus: false,
+      onFocusChange: (b) {
+        if (!b) if (item.onFocusChanged != null)
+          item.onFocusChanged(txt_controller.text);
+      },
+      child: TextFormField(
+        readOnly: (item.isPrimaryKey || item.readOnly),
+        autofocus: canFocus(item),
+        maxLines: item.maxLines,
+        maxLength: item.maxLength,
+        enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
+        controller: txt_controller,
+        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        decoration: InputDecoration(
+          labelText: item.label ?? item.name,
+        ),
+        validator: (value) {
+          if (item.onValidate != null) return item.onValidate(value);
+          if (item.required) if (value.isEmpty) {
+            return (item.editInfo
+                .replaceAll('{label}', item.label ?? item.name));
+          }
+          if ((item.minLength != null) && (value.length < item.minLength))
+            return 'Texto insuficientes (min: ${item.minLength} caracteres)';
 
-              return null;
-            },
-            onSaved: (x) {
-              if (item.onSetValue != null) {
-                p[item.name] = item.onSetValue(x);
-                return;
-              }
-              if (p[item.name] is int)
-                p[item.name] = int.tryParse(x);
-              else if (p[item.name] is double)
-                p[item.name] = double.tryParse(x);
-              else if (p[item.name] is bool)
-                p[item.name] = x;
-              else
-                p[item.name] = x;
-            }));
+          return null;
+        },
+        onSaved: (x) {
+          if (item.onSetValue != null) {
+            p[item.name] = item.onSetValue(x);
+            return;
+          }
+          if (p[item.name] is int)
+            p[item.name] = int.tryParse(x);
+          else if (p[item.name] is double)
+            p[item.name] = double.tryParse(x);
+          else if (p[item.name] is bool)
+            p[item.name] = x;
+          else
+            p[item.name] = x;
+        },
+      ),
+    );
   }
 
   _save(context) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      doPostEvent(
-              widget.controller.paginatedController, widget.data, widget.event)
+      doPostEvent(widget.controller.paginatedController, p, widget.event)
           .then((rsp) {
+        if (widget.onSaved != null) widget.onSaved(p);
         Navigator.pop(context);
       });
     }

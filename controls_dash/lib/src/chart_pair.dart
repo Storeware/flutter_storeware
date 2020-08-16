@@ -4,8 +4,9 @@ import 'package:charts_flutter/flutter.dart' as charts;
 class ChartPair {
   final String title;
   final num value;
+  final String tooltip;
   final charts.Color color;
-  ChartPair(this.title, this.value, {this.color});
+  ChartPair(this.title, this.value, {this.color, this.tooltip});
 }
 
 class ChartPairInt {

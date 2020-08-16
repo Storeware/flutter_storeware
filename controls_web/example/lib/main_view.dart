@@ -1,3 +1,4 @@
+import 'package:controls_web/controls/notice_activities.dart';
 import 'package:controls_web/controls/responsive.dart';
 import 'package:controls_web/controls/rounded_button.dart';
 import 'package:flutter/material.dart';

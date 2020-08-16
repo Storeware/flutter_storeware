@@ -98,6 +98,7 @@ class PaginatedGridColumn {
   bool autofocus;
   int maxLines;
   int maxLength;
+  int minLength;
   bool placeHolder;
   bool folded;
   Color color;
@@ -109,6 +110,7 @@ class PaginatedGridColumn {
     this.maxLines,
     this.color,
     this.maxLength,
+    this.minLength,
     this.width,
     this.tooltip,
     this.editWidth,
@@ -160,6 +162,7 @@ class PaginatedGrid extends StatefulWidget {
   final List<Widget> actions;
   final int currentPage;
   final double elevation;
+  final bool canSort;
 
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
@@ -242,6 +245,7 @@ class PaginatedGrid extends StatefulWidget {
     this.oneRowAutoEdit = false,
     this.footerLeading,
     this.footerHeight = 56,
+    this.canSort = true,
     //this.backgroundColor,
     this.columns,
     this.footerTrailing,
@@ -376,13 +380,14 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   }
 
   createColumns(List<dynamic> source) {
-    controller.columns = [];
+    controller.createColumns(source);
+    /*  controller.columns = [];
     Map<String, dynamic> row = source.first;
     if (row != null)
       row.forEach((k, v) {
         controller.columns.add(PaginatedGridColumn(
             name: k, label: k.replaceAll('_', ' ').toCapital()));
-      });
+      });*/
   }
 
   _sort(int idx, bool ascending) {
@@ -431,7 +436,6 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                 if (!snapshot.hasData)
                   return Align(child: CircularProgressIndicator());
                 controller.originalSource = snapshot.data;
-
                 controller.widget = widget;
                 if (widget.onSort != null)
                   controller.originalSource.sort((a, b) {
@@ -527,11 +531,14 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                   i++)
                                 if (controller.columns[i].visible)
                                   DataColumn(
-                                      onSort: controller.columns[i].onSort ??
-                                              (controller.columns[i].sort)
-                                          ? (int columnIndex, bool ascending) =>
-                                              _sort(columnIndex, ascending)
-                                          : (a, b) => null,
+                                      onSort: (widget.canSort)
+                                          ? controller.columns[i].onSort ??
+                                                  (controller.columns[i].sort)
+                                              ? (int columnIndex,
+                                                      bool ascending) =>
+                                                  _sort(columnIndex, ascending)
+                                              : (a, b) => null
+                                          : null,
                                       numeric: controller.columns[i].numeric,
                                       tooltip: controller.columns[i].tooltip,
                                       label: Align(
@@ -543,17 +550,31 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                                   Alignment.centerLeft,
                                           child: Container(
                                             width: controller.columns[i].width,
-                                            child: Text(
-                                                controller.columns[i].label ??
-                                                    controller.columns[i].name
-                                                        .toCapital(),
-                                                textAlign: TextAlign.center,
-                                                style: widget.columnStyle ??
-                                                    TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16,
-                                                    )),
+                                            child: Builder(builder: (ctx) {
+                                              var labels = (controller
+                                                          .columns[i].label ??
+                                                      controller.columns[i].name
+                                                          .toCapital())
+                                                  .split('|');
+                                              return Column(children: [
+                                                for (var l in labels)
+                                                  Expanded(
+                                                      flex: 1,
+                                                      child: Text(l,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: widget
+                                                                  .columnStyle ??
+                                                              TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 16,
+                                                              )))
+                                              ]);
+                                            }),
                                           )))
                             ],
                             source: controller.tableSource,
@@ -610,9 +631,13 @@ class _PaginatedGridState extends State<PaginatedGrid> {
         //    child: IconButton(
         child: Icon(Icons.add),
         onPressed: () {
-          controller.data = null;
+          controller.data = {};
+          if (controller.beforeChange != null)
+            controller.beforeChange(
+                controller.data, PaginatedGridChangeEvent.insert);
+
           if (widget.onInsertItem != null)
-            widget.onInsertItem(controller).then((rsp) {
+            widget.onInsertItem(controller)?.then((rsp) {
               controller.changed(rsp);
             });
           else if (widget.onPostEvent != null) {
@@ -635,6 +660,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 }
 
 class PaginatedGridController {
+  var parent;
+
   BuildContext context;
   _PaginatedGridState statePage;
   StreamController<bool> changedEvent = StreamController<bool>.broadcast();
@@ -646,14 +673,17 @@ class PaginatedGridController {
   int currentColumn = 0;
   Map<String, dynamic> data;
   List<dynamic> originalSource;
+  Function(dynamic, PaginatedGridChangeEvent) beforeChange;
+
   dispose() {
     changedEvent.close();
     postEvent.close();
   }
 
+  get self => this;
   PaginatedGridColumn findColumn(name) {
     var index = -1;
-    for (int i = 0; i < columns.length; i++)
+    for (int i = 0; i < (columns?.length ?? 0); i++)
       if (columns[i].name == name) index = i;
     if (index > -1) return columns[index];
     return null;
@@ -668,6 +698,8 @@ class PaginatedGridController {
     bool inScaffold = true,
     PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update,
   }) {
+    if (beforeChange != null) beforeChange(this.data, event);
+
     return PaginatedGridEditRow(
       data: data,
       title: title,
@@ -707,6 +739,24 @@ class PaginatedGridController {
             title: title, width: width, height: height, event: event));
   }
 
+  createColumns(List<Map<String, dynamic>> source) {
+    columns = [];
+    Map<String, dynamic> row = source.first;
+    if (row != null)
+      row.forEach((k, v) {
+        var numeric = false;
+        if (v is double) numeric = true;
+        columns.add(
+          PaginatedGridColumn(
+            name: k,
+            label: k.replaceAll('_', ' ').toCapital(),
+            numeric: numeric,
+            //width: 120,
+          ),
+        );
+      });
+  }
+
   clear() {
     originalSource.clear();
     source.clear();
@@ -735,11 +785,12 @@ class PaginatedGridController {
     //debugPrint('changeTo $key $valueSearch $dadosTo');
     begin();
     try {
-      for (var i = 0; i < source.length; i++)
-        if (source[i][key] == valueSearch) {
-          //print([source[i], dadosTo]);
-          source[i] = dadosTo;
-        }
+      if (source != null)
+        for (var i = 0; i < source.length; i++)
+          if (source[i][key] == valueSearch) {
+            //print([source[i], dadosTo]);
+            source[i] = dadosTo;
+          }
     } finally {
       end();
     }
@@ -914,6 +965,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
   }
 
   doEditItem(index, bool b) {
+    if (controller.beforeChange != null)
+      controller.beforeChange(controller.data, PaginatedGridChangeEvent.update);
+
     return Dialogs.showPage(
       controller.context,
       child: PaginatedGridEditRow(
@@ -1116,6 +1170,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             ? item.onGetValue(p[item.name])
             : (p[item.name] ?? '').toString());
     return Focus(
+        canRequestFocus: false,
         onFocusChange: (b) {
           if (!b) if (item.onFocusChanged != null)
             item.onFocusChanged(_valueController.text);

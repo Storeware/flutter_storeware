@@ -20,6 +20,7 @@ class ReportColumn {
   final double width;
   final bool numeric;
   final TextStyle style;
+  final Widget Function(dynamic) builder;
 
   /// evento para retornar valores transformados
   final String Function(dynamic) onGetValue;
@@ -29,6 +30,7 @@ class ReportColumn {
     this.style,
     this.onGetValue,
     this.label,
+    this.builder,
     this.numeric = false,
   });
 }
@@ -109,11 +111,13 @@ class _ReportViewState extends State<ReportView> {
                   alignment: col.numeric
                       ? Alignment.centerRight
                       : Alignment.centerLeft,
-                  child: Text(
-                      (col.onGetValue != null)
-                          ? col.onGetValue(row[col.name])
-                          : '${row[col.name]}',
-                      style: col.style),
+                  child: (col.builder != null)
+                      ? col.builder(row)
+                      : Text(
+                          (col.onGetValue != null)
+                              ? col.onGetValue(row[col.name])
+                              : '${row[col.name]}',
+                          style: col.style),
                 ),
               ),
             ),

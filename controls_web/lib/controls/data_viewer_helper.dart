@@ -50,13 +50,19 @@ class DataViewerHelper {
         /// visualiza switch no grid
         DataViewerHelper._simnaoFn(
             {'v': row[column.name], 't': trueValue, 'f': falseValue});
-        return MaskedSwitchFormField(
-            activeColor: color,
-            activeTrackColor: (color != null) ? color.lighten(50) : null,
-            inactiveTrackColor: inactiveTrackColor ??
-                ((color != null) ? color.lighten(80) : null),
-            readOnly: true,
-            value: (row[column.name] ?? falseValue) == trueValue);
+
+        bool b = (row[column.name] ?? falseValue) == trueValue;
+        return Text(((b) ? 'Sim' : 'Não'),
+            style: TextStyle(
+              color: (b) ? color : null,
+            ));
+        //return MaskedSwitchFormField(
+        //    activeColor: color,
+        //    activeTrackColor: (color != null) ? color.lighten(50) : null,
+        //    inactiveTrackColor: inactiveTrackColor ??
+        //       ((color != null) ? color.lighten(80) : null),
+        //   readOnly: true,
+        //   value: (row[column.name] ?? falseValue) == trueValue);
       };
       column.editBuilder = (a, b, c, row) {
         DataViewerHelper._simnaoFn(

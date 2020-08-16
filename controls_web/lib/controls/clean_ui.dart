@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 class TabButton extends StatelessWidget {
@@ -124,9 +126,11 @@ class CleanContainer extends StatelessWidget {
   final double elevation;
   final double border;
   final Color borderColor;
+  final EdgeInsets padding;
   const CleanContainer({
     Key key,
     this.child,
+    this.padding,
     this.color,
     this.radius,
     this.elevation = 1,
@@ -143,9 +147,10 @@ class CleanContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    var _selectedColor = selectedColor ?? Colors.grey.shade300;
+    var _selectedColor = selectedColor ?? Colors.grey.shade100;
     var _color = color ?? theme.scaffoldBackgroundColor;
     return Container(
+      padding: padding ?? EdgeInsets.all(8),
       width: width,
       height: height,
       decoration: BoxDecoration(
@@ -533,5 +538,100 @@ class ActionText extends StatelessWidget {
       ),
       onTap: () => onPressed(),
     );
+  }
+}
+
+class ActionCounter extends StatelessWidget {
+  final String label;
+  final String value;
+  final int charCount;
+  final TextStyle style;
+  final Widget Function(String) builder;
+  const ActionCounter(
+      {Key key,
+      this.label,
+      this.value,
+      this.style,
+      this.builder,
+      this.charCount})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var cs = (charCount == null) ? value : value.padLeft(charCount, '0');
+    return Labeled(
+      label: label,
+      children: [
+        for (var s in cs.characters)
+          (builder != null)
+              ? builder(s)
+              : ActionText(
+                  label: s,
+                  style: style ??
+                      TextStyle(fontSize: 18, fontWeight: FontWeight.w300)),
+      ],
+    );
+  }
+}
+
+class ActionTimer extends StatefulWidget {
+  final String label;
+  final Duration interval;
+  final String Function(Timer) onGetValue;
+  final Widget Function(String) builder;
+  final Widget Function(String) itemBuilder;
+  final String Function(String) onTransform;
+  final int charCount;
+  const ActionTimer({
+    Key key,
+    this.label,
+    this.interval,
+    this.onGetValue,
+    this.builder,
+    this.itemBuilder,
+    this.onTransform,
+    this.charCount = 5,
+  }) : super(key: key);
+  @override
+  _ActionTimerState createState() => _ActionTimerState();
+}
+
+class _ActionTimerState extends State<ActionTimer> {
+  Timer timer;
+  ValueNotifier<String> valueN;
+
+  @override
+  void initState() {
+    super.initState();
+    valueN = ValueNotifier<String>('');
+    timer = Timer.periodic(widget.interval ?? Duration(seconds: 1), (t) {
+      if (widget.onGetValue != null)
+        valueN.value = widget.onGetValue(t);
+      else
+        valueN.value = t.tick.toString();
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+        valueListenable: valueN,
+        builder: (a, value, w) {
+          var v = value;
+          if (widget.onTransform != null) v = widget.onTransform(v);
+          return (widget.builder != null)
+              ? widget.builder(v)
+              : ActionCounter(
+                  label: widget.label ?? 'Duração',
+                  builder: widget.itemBuilder,
+                  value: value.padLeft(widget.charCount, '0'));
+        });
   }
 }

@@ -143,12 +143,12 @@ class LightTile extends StatelessWidget {
   }
 }
 
-class LigthInfo extends StatelessWidget {
+class LightInfo extends StatelessWidget {
   final Widget image, title, subtitle;
   final String label, sublabel;
   final Function() onPressed;
   final Widget leading, trailing;
-  const LigthInfo(
+  const LightInfo(
       {Key key,
       this.image,
       this.title,

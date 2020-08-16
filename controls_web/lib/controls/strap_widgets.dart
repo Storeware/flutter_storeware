@@ -46,6 +46,7 @@ strapFontColor(StrapButtonType type) {
 
 class StrapButton extends StatelessWidget {
   final String text;
+  final Widget title, subtitle;
   final Function onPressed;
   final StrapButtonType type;
   final double height;
@@ -53,16 +54,22 @@ class StrapButton extends StatelessWidget {
   final double margin;
   final double radius;
   final double borderWidth;
+  final Widget leading;
+  final Widget trailing;
   const StrapButton({
     Key key,
-    @required this.text,
+    this.text,
     @required this.onPressed,
     this.margin = 1,
     this.type = StrapButtonType.primary,
     this.height = kMinInteractiveDimension,
-    this.width,
+    this.width = kMinInteractiveDimension * 3,
     this.borderWidth = 1,
     this.radius = 5,
+    this.title,
+    this.subtitle,
+    this.leading,
+    this.trailing,
   }) : super(key: key);
 
   @override
@@ -81,13 +88,29 @@ class StrapButton extends StatelessWidget {
       ),
       child: FlatButton(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(text,
-              style: TextStyle(
-                color: strapFontColor(type),
-                fontSize: 16,
-              )),
-        ),
+            padding: const EdgeInsets.all(8.0),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              if (title != null)
+                DefaultTextStyle(style: theme.textTheme.button, child: title),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (leading != null) leading,
+                  if (text != null)
+                    Text(text,
+                        style: TextStyle(
+                          color: strapFontColor(type),
+                          fontSize: 16,
+                        )),
+                  if (trailing != null) trailing,
+                ],
+              ),
+              if (subtitle != null)
+                DefaultTextStyle(
+                    style: theme.textTheme.caption, child: subtitle),
+            ])),
         onPressed: () {
           onPressed();
         },

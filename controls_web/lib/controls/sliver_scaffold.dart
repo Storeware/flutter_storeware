@@ -1,4 +1,4 @@
-import 'defaults.dart';
+import 'package:controls_web/controls/defaults.dart';
 import 'package:flutter/material.dart';
 
 typedef WidgetListBuilderContext(BuildContext context, int index);
@@ -14,7 +14,6 @@ class WidgetList {
   }
 }
 
-@immutable
 class SliverScaffold extends StatefulWidget {
   final AppBar appBar;
   final SliverAppBar sliverAppBar;
@@ -38,7 +37,7 @@ class SliverScaffold extends StatefulWidget {
   final double gridCrossAxisSpacing;
   final double gridChildAspectRatio;
   final int gridCrossAxisCount;
-  final ExtendedAppBar extendedBar;
+  final Widget extendedBar;
   final double bodyTop;
   final double elevation;
   final FloatingActionButtonLocation floatingActionButtonLocation;
@@ -73,7 +72,8 @@ class SliverScaffold extends StatefulWidget {
       : super(key: key) {
     this.topRadius = this.topRadius ?? default_topScaffoldRadius;
     this.bottomRadius = this.bottomRadius ?? default_bottomScaffoldRadius;
-    this.backgroundColor = this.backgroundColor??defaultScaffoldBackgroudColor;
+    this.backgroundColor =
+        this.backgroundColor ?? defaultScaffoldBackgroudColor;
   }
 
   static scrollable(
@@ -151,13 +151,14 @@ class _SliverScaffoldState extends State<SliverScaffold> {
   List<Widget> _builder() {
     List<Widget> rt = [];
     if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
-    //if (widget.extendedBar!=null) rt.add(widget.extendedBar);
+    if (widget.extendedBar != null)
+      rt.add(SliverToBoxAdapter(child: widget.extendedBar));
     if (widget.slivers != null)
       widget.slivers.forEach((f) {
         rt.add(f);
       });
     if (widget.grid != null) {
-      if (widget.extendedBar != null) widget.grid.insert(0, widget.extendedBar);
+      //if (widget.extendedBar != null) widget.grid.insert(0, widget.extendedBar);
       rt.add(
         SliverGrid(
           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
@@ -190,7 +191,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         drawer: widget.drawer,
         endDrawer: widget.endDrawer,
         backgroundColor: widget.backgroundColor,
-        floatingActionButtonLocation : widget.floatingActionButtonLocation,
+        floatingActionButtonLocation: widget.floatingActionButtonLocation,
         floatingActionButton: widget.floatingActionButton,
         appBar: widget.appBar,
         body: Container(
@@ -210,9 +211,9 @@ class _SliverScaffoldState extends State<SliverScaffold> {
                     controller: widget.controller,
                     reverse: widget.reverse,
                     headerSliverBuilder: (context, inner) {
-                      return _builder();
+                      return _builder() ?? Container();
                     },
-                    body: _createBody(_body),
+                    body: _createBody(_body) ?? Container(),
                   )),
             )));
 
@@ -226,20 +227,21 @@ class _SliverScaffoldState extends State<SliverScaffold> {
   }
 
   Widget _createBody(Widget _body) {
-    if (widget.extendedBar != null) {
+    /* if (widget.extendedBar != null) {
       return ScaffoldLight(
         extendedBar: widget.extendedBar,
         bodyTop: widget.bodyTop,
-        body: _body,
+        body: _body ?? Container(),
       );
     } else {
-      return (widget.isScrollView
-          ? Scaffold(
-              resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
-              body: (widget.body == null ? Text('no data.....') : _body))
-          : widget.body);
-    }
+    */
+    return (widget.isScrollView
+        ? Scaffold(
+            resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+            body: (widget.body == null ? Text('no data.....') : _body))
+        : widget.body);
   }
+  //}
 }
 
 class ExtendedAppBar extends StatelessWidget {
@@ -260,7 +262,7 @@ class ExtendedAppBar extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: Wrap(children: [child]),
+      child: child,
       color: color,
     );
   }
@@ -322,7 +324,8 @@ class BoxContainer extends StatelessWidget {
   }
 }
 
-AppBar appBarLight({String text, Widget title,Color backgroundColor, actions}) {
+AppBar appBarLight(
+    {String text, Widget title, Color backgroundColor, actions}) {
   return AppBar(
       backgroundColor: backgroundColor,
       title: title ?? Text(text),

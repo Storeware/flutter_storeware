@@ -547,7 +547,7 @@ class MaskedSwitchFormField extends StatefulWidget {
   final bool readOnly;
   MaskedSwitchFormField({
     Key key,
-    this.value,
+    this.value = false,
     this.label,
     this.activeTrackColor,
     this.activeColor,

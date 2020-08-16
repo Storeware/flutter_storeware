@@ -19,6 +19,7 @@ class SliverScaffold extends StatefulWidget {
   final SliverAppBar sliverAppBar;
   final List<Widget> slivers;
   final List<Widget> grid;
+  final List<Widget> bottomSlivers;
   final Widget body;
   final Widget drawer;
   final Widget endDrawer;
@@ -47,6 +48,7 @@ class SliverScaffold extends StatefulWidget {
       this.sliverAppBar,
       this.slivers,
       this.grid,
+      this.bottomSlivers,
       this.gridMainAxisSpacing = 10.0,
       this.gridCrossAxisSpacing = 10.0,
       this.gridChildAspectRatio = 2.0,
@@ -176,6 +178,9 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         ),
       );
     }
+    if (widget.bottomSlivers != null)
+      for (var item in widget.bottomSlivers)
+        rt.add(SliverToBoxAdapter(child: item));
     return rt;
   }
 

@@ -1,3 +1,4 @@
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'time_ago.dart';
 
@@ -173,23 +174,17 @@ extension NumTimeExtension<T extends num> on T {
 }
 
 extension DateTimeTimeExtension on DateTime {
+  initialize({lang = 'pt_BR'}) {
+    initializeDateFormatting(lang, null);
+  }
+
   /// Adds this DateTime && Duration && returns the sum as a new DateTime object.
   DateTime operator +(Duration duration) => add(duration);
 
   /// Subtracts the Duration from this DateTime returns the difference as a new DateTime object.
   DateTime operator -(Duration duration) => subtract(duration);
-  //DateTime operator -=( int days)=> this.add(Duration(days:-days));
 
-  //DateTime operator +=( int days)=> this.add(Duration(days:days));
-  //DateTime operator ++()=> this.add(Duration(days:1));
-  //DateTime operator --()=>this.add(Duration(days:-1));
-
-  /// Returns a range of dates to [to], exclusive start, inclusive end
-  /// ```dart
-  /// final start = DateTime(2019);
-  /// final end = DateTime(2020);
-  /// start.to(end, by: const Duration(days: 365)).forEach(print); // 2020-01-01 00:00:00.000
-  /// ```
+  /// range this until to
   Iterable<DateTime> to(DateTime to,
       {Duration by = const Duration(days: 1)}) sync* {
     if (isAtSameMomentAs(to)) return;
@@ -214,6 +209,13 @@ extension DateTimeTimeExtension on DateTime {
       }
     }
   }
+
+  Iterable<DateTime> range(DateTime from, DateTime to, {int skip = 1}) sync* {
+    while (from.compareTo(to) <= 0) {
+      yield from;
+      from = from.add(Duration(days: skip));
+    }
+  }
 }
 
 extension DurationTimeExtension on Duration {
@@ -231,4 +233,18 @@ extension DurationTimeExtension on Duration {
 
   /// Subtracts the Duration from the current DateTime && returns a DateTime in the past
   DateTime get ago => DateTime.now() - this;
+
+  /// sample:  print(parseDuration('10h 50m')); // 10:50:00.00000
+  Duration parseDuration(String line) {
+    final _regExp = RegExp(r'((?<hours>\d+)h)?[ ]*((?<minutes>\d+)m)?');
+    final match = _regExp.firstMatch(line);
+
+    if (match == null) {
+      throw Exception('Could not get duration from: $line');
+    }
+
+    return Duration(
+        hours: int.parse(match.namedGroup('hours') ?? '0'),
+        minutes: int.parse(match.namedGroup('minutes') ?? '0'));
+  }
 }

@@ -18,8 +18,14 @@ void main() {
   });
 
   test('DateTime', () {
+    DateTime(2020).initialize();
+
     expect(DateTime(2019, 12, 19).format('MM-dd-yyyy'), '12-19-2019');
     expect(t.timeAgo(lang: 'pt_BR'), 'uma hora atrás');
+    expect(
+        t.range(DateTime(2020, 8, 1), DateTime(2020, 8, 10)).length.toString(),
+        '10');
+    expect(t.range(DateTime(2020, 8, 1), DateTime(2020, 8, 10)).last.day, 10);
   });
 
   test('Double', () {
@@ -48,5 +54,11 @@ void main() {
     expect(validarCEP('09910470', fsComplemento: 'SP'), '');
     expect(validarCEP('09910470', fsComplemento: 'RS') != '', true);
     expect(validarCEP('09910470', fsComplemento: 'XX') != '', true);
+  });
+
+  test('integer', () {
+    int i = 0;
+    expect(i.range(1, 10).last, 10);
+    expect(i.range(1, 10, skip: 2).last, 9);
   });
 }

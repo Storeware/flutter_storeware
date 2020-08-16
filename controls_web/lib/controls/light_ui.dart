@@ -50,6 +50,7 @@ class LightButton extends StatelessWidget {
                 Positioned(
                     bottom: 8,
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (value != null)
@@ -90,22 +91,25 @@ class LightAmmount extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Container(
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        if (value != null)
-          Text(value,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
-        if (label != null)
-          Text(
-            label,
-            style: TextStyle(color: theme.textTheme.caption.color),
-          ),
-        if (sublabel != null)
-          Text(
-            sublabel,
-            style: TextStyle(color: theme.textTheme.caption.color),
-          ),
-        if (child != null) child,
-      ]),
+      child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (value != null)
+              Text(value,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
+            if (label != null)
+              Text(
+                label,
+                style: TextStyle(color: theme.textTheme.caption.color),
+              ),
+            if (sublabel != null)
+              Text(
+                sublabel,
+                style: TextStyle(color: theme.textTheme.caption.color),
+              ),
+            if (child != null) child,
+          ]),
     );
   }
 }
@@ -128,7 +132,7 @@ class LightTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(children: [
+    return Row(mainAxisSize: MainAxisSize.min, children: [
       Container(width: 4, height: height, color: tagColor ?? Colors.amber),
       SizedBox(width: 8),
       Expanded(
@@ -163,12 +167,14 @@ class LightInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (image != null) CircleAvatar(child: image),
         if (label != null)
-          Text(label,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+          for (var s in label.split('|'))
+            Text(s,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
         if (sublabel != null)
           Text(
             sublabel,
@@ -181,6 +187,144 @@ class LightInfo extends StatelessWidget {
             trailing: trailing,
           )
       ],
+    );
+  }
+}
+
+class LightImageTile extends StatelessWidget {
+  final Widget image;
+  final Widget title, subtitle;
+  final String label, sublabel;
+  const LightImageTile(
+      {Key key,
+      this.image,
+      this.title,
+      this.subtitle,
+      this.label,
+      this.sublabel})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [
+      if (image != null) image,
+      if (title != null) ListTile(title: title, subtitle: subtitle),
+      if (label != null)
+        Text(label,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+            )),
+      if (sublabel != null)
+        Text(sublabel,
+            style: TextStyle(
+              fontSize: 12,
+            )),
+    ]);
+  }
+}
+
+class LightValueButton extends StatelessWidget {
+  final String label, sublabel;
+  final Function() onPressed;
+  final Widget image;
+  final Widget leading;
+  //final double width, height;
+  const LightValueButton({
+    Key key,
+    this.label,
+    this.sublabel,
+    this.onPressed,
+    this.image,
+    this.leading,
+    //this.width = 120,
+    //this.height = 120,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+
+    return InkWell(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (leading != null) leading,
+                      if (image != null) image,
+                    ]),
+              ),
+              if (label != null)
+                Text(label,
+                    style: theme.textTheme.button.copyWith(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                    )),
+              if (sublabel != null)
+                Text(sublabel, style: theme.textTheme.caption),
+            ]),
+        onTap: onPressed);
+  }
+}
+
+class LightContainer extends StatelessWidget {
+  final List<Widget> children;
+  final String label, sublabel;
+  final Function() onPressed;
+  final double elevation;
+  final double width, height;
+  final Color color;
+  const LightContainer(
+      {Key key,
+      this.children,
+      this.label,
+      this.sublabel,
+      this.onPressed,
+      this.elevation = 0,
+      this.width,
+      this.height,
+      this.color})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return Card(
+      color: color ?? theme.primaryColor.withAlpha(20),
+      elevation: elevation,
+      child: Container(
+        width: width,
+        height: height,
+        child: SizedBox.expand(
+          child: ListView(
+            //scrollDirection: Axis.horizontal,
+            //mainAxisSize: MainAxisSize.min,
+            children: [
+              if (children != null)
+                Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      for (var item in children)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: item,
+                        )
+                    ]),
+              Center(
+                  child: LightInfo(
+                      label: label, sublabel: sublabel, onPressed: onPressed)),
+            ],
+          ),
+        ),
+      ),
+      // ),
     );
   }
 }

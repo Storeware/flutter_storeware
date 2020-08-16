@@ -88,29 +88,36 @@ class StrapButton extends StatelessWidget {
       ),
       child: FlatButton(
         child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(mainAxisSize: MainAxisSize.min, children: [
-              if (title != null)
-                DefaultTextStyle(style: theme.textTheme.button, child: title),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (leading != null) leading,
-                  if (text != null)
-                    Text(text,
-                        style: TextStyle(
-                          color: strapFontColor(type),
-                          fontSize: 16,
-                        )),
-                  if (trailing != null) trailing,
-                ],
-              ),
-              if (subtitle != null)
-                DefaultTextStyle(
-                    style: theme.textTheme.caption, child: subtitle),
-            ])),
+            padding: const EdgeInsets.all(1),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (leading != null) Flexible(flex: 1, child: leading),
+                Flexible(
+                  flex: 4,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (title != null)
+                        DefaultTextStyle(
+                            style: theme.textTheme.button, child: title),
+                      if (text != null)
+                        Text(text,
+                            style: TextStyle(
+                              color: strapFontColor(type),
+                              fontSize: 16,
+                            )),
+                      if (subtitle != null)
+                        DefaultTextStyle(
+                            style: theme.textTheme.caption, child: subtitle),
+                    ],
+                  ),
+                ),
+                if (trailing != null) Flexible(flex: 1, child: trailing),
+              ],
+            )),
         onPressed: () {
           onPressed();
         },

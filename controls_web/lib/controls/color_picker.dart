@@ -129,11 +129,11 @@ extension ColorExtension on Color {
       '${green.toRadixString(16).padLeft(2, '0')}'
       '${blue.toRadixString(16).padLeft(2, '0')}';
 
-  static Color intRGBToColor(int c, {Color def = Colors.blue}) {
+  static Color intRGBToColor(num c, {Color def = Colors.blue}) {
     if (c is int) {
       Color cor;
       if (c != null) {
-        String hex = '0xff' + (c.toRadixString(16));
+        String hex = '0xff' + (c.toInt().toRadixString(16));
         cor = hexToARGB(hex, def);
       } else
         cor = def;

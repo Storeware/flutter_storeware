@@ -653,44 +653,62 @@ class MaskedDropDownFormField extends StatelessWidget {
       if (!items.contains(_value)) items.insert(0, _value);
     }
 
+    ValueNotifier<String> valueChange = ValueNotifier<String>(_value);
     return Container(
         padding: padding ?? EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (leading != null) leading,
-            if (hintText != null)
-              Container(
-                  alignment: Alignment.bottomLeft,
-                  height: 15,
-                  child: Text(hintText ?? '',
-                      style: theme.inputDecorationTheme.hintStyle) //TextStyle(
-                  //fontSize: 12, color: hintColor ?? Colors.black54)),
+        child: ValueListenableBuilder(
+          valueListenable: valueChange,
+          builder: (a, v, w) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (leading != null) leading,
+              if (hintText != null)
+                Container(
+                    padding: EdgeInsets.only(top: 4, bottom: 1),
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      hintText ?? '',
+                      style: theme.textTheme.caption.copyWith(fontSize: 12),
+                    )),
+              DropdownButtonHideUnderline(
+                key: UniqueKey(),
+                child: DropdownButton(
+                  items: items.map((String label) {
+                    return DropdownMenuItem(
+                      key: UniqueKey(),
+                      value: label ?? '',
+                      child: Text(
+                        label ?? '',
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    );
+                  }).toList(),
+                  isDense: true,
+                  isExpanded: true,
+                  onChanged: (x) {
+                    var erro;
+                    if (validator != null) if (erro = validator(x) != null) {
+                      return false;
+                    }
+                    if (onChanged != null) onChanged(x);
+                    if (onSaved != null) onSaved(x);
+                    valueChange.value = x;
+                  },
+                  hint: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(hintText),
                   ),
-            DropdownButtonFormField(
-              key: UniqueKey(),
-              items: items.map((String label) {
-                return new DropdownMenuItem(
-                  key: UniqueKey(),
-                  value: label ?? '',
-                  child: Text(
-                    label ?? '',
-                    //softWrap: true,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                );
-              }).toList(),
-              isDense: true,
-              isExpanded: true,
-              onChanged: onChanged,
-              validator: validator,
-              onSaved: onSaved,
-              value: _value,
-              // decoration: InputDecoration(hintText: hintText),
-            ),
-            if (trailing != null) trailing
-          ],
+                  value: v,
+                ),
+              ),
+              if (trailing != null) trailing,
+              SizedBox(
+                height: 8,
+              ),
+              Container(height: 2, color: theme.dividerColor),
+            ],
+          ),
         ));
   }
 }

@@ -1,4 +1,4 @@
-﻿import 'dart:async';
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
@@ -246,11 +246,18 @@ class RestClient {
       }
     } catch (e) {
       var error;
-      if ((e.response != null) && (e.response.data != null))
-        error = e.response.data['error'];
-      error ??= e.message ?? '$e';
+      try {
+        if ((e.response != null) && (e.response.data != null)) {
+          print([e.response, e.response.data]);
+          error = (e?.response?.data ?? {})['error'];
+        }
+      } catch (e) {
+        // nada.
+      }
+      error ??=
+          '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
       notifyError.send(error);
-      print('Error: $error ${e.message} ');
+
       throw error;
     }
   }

@@ -245,28 +245,27 @@ class RestClient {
         return throw (resp.data);
       }
     } catch (e) {
-      var error;
-      try {
-        if ((e.response != null) && (e.response.data != null)) {
-          print([e.response, e.response.data]);
-          error = (e?.response?.data ?? {})['error'];
-        }
-      } catch (e) {
-        // nada.
-      }
-      error ??= formataMensagemErro(e);
-
+      var error = formataMensagemErro(e);
       if (!silent) notifyError.send(error);
-
       throw error;
     }
   }
 
   bool silent = false;
 
-  formatMesnagemErro(e) {
-    String erro =
-        '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
+  formataMensagemErro(e) {
+    String erro;
+    try {
+      if ((e.response != null) && (e.response.data != null)) {
+        print([e.response, e.response.data]);
+        erro = (e?.response?.data ?? {})['error'];
+      }
+    } catch (e) {
+      // nada.
+    }
+    if (erro == null)
+      erro =
+          '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
     if (erro.contains('PRIMARY KEY'))
       erro = 'Operação bloqueada pela chave de identificação|$erro';
     if (erro.contains('FOREIGN KEY'))
@@ -323,19 +322,8 @@ class RestClient {
         }
       });
     } catch (e) {
-      var error;
-      try {
-        if ((e.response != null) && (e.response.data != null)) {
-          print([e.response, e.response.data]);
-          error = (e?.response?.data ?? {})['error'];
-        }
-      } catch (e) {
-        // nada.
-      }
-      error ??= formataMensagemErro(e);
-
+      var error = formataMensagemErro(e);
       if (!silent) notifyError.send(error);
-
       throw error;
     }
   }

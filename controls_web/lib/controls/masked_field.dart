@@ -547,7 +547,7 @@ class MaskedSwitchFormField extends StatefulWidget {
   final bool readOnly;
   MaskedSwitchFormField({
     Key key,
-    this.value = false,
+    this.value,
     this.label,
     this.activeTrackColor,
     this.activeColor,
@@ -570,38 +570,41 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
     super.build(context);
     ValueNotifier<bool> initialValue = ValueNotifier<bool>(widget.value);
 
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      if (widget.leading != null) widget.leading,
-      if (widget.label != null)
-        Expanded(
-          child: Text(
-            widget.label ?? '' + '  ',
-            textAlign: TextAlign.right,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-      ValueListenableBuilder(
-          valueListenable: initialValue,
-          builder: (
-            BuildContext context,
-            bool value,
-            Widget child,
-          ) {
-            return Switch(
-                value: initialValue.value,
-                activeColor: widget.activeColor,
-                activeTrackColor: widget.activeTrackColor,
-                inactiveTrackColor: widget.inactiveTrackColor,
-                autofocus: widget.autofocus,
-                onChanged: (b) {
-                  if (!widget.readOnly) {
-                    if (widget.onChanged != null) widget.onChanged(b);
-                    initialValue.value = b;
-                  }
-                });
-          }),
-      if (widget.trailing != null) widget.trailing
-    ]);
+    return Container(
+        width: 180,
+        height: kToolbarHeight,
+        child: Row(mainAxisSize: MainAxisSize.min, children: [
+          if (widget.leading != null) widget.leading,
+          if (widget.label != null)
+            Expanded(
+              child: Text(
+                widget.label ?? '' + '  ',
+                textAlign: TextAlign.right,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ValueListenableBuilder(
+              valueListenable: initialValue,
+              builder: (
+                BuildContext context,
+                bool value,
+                Widget child,
+              ) {
+                return Switch(
+                    value: initialValue.value,
+                    activeColor: widget.activeColor,
+                    activeTrackColor: widget.activeTrackColor,
+                    inactiveTrackColor: widget.inactiveTrackColor,
+                    autofocus: widget.autofocus,
+                    onChanged: (b) {
+                      if (!widget.readOnly) {
+                        if (widget.onChanged != null) widget.onChanged(b);
+                        initialValue.value = b;
+                      }
+                    });
+              }),
+          if (widget.trailing != null) widget.trailing
+        ]));
   }
 
   @override

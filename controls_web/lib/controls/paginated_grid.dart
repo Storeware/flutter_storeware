@@ -553,7 +553,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                             child: Builder(builder: (ctx) {
                                               var labels = (controller
                                                           .columns[i].label ??
-                                                      controller.columns[i].name
+                                                      '${controller.columns[i].name}'
                                                           .toCapital())
                                                   .split('|');
                                               return Column(children: [
@@ -683,9 +683,11 @@ class PaginatedGridController {
   get self => this;
   PaginatedGridColumn findColumn(name) {
     var index = -1;
-    for (int i = 0; i < (columns?.length ?? 0); i++)
-      if (columns[i].name == name) index = i;
-    if (index > -1) return columns[index];
+    if (columns != null) {
+      for (int i = 0; i < columns.length; i++)
+        if (columns[i].name == name) index = i;
+      if (index > -1) return columns[index];
+    }
     return null;
   }
 
@@ -739,9 +741,9 @@ class PaginatedGridController {
             title: title, width: width, height: height, event: event));
   }
 
-  createColumns(List<Map<String, dynamic>> source) {
+  createColumns(List<dynamic> source) {
     columns = [];
-    Map<String, dynamic> row = source.first;
+    var row = source.first;
     if (row != null)
       row.forEach((k, v) {
         var numeric = false;
@@ -749,7 +751,7 @@ class PaginatedGridController {
         columns.add(
           PaginatedGridColumn(
             name: k,
-            label: k.replaceAll('_', ' ').toCapital(),
+            label: '${k.replaceAll('_', ' ')}'.toCapital(),
             numeric: numeric,
             //width: 120,
           ),

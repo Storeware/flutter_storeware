@@ -254,7 +254,7 @@ class RestClient {
       } catch (e) {
         // nada.
       }
-      error ??= formataMensagemErro(d);
+      error ??= formataMensagemErro(e);
 
       if (!silent) notifyError.send(error);
 
@@ -332,7 +332,7 @@ class RestClient {
       } catch (e) {
         // nada.
       }
-      error ??= formataMensagemErro(d);
+      error ??= formataMensagemErro(e);
 
       if (!silent) notifyError.send(error);
 

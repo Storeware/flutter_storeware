@@ -111,10 +111,12 @@ class DataViewerController {
       });
     else if (dataSource != null) {
       if (onValidate != null) dados = onValidate(dados);
-      return dataSource.delete(dados).then((rsp) {
+      return dataSource.delete(dados).then((rsp_) {
         //print('resposta: $rsp');
-        if (rsp is String) rsp = jsonDecode(rsp);
-        int rows = rsp['rows'] ?? 1;
+
+        var rsp = jsonDecode(rsp_);
+
+        int rows = (rsp ?? {})['rows'] ?? 1;
         if (rows > 0) {
           if (!manual && (rsp != null)) paginatedController.remove(dados);
           if (onChanged != null) onChanged(dados);

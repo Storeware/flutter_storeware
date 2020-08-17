@@ -256,11 +256,13 @@ class RestClient {
       }
       error ??=
           '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
-      notifyError.send(error);
+      if (!silent) notifyError.send(error);
 
       throw error;
     }
   }
+
+  bool silent = false;
 
   openJsonAsync(String url,
       {String method = 'GET', Map<String, dynamic> body, cacheControl}) async {
@@ -311,8 +313,20 @@ class RestClient {
         }
       });
     } catch (e) {
-      print('Error: $e');
-      throw e.message;
+      var error;
+      try {
+        if ((e.response != null) && (e.response.data != null)) {
+          print([e.response, e.response.data]);
+          error = (e?.response?.data ?? {})['error'];
+        }
+      } catch (e) {
+        // nada.
+      }
+      error ??=
+          '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
+      if (!silent) notifyError.send(error);
+
+      throw error;
     }
   }
 

@@ -268,7 +268,7 @@ class RestClient {
           '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
     if (erro.contains('PRIMARY KEY'))
       erro = 'Operação bloqueada pela chave de identificação|$erro';
-    if (erro.contains('FOREIGN KEY'))
+    if (erro.contains('FOREING KEY'))
       erro = 'Uma chave externa bloqueou a operação |$erro';
     return erro;
   }

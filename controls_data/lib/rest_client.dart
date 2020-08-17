@@ -254,8 +254,8 @@ class RestClient {
       } catch (e) {
         // nada.
       }
-      error ??=
-          '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
+      error ??= formataMensagemErro(d);
+
       if (!silent) notifyError.send(error);
 
       throw error;
@@ -263,6 +263,16 @@ class RestClient {
   }
 
   bool silent = false;
+
+  formatMesnagemErro(e) {
+    String erro =
+        '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
+    if (erro.contains('PRIMARY KEY'))
+      erro = 'Operação bloqueada pela chave de identificação|$erro';
+    if (erro.contains('FOREIGN KEY'))
+      erro = 'Uma chave externa bloqueou a operação |$erro';
+    return erro;
+  }
 
   openJsonAsync(String url,
       {String method = 'GET', Map<String, dynamic> body, cacheControl}) async {
@@ -322,8 +332,8 @@ class RestClient {
       } catch (e) {
         // nada.
       }
-      error ??=
-          '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
+      error ??= formataMensagemErro(d);
+
       if (!silent) notifyError.send(error);
 
       throw error;

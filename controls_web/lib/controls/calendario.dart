@@ -82,7 +82,7 @@ class _CalendarioState extends State<Calendario> {
               primary: false,
               crossAxisCount: 7,
               children: [
-                for (DateTime d in inicio.range(widget.lastDate)) createDay(d)
+                for (DateTime d in inicio.rangeTo(widget.lastDate)) createDay(d)
               ],
             ),
           ),
@@ -156,7 +156,7 @@ extension DateTimeEx on DateTime {
     return data.difference(DateTime(data.year, 1, 1)).inDays;
   }
 
-  List<DateTime> range(DateTime ate) {
+  List<DateTime> rangeTo(DateTime ate) {
     DateTime de = DateTime(this.year, this.month, this.day);
     List<DateTime> r = [];
     while (de.compareTo(ate) <= 0) {

@@ -346,7 +346,7 @@ class ODataClient {
     return v;
   }
 
-  post(String resource, json, {bool removeNulls = true}) async {
+  Future<String> post(String resource, json, {bool removeNulls = true}) async {
     Map<String, dynamic> data = {};
     try {
       if (removeNulls) {
@@ -358,9 +358,7 @@ class ODataClient {
           data[k] = reviverTo(v);
         });
 
-      return client.post(resource, body: data).then((resp) {
-        return resp;
-      });
+      return client.post(resource, body: data);
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;

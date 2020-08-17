@@ -991,14 +991,18 @@ class PaginatedGridDataTableSource extends DataTableSource {
                           .onPostEvent(controller, controller.data,
                               PaginatedGridChangeEvent.delete)
                           .then((rsp) {
-                        Navigator.pop(controller.context);
+                        if (rsp is bool && !rsp) return;
+                        controller.removeAt(index);
+                        Timer.run(() {
+                          Navigator.pop(controller.context);
+                        });
+                        controller.changed(b);
                       });
                     else
                       controller.widget.onDeleteItem(controller).then((x) {
                         if (x) {
                           controller.removeAt(index);
                           Timer.run(() {
-                            //print('pop');
                             Navigator.pop(controller.context);
                           });
                           controller.changed(b);

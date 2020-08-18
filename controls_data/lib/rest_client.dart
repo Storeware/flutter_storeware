@@ -254,21 +254,11 @@ class RestClient {
   bool silent = false;
 
   formataMensagemErro(e) {
-    String erro;
-    try {
-      if ((e.response != null) && (e.response.data != null)) {
-        print([e.response, e.response.data]);
-        erro = (e?.response?.data ?? {})['error'];
-      }
-    } catch (e) {
-      // nada.
-    }
-    if (erro == null)
-      erro =
-          '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()}';
+    String erro =
+        '${e.response.statusCode ?? ''} ${e.response.statusMessage ?? ''}  ${e.message ?? ''} ${e.toString()} ${e?.response?.data ?? ''} ';
     if (erro.contains('PRIMARY KEY'))
       erro = 'Operação bloqueada pela chave de identificação|$erro';
-    if (erro.contains('FOREING KEY'))
+    if (erro.contains('FOREIGN KEY'))
       erro = 'Uma chave externa bloqueou a operação |$erro';
     return erro;
   }

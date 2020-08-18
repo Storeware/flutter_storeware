@@ -25,11 +25,14 @@ extension DynamicExtension on dynamic {
     return def;
   }
 
-  DateTime toDateTime(value, {DateTime def, int z = -3}) {
+  DateTime toDateTime(value, {DateTime def, int z = 0}) {
     if (value is String) {
       var v = DateTime.tryParse(value);
+      int dif = z;
       if (v != null) {
-        int dif = (value.endsWith('Z')) ? z : 0;
+        dif = (value.endsWith('Z'))
+            ? 0
+            : dif; // quando termado Z  não muda o fuso.
         return DateTime.tryParse(value)?.add(Duration(hours: dif));
       }
     }

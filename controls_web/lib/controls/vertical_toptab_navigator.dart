@@ -24,6 +24,7 @@ class VerticalTopTabView extends StatefulWidget {
   final TextStyle style;
   final Color indicatorColor;
   final Color selectedColor;
+  final Color tabColor;
   final Widget leading;
   final double spacing;
 
@@ -38,6 +39,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.controller,
       this.iconColor,
       this.leading,
+      this.tabColor,
       this.style})
       : super(key: key);
 
@@ -80,6 +82,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           indicatorColor: widget.indicatorColor,
           selectedColor: widget.selectedColor,
           spacing: widget.spacing,
+          tabColor: widget.tabColor,
           onSelectItem: (index, tab) {
             position = index;
             if (tab.onPressed != null)
@@ -174,7 +177,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    _iconColor = widget.iconColor ?? theme.primaryColor;
+    _iconColor = widget.iconColor ?? theme.tabBarTheme.labelColor;
     _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
     Color _selectedColor =
         widget.selectedColor ?? theme.scaffoldBackgroundColor;

@@ -508,6 +508,7 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
   @override
   Widget build(BuildContext context) {
     bool value = widget.value ?? false;
+    ThemeData theme = Theme.of(context);
     return FittedBox(
       fit: BoxFit.cover,
       child: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
@@ -528,7 +529,8 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
             },
           );
         }),
-        if (widget.label != null) Text(widget.label),
+        if (widget.label != null)
+          Text(widget.label, style: theme.inputDecorationTheme.hintStyle),
         if (widget.trailing != null) widget.trailing
       ]),
     );
@@ -614,6 +616,7 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
 class MaskedDropDownFormField extends StatelessWidget {
   final List<String> items;
   final String hintText;
+  final TextStyle style;
   final String value;
   final Function onChanged;
   final Function onSaved;
@@ -627,6 +630,7 @@ class MaskedDropDownFormField extends StatelessWidget {
       {Key key,
       this.items,
       this.hintText,
+      this.style,
       this.value,
       this.onChanged,
       this.onSaved,
@@ -669,37 +673,45 @@ class MaskedDropDownFormField extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     child: Text(
                       hintText ?? '',
-                      style: theme.textTheme.caption.copyWith(fontSize: 12),
+                      style: theme.inputDecorationTheme
+                          .hintStyle, //.copyWith(fontSize: 12),
                     )),
               DropdownButtonHideUnderline(
                 key: UniqueKey(),
-                child: DropdownButton(
-                  items: items.map((String label) {
-                    return DropdownMenuItem(
-                      key: UniqueKey(),
-                      value: label ?? '',
-                      child: Text(
-                        label ?? '',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    );
-                  }).toList(),
-                  isDense: true,
-                  isExpanded: true,
-                  onChanged: (x) {
-                    var erro;
-                    if (validator != null) if (erro = validator(x) != null) {
-                      return false;
-                    }
-                    if (onChanged != null) onChanged(x);
-                    if (onSaved != null) onSaved(x);
-                    valueChange.value = x;
-                  },
-                  hint: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(hintText),
+                child: Theme(
+                  data: theme.copyWith(canvasColor: theme.primaryColorLight),
+                  child: DropdownButton(
+                    // style: style ?? theme.textTheme.bodyText1,
+                    items: items.map((String label) {
+                      return DropdownMenuItem(
+                        key: UniqueKey(),
+                        value: label ?? '',
+                        child: Container(
+                          child: Text(
+                            label ?? '',
+                            //style: TextStyle(color: theme.buttonColor),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    isDense: true,
+                    isExpanded: true,
+                    onChanged: (x) {
+                      var erro;
+                      if (validator != null) if (erro = validator(x) != null) {
+                        return false;
+                      }
+                      if (onChanged != null) onChanged(x);
+                      if (onSaved != null) onSaved(x);
+                      valueChange.value = x;
+                    },
+                    hint: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(hintText),
+                    ),
+                    value: v,
                   ),
-                  value: v,
                 ),
               ),
               if (trailing != null) trailing,
@@ -835,10 +847,10 @@ class MaskedLabeled extends StatelessWidget {
               Row(children: [
                 Expanded(
                     child: Text(label ?? '',
-                        style: theme.textTheme
-                            .caption)), //TextStyle(fontSize: 12, color: Colors.grey))),
+                        style: theme.inputDecorationTheme
+                            .hintStyle)), //TextStyle(fontSize: 12, color: Colors.grey))),
                 if (sublabel != null)
-                  Text(sublabel, style: theme.textTheme.caption),
+                  Text(sublabel, style: theme.inputDecorationTheme.hintStyle),
               ]),
               Padding(
                   padding: EdgeInsets.only(bottom: 8, top: 4),

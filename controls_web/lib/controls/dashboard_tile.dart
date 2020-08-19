@@ -91,7 +91,7 @@ class DashboardTile extends StatelessWidget {
                       top: avatarMargin,
                       left: avatarMargin,
                       child: CircleAvatar(
-                        backgroundColor: avatarColor ?? brighten(_color, 50),
+                        backgroundColor: avatarColor ?? _color.withOpacity(0.2),
                         radius: avatarRadius,
                         child: avatarChild,
                       ),
@@ -153,8 +153,9 @@ class DashboardTile extends StatelessWidget {
                                   style: titleStyle ??
                                       TextStyle(
                                           fontSize: 18,
-                                          color: theme.primaryTextTheme
-                                              .bodyText1.color),
+                                          color: theme
+                                              .primaryTextTheme.bodyText1.color
+                                              .withOpacity(0.7)),
                                 ),
                               ),
                           ]),

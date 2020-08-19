@@ -393,12 +393,13 @@ class _DragTargetDualListItemState extends State<DragTargetDualListItem> {
                       height: 50,
                       color: Colors.grey.withOpacity(0.9),
                     )
-                  : Container(
-                      color: Colors.grey.withOpacity(0.2),
-                      child: Container(
-                        height: expanded() ? 50 : 5,
-                        color: Colors.grey.withOpacity(0.1),
-                      ),
+                  : //Container(
+                  //  color: Colors.grey.withOpacity(0.2),
+                  //child:
+                  Container(
+                      height: expanded() ? 50 : 5,
+                      //color: expanded() ? Colors.grey.withOpacity(0.1) : null,
+                      //),
                     );
             },
           );

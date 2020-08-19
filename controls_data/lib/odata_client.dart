@@ -70,7 +70,7 @@ extension DynamicExtension on dynamic {
     return def;
   }
 
-  DateTime toDateTime(value, {DateTime def, zone = -3}) {
+  DateTime toDateTime(value, {DateTime def, zone = 0}) {
     if (value is String) {
       int dif = (value.endsWith('Z') ? zone : 0);
       return DateTime.tryParse(value).add(Duration(hours: dif));

@@ -511,7 +511,8 @@ class ActionText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TextStyle _style = style ?? theme.textTheme.bodyText1;
+    TextStyle _style = style ??
+        theme.textTheme.bodyText1.copyWith(color: theme.tabBarTheme.labelColor);
     return InkWell(
       child: Container(
         width: width,

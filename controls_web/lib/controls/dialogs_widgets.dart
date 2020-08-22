@@ -17,7 +17,9 @@ class Dialogs {
         width: width,
         height: height,
         child: Scaffold(
-          appBar: AppBar(title: Text(title ?? '')),
+          appBar: (title == null)
+              ? null
+              : AppBar(toolbarHeight: 60, title: Text(title ?? '')),
           body: Column(
             children: [
               if (child != null) child,

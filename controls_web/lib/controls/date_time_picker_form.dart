@@ -13,17 +13,20 @@ class DateTimePickerFormField extends StatefulWidget {
   final bool extended;
   final Widget suffix;
   final InputDecoration decoration;
+  final bool showResetIcon;
   DateTimePickerFormField(
       {Key key,
       this.format,
       this.decoration,
       this.dateOnly,
       this.extended = false,
+      this.showResetIcon = true,
       this.initialValue,
       this.firstDate,
       this.validator,
       this.onChanged,
-      this.onSaved, this.suffix})
+      this.onSaved,
+      this.suffix})
       : super(key: key);
   @override
   _DateTimePickerFormFieldState createState() =>
@@ -36,7 +39,7 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
 
   bool autoValidate = false;
   bool readOnly = true;
-  bool showResetIcon = true;
+  bool showResetIcon;
   DateTime value = DateTime.now();
   int changedCount = 0;
   int savedCount = 0;
@@ -49,56 +52,53 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
     } else {
       initialValue = DateTime.now();
     }
+    showResetIcon = widget.showResetIcon;
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-   return
-   Column(
-       children:[
-     DateTimeField(
-      decoration: widget.decoration ,
-      format: format,
-      onShowPicker: (context, currentValue) async {
-        print('date_time_picker_form->CurrentValue: $currentValue');
-        final date = await showDatePicker(
-            context: context,
-            firstDate: DateTime(1900),
-            initialDate: currentValue ?? DateTime.now(),
-            lastDate: DateTime(2100));
-        if (date != null) {
-          final time = await showTimePicker(
-            context: context,
-            initialTime:
-            TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-          );
-          return DateTimeField.combine(date, time);
-        } else {
-          return currentValue;
-        }
-      },
-      autovalidate: autoValidate,
-      validator: (date) {
-        if (widget.validator != null) return widget.validator(date);
-        return date == null ? 'Data inválida' : null;
-      },
-      initialValue: initialValue,
-      onChanged: (date) => setState(() {
-        value = date;
-        changedCount++;
-        if (widget.onChanged != null) widget.onChanged(value);
-      }),
-      onSaved: (date) => setState(() {
-        value = date;
-        savedCount++;
-        if (widget.onSaved != null) widget.onSaved(value);
-      }),
-      resetIcon: showResetIcon ? Icon(Icons.delete) : null,
-      readOnly: readOnly,
-    ),
-
+    return Column(children: [
+      DateTimeField(
+        decoration: widget.decoration,
+        format: format,
+        onShowPicker: (context, currentValue) async {
+          //print('date_time_picker_form->CurrentValue: $currentValue');
+          final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+          if (date != null) {
+            final time = await showTimePicker(
+              context: context,
+              initialTime:
+                  TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+            );
+            return DateTimeField.combine(date, time);
+          } else {
+            return currentValue;
+          }
+        },
+        autovalidate: autoValidate,
+        validator: (date) {
+          if (widget.validator != null) return widget.validator(date);
+          return date == null ? 'Data inválida' : null;
+        },
+        initialValue: initialValue,
+        onChanged: (date) => setState(() {
+          value = date;
+          changedCount++;
+          if (widget.onChanged != null) widget.onChanged(value);
+        }),
+        onSaved: (date) => setState(() {
+          value = date;
+          savedCount++;
+          if (widget.onSaved != null) widget.onSaved(value);
+        }),
+        resetIcon: showResetIcon ? Icon(Icons.delete) : null,
+        readOnly: readOnly,
+      ),
       widget.extended
           ? CheckboxListTile(
               title: Text('autoValidate'),
@@ -117,7 +117,7 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
           ? CheckboxListTile(
               title: Text('showResetIcon'),
               value: showResetIcon,
-              onChanged: (value) => setState(() => showResetIcon = value),
+              onChanged: (value) => setState(() => showResetIcon == value),
             )
           : Container(),
     ]);

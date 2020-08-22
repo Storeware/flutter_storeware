@@ -29,7 +29,8 @@ class MenuDialog extends StatefulWidget {
       double height,
       Color color}) async {
     var h = height ?? (kToolbarHeight * (choices.length + 1));
-    if (Platform.isIOS) h += kToolbarHeight;
+    if (Platform.isIOS || Platform.isAndroid || Platform.isFuchsia)
+      h += kToolbarHeight;
     return Dialogs.showModal(context,
         title: title ?? 'Menu',
         width: width,

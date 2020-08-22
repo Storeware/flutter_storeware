@@ -283,11 +283,11 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
           style: widget.style ??
               theme.textTheme.bodyText1.copyWith(fontSize: widget.fontSize),
           decoration: InputDecoration(
-            labelText: '${widget.label}',
-            helperText: !_showHelperText
-                ? (widget.sample != null) ? 'Ex: ${widget.sample}' : null
-                : null,
-          ),
+              labelText: '${widget.label}',
+              helperText: !_showHelperText
+                  ? (widget.sample != null) ? 'Ex: ${widget.sample}' : null
+                  : null,
+              hintStyle: theme.inputDecorationTheme.hintStyle),
           keyboardType: widget.keyboardType,
           onChanged: widget.onChanged,
           validator: (value) {
@@ -402,13 +402,13 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             onTap: () {
               if (widget.readOnly) return;
               if (widget.type == MaskedDatePickerType.day)
-                getDate().then((x) {
+                getDate(context).then((x) {
                   _dataController.text = formatter.format(x);
 
                   if (widget.onChanged != null) widget.onChanged(x);
                 });
-              if (widget.type == MaskedDatePickerType.time)
-                getTime().then((TimeOfDay h) {
+              /*       if (widget.type == MaskedDatePickerType.time)
+                getTime(context).then((TimeOfDay h) {
                   var d1 = formatter.parse(_dataController.text);
                   var d = DateTime(d1.year, d1.month, d1.day)
                       .add(Duration(hours: h.hour))
@@ -416,16 +416,18 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
                   _dataController.text = formatter.format(d);
                   if (widget.onChanged != null) widget.onChanged(d);
                 });
+         */
               if (widget.type == MaskedDatePickerType.dayAndTime)
-                getDate().then((x) {
+                getDate(context).then((x) {
                   var d1 = x;
-                  getTime().then((h) {
+                  /*             getTime(context).then((h) {
                     var d = DateTime(d1.year, d1.month, d1.day)
                         .add(Duration(hours: h.hour))
                         .add(Duration(minutes: h.minute));
                     _dataController.text = formatter.format(d);
                     if (widget.onChanged != null) widget.onChanged(d);
                   });
+     */
                 });
             },
             onChanged: (x) {
@@ -438,7 +440,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             }));
   }
 
-  Future<DateTime> getDate() {
+  Future<DateTime> getDate(BuildContext context) {
     // Imagine that this function is
     // more complex and slow.
     return showDatePicker(
@@ -454,8 +456,8 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
       },
     );
   }
-
-  Future<TimeOfDay> getTime() {
+/*
+  Future<TimeOfDay> getTime(BuildContext context) {
     return showTimePicker(
       context: context,
       initialTime: TimeOfDay(
@@ -467,7 +469,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
         );
       },
     );
-  }
+  }*/
 }
 
 class MaskedCheckbox extends StatefulWidget {
@@ -673,15 +675,13 @@ class MaskedDropDownFormField extends StatelessWidget {
                     alignment: Alignment.bottomLeft,
                     child: Text(
                       hintText ?? '',
-                      style: theme.inputDecorationTheme
-                          .hintStyle, //.copyWith(fontSize: 12),
+                      style: theme.inputDecorationTheme.hintStyle,
                     )),
               DropdownButtonHideUnderline(
                 key: UniqueKey(),
                 child: Theme(
                   data: theme.copyWith(canvasColor: theme.primaryColorLight),
                   child: DropdownButton(
-                    // style: style ?? theme.textTheme.bodyText1,
                     items: items.map((String label) {
                       return DropdownMenuItem(
                         key: UniqueKey(),
@@ -689,7 +689,6 @@ class MaskedDropDownFormField extends StatelessWidget {
                         child: Container(
                           child: Text(
                             label ?? '',
-                            //style: TextStyle(color: theme.buttonColor),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

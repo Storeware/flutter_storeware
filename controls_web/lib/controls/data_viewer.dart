@@ -592,9 +592,14 @@ class DataViewerEditGroupedPage extends StatefulWidget {
 class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   ThemeData theme;
   final _formKey = GlobalKey<FormState>();
+  int itemsCount = 0;
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
+    col = 0;
+    itemsCount = 0;
+    for (DataViewerGroup row in widget.grouped)
+      itemsCount += row.children.length;
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title ?? 'Edição'),
@@ -618,7 +623,10 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (var row in widget.grouped) createRow(row, widget.data),
+                for (var row in widget.grouped)
+                  Builder(builder: (ctx) {
+                    return createRow(context, row, widget.data);
+                  }),
                 SizedBox(
                   height: 15,
                 ),
@@ -637,7 +645,9 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     );
   }
 
-  createRow(DataViewerGroup rows, Map<String, dynamic> data) {
+  int col = 0;
+
+  createRow(context, DataViewerGroup rows, Map<String, dynamic> data) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -650,13 +660,16 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               child: Text(rows.title, style: theme.textTheme.caption)),
         Wrap(
           direction: Axis.horizontal,
-          children: [for (var column in rows.children) createColumn(column)],
+          children: [
+            for (var column in rows.children)
+              createColumn(context, column, isLast: (itemsCount == ++col))
+          ],
         ),
       ],
     );
   }
 
-  createColumn(column) {
+  createColumn(context, column, {bool isLast, Function() onLastPressed}) {
     var col;
     var ctrl;
 
@@ -674,7 +687,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
       edit = col.editBuilder(
           widget.controller.paginatedController, col, widget.data, widget.data);
     if (edit == null) {
-      edit = createFormField(col);
+      edit = createFormField(context, col, isLast: isLast);
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
@@ -702,11 +715,12 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   }
 
   get p => widget.data;
-  createFormField(item) {
+  createFormField(BuildContext context, item, {bool isLast = false}) {
     final TextEditingController txt_controller = TextEditingController(
         text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
             : (p[item.name] ?? '').toString());
+    var focusNode = FocusNode();
     return Focus(
       //descendantsAreFocusable: canFocus(item),
       canRequestFocus: false,
@@ -715,6 +729,14 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           item.onFocusChanged(txt_controller.text);
       },
       child: TextFormField(
+        textInputAction: (isLast) ? TextInputAction.done : TextInputAction.next,
+        focusNode: focusNode,
+        onFieldSubmitted: (x) {
+          if (isLast) {
+            _save(context);
+          } else
+            focusNode.nextFocus();
+        },
         readOnly: (item.isPrimaryKey || item.readOnly),
         autofocus: canFocus(item),
         maxLines: item.maxLines,

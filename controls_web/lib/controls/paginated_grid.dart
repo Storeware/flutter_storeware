@@ -1107,7 +1107,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
     double mw = widget.width ?? 400;
 
     return (!widget.inScaffold)
-        ? buildPage()
+        ? buildPage(context)
         : Container(
             height: (widget.fullPage) ? size.height * 0.95 : mh,
             constraints: BoxConstraints(
@@ -1118,14 +1118,16 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             child: Scaffold(
               appBar: AppBar(
                   title: Text(widget.title ?? ''), actions: widget.actions),
-              body: SingleChildScrollView(child: buildPage()),
+              body: SingleChildScrollView(child: buildPage(context)),
             ),
             // ),
             //),
           );
   }
 
-  Widget buildPage() {
+  Widget buildPage(BuildContext context) {
+    int col = 0;
+    final int mxCol = widget.controller.columns.length;
     return Padding(
       padding: EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
       child: Center(
@@ -1144,7 +1146,11 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
                           alignment: Alignment.center,
                           width: 300,
                           //height: 56,
-                          child: createFormField(item),
+                          child: createFormField(
+                            context,
+                            item,
+                            isLast: (mxCol == ++col),
+                          ),
                         ),
               SizedBox(
                 height: 10,
@@ -1170,11 +1176,13 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
     );
   }
 
-  createFormField(PaginatedGridColumn item) {
+  createFormField(BuildContext context, PaginatedGridColumn item,
+      {bool isLast = false}) {
     final TextEditingController _valueController = TextEditingController(
         text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
             : (p[item.name] ?? '').toString());
+    var focusNode = FocusNode();
     return Focus(
         canRequestFocus: false,
         onFocusChange: (b) {
@@ -1182,6 +1190,15 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             item.onFocusChanged(_valueController.text);
         },
         child: TextFormField(
+            textInputAction:
+                (isLast) ? TextInputAction.done : TextInputAction.next,
+            focusNode: focusNode,
+            onFieldSubmitted: (x) {
+              if (isLast)
+                _save(context);
+              else
+                focusNode.nextFocus();
+            },
             autofocus: canFocus(item),
             maxLines: item.maxLines,
             maxLength: item.maxLength,

@@ -17,6 +17,7 @@ class TabChoice<T> {
   int count;
   String tooltip;
   List<TabChoice> items;
+  double width;
   TabChoice(
       {this.builder,
       this.data,
@@ -26,6 +27,7 @@ class TabChoice<T> {
       this.items,
       this.tooltip,
       this.index,
+      this.width,
       this.label,
       this.child,
       this.icon,

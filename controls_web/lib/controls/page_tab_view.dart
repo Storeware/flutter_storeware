@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:controls_web/controls/tab_choice.dart';
 
 class PageTabViewController {
   TabController tabController;
@@ -163,8 +164,8 @@ class _TabBarViewState extends State<PageTabView>
         child: Column(
           children: <Widget>[
             tc.image ?? Icon(tc.icon, size: 25, color: _iconColor),
-            if (tc.title != null)
-              Text(tc.title, style: TextStyle(fontSize: 18, color: _iconColor))
+            if (tc.label != null)
+              Text(tc.label, style: TextStyle(fontSize: 18, color: _iconColor))
           ],
         ),
       ),
@@ -259,30 +260,4 @@ class _TabBarViewState extends State<PageTabView>
       ),
     );
   }
-}
-
-/*
- --------------------------------------------------------------------------
- */
-class TabChoice {
-  final int index;
-  const TabChoice({
-    this.iconColor,
-    this.index,
-    this.title,
-    this.icon,
-    this.image,
-    this.width,
-    this.child,
-    this.onPressed,
-    this.tooltip,
-  });
-  final String tooltip;
-  final double width;
-  final String title;
-  final IconData icon;
-  final Widget child;
-  final Widget image;
-  final Color iconColor;
-  final Function onPressed;
 }

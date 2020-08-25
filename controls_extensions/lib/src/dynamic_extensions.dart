@@ -25,14 +25,14 @@ extension DynamicExtension on dynamic {
     return def;
   }
 
-  DateTime toDateTime(value, {DateTime def, int z = 0}) {
+  DateTime toDateTime(value, {DateTime def, int zone = -3}) {
     if (value is String) {
       var v = DateTime.tryParse(value);
-      int dif = z;
+      int dif = zone;
       if (v != null) {
         dif = (value.endsWith('Z'))
-            ? 0
-            : dif; // quando termado Z  não muda o fuso.
+            ? dif
+            : 0; // quando termado Z  formatar fuso horario.
         return DateTime.tryParse(value)?.add(Duration(hours: dif));
       }
     }

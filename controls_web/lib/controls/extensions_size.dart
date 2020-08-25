@@ -17,14 +17,14 @@ extension SizeResponsive on Size {
     return width >= 1400;
   }
 
-  double boxWidth({max = 250, min = 200}) {
+  double boxWidth({double max = 250, double min = 200}) {
     var cols = width ~/ max;
     if (cols <= 1) return width;
     var w = (width - (cols * 5)) / cols;
     return (w >= min) ? w : min;
   }
 
-  int cols({max = 250, min = 200}) {
+  int cols({double max = 250, double min = 200}) {
     var cols = width ~/ max;
     if (cols <= 1) return 1;
     return cols;

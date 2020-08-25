@@ -649,7 +649,7 @@ abstract class ODataModelClass<T extends DataItem> {
     try {
       //return API.delete(collectionName, d).then((x) => x);
       return API.post('delete/$collectionName', d).then((x) {
-        if (CC != null) CC.delete('delete/$collectionName', d);
+        if (CC != null) CC.post('delete/$collectionName', d);
 
         return x;
       });

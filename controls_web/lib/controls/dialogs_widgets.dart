@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls.dart';
 import 'package:controls_web/controls/notice_activities.dart';
+import 'package:controls_web/controls/strap_widgets.dart';
 
 class Dialogs {
   static showModal(context,
@@ -157,10 +158,10 @@ class Dialogs {
   }
 
   static info(
-    context, {
+    BuildContext context, {
     String text,
-    width: 300,
-    height = 150,
+    double width: 300,
+    double height = 150,
     Widget icon,
     Color color,
     double tagWidth,
@@ -205,9 +206,11 @@ class Dialogs {
                                   SizedBox(
                                     height: 20,
                                   ),
-                                  RoundedButton(
-                                    buttonName: 'OK',
-                                    onTap: () {
+                                  StrapButton(
+                                    text: 'OK',
+                                    type: StrapButtonType.info,
+                                    radius: 30,
+                                    onPressed: () {
                                       Navigator.of(context).pop();
                                     },
                                   ),

@@ -327,12 +327,14 @@ class ActivityCard extends StatelessWidget {
   final TextStyle style;
   final Color titleColor;
   final double avatarSize;
+  final List<Widget> actions;
   const ActivityCard(
       {Key key,
       this.color,
       this.title,
       this.subtitle,
       this.style,
+      this.actions,
       this.titleColor,
       this.icon,
       this.image,
@@ -381,26 +383,28 @@ class ActivityCard extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(title ?? '',
-                        style: _style ??
-                            TextStyle(
-                              fontSize: 32,
-                              color: Colors.white,
-                            )),
-                    Text(
-                      subtitle ?? '',
-                      style: theme.primaryTextTheme.headline6.copyWith(
-                        color: titleColor,
-                        fontSize:
-                            theme.primaryTextTheme.headline6.fontSize * 0.8,
-                        fontWeight: FontWeight.w300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(title ?? '',
+                          style: _style ??
+                              TextStyle(
+                                fontSize: 32,
+                                color: Colors.white,
+                              )),
+                      Text(
+                        subtitle ?? '',
+                        style: theme.primaryTextTheme.headline6.copyWith(
+                          color: titleColor,
+                          fontSize:
+                              theme.primaryTextTheme.headline6.fontSize * 0.8,
+                          fontWeight: FontWeight.w300,
+                        ),
                       ),
-                    ),
-                  ],
-                )),
+                    ],
+                  ),
+                ),
+                ...actions ?? [],
               ],
             ),
             Wrap(

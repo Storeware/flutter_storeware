@@ -174,9 +174,10 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   //ValueNotifier<bool> bShowDrownMenu;
   Color _iconColor;
   Color _tabColor;
+  ThemeData theme;
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    theme = Theme.of(context);
     _iconColor = widget.iconColor ?? theme.tabBarTheme.labelColor;
     _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
     Color _selectedColor =
@@ -197,6 +198,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           Expanded(child: Container(child: widget.leading)),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
+              width: widget.choices[index].width,
               padding:
                   EdgeInsets.only(left: widget.spacing, right: widget.spacing),
               color: (active.value == index) ? _selectedColor : _tabColor,
@@ -206,7 +208,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                     : Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Expanded(
+                          Container(
+                              //width: widget.choices[index].width,
                               child: (widget.choices[index].items != null)
                                   ? Padding(
                                       padding:
@@ -217,9 +220,12 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                   : Align(
                                       alignment: Alignment.center,
                                       child: buildLabel(index))),
+                          SizedBox(
+                            height: 2,
+                          ),
                           Container(
                               height: 2,
-                              width:
+                              width: widget.choices[index].width ??
                                   (widget.choices[index].label.length * 8.0) +
                                       ((widget.choices[index].items != null)
                                           ? 30
@@ -249,8 +255,12 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
 
   buildLabel(index) {
     return widget.choices[index].title ??
-        Text(widget.choices[index].label,
-            style: widget.style ?? TextStyle(color: _iconColor, fontSize: 14));
+        Text(
+          widget.choices[index].label,
+          overflow: TextOverflow.ellipsis,
+          style: widget.style ??
+              theme.tabBarTheme.labelStyle.copyWith(color: _iconColor),
+        );
   }
 
   showDrownMenu(int mainIndex, List<TabChoice> items) {

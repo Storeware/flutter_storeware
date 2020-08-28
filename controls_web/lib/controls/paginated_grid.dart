@@ -567,11 +567,13 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                                               .ellipsis,
                                                           style: widget
                                                                   .columnStyle ??
-                                                              TextStyle(
+                                                              theme.textTheme
+                                                                  .caption
+                                                                  .copyWith(
                                                                 fontWeight:
                                                                     FontWeight
                                                                         .bold,
-                                                                fontSize: 16,
+                                                                //fontSize: 16,
                                                               )))
                                               ]);
                                             }),
@@ -946,7 +948,8 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                 child: (col.builder != null)
                                     ? col.builder(index, row)
                                     : Text(doGetValue(col, row[col.name]) ?? '',
-                                        style: col.style),
+                                        style: col.style ??
+                                            theme.textTheme.bodyText1),
                               ))),
                       onTap: ((controller.widget.onCellTap != null) ||
                               (col.onEditIconPressed != null))

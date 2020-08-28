@@ -1,5 +1,5 @@
-import 'package:controls_web/controls/tab_choice.dart';
-import 'package:console/widgets/tabview_widget.dart';
+import 'tab_choice.dart';
+import 'tabview_widget.dart';
 import 'package:flutter/material.dart';
 
 class TabViewBottom extends StatefulWidget {

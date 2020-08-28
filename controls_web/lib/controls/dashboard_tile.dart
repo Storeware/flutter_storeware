@@ -151,11 +151,8 @@ class DashboardTile extends StatelessWidget {
                                 child: Text(
                                   title ?? '',
                                   style: titleStyle ??
-                                      TextStyle(
-                                          fontSize: 18,
-                                          color: theme
-                                              .primaryTextTheme.bodyText1.color
-                                              .withOpacity(0.7)),
+                                      theme.primaryTextTheme.caption
+                                          .copyWith(fontSize: 18),
                                 ),
                               ),
                           ]),

@@ -17,6 +17,7 @@ class VerticalTopTabNavigatorController {
 
 class VerticalTopTabView extends StatefulWidget {
   final List<Widget> actions;
+  final double height;
   final List<TabChoice> choices;
   final VerticalTopTabNavigatorController controller;
   final int initialIndex;
@@ -34,6 +35,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.indicatorColor = Colors.amber,
       this.selectedColor,
       this.spacing = 4,
+      this.height = kToolbarHeight,
       this.actions,
       this.choices,
       this.controller,
@@ -73,6 +75,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
     return Column(
       children: [
         VerticalTopTabNavigator(
+          height: widget.height,
           actions: widget.actions,
           choices: widget.choices,
           controller: controller,
@@ -133,6 +136,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final Color iconColor;
   final TextStyle style;
   final double spacing;
+  final double height;
   final VerticalTopTabNavigatorController controller;
   VerticalTopTabNavigator(
       {Key key,
@@ -141,6 +145,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.initialIndex = 0,
       this.selectedColor,
       this.leading,
+      this.height = kMinInteractiveDimension,
       this.actions,
       this.spacing = 4,
       this.controller,
@@ -192,7 +197,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
     }
     return Container(
       padding: const EdgeInsets.all(3.0),
-      height: 36,
+      height: widget.height,
       width: double.maxFinite,
       child: ValueListenableBuilder<int>(
         valueListenable: active,

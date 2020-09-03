@@ -214,9 +214,11 @@ class PaginatedGrid extends StatefulWidget {
   final Widget footerLeading;
   final Widget footerTrailing;
   final double footerHeight;
+  final Color backgroundColor;
 
   final double dataRowHeight;
   final double headingRowHeight;
+  final Color headingRowColor;
   final double horizontalMargin;
   final DragStartBehavior dragStartBehavior;
 
@@ -231,8 +233,9 @@ class PaginatedGrid extends StatefulWidget {
   PaginatedGrid({
     Key key,
     this.controller,
-    this.dataRowHeight = 56,
-    this.headingRowHeight = 56,
+    this.dataRowHeight = kMinInteractiveDimension,
+    this.headingRowHeight = kMinInteractiveDimension,
+    this.headingRowColor,
     this.horizontalMargin = 10,
     this.dragStartBehavior = DragStartBehavior.start,
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
@@ -246,7 +249,7 @@ class PaginatedGrid extends StatefulWidget {
     this.footerLeading,
     this.footerHeight = 56,
     this.canSort = true,
-    //this.backgroundColor,
+    this.backgroundColor,
     this.columns,
     this.footerTrailing,
     this.canEdit = false,
@@ -469,9 +472,12 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                           return PaginatedDataTableExtended(
                             elevation: widget.elevation,
                             headingRowHeight: widget.headingRowHeight,
+                            headingRowColor: widget.headingRowColor ??
+                                theme.primaryColor.withAlpha(100),
                             headerHeight: (widget.header == null)
                                 ? 0
                                 : widget.headerHeight,
+
                             dataRowHeight: widget.dataRowHeight,
                             columnSpacing: 0, //widget.columnSpacing,
                             footerTrailing: widget.footerTrailing,
@@ -519,7 +525,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             horizontalMargin: widget.horizontalMargin,
                             dragStartBehavior: widget.dragStartBehavior,
                             onRowsPerPageChanged: widget.onRowsPerPageChanged,
-                            color: //widget.backgroundColor ??
+                            color: widget.backgroundColor ??
                                 theme.scaffoldBackgroundColor,
                             rowsPerPage: widget.rowsPerPage,
                             onPageChanged: widget.onPageChanged,
@@ -531,53 +537,58 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                   i++)
                                 if (controller.columns[i].visible)
                                   DataColumn(
-                                      onSort: (widget.canSort)
-                                          ? controller.columns[i].onSort ??
-                                                  (controller.columns[i].sort)
-                                              ? (int columnIndex,
-                                                      bool ascending) =>
-                                                  _sort(columnIndex, ascending)
-                                              : (a, b) => null
-                                          : null,
-                                      numeric: controller.columns[i].numeric,
-                                      tooltip: controller.columns[i].tooltip,
-                                      label: Align(
-                                          alignment: (controller
-                                                      .columns[i].numeric ??
+                                    onSort: (widget.canSort)
+                                        ? controller.columns[i].onSort ??
+                                                (controller.columns[i].sort)
+                                            ? (int columnIndex,
+                                                    bool ascending) =>
+                                                _sort(columnIndex, ascending)
+                                            : (a, b) => null
+                                        : null,
+                                    numeric: controller.columns[i].numeric,
+                                    tooltip: controller.columns[i].tooltip,
+                                    label: Align(
+                                      alignment:
+                                          (controller.columns[i].numeric ??
                                                   false)
                                               ? Alignment.centerRight
                                               : controller.columns[i].align ??
                                                   Alignment.centerLeft,
-                                          child: Container(
-                                            width: controller.columns[i].width,
-                                            child: Builder(builder: (ctx) {
-                                              var labels = (controller
-                                                          .columns[i].label ??
-                                                      '${controller.columns[i].name}'
-                                                          .toCapital())
-                                                  .split('|');
-                                              return Column(children: [
-                                                for (var l in labels)
-                                                  Expanded(
-                                                      flex: 1,
-                                                      child: Text(l,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: widget
-                                                                  .columnStyle ??
-                                                              theme.textTheme
-                                                                  .caption
-                                                                  .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                //fontSize: 16,
-                                                              )))
-                                              ]);
-                                            }),
-                                          )))
+                                      child: Container(
+                                        width: controller.columns[i].width,
+                                        child: Builder(builder: (ctx) {
+                                          var labels = (controller
+                                                      .columns[i].label ??
+                                                  '${controller.columns[i].name}'
+                                                      .toCapital())
+                                              .split('|');
+                                          return Column(children: [
+                                            if (labels.length == 1) Spacer(),
+                                            for (var l in labels)
+                                              Expanded(
+                                                flex: 1,
+                                                child: Container(
+                                                    child: Text(l,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: widget
+                                                                .columnStyle ??
+                                                            theme.textTheme
+                                                                .caption
+                                                                .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 14,
+                                                            ))),
+                                              )
+                                          ]);
+                                        }),
+                                      ),
+                                    ),
+                                  )
                             ],
                             source: controller.tableSource,
                             onSelectAll: widget.onSelectAll,
@@ -891,6 +902,10 @@ class PaginatedGridDataTableSource extends DataTableSource {
                         : doEditItem(index, b);
                   }
                 : null,
+        color: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+          return rowColor;
+        }),
         cells: [
           for (PaginatedGridColumn col in controller.columns)
             if (col.visible)

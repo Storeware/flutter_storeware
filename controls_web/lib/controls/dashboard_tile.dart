@@ -36,6 +36,7 @@ class DashboardTile extends StatelessWidget {
   final Color avatarColor;
   final double avatarMargin;
   final double elevation;
+  final Function() onPressed;
   const DashboardTile(
       {Key key,
       this.value,
@@ -48,6 +49,7 @@ class DashboardTile extends StatelessWidget {
       this.avatarMargin = -20,
       this.image,
       this.icon,
+      this.onPressed,
       this.titleHeight = 25,
       this.avatarRadius = 30,
       this.avatarColor,
@@ -81,85 +83,90 @@ class DashboardTile extends StatelessWidget {
                           : width
                       : width ?? 180);
               //print(w);
-              return Container(
-                width: w,
-                height: height,
-                //constraints: BoxConstraints(minHeight: 80),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: avatarMargin,
-                      left: avatarMargin,
-                      child: CircleAvatar(
-                        backgroundColor: avatarColor ?? _color.withOpacity(0.2),
-                        radius: avatarRadius,
-                        child: avatarChild,
-                      ),
-                    ),
-                    if (image != null)
-                      Positioned(
-                        bottom: this.titleHeight / 2,
-                        right: 4,
-                        child:
-                            Container(color: Colors.transparent, child: image),
-                      ),
-                    if (icon != null)
-                      Positioned(
-                        left: 10,
-                        top: 10,
-                        child: icon,
-                      ),
-                    Positioned(
-                      child: Column(mainAxisSize: MainAxisSize.min,
-                          //crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (value != null)
-                                    Container(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        value,
-                                        style: valueStyle ??
-                                            TextStyle(
-                                                fontSize: 32,
-                                                color: theme.primaryTextTheme
-                                                    .bodyText1.color),
-                                      ),
-                                    ),
-                                  if (left != null)
-                                    Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          left,
-                                          if (body != null)
-                                            Expanded(child: body)
-                                        ]),
-                                  if (left == null)
-                                    if (body != null) Expanded(child: body),
-                                ],
-                              ),
-                            ),
-                            if (title != null)
-                              Container(
-                                alignment: Alignment.center,
-                                height: titleHeight,
-                                color: _color.withOpacity(0.2),
-                                child: Text(
-                                  title ?? '',
-                                  style: titleStyle ??
-                                      theme.primaryTextTheme.caption
-                                          .copyWith(fontSize: 18),
+              return InkWell(
+                  onTap: onPressed,
+                  child: Container(
+                    width: w,
+                    height: height,
+                    //constraints: BoxConstraints(minHeight: 80),
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          top: avatarMargin,
+                          left: avatarMargin,
+                          child: CircleAvatar(
+                            backgroundColor:
+                                avatarColor ?? _color.withOpacity(0.2),
+                            radius: avatarRadius,
+                            child: avatarChild,
+                          ),
+                        ),
+                        if (image != null)
+                          Positioned(
+                            bottom: this.titleHeight / 2,
+                            right: 4,
+                            child: Container(
+                                color: Colors.transparent, child: image),
+                          ),
+                        if (icon != null)
+                          Positioned(
+                            left: 10,
+                            top: 10,
+                            child: icon,
+                          ),
+                        Positioned(
+                          child: Column(mainAxisSize: MainAxisSize.min,
+                              //crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if (value != null)
+                                        Container(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            value,
+                                            style: valueStyle ??
+                                                TextStyle(
+                                                    fontSize: 32,
+                                                    color: theme
+                                                        .primaryTextTheme
+                                                        .bodyText1
+                                                        .color),
+                                          ),
+                                        ),
+                                      if (left != null)
+                                        Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              left,
+                                              if (body != null)
+                                                Expanded(child: body)
+                                            ]),
+                                      if (left == null)
+                                        if (body != null) Expanded(child: body),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                          ]),
+                                if (title != null)
+                                  Container(
+                                    alignment: Alignment.center,
+                                    height: titleHeight,
+                                    color: _color.withOpacity(0.2),
+                                    child: Text(
+                                      title ?? '',
+                                      style: titleStyle ??
+                                          theme.primaryTextTheme.caption
+                                              .copyWith(fontSize: 18),
+                                    ),
+                                  ),
+                              ]),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              );
+                  ));
             })));
   }
 }

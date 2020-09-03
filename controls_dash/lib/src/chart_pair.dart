@@ -2,11 +2,21 @@ import 'package:charts_flutter/flutter.dart' as charts;
 
 /// Sample linear data type.
 class ChartPair {
-  final String title;
-  final num value;
-  final String tooltip;
-  final charts.Color color;
-  ChartPair(this.title, this.value, {this.color, this.tooltip});
+  dynamic key;
+  String title;
+  num value;
+  String tooltip;
+  charts.Color color;
+  ChartPair(this.title, this.value, {this.key, this.color, this.tooltip});
+  toJson() {
+    return {
+      "key": key,
+      "title": title,
+      "value": value,
+      "tooltip": tooltip,
+      "color": color
+    };
+  }
 }
 
 class ChartPairInt {

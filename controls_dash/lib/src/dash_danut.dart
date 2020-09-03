@@ -8,12 +8,14 @@ class DashDanutChart extends StatelessWidget {
   final int arcWidth;
   final bool animate;
   final bool showLabels;
+  final Function(int, ChartPair) onPressed;
 
   DashDanutChart(
     this.seriesList, {
     this.arcWidth = 60,
     this.animate,
     this.showLabels = false,
+    this.onPressed,
   });
 
   /// Creates a [PieChart] with sample data and no transition.
@@ -54,10 +56,23 @@ class DashDanutChart extends StatelessWidget {
     ];
   }
 
+  _onSelectionChanged(charts.SelectionModel model) {
+    final selectedDatum = model.selectedDatum;
+    if (selectedDatum.isEmpty) return;
+    if (onPressed != null)
+      onPressed(selectedDatum.first.index, selectedDatum.first.datum);
+  }
+
   @override
   Widget build(BuildContext context) {
     return new charts.PieChart(seriesList,
         animate: animate,
+        selectionModels: [
+          new charts.SelectionModelConfig(
+            type: charts.SelectionModelType.info,
+            changedListener: _onSelectionChanged,
+          )
+        ],
         behaviors: [
           if (showLabels)
             new charts.DatumLegend(

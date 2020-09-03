@@ -178,7 +178,9 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    _iconColor = widget.iconColor ?? theme.tabBarTheme.labelColor;
+    _iconColor = widget.iconColor ??
+        theme.tabBarTheme?.labelColor ??
+        theme.primaryIconTheme.color;
     _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
     Color _selectedColor =
         widget.selectedColor ?? theme.scaffoldBackgroundColor;
@@ -259,7 +261,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           widget.choices[index].label,
           overflow: TextOverflow.ellipsis,
           style: widget.style ??
-              (theme.tabBarTheme?.labelStyle ?? theme.textTheme.bodyText1)
+              (theme.tabBarTheme?.labelStyle ?? theme.primaryTextTheme.caption)
                   .copyWith(color: _iconColor),
         );
   }

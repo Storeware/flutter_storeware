@@ -64,10 +64,12 @@ class PaginatedDataTableExtended extends StatefulWidget {
     this.dataRowHeight = kMinInteractiveDimension,
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.alignment = Alignment.topLeft,
-    this.headingRowHeight = 56.0,
+    this.headingRowHeight = kMinInteractiveDimension,
+    this.headingRowColor,
     this.headerHeight = 64,
+    this.dataTextStyle,
     this.horizontalMargin = 24.0,
-    this.columnSpacing = 56.0,
+    this.columnSpacing = kMinInteractiveDimension,
     this.showCheckboxColumn = true,
     this.initialFirstRowIndex = 0,
     this.onPageChanged,
@@ -169,6 +171,8 @@ class PaginatedDataTableExtended extends StatefulWidget {
   final CrossAxisAlignment crossAxisAlignment;
   final Alignment alignment;
   final Color color;
+  final Color headingRowColor;
+  final TextStyle dataTextStyle;
 
   /// The horizontal margin between the contents of each data column.
   ///
@@ -508,6 +512,15 @@ class PaginatedDataTableExtendedState
                             key: _tableKey,
                             dividerThickness: 1,
                             columns: widget.columns,
+                            dataTextStyle: widget.dataTextStyle,
+                            decoration: BoxDecoration(
+                                color: widget.color ?? Colors.transparent),
+                            headingRowColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
+                              return widget.headingRowColor ??
+                                  Colors.transparent;
+                            }),
                             sortColumnIndex: widget.sortColumnIndex,
                             sortAscending: widget.sortAscending,
                             onSelectAll: widget.onSelectAll,

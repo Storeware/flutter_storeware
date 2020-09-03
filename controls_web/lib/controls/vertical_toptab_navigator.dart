@@ -259,7 +259,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           widget.choices[index].label,
           overflow: TextOverflow.ellipsis,
           style: widget.style ??
-              theme.tabBarTheme.labelStyle.copyWith(color: _iconColor),
+              (theme.tabBarTheme?.labelStyle ?? theme.textTheme.bodyText1)
+                  .copyWith(color: _iconColor),
         );
   }
 

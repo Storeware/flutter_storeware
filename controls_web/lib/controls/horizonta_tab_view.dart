@@ -80,7 +80,9 @@ class HorizontalTabView extends StatelessWidget {
             ? HorizontalTabViewSiderBarType.compact
             : HorizontalTabViewSiderBarType.show);
     ThemeData theme = Theme.of(context);
-    _iconColor = iconColor ?? theme.tabBarTheme.labelColor;
+    _iconColor = iconColor ??
+        theme.tabBarTheme?.labelColor ??
+        theme.textTheme.bodyText1.color;
 
     return ValueListenableBuilder(
         valueListenable: _index,

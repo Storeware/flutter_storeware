@@ -46,7 +46,7 @@ class HorizontalTabView extends StatelessWidget {
     this.sidebarBackgroundColor,
     this.sidebarType,
     this.controller,
-    this.tagColor = Colors.amber,
+    this.tagColor,
     this.mobileCrossCount,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
@@ -80,9 +80,8 @@ class HorizontalTabView extends StatelessWidget {
             ? HorizontalTabViewSiderBarType.compact
             : HorizontalTabViewSiderBarType.show);
     ThemeData theme = Theme.of(context);
-    _iconColor = iconColor ??
-        theme.tabBarTheme?.labelColor ??
-        theme.primaryIconTheme.color;
+    _iconColor =
+        iconColor ?? theme.tabBarTheme?.labelColor ?? theme.buttonColor;
 
     return ValueListenableBuilder(
         valueListenable: _index,
@@ -154,7 +153,8 @@ class HorizontalTabView extends StatelessWidget {
                                                     tabHeight ?? kToolbarHeight,
                                                 width: 5,
                                                 color: (_index.value == index)
-                                                    ? tagColor
+                                                    ? tagColor ??
+                                                        theme.indicatorColor
                                                     : tabColor),
                                             Expanded(
                                                 child: Container(

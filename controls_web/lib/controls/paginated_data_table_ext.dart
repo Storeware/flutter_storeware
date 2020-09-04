@@ -512,7 +512,7 @@ class PaginatedDataTableExtendedState
                             key: _tableKey,
                             dividerThickness: 1,
                             columns: widget.columns,
-                            dataTextStyle: widget.dataTextStyle,
+                            //dataTextStyle: widget.dataTextStyle, { nao tem suporte no BETA, so master - 04/09/2020}
                             decoration: BoxDecoration(
                                 color: widget.color ?? Colors.transparent),
                             headingRowColor:

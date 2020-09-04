@@ -32,7 +32,7 @@ class VerticalTopTabView extends StatefulWidget {
   const VerticalTopTabView(
       {Key key,
       this.initialIndex = 0,
-      this.indicatorColor = Colors.amber,
+      this.indicatorColor,
       this.selectedColor,
       this.spacing = 4,
       this.height = kToolbarHeight,
@@ -70,6 +70,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
   get minIndex => 0;
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     DateTime ultimo = DateTime.now();
     int newIndex = widget.initialIndex;
     return Column(
@@ -82,7 +83,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           leading: widget.leading,
           iconColor: widget.iconColor,
           initialIndex: widget.initialIndex,
-          indicatorColor: widget.indicatorColor,
+          indicatorColor: widget.indicatorColor ?? theme.indicatorColor,
           selectedColor: widget.selectedColor,
           spacing: widget.spacing,
           tabColor: widget.tabColor,
@@ -149,7 +150,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.actions,
       this.spacing = 4,
       this.controller,
-      this.indicatorColor = Colors.amber,
+      this.indicatorColor,
       this.iconColor,
       this.style,
       this.tabColor})
@@ -183,9 +184,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    _iconColor = widget.iconColor ??
-        theme.tabBarTheme?.labelColor ??
-        theme.primaryIconTheme.color;
+    _iconColor =
+        widget.iconColor ?? theme.tabBarTheme?.labelColor ?? theme.buttonColor;
     _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
     Color _selectedColor =
         widget.selectedColor ?? theme.scaffoldBackgroundColor;
@@ -238,7 +238,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                           ? 30
                                           : 0),
                               color: (active.value == index)
-                                  ? widget.indicatorColor
+                                  ? widget.indicatorColor ??
+                                      theme.indicatorColor
                                   : null),
                         ],
                       ),
@@ -266,7 +267,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           widget.choices[index].label,
           overflow: TextOverflow.ellipsis,
           style: widget.style ??
-              (theme.tabBarTheme?.labelStyle ?? theme.primaryTextTheme.caption)
+              (theme.tabBarTheme?.labelStyle ??
+                      theme.textTheme.button.copyWith(color: theme.buttonColor))
                   .copyWith(color: _iconColor),
         );
   }

@@ -340,7 +340,7 @@ class DataViewer extends StatefulWidget {
     this.oddRowColor,
     this.rowsPerPage,
     this.headerHeight = kToolbarHeight + 48,
-    this.headingRowHeight = kMinInteractiveDimension * 0.8,
+    this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
     this.canSort = true,

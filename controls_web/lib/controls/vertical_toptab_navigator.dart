@@ -17,8 +17,8 @@ class VerticalTopTabNavigatorController {
 
 class VerticalTopTabView extends StatefulWidget {
   final List<Widget> actions;
-  final double height;
   final List<TabChoice> choices;
+  final double height;
   final VerticalTopTabNavigatorController controller;
   final int initialIndex;
   final Color iconColor;

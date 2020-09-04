@@ -512,15 +512,16 @@ class PaginatedDataTableExtendedState
                             key: _tableKey,
                             dividerThickness: 1,
                             columns: widget.columns,
-                            //dataTextStyle: widget.dataTextStyle, { nao tem suporte no BETA, so master - 04/09/2020}
-                            decoration: BoxDecoration(
-                                color: widget.color ?? Colors.transparent),
+                            /*dataTextStyle: widget.dataTextStyle,
+                            //decoration: BoxDecoration(
+                            //    color: widget.color ?? Colors.transparent),
                             headingRowColor:
                                 MaterialStateProperty.resolveWith<Color>(
                                     (Set<MaterialState> states) {
                               return widget.headingRowColor ??
                                   Colors.transparent;
                             }),
+                            */
                             sortColumnIndex: widget.sortColumnIndex,
                             sortAscending: widget.sortAscending,
                             onSelectAll: widget.onSelectAll,

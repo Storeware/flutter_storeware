@@ -205,7 +205,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       child: ValueListenableBuilder<int>(
         valueListenable: active,
         builder: (a, b, w) => Row(children: [
-          Expanded(child: Container(child: widget.leading)),
+          if (widget.leading != null) widget.leading,
+          Spacer(),
           for (var index = 0; index < widget.choices.length; index++)
             Container(
               width: widget.choices[index].width,

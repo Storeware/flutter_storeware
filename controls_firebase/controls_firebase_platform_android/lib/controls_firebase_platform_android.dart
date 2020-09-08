@@ -13,7 +13,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' as fb;
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'fbmessages.dart';
+import 'firebase_messaging.dart';
 
 export 'package:firebase_auth/firebase_auth.dart';
 

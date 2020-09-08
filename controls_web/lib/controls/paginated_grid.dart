@@ -233,7 +233,7 @@ class PaginatedGrid extends StatefulWidget {
   PaginatedGrid({
     Key key,
     this.controller,
-    this.dataRowHeight = kMinInteractiveDimension,
+    this.dataRowHeight = kMinInteractiveDimension * .70,
     this.headingRowHeight = kMinInteractiveDimension,
     this.headingRowColor,
     this.horizontalMargin = 10,
@@ -247,7 +247,7 @@ class PaginatedGrid extends StatefulWidget {
     this.onRowsPerPageChanged,
     this.oneRowAutoEdit = false,
     this.footerLeading,
-    this.footerHeight = 56,
+    this.footerHeight = kToolbarHeight,
     this.canSort = true,
     this.backgroundColor,
     this.columns,
@@ -278,7 +278,7 @@ class PaginatedGrid extends StatefulWidget {
     this.appBar,
     this.source,
     this.onSort,
-    this.headerHeight = 64,
+    this.headerHeight = kToolbarHeight + 10,
     this.beforeShow,
     this.canDelete = false,
     this.canInsert = false,
@@ -513,9 +513,9 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                               if (widget.onRefresh != null)
                                 Tooltip(
                                     message: 'Recarregar',
-                                    child: IconButton(
-                                      icon: Icon(Icons.refresh),
-                                      onPressed: () {
+                                    child: InkWell(
+                                      child: Icon(Icons.refresh),
+                                      onTap: () {
                                         doRefresh();
                                       },
                                     )),
@@ -917,9 +917,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
                           if (controller.widget.onEditItem != null)
                             Tooltip(
                                 message: 'Alterar o item',
-                                child: IconButton(
-                                  icon: Icon(Icons.edit),
-                                  onPressed: () {
+                                child: InkWell(
+                                  child: Icon(Icons.edit),
+                                  onTap: () {
                                     setData(index, col.index);
                                     controller.changed(controller.widget
                                         .onEditItem(controller));
@@ -930,9 +930,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
                           if (controller.widget.onDeleteItem != null)
                             Tooltip(
                                 message: 'Excluir o item',
-                                child: IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () {
+                                child: InkWell(
+                                  child: Icon(Icons.delete),
+                                  onTap: () {
                                     setData(index, col.index);
                                     controller.widget
                                         .onDeleteItem(controller)
@@ -964,7 +964,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                     ? col.builder(index, row)
                                     : Text(doGetValue(col, row[col.name]) ?? '',
                                         style: col.style ??
-                                            theme.textTheme.bodyText1),
+                                            theme.textTheme.bodyText2),
                               ))),
                       onTap: ((controller.widget.onCellTap != null) ||
                               (col.onEditIconPressed != null))

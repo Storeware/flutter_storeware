@@ -292,6 +292,7 @@ class DataViewer extends StatefulWidget {
   final double width;
   final double elevation;
   final bool canSort;
+  final TextStyle columnStyle;
 
   /// se permite editar um dado - default: true;
   final bool canEdit;
@@ -339,16 +340,17 @@ class DataViewer extends StatefulWidget {
     this.elevation = 0,
     this.oddRowColor,
     this.rowsPerPage,
-    this.headerHeight = kToolbarHeight + 48,
+    this.headerHeight = kToolbarHeight,
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
     this.canSort = true,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
-    this.dataRowHeight = kMinInteractiveDimension * 0.8,
+    this.dataRowHeight = kMinInteractiveDimension * 0.7,
     this.beforeShow,
     this.columns,
+    this.columnStyle,
     this.canEdit = true,
     this.canDelete = false,
     this.canInsert = false,
@@ -403,52 +405,68 @@ class _DataViewerState extends State<DataViewer> {
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               if (widget.title != null) widget.title,
               Container(
-                  height: kToolbarHeight + 4,
+                  //height: kToolbarHeight + 4,
                   width: sizes.maxWidth,
                   alignment: Alignment.center,
                   child: Align(
                     child: Container(
-                        width: bwidth,
-                        child: Column(children: [
-                          Row(children: [
-                            if (widget.leading != null) widget.leading,
-                            Expanded(
-                              child: TextFormField(
-                                controller: _filtroController,
-                                style: theme.textTheme.bodyText1,
-                                /*TextStyle(
+                      width: bwidth,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (widget.leading != null) widget.leading,
+                              Expanded(
+                                child: TextFormField(
+                                  controller: _filtroController,
+                                  style: theme.textTheme.bodyText1,
+                                  /*TextStyle(
                             fontSize: 16, fontStyle: FontStyle.normal),*/
-                                decoration: InputDecoration(
+                                  decoration: InputDecoration(
                                     labelText: 'procurar por',
-                                    suffixIcon: InkWell(
-                                        child: Icon(Icons.delete),
+                                    /*suffixIcon: InkWell(
+                                        child: Icon(Icons.clear),
                                         onTap: () {
                                           _filtroController.text = '';
-                                        })),
+                                        })*/
+                                  ),
+                                ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5), // ios usa 5
-                              width: 90,
-                              child: StrapButton(
-                                  //type: StrapButtonType.primary ,
-                                  text: 'abrir',
-                                  onPressed: () {
-                                    controller.page = 1;
-                                    controller.filter = _filtroController.text;
-                                    if (controller.onClearCache != null)
-                                      controller.onClearCache();
-                                    if (widget.onSearchPressed != null)
-                                      widget.onSearchPressed();
-                                    controller.goPage(1);
+                              InkWell(
+                                  child: Icon(Icons.clear),
+                                  onTap: () {
+                                    _filtroController.text = '';
                                   }),
-                            ),
-                          ]),
-                        ])),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5), // ios usa 5
+                                width: 90,
+                                child: StrapButton(
+                                    //type: StrapButtonType.primary ,
+                                    text: 'abrir',
+                                    height: 40,
+                                    onPressed: () {
+                                      controller.page = 1;
+                                      controller.filter =
+                                          _filtroController.text;
+                                      if (controller.onClearCache != null)
+                                        controller.onClearCache();
+                                      if (widget.onSearchPressed != null)
+                                        widget.onSearchPressed();
+                                      controller.goPage(1);
+                                    }),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   )),
               if (widget.subtitle != null) widget.subtitle,
             ],
@@ -493,6 +511,7 @@ class _DataViewerState extends State<DataViewer> {
                           }
                         : null,
                     columnSpacing: 10,
+                    columnStyle: widget.columnStyle,
                     onEditItem: widget.onEditItem,
                     onInsertItem: widget.onInsertItem,
                     onDeleteItem: widget.onDeleteItem,

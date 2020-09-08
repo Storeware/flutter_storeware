@@ -13,6 +13,7 @@ class Dialogs {
       double height,
       Color color,
       Widget bottom}) async {
+    double _height = 40;
     return showPage(context,
         label: title ?? '',
         width: width,
@@ -20,7 +21,7 @@ class Dialogs {
         child: Scaffold(
           appBar: (title == null)
               ? null
-              : AppBar(toolbarHeight: 60, title: Text(title ?? '')),
+              : AppBar(toolbarHeight: _height, title: Text(title ?? '')),
           body: Column(
             children: [
               if (child != null) child,

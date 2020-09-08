@@ -35,7 +35,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.indicatorColor,
       this.selectedColor,
       this.spacing = 4,
-      this.height = kToolbarHeight,
+      this.height = 32,
       this.actions,
       this.choices,
       this.controller,
@@ -74,6 +74,9 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
     DateTime ultimo = DateTime.now();
     int newIndex = widget.initialIndex;
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         VerticalTopTabNavigator(
           height: widget.height,

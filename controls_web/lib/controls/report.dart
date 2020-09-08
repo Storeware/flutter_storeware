@@ -78,10 +78,10 @@ class ReportView extends StatefulWidget {
     this.backgroundColor,
     this.onSelectChanged,
     this.onCellTap,
-    this.columnSpacing = 56,
+    this.columnSpacing = 40,
     this.onHeaderBuilder,
     this.onFooterBuilder,
-    this.dataRowHeight = 40,
+    this.dataRowHeight = 35,
     //this.onHasAditionalRow,
     this.onAditionalBuilder,
     //this.body,
@@ -266,15 +266,14 @@ class _ReportViewState extends State<ReportView> {
           if ((widget.controller.columns ?? []).length == 0) createColumns();
 
           return Scaffold(
-            //appBar: AppBar(title: Text('')),
             body: Card(
-              elevation: 0, //widget.elevation,
+              elevation: 0,
               semanticContainer: false,
               color: widget.backgroundColor,
-
               child: Align(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     if (widget.title != null)
                       ListTile(
@@ -290,18 +289,20 @@ class _ReportViewState extends State<ReportView> {
                         ),
                       ),
                     if (widget.header != null) widget.header,
-                    SingleChildScrollView(
-                        child: DataTable(
-                      columnSpacing: 0,
-                      horizontalMargin: 0,
-                      dataRowHeight: widget.dataRowHeight,
-
-                      rows: getRows(),
-                      //header: Text(''),
-                      //source: createTableSource(),
-                      columns: genColumns(),
-                      showCheckboxColumn: false,
-                    )),
+                    Divider(),
+                    Expanded(
+                        child: ListView(
+                            scrollDirection: Axis.horizontal,
+                            children: [
+                          DataTable(
+                            columnSpacing: 0,
+                            horizontalMargin: 0,
+                            dataRowHeight: widget.dataRowHeight,
+                            rows: getRows(),
+                            columns: genColumns(),
+                            showCheckboxColumn: false,
+                          ),
+                        ])),
                     if (widget.bottom != null) widget.bottom,
                   ],
                 ),

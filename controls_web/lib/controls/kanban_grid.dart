@@ -211,7 +211,7 @@ class KanbanColumn {
   KanbanColumn({
     @required this.id,
     this.label,
-    this.width = 250,
+    this.width = 200,
     this.minWidth,
     this.elevation = 0,
     this.titleColor = Colors.blue,

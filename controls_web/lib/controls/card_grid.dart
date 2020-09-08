@@ -122,7 +122,8 @@ class _CardGridState extends State<CardGrid> {
   Widget build(BuildContext context) {
     return Scaffold(
       //child: child,
-      body: FutureBuilder<dynamic>(
+      body: SingleChildScrollView(
+          child: FutureBuilder<dynamic>(
         initialData: widget.source,
         future: widget.futureSource,
         builder: (context, snapshot) {
@@ -155,7 +156,7 @@ class _CardGridState extends State<CardGrid> {
                 ]);
               });
         },
-      ),
+      )),
       floatingActionButton:
           ((widget.onChangeEvent != null) && (widget.canInsert))
               ? FloatingActionButton(

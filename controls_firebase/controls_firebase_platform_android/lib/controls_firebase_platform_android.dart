@@ -59,7 +59,16 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   firestore() {
     return FirebaseFirestoreDriver();
   }
+  
 }
+
+class FBPushNotification extends FBMessaging {
+  static final _singleton = FBPushNotification._create();
+  FBPushNotification._create();
+  factory FBPushNotification() => _singleton;
+  static get instance => _singleton;
+}
+
 
 class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   static final _singleton = FirebaseFirestoreDriver._create();

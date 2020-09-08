@@ -45,6 +45,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
         widget.tabColor ?? theme.appBarTheme.color ?? Colors.amber;
     Color _iconColor = widget.iconColor ?? theme.tabBarTheme.labelColor;
     Color _indicatorColor = widget.indicatorColor ?? widget.tabColor;
+    Color _tagColor = widget.tagColor ?? theme.indicatorColor;
     return Column(children: [
       Expanded(
           child: TabBarViewDynamic(
@@ -127,7 +128,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
                                                   height: 2,
                                                   width: choice.width ?? 60,
                                                   color: (idx == i)
-                                                      ? widget.tagColor
+                                                      ? _tagColor
                                                       : null)
                                             ],
                                           ),

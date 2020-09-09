@@ -25,21 +25,42 @@ class FBMessaging extends FBMessagingInterface {
     if (Platform.isIOS) iOSPermission();
 
     //_mc.setAutoInitEnabled(true);
-    _mc.configure();
-    /* _mc.configure(
+    //_mc.configure();
+    _mc.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("on message $message");
         _controller.add(message);
+        LocalNotifications.showNotification(title: '', body: '', payload: '');
       },
+      onBackgroundMessage: myBackgroundMessageHandler,
       onResume: (Map<String, dynamic> message) async {},
       onLaunch: (Map<String, dynamic> message) async {},
-    );*/
+    );
+  }
+
+  Future<dynamic> myBackgroundMessageHandler(
+      Map<String, dynamic> message) async {
+    if (message.containsKey('data')) {
+      // Handle data message
+      final dynamic data = message['data'];
+      _controller.add(data);
+    }
+
+    if (message.containsKey('notification')) {
+      // Handle notification message
+      final dynamic notification = message['notification'];
+      _controller.add(notification);
+    }
+
+    // Or do other work.
   }
 
   @override
   Future requestPermission() {
     return null;
   }
+
+  /// para android
 
   void iOSPermission() {
     _mc.requestNotificationPermissions(

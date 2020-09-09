@@ -340,14 +340,14 @@ class DataViewer extends StatefulWidget {
     this.elevation = 0,
     this.oddRowColor,
     this.rowsPerPage,
-    this.headerHeight = kToolbarHeight,
+    this.headerHeight = kToolbarHeight + 8,
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
     this.header,
     this.canSort = true,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
-    this.dataRowHeight = kMinInteractiveDimension * 0.7,
+    this.dataRowHeight = kMinInteractiveDimension * 0.8,
     this.beforeShow,
     this.columns,
     this.columnStyle,
@@ -426,15 +426,8 @@ class _DataViewerState extends State<DataViewer> {
                                 child: TextFormField(
                                   controller: _filtroController,
                                   style: theme.textTheme.bodyText1,
-                                  /*TextStyle(
-                            fontSize: 16, fontStyle: FontStyle.normal),*/
                                   decoration: InputDecoration(
                                     labelText: 'procurar por',
-                                    /*suffixIcon: InkWell(
-                                        child: Icon(Icons.clear),
-                                        onTap: () {
-                                          _filtroController.text = '';
-                                        })*/
                                   ),
                                 ),
                               ),
@@ -448,7 +441,6 @@ class _DataViewerState extends State<DataViewer> {
                                     vertical: 5), // ios usa 5
                                 width: 90,
                                 child: StrapButton(
-                                    //type: StrapButtonType.primary ,
                                     text: 'abrir',
                                     height: 40,
                                     onPressed: () {
@@ -491,7 +483,6 @@ class _DataViewerState extends State<DataViewer> {
     return StreamBuilder<dynamic>(
         stream: controller.subscribeChanges.stream,
         builder: (context, snapshot) {
-          // print('subscribeChanges: ${snapshot.data}');
           return DefaultDataViewer(
             controller: widget.controller,
             child: Container(
@@ -522,7 +513,9 @@ class _DataViewerState extends State<DataViewer> {
                         : 0,
                     header: (widget.header != null)
                         ? widget.header
-                        : (widget.canSearch) ? createHeader() : null,
+                        : (widget.canSearch)
+                            ? createHeader()
+                            : null,
                     headingRowHeight: widget.headingRowHeight,
                     dataRowHeight: widget.dataRowHeight,
                     controller: controller.paginatedController,

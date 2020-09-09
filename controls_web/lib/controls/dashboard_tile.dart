@@ -37,6 +37,8 @@ class DashboardTile extends StatelessWidget {
   final double avatarMargin;
   final double elevation;
   final Function() onPressed;
+  final Color indicatorColor;
+  final double avatarSize;
   const DashboardTile(
       {Key key,
       this.value,
@@ -46,14 +48,16 @@ class DashboardTile extends StatelessWidget {
       this.titleStyle,
       this.color,
       this.borderRadius = 15,
-      this.avatarMargin = -20,
+      this.avatarMargin = 00,
       this.image,
       this.icon,
       this.onPressed,
       this.titleHeight = 25,
-      this.avatarRadius = 30,
+      this.avatarRadius = 60,
+      this.avatarSize = 45,
       this.avatarColor,
       this.avatarChild,
+      this.indicatorColor,
       this.width = 180,
       this.height = 80,
       this.left,
@@ -65,6 +69,7 @@ class DashboardTile extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     Color _color = color ?? theme.primaryColor;
     ResponsiveInfo responsive = ResponsiveInfo(context);
+    Color _indicatorColor = indicatorColor ?? theme.indicatorColor;
     return Theme(
         data: theme.copyWith(primaryColor: _color),
         child: Card(
@@ -91,29 +96,6 @@ class DashboardTile extends StatelessWidget {
                     //constraints: BoxConstraints(minHeight: 80),
                     child: Stack(
                       children: [
-                        Positioned(
-                          top: avatarMargin,
-                          left: avatarMargin,
-                          child: CircleAvatar(
-                            backgroundColor:
-                                avatarColor ?? _color.withOpacity(0.2),
-                            radius: avatarRadius,
-                            child: avatarChild,
-                          ),
-                        ),
-                        if (image != null)
-                          Positioned(
-                            bottom: this.titleHeight / 2,
-                            right: 4,
-                            child: Container(
-                                color: Colors.transparent, child: image),
-                          ),
-                        if (icon != null)
-                          Positioned(
-                            left: 10,
-                            top: 10,
-                            child: icon,
-                          ),
                         Positioned(
                           child: Column(mainAxisSize: MainAxisSize.min,
                               //crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -154,7 +136,15 @@ class DashboardTile extends StatelessWidget {
                                   Container(
                                     alignment: Alignment.center,
                                     height: titleHeight,
-                                    color: _color.withOpacity(0.2),
+                                    decoration: BoxDecoration(
+                                      color: _indicatorColor.withAlpha(100),
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft:
+                                            Radius.circular(borderRadius),
+                                        bottomRight:
+                                            Radius.circular(borderRadius),
+                                      ),
+                                    ),
                                     child: Text(
                                       title ?? '',
                                       style: titleStyle ??
@@ -164,6 +154,37 @@ class DashboardTile extends StatelessWidget {
                                   ),
                               ]),
                         ),
+                        if (avatarChild != null)
+                          Positioned(
+                            top: avatarMargin,
+                            left: avatarMargin,
+                            child: Container(
+                              width: avatarSize,
+                              height: avatarSize,
+                              decoration: BoxDecoration(
+                                color: avatarColor ?? _color.withOpacity(0.5),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(borderRadius),
+                                  bottomRight: Radius.circular(avatarRadius),
+                                ),
+                              ),
+                              child: avatarChild,
+                              alignment: Alignment.center,
+                            ),
+                          ),
+                        if (image != null)
+                          Positioned(
+                            bottom: this.titleHeight / 2,
+                            right: 4,
+                            child: Container(
+                                color: Colors.transparent, child: image),
+                          ),
+                        if (icon != null)
+                          Positioned(
+                            left: 10,
+                            top: 10,
+                            child: icon,
+                          ),
                       ],
                     ),
                   ));

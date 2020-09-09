@@ -233,7 +233,7 @@ class PaginatedGrid extends StatefulWidget {
   PaginatedGrid({
     Key key,
     this.controller,
-    this.dataRowHeight = kMinInteractiveDimension * .70,
+    this.dataRowHeight = kMinInteractiveDimension * .80,
     this.headingRowHeight = kMinInteractiveDimension,
     this.headingRowColor,
     this.horizontalMargin = 10,

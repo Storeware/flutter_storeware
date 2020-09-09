@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:universal_io/io.dart';
+import 'local_notification.dart';
 
 class FBMessaging extends FBMessagingInterface {
   FBMessaging();

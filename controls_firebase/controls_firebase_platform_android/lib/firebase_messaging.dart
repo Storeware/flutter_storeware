@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:universal_io/io.dart';
-import 'local_notification.dart';
+import 'local_notifications.dart';
 
 class FBMessaging extends FBMessagingInterface {
   FBMessaging();
@@ -20,22 +20,43 @@ class FBMessaging extends FBMessagingInterface {
 
   //@override
   Future<void> init(String keyPair) async {
+    /// inicializa  LocalNotification
+    this.localNotification = LocalNotifications();
+
     // no android o keyPair vem do arquivo de configuração google-services.json
     _mc = FirebaseMessaging();
     if (Platform.isIOS) iOSPermission();
 
-    //_mc.setAutoInitEnabled(true);
-    //_mc.configure();
+    _mc.setAutoInitEnabled(true);
     _mc.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print("on message $message");
-        _controller.add(message);
-        LocalNotifications.showNotification(title: '', body: '', payload: '');
+        //_controller.sink.add(message);
+        goMessage(message);
       },
       onBackgroundMessage: myBackgroundMessageHandler,
-      onResume: (Map<String, dynamic> message) async {},
-      onLaunch: (Map<String, dynamic> message) async {},
+      onResume: (Map<String, dynamic> message) async {
+        print('onResumo $message');
+        _controller.sink.add(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('onLaunch $message');
+        _controller.sink.add(message);
+      },
     );
+  }
+
+  var localNotification;
+  Future<void> goMessage(message) async {
+    try {
+      var notification = message['notification'];
+      var title = notification['title'];
+      var body = notification['body'];
+      var data = message['data'];
+      if (this.localNotification != null)
+        this.localNotification.showNotification(title: title, body: body);
+    } catch (err) {
+      print('$err');
+    }
   }
 
   Future<dynamic> myBackgroundMessageHandler(

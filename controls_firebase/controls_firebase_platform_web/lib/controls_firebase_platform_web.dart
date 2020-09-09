@@ -249,7 +249,7 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
     return await googleSignIn.isSignedIn();
   }
 
-  FirebaseUser currentUser;
+  User currentUser;
   @override
   Future<String> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -260,15 +260,15 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    FirebaseUser user = authResult.user;
-    currentUser = await _auth.currentUser();
+    final authResult = await _auth.signInWithCredential(credential);
+    User user = authResult.user;
+    currentUser = await _auth.currentUser;
     assert(user.uid == currentUser.uid);
     return 'signInWithGoogle succeeded: $user';
   }
 
   @override
-  FirebaseUser getCurrentUser() {
+  User getCurrentUser() {
     return currentUser;
   }
 

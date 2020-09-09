@@ -26,7 +26,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   init(options) async {
     try {
       /// a configuração é feita no ambiente
-      app = api.FirebaseApp.instance;
+      app = await api.Firebase.initializeApp();
       if (app == null)
         app = await api.FirebaseApp.configure(
             name: 'DEFAULT',

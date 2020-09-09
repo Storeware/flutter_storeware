@@ -91,7 +91,9 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
         .get()
         .then((fb.DocumentSnapshot x) {
       if (!x.exists) return null;
-      return {"id": x.documentID, ...x.data};
+      //Map<String, dynamic> r = x.data();
+      //r['id'] = x.documentID;
+      return {"id": x.documentID, ...x.data()};
     });
   }
 
@@ -105,7 +107,10 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     data.removeWhere((k, v) => k == "id");
     Map<String, dynamic> d = data;
     d['dtatualiz'] = DateTime.now().toIso8601String();
-    return store.collection(collection).document(doc).setData(d, merge: merge);
+    return store
+        .collection(collection)
+        .document(doc)
+        .setData(d, fb.SetOptions(merge: merge));
   }
 
   @override
@@ -114,7 +119,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     fb.Query rst = (where != null) ? where(ref) : ref;
     return rst.getDocuments().then((fb.QuerySnapshot doc) {
       return doc.documents.map((f) {
-        return {"id": f.documentID, ...f.data};
+        return {"id": f.documentID, ...f.data()};
       }).toList();
     });
   }
@@ -256,7 +261,7 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
     return await googleSignIn.isSignedIn();
   }
 
-  FirebaseUser currentUser;
+  User currentUser;
   @override
   Future<String> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -267,15 +272,15 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
-    final AuthResult authResult = await _auth.signInWithCredential(credential);
-    FirebaseUser user = authResult.user;
-    currentUser = await _auth.currentUser();
+    final authResult = await _auth.signInWithCredential(credential);
+    User user = authResult.user;
+    currentUser = await _auth.currentUser;
     assert(user.uid == currentUser.uid);
     return 'signInWithGoogle succeeded: $user';
   }
 
   @override
-  FirebaseUser getCurrentUser() {
+  User getCurrentUser() {
     return currentUser;
   }
 

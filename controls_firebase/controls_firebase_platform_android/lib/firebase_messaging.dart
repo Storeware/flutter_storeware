@@ -1,12 +1,13 @@
 import 'dart:async';
-import 'package:firebase/firebase.dart' as firebase;
-//import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
+import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:universal_io/io.dart';
 
-class FBMessaging {
-  //extends FBMessagingInterface {
+class FBMessaging extends FBMessagingInterface {
   FBMessaging();
-  firebase.Messaging _mc;
-  String _token;
+
+  FirebaseMessaging _mc;
+  String token;
 
   final _controller = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get stream => _controller.stream;
@@ -18,24 +19,40 @@ class FBMessaging {
 
   //@override
   Future<void> init(String keyPair) async {
-    _mc = firebase.messaging();
-    _mc.usePublicVapidKey(keyPair); // 'FCM_SERVER_KEY');
-    _mc.onMessage.listen((event) {
-      _controller.add(event?.data);
-    });
+    // no android o keyPair vem do arquivo de configuração google-services.json
+    _mc = FirebaseMessaging();
+    if (Platform.isIOS) iOSPermission();
+
+    //_mc.setAutoInitEnabled(true);
+    _mc.configure();
+    /* _mc.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("on message $message");
+        _controller.add(message);
+      },
+      onResume: (Map<String, dynamic> message) async {},
+      onLaunch: (Map<String, dynamic> message) async {},
+    );*/
   }
 
   @override
   Future requestPermission() {
-    return _mc.requestPermission();
+    return null;
+  }
+
+  void iOSPermission() {
+    _mc.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true));
+    _mc.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
   }
 
   @override
   Future<String> getToken([bool force = false]) async {
-    if (force || _token == null) {
-      await requestPermission();
-      _token = await _mc.getToken();
-    }
-    return _token;
+    return _mc.getToken().then((tkn) {
+      token = tkn;
+      return tkn;
+    });
   }
 }

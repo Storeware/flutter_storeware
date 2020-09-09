@@ -11,12 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   
-  #google_sign_in: 
-  #flutter_cache_manager: 
-  #firebase_core: 
-  #cloud_firestore: 
-  #firebase_storage: 
-  #firebase_auth: 
+  flutter_cache_manager:
+  google_sign_in:
+  firebase_auth:
+  firebase_core:
+  firebase_storage:
+  firebase_messaging:
+  cloud_firestore:
+  
   
   controls_firebase_platform_interface:
     git:

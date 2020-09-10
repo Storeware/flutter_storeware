@@ -254,8 +254,12 @@ class RestClient {
   bool silent = false;
 
   formataMensagemErro(e) {
-    String erro = e?.error?.osError?.message ?? '';
-    //if (erro.isEmpty) erro += '${e?.error ?? ''}';
+    String erro = '';
+    try {
+      erro = e?.error?.osError?.message ?? '';
+    } catch (e) {
+      /// nada a fazer;
+    }
     if (erro.isEmpty) erro += '${e?.response?.statusCode ?? ''}';
     if (erro.isEmpty) erro += '${e?.response?.statusMessage ?? ''}';
     if (erro.isEmpty) erro = '${e?.message ?? ''}';

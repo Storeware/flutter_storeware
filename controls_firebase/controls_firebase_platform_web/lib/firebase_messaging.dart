@@ -34,7 +34,8 @@ class FBMessaging extends FBMessagingInterface {
 
       _controller.add({
         "notification": {"title": title, "body": body},
-        "data": data
+        "show": true
+        //"data": data - web retorna objeto nao compativel
       });
 
       //if (this.localNotification != null)

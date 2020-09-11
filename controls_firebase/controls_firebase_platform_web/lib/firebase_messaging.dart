@@ -20,8 +20,29 @@ class FBMessaging extends FBMessagingInterface {
     _mc = firebase.messaging();
     _mc.usePublicVapidKey(keyPair); // 'FCM_SERVER_KEY');
     _mc.onMessage.listen((event) {
-      _controller.add(event?.data);
+      //_controller.add(event?.data);
+      goMessage(event);
     });
+  }
+
+  Future<void> goMessage(message) async {
+    try {
+      var notification = message.notification;
+      var title = notification.title;
+      var body = notification.body;
+      var data = message.data;
+
+      _controller.add({
+        "notification": {"title": title, "body": body},
+        "data": data
+      });
+
+      //if (this.localNotification != null)
+      //  this.localNotification.showNotification(title: title, body: body);
+
+    } catch (err) {
+      print('$err');
+    }
   }
 
   @override

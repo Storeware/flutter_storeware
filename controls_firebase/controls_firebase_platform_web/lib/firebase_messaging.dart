@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'package:firebase/firebase.dart' as firebase;
 import 'package:controls_firebase_platform_interface/firebase_messaging_interface.dart';
+import 'dart:convert';
+import 'dart:html';
+import 'package:http/browser_client.dart';
+import 'package:service_worker/window.dart' as sw;
+import 'dart:js' as js;
 
 class FBMessaging extends FBMessagingInterface {
   FBMessaging();
@@ -20,9 +25,17 @@ class FBMessaging extends FBMessagingInterface {
     _mc = firebase.messaging();
     _mc.usePublicVapidKey(keyPair); // 'FCM_SERVER_KEY');
     _mc.onMessage.listen((event) {
-      //_controller.add(event?.data);
       goMessage(event);
     });
+    _mc.onTokenRefresh.listen((token) {
+      if (onTokenRefresh != null) {
+        onTokenRefresh(token);
+      }
+    });
+  }
+
+  showNotification(title, body, data) {
+    // js.context.callMethod('showNotification', [title, body, data]);
   }
 
   Future<void> goMessage(message) async {
@@ -31,16 +44,12 @@ class FBMessaging extends FBMessagingInterface {
       var title = notification.title;
       var body = notification.body;
       var data = message.data;
-
       _controller.add({
         "notification": {"title": title, "body": body},
         "show": true
-        //"data": data - web retorna objeto nao compativel
+        //"data": TODO: data - web retorna objeto nao compativel
       });
-
-      //if (this.localNotification != null)
-      //  this.localNotification.showNotification(title: title, body: body);
-
+      showNotification(title, body, data);
     } catch (err) {
       print('$err');
     }

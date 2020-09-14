@@ -7,6 +7,7 @@ class DateTimePickerFormField extends StatefulWidget {
   final bool dateOnly;
   final DateTime initialValue;
   final DateTime firstDate;
+  final DateTime lastDate;
   final Function(DateTime) validator;
   final Function(DateTime) onChanged;
   final Function(DateTime) onSaved;
@@ -14,11 +15,13 @@ class DateTimePickerFormField extends StatefulWidget {
   final Widget suffix;
   final InputDecoration decoration;
   final bool showResetIcon;
+  final DatePickerEntryMode initialEntryMode;
   DateTimePickerFormField(
       {Key key,
       this.format,
       this.decoration,
       this.dateOnly,
+      this.initialEntryMode = DatePickerEntryMode.input,
       this.extended = false,
       this.showResetIcon = true,
       this.initialValue,
@@ -26,7 +29,8 @@ class DateTimePickerFormField extends StatefulWidget {
       this.validator,
       this.onChanged,
       this.onSaved,
-      this.suffix})
+      this.suffix,
+      this.lastDate})
       : super(key: key);
   @override
   _DateTimePickerFormFieldState createState() =>
@@ -40,7 +44,7 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
   bool autoValidate = false;
   bool readOnly = true;
   bool showResetIcon;
-  DateTime value = DateTime.now();
+  //DateTime value = DateTime.now();
   int changedCount = 0;
   int savedCount = 0;
 
@@ -63,17 +67,29 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
         decoration: widget.decoration,
         format: format,
         onShowPicker: (context, currentValue) async {
-          //print('date_time_picker_form->CurrentValue: $currentValue');
+          print('date_time_picker_form->CurrentValue: $currentValue');
+          final today = DateTime.now();
           final date = await showDatePicker(
-              context: context,
-              firstDate: DateTime(1900),
-              initialDate: currentValue ?? DateTime.now(),
-              lastDate: DateTime(2100));
+            context: context,
+            firstDate: widget.firstDate ?? today.add(Duration(days: -180)),
+            initialDate: currentValue ?? today.add(Duration(days: 360)),
+            lastDate: widget.lastDate ??
+                DateTime(
+                  DateTime.now().year,
+                ),
+            initialEntryMode: widget.initialEntryMode,
+          );
+
           if (date != null) {
             final time = await showTimePicker(
               context: context,
               initialTime:
                   TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+              useRootNavigator: true,
+              //initialEntryMode:
+              //    widget.initialEntryMode == DatePickerEntryMode.input
+              //        ? TimePickerEntryMode.input
+              //        : TimePickerEntryMode.dial,
             );
             return DateTimeField.combine(date, time);
           } else {
@@ -87,14 +103,16 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
         },
         initialValue: initialValue,
         onChanged: (date) => setState(() {
-          value = date;
+          initialValue = date;
+          print(['onChanged', date]);
           changedCount++;
-          if (widget.onChanged != null) widget.onChanged(value);
+          if (widget.onChanged != null) widget.onChanged(initialValue);
         }),
         onSaved: (date) => setState(() {
-          value = date;
+          print(['onChanged', date]);
+          initialValue = date;
           savedCount++;
-          if (widget.onSaved != null) widget.onSaved(value);
+          if (widget.onSaved != null) widget.onSaved(initialValue);
         }),
         resetIcon: showResetIcon ? Icon(Icons.delete) : null,
         readOnly: readOnly,

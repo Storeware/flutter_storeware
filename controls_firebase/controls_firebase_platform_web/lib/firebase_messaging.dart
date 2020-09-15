@@ -27,11 +27,11 @@ class FBMessaging extends FBMessagingInterface {
     _mc.onMessage.listen((event) {
       goMessage(event);
     });
-    _mc.onTokenRefresh.listen((token) {
+    /*_mc.onTokenRefresh.listen((token) {
       if (onTokenRefresh != null) {
         onTokenRefresh(token);
       }
-    });
+    });*/
   }
 
   showNotification(title, body, data) {

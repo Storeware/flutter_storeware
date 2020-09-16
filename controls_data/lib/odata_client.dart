@@ -536,7 +536,7 @@ abstract class ODataModelClass<T extends DataItem> {
     });
   }
 
-  listNoCached(
+  Future<List<dynamic>> listNoCached(
       {filter,
       resource,
       join,
@@ -563,7 +563,7 @@ abstract class ODataModelClass<T extends DataItem> {
     return search(
             resource: collectionName, select: columns, filter: filter, top: 1)
         .then((ODataResult r) {
-      return r.first;
+      return r.rows > 0 ? r.first : null;
     });
   }
 
@@ -614,12 +614,14 @@ abstract class ODataModelClass<T extends DataItem> {
     try {
       d = removeExternalKeys(d);
       return API.put(collectionName, d).then((x) {
+        API.client.notifyLog.notify(x.toString());
         if (CC != null) CC.put(collectionName, d);
         afterChangeEvent(d);
         return x;
       });
     } catch (e) {
       ErrorNotify.send('$e');
+      return null;
       rethrow;
     }
   }

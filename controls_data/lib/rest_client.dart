@@ -237,6 +237,7 @@ class RestClient {
       else
         throw "Method inválido";
       //print('Response: $resp');
+      notifyLog.notify('statusCode: $statusCode - $resp');
       _decodeResp(resp);
 
       if (statusCode == 200) {
@@ -246,7 +247,7 @@ class RestClient {
       }
     } catch (e) {
       var error = formataMensagemErro(e);
-      if (!silent) notifyError.send(error);
+      if (!silent) notifyError.send('$error [$resp]');
       return throw error;
     }
   }
@@ -254,22 +255,31 @@ class RestClient {
   bool silent = false;
 
   formataMensagemErro(e) {
-    String erro = '';
-    try {
-      erro = e?.error?.osError?.message ?? '';
-    } catch (e) {
-      /// nada a fazer;
-    }
-    if (erro.isEmpty) erro += '${e?.response?.statusCode ?? ''}';
-    if (erro.isEmpty) erro += '${e?.response?.statusMessage ?? ''}';
-    if (erro.isEmpty) erro = '${e?.message ?? ''}';
-    if (erro.isEmpty) erro = '${e.toString()}';
-    if (erro.isEmpty) erro = '${e?.response?.data ?? ''}';
+    if ((e?.response?.statusCode ?? 0) == 403)
+      return 'A solicitação foi recusada pelo servidor (403)';
+    if ((e?.response?.statusCode ?? 0) == 404)
+      return 'A solicitação não foi encontrada (404)';
 
-    if (erro.contains('PRIMARY KEY'))
-      erro = 'Operação bloqueada pela chave de identificação|$erro';
-    if (erro.contains('FOREIGN KEY'))
-      erro = 'Uma chave externa bloqueou a operação |$erro';
+    String erro = '${e.message}';
+    try {
+      try {
+        erro += e?.error?.osError?.message ?? '';
+      } catch (e) {
+        /// nada a fazer;
+      }
+      if (erro.isEmpty) erro += '${e?.response?.statusCode ?? ''}';
+      if (erro.isEmpty) erro += '${e?.response?.statusMessage ?? ''}';
+      if (erro.isEmpty) erro += '${e?.message ?? ''}';
+      if (erro.isEmpty) erro += '${e.toString()}';
+      if (erro.isEmpty) erro += '${e?.response?.data ?? ''}';
+
+      if (erro.contains('PRIMARY KEY'))
+        erro = 'Operação bloqueada pela chave de identificação|$erro';
+      if (erro.contains('FOREIGN KEY'))
+        erro = 'Uma chave externa bloqueou a operação |$erro';
+    } catch (e) {
+      //
+    }
     return erro;
   }
 

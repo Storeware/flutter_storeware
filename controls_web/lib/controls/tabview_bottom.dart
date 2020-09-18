@@ -119,11 +119,17 @@ class _TabViewBottomState extends State<TabViewBottom> {
                                                     child: Text(choice.label,
                                                         overflow: TextOverflow
                                                             .ellipsis,
-                                                        style: theme.tabBarTheme
-                                                            .labelStyle
-                                                            .copyWith(
-                                                                color:
-                                                                    _iconColor))),
+                                                        style: theme
+                                                            ?.tabBarTheme
+                                                            ?.labelStyle
+                                                            ?.copyWith(
+                                                                color: _iconColor ??
+                                                                    theme
+                                                                        .textTheme
+                                                                        .caption
+                                                                        .copyWith(
+                                                                            color:
+                                                                                _iconColor)))),
                                               Container(
                                                   height: 2,
                                                   width: choice.width ?? 60,

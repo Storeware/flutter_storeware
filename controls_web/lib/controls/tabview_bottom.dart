@@ -15,6 +15,7 @@ class TabViewBottom extends StatefulWidget {
   final List<Widget> actions;
   final Widget bottomNavigationBar;
   final Widget appBar;
+  final EdgeInsets padding;
   const TabViewBottom({
     Key key,
     this.choices,
@@ -23,7 +24,8 @@ class TabViewBottom extends StatefulWidget {
     this.tabColor = Colors.transparent,
     this.color,
     this.iconColor,
-    this.tagColor = Colors.amber,
+    this.padding,
+    this.tagColor,
     this.indicatorColor,
     this.tabHeight = kToolbarHeight,
     this.actions,
@@ -48,7 +50,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
 //    ValueNotifier<Widget> activeChild =
 //        ValueNotifier<Widget>(getChild(activeIndex));
     ThemeData theme = Theme.of(context);
-    Color _color = widget.color ?? theme.appBarTheme.color;
+    Color _color = widget.color ?? theme.bottomAppBarColor;
     Color _tabColor =
         widget.tabColor ?? theme.appBarTheme.color ?? Colors.amber;
     Color _iconColor = widget.iconColor ?? theme.tabBarTheme.labelColor;
@@ -71,7 +73,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
         },
       )),
       Padding(
-        padding: const EdgeInsets.all(4.0),
+        padding: widget.padding ?? EdgeInsets.all(0.0),
         child: Column(
           children: [
             Container(

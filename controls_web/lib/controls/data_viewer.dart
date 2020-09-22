@@ -400,25 +400,28 @@ class _DataViewerState extends State<DataViewer> {
     bool isSmall = size.width < 500;
     int nActions = widget.actions?.length ?? 0;
     double bwidth = 350.0 - (isSmall ? ((nActions) * kToolbarHeight) : 0.0);
-    return LayoutBuilder(builder: (ctr, sizes) {
-      return Form(
-        child: SafeArea(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (widget.title != null) widget.title,
-              Container(
-                  //height: kToolbarHeight + 4,
-                  width: sizes.maxWidth,
-                  alignment: Alignment.center,
-                  child: Align(
-                    child: Container(
-                      width: bwidth,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
+
+    ///return LayoutBuilder(builder: (ctr, sizes) {
+    return Form(
+      // child: SafeArea(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.title != null) widget.title,
+          Container(
+              //height: kToolbarHeight + 4,
+              //width: sizes.maxWidth,
+              alignment: Alignment.center,
+              child: Align(
+                child: Container(
+                  width: bwidth,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                          height: kToolbarHeight + 4,
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (widget.leading != null) widget.leading,
@@ -442,7 +445,7 @@ class _DataViewerState extends State<DataViewer> {
                                 width: 90,
                                 child: StrapButton(
                                     text: 'abrir',
-                                    height: 40,
+                                    height: 30,
                                     onPressed: () {
                                       controller.page = 1;
                                       controller.filter =
@@ -455,17 +458,17 @@ class _DataViewerState extends State<DataViewer> {
                                     }),
                               ),
                             ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  )),
-              if (widget.subtitle != null) widget.subtitle,
-            ],
-          ),
-        ),
-      );
-    });
+                          )),
+                    ],
+                  ),
+                ),
+              )),
+          if (widget.subtitle != null) widget.subtitle,
+        ],
+      ),
+      //  ),
+    );
+    //});
   }
 
   @override

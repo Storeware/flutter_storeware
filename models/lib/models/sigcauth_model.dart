@@ -8,6 +8,8 @@ import 'package:controls_data/rest_client.dart';
 import 'package:controls_extensions/extensions.dart';
 
 toDouble(dynamic value) {
+  if (value is double) return value;
+  if (value is int) return value + 0.0;
   return double.tryParse(value ?? '0') ?? 0;
 }
 

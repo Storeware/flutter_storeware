@@ -2,8 +2,18 @@ import 'dart:convert';
 
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
-import 'package:controls_data/odata_firestore.dart';
-import '../widgets/firebird_extensions.dart';
+//import 'package:controls_data/odata_firestore.dart';
+import 'package:controls_data/rest_client.dart';
+//import '../widgets/firebird_extensions.dart';
+import 'package:controls_extensions/extensions.dart';
+
+toDouble(value) {
+  return double.tryParse(value) ?? 0;
+}
+
+toDateTime(value) {
+  return DateTime.tryParse(value) ?? DateTime.now();
+}
 
 class SigcauthItem extends DataItem {
   //int id;
@@ -180,7 +190,7 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
   SigcauthItemModel() {
     collectionName = 'sigcauth';
     super.API = ODataInst();
-    super.CC = CloudV3().client..client.silent = true;
+    //super.CC = CloudV3().client..client.silent = true;
   }
   SigcauthItem newItem() => SigcauthItem();
 
@@ -218,8 +228,9 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
           ' and (exists (select 1 from sigcaut1 k where k.dcto=a.dcto and k.data=a.data and estprod in [$s])) ';
     }
 
-    String filtroItens = ifNotNull(data, " x.data eq '${data.toDateString()}'",
-        " (x.data gt cast('now' as date)-90)");
+    String filtroItens = (data != null)
+        ? " x.data eq '${data.toDateString()}'"
+        : " (x.data gt cast('now' as date)-90)";
 
     if (encerrados != null) {
       if (encerrados) {

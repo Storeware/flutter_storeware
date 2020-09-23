@@ -4,6 +4,15 @@ import 'ACBrUtil.dart' as utils;
 
 /// https://api.flutter.dev/flutter/intl/NumberFormat-class.html
 /// [NumberFormat]
+extension NumExtension on num {
+  num between(num de, num ate) {
+    num valor = this;
+    if (valor > ate) valor = ate;
+    if (valor < de) valor = de;
+    return valor;
+  }
+}
+
 extension DoubleExtension on double {
   String format(String mask, {String lang}) {
     final oCcy = new NumberFormat(mask, lang ?? Intl.defaultLocale);

@@ -12,6 +12,7 @@ class SenhasItem extends DataItem {
   String validade;
   String trocasenha;
   String dtatualiz;
+  String vendedor;
 
   SenhasItem(
       {this.aplicacao,
@@ -38,6 +39,7 @@ class SenhasItem extends DataItem {
     validade = json['validade'];
     trocasenha = json['trocasenha'];
     dtatualiz = json['dtatualiz'];
+    vendedor = json['vendedor'];
     return this;
   }
 
@@ -52,6 +54,7 @@ class SenhasItem extends DataItem {
     data['validade'] = this.validade;
     data['trocasenha'] = this.trocasenha;
     data['dtatualiz'] = this.dtatualiz;
+    data['vendedor'] = this.vendedor;
     return data;
   }
 }

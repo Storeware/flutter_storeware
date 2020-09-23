@@ -7,12 +7,13 @@ import 'package:controls_data/rest_client.dart';
 //import '../widgets/firebird_extensions.dart';
 import 'package:controls_extensions/extensions.dart';
 
-toDouble(value) {
-  return double.tryParse(value) ?? 0;
+toDouble(dynamic value) {
+  return double.tryParse(value ?? '0') ?? 0;
 }
 
 toDateTime(value) {
-  return DateTime.tryParse(value) ?? DateTime.now();
+  return DateTime.tryParse(value ?? DateTime.now().toIso8601String()) ??
+      DateTime.now();
 }
 
 class SigcauthItem extends DataItem {

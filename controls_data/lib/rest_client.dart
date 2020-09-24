@@ -259,8 +259,11 @@ class RestClient {
       return 'A solicitação foi recusada pelo servidor (403)';
     if ((e?.response?.statusCode ?? 0) == 404)
       return 'A solicitação não foi encontrada (404)';
+    String title = '${e.message}';
+    String erro = (title.isNotEmpty ? '${title}|' : '') +
+        '${e?.response?.data['error'] ?? ''}';
 
-    String erro = '${e.message}';
+    if (erro.isEmpty) erro += '${e.message}';
     try {
       try {
         erro += e?.error?.osError?.message ?? '';

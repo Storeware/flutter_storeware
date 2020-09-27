@@ -23,7 +23,7 @@ class TabBarViewDynamic extends StatefulWidget {
 }
 
 class _TabViewBottomState extends State<TabBarViewDynamic>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   Widget getChild(int idx) {
     if (mounted && (idx == _currentPosition)) {
       return widget.builder(idx);
@@ -32,6 +32,9 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
   }
 
   TabController controller;
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     _currentPosition = widget.activeIndex ?? 0;
@@ -62,9 +65,14 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
 
   int _currentCount = 0;
   int _currentPosition = 0;
+  int _lastPosition = -1;
+
+/*
+  /// recarregava sem necessidade
   @override
   void didUpdateWidget(TabBarViewDynamic oldWidget) {
-    if (_currentCount != widget.itemCount) {
+    if (oldWidget != this.widget) if (_currentCount != widget.itemCount ||
+        (_currentPosition != _lastPosition)) {
       controller.animation.removeListener(onScroll);
       controller.removeListener(onPositionChange);
       controller.dispose();
@@ -92,6 +100,7 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
           vsync: this,
           initialIndex: _currentPosition,
         );
+        _lastPosition = _currentPosition;
         controller.addListener(onPositionChange);
         controller.animation.addListener(onScroll);
         if (widget.onControllerChange != null)
@@ -103,7 +112,7 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
 
     super.didUpdateWidget(oldWidget);
   }
-
+*/
   onPositionChange() {
     if (!controller.indexIsChanging) {
       _currentPosition = controller.index;

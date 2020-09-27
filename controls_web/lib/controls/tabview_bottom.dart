@@ -43,12 +43,17 @@ class _TabViewBottomState extends State<TabViewBottom> {
   }
 
   TabController tabController;
+  ValueNotifier<int> index;
+  @override
+  void initState() {
+    super.initState();
+    index = ValueNotifier<int>(widget.activeIndex);
+  }
+
+  int activeIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<int> index = ValueNotifier<int>(widget.activeIndex);
-//    ValueNotifier<Widget> activeChild =
-//        ValueNotifier<Widget>(getChild(activeIndex));
     ThemeData theme = Theme.of(context);
     Color _color = widget.color ?? theme.bottomAppBarColor;
     Color _tabColor =
@@ -95,6 +100,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
                       return ValueListenableBuilder<int>(
                         valueListenable: index,
                         builder: (BuildContext context, int idx, Widget child) {
+                          activeIndex = idx;
                           return Padding(
                             padding: const EdgeInsets.only(
                                 left: 4.0, right: 0, top: 4.0),

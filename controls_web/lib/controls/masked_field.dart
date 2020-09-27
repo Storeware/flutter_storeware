@@ -285,7 +285,9 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
           decoration: InputDecoration(
               labelText: '${widget.label}',
               helperText: !_showHelperText
-                  ? (widget.sample != null) ? 'Ex: ${widget.sample}' : null
+                  ? (widget.sample != null)
+                      ? 'Ex: ${widget.sample}'
+                      : null
                   : null,
               hintStyle: theme.inputDecorationTheme.hintStyle),
           keyboardType: widget.keyboardType,
@@ -658,6 +660,11 @@ class MaskedDropDownFormField extends StatelessWidget {
       /// se branco não tem na lista, adicionar
       if (!items.contains(_value)) items.insert(0, _value);
     }
+    // remover repetidos
+    List<String> _items = [];
+    for (var i = 0; i < items.length; i++) {
+      if (!_items.contains(items[i])) _items.add(items[i]);
+    }
 
     ValueNotifier<String> valueChange = ValueNotifier<String>(_value);
     return Container(
@@ -682,7 +689,7 @@ class MaskedDropDownFormField extends StatelessWidget {
                 child: Theme(
                   data: theme.copyWith(canvasColor: theme.primaryColorLight),
                   child: DropdownButton(
-                    items: items.map((String label) {
+                    items: _items.map((String label) {
                       return DropdownMenuItem(
                         key: UniqueKey(),
                         value: label ?? '',

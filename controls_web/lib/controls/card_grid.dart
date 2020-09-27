@@ -255,70 +255,71 @@ class _CardGridEditRowState extends State<CardGridEditRow> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
-      body: Container(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                for (var item in widget.controller.columns)
-                  if (item != null)
-                    (item.editBuilder != null)
-                        ? item.editBuilder(
-                            widget.controller, item, p[item.name], p)
-                        : TextFormField(
-                            autofocus: canFocus(item),
-                            maxLines: item.maxLines,
-                            maxLength: item.maxLength,
-                            enabled: canEdit(item),
-                            initialValue: (item.onGetValue != null)
-                                ? item.onGetValue(p[item.name])
-                                : (p[item.name] ?? '').toString(),
-                            style: TextStyle(
-                                fontSize: 16, fontStyle: FontStyle.normal),
-                            decoration: InputDecoration(
-                              labelText: item.label ?? item.name,
-                            ),
-                            validator: (value) {
-                              if (item.onValidate != null)
-                                return item.onValidate(value);
-                              if (item.required) if (value.isEmpty) {
-                                return (item.editInfo.replaceAll(
-                                    '{label}', item.label ?? item.name));
-                              }
+        appBar: AppBar(title: Text(widget.title)),
+        body: SingleChildScrollView(
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    for (var item in widget.controller.columns)
+                      if (item != null)
+                        (item.editBuilder != null)
+                            ? item.editBuilder(
+                                widget.controller, item, p[item.name], p)
+                            : TextFormField(
+                                autofocus: canFocus(item),
+                                maxLines: item.maxLines,
+                                maxLength: item.maxLength,
+                                enabled: canEdit(item),
+                                initialValue: (item.onGetValue != null)
+                                    ? item.onGetValue(p[item.name])
+                                    : (p[item.name] ?? '').toString(),
+                                style: TextStyle(
+                                    fontSize: 16, fontStyle: FontStyle.normal),
+                                decoration: InputDecoration(
+                                  labelText: item.label ?? item.name,
+                                ),
+                                validator: (value) {
+                                  if (item.onValidate != null)
+                                    return item.onValidate(value);
+                                  if (item.required) if (value.isEmpty) {
+                                    return (item.editInfo.replaceAll(
+                                        '{label}', item.label ?? item.name));
+                                  }
 
-                              return null;
-                            },
-                            onSaved: (x) {
-                              if (item.onSetValue != null) {
-                                p[item.name] = item.onSetValue(x);
-                                return;
-                              }
-                              if (p[item.name] is int)
-                                p[item.name] = int.tryParse(x);
-                              else if (p[item.name] is double)
-                                p[item.name] = double.tryParse(x);
-                              else if (p[item.name] is bool)
-                                p[item.name] = x;
-                              else
-                                p[item.name] = x;
-                            }),
-                Divider(),
-                FlatButton(
-                  child: Text('Salvar'),
-                  onPressed: () {
-                    _save(context);
-                  },
+                                  return null;
+                                },
+                                onSaved: (x) {
+                                  if (item.onSetValue != null) {
+                                    p[item.name] = item.onSetValue(x);
+                                    return;
+                                  }
+                                  if (p[item.name] is int)
+                                    p[item.name] = int.tryParse(x);
+                                  else if (p[item.name] is double)
+                                    p[item.name] = double.tryParse(x);
+                                  else if (p[item.name] is bool)
+                                    p[item.name] = x;
+                                  else
+                                    p[item.name] = x;
+                                }),
+                    Divider(),
+                    FlatButton(
+                      child: Text('Salvar'),
+                      onPressed: () {
+                        _save(context);
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   _save(context) {

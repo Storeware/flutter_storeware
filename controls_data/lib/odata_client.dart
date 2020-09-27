@@ -578,7 +578,7 @@ abstract class ODataModelClass<T extends DataItem> {
 
   removeExternalKeys(Map<String, dynamic> dados) {
     externalKeys.split(',').forEach((key) {
-      dados.remove(key);
+      if (key != 'id') dados.remove(key);
     });
     return dados;
   }

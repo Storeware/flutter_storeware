@@ -292,6 +292,7 @@ class ProgressDialog {
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
     }
+    
 
     _dialogMessage = message ?? _dialogMessage;
     _maxProgress = maxProgress ?? _maxProgress;

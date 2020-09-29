@@ -911,12 +911,14 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   final int maxLines;
   final Function(T) onChanged;
   final Function(bool, T) onFocusChange;
+  final TextInputType keyboardType;
 
   const MaskedSearchFormField(
       {Key key,
       this.initialValue,
       this.onGetValue,
       this.decoration,
+      this.keyboardType,
       this.validator,
       this.onSaved,
       this.autofocus = false,
@@ -977,7 +979,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
         child: TextFormField(
             autofocus: autofocus,
             controller: _controller,
-            keyboardType: getKeyboardType(),
+            keyboardType: keyboardType ?? getKeyboardType(),
             style: style ??
                 theme.textTheme
                     .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),

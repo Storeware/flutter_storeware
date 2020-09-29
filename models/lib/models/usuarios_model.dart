@@ -57,6 +57,10 @@ class SenhasItem extends DataItem {
     data['vendedor'] = this.vendedor;
     return data;
   }
+
+  get bool isAdmin=> grupo == 'Administrdor';
+  get bool isGestor => grupo == 'Gerente';
+  get bool isOperador => (!isAdmin && !isGestor);
 }
 
 class SenhasItemModel extends ODataModelClass<SenhasItem> {

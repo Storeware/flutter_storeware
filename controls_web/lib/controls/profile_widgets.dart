@@ -94,6 +94,7 @@ class DrawerTile extends StatelessWidget {
   final Widget image;
   final String title;
   final Widget subtitle;
+  final bool enabled;
   final Function() onPressed;
 
   DrawerTile(
@@ -102,11 +103,14 @@ class DrawerTile extends StatelessWidget {
       this.onPressed,
       this.leading,
       this.trailing,
+      this.enabled = true,
       this.subtitle});
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+    Color _color = (enabled) ? theme.popupMenuTheme.color : theme.dividerColor;
+
     return ListTile(
       onTap: () {
         if (onPressed != null) onPressed();
@@ -116,6 +120,7 @@ class DrawerTile extends StatelessWidget {
         title,
         style: theme.textTheme.caption.copyWith(
           fontSize: 14,
+          color: _color,
         ),
       ),
       subtitle: subtitle,

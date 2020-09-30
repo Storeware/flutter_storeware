@@ -58,9 +58,10 @@ class SenhasItem extends DataItem {
     return data;
   }
 
-  get bool isAdmin=> grupo == 'Administrdor';
-  get bool isGestor => grupo == 'Gerente';
-  get bool isOperador => (!isAdmin && !isGestor);
+  get isAdmin => grupo == 'Administrador';
+  get isGestor => 'Gerente,Diretor'.contains(grupo);
+  get isOperador => (!isAdmin && !isGestor);
+  get isReadOnly => 'Consulta'.contains(grupo);
 }
 
 class SenhasItemModel extends ODataModelClass<SenhasItem> {

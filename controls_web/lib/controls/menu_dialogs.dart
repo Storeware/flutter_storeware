@@ -7,10 +7,12 @@ class MenuChoice {
   final String title;
   final int index;
   final Function(BuildContext) builder;
+  final bool enabled;
   MenuChoice({
     this.icon,
     this.title,
     this.index,
+    this.enabled = true,
     this.builder,
   });
 }
@@ -61,9 +63,10 @@ class _MenuDialogState extends State<MenuDialog> {
 
 //cria cada item do menu
   Widget _tiles(String text, IconData icon, int item, Function onTap) {
+    Color _color = enabled ? theme.popupMenuTheme.color : theme.dividerColor;
     return ListTile(
         leading: (icon != null) ? Icon(icon) : null,
-        onTap: onTap,
+        onTap: enabled ? onTap : null,
         selected: item == itemSelect,
         title: Align(
             alignment: Alignment.centerLeft,
@@ -71,7 +74,9 @@ class _MenuDialogState extends State<MenuDialog> {
                 child: Text(text,
                     textAlign: TextAlign.left,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16)))));
+                        color: _color,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16)))));
   }
 
   ThemeData theme;

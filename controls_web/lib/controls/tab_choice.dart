@@ -7,6 +7,7 @@ class TabChoice<T> {
   String label;
   Widget title;
   bool visible;
+  bool enabled;
   int index;
   Widget image;
   Widget child;
@@ -35,6 +36,7 @@ class TabChoice<T> {
       this.trailing,
       this.selectedIcon,
       this.primary = false,
+      this.enabled = true,
       this.visible = true})
       : assert(items != null ||
             (label ?? '') == '-' ||

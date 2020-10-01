@@ -112,9 +112,11 @@ class DrawerTile extends StatelessWidget {
     Color _color = (enabled) ? theme.popupMenuTheme.color : theme.dividerColor;
 
     return ListTile(
-      onTap: (!enabled) () {
-        if (onPressed != null) onPressed();
-      },
+      onTap: (!enabled)
+          ? null
+          : () {
+              if (onPressed != null) onPressed();
+            },
       leading: leading ?? image,
       title: Text(
         title,

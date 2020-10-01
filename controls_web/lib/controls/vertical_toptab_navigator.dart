@@ -247,16 +247,18 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                   : null),
                         ],
                       ),
-                onTap: () {
-                  var choice = widget.choices[index];
-                  if ((choice.items ?? []).length > 0) {
-                    active.value = index;
-                    //bShowDrownMenu.value = true;
-                  } else {
-                    widget.onSelectItem(index, widget.choices[index]);
-                    active.value = index;
-                  }
-                },
+                onTap: (!widget.choices[index].enabled)
+                    ? null
+                    : () {
+                        var choice = widget.choices[index];
+                        if ((choice.items ?? []).length > 0) {
+                          active.value = index;
+                          //bShowDrownMenu.value = true;
+                        } else {
+                          widget.onSelectItem(index, widget.choices[index]);
+                          active.value = index;
+                        }
+                      },
               ),
             ),
           if (widget.actions != null) ...widget.actions,
@@ -270,10 +272,13 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
         Text(
           widget.choices[index].label,
           overflow: TextOverflow.ellipsis,
-          style: widget.style ??
-              (theme.tabBarTheme?.labelStyle ??
-                      theme.textTheme.button.copyWith(color: theme.buttonColor))
-                  .copyWith(color: _iconColor),
+          style: (!widget.choices[index].enabled)
+              ? TextStyle(color: theme.dividerColor)
+              : widget.style ??
+                  (theme.tabBarTheme?.labelStyle ??
+                          theme.textTheme.button
+                              .copyWith(color: theme.buttonColor))
+                      .copyWith(color: _iconColor),
         );
   }
 
@@ -293,8 +298,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       ],
       onChanged: (index) {
         active.value = mainIndex;
-        if ((items[index].label ?? '') != '-')
-          widget.onSelectItem(index, items[index]);
+        if ((widget.choices[index].enabled)) if ((items[index].label ?? '') !=
+            '-') widget.onSelectItem(index, items[index]);
       },
     ));
   }

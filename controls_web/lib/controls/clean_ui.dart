@@ -527,10 +527,14 @@ class ActionText extends StatelessWidget {
             children: [
               if (child != null) child,
               if (label != null)
-                Text(label, textAlign: TextAlign.center, style: _style),
+                Text(label,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: _style),
               if (sublabel != null)
                 Text(sublabel,
                     textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
                     style: _style.copyWith(
                         fontSize: (_style.fontSize ?? 12) * 0.8))
             ],

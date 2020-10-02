@@ -32,6 +32,7 @@ class HorizontalTabView extends StatelessWidget {
   final Color tagColor;
   final bool isMobile;
   final double tabHeight;
+  //final double tabHeightCompact;
   final AppBar sidebarAppBar;
   final Drawer sidebarDrawer;
   HorizontalTabView({
@@ -43,6 +44,7 @@ class HorizontalTabView extends StatelessWidget {
     this.padding,
     this.width,
     this.tabHeight,
+    //this.tabHeightCompact,
     this.sidebarBackgroundColor,
     this.sidebarType,
     this.controller,
@@ -123,30 +125,42 @@ class HorizontalTabView extends StatelessWidget {
                                         : tabColor,
                                     child: (_sidebarType !=
                                             HorizontalTabViewSiderBarType.show)
-                                        ? MaterialButton(
-                                            padding: EdgeInsets.zero,
-                                            child: Column(
-                                              children: [
-                                                if (choices[index].image !=
-                                                    null)
-                                                  choices[index].image,
-                                                if (choices[index].icon != null)
-                                                  Icon(choices[index].icon,
-                                                      color: _iconColor),
-                                                if (_index.value == index)
-                                                  choices[index].title ??
-                                                      Text(choices[index].label,
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            color: _iconColor,
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                          )),
-                                              ],
-                                            ),
-                                            onPressed: () {
-                                              _index.value = index;
-                                            })
+                                        ? Container(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 4),
+                                            /* height: (_index.value == index)
+                                                ? null
+                                                : tabHeightCompact ?? 40,
+                                           */
+                                            child: MaterialButton(
+                                                padding: EdgeInsets.zero,
+                                                child: Column(
+                                                  children: [
+                                                    if (choices[index].image !=
+                                                        null)
+                                                      choices[index].image,
+                                                    if (choices[index].icon !=
+                                                        null)
+                                                      Icon(choices[index].icon,
+                                                          color: _iconColor),
+                                                    if (_index.value == index)
+                                                      choices[index].title ??
+                                                          Text(
+                                                              choices[index]
+                                                                  .label,
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color:
+                                                                    _iconColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w500,
+                                                              )),
+                                                  ],
+                                                ),
+                                                onPressed: () {
+                                                  _index.value = index;
+                                                }))
                                         : Row(children: [
                                             Container(
                                                 height:

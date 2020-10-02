@@ -117,6 +117,35 @@ class Dialogs {
         ]));
   }
 
+  /// await Dialogs.showWaiting<bool>(context,title:'Processando',onWaiting:(){...},onDone:(v){...});
+  static Future<T> showWaiting<T>(BuildContext context,
+      {Future<T> Function() onWaiting,
+      String title,
+      Function(T) onDone}) async {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(children: [
+            Center(
+                child: Text(title ?? 'Processando',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w500))),
+            FutureBuilder<T>(
+                future: onWaiting(),
+                builder: (a, b) {
+                  print(b.connectionState);
+                  if (b.connectionState == ConnectionState.waiting)
+                    return Align(child: CircularProgressIndicator());
+                  if (onDone != null) onDone(b.data);
+                  Timer.run(() {
+                    Navigator.pop(context, b.data);
+                  });
+                  return Container();
+                })
+          ]);
+        });
+  }
+
   static Future<void> showLoadingDialog(BuildContext context, GlobalKey key,
       {Widget title, Widget content}) async {
     return showDialog<void>(
@@ -292,7 +321,6 @@ class ProgressDialog {
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
     }
-    
 
     _dialogMessage = message ?? _dialogMessage;
     _maxProgress = maxProgress ?? _maxProgress;

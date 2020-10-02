@@ -991,9 +991,10 @@ class MaskedSearchFormField<T> extends StatelessWidget {
                         //    canRequestFocus: false, onKey: (a, b) => false),
                         child: Icon(iconSearch),
                         onTap: () {
-                          onSearch().then((item) {
-                            _controller.text = getValue(item);
-                          });
+                          if (!readOnly)
+                            onSearch().then((item) {
+                              _controller.text = getValue(item);
+                            });
                         })),
             enableSuggestions: true,
             expands: maxLines > 1,

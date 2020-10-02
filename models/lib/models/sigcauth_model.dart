@@ -6,6 +6,7 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/rest_client.dart';
 //import '../widgets/firebird_extensions.dart';
 import 'package:controls_extensions/extensions.dart';
+import '../data/sql_builder.dart';
 
 toDouble(dynamic value) {
   if (value is double) return value;
@@ -313,12 +314,13 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
 
   updateById(SigcauthItem item) {
     var dEnt = toDateTimeSql(item.dtEntRet);
-    return API.execute("""update sigcauth set  
-        cliente = ${item.cliente}, 
-        dtent_ret = '$dEnt', 
-        obs='${item.obs}' ,
-        operacao = '${item.operacao}'
-        where id = ${item.id}"""
-        .replaceAll("'null'", 'null'));
+    Map<String, dynamic> dados = item.toJson();
+    dados.remove('total');
+    dados.remove('estprod');
+    dados.remove('nome');
+    var colunas =
+        'dcto,filial,cliente,filialretira,qtdepessoa,operador,lote,data,dtent_ret,endentr,bairroentr,cidadeentr,estadoentr';
+    return API.execute(
+        SqlBuilder.createSqlUpdate('sigcauth', 'id', dados, colunas: colunas));
   }
 }

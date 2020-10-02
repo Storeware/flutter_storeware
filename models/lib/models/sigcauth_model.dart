@@ -115,39 +115,42 @@ class SigcauthItem extends DataItem {
   }
   @override
   fromMap(Map<String, dynamic> json) {
-    id = json['id'];
-    dcto = json['dcto'];
-    filial = toDouble(json['filial']);
-    cliente = toDouble(json['cliente']);
-    vendedor = json['vendedor'];
-    total = toDouble(json['total']);
-    obs = json['obs'];
-    entrega = json['entrega'];
-    filialretira = toDouble(json['filialretira']);
-    hora = json['hora'];
-    valortroco = json['valortroco'];
-    qtdepessoa = json['qtdepessoa'];
-    operador = json['operador'];
-    lote = toDouble(json['lote']);
-    cobrataxa = json['cobrataxa'];
-    contatravada = json['contatravada'];
-    operacao = json['operacao'];
-    data = toDate(json['data']);
-    dav = json['dav'];
-    registrado = json['registrado'];
-    prevenda = json['prevenda'];
-    baseicmssubst = toDouble(json['baseicmssubst']);
-    icmssubst = toDouble(json['icmssubst']);
-    mesa = json['mesa'];
-    nome = json['nome'];
-    dtEntRet = toDateTime(json['dtent_ret']);
-    endentr = json['endentr'];
-    bairroentr = json['bairroentr'];
-    cidadeentr = json['cidadeentr'];
-    estadoentr = json['estadoentr'];
-    cnpjentr = json['cnpjentr'];
-    estprod = toDouble(json['estprod']);
-
+    try {
+      id = json['id'];
+      dcto = json['dcto'];
+      filial = toDouble(json['filial']);
+      cliente = toDouble(json['cliente']);
+      vendedor = json['vendedor'];
+      total = toDouble(json['total']);
+      obs = json['obs'];
+      entrega = json['entrega'];
+      filialretira = toDouble(json['filialretira']);
+      hora = json['hora'];
+      qtdepessoa = toDouble(json['qtdepessoa']).toInt();
+      operador = json['operador'];
+      lote = toDouble(json['lote']);
+      cobrataxa = json['cobrataxa'];
+      contatravada = json['contatravada'];
+      operacao = json['operacao'];
+      data = toDate(json['data']);
+      dav = json['dav'];
+      registrado = json['registrado'];
+      prevenda = json['prevenda'];
+      baseicmssubst = toDouble(json['baseicmssubst']);
+      icmssubst = toDouble(json['icmssubst']);
+      mesa = json['mesa'];
+      nome = json['nome'];
+      dtEntRet = toDateTime(json['dtent_ret']);
+      endentr = json['endentr'];
+      bairroentr = json['bairroentr'];
+      cidadeentr = json['cidadeentr'];
+      estadoentr = json['estadoentr'];
+      cnpjentr = json['cnpjentr'];
+      estprod = toDouble(json['estprod']);
+      valortroco = toDouble(json['valortroco']);
+    } catch (e) {
+      //
+    }
     return this;
   }
 

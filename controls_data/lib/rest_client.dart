@@ -218,7 +218,7 @@ class RestClient {
         contentType: contentType ?? this.contentType // [e automatic no DIO??]
         );
 
-    notifyLog.send('$method: ${this.baseUrl}$url - $_h $body');
+    notifyLog.send('$method: ${this.baseUrl}$url - $body');
 
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
@@ -304,7 +304,7 @@ class RestClient {
       contentType: contentType, //formUrlEncodedContentType,
       //contentType: this.contentType
     );
-    notifyLog.send('$method: ${this.baseUrl}$url - $_h $contentType');
+    notifyLog.send('$method: ${this.baseUrl}$url - $contentType');
 
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);

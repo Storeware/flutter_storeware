@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.3
+  #cupertino_icons: ^0.1.3
   uuid: #^2.0.2
   universal_html: #^1.1.6
   datetime_picker_formfield:

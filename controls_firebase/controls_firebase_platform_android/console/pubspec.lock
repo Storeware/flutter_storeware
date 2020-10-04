@@ -64,15 +64,22 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0-nullsafety.3"
-  controls_firebase_platform_interface:
+  controls_firebase_platform_android:
     dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.5"
+  controls_firebase_platform_interface:
+    dependency: transitive
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: "28062441cd1432e0fbd64f652391ffbbd5928af3"
+      resolved-ref: "0f8c7757447ebc18019dad28c51740a309f84c97"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "0.0.5"
+    version: "0.0.6"
   convert:
     dependency: transitive
     description:
@@ -87,6 +94,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.5"
+  cupertino_icons:
+    dependency: "direct main"
+    description:
+      name: cupertino_icons
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -234,7 +248,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.1"
+    version: "0.12.2"
   http_parser:
     dependency: transitive
     description:
@@ -332,7 +346,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   process:
     dependency: transitive
     description:

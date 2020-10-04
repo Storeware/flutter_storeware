@@ -54,11 +54,11 @@ class FBMessaging extends FBMessagingInterface {
       var data = message['data'];
       if (this.localNotification != null)
         this.localNotification.showNotification(title: title, body: body);
-       _controller.add({
+      _controller.add({
         "notification": {"title": title, "body": body},
         "data": data,
-         "show":false,
-        });
+        "show": false,
+      });
     } catch (err) {
       print('$err');
     }

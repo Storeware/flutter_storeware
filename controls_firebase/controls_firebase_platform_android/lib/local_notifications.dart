@@ -20,10 +20,11 @@ class LocalNotifications {
       {String title, String body, String payload}) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'console', 'Storeware', 'Storeware - Channel',
-        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+        importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
     print('showNotification $title - $body');
     await flutterLocalNotificationsPlugin.show(
         0, title ?? '', body ?? '', platformChannelSpecifics,
@@ -46,7 +47,7 @@ class LocalNotifications {
             });
         });
     var initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onSelectNotification: (String payload) async {
       if (payload != null) {

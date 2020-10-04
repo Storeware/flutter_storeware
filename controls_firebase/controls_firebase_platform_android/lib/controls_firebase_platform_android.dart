@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_messaging.dart';
 
-export 'package:firebase_auth/firebase_auth.dart';
+//export 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
@@ -25,22 +25,29 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   @override
   init(options) async {
     try {
+      WidgetsFlutterBinding.ensureInitialized();
+
       /// a configuração é feita no ambiente
-      app = await api.Firebase.initializeApp();
-      if (app == null)
-        app = await api.FirebaseApp.configure(
+      try {
+        app = await api.Firebase.initializeApp();
+      } catch (e) {
+        //
+      }
+      if (api.Firebase.apps.length == 0)
+        app = await api.Firebase.initializeApp(
             name: 'DEFAULT',
             options: api.FirebaseOptions(
-              gcmSenderID: options['858174338114'],
+              messagingSenderId: options['858174338114'],
               databaseURL: options['databaseURL'],
               apiKey: options['apiKey'],
-              googleAppID: options['appId'],
-              projectID: options['projectId'],
+              appId: options['appId'],
+              projectId: options['projectId'],
               storageBucket: options['storageBucket'],
             ));
       print('Firebase Android Inited');
       return app;
     } catch (e) {
+      print('FALHOU');
       print('$e');
     }
   }
@@ -48,16 +55,16 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   //var _storage;
   @override
   storage() {
-    return FirebaseStorageDriver(); //fs.FirebaseStorage.instance;
+    //return FirebaseStorageDriver(); //fs.FirebaseStorage.instance;
   }
 
   @override
   auth() {
-    return FirebaseAuthDriver();
+    //return FirebaseAuthDriver();
   }
 
   @override
-  firestore() {
+  FirebaseFirestoreDriver firestore() {
     return FirebaseFirestoreDriver();
   }
 
@@ -75,8 +82,10 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   static final _singleton = FirebaseFirestoreDriver._create();
   FirebaseFirestoreDriver._create();
   factory FirebaseFirestoreDriver() => _singleton;
-
-  var store = fb.Firestore.instance;
+  fb.FirebaseFirestore get store {
+    if (api.Firebase.apps.length == 0) FirebaseAppDriver().init(null);
+    return fb.FirebaseFirestore.instance;
+  }
 
   @override
   collection(String path) {
@@ -87,19 +96,19 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   Future<Map<String, dynamic>> getDoc(collection, doc) {
     return store
         .collection(collection)
-        .document(doc)
+        .doc(doc)
         .get()
         .then((fb.DocumentSnapshot x) {
       if (!x.exists) return null;
       //Map<String, dynamic> r = x.data();
       //r['id'] = x.documentID;
-      return {"id": x.documentID, ...x.data()};
+      return {"id": x.id, ...x.data()};
     });
   }
 
   @override
   genId(collection) {
-    store.collection(collection).document().documentID;
+    return store.collection(collection).doc().id;
   }
 
   @override
@@ -109,17 +118,17 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     d['dtatualiz'] = DateTime.now().toIso8601String();
     return store
         .collection(collection)
-        .document(doc)
-        .setData(d, fb.SetOptions(merge: merge));
+        .doc(doc)
+        .set(d, fb.SetOptions(merge: merge));
   }
 
   @override
   getWhere(collection, Function(fb.CollectionReference) where) {
     fb.CollectionReference ref = store.collection(collection);
     fb.Query rst = (where != null) ? where(ref) : ref;
-    return rst.getDocuments().then((fb.QuerySnapshot doc) {
-      return doc.documents.map((f) {
-        return {"id": f.documentID, ...f.data()};
+    return rst.get().then((fb.QuerySnapshot doc) {
+      return doc.docs.map((f) {
+        return {"id": f.id, ...f.data()};
       }).toList();
     });
   }
@@ -261,26 +270,26 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
     return await googleSignIn.isSignedIn();
   }
 
-  User currentUser;
+  var currentUser;
   @override
   Future<String> signInWithGoogle() async {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
     final authResult = await _auth.signInWithCredential(credential);
-    User user = authResult.user;
-    currentUser = await _auth.currentUser;
+    var user = authResult.user;
+    currentUser = _auth.currentUser;
     assert(user.uid == currentUser.uid);
     return 'signInWithGoogle succeeded: $user';
   }
 
   @override
-  User getCurrentUser() {
+  getCurrentUser() {
     return currentUser;
   }
 

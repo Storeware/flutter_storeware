@@ -1,6 +1,6 @@
 name: controls_firebase_platform_web
 description: A new Flutter package project.
-version: 0.0.6
+version: 0.0.7
 author: Amarildo Lacerda
 homepage: https://tireideletra.com.br
 
@@ -12,10 +12,10 @@ dependencies:
     sdk: flutter
   universal_html:
 
-  firebase_auth: 
-  google_sign_in: 
+  firebase_auth:
+  google_sign_in:
   firebase_core:
-  firebase_web:
+  #firebase_web:
   firebase_storage:
   flutter_cache_manager:
   controls_firebase_platform_interface:

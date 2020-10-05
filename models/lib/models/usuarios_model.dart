@@ -11,7 +11,7 @@ class SenhasItem extends DataItem {
   String grupo;
   String validade;
   String trocasenha;
-  String dtatualiz;
+  DateTime dtatualiz;
   String vendedor;
 
   SenhasItem(
@@ -33,12 +33,12 @@ class SenhasItem extends DataItem {
     aplicacao = json['aplicacao'];
     caixa = json['caixa'];
     codigo = json['codigo'];
-    inativo = json['inativo'];
+    inativo = toInt(json['inativo']);
     nome = json['nome'];
     grupo = json['grupo'];
     validade = json['validade'];
     trocasenha = json['trocasenha'];
-    dtatualiz = json['dtatualiz'];
+    dtatualiz = toDateTime(json['dtatualiz']);
     vendedor = json['vendedor'];
     return this;
   }
@@ -55,6 +55,7 @@ class SenhasItem extends DataItem {
     data['trocasenha'] = this.trocasenha;
     data['dtatualiz'] = this.dtatualiz;
     data['vendedor'] = this.vendedor;
+    data['id'] = this.codigo;
     return data;
   }
 

@@ -19,11 +19,13 @@ class TabChoice<T> {
   String tooltip;
   List<TabChoice> items;
   double width;
+  bool Function(int) completed;
   TabChoice(
       {this.builder,
       this.data,
       this.image,
       this.onPressed,
+      this.completed,
       this.title,
       this.items,
       this.tooltip,

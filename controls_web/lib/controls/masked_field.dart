@@ -912,6 +912,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   final Function(T) onChanged;
   final Function(bool, T) onFocusChange;
   final TextInputType keyboardType;
+  final bool required;
 
   const MaskedSearchFormField(
       {Key key,
@@ -929,6 +930,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
       this.onFocusChange,
       this.iconSearch = Icons.search,
       this.readOnly = false,
+      this.required = true,
       this.labelText,
       this.maxLines = 1,
       this.onChanged,
@@ -968,8 +970,8 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final TextEditingController _controller =
-        this.controller ?? TextEditingController(text: getValue(initialValue));
+    final TextEditingController _controller = this.controller ??
+        TextEditingController(text: getValueStr(getValue(initialValue)));
     return Focus(
         canRequestFocus: false,
         onFocusChange: (x) {
@@ -1012,5 +1014,11 @@ class MaskedSearchFormField<T> extends StatelessWidget {
               T v = setValue(x);
               onSaved(v);
             }));
+  }
+
+  getValueStr(value) {
+    var v = '$value';
+    if (v == '0' || v == '0.0') return '';
+    return value;
   }
 }

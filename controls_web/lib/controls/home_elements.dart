@@ -798,8 +798,8 @@ class _CarouselSliderState extends State<CarouselSlider>
           builder: (BuildContext context, child) {
             // on the first render, the pageController.page is null,
             // this is a dirty hack
-            if (widget.pageController.position.minScrollExtent == null ||
-                widget.pageController.position.maxScrollExtent == null) {
+            if (widget?.pageController?.position?.minScrollExtent == null ||
+                widget?.pageController?.position?.maxScrollExtent == null) {
               Future.delayed(Duration(microseconds: 1), () {
                 setState(() {});
               });
@@ -908,16 +908,16 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
   @override
   Widget build(BuildContext context) {
     CarouselSlider carrousel = CarouselSlider(
-      autoPlay: widget.autoPlay,
-      items: widget.children,
-      onPageChanged: widget.onPageChanged,
-      aspectRatio: widget.aspectRatio,
-      autoPlayAnimationDuration: widget.autoPlayAnimationDuration,
-      autoPlayInterval: widget.autoPlayInterval,
-      height: widget.height,
-      initialPage: widget.initialPage,
-      reverse: widget.reverse,
-      scrollDirection: widget.scrollDirection,
+      autoPlay: widget?.autoPlay,
+      items: widget?.children,
+      onPageChanged: widget?.onPageChanged,
+      aspectRatio: widget?.aspectRatio,
+      autoPlayAnimationDuration: widget?.autoPlayAnimationDuration,
+      autoPlayInterval: widget?.autoPlayInterval,
+      height: widget?.height,
+      initialPage: widget?.initialPage,
+      reverse: widget?.reverse,
+      scrollDirection: widget?.scrollDirection,
     );
     var size = MediaQuery.of(context).size;
     return Row(
@@ -925,8 +925,8 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
         if (widget.enabled)
           InkWell(
             child: Container(
-                color: widget.navColor,
-                height: size.height,
+                color: widget?.navColor,
+                height: size?.height,
                 width: 18,
                 child: Icon(
                   Icons.keyboard_arrow_left,
@@ -939,8 +939,8 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
         if (widget.enabled)
           InkWell(
             child: Container(
-                color: widget.navColor,
-                height: size.height,
+                color: widget?.navColor,
+                height: size?.height,
                 width: 18,
                 child: Icon(
                   Icons.keyboard_arrow_right,

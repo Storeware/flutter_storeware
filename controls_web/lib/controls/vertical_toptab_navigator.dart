@@ -28,6 +28,8 @@ class VerticalTopTabView extends StatefulWidget {
   final Color tabColor;
   final Widget leading;
   final double spacing;
+  final Color completedColor;
+  final Widget Function(int) timeline;
 
   const VerticalTopTabView(
       {Key key,
@@ -42,6 +44,8 @@ class VerticalTopTabView extends StatefulWidget {
       this.iconColor,
       this.leading,
       this.tabColor,
+      this.completedColor = Colors.green,
+      this.timeline,
       this.style})
       : super(key: key);
 
@@ -90,6 +94,8 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           selectedColor: widget.selectedColor,
           spacing: widget.spacing,
           tabColor: widget.tabColor,
+          completedColor: widget.completedColor,
+          timeline: widget.timeline,
           onSelectItem: (index, tab) {
             position = index;
             if (tab.onPressed != null)
@@ -141,6 +147,8 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final TextStyle style;
   final double spacing;
   final double height;
+  final Color completedColor;
+  final Widget Function(int) timeline;
   final VerticalTopTabNavigatorController controller;
   VerticalTopTabNavigator(
       {Key key,
@@ -148,6 +156,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.onSelectItem,
       this.initialIndex = 0,
       this.selectedColor,
+      this.completedColor = Colors.green,
       this.leading,
       this.height = kMinInteractiveDimension,
       this.actions,
@@ -156,6 +165,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.indicatorColor,
       this.iconColor,
       this.style,
+      this.timeline,
       this.tabColor})
       : super(key: key);
 
@@ -187,8 +197,9 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    _iconColor =
-        widget.iconColor ?? theme.tabBarTheme?.labelColor ?? theme.buttonColor;
+    _iconColor = widget.iconColor ??
+        theme.tabBarTheme?.labelColor ??
+        theme.textTheme.bodyText1.color.withAlpha(100);
     _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
     Color _selectedColor =
         widget.selectedColor ?? theme.scaffoldBackgroundColor;
@@ -208,64 +219,110 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           if (widget.leading != null) widget.leading,
           Spacer(),
           for (var index = 0; index < widget.choices.length; index++)
-            Container(
-              width: widget.choices[index].width,
-              padding:
-                  EdgeInsets.only(left: widget.spacing, right: widget.spacing),
-              color: (active.value == index) ? _selectedColor : _tabColor,
-              child: InkWell(
-                child: (!widget.choices[index].visible)
-                    ? Container()
-                    : Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                              //width: widget.choices[index].width,
-                              child: (widget.choices[index].items != null)
-                                  ? Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 8),
-                                      child: showDrownMenu(
-                                          index, widget.choices[index].items),
-                                    )
-                                  : Align(
-                                      alignment: Alignment.center,
-                                      child: buildLabel(index))),
-                          SizedBox(
-                            height: 2,
-                          ),
-                          Container(
-                              height: 2,
-                              width: widget.choices[index].width ??
-                                  (widget.choices[index].label.length * 8.0) +
-                                      ((widget.choices[index].items != null)
-                                          ? 30
-                                          : 0),
-                              color: (active.value == index)
-                                  ? widget.indicatorColor ??
-                                      theme.indicatorColor
-                                  : null),
-                        ],
-                      ),
-                onTap: (!widget.choices[index].enabled)
-                    ? null
-                    : () {
-                        var choice = widget.choices[index];
-                        if ((choice.items ?? []).length > 0) {
-                          active.value = index;
-                          //bShowDrownMenu.value = true;
-                        } else {
-                          widget.onSelectItem(index, widget.choices[index]);
-                          active.value = index;
-                        }
-                      },
-              ),
-            ),
+            Builder(builder: (x) {
+              bool completed = (widget.choices[index].completed != null)
+                  ? widget.choices[index].completed(index) ?? false
+                  : false;
+
+              return Container(
+                width: widget.choices[index].width,
+                //padding: EdgeInsets.only(
+                //    left: existIndicator(index) ? 0 : widget.spacing,
+                //    right: existIndicator(index) ? 0 : widget.spacing),
+                color: (active.value == index) ? _selectedColor : _tabColor,
+                child: InkWell(
+                  child: (!widget.choices[index].visible)
+                      ? Container()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                      //width: widget.choices[index].width,
+                                      child: (widget.choices[index].items !=
+                                              null)
+                                          ? Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 8),
+                                              child: showDrownMenu(index,
+                                                  widget.choices[index].items),
+                                            )
+                                          : Align(
+                                              alignment: Alignment.center,
+                                              child: buildLabel(index))),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                  Container(
+                                    height: 2,
+                                    width: widget.choices[index].width ??
+                                        (widget.choices[index].label.length *
+                                                8.0) +
+                                            ((widget.choices[index].items !=
+                                                    null)
+                                                ? 30
+                                                : 0),
+                                    color: (active.value == index)
+                                        ? widget.indicatorColor ??
+                                            theme.indicatorColor
+                                        : (completed)
+                                            ? widget.completedColor
+                                            : null,
+                                  ),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                width: widget.spacing,
+                              ),
+                              if (existIndicator(index) &&
+                                  active.value != index)
+                                (widget.timeline != null)
+                                    ? widget.timeline(index)
+                                    : Container(
+                                        width: 8,
+                                        height: 8,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            //border: Border.all(
+                                            //    width: 1, color: Colors.black),
+                                            color: completed
+                                                ? widget.completedColor
+                                                : Colors.transparent)),
+                              SizedBox(
+                                width: widget.spacing,
+                              ),
+                            ]),
+                  onTap: (!widget.choices[index].enabled)
+                      ? null
+                      : () {
+                          var choice = widget.choices[index];
+                          if ((choice.items ?? []).length > 0) {
+                            active.value = index;
+                            //bShowDrownMenu.value = true;
+                          } else {
+                            widget.onSelectItem(index, widget.choices[index]);
+                            active.value = index;
+                          }
+                        },
+                ),
+              );
+            }),
           if (widget.actions != null) ...widget.actions,
         ]),
       ),
     );
   }
+
+  existIndicator(index) => widget.choices[index].completed != null;
 
   buildLabel(index) {
     return widget.choices[index].title ??

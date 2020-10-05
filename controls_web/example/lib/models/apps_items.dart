@@ -72,6 +72,7 @@ class AppsItems {
     ));
     r.add(ApplienceStatus(
         width: 150,
+        height: 180,
         title: 'Detalhes',
         color: Colors.amber,
         icon: Icons.adjust,

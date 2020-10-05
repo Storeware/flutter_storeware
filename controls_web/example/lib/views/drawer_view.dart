@@ -22,7 +22,7 @@ class _DrawerViewState extends State<DrawerView> {
             color: theme.primaryColor.withAlpha(120),
             child: Menu.profile(),
           ),
-          Expanded(child: Menu.builder(context)),
+          SizedBox.expand(child: Menu.builder(context)),
           Container(height: 40, color: theme.primaryColor.withAlpha(100))
         ],
       ),

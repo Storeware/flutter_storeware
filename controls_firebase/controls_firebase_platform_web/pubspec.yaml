@@ -11,12 +11,15 @@ dependencies:
   flutter:
     sdk: flutter
   universal_html:
+  js:
+  html:
 
   firebase_auth:
   google_sign_in:
-  firebase_core:
+  firebase_core: ^0.5.0
   #firebase_web:
-  firebase_storage:
+  firebase_storage: ^4.0.1
+  cloud_firestore: ^0.14.1+2
   flutter_cache_manager:
   controls_firebase_platform_interface:
     git:

@@ -7,8 +7,9 @@ import 'dart:typed_data';
 // ignore_for_file:
 import 'package:controls_firebase_platform_interface/controls_firebase_platform_interface.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_web/firebase.dart' as api;
-import 'package:firebase_web/firestore.dart';
+import 'package:firebase_core/firebase_core.dart' as api;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as fs;
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -27,18 +28,20 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
     if (options != null) this.options = options;
     try {
       /// a configuração é feita no ambiente
-      if ((api.apps != null) || api.apps.isNotEmpty) {
-        app = api.apps[0];
+      if ((api.Firebase.apps != null) || api.Firebase.apps.isNotEmpty) {
+        app = api.Firebase.apps[0];
       } else
-        app = api.initializeApp(
-          // name: "selfandpay",
-          messagingSenderId: options['858174338114'],
-          databaseURL: options['databaseURL'],
-          apiKey: options['apiKey'],
-          //googleAppID: options['appId'],
-          projectId: options['projectId'],
-          storageBucket: options['storageBucket'],
-        );
+        app = api.Firebase.initializeApp(
+            name: 'DEFAULT',
+            // name: "selfandpay",
+            options: api.FirebaseOptions(
+              messagingSenderId: options['858174338114'],
+              databaseURL: options['databaseURL'],
+              apiKey: options['apiKey'],
+              //googleAppID: options['appId'],
+              projectId: options['projectId'],
+              storageBucket: options['storageBucket'],
+            ));
       print('carregou firebase');
       return app;
     } catch (e) {
@@ -68,7 +71,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   FirebaseFirestoreDriver._create();
   factory FirebaseFirestoreDriver() => _singleton;
 
-  var store = api.firestore();
+  FirebaseFirestore get store => FirebaseFirestore.instance;
   @override
   collection(String path) {
     return store.collection(path);
@@ -97,7 +100,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     Map<String, dynamic> d = data; //data.removeWhere((k, v) => k == "id");
     d['dtatualiz'] = DateTime.now().toIso8601String();
     d.remove('id');
-    var ref = api.firestore().collection(collection);
+    var ref = store.collection(collection);
     if (doc == null) return ref.add(d);
     var refx = ref.doc(doc);
     // print(['enviando', data]);
@@ -120,7 +123,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
       collection, Function(CollectionReference) where) {
     CollectionReference ref = store.collection(collection);
     Query rst = (where != null) ? where(ref) : ref;
-    return rst.onSnapshot;
+    return rst.snapshots();
   }
 }
 
@@ -136,25 +139,27 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     return p;
   }
 
+  fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
+
   @override
   Future<int> uploadFileImage(String path, rawPath, {metadata}) async {
     String _fileName = buildPath(path);
-    api.StorageReference firebaseStorageRef = api.storage().ref(_fileName);
-    api.UploadMetadata md;
-    md = api.UploadMetadata(
+    fs.StorageReference firebaseStorageRef =
+        await storage.getReferenceFromUrl(_fileName);
+    fs.StorageMetadata md;
+    md = fs.StorageMetadata(
         cacheControl: "Public, max-age=12345", customMetadata: metadata ?? {});
-    api.UploadTask uploadTask = firebaseStorageRef.put(rawPath, md);
-    return uploadTask.future.then((resp) {
-      //firebaseStorageRef.updateMetadata(md);
-      api.UploadTaskSnapshot taskSnapshot = uploadTask.snapshot;
-      return taskSnapshot.bytesTransferred;
+    fs.StorageUploadTask uploadTask = firebaseStorageRef.putData(rawPath, md);
+    return uploadTask.onComplete.then((resp) {
+      return resp.bytesTransferred;
     });
   }
 
   @override
   Future<String> getDownloadURL(String path) async {
     String _fileName = buildPath(path);
-    api.StorageReference firebaseStorageRef = api.storage().ref(_fileName);
+    fs.StorageReference firebaseStorageRef =
+        await storage.getReferenceFromUrl(_fileName);
     try {
       return firebaseStorageRef.getDownloadURL().then((x) {
         return x.toString();

@@ -29,7 +29,7 @@ class VerticalTopTabView extends StatefulWidget {
   final Widget leading;
   final double spacing;
   final Color completedColor;
-  final Widget Function(int) timeline;
+  final Widget Function(TabChoice) timelineBuild;
   final Function(int) onSelectedItem;
 
   const VerticalTopTabView(
@@ -46,7 +46,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.leading,
       this.tabColor,
       this.completedColor = Colors.green,
-      this.timeline,
+      this.timelineBuild,
       this.onSelectedItem,
       this.style})
       : super(key: key);
@@ -97,7 +97,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           spacing: widget.spacing,
           tabColor: widget.tabColor,
           completedColor: widget.completedColor,
-          timeline: widget.timeline,
+          timelineBuild: widget.timelineBuild,
           onSelectItem: (index, tab) {
             position = index;
             if (widget.onSelectedItem != null) widget.onSelectedItem(index);
@@ -151,7 +151,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final double spacing;
   final double height;
   final Color completedColor;
-  final Widget Function(int) timeline;
+  final Widget Function(TabChoice) timelineBuild;
   final VerticalTopTabNavigatorController controller;
   VerticalTopTabNavigator(
       {Key key,
@@ -168,7 +168,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.indicatorColor,
       this.iconColor,
       this.style,
-      this.timeline,
+      this.timelineBuild,
       this.tabColor})
       : super(key: key);
 
@@ -229,7 +229,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           for (var index = 0; index < widget.choices.length; index++)
             Builder(builder: (x) {
               bool completed = (widget.choices[index].completed != null)
-                  ? widget.choices[index].completed(index) ?? false
+                  ? widget.choices[index].completed(activeIndex) ?? false
                   : false;
 
               return Container(
@@ -292,8 +292,9 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                               ),
                               if (existIndicator(index) &&
                                   active.value != index)
-                                (widget.timeline != null)
-                                    ? widget.timeline(index)
+                                (widget.timelineBuild != null)
+                                    ? widget
+                                        .timelineBuild(widget.choices[index])
                                     : Container(
                                         width: widget.spacing,
                                         height: widget.spacing,

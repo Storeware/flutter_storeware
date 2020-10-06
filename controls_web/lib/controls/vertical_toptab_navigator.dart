@@ -30,6 +30,7 @@ class VerticalTopTabView extends StatefulWidget {
   final double spacing;
   final Color completedColor;
   final Widget Function(int) timeline;
+  final Function(int) onSelectedItem;
 
   const VerticalTopTabView(
       {Key key,
@@ -46,6 +47,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.tabColor,
       this.completedColor = Colors.green,
       this.timeline,
+      this.onSelectedItem,
       this.style})
       : super(key: key);
 
@@ -98,6 +100,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           timeline: widget.timeline,
           onSelectItem: (index, tab) {
             position = index;
+            if (widget.onSelectedItem != null) widget.onSelectedItem(index);
             if (tab.onPressed != null)
               tab.onPressed();
             else {
@@ -216,8 +219,13 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       child: ValueListenableBuilder<int>(
         valueListenable: active,
         builder: (a, b, w) => Row(children: [
+          /// objetos a esquerda
           if (widget.leading != null) widget.leading,
+
+          /// space em branco a esquerda do menu
           Spacer(),
+
+          /// lista itens do menu
           for (var index = 0; index < widget.choices.length; index++)
             Builder(builder: (x) {
               bool completed = (widget.choices[index].completed != null)
@@ -287,8 +295,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                 (widget.timeline != null)
                                     ? widget.timeline(index)
                                     : Container(
-                                        width: 8,
-                                        height: 8,
+                                        width: widget.spacing,
+                                        height: widget.spacing,
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(50),

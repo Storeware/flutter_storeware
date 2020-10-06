@@ -4,10 +4,7 @@ extension DynamicExtension on dynamic {
   }
 
   int toInt(value, {def = 0}) {
-    if (value is int) return value;
-    if (value is num) return value.toInt();
-    if (value is String) return int.tryParse(value);
-    return def;
+    return toDouble(value, def: def).toInt();
   }
 
   double toDouble(value, {def = 0.0}) {
@@ -16,6 +13,10 @@ extension DynamicExtension on dynamic {
     if (value is num) return value + 0.0;
     if (value is String) return double.tryParse(value);
     return def;
+  }
+
+  DateTime toTime(DateTime value) {
+    return DateTime(0, 0, 0, value.hour, value.minute, value.second);
   }
 
   bool toBool(value, {def: false}) {

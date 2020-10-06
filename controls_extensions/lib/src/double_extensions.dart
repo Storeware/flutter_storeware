@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
 import 'ACBrUtil.dart' as utils;
+import 'dynamic_extensions.dart';
 
 /// https://api.flutter.dev/flutter/intl/NumberFormat-class.html
 /// [NumberFormat]
@@ -17,6 +18,10 @@ extension DoubleExtension on double {
   String format(String mask, {String lang}) {
     final oCcy = new NumberFormat(mask, lang ?? Intl.defaultLocale);
     return oCcy.format(this);
+  }
+
+  double from(value) {
+    return ''.toDouble(value);
   }
 
   num min(num value) {
@@ -68,7 +73,6 @@ extension IntExtensions on int {
   int min(int value) {
     return (this > value) ? value : this;
   }
-  
 
   int max(int value) {
     return (this < value) ? value : this;

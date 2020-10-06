@@ -10,6 +10,9 @@ void main() {
   test('Strings', () {
     expect('1232'.toDouble(), 1232);
     expect('2019-12-22T00:00:00'.toDateTime(), DateTime(2019, 12, 22));
+    expect(''.from(123), '123');
+    expect(0.from('123'), 123);
+    expect(1.2.from('123.1'), 123.1);
     /* final calculator = Calculator();
     expect(calculator.addOne(2), 3);
     expect(calculator.addOne(-7), -6);
@@ -18,6 +21,10 @@ void main() {
   });
 
   test('DateTime', () {
+    DateTime data;
+    var dt = data.from('2019-10-06');
+    expect(DateTime(2019, 10, 6), dt);
+    print(dt);
     DateTime(2020).initialize();
 
     expect(DateTime(2019, 12, 19).format('MM-dd-yyyy'), '12-19-2019');
@@ -44,6 +51,11 @@ void main() {
         'Dois Mil Reais e Seis Centavos');
     expect(10.234.simpleRoundTo(-2), 10.23);
     expect(10.234.roundTo(2), 10.23);
+
+    double d;
+    var d1 = d.from('0.1');
+    print(d1);
+    expect(d1, 0.1);
   });
 
   test('validador', () {
@@ -60,5 +72,9 @@ void main() {
     int i = 0;
     expect(i.range(1, 10).last, 10);
     expect(i.range(1, 10, skip: 2).last, 9);
+
+    var i1 = i.from('23.1');
+    print(i1);
+    expect(i1, 23);
   });
 }

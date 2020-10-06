@@ -1,6 +1,7 @@
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'time_ago.dart';
+import 'dynamic_extensions.dart';
 
 extension DateTimeExtension on DateTime {
   /// Format DateTime to custom mask
@@ -13,6 +14,8 @@ extension DateTimeExtension on DateTime {
     return this.format('E').substring(0, 1).toUpperCase() +
         this.format(f ?? '');
   }
+
+  DateTime from(dynamic value) => ''.toDateTime(value);
 
   dateFormat(String mask, [lang = 'pt-BR']) => DateFormat(mask, lang);
 

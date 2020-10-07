@@ -153,7 +153,26 @@ class DataViewerHelper {
     return column;
   }
 
-  static moneyColumn(column, {int decimais = 2}) {
+  static text(column, {int decimais = 2, double width, Color color}) {
+    if (column != null) {
+      column.editBuilder = (a, b, c, row) {
+        return Container(
+          width: width ?? column.width,
+          color: color,
+          child: MaskedTextField(
+            label: column.label,
+            initialValue: (row[column.name] ?? ''),
+            onSaved: (x) {
+              row[column.name] = x;
+            },
+          ),
+        );
+      };
+    }
+    return column;
+  }
+
+  static moneyColumn(column, {int decimais = 2, double width, Color color}) {
     if (column != null) {
       column.align = Alignment.centerRight;
       column.builder = (idx, row) {
@@ -162,13 +181,17 @@ class DataViewerHelper {
       };
       column.editBuilder = (a, b, c, row) {
         /// define  edição
-        return MaskedMoneyFormField(
-          label: column.label,
-          precision: decimais,
-          initialValue: (row[column.name] ?? 0.0) + 0.0,
-          onSaved: (x) {
-            row[column.name] = x;
-          },
+        return Container(
+          color: color,
+          width: width ?? column.width,
+          child: MaskedMoneyFormField(
+            label: column.label,
+            precision: decimais,
+            initialValue: (row[column.name] ?? 0.0) + 0.0,
+            onSaved: (x) {
+              row[column.name] = x;
+            },
+          ),
         );
       };
       return column;

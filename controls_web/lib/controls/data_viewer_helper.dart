@@ -155,7 +155,7 @@ class DataViewerHelper {
 
   static moneyColumn(column, {int decimais = 2}) {
     if (column != null) {
-      column.numeric = true;
+      column.align = Alignment.centerRight;
       column.builder = (idx, row) {
         double v = (row[column.name] ?? 0.0) + 0.0;
         return Text(v.toStringAsFixed(decimais));
@@ -165,7 +165,7 @@ class DataViewerHelper {
         return MaskedMoneyFormField(
           label: column.label,
           precision: decimais,
-          initialValue: (row[column.name] ?? 0.0),
+          initialValue: (row[column.name] ?? 0.0) + 0.0,
           onSaved: (x) {
             row[column.name] = x;
           },

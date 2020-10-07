@@ -53,7 +53,8 @@ class ProdutoItem extends DataItem {
     codigo = json['codigo'];
     nome = json['nome'];
     precoweb = toDouble(json['precoweb']);
-    unidade = json['unidade'];
+    unidade = json['unidade'] ?? '';
+    if (unidade == '') unidade = 'UN';
     try {
       sinopse = json['sinopse'] ?? '';
     } catch (e) {

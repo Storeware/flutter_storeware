@@ -32,7 +32,7 @@ class ProdutoItem extends DataItem {
     data['codigo'] = this.codigo;
     data['nome'] = this.nome;
     data['precoweb'] = this.precoweb ?? 0;
-    data['unidade'] = this.unidade;
+    data['unidade'] = (this.unidade ?? '').length == 0 ? 'UN' : this.unidade;
     data['sinopse'] = this.sinopse;
     data['obs'] = this.obs;
     data['codtitulo'] = this.codtitulo;

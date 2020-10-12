@@ -45,7 +45,7 @@ class Rounded extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      alignment: align,
+      alignment: alignment,
       width: width,
       height: height,
       decoration: BoxDecoration(

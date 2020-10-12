@@ -45,6 +45,8 @@ class ReportView extends StatefulWidget {
   final Color backgroundColor;
   //final Widget body;
   final Widget bottom;
+  final List<Widget> actions;
+  final Widget leading;
 
   /// lista de colunas do relatorio
   final List<ReportColumn> columns;
@@ -87,6 +89,8 @@ class ReportView extends StatefulWidget {
     //this.body,
     this.bottom,
     this.columns,
+    this.actions,
+    this.leading,
   }) : super(key: key);
 
   @override
@@ -204,7 +208,9 @@ class _ReportViewState extends State<ReportView> {
             widget.onAditionalBuilder(
                 (i == first)
                     ? ReportRowType.header
-                    : (i == last) ? ReportRowType.footer : ReportRowType.body,
+                    : (i == last)
+                        ? ReportRowType.footer
+                        : ReportRowType.body,
                 source[i],
                 rows));
       }
@@ -287,6 +293,10 @@ class _ReportViewState extends State<ReportView> {
                           widget.subtitle ?? '',
                           textAlign: TextAlign.center,
                         ),
+                        trailing: (widget.actions == null)
+                            ? null
+                            : Row(children: widget.actions),
+                        leading: widget.leading,
                       ),
                     if (widget.header != null) widget.header,
                     Divider(),

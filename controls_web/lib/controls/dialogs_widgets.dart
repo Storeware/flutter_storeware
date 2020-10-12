@@ -38,6 +38,8 @@ class Dialogs {
       Alignment alignment,
       bool fullPage = false,
       Widget Function(BuildContext) builder,
+      RouteTransitionsBuilder transitionBuilder,
+      int transitionDuration,
       String label = ''}) async {
     Size size = MediaQuery.of(context).size;
     double plus = 0.0;
@@ -46,7 +48,7 @@ class Dialogs {
       context: context,
       barrierLabel: label,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 500),
+      transitionDuration: Duration(milliseconds: transitionDuration ?? 500),
       barrierDismissible: true,
       pageBuilder: (BuildContext context, Animation animation,
           Animation secondaryAnimation) {
@@ -61,6 +63,8 @@ class Dialogs {
         );
       },
       transitionBuilder: (_, anim, __, child) {
+        if (transitionBuilder != null)
+          return transitionBuilder(_, anim, __, child);
         return ScaleTransition(
           scale: anim,
           child: child,

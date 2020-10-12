@@ -35,6 +35,8 @@ class HorizontalTabView extends StatelessWidget {
   //final double tabHeightCompact;
   final AppBar sidebarAppBar;
   final Drawer sidebarDrawer;
+  final Widget sidebarRight;
+  final Function(int) onChanged;
   HorizontalTabView({
     Key key,
     this.choices,
@@ -61,6 +63,8 @@ class HorizontalTabView extends StatelessWidget {
     this.sidebarHeader,
     this.sidebarFooter,
     this.floatingActionButton,
+    this.sidebarRight,
+    this.onChanged,
   }) : super(key: key);
   final ValueNotifier<int> _index = ValueNotifier<int>(0);
 
@@ -215,9 +219,11 @@ class HorizontalTabView extends StatelessWidget {
                             if (choices[_index.value].child == null)
                               choices[_index.value].child =
                                   choices[_index.value].builder();
+                            if (onChanged != null) onChanged(_index.value);
                             return choices[_index.value].child;
                           })),
-                    )
+                    ),
+                    if (sidebarRight != null) sidebarRight,
                   ],
                 ),
               ));

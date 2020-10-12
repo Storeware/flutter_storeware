@@ -25,6 +25,40 @@ class BadgeButton extends StatelessWidget {
   }
 }
 
+class Rounded extends StatelessWidget {
+  final Widget child;
+  final double radius;
+  final double width;
+  final double height;
+  final Color color;
+  final Alignment alignment;
+  const Rounded(
+      {Key key,
+      this.child,
+      this.radius = 5,
+      this.width,
+      this.color,
+      this.alignment = Alignment.center,
+      this.height})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: align,
+      width: width,
+      height: height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(
+          radius ?? 5,
+        ),
+        color: color ?? Colors.grey[100],
+      ),
+      child: child,
+    );
+  }
+}
+
 class RoundedButton extends StatelessWidget {
   final String buttonName;
   final String assertImagePath;

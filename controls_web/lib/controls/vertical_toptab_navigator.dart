@@ -364,8 +364,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       ],
       onChanged: (index) {
         active.value = mainIndex;
-        if ((widget.choices[index].enabled)) if ((items[index].label ?? '') !=
-            '-') widget.onSelectItem(index, items[index]);
+        if ((items[index].enabled)) if ((items[index].label ?? '') != '-')
+          widget.onSelectItem(index, items[index]);
       },
     ));
   }

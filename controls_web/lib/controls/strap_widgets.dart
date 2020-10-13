@@ -56,6 +56,8 @@ class StrapButton extends StatelessWidget {
   final double borderWidth;
   final Widget leading;
   final Widget trailing;
+  final Widget image;
+  final bool running;
   const StrapButton({
     Key key,
     this.text,
@@ -70,6 +72,8 @@ class StrapButton extends StatelessWidget {
     this.subtitle,
     this.leading,
     this.trailing,
+    this.image,
+    this.running = false,
   }) : super(key: key);
 
   @override
@@ -100,6 +104,7 @@ class StrapButton extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      if (image != null) image,
                       if (title != null)
                         DefaultTextStyle(
                             style: theme.textTheme.button, child: title),
@@ -115,6 +120,8 @@ class StrapButton extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (running)
+                  Flexible(flex: 1, child: CircularProgressIndicator()),
                 if (trailing != null) Flexible(flex: 1, child: trailing),
               ],
             )),

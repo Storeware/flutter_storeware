@@ -67,52 +67,6 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
   int _currentPosition = 0;
   int _lastPosition = -1;
 
-/*
-  /// recarregava sem necessidade
-  @override
-  void didUpdateWidget(TabBarViewDynamic oldWidget) {
-    if (oldWidget != this.widget) if (_currentCount != widget.itemCount ||
-        (_currentPosition != _lastPosition)) {
-      controller.animation.removeListener(onScroll);
-      controller.removeListener(onPositionChange);
-      controller.dispose();
-
-      if (widget.activeIndex != null) {
-        _currentPosition = widget.activeIndex;
-      }
-
-      if (_currentPosition > widget.itemCount - 1) {
-        _currentPosition = widget.itemCount - 1;
-        _currentPosition = _currentPosition < 0 ? 0 : _currentPosition;
-        if (widget.onPositionChange != null) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              widget.onPositionChange(_currentPosition);
-            }
-          });
-        }
-      }
-
-      _currentCount = widget.itemCount;
-      setState(() {
-        controller = TabController(
-          length: widget.itemCount,
-          vsync: this,
-          initialIndex: _currentPosition,
-        );
-        _lastPosition = _currentPosition;
-        controller.addListener(onPositionChange);
-        controller.animation.addListener(onScroll);
-        if (widget.onControllerChange != null)
-          widget.onControllerChange(controller);
-      });
-    } else if (widget.activeIndex != null) {
-      controller.animateTo(widget.activeIndex);
-    }
-
-    super.didUpdateWidget(oldWidget);
-  }
-*/
   onPositionChange() {
     if (!controller.indexIsChanging) {
       _currentPosition = controller.index;
@@ -136,6 +90,7 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
   @override
   Widget build(BuildContext context) {
     return tabView = TabBarView(
+      key: UniqueKey(),
       controller: controller,
       children: [for (var i = 0; i < widget.itemCount; i++) getChild(i)],
     );

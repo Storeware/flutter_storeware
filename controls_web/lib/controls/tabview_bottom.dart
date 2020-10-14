@@ -16,6 +16,7 @@ class TabViewBottom extends StatefulWidget {
   final Widget bottomNavigationBar;
   final Widget appBar;
   final EdgeInsets padding;
+  final Function(int) onChanged;
   const TabViewBottom({
     Key key,
     this.choices,
@@ -31,6 +32,7 @@ class TabViewBottom extends StatefulWidget {
     this.actions,
     this.bottomNavigationBar,
     this.appBar,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -39,7 +41,9 @@ class TabViewBottom extends StatefulWidget {
 
 class _TabViewBottomState extends State<TabViewBottom> {
   Widget getChild(int idx) {
-    return widget.choices[idx].child ??= widget.choices[idx].builder();
+    return widget.choices[idx].child ??= Container(
+        key: ValueKey(widget.choices[idx].label ?? '$idx'),
+        child: widget.choices[idx].builder());
   }
 
   TabController tabController;
@@ -50,7 +54,10 @@ class _TabViewBottomState extends State<TabViewBottom> {
     index = ValueNotifier<int>(widget.activeIndex);
   }
 
-  int activeIndex = 0;
+  int get activeIndex => index?.value ?? widget.activeIndex ?? 0;
+  set activeIndex(int v) {
+    if (widget.onChanged != null) widget.onChanged(v);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +66,13 @@ class _TabViewBottomState extends State<TabViewBottom> {
     Color _tabColor =
         widget.tabColor ?? theme.appBarTheme.color ?? Colors.amber;
     Color _iconColor = widget.iconColor ?? theme.tabBarTheme.labelColor;
-    Color _indicatorColor = widget.indicatorColor ?? widget.tabColor;
+    Color _indicatorColor = widget.indicatorColor ?? Colors.grey.withAlpha(20);
     Color _tagColor = widget.tagColor ?? theme.indicatorColor;
     return Column(children: [
       if (widget.appBar != null) widget.appBar,
       Expanded(
           child: TabBarViewDynamic(
-        //key: UniqueKey(),
+        key: UniqueKey(),
         itemCount: widget.choices.length,
         activeIndex: widget.activeIndex,
         onControllerChange: (t) {
@@ -103,7 +110,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
                           activeIndex = idx;
                           return Padding(
                             padding: const EdgeInsets.only(
-                                left: 4.0, right: 0, top: 4.0),
+                                left: 0.0, right: 0, top: 2.0, bottom: 2.0),
                             child: InkWell(
                               onTap: () {
                                 //activeChild.value = getChild(i);
@@ -111,9 +118,18 @@ class _TabViewBottomState extends State<TabViewBottom> {
                                 //index.value = i;
                               },
                               child: Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 2.0,
+                                      bottom: 2,
+                                      right: 2.0,
+                                      top: 2.0),
                                   alignment: Alignment.center,
-                                  color:
-                                      (idx == i) ? _indicatorColor : _tabColor,
+                                  decoration: BoxDecoration(
+                                    color: (idx == i)
+                                        ? _indicatorColor
+                                        : _tabColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,

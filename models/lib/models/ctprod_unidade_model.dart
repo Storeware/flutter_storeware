@@ -1,6 +1,7 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
+import 'package:controls_extensions/extensions.dart';
 
 class CtprodUnidadeItem extends DataItem {
   String codigo;
@@ -16,10 +17,10 @@ class CtprodUnidadeItem extends DataItem {
   }
   @override
   fromMap(Map<String, dynamic> json) {
-    codigo = json['codigo'];
-    descricao = json['descricao'];
-    permitefracao = json['permitefracao'];
-    abreviacao = json['abreviacao'];
+    codigo = ''.from(json['codigo']);
+    descricao = ''.from(json['descricao']);
+    permitefracao = ''.from(json['permitefracao']);
+    abreviacao = ''.from(json['abreviacao']);
     return this;
   }
 

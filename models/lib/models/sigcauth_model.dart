@@ -54,6 +54,7 @@ class SigcauthItem extends DataItem {
   String cnpjentr;
 
   double estprod;
+  String impresso;
 
   static get test => {
         "id": 66883,
@@ -148,6 +149,7 @@ class SigcauthItem extends DataItem {
       cnpjentr = json['cnpjentr'];
       estprod = toDouble(json['estprod']);
       valortroco = toDouble(json['valortroco']);
+      impresso = json['impresso'];
     } catch (e) {
       //
     }
@@ -188,6 +190,7 @@ class SigcauthItem extends DataItem {
     data['estadoentr'] = estadoentr;
     data['cnpjentr'] = cnpjentr;
     data['estprod'] = estprod;
+    data['impresso'] = impresso;
 
     return data;
   }
@@ -323,6 +326,7 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
     dados.remove('nome');
     var colunas =
         'dcto,filial,cliente,filialretira,qtdepessoa,operador,lote,data,dtent_ret,endentr,bairroentr,cidadeentr,estadoentr';
+    if (item.impresso != null) colunas += ',impresso';
     return API.execute(
         SqlBuilder.createSqlUpdate('sigcauth', 'id', dados, colunas: colunas));
   }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
@@ -52,11 +53,14 @@ class CategoriaModel extends ODataModelClass<CategoriaItem> {
 
   CategoriaItem newItem() => CategoriaItem();
 
-  enviar(CategoriaItem item) {
+  @override
+  Future<Map<String, dynamic>> enviar(CategoriaItem item) async {
     var values =
         [item.codigo, item.nome, item.prioridade, item.codigoPai].join("','");
     String cmd = '''select * from ESTAPP_SP_CATEG_INSERIR('$values')''';
-    return ODataInst().post('command', {'command': '$cmd'}, removeNulls: false);
+    return ODataInst()
+        .post('command', {'command': '$cmd'}, removeNulls: false)
+        .then((rsp) => jsonDecode(rsp));
   }
 
   buscar([String queryStr]) async {

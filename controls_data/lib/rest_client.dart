@@ -48,13 +48,15 @@ class RestClient {
   RestClient({this.baseUrl}) {}
   String tokenId;
   String _authorization;
-  get authorization => _authorization;
-  set authorization(x) {
+  String get authorization => _authorization;
+  set authorization(String x) {
     _authorization = x;
   }
 
+  bool inDebug = false;
+
   /* decode json string to object */
-  dynamic decode(String texto) {
+  Map<String, dynamic> decode(String texto) {
     return json.decode(texto, reviver: (k, v) {
       if (v is String) {
         /// validação do dado como DateTime
@@ -123,7 +125,7 @@ class RestClient {
   String baseUrl;
   Map<String, dynamic> params = {};
   String contentType = 'application/json';
-  get headers => _headers;
+  Map<String, String> get headers => _headers;
   autenticator({String key = 'authorization', String value}) {
     _headers[key] = value;
     return this;
@@ -239,14 +241,18 @@ class RestClient {
       //print('Response: $resp');
       notifyLog.notify('statusCode: $statusCode - $resp');
       _decodeResp(resp);
-
+      if (inDebug) {
+        resp.data['url'] = url;
+        resp.data['method'] = method;
+        resp.data['body'] = body;
+      }
       if (statusCode == 200) {
         return resp.data;
       } else {
         return throw (resp.data);
       }
     } catch (e) {
-      var error = formataMensagemErro(e);
+      var error = formataMensagemErro('$method:$url', e);
       if (!silent) notifyError.send('$error [$resp]');
       return throw error;
     }
@@ -254,14 +260,18 @@ class RestClient {
 
   bool silent = false;
 
-  formataMensagemErro(e) {
+  formataMensagemErro(path, e) {
+    var msg = '${e.message}' ?? '';
+    if (inDebug) msg += '$path |';
     if ((e?.response?.statusCode ?? 0) == 403)
-      return 'A solicitação foi recusada pelo servidor (403)';
+      return 'A solicitação foi recusada pelo servidor - checar permissões de acesso (403) ($msg)';
     if ((e?.response?.statusCode ?? 0) == 404)
-      return 'A solicitação não foi encontrada (404)';
+      return 'A solicitação não foi encontrada - checar se é um objeto válido (404) ($msg)';
+
     String title = '${e.message}';
-    String erro = (title.isNotEmpty ? '${title}|' : '') +
-        '${e?.response?.data['error'] ?? ''}';
+    String es =
+        (e?.response?.data != null) ? e?.response?.data['error'] ?? '' : '';
+    String erro = (title.isNotEmpty ? '${title}|' : '') + es;
 
     if (erro.isEmpty) erro += '${e.message}';
     try {
@@ -286,7 +296,7 @@ class RestClient {
     return erro;
   }
 
-  openJsonAsync(String url,
+  Future<Map<String, dynamic>> openJsonAsync(String url,
       {String method = 'GET', Map<String, dynamic> body, cacheControl}) async {
     _setHeader();
     final _h = _headers;
@@ -326,6 +336,11 @@ class RestClient {
 
       return ref.then((resp) {
         _decodeResp(resp);
+        if (inDebug) {
+          resp.data['url'] = url;
+          resp.data['method'] = method;
+          resp.data['body'] = body;
+        }
 
         if (statusCode == 200) {
           notifyLog.notify(resp.data.toString());
@@ -335,7 +350,7 @@ class RestClient {
         }
       });
     } catch (e) {
-      var error = formataMensagemErro(e);
+      var error = formataMensagemErro(url, e);
       if (!silent) notifyError.send(error);
       throw error;
     }
@@ -345,6 +360,7 @@ class RestClient {
       {method = 'GET', body, String cacheControl}) async {
     this.service = urlService;
     var url = encodeUrl();
+    if (inDebug) print(['SEND', url]);
     return openUrl(url, method: method, body: body, cacheControl: cacheControl)
         .then((x) => x);
   }
@@ -352,19 +368,21 @@ class RestClient {
   Future<String> post(String urlService, {body}) async {
     this.service = urlService;
     var url = encodeUrl();
-    //print(url);
+    if (inDebug) print(['POST', url, body]);
     return openUrl(url, method: 'POST', body: body).then((x) => x);
   }
 
   Future<String> put(String urlService, {body}) async {
     this.service = urlService;
     var url = encodeUrl();
+    if (inDebug) print(['PUT', url, body]);
     return openUrl(url, method: 'PUT', body: body).then((x) => x);
   }
 
   Future<String> delete(String urlService, {body}) async {
     this.service = urlService;
     var url = encodeUrl();
+    if (inDebug) print(['DELETE', url, body]);
     return openUrl(url, method: 'DELETE', body: body).then((x) => x);
   }
 
@@ -376,6 +394,7 @@ class RestClient {
     if ((body != null) && (body is String)) {
       contentType = 'text/plain';
     }
+    if (inDebug) print(['PATCH', url, body]);
     return openUrl(url, method: 'PATCH', body: body, contentType: contentType)
         .then((x) => x);
   }

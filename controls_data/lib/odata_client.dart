@@ -285,10 +285,15 @@ class ODataClient {
 
   ODataClient clone() {
     var o = ODataClient();
+    o.client.inDebug = client.inDebug;
     o.baseUrl = client.baseUrl;
     o.prefix = client.prefix;
-    o.client = client.authorization;
-    o.client.setToken(client.tokenId);
+    client.headers.forEach((k, v) {
+      o.client.addHeader(k, v);
+    });
+    if (client.tokenId != null) o.client.setToken(client.tokenId);
+    if (client.authorization != null)
+      o.client.authorization = client.authorization;
     return o;
   }
 
@@ -330,7 +335,7 @@ class ODataClient {
     }
   }
 
-  getOne(String resource) async {
+  Future<dynamic> getOne(String resource) async {
     try {
       return client.send(resource).then((res) {
         return client.decode(res);
@@ -365,7 +370,19 @@ class ODataClient {
     }
   }
 
-  put(String resource, Map<String, dynamic> json,
+  Map<String, dynamic> removeNulls(json) {
+    Map<String, dynamic> data = {};
+    json.forEach((k, v) {
+      try {
+        if (v != null) data[k] = reviverTo(v);
+      } catch (e) {
+        print('$e');
+      }
+    });
+    return data;
+  }
+
+  Future<String> put(String resource, Map<String, dynamic> json,
       {bool removeNulls = true}) async {
     /// remover os null
     Map<String, dynamic> data = {};
@@ -388,9 +405,9 @@ class ODataClient {
     }
   }
 
-  delete(String resource, Map<String, dynamic> json) async {
+  Future<String> delete(String resource, Map<String, dynamic> json) async {
     try {
-      return client.delete(resource, body: json).then((resp) {
+      return client.delete(resource, body: removeNulls(json)).then((resp) {
         return resp;
       });
     } catch (e) {
@@ -425,7 +442,7 @@ class ODataClient {
     }
   }
 
-  execute(String command) async {
+  Future<String> execute(String command) async {
     try {
       return client.post('command', body: {"command": command}).then((x) => x);
     } catch (e) {
@@ -492,14 +509,14 @@ abstract class ODataModelClass<T extends DataItem> {
   ODataClient API;
   ODataModelClass({this.API});
 
-  list({filter}) async {
+  Future<List<dynamic>> list({filter}) async {
     return search(resource: collectionName, select: columns, filter: filter)
         .then((ODataResult r) {
       return r.asMap();
     });
   }
 
-  query(
+  Future<List<dynamic>> query(
       {filter, String select, int top, int skip, orderBy, cacheControl}) async {
     return search(
             resource: collectionName,
@@ -514,7 +531,7 @@ abstract class ODataModelClass<T extends DataItem> {
     });
   }
 
-  listCached(
+  Future<List<dynamic>> listCached(
       {filter,
       cacheControl,
       resource,
@@ -559,17 +576,17 @@ abstract class ODataModelClass<T extends DataItem> {
     });
   }
 
-  getOne({filter}) {
+  Future<ODataDocument> getOne({filter}) async {
     return search(
             resource: collectionName, select: columns, filter: filter, top: 1)
         .then((ODataResult r) {
-      return r.rows > 0 ? r.first : null;
+      return (r.rows > 0) ? r.first : null;
     });
   }
 
-  enviar(T item) {
+  Future<Map<String, dynamic>> enviar(T item) {
     try {
-      return API.post(collectionName, item.toJson()).then((x) => x);
+      return API.post(collectionName, item.toJson()).then((x) => jsonDecode(x));
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -585,7 +602,7 @@ abstract class ODataModelClass<T extends DataItem> {
 
   afterChangeEvent(item) {}
 
-  post(item) async {
+  Future<Map<String, dynamic>> post(item) async {
     var d;
     if (item is T)
       d = item.toJson();
@@ -596,7 +613,7 @@ abstract class ODataModelClass<T extends DataItem> {
       return API.post(collectionName, d).then((x) {
         if (CC != null) CC.post(collectionName, d);
         afterChangeEvent(d);
-        return x;
+        return jsonDecode(x);
       });
     } catch (e) {
       print('$e');
@@ -605,7 +622,7 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  put(item) async {
+  Future<Map<String, dynamic>> put(item) async {
     var d;
     if (item is T)
       d = item.toJson();
@@ -613,7 +630,10 @@ abstract class ODataModelClass<T extends DataItem> {
       d = item;
     try {
       d = removeExternalKeys(d);
-      return API.put(collectionName, d).then((x) {
+      return API.client
+          .openJsonAsync(API.client.formatUrl(path: collectionName),
+              method: "PUT", body: API.removeNulls(d))
+          .then((x) {
         API.client.notifyLog.notify(x.toString());
         if (CC != null) CC.put(collectionName, d);
         afterChangeEvent(d);
@@ -626,7 +646,7 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  send(ODataEventState event, T item) {
+  Future<Map<String, dynamic>> send(ODataEventState event, T item) async {
     switch (event) {
       case ODataEventState.insert:
         return post(item);
@@ -642,15 +662,18 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  delete(item) async {
-    var d;
+  Future<Map<String, dynamic>> delete(item) async {
+    Map<String, dynamic> d;
     if (item is T)
-      d = item.toJson();
+      d = API.removeNulls(item.toJson());
     else
-      d = item;
+      d = API.removeNulls(item);
     try {
-      //return API.delete(collectionName, d).then((x) => x);
-      return API.post('delete/$collectionName', d).then((x) {
+      //return API.delete(collectionName, d).then((x) => jsonDecode(x));
+      return API.client
+          .openJsonAsync(API.client.formatUrl(path: 'delete/$collectionName'),
+              method: 'POST', body: d)
+          .then((x) {
         if (CC != null) CC.post('delete/$collectionName', d);
 
         return x;

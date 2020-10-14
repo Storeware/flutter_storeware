@@ -111,10 +111,8 @@ class DataViewerController {
       });
     else if (dataSource != null) {
       if (onValidate != null) dados = onValidate(dados);
-      return dataSource.delete(dados).then((rsp_) {
+      return dataSource.delete(dados).then((rsp) {
         //print('resposta: $rsp');
-
-        var rsp = jsonDecode(rsp_);
 
         int rows = (rsp ?? {})['rows'] ?? 1;
         if (rows > 0) {

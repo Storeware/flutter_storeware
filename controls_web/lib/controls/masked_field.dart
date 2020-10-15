@@ -16,6 +16,7 @@ class MaskedTextField extends StatefulWidget {
   final Function(String) onSaved;
   final Function(String) validator;
   final int maxLength;
+  final bool readOnly;
 
   final String mask;
   final TextEditingController controller;
@@ -28,6 +29,8 @@ class MaskedTextField extends StatefulWidget {
   final String errorText;
   final bool autofocus;
   final Function(String) onChanged;
+  final Widget suffix;
+  final Widget prefix;
   MaskedTextField({
     Key key,
     this.validator,
@@ -43,8 +46,11 @@ class MaskedTextField extends StatefulWidget {
     this.style,
     this.match,
     this.sample,
+    this.suffix,
+    this.prefix,
     this.errorText = 'Falta informar %1',
     this.fontSize = 16,
+    this.readOnly = false,
     this.onChanged,
     this.maxLength,
   }) : super(key: key);
@@ -249,6 +255,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
   bool _autoDispose = false;
   @override
   void initState() {
+    super.initState();
     if (widget.controller != null) {
       _autoDispose = false;
     } else {
@@ -261,7 +268,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
         _autoDispose = true;
       }
     }
-    super.initState();
+    _controller ??= TextEditingController(text: widget.initialValue ?? '');
   }
 
   @override
@@ -277,20 +284,24 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
       child: TextFormField(
           textAlign: widget.textAlign ?? TextAlign.start,
           maxLength: widget.maxLength,
+          readOnly: widget.readOnly,
           autofocus: widget.autofocus,
-          initialValue: (_controller == null) ? widget.initialValue : null,
+          initialValue:
+              (_controller == null) ? widget.initialValue ?? '' : null,
           controller: _controller,
           style: widget.style ??
               theme.textTheme.bodyText1.copyWith(fontSize: widget.fontSize),
           decoration: InputDecoration(
               labelText: '${widget.label}',
+              suffix: widget.suffix,
+              prefix: widget.prefix,
               helperText: !_showHelperText
                   ? (widget.sample != null)
                       ? 'Ex: ${widget.sample}'
                       : null
                   : null,
               hintStyle: theme.inputDecorationTheme.hintStyle),
-          keyboardType: widget.keyboardType,
+          keyboardType: widget.keyboardType ?? TextInputType.text,
           onChanged: widget.onChanged,
           validator: (value) {
             if (widget.match != null) {

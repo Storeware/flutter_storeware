@@ -37,6 +37,7 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
 
   @override
   void initState() {
+    super.initState();
     _currentPosition = widget.activeIndex ?? 0;
     controller = TabController(
       length: widget.itemCount,
@@ -48,7 +49,6 @@ class _TabViewBottomState extends State<TabBarViewDynamic>
     _currentCount = widget.itemCount;
     if (widget.onControllerChange != null)
       widget.onControllerChange(controller);
-    super.initState();
   }
 
   @override

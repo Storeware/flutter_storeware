@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 enum ResponsiveInfoScreen { mobile, tablet, desktop }
+
+extension BuildContextExtension on BuildContext {
+  MediaQueryData get mediaQuery => MediaQuery.of(this);
+
+  get responsive => ResponsiveInfo(this);
+  get isLandscape => mediaQuery.orientation = Orientation.landscape;
+
+  get size => mediaQuery.size;
+
+  double get pixelsPerInch =>
+      UniversalPlatform.isAndroid || UniversalPlatform.isIOS ? 150 : 96;
+}
 
 class ResponsiveInfo {
   Size _size;

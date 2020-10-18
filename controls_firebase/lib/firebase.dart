@@ -1,6 +1,7 @@
 library controls_firebase;
 
 import "package:controls_firebase_platform_android/firebase_messaging.dart"
+    if (dart.library.macos) 'package:controls_firebase_platform_macos/firebase_messaging.dart'
     if (dart.library.linux) 'dummy.dart'
     if (dart.library.windows) 'dummy.dart'
     if (dart.library.js) "package:controls_firebase_platform_web/firebase_messaging.dart";

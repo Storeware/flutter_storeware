@@ -4,7 +4,7 @@ import 'package:controls_firebase_platform_interface/controls_firebase_platform_
 
 class FirebaseAppDriver extends FirebaseAppDriverInterface {
   FirebaseAppDriver() {
-    platform = FirebasePlatform.linux;
+    platform = FirebasePlatform.macos;
   }
 
   @override

@@ -7,7 +7,7 @@ extension BuildContextExtension on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
   get responsive => ResponsiveInfo(this);
-  get isLandscape => mediaQuery.orientation = Orientation.landscape;
+  get isLandscape => mediaQuery.orientation == Orientation.landscape;
 
   get size => mediaQuery.size;
 

@@ -174,7 +174,9 @@ class RestClient {
   int statusCode = 0;
   _decodeResp(Response resp) {
     statusCode = resp.statusCode;
-    if (resp.data != null) {
+    if (resp.headers['content-type']
+        .toString()
+        .contains('json')) if (resp.data != null) {
       jsonResponse = resp.data;
     }
   }
@@ -251,9 +253,16 @@ class RestClient {
       } else {
         return throw (resp.data);
       }
+      //} on TypeErrorImpl catch (e) {
+      //  return throw '$e';
     } catch (e) {
-      var error = formataMensagemErro('$method:$url', e);
-      if (!silent) notifyError.send('$error [$resp]');
+      var error;
+      try {
+        error = formataMensagemErro('$method:$url', e);
+        if (!silent) notifyError.send('$error [$resp]');
+      } catch (err) {
+        return throw e;
+      }
       return throw error;
     }
   }
@@ -261,19 +270,19 @@ class RestClient {
   bool silent = false;
 
   formataMensagemErro(path, e) {
-    var msg = '${e.message}' ?? '';
+    var msg = '${e?.message}' ?? '';
     if (inDebug) msg += '$path |';
     if ((e?.response?.statusCode ?? 0) == 403)
       return 'A solicitação foi recusada pelo servidor - checar permissões de acesso (403) ($msg)';
     if ((e?.response?.statusCode ?? 0) == 404)
       return 'A solicitação não foi encontrada - checar se é um objeto válido (404) ($msg)';
 
-    String title = '${e.message}';
+    String title = '${e?.message}';
     String es =
         (e?.response?.data != null) ? e?.response?.data['error'] ?? '' : '';
     String erro = (title.isNotEmpty ? '${title}|' : '') + es;
 
-    if (erro.isEmpty) erro += '${e.message}';
+    if (erro.isEmpty) erro += '${e?.message}';
     try {
       try {
         erro += e?.error?.osError?.message ?? '';
@@ -283,7 +292,7 @@ class RestClient {
       if (erro.isEmpty) erro += '${e?.response?.statusCode ?? ''}';
       if (erro.isEmpty) erro += '${e?.response?.statusMessage ?? ''}';
       if (erro.isEmpty) erro += '${e?.message ?? ''}';
-      if (erro.isEmpty) erro += '${e.toString()}';
+      if (erro.isEmpty) erro += '${e?.toString()}';
       if (erro.isEmpty) erro += '${e?.response?.data ?? ''}';
 
       if (erro.contains('PRIMARY KEY'))
@@ -397,5 +406,58 @@ class RestClient {
     if (inDebug) print(['PATCH', url, body]);
     return openUrl(url, method: 'PATCH', body: body, contentType: contentType)
         .then((x) => x);
+  }
+
+  rawData(String url,
+      {method = 'GET', body, String contentType, String cacheControl}) async {
+    _setHeader();
+    final _h = _headers;
+    if (cacheControl != null) _h['Cache-Control'] = cacheControl;
+    var ref;
+    BaseOptions bo = BaseOptions(
+        connectTimeout: connectionTimeout,
+        followRedirects: followRedirects,
+        receiveTimeout: receiveTimeout,
+        baseUrl: this.baseUrl,
+        headers: _h,
+        queryParameters: params,
+        contentType: contentType ?? this.contentType // [e automatic no DIO??]
+        );
+
+    notifyLog.send('$method: ${this.baseUrl}$url - $body');
+
+    String uri = Uri.parse(url).toString();
+    Dio dio = Dio(bo);
+
+    try {
+      if (method == 'GET') {
+        ref = dio.get(uri);
+      } else if (method == 'POST') {
+        ref = dio.post(uri, data: body); //, headers: headers);
+      } else if (method == 'PUT')
+        ref = dio.put(uri, data: body); //, headers: headers);
+      else if (method == 'PATCH')
+        ref = dio.patch(uri, data: body); //, headers: headers);
+      else if (method == 'DELETE')
+        ref = dio.delete(uri);
+      else
+        throw "Method inválido";
+
+      return ref.then((resp) {
+        _decodeResp(resp);
+
+        notifyLog.notify(resp.data.toString());
+
+        if (statusCode == 200) {
+          return resp;
+        } else {
+          return throw (resp);
+        }
+      });
+    } catch (e) {
+      var error = formataMensagemErro('$method:$url', e);
+      //if (!silent) notifyError.send('$error [$resp]');
+      return throw error;
+    }
   }
 }

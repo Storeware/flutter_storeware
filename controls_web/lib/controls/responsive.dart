@@ -6,10 +6,10 @@ enum ResponsiveInfoScreen { mobile, tablet, desktop }
 extension BuildContextExtension on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 
-  get responsive => ResponsiveInfo(this);
-  get isLandscape => mediaQuery.orientation == Orientation.landscape;
+  ResponsiveInfo get responsive => ResponsiveInfo(this);
+  bool get isLandscape => mediaQuery.orientation == Orientation.landscape;
 
-  get size => mediaQuery.size;
+  Size get size => mediaQuery.size;
 
   double get pixelsPerInch =>
       UniversalPlatform.isAndroid || UniversalPlatform.isIOS ? 150 : 96;

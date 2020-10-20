@@ -268,7 +268,8 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
         _autoDispose = true;
       }
     }
-    _controller ??= TextEditingController(text: widget.initialValue ?? '');
+    _controller ??= widget.controller ??
+        TextEditingController(text: widget.initialValue ?? '');
   }
 
   @override

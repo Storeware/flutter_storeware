@@ -286,10 +286,10 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
   }
 
   iniciarPedido(double filial, DateTime data, double cliente, String pedido,
-      double lote) async {
+      double lote, String operacao) async {
     var d = toDateSql(data);
     var qry =
-        """SELECT p.ID FROM WEB_REG_PEDIDO($filial, '$d', $cliente, '$pedido', $lote) p""";
+        """SELECT p.ID FROM WEB_REG_PEDIDO($filial, '$d', $cliente, '$pedido', $lote,'$operacao') p""";
     return API.openJson(qry).then((rsp) => rsp['result']);
   }
 

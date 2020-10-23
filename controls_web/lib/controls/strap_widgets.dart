@@ -58,6 +58,8 @@ class StrapButton extends StatelessWidget {
   final Widget trailing;
   final Widget image;
   final bool running;
+  final bool enabled;
+  final bool visible;
   const StrapButton({
     Key key,
     this.text,
@@ -73,6 +75,8 @@ class StrapButton extends StatelessWidget {
     this.leading,
     this.trailing,
     this.image,
+    this.enabled = true,
+    this.visible = true,
     this.running = false,
   }) : super(key: key);
 
@@ -80,55 +84,63 @@ class StrapButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     primaryColor = theme.primaryColor;
-    return Container(
-      height: height,
-      width: width,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
-        border:
-            Border.all(width: borderWidth, color: Colors.grey.withOpacity(0.2)),
-        color:
-            (type == StrapButtonType.primary) ? primaryColor : strapColor(type),
-      ),
-      child: FlatButton(
-        child: Padding(
-            padding: const EdgeInsets.all(1),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (leading != null) Flexible(flex: 1, child: leading),
-                Flexible(
-                  flex: 4,
-                  child: Column(
+    return (!visible)
+        ? Container()
+        : Container(
+            height: height,
+            width: width,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(radius),
+              border: Border.all(
+                  width: borderWidth, color: Colors.grey.withOpacity(0.2)),
+              color: (type == StrapButtonType.primary)
+                  ? primaryColor
+                  : strapColor(type),
+            ),
+            child: FlatButton(
+              child: Padding(
+                  padding: const EdgeInsets.all(1),
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (image != null) image,
-                      if (title != null)
-                        DefaultTextStyle(
-                            style: theme.textTheme.button, child: title),
-                      if (text != null)
-                        Text(text,
-                            style: TextStyle(
-                              color: strapFontColor(type),
-                              fontSize: 16,
-                            )),
-                      if (subtitle != null)
-                        DefaultTextStyle(
-                            style: theme.textTheme.caption, child: subtitle),
+                      if (leading != null) Flexible(flex: 1, child: leading),
+                      Flexible(
+                        flex: 4,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (image != null) image,
+                            if (title != null)
+                              DefaultTextStyle(
+                                  style: theme.textTheme.button, child: title),
+                            if (text != null)
+                              Text(text,
+                                  style: TextStyle(
+                                    color: (enabled)
+                                        ? strapFontColor(type)
+                                        : theme.dividerColor,
+                                    fontSize: 16,
+                                  )),
+                            if (subtitle != null)
+                              DefaultTextStyle(
+                                  style: theme.textTheme.caption,
+                                  child: subtitle),
+                          ],
+                        ),
+                      ),
+                      if (running)
+                        Flexible(flex: 1, child: CircularProgressIndicator()),
+                      if (trailing != null) Flexible(flex: 1, child: trailing),
                     ],
-                  ),
-                ),
-                if (running)
-                  Flexible(flex: 1, child: CircularProgressIndicator()),
-                if (trailing != null) Flexible(flex: 1, child: trailing),
-              ],
-            )),
-        onPressed: () {
-          onPressed();
-        },
-      ),
-    );
+                  )),
+              onPressed: (enabled)
+                  ? () {
+                      onPressed();
+                    }
+                  : null,
+            ),
+          );
   }
 }

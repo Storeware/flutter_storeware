@@ -44,10 +44,14 @@ strapFontColor(StrapButtonType type) {
   }
 }
 
-class StrapButton extends StatelessWidget {
+enum StrapButtonState { none, pressed, processing }
+
+class StrapButton extends StatefulWidget {
   final String text;
   final Widget title, subtitle;
   final Function onPressed;
+  final Future<StrapButtonState> Function() onPressedAsync;
+
   final StrapButtonType type;
   final double height;
   final double width;
@@ -57,13 +61,15 @@ class StrapButton extends StatelessWidget {
   final Widget leading;
   final Widget trailing;
   final Widget image;
-  final bool running;
   final bool enabled;
   final bool visible;
+  final StrapButtonState Function(
+      StrapButtonState, ValueNotifier<StrapButtonState>) onStateChanged;
+  final ValueNotifier<StrapButtonState> stateNotifier;
   const StrapButton({
     Key key,
     this.text,
-    @required this.onPressed,
+    this.onPressed,
     this.margin = 1,
     this.type = StrapButtonType.primary,
     this.height = kMinInteractiveDimension,
@@ -77,70 +83,118 @@ class StrapButton extends StatelessWidget {
     this.image,
     this.enabled = true,
     this.visible = true,
-    this.running = false,
+    this.onStateChanged,
+    this.stateNotifier,
+    this.onPressedAsync,
   }) : super(key: key);
 
   @override
+  _StrapButtonState createState() => _StrapButtonState();
+}
+
+class _StrapButtonState extends State<StrapButton> {
+  ValueNotifier<StrapButtonState> _valueNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _valueNotifier = widget.stateNotifier ??
+        ValueNotifier<StrapButtonState>(StrapButtonState.none);
+  }
+
+  stateChanged(StrapButtonState value) {
+    if (widget.onStateChanged != null) {
+      _valueNotifier.value = widget.onStateChanged(value, _valueNotifier);
+    } else {
+      _valueNotifier.value = value;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    stateChanged(StrapButtonState.none);
     var theme = Theme.of(context);
     primaryColor = theme.primaryColor;
-    return (!visible)
+    return (!widget.visible)
         ? Container()
         : Container(
-            height: height,
-            width: width,
+            height: widget.height,
+            width: widget.width,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(radius),
+              borderRadius: BorderRadius.circular(widget.radius),
               border: Border.all(
-                  width: borderWidth, color: Colors.grey.withOpacity(0.2)),
-              color: (type == StrapButtonType.primary)
+                  width: widget.borderWidth,
+                  color: Colors.grey.withOpacity(0.2)),
+              color: (widget.type == StrapButtonType.primary)
                   ? primaryColor
-                  : strapColor(type),
+                  : strapColor(widget.type),
             ),
-            child: FlatButton(
-              child: Padding(
-                  padding: const EdgeInsets.all(1),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      if (leading != null) Flexible(flex: 1, child: leading),
-                      Flexible(
-                        flex: 4,
-                        child: Column(
+            child: ValueListenableBuilder<StrapButtonState>(
+                valueListenable: _valueNotifier,
+                builder: (BuildContext context, StrapButtonState stateValue,
+                    Widget child) {
+                  return FlatButton(
+                    child: Padding(
+                        padding: const EdgeInsets.all(1),
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (image != null) image,
-                            if (title != null)
-                              DefaultTextStyle(
-                                  style: theme.textTheme.button, child: title),
-                            if (text != null)
-                              Text(text,
-                                  style: TextStyle(
-                                    color: (enabled)
-                                        ? strapFontColor(type)
-                                        : theme.dividerColor,
-                                    fontSize: 16,
-                                  )),
-                            if (subtitle != null)
-                              DefaultTextStyle(
-                                  style: theme.textTheme.caption,
-                                  child: subtitle),
+                            if (widget.leading != null)
+                              Flexible(flex: 1, child: widget.leading),
+                            Expanded(
+                              //flex: 4,
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  if (widget.image != null) widget.image,
+                                  if (widget.title != null)
+                                    DefaultTextStyle(
+                                        style: theme.textTheme.button,
+                                        child: widget.title),
+                                  if (widget.text != null)
+                                    Text(widget.text,
+                                        style: TextStyle(
+                                          color: (widget.enabled)
+                                              ? strapFontColor(widget.type)
+                                              : theme.dividerColor,
+                                          fontSize: 16,
+                                        )),
+                                  if (widget.subtitle != null)
+                                    DefaultTextStyle(
+                                        style: theme.textTheme.caption,
+                                        child: widget.subtitle),
+                                ],
+                              ),
+                            ),
+                            if (widget.trailing != null)
+                              Flexible(flex: 1, child: widget.trailing),
+                            if (stateValue == StrapButtonState.processing)
+                              Container(
+                                  child: Container(
+                                      width: 22,
+                                      height: 22,
+                                      child: CircularProgressIndicator(
+                                        backgroundColor:
+                                            strapFontColor(widget.type),
+                                      ))),
                           ],
-                        ),
-                      ),
-                      if (running)
-                        Flexible(flex: 1, child: CircularProgressIndicator()),
-                      if (trailing != null) Flexible(flex: 1, child: trailing),
-                    ],
-                  )),
-              onPressed: (enabled)
-                  ? () {
-                      onPressed();
-                    }
-                  : null,
-            ),
-          );
+                        )),
+                    onPressed: (widget.enabled &&
+                            (stateValue != StrapButtonState.processing))
+                        ? () async {
+                            stateChanged(StrapButtonState.pressed);
+                            if (widget.onPressedAsync != null) {
+                              stateChanged(StrapButtonState.processing);
+                              stateChanged(await widget.onPressedAsync() ??
+                                  StrapButtonState.none);
+                            } else {
+                              widget.onPressed();
+                            }
+                          }
+                        : null,
+                  );
+                }));
   }
 }

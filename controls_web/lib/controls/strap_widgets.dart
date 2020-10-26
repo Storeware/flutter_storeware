@@ -178,10 +178,12 @@ class _StrapButtonState extends State<StrapButton> {
                                   child: Container(
                                       width: 22,
                                       height: 22,
+                                      color: strapColor(widget.type),
                                       child: CircularProgressIndicator(
-                                        backgroundColor:
-                                            strapFontColor(widget.type),
-                                      ))),
+                                          //valueColor: strapFontColor(widget.type),
+                                          //backgroundColor:
+                                          //    strapColor(widget.type),
+                                          ))),
                           ],
                         )),
                     onPressed: (widget.enabled &&

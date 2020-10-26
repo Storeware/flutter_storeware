@@ -44,7 +44,7 @@ strapFontColor(StrapButtonType type) {
   }
 }
 
-enum StrapButtonState { none, pressed, processing }
+enum StrapButtonState { none, pressed, processing, waiting }
 
 class StrapButton extends StatefulWidget {
   final String text;
@@ -170,7 +170,10 @@ class _StrapButtonState extends State<StrapButton> {
                             ),
                             if (widget.trailing != null)
                               Flexible(flex: 1, child: widget.trailing),
-                            if (stateValue == StrapButtonState.processing)
+                            if ([
+                              StrapButtonState.waiting,
+                              StrapButtonState.processing
+                            ].contains(stateValue))
                               Container(
                                   child: Container(
                                       width: 22,
@@ -182,11 +185,11 @@ class _StrapButtonState extends State<StrapButton> {
                           ],
                         )),
                     onPressed: (widget.enabled &&
-                            (stateValue != StrapButtonState.processing))
+                            (stateValue != StrapButtonState.waiting))
                         ? () async {
                             stateChanged(StrapButtonState.pressed);
                             if (widget.onPressedAsync != null) {
-                              stateChanged(StrapButtonState.processing);
+                              stateChanged(StrapButtonState.waiting);
                               stateChanged(await widget.onPressedAsync() ??
                                   StrapButtonState.none);
                             } else {

@@ -16,7 +16,9 @@ class Usuario {
 }
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({Key key}) : super(key: key);
+  final List<Widget> actions;
+  final String title;
+  const ProfileHeader({Key key, this.title, this.actions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,8 @@ class ProfileHeader extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          title: Text('Opções')),
+          actions: actions,
+          title: Text(title ?? 'Opções')),
     );
   }
 }

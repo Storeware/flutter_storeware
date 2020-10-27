@@ -113,9 +113,10 @@ class ResponsiveArea extends StatelessWidget {
   }
 }
 
-class ResponsiveBuilder extends StatelessWidget {
+
+class ResponsiveLayout extends StatelessWidget {
   final Widget Function(BuildContext, Size size) builder;
-  const ResponsiveBuilder({Key key, this.builder}) : super(key: key);
+  const ResponsiveLayout({Key key, this.builder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

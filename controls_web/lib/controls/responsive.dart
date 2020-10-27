@@ -100,3 +100,28 @@ class ResponsiveBuilder extends StatelessWidget {
     );
   }
 }
+
+class ResponsiveArea extends StatelessWidget {
+  final Widget Function(BuildContext, Size size) builder;
+  const ResponsiveArea({Key key, this.builder}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (a, c) => SafeArea(child: builder(a, c.biggest)),
+    );
+  }
+}
+
+class ResponsiveBuilder extends StatelessWidget {
+  final Widget Function(BuildContext, Size size) builder;
+  const ResponsiveBuilder({Key key, this.builder}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (a, b) => builder(a, b.biggest),
+    );
+  }
+}
+

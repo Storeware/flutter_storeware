@@ -495,6 +495,7 @@ class ActionText extends StatelessWidget {
   final Function() onPressed;
   final double height, width;
   final Widget child;
+  final double borderWidth;
   const ActionText(
       {Key key,
       this.label,
@@ -504,6 +505,7 @@ class ActionText extends StatelessWidget {
       this.height,
       this.width,
       this.child,
+      this.borderWidth = 1,
       this.onPressed,
       this.radius = 5})
       : super(key: key);
@@ -517,10 +519,15 @@ class ActionText extends StatelessWidget {
       child: Container(
         width: width,
         height: height,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(radius),
-            color: color ?? theme.scaffoldBackgroundColor,
-            border: Border.all(width: 1, color: theme.dividerColor)),
+        decoration: (borderWidth > 0)
+            ? BoxDecoration(
+                borderRadius: BorderRadius.circular(radius),
+                color: color ?? theme.scaffoldBackgroundColor,
+                border:
+                    Border.all(width: borderWidth, color: theme.dividerColor))
+            : null,
+        color:
+            (borderWidth == 0) ? color ?? theme.scaffoldBackgroundColor : null,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

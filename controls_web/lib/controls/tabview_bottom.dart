@@ -15,6 +15,7 @@ class TabViewBottom extends StatefulWidget {
   final Color indicatorColor;
   final double tabHeight;
   final TextStyle style;
+  final Widget leading;
   final List<Widget> actions;
   final Widget bottomNavigationBar;
   final Widget appBar;
@@ -38,6 +39,7 @@ class TabViewBottom extends StatefulWidget {
     this.bottomNavigationBar,
     this.appBar,
     this.onChanged,
+    this.leading,
   }) : super(key: key);
 
   @override
@@ -121,6 +123,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
                           color: _color,
                           height: widget.tabHeight,
                           child: Row(children: [
+                            if (widget.leading != null) widget.leading,
                             Expanded(
                                 child: ListView.builder(
                               scrollDirection: Axis.horizontal,

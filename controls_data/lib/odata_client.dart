@@ -516,6 +516,10 @@ abstract class ODataModelClass<T extends DataItem> {
     });
   }
 
+  bool validate(Map<String, dynamic> value) {
+    return true;
+  }
+
   Future<List<dynamic>> query(
       {filter, String select, int top, int skip, orderBy, cacheControl}) async {
     return search(
@@ -585,12 +589,15 @@ abstract class ODataModelClass<T extends DataItem> {
   }
 
   Future<Map<String, dynamic>> enviar(T item) {
-    try {
-      return API.post(collectionName, item.toJson()).then((x) => jsonDecode(x));
-    } catch (e) {
-      ErrorNotify.send('$e');
-      rethrow;
-    }
+    if (validate(item))
+      try {
+        return API
+            .post(collectionName, item.toJson())
+            .then((x) => jsonDecode(x));
+      } catch (e) {
+        ErrorNotify.send('$e');
+        rethrow;
+      }
   }
 
   removeExternalKeys(Map<String, dynamic> dados) {
@@ -603,46 +610,50 @@ abstract class ODataModelClass<T extends DataItem> {
   afterChangeEvent(item) {}
 
   Future<Map<String, dynamic>> post(item) async {
-    var d;
-    if (item is T)
-      d = item.toJson();
-    else
-      d = item;
-    try {
-      d = removeExternalKeys(d);
-      return API.post(collectionName, d).then((x) {
-        if (CC != null) CC.post(collectionName, d);
-        afterChangeEvent(d);
-        return jsonDecode(x);
-      });
-    } catch (e) {
-      print('$e');
-      ErrorNotify.send('$e');
-      rethrow;
+    if (validate(item)) {
+      var d;
+      if (item is T)
+        d = item.toJson();
+      else
+        d = item;
+      try {
+        d = removeExternalKeys(d);
+        return API.post(collectionName, d).then((x) {
+          if (CC != null) CC.post(collectionName, d);
+          afterChangeEvent(d);
+          return jsonDecode(x);
+        });
+      } catch (e) {
+        print('$e');
+        ErrorNotify.send('$e');
+        rethrow;
+      }
     }
   }
 
   Future<Map<String, dynamic>> put(item) async {
-    var d;
-    if (item is T)
-      d = item.toJson();
-    else
-      d = item;
-    try {
-      d = removeExternalKeys(d);
-      return API.client
-          .openJsonAsync(API.client.formatUrl(path: collectionName),
-              method: "PUT", body: API.removeNulls(d))
-          .then((x) {
-        API.client.notifyLog.notify(x.toString());
-        if (CC != null) CC.put(collectionName, d);
-        afterChangeEvent(d);
-        return x;
-      });
-    } catch (e) {
-      ErrorNotify.send('$e');
-      return null;
-      rethrow;
+    if (validate(item)) {
+      var d;
+      if (item is T)
+        d = item.toJson();
+      else
+        d = item;
+      try {
+        d = removeExternalKeys(d);
+        return API.client
+            .openJsonAsync(API.client.formatUrl(path: collectionName),
+                method: "PUT", body: API.removeNulls(d))
+            .then((x) {
+          API.client.notifyLog.notify(x.toString());
+          if (CC != null) CC.put(collectionName, d);
+          afterChangeEvent(d);
+          return x;
+        });
+      } catch (e) {
+        ErrorNotify.send('$e');
+        return null;
+        rethrow;
+      }
     }
   }
 

@@ -607,12 +607,12 @@ abstract class ODataModelClass<T extends DataItem> {
   afterChangeEvent(item) {}
 
   Future<Map<String, dynamic>> post(item) async {
-    if (validate(item)) {
-      var d;
-      if (item is T)
-        d = item.toJson();
-      else
-        d = item;
+    var d;
+    if (item is T)
+      d = item.toJson();
+    else
+      d = item;
+    if (validate(d)) {
       try {
         d = removeExternalKeys(d);
         return API.post(collectionName, d).then((x) {
@@ -629,12 +629,12 @@ abstract class ODataModelClass<T extends DataItem> {
   }
 
   Future<Map<String, dynamic>> put(item) async {
-    if (validate(item)) {
-      var d;
-      if (item is T)
-        d = item.toJson();
-      else
-        d = item;
+    var d;
+    if (item is T)
+      d = item.toJson();
+    else
+      d = item;
+    if (validate(d)) {
       try {
         d = removeExternalKeys(d);
         return API.client

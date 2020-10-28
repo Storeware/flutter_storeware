@@ -21,7 +21,7 @@ class DateTimePickerFormField extends StatefulWidget {
       this.format,
       this.decoration,
       this.dateOnly,
-      this.initialEntryMode = DatePickerEntryMode.input,
+      this.initialEntryMode = DatePickerEntryMode.calendar,
       this.extended = false,
       this.showResetIcon = true,
       this.initialValue,
@@ -71,9 +71,9 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
           final today = DateTime.now();
           final date = await showDatePicker(
             context: context,
-            firstDate: widget.firstDate ?? today.add(Duration(days: -180)),
+            firstDate: widget.firstDate ?? today.add(Duration(days: -500)),
             initialDate: currentValue ?? today,
-            lastDate: widget.lastDate ?? today.add(Duration(days: 360)),
+            lastDate: widget.lastDate ?? today.add(Duration(days: 500)),
             initialEntryMode: widget.initialEntryMode,
           );
 

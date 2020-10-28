@@ -144,6 +144,23 @@ abstract class DataItem {
   fromDateTime(DateTime dt) {
     return dt.toIso8601String().substring(0, 19).replaceAll('T', ' ');
   }
+
+  copyTo(Map<String, dynamic> destino) {
+    toJson().forEach((key, value) {
+      destino[key] = value;
+    });
+  }
+
+  copyWith(Map<String, dynamic> dados) {
+    var values = toJson();
+    dados.forEach((key, value) {
+      values[key] = value;
+    });
+    fromMap(values);
+  }
+
+  //get keys => toJson().keys;
+  //get values => toJson().values;
 }
 
 abstract class DataModel {

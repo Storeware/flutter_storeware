@@ -589,15 +589,12 @@ abstract class ODataModelClass<T extends DataItem> {
   }
 
   Future<Map<String, dynamic>> enviar(T item) {
-    if (validate(item))
-      try {
-        return API
-            .post(collectionName, item.toJson())
-            .then((x) => jsonDecode(x));
-      } catch (e) {
-        ErrorNotify.send('$e');
-        rethrow;
-      }
+    try {
+      return API.post(collectionName, item.toJson()).then((x) => jsonDecode(x));
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
   }
 
   removeExternalKeys(Map<String, dynamic> dados) {

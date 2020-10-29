@@ -29,6 +29,11 @@ class Cached {
     return item;
   }
 
+  static add(key, value) {
+    _cached[key] = value;
+    return value;
+  }
+
   static value<T>(String key, {T Function(String) builder}) {
     var item = _cached[key];
     //print(['Cache value:', key, (item != null)]);

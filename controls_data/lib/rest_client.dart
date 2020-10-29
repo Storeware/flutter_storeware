@@ -259,11 +259,14 @@ class RestClient {
       var error;
       try {
         error = formataMensagemErro('$method:$url', e);
-        if (!silent) notifyError.send('$error [$resp]');
+        if (!silent)
+          notifyError.send('$error [$resp]');
+        else
+          print([error, uri, body]);
+        return throw error;
       } catch (err) {
-        return throw e;
+        return throw '$e';
       }
-      return throw error;
     }
   }
 

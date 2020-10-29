@@ -104,6 +104,7 @@ class Sigcaut1Item extends DataItem {
     this.compl,
     this.mesa,
     this.dctoid,
+    this.vendedor,
     //   this.empresa,
     //   this.formapgto,
     //   this.hora,

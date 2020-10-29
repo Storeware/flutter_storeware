@@ -14,6 +14,7 @@ class ProdutoItem extends DataItem {
   double codtitulo; // codigo do atalho
   bool publicaweb = true;
   bool inservico = false;
+  double filial;
   ProdutoItem(
       {this.codigo,
       this.nome,
@@ -39,6 +40,7 @@ class ProdutoItem extends DataItem {
     data['publicaweb'] = (this.publicaweb ?? 'S') ? 'S' : 'N';
     data['inservico'] = (this.inservico ?? 'N') ? 'S' : 'N';
     data['id'] = '$codigo';
+    data['filial'] = filial;
     return data;
   }
 
@@ -64,6 +66,7 @@ class ProdutoItem extends DataItem {
     codtitulo = toDouble(json['codtitulo']);
     this.publicaweb = (json['publicaweb' ?? 'S'] == 'S');
     this.inservico = (json['inservico'] ?? 'N') == 'S';
+    this.filial = toDouble(json['filial']);
   }
 
   static List<String> get keys {
@@ -72,7 +75,7 @@ class ProdutoItem extends DataItem {
     return k;
   }
 
-  static copy(dados) {
+  static Map<String, dynamic> copy(dados) {
     var d;
     if (dados is ProdutoItem)
       d = ProdutoItem.fromJson(dados.toJson());
@@ -96,13 +99,14 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
 
   ProdutoItem newItem() => ProdutoItem();
 
-  listGrid({String filter, top: 20, skip: 0, String orderBy}) {
+  listGrid(
+      {String filter, top: 20, skip: 0, String orderBy, double filial = 1}) {
     //debugPrint('produto.listGrid');
     //return Cached.value('listGrid_$filter', builder: (key) {
     return search(
             resource: 'ctprod',
             select:
-                'ctprod.codigo,ctprod.inservico, ctprod.nome,ctprod.precoweb,ctprod.unidade,ctprod.obs,cast(ctprod.sinopse as varchar(1024)) sinopse , i.codtitulo',
+                'ctprod.codigo,ctprod.inservico, ctprod.nome, coalesce( (select precoweb from ctprod_filial where codigo=ctprod.codigo and filial = $filial) ,ctprod.precoweb) precoweb ,ctprod.unidade,ctprod.obs,cast(ctprod.sinopse as varchar(1024)) sinopse , i.codtitulo',
             filter: filter,
             join:
                 ' left join ctprod_atalho_itens i on (i.codprod=ctprod.codigo)',
@@ -125,6 +129,7 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   put(item) {
     var it = ProdutoItem.copy(item);
     atalhoUpdate(it);
+    updatePrecoFilial(it);
     return super.put(it);
   }
 
@@ -132,6 +137,7 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   post(item) {
     var it = ProdutoItem.copy(item);
     atalhoUpdate(it);
+    updatePrecoFilial(it);
     return super.post(it);
   }
 
@@ -141,6 +147,16 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
       // atalhoUpdate
       String upd =
           "update or insert into ctprod_atalho_itens (codtitulo,codprod) values(${item['codtitulo']},'${item['codigo']}') matching (codprod)   ";
+      API.execute(upd);
+    }
+  }
+
+  updatePrecoFilial(Map<String, dynamic> dados) {
+    var it = ProdutoItem.fromJson(dados);
+    if ((it.filial ??= 0) > 0) {
+      var upd =
+          "update or insert into ctprod_filial (codigo,filial,precoweb) values ('${it.codigo}',${it.filial}, ${it.precoweb}) matching (codigo,filial)";
+      print(upd);
       API.execute(upd);
     }
   }

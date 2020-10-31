@@ -2,6 +2,9 @@ import 'package:controls_web/controls.dart';
 import 'package:controls_web/controls/notice_activities.dart';
 import 'package:flutter/material.dart';
 
+@deprecated
+
+/// usar dialog_widgets.dart ao inves de alert.dart
 class Dialogs {
   static Future<void> showLoadingDialog(BuildContext context, GlobalKey key,
       {Widget title, Widget content}) async {

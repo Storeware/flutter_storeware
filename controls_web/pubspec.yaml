@@ -1,7 +1,7 @@
 name: controls_web
 description: A new Flutter package project.
-version: 1.0.1
-author: amarildo lacerda<amarildo_51@msn.com>
+version: 2.0.0
+author: <amarildo_51@msn.com>
 homepage: http://tireideletra.com.br
 
 environment:
@@ -11,12 +11,15 @@ dependencies:
   flutter:
     sdk: flutter
   #cupertino_icons: ^0.1.3
-  uuid: #^2.0.2
+  uuid:
   universal_html: #^1.1.6
   datetime_picker_formfield:
-  meta: #^1.1.7
+  meta:
   url_launcher:
-  
+  universal_io:
+  universal_platform:
+  font_awesome_flutter:
+
   controls_data:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

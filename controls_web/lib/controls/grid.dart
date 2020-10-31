@@ -80,11 +80,18 @@ class _DataGridPageState extends State<DataGridPage> {
 
   @override
   initState() {
-    inactive = widget.inactive;
     super.initState();
+    inactive = widget.inactive;
+    _notifier = StreamController<bool>.broadcast();
   }
 
-  var _notifier = StreamController<bool>.broadcast();
+  @override
+  void dispose() {
+    _notifier.close();
+    super.dispose();
+  }
+
+  var _notifier;
   _compareTo(String a, String b) {
     return a.compareTo(b);
   }

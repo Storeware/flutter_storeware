@@ -21,9 +21,9 @@ class _EntradaViewState extends State<EntradaView> {
         enabled: true,
         child: VerticalTopTabView(
           completedColor: Colors.green,
-          timeline: (x) {
-            return Icon(Icons.check, size: 10);
-          },
+          //timeline: (x) {
+          // return Icon(Icons.check, size: 10);
+          //},
           choices: [
             TabChoice(
               label: 'Opções',

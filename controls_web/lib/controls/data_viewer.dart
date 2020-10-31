@@ -1,4 +1,4 @@
-import 'dart:convert';
+//import 'dart:convert';
 
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
@@ -6,8 +6,9 @@ import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/constants.dart';
+//import 'package:flutter/src/material/constants.dart';
 
+/// [DefaultDataViewer] widget para propagar dependencia pela arvore
 class DefaultDataViewer extends InheritedWidget {
   final DataViewerController controller;
   DefaultDataViewer({Key key, @required this.controller, Widget child})
@@ -22,15 +23,16 @@ class DefaultDataViewer extends InheritedWidget {
 }
 
 /// [DataViewerController] Controller de dados para [DataViewer]
+/// O Controller define comportamento e expoe funcionalidade do DataViewer
 class DataViewerController {
-  /// API de ligação com o REST
+  /// API de ligação com o REST - utilizado para enviar PUT,POST,DELETE para o servido
   final ODataModelClass dataSource;
 
-  /// Function de busca dos dados
+  /// Function de busca dos dados - deve retornar um objeto do timpo List<dynamic>
   Function() future;
   final Function(dynamic, PaginatedGridChangeEvent) beforeChange;
 
-  /// [DataViewerController.keyName] utilizado para localizar uma linha na pilha
+  /// [DataViewerController.keyName] utilizado para localizar uma linha na pilha - ligado com a chave primaria da tabela no banco de dados
   String keyName;
   DataViewerController({
     this.future,
@@ -53,8 +55,14 @@ class DataViewerController {
     }
     paginatedController.parent = this;
   }
+
+  /// posicao da pagina a buscar
   int page = 1;
+
+  /// numero de linhas a obter
   int top;
+
+  /// [filter] e utilizado para passar parametro de digitacao na busca - um filter
   String get filter => filterValue.value;
   set filter(String v) => filterValue.value = v;
   ValueNotifier filterValue = ValueNotifier<String>('');
@@ -64,6 +72,8 @@ class DataViewerController {
   final Future<dynamic> Function(dynamic) onUpdate;
   final Future<dynamic> Function(dynamic) onDelete;
   final Function(dynamic) onChanged;
+
+  /// lista de colunas a serem mostradados ou tratado pelo DataViewer
   List<PaginatedGridColumn> columns;
 
   /// Evento indicando que pode limpar o cache;
@@ -87,6 +97,7 @@ class DataViewerController {
   /// [DataViewerController.skip] indica as linhas iniciais a saltar na busca da API
   get skip => (page - 1) * top;
 
+  /// procura o object column na lista de colunas
   findColumn(name) {
     var index = -1;
     for (int i = 0; i < columns.length; i++)
@@ -95,6 +106,7 @@ class DataViewerController {
     return null;
   }
 
+  /// crias as colunas, de uso interno
   createColumns(List<Map<String, dynamic>> source) {
     paginatedController.createColumns(source);
   }
@@ -187,16 +199,17 @@ class DataViewerController {
   }
 
   /// mostra uma janela filha
-  show(texto) {
-    if (context != null) Dialogs.showModal(context, title: texto);
+  show(String texto, {Widget child}) {
+    if (context != null) Dialogs.showModal(context, title: texto, child: child);
   }
 
   /// [DataViewerController.onValidate] permite  transformar um dados antes de enviar para a API
-  dynamic Function(dynamic) onValidate;
+  Map<String, dynamic> Function(dynamic) onValidate;
 
   /// [PaginatedGridController] controller para paginação dos dados.
   PaginatedGridController paginatedController = PaginatedGridController();
 
+  /// [edit] abre uma janela de edicao dos dados
   edit(BuildContext context, Map<String, dynamic> data,
       {String title,
       double width,
@@ -207,8 +220,10 @@ class DataViewerController {
   }
 }
 
+/// [DataViewerColumn] cria as propriedade da coluna no grid
 class DataViewerColumn extends PaginatedGridColumn {
   DataViewerColumn({
+    /// evento editPressed
     Function(PaginatedGridController) onEditIconPressed,
     bool numeric = false,
     bool autofocus = false,
@@ -221,25 +236,37 @@ class DataViewerColumn extends PaginatedGridColumn {
     String tooltip,
     Alignment align,
     TextStyle style,
+
+    /// nome da coluna utilizado para localizar na lista de dados
     String name,
     bool required = false,
     bool readOnly = false,
+
+    /// [isPrimaryKey] indica se pode ou nao ser editada. True, indica que a coluna nao pode ser editada.
     bool isPrimaryKey = false,
     onSort,
     bool placeHolder = false,
+
+    /// [label] indica o texto a ser mostrado no titulo da coluna
     String label,
     String editInfo = '{label}',
     bool sort = true,
     double editWidth,
     double editHeight,
     Function(dynamic) onFocusChanged,
+
+    /// [builder] e um construtor de Widget para a celula no grid
     Widget Function(int, Map<String, dynamic>) builder,
     Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
             Map<String, dynamic>)
         editBuilder,
     bool isVirtual = false,
+
+    /// obter um valor legivel para o dado
     String Function(dynamic) onGetValue,
     final dynamic Function(dynamic) onSetValue,
+
+    /// valida o dado para a coluna antes de submeter a persistencia
     final String Function(dynamic) onValidate,
     folded,
   }) : super(
@@ -729,7 +756,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
 
   get p => widget.data;
   createFormField(BuildContext context, item, {bool isLast = false}) {
-    final TextEditingController txt_controller = TextEditingController(
+    final TextEditingController txtController = TextEditingController(
         text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
             : (p[item.name] ?? '').toString());
@@ -739,7 +766,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
       canRequestFocus: false,
       onFocusChange: (b) {
         if (!b) if (item.onFocusChanged != null)
-          item.onFocusChanged(txt_controller.text);
+          item.onFocusChanged(txtController.text);
       },
       child: TextFormField(
         textInputAction: (isLast) ? TextInputAction.done : TextInputAction.next,
@@ -755,7 +782,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         maxLines: item.maxLines,
         maxLength: item.maxLength,
         enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
-        controller: txt_controller,
+        controller: txtController,
         style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
           labelText: item.label ?? item.name,

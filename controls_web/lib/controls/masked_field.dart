@@ -641,6 +641,8 @@ class MaskedDropDownFormField extends StatelessWidget {
   final Color hintColor;
   final Widget trailing;
   final Widget leading;
+  final bool readOnly;
+  final Function(dynamic) onItemChanged;
   final EdgeInsetsGeometry padding;
   const MaskedDropDownFormField(
       {Key key,
@@ -655,6 +657,8 @@ class MaskedDropDownFormField extends StatelessWidget {
       this.hintColor,
       this.padding,
       this.trailing,
+      this.onItemChanged,
+      this.readOnly = false,
       this.leading})
       : super(key: key);
 
@@ -680,10 +684,12 @@ class MaskedDropDownFormField extends StatelessWidget {
 
     ValueNotifier<String> valueChange = ValueNotifier<String>(_value);
     return Container(
-        padding: padding ?? EdgeInsets.symmetric(horizontal: 10),
-        child: ValueListenableBuilder(
-          valueListenable: valueChange,
-          builder: (a, v, w) => Column(
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 10),
+      child: ValueListenableBuilder(
+        valueListenable: valueChange,
+        builder: (a, v, w) {
+          if (onItemChanged != null) onItemChanged(v);
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -716,6 +722,7 @@ class MaskedDropDownFormField extends StatelessWidget {
                     isDense: true,
                     isExpanded: true,
                     onChanged: (x) {
+                      if (readOnly) return false;
                       var erro;
                       if (validator != null) if (erro = validator(x) != null) {
                         return false;
@@ -738,8 +745,10 @@ class MaskedDropDownFormField extends StatelessWidget {
               ),
               Container(height: 2, color: theme.dividerColor),
             ],
-          ),
-        ));
+          );
+        },
+      ),
+    );
   }
 }
 
@@ -754,6 +763,7 @@ class MaskedMoneyFormField extends StatelessWidget {
   final int maxLength;
   final dynamic Function(double) validator;
   final Function(double) onFocusChanged;
+  final bool readOnly;
   const MaskedMoneyFormField({
     Key key,
     this.label,
@@ -762,6 +772,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.leftSymbol = '',
     this.precision,
     this.controller,
+    this.readOnly = false,
     this.onFocusChanged,
     this.errorText,
     this.validator,
@@ -805,6 +816,7 @@ class MaskedMoneyFormField extends StatelessWidget {
                 child: TextFormField(
                     key: key,
                     controller: _controller,
+                    readOnly: readOnly,
                     keyboardType: TextInputType.number,
                     autofocus: true,
                     textAlign: TextAlign.right,
@@ -1000,16 +1012,18 @@ class MaskedSearchFormField<T> extends StatelessWidget {
             decoration: decoration ??
                 InputDecoration(
                     labelText: labelText,
-                    suffixIcon: GestureDetector(
-                        //focusNode: FocusNode(
-                        //    canRequestFocus: false, onKey: (a, b) => false),
-                        child: Icon(iconSearch),
-                        onTap: () {
-                          if (!readOnly)
-                            onSearch().then((item) {
-                              _controller.text = getValue(item);
-                            });
-                        })),
+                    suffixIcon: (readOnly)
+                        ? null
+                        : GestureDetector(
+                            //focusNode: FocusNode(
+                            //    canRequestFocus: false, onKey: (a, b) => false),
+                            child: Icon(iconSearch),
+                            onTap: () {
+                              if (!readOnly)
+                                onSearch().then((item) {
+                                  _controller.text = getValue(item);
+                                });
+                            })),
             enableSuggestions: true,
             expands: maxLines > 1,
             maxLines: maxLines,

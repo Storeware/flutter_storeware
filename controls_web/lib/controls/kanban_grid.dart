@@ -118,8 +118,8 @@ class KanbanGrid extends StatefulWidget {
   final dynamic Function(KanbanController, DraggableKanbanItem) onNewItem;
 
   /// [onSelectedItem] é chamado quando click no card item
-  final Function(DraggableKanbanItem) onSelectedItem;
-  final Function(DraggableKanbanItem) onDoubleTap;
+  //final Function(DraggableKanbanItem) onSelectedItem;
+  //final Function(DraggableKanbanItem) onDoubleTap;
 
   /// exluir um card
   final Function(DraggableKanbanItem) onDeleteItem;
@@ -137,8 +137,8 @@ class KanbanGrid extends StatefulWidget {
       this.headerHeight = 50,
       this.onWillAccept,
       this.onAcceptItem,
-      this.onSelectedItem,
-      this.onDoubleTap,
+      //this.onSelectedItem,
+      //this.onDoubleTap,
       this.onNewItem,
       this.onDeleteItem,
       this.emptyContainer,
@@ -656,10 +656,11 @@ class _DraggableKanbanCardState extends State<DraggableKanbanCard> {
       feedback: Container(
         constraints: BoxConstraints(maxWidth: widget.column.width),
         child: Align(
-          child: Icon(Icons.drag_handle),
+          child: Icon(Icons.more),
         ),
       ),
-      child: ((widget.controller.widget.onSelectedItem != null) ||
+      child:
+          /*((widget.controller.widget.onSelectedItem != null) ||
               (widget.controller.widget.onDoubleTap != null))
           ? InkWell(
 
@@ -674,7 +675,8 @@ class _DraggableKanbanCardState extends State<DraggableKanbanCard> {
                 if (widget.controller.widget.onSelectedItem != null)
                   widget.controller.widget.onSelectedItem(draggable);
               })
-          : widget.child,
+          :*/
+          widget.child,
       childWhenDragging: Material(
         color: Colors.grey.withOpacity(0.2),
         child: Container(height: 0),

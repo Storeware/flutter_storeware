@@ -521,7 +521,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
           child: Draggable<DraggableKanbanItem>(
               data: draggable,
               feedback: Icon(Icons.more),
-              child: Icon(Icons.more_horiz))),
+              child: Icon(Icons.swap_horiz))),
     ]);
   }
 

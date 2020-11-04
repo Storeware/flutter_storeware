@@ -124,8 +124,8 @@ class KanbanGrid extends StatefulWidget {
   /// exluir um card
   final Function(DraggableKanbanItem) onDeleteItem;
   final Widget emptyContainer;
-  final List<KanbanSlideAction> leadingActions;
-  final List<KanbanSlideAction> trailingActions;
+  final List<KanbanSlideAction> slideLeading;
+  final List<KanbanSlideAction> slideTrailing;
   KanbanGrid(
       {Key key,
       @required this.keyName,
@@ -147,8 +147,8 @@ class KanbanGrid extends StatefulWidget {
       this.bottomNavigationBar,
       @required this.source,
       this.itemHeight,
-      this.leadingActions,
-      this.trailingActions})
+      this.slideLeading,
+      this.slideTrailing})
       : super(key: key);
 
   @override
@@ -454,7 +454,7 @@ class KabanColumnCards extends StatefulWidget {
 
 class _KabanColumnCardsState extends State<KabanColumnCards> {
   bool get isSlidable =>
-      (kanban.trailingActions != null || kanban.leadingActions != null);
+      (kanban.slideTrailing != null || kanban.slideLeading != null);
   Widget getItem(index, data, item) {
     return Padding(
         padding: const EdgeInsets.only(top: 2, left: 6, right: 6),
@@ -468,10 +468,10 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
               ? Slidable(
                   actionPane: SlidableDrawerActionPane(),
                   actionExtentRatio: 0.25,
-                  secondaryActions: kanban.trailingActions == null
+                  secondaryActions: kanban.slideTrailing == null
                       ? null
                       : [
-                          for (final it in kanban.trailingActions)
+                          for (final it in kanban.slideTrailing)
                             IconSlideAction(
                               caption: it.label,
                               icon: it.icon,
@@ -479,10 +479,10 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
                               onTap: () => it.onPressed(item),
                             )
                         ],
-                  actions: kanban.leadingActions == null
+                  actions: kanban.slideLeading == null
                       ? null
                       : [
-                          for (final it in kanban.leadingActions)
+                          for (final it in kanban.slideLeading)
                             IconSlideAction(
                               key: it.key,
                               caption: it.label,

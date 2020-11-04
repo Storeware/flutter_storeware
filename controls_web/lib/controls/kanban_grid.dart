@@ -534,7 +534,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
     var accepted = false;
     kanban = DefaultKanbanGrid.of(context).kanbanGrid;
 
-    return ListView(children: [
+    return Column(children: [
       /// header
       if (kanban.headerHeight > 0)
         DragTargetKanbanCard(
@@ -568,37 +568,41 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
                 ],
               )),
         ),
-
-      /// itens
-      for (var i = 0; i < data.length; i++) getItem(i, data, data[i]),
-      Padding(
-        padding: const EdgeInsets.only(top: 2, left: 6.0, right: 6.0),
-        child: DragTarget<DraggableKanbanItem>(
-          onWillAccept: (v) {
-            accepted = true;
-            return true;
-          },
-          onAccept: (value) {
-            value.controller._remove(value.column, value.data);
-            widget.controller._insert(widget.column, -1, value.data).then((b) {
-              value.controller.reload();
-            });
-          },
-          onLeave: (v) {
-            accepted = false;
-          },
-          builder: (a, items, c) => Material(
-            elevation: (accepted) ? 8 : 0,
-            child: kanban.emptyContainer ??
-                Container(
-                    height: 40,
-                    color: theme.primaryColor.withOpacity(0.1),
-                    child: (accepted)
-                        ? kanban.builder(items[0].column, 0, items[0].data)
-                        : null),
+      Expanded(
+          child: ListView(children: [
+        /// itens
+        for (var i = 0; i < data.length; i++) getItem(i, data, data[i]),
+        Padding(
+          padding: const EdgeInsets.only(top: 2, left: 6.0, right: 6.0),
+          child: DragTarget<DraggableKanbanItem>(
+            onWillAccept: (v) {
+              accepted = true;
+              return true;
+            },
+            onAccept: (value) {
+              value.controller._remove(value.column, value.data);
+              widget.controller
+                  ._insert(widget.column, -1, value.data)
+                  .then((b) {
+                value.controller.reload();
+              });
+            },
+            onLeave: (v) {
+              accepted = false;
+            },
+            builder: (a, items, c) => Material(
+              elevation: (accepted) ? 8 : 0,
+              child: kanban.emptyContainer ??
+                  Container(
+                      height: 40,
+                      color: theme.primaryColor.withOpacity(0.1),
+                      child: (accepted && items.length > 0)
+                          ? kanban.builder(items[0].column, 0, items[0].data)
+                          : null),
+            ),
           ),
         ),
-      ),
+      ]))
     ]);
   }
 }

@@ -294,6 +294,7 @@ class KanbanController {
   }
 
   String keyName;
+  int rowIndexOnColumn = 0;
   var widget;
 
   List<KanbanColumn> columns;
@@ -379,6 +380,7 @@ class KanbanController {
   Future<dynamic> _insert(KanbanColumn column, int index, dynamic item) async {
     item[keyName] = column.id;
     if (widget.onAcceptItem != null) {
+      this.rowIndexOnColumn = index;
       return widget.onAcceptItem(this, column, item).then((rsp) {
         if (data[column.id] == null) data[column.id] = [];
         if ((index < 0) || (data[column.id].length <= index))
@@ -513,8 +515,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
     var draggable = DraggableKanbanItem(
         column: widget.column, controller: widget.controller, data: item);
     return Stack(children: [
-      Expanded(
-          child: widget.controller.widget.builder(widget.column, index, item)),
+      widget.controller.widget.builder(widget.column, index, item),
       Positioned(
           right: 0,
           bottom: 0,

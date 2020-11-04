@@ -226,7 +226,7 @@ class RestClient {
 
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-
+    //dio.transformer = ClientTransformer();
     try {
       if (method == 'GET') {
         resp = await dio.get(uri);
@@ -330,7 +330,7 @@ class RestClient {
 
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-    //print('URL: ${this.baseUrl} $uri, $contentType ');
+    //dio.transformer = ClientTransformer();
     Future<Response> ref;
     try {
       if (method == 'GET') {
@@ -431,6 +431,7 @@ class RestClient {
 
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
+    //dio.transformer = ClientTransformer();
 
     try {
       if (method == 'GET') {
@@ -464,3 +465,15 @@ class RestClient {
     }
   }
 }
+
+/*
+class ClientTransformer extends DefaultTransformer {
+  @override
+  Future transformResponse(
+      RequestOptions options, ResponseBody response) async {
+    //options.extra["self"] = 'XX';
+    print([response.headers.values.join(','), response.extra.values.join(';')]);
+    return super.transformResponse(options, response);
+  }
+}
+*/

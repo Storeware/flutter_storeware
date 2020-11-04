@@ -162,6 +162,9 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   }
 
   buscarByCodigo(String codigo) async {
-    return listCached(filter: "codigo eq '$codigo'", select: columns);
+    return listCached(
+        filter: "codigo eq '$codigo'",
+        select:
+            'codigo,nome,precoweb,unidade,cast(sinopse as varchar(1024)) sinopse,obs,publicaweb,inservico');
   }
 }

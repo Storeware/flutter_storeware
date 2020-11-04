@@ -1,6 +1,9 @@
+//import 'package:controls_web/controls/slide_tile.dart';
+//import 'package:controls_web/controls/tab_choice.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 //import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// clase de teste para Kanban
 class KanbanSample extends StatefulWidget {
@@ -61,6 +64,27 @@ class DefaultKanbanGrid extends InheritedWidget {
       context.dependOnInheritedWidgetOfExactType();
 }
 
+class KanbanSlideAction {
+  final Key key;
+  final String label;
+  final IconData icon;
+  final Widget image;
+  final Function(dynamic) onPressed;
+  final Color color;
+  final Color foregroundColor;
+  final bool closeOnTap;
+  KanbanSlideAction(
+      {this.key,
+      this.label,
+      this.icon,
+      this.image,
+      this.onPressed,
+      this.color,
+      this.foregroundColor,
+      this.closeOnTap})
+      : assert(icon != null || image != null);
+}
+
 /// Class [KanbanGrid]
 /// Fornecer [KanbanGrid.souce] contendo os dados a serem mostrados;
 /// [KanbanColumn] indica os cards verticais usados no kanban
@@ -99,27 +123,33 @@ class KanbanGrid extends StatefulWidget {
 
   /// exluir um card
   final Function(DraggableKanbanItem) onDeleteItem;
-  KanbanGrid({
-    Key key,
-    @required this.keyName,
-    @required this.columns,
-    this.showProcessing = true,
-    this.minWidth = 50,
-    //this.decoration,
-    this.builderHeader,
-    this.headerHeight = 50,
-    this.onWillAccept,
-    this.onAcceptItem,
-    this.onSelectedItem,
-    this.onDoubleTap,
-    this.onNewItem,
-    this.onDeleteItem,
-    @required this.builder,
-    this.controller,
-    this.bottomNavigationBar,
-    @required this.source,
-    this.itemHeight,
-  }) : super(key: key);
+  final Widget emptyContainer;
+  final List<KanbanSlideAction> leadingActions;
+  final List<KanbanSlideAction> trailingActions;
+  KanbanGrid(
+      {Key key,
+      @required this.keyName,
+      @required this.columns,
+      this.showProcessing = true,
+      this.minWidth = 50,
+      //this.decoration,
+      this.builderHeader,
+      this.headerHeight = 50,
+      this.onWillAccept,
+      this.onAcceptItem,
+      this.onSelectedItem,
+      this.onDoubleTap,
+      this.onNewItem,
+      this.onDeleteItem,
+      this.emptyContainer,
+      @required this.builder,
+      this.controller,
+      this.bottomNavigationBar,
+      @required this.source,
+      this.itemHeight,
+      this.leadingActions,
+      this.trailingActions})
+      : super(key: key);
 
   @override
   _KanbanGridState createState() => _KanbanGridState();
@@ -421,32 +451,87 @@ class KabanColumnCards extends StatefulWidget {
 }
 
 class _KabanColumnCardsState extends State<KabanColumnCards> {
+  bool get isSlidable =>
+      (kanban.trailingActions != null || kanban.leadingActions != null);
   Widget getItem(index, data, item) {
     return Padding(
-      padding: const EdgeInsets.only(top: 2, left: 6, right: 6),
-      child: DragTargetKanbanCard(
-          key: ValueKey(index),
+        padding: const EdgeInsets.only(top: 2, left: 6, right: 6),
+        child: DragTargetKanbanCard(
+          //key: ValueKey(index),
           itemIndex: index,
           data: data,
           column: widget.column,
           controller: widget.controller,
-          child: DraggableKanbanCard(
-              key: ObjectKey(item),
-              itemIndex: index,
-              column: widget.column,
-              controller: widget.controller,
-              item: item,
-              child: widget.controller.widget
-                  .builder(widget.column, index, item))),
-    );
+          child: isSlidable
+              ? Slidable(
+                  actionPane: SlidableDrawerActionPane(),
+                  actionExtentRatio: 0.25,
+                  secondaryActions: kanban.trailingActions == null
+                      ? null
+                      : [
+                          for (final it in kanban.trailingActions)
+                            IconSlideAction(
+                              caption: it.label,
+                              icon: it.icon,
+                              iconWidget: it.image,
+                              onTap: () => it.onPressed(item),
+                            )
+                        ],
+                  actions: kanban.leadingActions == null
+                      ? null
+                      : [
+                          for (final it in kanban.leadingActions)
+                            IconSlideAction(
+                              key: it.key,
+                              caption: it.label,
+                              icon: it.icon,
+                              iconWidget: it.image,
+                              onTap: () => it.onPressed(item),
+                              color: it.color,
+                              foregroundColor: it.foregroundColor,
+                              closeOnTap: it.closeOnTap,
+                            )
+                        ],
+                  key: ObjectKey(item),
+                  child: buildSlidable(index, item),
+                )
+              : buildDraggable(index, item),
+        ));
   }
 
+  Widget buildDraggable(index, item) {
+    return DraggableKanbanCard(
+        key: ObjectKey(item),
+        itemIndex: index,
+        column: widget.column,
+        controller: widget.controller,
+        item: item,
+        child: widget.controller.widget.builder(widget.column, index, item));
+  }
+
+  Widget buildSlidable(index, item) {
+    var draggable = DraggableKanbanItem(
+        column: widget.column, controller: widget.controller, data: item);
+    return Stack(children: [
+      Expanded(
+          child: widget.controller.widget.builder(widget.column, index, item)),
+      Positioned(
+          right: 0,
+          bottom: 0,
+          child: Draggable<DraggableKanbanItem>(
+              data: draggable,
+              feedback: Icon(Icons.more),
+              child: Icon(Icons.more_horiz))),
+    ]);
+  }
+
+  KanbanGrid kanban;
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     var data = widget.controller.data[widget.column.id] ?? [];
     var accepted = false;
-    KanbanGrid kanban = DefaultKanbanGrid.of(context).kanbanGrid;
+    kanban = DefaultKanbanGrid.of(context).kanbanGrid;
 
     return ListView(children: [
       /// header
@@ -503,12 +588,13 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
           },
           builder: (a, items, c) => Material(
             elevation: (accepted) ? 8 : 0,
-            child: Container(
-                height: 40,
-                color: theme.primaryColor.withOpacity(0.1),
-                child: (accepted)
-                    ? kanban.builder(items[0].column, 0, items[0].data)
-                    : null),
+            child: kanban.emptyContainer ??
+                Container(
+                    height: 40,
+                    color: theme.primaryColor.withOpacity(0.1),
+                    child: (accepted)
+                        ? kanban.builder(items[0].column, 0, items[0].data)
+                        : null),
           ),
         ),
       ),
@@ -566,14 +652,12 @@ class _DraggableKanbanCardState extends State<DraggableKanbanCard> {
       data: draggable,
       // rootOverlay: true,
 
-      feedback: Material(
-          elevation: 8,
-          child: Container(
-              height: kanban.itemHeight,
-              color: widget.column.dragColor,
-              child: kanban.builder(
-                  widget.column, widget.itemIndex, widget.item))),
-
+      feedback: Container(
+        constraints: BoxConstraints(maxWidth: widget.column.width),
+        child: Align(
+          child: Icon(Icons.drag_handle),
+        ),
+      ),
       child: ((widget.controller.widget.onSelectedItem != null) ||
               (widget.controller.widget.onDoubleTap != null))
           ? InkWell(

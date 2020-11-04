@@ -250,7 +250,9 @@ class Sigcaut1ItemModel extends ODataModelClass<Sigcaut1Item> {
     keys.remove('unidade');
     keys.remove('dtent_ret');
 
-    columns = 'a.' + keys.join(', a.');
+    columns = 'a.' +
+        keys.join(', a.').replaceAll('a.nome,',
+            'CAST(a.nome AS varchar(50) character set WIN1252) nome,');
   }
   Sigcaut1Item newItem() => Sigcaut1Item();
 

@@ -19,6 +19,8 @@ dependencies:
   universal_io:
   universal_platform:
   font_awesome_flutter:
+  flutter_slidable:
+
 
   controls_data:
     git:

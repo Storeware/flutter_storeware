@@ -29,6 +29,7 @@ dependencies:
   #universal_html:
   #http:
   dio:
+  connectivity:
 
   control_data_platform_web:
     git:

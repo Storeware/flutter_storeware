@@ -97,6 +97,9 @@ class KanbanGrid extends StatefulWidget {
   final double headerHeight;
   final Widget columnBottom;
   final double dropElevation;
+  final IconData dragIcon;
+  final IconData dropIcon;
+  final Widget feedback;
 //  final BoxDecoration decoration;
 
   /// [onAcceptItem] é chamado para gravar um item
@@ -153,6 +156,9 @@ class KanbanGrid extends StatefulWidget {
       this.slideLeading,
       this.columnBottom,
       this.bottom,
+      this.dragIcon,
+      this.dropIcon,
+      this.feedback,
       this.dropElevation = 15,
       this.slideTrailing})
       : super(key: key);
@@ -535,8 +541,8 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
           bottom: 0,
           child: Draggable<DraggableKanbanItem>(
               data: draggable,
-              feedback: Icon(Icons.more),
-              child: Icon(Icons.swap_horiz))),
+              feedback: kanban.feedback ?? Icon(kanban.dropIcon ?? Icons.more),
+              child: Icon(kanban.dragIcon ?? Icons.swap_horiz))),
     ]);
   }
 

@@ -22,7 +22,7 @@ class BlocModelX<T> {
   }
 
   notify(T value) => _stream.sink.add(value);
-  get stream => _stream;
+  get stream => _stream.stream;
   get sink => _stream.sink;
 }
 

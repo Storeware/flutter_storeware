@@ -677,12 +677,8 @@ class _DraggableKanbanCardState extends State<DraggableKanbanCard> {
       data: draggable,
       // rootOverlay: true,
 
-      feedback: Container(
-        constraints: BoxConstraints(maxWidth: widget.column.width),
-        child: Align(
-          child: Icon(Icons.more),
-        ),
-      ),
+      feedback: kanban.feedback ?? Icon(kanban.dropIcon ?? Icons.more),
+
       child:
           /*((widget.controller.widget.onSelectedItem != null) ||
               (widget.controller.widget.onDoubleTap != null))

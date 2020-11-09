@@ -95,6 +95,8 @@ class KanbanGrid extends StatefulWidget {
   final double minWidth;
   final double itemHeight;
   final double headerHeight;
+  final Widget columnBottom;
+  final double dropElevation;
 //  final BoxDecoration decoration;
 
   /// [onAcceptItem] é chamado para gravar um item
@@ -126,6 +128,7 @@ class KanbanGrid extends StatefulWidget {
   final Widget emptyContainer;
   final List<KanbanSlideAction> slideLeading;
   final List<KanbanSlideAction> slideTrailing;
+  final Widget bottom;
   KanbanGrid(
       {Key key,
       @required this.keyName,
@@ -148,6 +151,9 @@ class KanbanGrid extends StatefulWidget {
       @required this.source,
       this.itemHeight,
       this.slideLeading,
+      this.columnBottom,
+      this.bottom,
+      this.dropElevation = 15,
       this.slideTrailing})
       : super(key: key);
 
@@ -174,6 +180,7 @@ class _KanbanGridState extends State<KanbanGrid> {
     return DefaultKanbanGrid(
       kanbanGrid: widget,
       child: Scaffold(
+          bottomSheet: widget.bottom,
           body: Padding(
               padding: const EdgeInsets.all(8.0),
               child: StreamBuilder<int>(
@@ -185,6 +192,8 @@ class _KanbanGridState extends State<KanbanGrid> {
                           ? Align(child: CircularProgressIndicator())
                           : Container();
                     return ListView(
+                      shrinkWrap: true,
+                      physics: ClampingScrollPhysics(),
                       //controller: scrollCtr,
                       scrollDirection: Axis.horizontal,
                       children: [
@@ -201,12 +210,17 @@ class _KanbanGridState extends State<KanbanGrid> {
                                 maxHeight: double.maxFinite,
                               ),
                               color: col.color,
-                              child: KabanColumnCards(
-                                  minWidth: widget.minWidth,
-                                  controller: controller,
-                                  column: col),
+                              child: Column(children: [
+                                Expanded(
+                                    child: KabanColumnCards(
+                                        minWidth: widget.minWidth,
+                                        controller: controller,
+                                        column: col)),
+                                if (widget.columnBottom != null)
+                                  widget.columnBottom,
+                              ]),
                             ),
-                          )
+                          ),
                       ],
                     );
                   })),
@@ -591,7 +605,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
               accepted = false;
             },
             builder: (a, items, c) => Material(
-              elevation: (accepted) ? 8 : 0,
+              elevation: (accepted) ? kanban.dropElevation : 0,
               child: kanban.emptyContainer ??
                   Container(
                       height: 40,
@@ -771,7 +785,7 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
                                     kanban.minWidth) *
                                 value,
                             child: Material(
-                                elevation: accepted ? 8 : 0,
+                                elevation: accepted ? kanban.dropElevation : 0,
                                 child: Container(
                                     height: kanban.itemHeight,
                                     child: kanban.builder(

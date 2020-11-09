@@ -564,8 +564,23 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
   }
 }
 
-class RestConnectionChanged extends BlocModel<bool> {
+class RestConnectionChanged {
   static final _singleton = RestConnectionChanged._create();
   RestConnectionChanged._create();
   factory RestConnectionChanged() => _singleton;
+
+  final _stream = StreamController<bool>.broadcast();
+  get stream => _stream.stream;
+  get sink => _stream.sink;
+  notify(bool value) {
+    sink.add(value);
+  }
+
+  close() {
+    _stream.close();
+  }
+
+  void dispose() {
+    close();
+  }
 }

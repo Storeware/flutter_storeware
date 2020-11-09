@@ -572,11 +572,16 @@ class RestConnectionChanged {
   final _stream = StreamController<bool>.broadcast();
   get stream => _stream.stream;
   get sink => _stream.sink;
+  var subscription =
+      Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+    _singleton.notify(result != ConnectivityResult.none);
+  });
   notify(bool value) {
     sink.add(value);
   }
 
   close() {
+    subscription.cancel();
     _stream.close();
   }
 

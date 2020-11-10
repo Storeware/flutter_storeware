@@ -56,7 +56,7 @@ class DefaultKanbanGrid extends InheritedWidget {
   }) : super(key: key, child: child);
   @override
   bool updateShouldNotify(covariant InheritedWidget oldWidget) {
-    throw false;
+    return false;
   }
 
   final KanbanGrid kanbanGrid;
@@ -336,6 +336,7 @@ class KanbanController {
     columns.forEach((col) {
       col.index = i++;
     });
+
     source.forEach((item) {
       _addData(item);
     });

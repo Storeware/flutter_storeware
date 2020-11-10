@@ -60,8 +60,8 @@ class ActivityPanel extends StatelessWidget {
   final double rightRadius;
   const ActivityPanel(
       {Key key,
-      this.topRadius = 20,
-      this.bottomRadius = 20,
+      this.topRadius = 15,
+      this.bottomRadius = 15,
       this.leftRadius,
       this.rightRadius,
       this.color,
@@ -72,21 +72,27 @@ class ActivityPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return /*ClipRRect(
       borderRadius: BorderRadius.only(
         topRight: Radius.circular(rightRadius ?? topRadius),
         topLeft: Radius.circular(leftRadius ?? topRadius),
         bottomLeft: Radius.circular(leftRadius ?? bottomRadius),
         bottomRight: Radius.circular(rightRadius ?? bottomRadius),
       ),
-      child: Container(
-        height: height,
-        width: width,
-        decoration: BoxDecoration(
+      child: */
+        Container(
+      height: height,
+      width: width,
+      decoration: BoxDecoration(
           color: color,
-        ),
-        child: child,
-      ),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(rightRadius ?? topRadius),
+            topLeft: Radius.circular(leftRadius ?? topRadius),
+            bottomLeft: Radius.circular(leftRadius ?? bottomRadius),
+            bottomRight: Radius.circular(rightRadius ?? bottomRadius),
+          )),
+      child: child,
+      // ),
     );
   }
 

@@ -210,4 +210,21 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
       return rsp['result'];
     });
   }
+
+  evolucaoPorVendedor(
+      {String vendedor, DateTime inicio, DateTime fim, filial}) {
+    DateTime _de = inicio;
+    if (_de == null) {
+      _de = DateTime.now().startOfMonth();
+    }
+    DateTime _ate = fim;
+    if (_ate == null) _ate = DateTime.now().endOfMonth();
+    var qry = "select data, sum(total) total, count(*) itens " +
+        "from sigcauth " +
+        "          where vendedor eq '$vendedor' and data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
+        "group by 1 ";
+    return API.openJson(qry).then((rsp) {
+      return rsp['result'];
+    });
+  }
 }

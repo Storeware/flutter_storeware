@@ -113,7 +113,7 @@ class DashTimeSeriesLine extends StatelessWidget {
     return [
       new charts.Series<TimeSeriesSales, DateTime>(
         id: id,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        //colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: data,

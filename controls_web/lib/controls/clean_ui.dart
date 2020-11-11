@@ -308,34 +308,47 @@ class LabeledColumn extends StatelessWidget {
   final List<Widget> children;
   final Widget title;
   final double spacing;
+  final Color backgroundColor;
+  final double elevation;
   const LabeledColumn(
-      {Key key, this.label, this.children, this.title, this.spacing = 1})
+      {Key key,
+      this.elevation = 0,
+      this.backgroundColor,
+      this.label,
+      this.children,
+      this.title,
+      this.spacing = 1})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     var fs = theme.textTheme.subtitle1.fontSize - 2;
-    return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          title ??
-              Text(label ?? '',
-                  style: theme.textTheme
-                      .headline6), //.copyWith(fontWeight: FontWeight.bold)),
-          SizedBox(
-            height: 5,
-          ),
-          DefaultTextStyle(
-            style:
-                theme.textTheme.subtitle2.copyWith(fontWeight: FontWeight.w300),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [for (var item in children) ...doitem(item)]),
-          ),
-        ]);
+    return Card(
+        color: backgroundColor ?? Colors.transparent,
+        elevation: elevation,
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              title ??
+                  Text(label ?? '',
+                      style: theme.textTheme
+                          .headline6), //.copyWith(fontWeight: FontWeight.bold)),
+              SizedBox(
+                height: 5,
+              ),
+              DefaultTextStyle(
+                style: theme.textTheme.subtitle2
+                    .copyWith(fontWeight: FontWeight.w300),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [for (var item in children) ...doitem(item)]),
+              ),
+            ]));
   }
 
   doitem(item) => [

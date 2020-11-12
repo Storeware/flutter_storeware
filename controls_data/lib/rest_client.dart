@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
-import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:universal_io/io.dart';

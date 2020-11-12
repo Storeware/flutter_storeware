@@ -34,12 +34,23 @@ class Cached {
     return value;
   }
 
-  static value<T>(String key, {T Function(String) builder}) {
+  Map<String, DateTime> _lastAge = {};
+  static value<T>(String key, {int maxage = 0, T Function(String) builder}) {
+    if (maxage > 0) {
+      DateTime last = _singleton._lastAge[key];
+      if ((last != null) &&
+          (DateTime.now().difference(last).inMilliseconds > maxage)) {
+        _cached.remove(key);
+      }
+    }
+
     var item = _cached[key];
-    //print(['Cache value:', key, (item != null)]);
     if (item != null) return item;
     item = builder(key);
-    if (item != null) _cached[key] = item;
+    if (item != null) {
+      _cached[key] = item;
+      _singleton._lastAge[key] = DateTime.now();
+    }
     return item;
   }
 

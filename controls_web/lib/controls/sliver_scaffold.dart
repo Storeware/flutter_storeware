@@ -14,6 +14,7 @@ class WidgetList {
   }
 }
 
+// ignore: must_be_immutable
 class SliverScaffold extends StatefulWidget {
   final AppBar appBar;
   final SliverAppBar sliverAppBar;

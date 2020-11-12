@@ -50,6 +50,7 @@ class StrapButton extends StatefulWidget {
   final String text;
   final Widget title, subtitle;
   final Function onPressed;
+  final int maxLines;
   final Future<StrapButtonState> Function() onPressedAsync;
 
   final StrapButtonType type;
@@ -80,6 +81,7 @@ class StrapButton extends StatefulWidget {
     this.subtitle,
     this.leading,
     this.trailing,
+    this.maxLines = 1,
     this.image,
     this.enabled = true,
     this.visible = true,
@@ -155,6 +157,8 @@ class _StrapButtonState extends State<StrapButton> {
                                         child: widget.title),
                                   if (widget.text != null)
                                     Text(widget.text,
+                                        maxLines: widget.maxLines,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           color: (widget.enabled)
                                               ? strapFontColor(widget.type)

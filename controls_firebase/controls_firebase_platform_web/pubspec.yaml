@@ -14,6 +14,8 @@ dependencies:
   js:
   html:
 
+
+  firebase:
   firebase_auth:
   google_sign_in:
   firebase_core: ^0.5.0

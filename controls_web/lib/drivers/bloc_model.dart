@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class BlocModel<T> {
   final _stream = StreamController<T>.broadcast();
-  get stream => _stream.stream;
+  Stream<T> get stream => _stream.stream;
   get sink => _stream.sink;
   notify(T value) {
     sink.add(value);

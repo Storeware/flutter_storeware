@@ -277,6 +277,7 @@ class ODataClient {
 
   get notifier => client.notify;
   get errorNotifier => client.notifyError;
+  get processing => DataProcessingNotifier();
 
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {

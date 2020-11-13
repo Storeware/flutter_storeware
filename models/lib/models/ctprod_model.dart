@@ -2,6 +2,7 @@
 import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
+
 import 'package:controls_data/odata_firestore.dart';
 
 class ProdutoItem extends DataItem {
@@ -128,17 +129,21 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   @override
   put(item) {
     var it = ProdutoItem.copy(item);
-    atalhoUpdate(it);
-    updatePrecoFilial(it);
-    return super.put(it);
+    return super.put(it).then((rsp) {
+      atalhoUpdate(it);
+      updatePrecoFilial(it);
+      return rsp;
+    });
   }
 
   @override
   post(item) {
     var it = ProdutoItem.copy(item);
-    atalhoUpdate(it);
-    updatePrecoFilial(it);
-    return super.post(it);
+    return super.post(it).then((rsp) {
+      atalhoUpdate(it);
+      updatePrecoFilial(it);
+      return rsp;
+    });
   }
 
   atalhoUpdate(item) {
@@ -154,8 +159,9 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   updatePrecoFilial(Map<String, dynamic> dados) {
     var it = ProdutoItem.fromJson(dados);
     if ((it.filial ??= 0) > 0) {
+      var p = '${it.precoweb}'.replaceAll(',', '.');
       var upd =
-          "update or insert into ctprod_filial (codigo,filial,precoweb) values ('${it.codigo}',${it.filial}, ${it.precoweb}) matching (codigo,filial)";
+          "update or insert into ctprod_filial (codigo,filial,precoweb) values ('${it.codigo}',${it.filial}, ${p}) matching (codigo,filial)";
       print(upd);
       API.execute(upd);
     }

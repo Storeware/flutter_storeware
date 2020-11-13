@@ -128,7 +128,7 @@ class KanbanGrid extends StatefulWidget {
 
   /// exluir um card
   final Function(DraggableKanbanItem) onDeleteItem;
-  final Widget emptyContainer;
+  final Widget Function(KanbanColumn) emptyContainer;
   final List<KanbanSlideAction> slideLeading;
   final List<KanbanSlideAction> slideTrailing;
   final Widget bottom;
@@ -613,8 +613,9 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
             },
             builder: (a, items, c) => Material(
               elevation: (accepted) ? kanban.dropElevation : 0,
-              child: kanban.emptyContainer ??
-                  Container(
+              child: (kanban.emptyContainer != null)
+                  ? kanban.emptyContainer(widget.column)
+                  : Container(
                       height: 40,
                       color: theme.primaryColor.withOpacity(0.1),
                       child: (accepted && items.length > 0)

@@ -227,6 +227,7 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
       bool encerrados,
       String operacaoDe = '128',
       String operacaoAte = '199',
+      int dias = 90,
       DateTime data,
       List<String> estados,
       bool extended = false,
@@ -240,7 +241,7 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
 
     String filtroItens = (data != null)
         ? " x.data eq '${data.toDateString()}'"
-        : " (x.data gt cast('now' as date)-90)";
+        : " (x.data gt cast('now' as date)-$dias)";
 
     if (encerrados != null) {
       if (encerrados) {

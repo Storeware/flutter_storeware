@@ -296,7 +296,7 @@ class KanbanColumn {
     this.minWidth,
     this.leading,
     this.elevation = 0,
-    this.titleColor = Colors.blue,
+    this.titleColor,
     this.dragColor = Colors.grey,
     this.draggableColor,
     this.dragDottedColor,
@@ -582,8 +582,9 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
           column: widget.column,
           child: AppBar(
               primary: false,
-              backgroundColor: widget.column.titleColor,
-              toolbarHeight: kanban.headerHeight - 2,
+              backgroundColor:
+                  widget.column.titleColor ?? theme.appBarTheme.color,
+              toolbarHeight: kanban.headerHeight,
               elevation: 0,
               automaticallyImplyLeading: false,
               title: Padding(

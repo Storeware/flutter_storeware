@@ -48,6 +48,8 @@ class _KanbanSampleState extends State<KanbanSample> {
   }
 }
 
+enum KanbanGridDragSide { left, right }
+
 class DefaultKanbanGrid extends InheritedWidget {
   DefaultKanbanGrid({
     Key key,
@@ -100,6 +102,7 @@ class KanbanGrid extends StatefulWidget {
   final IconData dragIcon;
   final IconData dropIcon;
   final Widget feedback;
+  final List<KanbanGridDragSide> dragSide;
 //  final BoxDecoration decoration;
 
   /// [onAcceptItem] é chamado para gravar um item
@@ -152,6 +155,7 @@ class KanbanGrid extends StatefulWidget {
       this.controller,
       this.bottomNavigationBar,
       @required this.source,
+      List<KanbanGridDragSide> dragSide,
       this.itemHeight,
       this.slideLeading,
       this.columnBottom,
@@ -161,7 +165,8 @@ class KanbanGrid extends StatefulWidget {
       this.feedback,
       this.dropElevation = 15,
       this.slideTrailing})
-      : super(key: key);
+      : this.dragSide = dragSide ?? [KanbanGridDragSide.right],
+        super(key: key);
 
   @override
   _KanbanGridState createState() => _KanbanGridState();
@@ -276,6 +281,7 @@ class KanbanColumn {
   Color color;
   double minWidth;
   List<Widget> actions;
+  Widget leading;
   int index;
   Color titleColor;
   Color dragColor;
@@ -288,6 +294,7 @@ class KanbanColumn {
     this.label,
     this.width = 200,
     this.minWidth,
+    this.leading,
     this.elevation = 0,
     this.titleColor = Colors.blue,
     this.dragColor = Colors.grey,
@@ -537,13 +544,24 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
         column: widget.column, controller: widget.controller, data: item);
     return Stack(children: [
       widget.controller.widget.builder(widget.column, index, item),
-      Positioned(
-          right: 0,
-          bottom: 0,
-          child: Draggable<DraggableKanbanItem>(
-              data: draggable,
-              feedback: kanban.feedback ?? Icon(kanban.dropIcon ?? Icons.more),
-              child: Icon(kanban.dragIcon ?? Icons.swap_horiz))),
+      if (kanban.dragSide.contains(KanbanGridDragSide.right))
+        Positioned(
+            right: 0,
+            bottom: 0,
+            child: Draggable<DraggableKanbanItem>(
+                data: draggable,
+                feedback:
+                    kanban.feedback ?? Icon(kanban.dropIcon ?? Icons.more),
+                child: Icon(kanban.dragIcon ?? Icons.swap_horiz))),
+      if (kanban.dragSide.contains(KanbanGridDragSide.left))
+        Positioned(
+            left: 0,
+            bottom: 0,
+            child: Draggable<DraggableKanbanItem>(
+                data: draggable,
+                feedback:
+                    kanban.feedback ?? Icon(kanban.dropIcon ?? Icons.more),
+                child: Icon(kanban.dragIcon ?? Icons.swap_horiz))),
     ]);
   }
 
@@ -562,32 +580,25 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
           controller: widget.controller,
           data: data,
           column: widget.column,
-          child: Container(
-              height: kanban.headerHeight,
-              color: widget.column.titleColor,
-              //padding: EdgeInsets.all(8),
-              alignment: Alignment.center,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: (widget.controller.widget.builderHeader != null)
-                          ? widget.controller.widget
-                              .builderHeader(widget.column)
-                          : Text(widget.column.label ?? '',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              )),
-                    ),
-                  ),
-                  if (!widget.controller.isColumnMinWidth(widget.column))
-                    if (widget.column.actions != null) ...widget.column.actions,
-                ],
-              )),
+          child: AppBar(
+              primary: false,
+              backgroundColor: widget.column.titleColor,
+              toolbarHeight: kanban.headerHeight - 2,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              title: Padding(
+                padding: const EdgeInsets.all(8),
+                child: (widget.controller.widget.builderHeader != null)
+                    ? widget.controller.widget.builderHeader(widget.column)
+                    : Text(widget.column.label ?? '',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        )),
+              ),
+              leading: widget.column.leading,
+              actions: widget.column.actions),
         ),
       Expanded(
           child: ListView(children: [

@@ -140,10 +140,10 @@ class KanbanGrid extends StatefulWidget {
       @required this.keyName,
       @required this.columns,
       this.showProcessing = true,
-      this.minWidth = 50,
+      this.minWidth = kMinInteractiveDimension,
       //this.decoration,
       this.builderHeader,
-      this.headerHeight = 50,
+      this.headerHeight = kMinInteractiveDimension,
       this.onWillAccept,
       this.onAcceptItem,
       //this.onSelectedItem,
@@ -210,7 +210,7 @@ class _KanbanGridState extends State<KanbanGrid> {
                       children: [
                         for (var col in controller.columns)
                           Card(
-                            color: col.color,
+                            color: col.color ?? Colors.transparent,
                             elevation: col.elevation,
                             child: Container(
                               width: controller.getCardWidth(col,

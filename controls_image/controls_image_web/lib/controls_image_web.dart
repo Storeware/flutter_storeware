@@ -9,7 +9,7 @@ class ControlsImage extends ControlsImageInterface {
   @override
   Future<io.File> pickFromGallary({imageQuality}) async {
     Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImage(asUint8List: true);
+        await ImagePickerWeb.getImage(outputType: ImageType.bytes);
     return io.File.fromRawPath(
         bytesFromPicker); //File(bytesFromPicker, 'image.jpg');
   }
@@ -17,7 +17,7 @@ class ControlsImage extends ControlsImageInterface {
   @override
   Future<io.File> pickFromCamera({imageQuality}) async {
     Uint8List bytesFromPicker =
-        await ImagePickerWeb.getImage(asUint8List: true);
+        await ImagePickerWeb.getImage(outputType: ImageType.bytes);
     return io.File.fromRawPath(
         bytesFromPicker); //File(bytesFromPicker, 'image.jpg');
   }

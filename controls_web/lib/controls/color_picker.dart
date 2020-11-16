@@ -1,5 +1,6 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:controls_web/controls/colores.dart';
 
 class ColorPickerField extends StatelessWidget {
   final Color color;
@@ -9,7 +10,11 @@ class ColorPickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    if (size.width > 550) size = Size(550, size.height);
+    if (size.height > 550) size = Size(size.width, 550);
     Color _color = color;
+    //ResponsiveInfo responsive = ResponsiveInfo(context);
     return (onChanged != null)
         ? StatefulBuilder(builder: (a, _setState) {
             return InkWell(
@@ -19,8 +24,8 @@ class ColorPickerField extends StatelessWidget {
                 onTap: () {
                   Dialogs.showPage(
                     context,
-                    width: 350,
-                    height: 350,
+                    width: size.width,
+                    height: size.height,
                     child: ColorPickerDialog(
                       color: _color,
                       onChanged: (c) {
@@ -53,7 +58,7 @@ class ColorPickerDialog extends StatelessWidget {
       _colors = primariesColors;
     }
     return Scaffold(
-      appBar: AppBar(title: Text('Selecionar uma côr')),
+      appBar: AppBar(title: Text('Selecionar uma cor')),
       body: LayoutBuilder(
         builder: (ctx, constraints) {
           int x = constraints.maxWidth ~/ 60;
@@ -63,7 +68,7 @@ class ColorPickerDialog extends StatelessWidget {
               for (var item in _colors)
                 InkWell(
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: CircleAvatar(
                       backgroundColor: item,
                       child: (item == color)
@@ -110,7 +115,9 @@ const List<Color> primariesColors = [
   // makes the app look disabled.
   Colors.blueGrey,
   Colors.grey,
-  Colors.white54
+  Colors.white54,
+  ...pastelColors,
+  ...amethistColors,
 ];
 
 extension ColorExtension on Color {

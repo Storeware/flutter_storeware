@@ -610,6 +610,8 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final PaginatedGridChangeEvent event;
   final double dataRowHeight;
   final Function(dynamic) onSaved;
+  final bool showAppBar;
+  final Widget appBar;
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
@@ -620,6 +622,8 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
+    this.showAppBar = true,
+    this.appBar,
     this.onSaved,
     @required this.event,
   }) : super(key: key);
@@ -641,19 +645,22 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     for (DataViewerGroup row in widget.grouped)
       itemsCount += row.children.length;
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title ?? 'Edição'),
-        actions: [
-          if (widget.canDelete)
-            IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () {
-                  widget.controller.doDelete(widget.data).then((rsp) {
-                    Navigator.pop(context);
-                  });
-                }),
-        ],
-      ),
+      appBar: !widget.showAppBar
+          ? null
+          : widget.appBar ??
+              AppBar(
+                title: Text(widget.title ?? 'Edição'),
+                actions: [
+                  if (widget.canDelete)
+                    IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          widget.controller.doDelete(widget.data).then((rsp) {
+                            Navigator.pop(context);
+                          });
+                        }),
+                ],
+              ),
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),

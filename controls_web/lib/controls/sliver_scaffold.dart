@@ -268,7 +268,7 @@ class ExtendedAppBar extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: child,
+      child: Wrap(children: [child]),
       color: color,
     );
   }
@@ -331,26 +331,43 @@ class BoxContainer extends StatelessWidget {
 }
 
 AppBar appBarLight(
-    {String text, Widget title, Color backgroundColor, actions}) {
+    {String text,
+    Widget title,
+    Widget leading,
+    Color backgroundColor,
+    List<Widget> actions}) {
   return AppBar(
       backgroundColor: backgroundColor,
-      title: title ?? Text(text),
+      title: title ?? Text(text ?? ''),
       elevation: default_elevation,
+      leading: leading,
       actions: actions);
 }
 
 class ScaffoldLight extends StatefulWidget {
+  final String title;
   final Widget body;
   final ExtendedAppBar extendedBar;
   final Widget appBar;
   final double bodyTop;
-  final Color backgroundColor;
+  final Widget bottomNavigationBar;
+  final Widget panelImage;
+  final double extendedPanelHeigh;
+  final Color backgroudColor;
+  final Widget drawer;
+  final Key scaffoldKey;
   ScaffoldLight(
       {Key key,
+      this.title,
+      this.scaffoldKey,
+      this.drawer,
       this.body,
       this.appBar,
       this.extendedBar,
-      this.backgroundColor,
+      this.panelImage,
+      this.extendedPanelHeigh = 150,
+      this.backgroudColor,
+      this.bottomNavigationBar,
       this.bodyTop = 0})
       : super(key: key);
 
@@ -360,23 +377,92 @@ class ScaffoldLight extends StatefulWidget {
 class _ScaffoldLightState extends State<ScaffoldLight> {
   @override
   Widget build(BuildContext context) {
+    Color bg = Theme.of(context).scaffoldBackgroundColor;
     double h = 0;
     if (widget.extendedBar != null) h = widget.extendedBar.height ?? 0;
     return Scaffold(
-        appBar: widget.appBar,
-        body: Container(
-          color: widget.backgroundColor ??
-              Theme.of(context).scaffoldBackgroundColor,
-          height: double.maxFinite,
-          child: Stack(children: [
-            widget.extendedBar,
-            Container(
-                height: double.maxFinite,
-                child: Column(children: [
-                  Container(height: h + widget.bodyTop),
-                  Expanded(child: widget.body ?? Container())
-                ]))
-          ]),
-        ));
+      key: widget.scaffoldKey,
+      appBar: widget.appBar,
+      backgroundColor: widget.backgroudColor,
+      drawer: widget.drawer,
+      body: Container(
+        color:
+            widget.backgroudColor ?? Theme.of(context).scaffoldBackgroundColor,
+        height: double.maxFinite,
+        child: Stack(children: [
+          if (widget.extendedBar != null) widget.extendedBar,
+          Container(
+              width: double.infinity,
+              height: widget.extendedPanelHeigh,
+              child: Container(
+                  color: bg,
+                  child: Center(
+                    child: widget.title != null
+                        ? Text(widget.title,
+                            style: TextStyle(color: Colors.white, fontSize: 18))
+                        : widget.panelImage,
+                  ))),
+          widget.body
+        ]),
+      ),
+      bottomNavigationBar: widget.bottomNavigationBar,
+    );
   }
+}
+
+class SliverHeader extends StatelessWidget {
+  final text;
+  final Color color;
+  final TextStyle style;
+  final Widget child;
+  final double max;
+  final double min;
+  const SliverHeader(this.text,
+      {Key key,
+      this.child,
+      this.max = 60,
+      this.min = 30,
+      this.color,
+      this.style})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPersistentHeader(
+      pinned: false,
+      floating: true,
+      delegate: Delegate(
+          max: max,
+          min: min,
+          child: child ??
+              Center(
+                  child: Text(
+                text,
+                style: style,
+              )),
+          color: color),
+    );
+  }
+}
+
+class Delegate extends SliverPersistentHeaderDelegate {
+  final Color color;
+  final Widget child;
+  final double max;
+  final double min;
+  Delegate({this.color, this.child, this.max = 60, this.min = 30});
+
+  @override
+  Widget build(
+          BuildContext context, double shrinkOffset, bool overlapsContent) =>
+      Container(child: child, color: color);
+
+  @override
+  double get maxExtent => max;
+
+  @override
+  double get minExtent => min;
+
+  @override
+  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
 }

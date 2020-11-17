@@ -259,6 +259,75 @@ class Dialogs {
               ],
             ));
   }
+
+  static alert<T>(BuildContext context,
+          {Color backgoundColor,
+          double elevation,
+          String text,
+          Widget title,
+          List<Widget> actions,
+          Widget content}) =>
+      showDialog<T>(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              content: content ?? Text(text ?? ''),
+              title: title,
+              backgroundColor: backgoundColor,
+              elevation: elevation,
+              actions: [
+                if (actions != null) ...actions,
+              ],
+            );
+          });
+
+  static okDlg(context,
+          {Widget content,
+          String text,
+          Widget title,
+          String textButton,
+          Color backgoundColor,
+          double elevation,
+          List<Widget> actions}) =>
+      showDialog<bool>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                content: content ?? Text(text ?? 'Continuar ?'),
+                title: title,
+                backgroundColor: backgoundColor,
+                elevation: elevation,
+                actions: [
+                  if (actions != null) ...actions,
+                  StrapButton(
+                      text: textButton ?? 'OK',
+                      onPressed: () {
+                        Navigator.pop(context, true);
+                      }),
+                ],
+              ));
+  static simNao(BuildContext context,
+          {String text, Widget title, List<Widget> actions, Widget content}) =>
+      showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              content: content ?? Text(text ?? ''),
+              title: title,
+              actions: [
+                StrapButton(
+                    text: 'Sim',
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    }),
+                if (actions != null) ...actions,
+                StrapButton(
+                    text: 'Não',
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    }),
+              ],
+            );
+          });
 }
 
 enum ProgressDialogType { Normal, Download, Percent }

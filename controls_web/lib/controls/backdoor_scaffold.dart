@@ -40,7 +40,7 @@ class BackdoorScaffold extends StatelessWidget {
       extendBody: extendBody,
       body: CustomScrollView(
         slivers: [
-          if (appBarChildren != null)
+          if (appBarChild != null)
             SliverAppBar(
                 floating: true,
                 pinned: pinned,

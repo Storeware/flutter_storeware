@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class BackdoorScaffold extends StatelessWidget {
   final Widget body;
   final Size preferredSize;
-  final List<Widget> appBarChildren;
+  final Widget appBarChild;
   final List<Widget> children;
   final Drawer drawer;
   final Widget bottomNavigationBar;
@@ -13,19 +13,23 @@ class BackdoorScaffold extends StatelessWidget {
   final bool extendBody;
   final AppBar appBar;
   final Widget bottomSheet;
+  final Widget floatingActionButton;
+  final bool pinned;
   BackdoorScaffold(
       {Key key,
       this.body,
       this.drawer,
       this.bottomNavigationBar,
       this.children,
-      this.appBarChildren,
+      this.appBarChild,
       this.title,
       this.expandedHeight,
       this.slivers,
       this.extendBody = false,
       this.appBar,
+      this.pinned = false,
       this.bottomSheet,
+      this.floatingActionButton,
       this.preferredSize})
       : super(key: key);
 
@@ -39,14 +43,12 @@ class BackdoorScaffold extends StatelessWidget {
           if (appBarChildren != null)
             SliverAppBar(
                 floating: true,
-                pinned: false,
+                pinned: pinned,
                 expandedHeight:
                     (appBar == null) ? 0 : expandedHeight ?? kToolbarHeight,
                 bottom: PreferredSize(
                   preferredSize: preferredSize ?? Size.fromHeight(125),
-                  child: Stack(children: [
-                    ...appBarChildren,
-                  ]),
+                  child: appBarChild,
                 )),
           if (children != null)
             SliverToBoxAdapter(
@@ -59,6 +61,7 @@ class BackdoorScaffold extends StatelessWidget {
       drawer: drawer,
       bottomNavigationBar: bottomNavigationBar,
       bottomSheet: bottomSheet,
+      floatingActionButton: floatingActionButton,
       //bottom : bottom,
     );
   }

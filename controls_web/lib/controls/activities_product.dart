@@ -5,6 +5,7 @@ class ActivityProductDetail extends StatefulWidget {
   final Widget image;
   final double height;
   final String title;
+  final int maxLines;
   final String subTitle;
   final Widget favorite;
   final Widget child;
@@ -16,17 +17,31 @@ class ActivityProductDetail extends StatefulWidget {
   final double qtyFrom;
   final String id;
   final String unit;
+  final String buyLabel;
+  final String buySubLabel;
+  final bool showBuyButton;
+  final Widget imageBottom, imageTop;
+  final TextStyle style;
+
   final double initialQty;
 
   final List<Widget> items;
   final Function(String, double) onBuyPressed;
+  final List<Widget> children;
   const ActivityProductDetail({
     Key key,
     this.actions,
     this.image,
     this.subTitle,
+    this.buyLabel,
+    this.buySubLabel,
+    this.maxLines = 2,
     this.title,
     this.favorite,
+    this.imageBottom,
+    this.imageTop,
+    this.showBuyButton = true,
+    this.style,
     this.child,
     this.price = 0,
     this.color,
@@ -34,6 +49,7 @@ class ActivityProductDetail extends StatefulWidget {
     this.qtyFrom = 0,
     this.items,
     this.initialQty = 1,
+    this.children,
     @required this.onBuyPressed,
     @required this.id,
     this.unit,
@@ -56,16 +72,24 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
 
   @override
   Widget build(BuildContext context) {
-//    ThemeData theme = Theme.of(context);
+    ThemeData theme = Theme.of(context);
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+        if (widget.imageTop != null) widget.imageTop,
+
         if (widget.image != null) widget.image,
+        if (widget.imageBottom != null) widget.imageBottom,
+
         (widget.title != null)
             ? Text(widget.title ?? '',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: widget.textColor ?? Colors.white.withAlpha(250),
-                ))
+                maxLines: widget.maxLines,
+                overflow: TextOverflow.ellipsis,
+                style: widget.style ??
+                    TextStyle(
+                      fontSize: 20,
+                      color: widget.textColor ?? Colors.white.withAlpha(250),
+                    ))
             : Container(),
         (widget.subTitle != null)
             ? Text(widget.subTitle,
@@ -77,6 +101,7 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
         ActivityPanel(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               if (widget.favorite != null) buildFavorities(),
               if (widget.unit != null)
@@ -106,19 +131,23 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
             ],
           ),
         ),
-        Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-          ActivityBuyButton(
-            color: Colors.indigo,
-            textColor: Colors.white,
-            initialValue: 1,
-            onQtdePressed: (qtde) {
-              widget.onBuyPressed(widget.id, qtde);
-            },
-          )
-        ]),
-        SizedBox(
-          height: 20,
-        ),
+        if (widget.children != null) ...widget.children,
+        if (widget.showBuyButton)
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            ActivityBuyButton(
+              label: widget.buyLabel,
+              subLabel: widget.buySubLabel,
+              color: widget.color ?? theme.primaryColor,
+              textColor: Colors.white,
+              initialValue: widget.initialQty,
+              onQtdePressed: (qtde) {
+                widget.onBuyPressed(widget.id, qtde);
+              },
+            )
+          ]),
+        //SizedBox(
+        //  height: 20,
+        //),
         ...widget.items ?? []
       ],
     );
@@ -133,12 +162,14 @@ class ActivityBuyButton extends StatefulWidget {
   final Color color;
   final Color textColor;
   final String label;
+  final String subLabel;
   const ActivityBuyButton({
     Key key,
     this.initialValue = 1,
     this.color,
     @required this.onQtdePressed,
     this.textColor,
+    this.subLabel,
     this.label,
   }) : super(key: key);
 
@@ -166,7 +197,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
     ThemeData theme = Theme.of(context);
     Color captionColor = widget.color ?? theme.primaryColor;
     return ActivityPanel(
-        width: 240,
+        width: 300,
         height: 45,
         color: widget.color ?? theme.primaryColor,
         child: Row(
@@ -207,7 +238,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
               ),
               child: Container(
                 color: Colors.white,
-                width: 40,
+                width: 80,
                 alignment: Alignment.center,
                 child: TextField(
                   textAlign: TextAlign.center,
@@ -243,13 +274,26 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
               child: MaterialButton(
                 //visualDensity: VisualDensity.compact,
                 child: Center(
-                    child: Text(widget.label ?? 'comprar',
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(widget.label ?? 'comprar',
                         style: TextStyle(
                           color:
                               widget.textColor ?? theme.textTheme.caption.color,
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                        ))),
+                        )),
+                    if (widget.subLabel != null)
+                      Text(widget.subLabel,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: widget.textColor ??
+                                theme.textTheme.caption.color,
+                          ))
+                  ],
+                )),
                 onPressed: () {
                   widget.onQtdePressed(somar(0));
                 },

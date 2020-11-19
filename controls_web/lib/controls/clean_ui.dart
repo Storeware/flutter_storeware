@@ -97,12 +97,14 @@ class CleanButton extends StatelessWidget {
         children: [
           if (icon != null) icon,
           Text(label ?? '',
+              overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 color: _color,
                 fontSize: 12,
               )),
           if (subLabel != null)
             Text(subLabel,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 10,
                   color: _color,

@@ -581,11 +581,11 @@ abstract class ODataModelClass<T extends DataItem> {
     });
   }
 
-  Future<ODataDocument> getOne({filter}) async {
+  Future<Map<String, dynamic>> getOne({filter}) async {
     return search(
             resource: collectionName, select: columns, filter: filter, top: 1)
         .then((ODataResult r) {
-      return (r.rows > 0) ? r.first : null;
+      return (r.rows > 0) ? r.first.doc : null;
     });
   }
 

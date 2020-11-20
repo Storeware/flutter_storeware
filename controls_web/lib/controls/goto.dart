@@ -21,7 +21,7 @@ class GoTo {
     await launch('tel:$fone');
   }
 
-  goWhats(String numero) async {
+  goWhats(String numero, {String texto}) async {
     var s = '';
     for (var i = 0; i < numero.length; i++) {
       var k = numero[i];
@@ -32,8 +32,9 @@ class GoTo {
         s = '+' + s;
       else if (!s.startsWith('+55')) s = '+55' + s;
     }
+    // TODO: no estouentregando usa este link e foi alterado a mensagem - refazer no estou entregando para enviar um texto..
     String url =
-        'https://api.whatsapp.com/send?phone=$s&text=Olá. Vi seu contato no aplicativo "estou entregando" e gostaria de:  ';
+        'https://api.whatsapp.com/send?phone=$s&text=${texto ?? 'Olá, '}  ';
     //print(s);
     await launch(url);
   }

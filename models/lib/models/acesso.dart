@@ -36,9 +36,9 @@ class Acesso {
   }
 
   /// usado durante a carga do app, não subsitui cargas já feitas
-  register(String nome, num id, TipoAcesso tipo) {
+  register(int id, String nome, TipoAcesso tipo) {
     if (indexOf(id) < 0)
-      return addOrReplace(Acesso(nome: nome, id: id, tipo: tipo));
+      return addOrReplace(Acesso(id: id, nome: nome, tipo: tipo));
   }
 
   get key => id;
@@ -123,7 +123,7 @@ class Acessos {
 
   /// registrar o acesso caso ainda não esteja na lista
   /// usado para auto-registro das rotinas - nao usar para carga de configuração inicial
-  static register(num pai, String nome, num acesso, TipoAcesso tipo) {
+  static register(num pai, num acesso, String nome, TipoAcesso tipo) {
     // procura o pai
     var ac = Acessos();
     Acesso itemPai = ac.findFirst(pai) ?? ac.acessos[0];

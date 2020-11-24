@@ -49,6 +49,10 @@ class FilialItem extends DataItem {
   double idcontabilista;
   int fpisCofins;
 
+  String get cnpj => this.cgc ?? '';
+  String get fullEnder =>
+      '${this.ender ?? ''}${(this.numero ?? '').isNotEmpty ? ', ' : ''}${this.numero ?? ''}';
+
   FilialItem(
       {this.cgc,
       this.codigo,
@@ -231,7 +235,8 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
     });
   }
 
-  buscarByCodigo(codigo) {
-    return listCached(filter: "codigo eq '$codigo'", select: 'codigo, nome');
+  buscarByCodigo(codigo, {String select}) {
+    return listCached(
+        filter: "codigo eq '$codigo'", select: select ?? 'codigo, nome');
   }
 }

@@ -17,7 +17,11 @@ abstract class LocalStorageInterface {
   num getNum(String key) => num.tryParse(getKey(key));
   setNum(String key, num value) => setKey(key, value.toString());
 
-  int getInt(String key) => int.tryParse(getKey(key));
+  int getInt(String key) {
+    var value = getKey(key);
+    return (value == null) ? null : int.tryParse(value);
+  }
+
   setInt(key, value) => setKey(key, value.toString());
 
   Map<String, dynamic> getJson(key) {

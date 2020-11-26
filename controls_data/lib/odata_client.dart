@@ -510,8 +510,13 @@ abstract class ODataModelClass<T extends DataItem> {
   ODataClient API;
   ODataModelClass({this.API});
 
+  makeCollection(Map<String, dynamic> item) {
+    return collectionName;
+  }
+
   Future<List<dynamic>> list({filter}) async {
-    return search(resource: collectionName, select: columns, filter: filter)
+    return search(
+            resource: makeCollection(null), select: columns, filter: filter)
         .then((ODataResult r) {
       return r.asMap();
     });
@@ -524,7 +529,7 @@ abstract class ODataModelClass<T extends DataItem> {
   Future<List<dynamic>> query(
       {filter, String select, int top, int skip, orderBy, cacheControl}) async {
     return search(
-            resource: collectionName,
+            resource: makeCollection(null),
             select: select ?? columns,
             filter: filter,
             top: top,
@@ -546,7 +551,7 @@ abstract class ODataModelClass<T extends DataItem> {
       orderBy,
       select}) async {
     return search(
-            resource: resource ?? collectionName,
+            resource: resource ?? makeCollection(null),
             select: select ?? columns,
             filter: filter,
             top: top,
@@ -568,7 +573,7 @@ abstract class ODataModelClass<T extends DataItem> {
       select,
       cacheControl}) async {
     return search(
-            resource: resource ?? collectionName,
+            resource: resource ?? makeCollection(null),
             select: select ?? columns,
             filter: filter,
             top: top,
@@ -583,15 +588,19 @@ abstract class ODataModelClass<T extends DataItem> {
 
   Future<Map<String, dynamic>> getOne({filter}) async {
     return search(
-            resource: collectionName, select: columns, filter: filter, top: 1)
+            resource: makeCollection(null),
+            select: columns,
+            filter: filter,
+            top: 1)
         .then((ODataResult r) {
       return (r.rows > 0) ? r.first.doc : null;
     });
   }
 
   Future<Map<String, dynamic>> enviar(T item) {
+    var d = item.toJson();
     try {
-      return API.post(collectionName, item.toJson()).then((x) => jsonDecode(x));
+      return API.post(makeCollection(d), d).then((x) => jsonDecode(x));
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -616,7 +625,7 @@ abstract class ODataModelClass<T extends DataItem> {
     if (validate(d)) {
       try {
         d = removeExternalKeys(d);
-        return API.post(collectionName, d).then((x) {
+        return API.post(makeCollection(d), d).then((x) {
           if (CC != null) CC.post(collectionName, d);
           afterChangeEvent(d);
           return jsonDecode(x);
@@ -643,7 +652,7 @@ abstract class ODataModelClass<T extends DataItem> {
                 method: "PUT", body: API.removeNulls(d))
             .then((x) {
           API.client.notifyLog.notify(x.toString());
-          if (CC != null) CC.put(collectionName, d);
+          if (CC != null) CC.put(makeCollection(d), d);
           afterChangeEvent(d);
           return x;
         });
@@ -680,10 +689,12 @@ abstract class ODataModelClass<T extends DataItem> {
     try {
       //return API.delete(collectionName, d).then((x) => jsonDecode(x));
       return API.client
-          .openJsonAsync(API.client.formatUrl(path: 'delete/$collectionName'),
-              method: 'POST', body: d)
+          .openJsonAsync(
+              API.client.formatUrl(path: 'delete/${makeCollection(d)}'),
+              method: 'POST',
+              body: d)
           .then((x) {
-        if (CC != null) CC.post('delete/$collectionName', d);
+        if (CC != null) CC.post('delete/${makeCollection(d)}', d);
 
         return x;
       });
@@ -708,7 +719,7 @@ abstract class ODataModelClass<T extends DataItem> {
       return API
           .send(
               ODataQuery(
-                  resource: resource ?? collectionName,
+                  resource: resource ?? makeCollection(null),
                   select: select ?? columns ?? '*',
                   filter: filter,
                   top: top,
@@ -742,7 +753,7 @@ abstract class ODataModelClass<T extends DataItem> {
     return API
         .send(
             ODataQuery(
-              resource: collectionName,
+              resource: makeCollection(null),
               select: select ?? '*',
               filter: filter,
               top: top,

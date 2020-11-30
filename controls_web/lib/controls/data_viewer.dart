@@ -140,10 +140,10 @@ class DataViewerController {
   }
 
   /// executa insert de uma linha
-  doInsert(dados, {manual = false}) {
+  Future<bool> doInsert(dados, {manual = false}) async {
     if (onValidate != null) dados = onValidate(dados);
     if (onClearCache != null) onClearCache();
-    var rsp;
+    bool rsp;
     if (onInsert != null)
       return onInsert(dados).then((r) {
         if (!manual && (rsp != null)) paginatedController.remove(dados);

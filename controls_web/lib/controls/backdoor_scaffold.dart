@@ -15,6 +15,7 @@ class BackdoorScaffold extends StatelessWidget {
   final Widget bottomSheet;
   final Widget floatingActionButton;
   final bool pinned;
+  final Color backgroundColor;
   BackdoorScaffold(
       {Key key,
       this.body,
@@ -30,11 +31,13 @@ class BackdoorScaffold extends StatelessWidget {
       this.pinned = false,
       this.bottomSheet,
       this.floatingActionButton,
-      this.preferredSize})
+      this.preferredSize,
+      this.backgroundColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: appBar,
       extendBody: extendBody,
@@ -42,6 +45,7 @@ class BackdoorScaffold extends StatelessWidget {
         slivers: [
           if (appBarChild != null)
             SliverAppBar(
+                backgroundColor: backgroundColor,
                 floating: true,
                 pinned: pinned,
                 expandedHeight:

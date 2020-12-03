@@ -5,11 +5,17 @@ class GradientBox extends StatelessWidget {
   final List<Widget> children;
   final List<Color> colors;
   final List<double> stops;
+  final Alignment begin;
+  final Alignment end;
+  final Widget child;
   const GradientBox(
       {Key key,
       this.height = kToolbarHeight,
       this.children,
       this.colors,
+      this.begin,
+      this.end,
+      this.child,
       this.stops})
       : super(key: key);
 
@@ -27,8 +33,8 @@ class GradientBox extends StatelessWidget {
         // alingment:Alingment.bottom,
         decoration: BoxDecoration(
             gradient: LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+          begin: begin ?? Alignment.centerLeft,
+          end: end ?? Alignment.centerRight,
           stops: stops ?? [0.1, 0.5, 0.7, 0.9],
           colors: colors ??
               [
@@ -38,7 +44,7 @@ class GradientBox extends StatelessWidget {
                 Color(0xff00afef),
               ],
         )),
-        child: (children == null)
+        child: child ?? (children == null)
             ? null
             : Stack(children: [
                 ...children,

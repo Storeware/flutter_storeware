@@ -23,6 +23,7 @@ class HorizontalTabView extends StatelessWidget {
   final int mobileCrossCount;
   final Color color;
   final double width;
+  final double minWidth;
   final Color backgroundColor;
   final Widget pageBottom;
   final EdgeInsets padding;
@@ -45,7 +46,7 @@ class HorizontalTabView extends StatelessWidget {
     this.sidebarAppBar,
     this.sidebarDrawer,
     this.padding,
-    this.width,
+    this.width = 220,
     this.tabHeight,
     //this.tabHeightCompact,
     this.sidebarBackgroundColor,
@@ -59,6 +60,7 @@ class HorizontalTabView extends StatelessWidget {
     this.tabColor = Colors.lightBlue,
     this.pageBottom,
     this.isMobile,
+    this.minWidth = 90,
     this.color, //= Colors.lightBlue,
     this.elevation = 0,
     this.sidebarHeader,
@@ -106,11 +108,7 @@ class HorizontalTabView extends StatelessWidget {
                   children: [
                     if (_sidebarType != HorizontalTabViewSiderBarType.hide)
                       Container(
-                          width: [
-                            0.0,
-                            100.0,
-                            width ?? 180.0
-                          ][_sidebarType.index],
+                          width: [0.0, minWidth, width][_sidebarType.index],
                           color: sidebarBackgroundColor ??
                               color ??
                               Colors.transparent,
@@ -143,44 +141,73 @@ class HorizontalTabView extends StatelessWidget {
                                                 ? null
                                                 : tabHeightCompact ?? 40,
                                            */
-                                                child: MaterialButton(
-                                                    padding: EdgeInsets.zero,
-                                                    child: Column(
-                                                      children: [
-                                                        if (choices[index]
-                                                                .image !=
-                                                            null)
-                                                          choices[index].image,
-                                                        if (choices[index]
-                                                                .icon !=
-                                                            null)
-                                                          Icon(
-                                                              choices[index]
-                                                                  .icon,
-                                                              color:
-                                                                  _iconColor),
-                                                        if (_index.value ==
-                                                            index)
-                                                          choices[index]
-                                                                  .title ??
-                                                              Text(
-                                                                  choices[index]
-                                                                      .label,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color:
-                                                                        _iconColor,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  )),
-                                                      ],
-                                                    ),
-                                                    onPressed: () {
-                                                      _index.value = index;
-                                                    }))
+                                                child: Row(children: [
+                                                  if (_index.value == index)
+                                                    Container(
+                                                        height: tabHeight ??
+                                                            kMinInteractiveDimension,
+                                                        width: 5,
+                                                        color: (_index.value ==
+                                                                index)
+                                                            ? tagColor ??
+                                                                theme
+                                                                    .indicatorColor
+                                                            : tabColor),
+                                                  Expanded(
+                                                      child: InkWell(
+                                                          child: Container(
+                                                              constraints:
+                                                                  BoxConstraints(
+                                                                      minHeight:
+                                                                          35),
+                                                              color: (_index
+                                                                          .value ==
+                                                                      index)
+                                                                  ? indicatorColor
+                                                                  : null,
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              child: Column(
+                                                                children: [
+                                                                  if (choices[index]
+                                                                          .image !=
+                                                                      null)
+                                                                    choices[index]
+                                                                        .image,
+                                                                  if (choices[index]
+                                                                          .icon !=
+                                                                      null)
+                                                                    Icon(
+                                                                        choices[index]
+                                                                            .icon,
+                                                                        color:
+                                                                            _iconColor),
+                                                                  if (_index
+                                                                          .value ==
+                                                                      index) ...[
+                                                                    SizedBox(
+                                                                        height:
+                                                                            2),
+                                                                    choices[index]
+                                                                            .title ??
+                                                                        Text(
+                                                                            choices[index]
+                                                                                .label,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              fontSize: 12,
+                                                                              color: _iconColor,
+                                                                              fontWeight: FontWeight.w500,
+                                                                            ))
+                                                                  ],
+                                                                ],
+                                                              )),
+                                                          onTap: () {
+                                                            _index.value =
+                                                                index;
+                                                          }))
+                                                ]))
                                             : Row(children: [
                                                 Container(
                                                     height: tabHeight ??

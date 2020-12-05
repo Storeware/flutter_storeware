@@ -53,31 +53,31 @@ const amethistColors = [
 ];
 
 const pastelColors = [
-  Color(0xffabdee6),
-  Color(0xffcbaacb),
-  Color(0xffffffb5),
-  Color(0xffffccb6),
-  Color(0xfff3b0c3),
-  Color(0xffc6dbda),
-  Color(0xfffee1e8),
-  Color(0xfffed7c3),
-  Color(0xfff6eac2),
-  Color(0xffecd5e3),
-  Color(0xffff968a),
-  Color(0xffffaea5),
-  Color(0xffffc5bf),
-  Color(0xffffd8be),
-  Color(0xffffc8a2),
-  Color(0xffd4f0f0),
-  Color(0xff8fcaca),
-  Color(0xffcce2cb),
-  Color(0xffb6cfb6),
-  Color(0xff97c1a9),
-  Color(0xfffcb9aa),
-  Color(0xffffdbcc),
-  Color(0xffeceae4),
-  Color(0xffa2e1db),
-  Color(0xff55cbcd)
+  Color(0xffabdee6), //0
+  Color(0xffcbaacb), //1
+  Color(0xffffffb5), //2
+  Color(0xffffccb6), //3
+  Color(0xfff3b0c3), //4
+  Color(0xffc6dbda), //5
+  Color(0xfffee1e8), //6
+  Color(0xfffed7c3), //7
+  Color(0xfff6eac2), //8
+  Color(0xffecd5e3), //9
+  Color(0xffff968a), //10
+  Color(0xffffaea5), //11
+  Color(0xffffc5bf), //12
+  Color(0xffffd8be), //3
+  Color(0xffffc8a2), //4
+  Color(0xffd4f0f0), //5
+  Color(0xff8fcaca), //6
+  Color(0xffcce2cb), //7
+  Color(0xffb6cfb6), //8
+  Color(0xff97c1a9), //9
+  Color(0xfffcb9aa), //20
+  Color(0xffffdbcc), //1
+  Color(0xffeceae4), //2
+  Color(0xffa2e1db), //3
+  Color(0xff55cbcd) //4
 ];
 
 List<List<Color>> _colores = [

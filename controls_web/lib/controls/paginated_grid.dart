@@ -88,6 +88,7 @@ class PaginatedGridColumn {
   Function(dynamic) onFocusChanged;
   String Function(dynamic) onGetValue;
   dynamic Function(dynamic) onSetValue;
+  Function(dynamic) onChanged;
   String Function(dynamic) onValidate;
   Widget Function(int, Map<String, dynamic>) builder;
   String tooltip;
@@ -678,6 +679,8 @@ class PaginatedGridController {
   BuildContext context;
   _PaginatedGridState statePage;
   StreamController<bool> changedEvent = StreamController<bool>.broadcast();
+  ValueNotifier<bool> changedValues = ValueNotifier<bool>(false);
+
   List<dynamic> source;
   List<PaginatedGridColumn> columns;
   PaginatedGrid widget;
@@ -991,44 +994,14 @@ class PaginatedGridDataTableSource extends DataTableSource {
     return Dialogs.showPage(
       controller.context,
       child: PaginatedGridEditRow(
+        index: index,
         fullPage: controller.widget.editFullPage,
         width: controller.widget.editSize?.width,
         height: controller.widget.editSize?.height,
         controller: controller,
         event: PaginatedGridChangeEvent.update,
         title: 'Alteração',
-        actions: [
-          if (controller.widget.canDelete)
-            Tooltip(
-                message: 'Excluir o item',
-                child: IconButton(
-                  icon: Icon(Icons.delete),
-                  onPressed: () {
-                    if (controller.widget.onDeleteItem == null)
-                      controller.widget
-                          .onPostEvent(controller, controller.data,
-                              PaginatedGridChangeEvent.delete)
-                          .then((rsp) {
-                        if (rsp is bool && !rsp) return;
-                        controller.removeAt(index);
-                        Timer.run(() {
-                          Navigator.pop(controller.context);
-                        });
-                        controller.changed(b);
-                      });
-                    else
-                      controller.widget.onDeleteItem(controller).then((x) {
-                        if (x) {
-                          controller.removeAt(index);
-                          Timer.run(() {
-                            Navigator.pop(controller.context);
-                          });
-                          controller.changed(b);
-                        }
-                      });
-                  },
-                )),
-        ],
+        actions: [],
       ),
     );
   }
@@ -1050,6 +1023,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
 
 class PaginatedGridEditRow extends StatefulWidget {
   final Map<String, dynamic> data;
+  final int index;
   final double width;
   final double height;
   final PaginatedGridController controller;
@@ -1068,6 +1042,7 @@ class PaginatedGridEditRow extends StatefulWidget {
     this.inScaffold = true,
     this.height,
     this.title,
+    @required this.index,
     this.actions,
   }) : super(key: key);
 
@@ -1078,14 +1053,16 @@ class PaginatedGridEditRow extends StatefulWidget {
 class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   Map<String, dynamic> p;
   PaginatedGridChangeEvent _event;
+
   @override
   void initState() {
+    super.initState();
     _event = widget.event ??
         ((widget.controller.data == null)
             ? PaginatedGridChangeEvent.insert
             : PaginatedGridChangeEvent.update);
     p = widget.data ?? widget.controller.data ?? {};
-    super.initState();
+    widget.controller.changedValues.value = false;
   }
 
   final _formKey = GlobalKey<FormState>();
@@ -1133,9 +1110,87 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
                   ? size.width * 0.95
                   : mw, //  widget.width ?? size.width * 0.95,
             ),
-            child: Scaffold(
-              appBar: AppBar(
-                  title: Text(widget.title ?? ''), actions: widget.actions),
+            child: EditScaffold(
+              title: widget.title,
+              index: widget.index,
+              controller: widget.controller,
+              canDelete: widget.controller.widget.canDelete,
+              canEdit: widget.controller.widget.canEdit ||
+                  widget.controller.widget.canInsert,
+              onReset: (ctx) => _formKey.currentState.reset(),
+              onSaved: (ctx) => _save(ctx),
+              /*appBar: AppBar(
+                  //expandedHeight: kToolbarHeight,
+                  flexibleSpace: ValueListenableBuilder(
+                      valueListenable: widget.controller.changedValues,
+                      builder: (BuildContext context, dynamic changed,
+                          Widget child) {
+                        return AppBar(
+                            title: Text(widget.title ?? ''),
+                            actions: [
+                              ...widget.actions,
+                              if (widget.controller.widget.canDelete &&
+                                  (!changed))
+                                Tooltip(
+                                    message: 'Excluir o item',
+                                    child: IconButton(
+                                      icon: Icon(Icons.delete),
+                                      onPressed: () {
+                                        if (widget.controller.widget
+                                                .onDeleteItem ==
+                                            null)
+                                          widget.controller.widget
+                                              .onPostEvent(
+                                                  widget.controller,
+                                                  widget.controller.data,
+                                                  PaginatedGridChangeEvent
+                                                      .delete)
+                                              .then((rsp) {
+                                            if (rsp is bool && !rsp) return;
+                                            widget.controller
+                                                .removeAt(widget.index);
+                                            Timer.run(() {
+                                              Navigator.pop(
+                                                  widget.controller.context);
+                                            });
+                                            widget.controller
+                                                .changed(widget.data); //b);
+                                          });
+                                        else
+                                          widget.controller.widget
+                                              .onDeleteItem(widget.controller)
+                                              .then((x) {
+                                            if (x) {
+                                              widget.controller
+                                                  .removeAt(widget.index);
+                                              Timer.run(() {
+                                                Navigator.pop(
+                                                    widget.controller.context);
+                                              });
+                                              widget.controller
+                                                  .changed(p); //b);
+                                            }
+                                          });
+                                      },
+                                    )),
+                              if (changed) ...[
+                                InkWell(
+                                    child: Icon(Icons.settings_backup_restore),
+                                    onTap: () {
+                                      _formKey.currentState.reset();
+                                      widget.controller.changedValues.value =
+                                          false;
+                                    }),
+                                SizedBox(width: 8),
+                                InkWell(
+                                    child: Icon(Icons.check),
+                                    onTap: () {
+                                      _save(context);
+                                    })
+                              ],
+                            ]);
+                      })),
+             */
               body: SingleChildScrollView(child: buildPage(context)),
             ),
             // ),
@@ -1217,7 +1272,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               else
                 focusNode.nextFocus();
             },
-            autofocus: canFocus(item),
+            autofocus: item.autofocus && canFocus(item),
             maxLines: item.maxLines,
             maxLength: item.maxLength,
             enabled: canEdit(item),
@@ -1234,6 +1289,10 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               }
 
               return null;
+            },
+            onChanged: (x) {
+              widget.controller.changedValues.value = true;
+              if (item.onChanged != null) item.onChanged(x);
             },
             onSaved: (x) {
               if (item.onSetValue != null) {
@@ -1260,5 +1319,91 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
         Navigator.pop(context);
       });
     }
+  }
+}
+
+class EditScaffold extends StatelessWidget {
+  final int index;
+  final bool canDelete;
+  final bool canEdit;
+  final Widget body;
+  final String title;
+  final controller;
+  final List<Widget> actions;
+  final Function(BuildContext context) onSaved;
+  final Function(BuildContext context) onReset;
+  const EditScaffold(
+      {Key key,
+      @required this.index,
+      @required this.controller,
+      @required this.onSaved,
+      this.title,
+      this.actions,
+      this.canDelete = false,
+      @required this.onReset,
+      @required this.canEdit,
+      @required this.body})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          //expandedHeight: kToolbarHeight,
+          flexibleSpace: ValueListenableBuilder(
+              valueListenable: controller.changedValues,
+              builder: (BuildContext context, dynamic changed, Widget child) {
+                return AppBar(title: Text(title ?? ''), actions: [
+                  ...actions ?? [],
+                  if (canDelete && (!changed))
+                    Tooltip(
+                        message: 'Excluir o item',
+                        child: IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            if (controller.widget.onDeleteItem == null)
+                              controller.widget
+                                  .onPostEvent(controller, controller.data,
+                                      PaginatedGridChangeEvent.delete)
+                                  .then((rsp) {
+                                if (rsp is bool && !rsp) return;
+                                controller.removeAt(index);
+                                Timer.run(() {
+                                  Navigator.pop(controller.context);
+                                });
+                                controller.changed(controller.data); //b);
+                              });
+                            else
+                              controller.widget
+                                  .onDeleteItem(controller)
+                                  .then((x) {
+                                if (x) {
+                                  controller.removeAt(index);
+                                  Timer.run(() {
+                                    Navigator.pop(controller.context);
+                                  });
+                                  controller.changed(controller.data); //b);
+                                }
+                              });
+                          },
+                        )),
+                  if (changed) ...[
+                    InkWell(
+                        child: Icon(Icons.settings_backup_restore),
+                        onTap: () {
+                          onReset(context);
+                          controller.changedValues.value = false;
+                        }),
+                    SizedBox(width: 8),
+                    InkWell(
+                        child: Icon(Icons.check),
+                        onTap: () {
+                          onSaved(context);
+                        })
+                  ],
+                ]);
+              })),
+      body: body,
+    );
   }
 }

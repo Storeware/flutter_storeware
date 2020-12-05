@@ -314,17 +314,22 @@ class Dialogs {
               content: content ?? Text(text ?? ''),
               title: title,
               actions: [
-                StrapButton(
-                    text: 'Sim',
-                    onPressed: () {
-                      Navigator.pop(context, true);
-                    }),
-                if (actions != null) ...actions,
-                StrapButton(
-                    text: 'Não',
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                    }),
+                Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      FlatButton(
+                          child: Text('Sim'),
+                          onPressed: () {
+                            Navigator.pop(context, true);
+                          }),
+                      if (actions != null) ...actions,
+                      FlatButton(
+                          child: Text('Não'),
+                          onPressed: () {
+                            Navigator.pop(context, false);
+                          }),
+                    ])
               ],
             );
           });

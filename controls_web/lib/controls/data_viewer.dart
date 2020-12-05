@@ -66,6 +66,7 @@ class DataViewerController {
   String get filter => filterValue.value;
   set filter(String v) => filterValue.value = v;
   ValueNotifier filterValue = ValueNotifier<String>('');
+  ValueNotifier<bool> changedValues = ValueNotifier<bool>(false);
 
   /// Eventos para customização de registro
   final Future<dynamic> Function(dynamic) onInsert;
@@ -634,6 +635,11 @@ class DataViewerEditGroupedPage extends StatefulWidget {
 }
 
 class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   ThemeData theme;
   final _formKey = GlobalKey<FormState>();
   int itemsCount = 0;
@@ -649,18 +655,41 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           ? null
           : widget.appBar ??
               AppBar(
-                title: Text(widget.title ?? 'Edição'),
-                actions: [
-                  if (widget.canDelete)
-                    IconButton(
-                        icon: Icon(Icons.delete),
-                        onPressed: () {
-                          widget.controller.doDelete(widget.data).then((rsp) {
-                            Navigator.pop(context);
-                          });
-                        }),
-                ],
-              ),
+                  flexibleSpace: ValueListenableBuilder<bool>(
+                      valueListenable: widget.controller.changedValues,
+                      builder:
+                          (BuildContext context, bool changed, Widget child) {
+                        return AppBar(
+                          title: Text(widget.title ?? 'Edição'),
+                          actions: [
+                            if (widget.canDelete && (!changed))
+                              IconButton(
+                                  icon: Icon(Icons.delete),
+                                  onPressed: () {
+                                    widget.controller
+                                        .doDelete(widget.data)
+                                        .then((rsp) {
+                                      Navigator.pop(context);
+                                    });
+                                  }),
+                            if (changed) ...[
+                              InkWell(
+                                  child: Icon(Icons.settings_backup_restore),
+                                  onTap: () {
+                                    _formKey.currentState.reset();
+                                    widget.controller.changedValues.value =
+                                        false;
+                                  }),
+                              SizedBox(width: 8),
+                              InkWell(
+                                  child: Icon(Icons.check),
+                                  onTap: () {
+                                    _save(context);
+                                  })
+                            ],
+                          ],
+                        );
+                      })),
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -784,8 +813,12 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           } else
             focusNode.nextFocus();
         },
+        onChanged: (x) {
+          widget.controller.changedValues.value = true;
+          if (item.onChanged) item.onChanged(x);
+        },
         readOnly: (item.isPrimaryKey || item.readOnly),
-        autofocus: canFocus(item),
+        autofocus: item.autoFocus && canFocus(item),
         maxLines: item.maxLines,
         maxLength: item.maxLength,
         enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),

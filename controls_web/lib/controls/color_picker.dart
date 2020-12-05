@@ -168,6 +168,7 @@ extension ColorExtension on Color {
       if (str != null && str.startsWith('\$')) str = '0x' + str.substring(1);
 
       if (str != null && str.startsWith('0x')) {
+        str = str.padRight(10, 'F');
         int i1 = int.parse(str.substring(2, 4), radix: 16);
         int i2 = int.parse(str.substring(4, 6), radix: 16);
         int i3 = int.parse(str.substring(6, 8), radix: 16);

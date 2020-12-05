@@ -1,4 +1,4 @@
-//import 'package:controls_web/controls/slide_tile.dart';
+import 'package:controls_web/controls/responsive.dart';
 //import 'package:controls_web/controls/tab_choice.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 //import 'package:dotted_border/dotted_border.dart';
@@ -72,6 +72,7 @@ class KanbanSlideAction {
   final IconData icon;
   final Widget image;
   final Function(dynamic) onPressed;
+  final IconSlideAction Function(dynamic) builder;
   final Color color;
   final Color foregroundColor;
   final bool closeOnTap;
@@ -81,10 +82,10 @@ class KanbanSlideAction {
       this.icon,
       this.image,
       this.onPressed,
+      this.builder,
       this.color,
       this.foregroundColor,
-      this.closeOnTap})
-      : assert(icon != null || image != null);
+      this.closeOnTap}); //: assert((builder != null) && (icon != null || image != null));
 }
 
 /// Class [KanbanGrid]
@@ -143,7 +144,7 @@ class KanbanGrid extends StatefulWidget {
       this.minWidth = kMinInteractiveDimension,
       //this.decoration,
       this.builderHeader,
-      this.headerHeight = kMinInteractiveDimension,
+      this.headerHeight,
       this.onWillAccept,
       this.onAcceptItem,
       //this.onSelectedItem,
@@ -174,6 +175,7 @@ class KanbanGrid extends StatefulWidget {
 
 class _KanbanGridState extends State<KanbanGrid> {
   KanbanController controller;
+  double headerHeight;
   @override
   void initState() {
     controller = widget.controller ?? KanbanController();
@@ -187,7 +189,11 @@ class _KanbanGridState extends State<KanbanGrid> {
 
   @override
   Widget build(BuildContext context) {
-    //print('KanbanGrid');
+    ResponsiveInfo resposive = ResponsiveInfo(context);
+    this.headerHeight ??= widget.headerHeight ?? resposive.isSmall
+        ? 30
+        : kMinInteractiveDimension;
+
     return DefaultKanbanGrid(
       kanbanGrid: widget,
       child: Scaffold(
@@ -310,6 +316,8 @@ class KanbanColumn {
 /// [KanbanController] informações de controle do Kanban
 class KanbanController {
   BlocModel<int> _reloadEvent = BlocModel<int>();
+  ValueNotifier<int> processingIndex = ValueNotifier<int>(-1);
+
   int _key = 0;
   reload() {
     print('Reload: $_updating');
@@ -500,27 +508,32 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
                       ? null
                       : [
                           for (final it in kanban.slideTrailing)
-                            IconSlideAction(
-                              caption: it.label,
-                              icon: it.icon,
-                              iconWidget: it.image,
-                              onTap: () => it.onPressed(item),
-                            )
+                            if (it.builder != null)
+                              it.builder(item)
+                            else
+                              IconSlideAction(
+                                  caption: it.label,
+                                  icon: it.icon,
+                                  iconWidget: it.image,
+                                  onTap: () => it.onPressed(item))
                         ],
                   actions: kanban.slideLeading == null
                       ? null
                       : [
                           for (final it in kanban.slideLeading)
-                            IconSlideAction(
-                              key: it.key,
-                              caption: it.label,
-                              icon: it.icon,
-                              iconWidget: it.image,
-                              onTap: () => it.onPressed(item),
-                              color: it.color,
-                              foregroundColor: it.foregroundColor,
-                              closeOnTap: it.closeOnTap,
-                            )
+                            if (it.builder != null)
+                              it.builder(item)
+                            else
+                              IconSlideAction(
+                                key: it.key,
+                                caption: it.label,
+                                icon: it.icon,
+                                iconWidget: it.image,
+                                onTap: () => it.onPressed(item),
+                                color: it.color,
+                                foregroundColor: it.foregroundColor,
+                                closeOnTap: it.closeOnTap,
+                              )
                         ],
                   key: ObjectKey(item),
                   child: buildSlidable(index, item),
@@ -541,7 +554,10 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
 
   Widget buildSlidable(index, item) {
     var draggable = DraggableKanbanItem(
-        column: widget.column, controller: widget.controller, data: item);
+        itemIndex: index,
+        column: widget.column,
+        controller: widget.controller,
+        data: item);
     return Stack(children: [
       widget.controller.widget.builder(widget.column, index, item),
       if (kanban.dragSide.contains(KanbanGridDragSide.right))
@@ -575,7 +591,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
 
     return Column(children: [
       /// header
-      if (kanban.headerHeight > 0)
+      if ((kanban.headerHeight ?? 40) > 0)
         DragTargetKanbanCard(
           controller: widget.controller,
           data: data,
@@ -612,13 +628,18 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
               accepted = true;
               return true;
             },
-            onAccept: (value) {
-              value.controller._remove(value.column, value.data);
-              widget.controller
-                  ._insert(widget.column, -1, value.data)
-                  .then((b) {
-                value.controller.reload();
-              });
+            onAccept: (DraggableKanbanItem value) {
+              try {
+                widget.controller.processingIndex.value = value.itemIndex;
+                value.controller._remove(value.column, value.data);
+                widget.controller
+                    ._insert(widget.column, -1, value.data)
+                    .then((b) {
+                  value.controller.reload();
+                });
+              } finally {
+                widget.controller.processingIndex.value = -1;
+              }
             },
             onLeave: (v) {
               accepted = false;
@@ -651,11 +672,15 @@ class KanbanEditNotifier extends BlocModel<DraggableKanbanItem> {
 
 /// [DraggableKanbanItem]  controller do item draggable
 class DraggableKanbanItem {
+  final int itemIndex;
   KanbanController controller;
   KanbanColumn column;
   dynamic data;
   DraggableKanbanItem(
-      {@required this.column, @required this.controller, @required this.data});
+      {@required this.column,
+      @required this.itemIndex,
+      @required this.controller,
+      @required this.data});
 }
 
 /// objeto que pode ser arrastado para outro estado
@@ -684,33 +709,18 @@ class _DraggableKanbanCardState extends State<DraggableKanbanCard> {
     KanbanGrid kanban = DefaultKanbanGrid.of(context).kanbanGrid;
 
     var draggable = DraggableKanbanItem(
-        column: widget.column,
-        controller: widget.controller,
-        data: widget.item);
+      itemIndex: widget.itemIndex,
+      column: widget.column,
+      controller: widget.controller,
+      data: widget.item,
+    );
     return Draggable<DraggableKanbanItem>(
       data: draggable,
-      // rootOverlay: true,
-
-      feedback: kanban.feedback ?? Icon(kanban.dropIcon ?? Icons.more),
-
-      child:
-          /*((widget.controller.widget.onSelectedItem != null) ||
-              (widget.controller.widget.onDoubleTap != null))
-          ? InkWell(
-
-              /// estava com BUG do InkWell dentro do dragable - observar
-              child: widget.child,
-              onDoubleTap: () {
-                if (widget.controller.widget.onDoubleTap != null)
-                  widget.controller.widget.onDoubleTap(draggable);
-              },
-              hoverColor: Colors.grey.withOpacity(0.5),
-              onTap: () {
-                if (widget.controller.widget.onSelectedItem != null)
-                  widget.controller.widget.onSelectedItem(draggable);
-              })
-          :*/
-          widget.child,
+      dragAnchor: DragAnchor.pointer,
+      feedback: Icon(Icons.room_preferences) ??
+          kanban.feedback ??
+          Icon(kanban.dropIcon ?? Icons.more),
+      child: widget.child,
       childWhenDragging: Material(
         color: Colors.grey.withOpacity(0.2),
         child: Container(height: 0),
@@ -772,6 +782,7 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
                 ._insert(
                     widget.column, (widget.itemIndex ?? 0) /*+ 1*/, value.data)
                 .then((b) {
+              kanban.controller.processingIndex.value = -1;
               value.controller.reload();
             });
             setState(() {
@@ -814,10 +825,21 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
             ));
           },
           onAcceptWithDetails: (value) {
+            kanban.controller.processingIndex.value = widget.itemIndex;
             setState(() {
               inDetails = true;
               //itemAccept = widget.itemIndex;
             });
+          },
+        ),
+        ValueListenableBuilder(
+          valueListenable: kanban.controller.processingIndex,
+          builder: (BuildContext context, dynamic value, Widget child) {
+            return Container(
+                height: 2,
+                child: (value == widget.itemIndex)
+                    ? LinearProgressIndicator()
+                    : null);
           },
         ),
       ],

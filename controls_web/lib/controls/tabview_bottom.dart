@@ -91,7 +91,8 @@ class _TabViewBottomState extends State<TabViewBottom> {
     Color _color = widget.color ?? theme.bottomAppBarColor;
     Color _tabColor =
         widget.tabColor ?? theme.appBarTheme.color ?? Colors.amber;
-    Color _iconColor = widget.iconColor ?? theme.tabBarTheme.labelColor;
+    Color _iconColor = theme.tabBarTheme?.labelColor ?? theme.buttonColor;
+
     Color _indicatorColor = widget.indicatorColor ?? Colors.grey.withAlpha(20);
     Color _tagColor = widget.tagColor ?? theme.indicatorColor;
     return Column(children: [

@@ -33,7 +33,8 @@ class LocalNotifications {
 
   Future<void> initNotifications() async {
     var initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+        AndroidInitializationSettings('ic_launcher');
+    // AndroidInitializationSettings('app_icon');
     var initializationSettingsIOS = IOSInitializationSettings(
         requestAlertPermission: false,
         requestBadgePermission: false,

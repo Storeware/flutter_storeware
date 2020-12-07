@@ -11,9 +11,10 @@ enum StrapButtonType {
   info,
   light,
   dark,
-  link
+  link,
+  none
 }
-strapColor(StrapButtonType type) {
+Color strapColor(StrapButtonType type) {
   return [
     primaryColor,
     Colors.grey,
@@ -23,11 +24,12 @@ strapColor(StrapButtonType type) {
     Colors.lightBlue,
     Colors.white,
     Colors.black,
-    Colors.white
+    Colors.white,
+    Colors.transparent
   ][type.index];
 }
 
-strapFontColor(StrapButtonType type) {
+Color strapFontColor(StrapButtonType type) {
   switch (type) {
     case StrapButtonType.warning:
       return Colors.black;
@@ -38,7 +40,9 @@ strapFontColor(StrapButtonType type) {
     case StrapButtonType.link:
       return Colors.blue;
       break;
-
+    case StrapButtonType.none:
+      return Colors.grey;
+      break;
     default:
       return Colors.white;
   }
@@ -122,15 +126,17 @@ class _StrapButtonState extends State<StrapButton> {
         : Container(
             height: widget.height,
             width: widget.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.radius),
-              border: Border.all(
-                  width: widget.borderWidth,
-                  color: Colors.grey.withOpacity(0.2)),
-              color: (widget.type == StrapButtonType.primary)
-                  ? primaryColor
-                  : strapColor(widget.type),
-            ),
+            decoration: widget.type == StrapButtonType.none
+                ? null
+                : BoxDecoration(
+                    borderRadius: BorderRadius.circular(widget.radius),
+                    border: Border.all(
+                        width: widget.borderWidth,
+                        color: Colors.grey.withOpacity(0.2)),
+                    color: (widget.type == StrapButtonType.primary)
+                        ? primaryColor
+                        : strapColor(widget.type),
+                  ),
             child: ValueListenableBuilder<StrapButtonState>(
                 valueListenable: _valueNotifier,
                 builder: (BuildContext context, StrapButtonState stateValue,
@@ -169,27 +175,28 @@ class _StrapButtonState extends State<StrapButton> {
                                     DefaultTextStyle(
                                         style: theme.textTheme.caption,
                                         child: widget.subtitle),
+                                  if ([
+                                    StrapButtonState.waiting,
+                                    StrapButtonState.processing
+                                  ].contains(stateValue))
+                                    Container(
+                                        child: Container(
+                                            width: double.maxFinite,
+                                            height: 2,
+                                            color: strapColor(widget.type),
+                                            child: LinearProgressIndicator(
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation(
+                                                      strapFontColor(
+                                                          widget.type)),
+                                            ))),
                                 ],
                               ),
                             ),
                             if (widget.trailing != null)
                               Flexible(flex: 1, child: widget.trailing),
-                            if ([
-                              StrapButtonState.waiting,
-                              StrapButtonState.processing
-                            ].contains(stateValue))
-                              Container(
-                                  child: Container(
-                                      width: 22,
-                                      height: 22,
-                                      color: strapColor(widget.type),
-                                      child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation(
-                                            strapFontColor(widget.type)),
-                                        //valueColor: strapFontColor(widget.type),
-                                        //backgroundColor:
-                                        //    strapColor(widget.type),
-                                      ))),
                           ],
                         )),
                     onPressed: (widget.enabled &&

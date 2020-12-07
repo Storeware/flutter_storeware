@@ -818,7 +818,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           if (item.onChanged) item.onChanged(x);
         },
         readOnly: (item.isPrimaryKey || item.readOnly),
-        autofocus: item.autoFocus && canFocus(item),
+        autofocus: item.autofocus && canFocus(item),
         maxLines: item.maxLines,
         maxLength: item.maxLength,
         enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),

@@ -18,7 +18,7 @@ class _KanbanSampleState extends State<KanbanSample> {
   Widget build(BuildContext context) {
     //print('kanbnTest');
     return KanbanGrid(
-        keyName: 'id', // coluna com o valor do card
+        columnKeyName: 'id', // coluna com o valor do card
         builder: (column, row, data) {
           return ListTile(title: Text(data['nome']));
         },
@@ -117,7 +117,8 @@ class KanbanGrid extends StatefulWidget {
   final Widget bottomNavigationBar;
 
   /// nome da coluna em [KanbanColumn] usado para separar os cards do kanban
-  final String keyName;
+  final String columnKeyName;
+  final String primaryKey;
   final List<dynamic> source;
 
   /// [onWillAccept] permite aceitar um recusar um accept
@@ -138,8 +139,9 @@ class KanbanGrid extends StatefulWidget {
   final Widget bottom;
   KanbanGrid(
       {Key key,
-      @required this.keyName,
+      @required this.columnKeyName,
       @required this.columns,
+      @required this.primaryKey,
       this.showProcessing = true,
       this.minWidth = kMinInteractiveDimension,
       //this.decoration,
@@ -179,7 +181,7 @@ class _KanbanGridState extends State<KanbanGrid> {
   @override
   void initState() {
     controller = widget.controller ?? KanbanController();
-    controller.keyName = widget.keyName;
+    controller.columnKeyName = widget.columnKeyName;
     controller.source = widget.source ?? [];
     controller.columns = widget.columns;
     controller.widget = widget;
@@ -291,9 +293,9 @@ class KanbanColumn {
   int index;
   Color titleColor;
   Color dragColor;
-  Color dragFocused;
-  Color draggableColor;
-  Color dragDottedColor;
+  //Color dragFocused;
+  //Color draggableColor;
+  //Color dragDottedColor;
   final dynamic Function(KanbanController, KanbanColumn) onNewItem;
   KanbanColumn({
     @required this.id,
@@ -304,9 +306,9 @@ class KanbanColumn {
     this.elevation = 0,
     this.titleColor,
     this.dragColor = Colors.grey,
-    this.draggableColor,
-    this.dragDottedColor,
-    this.dragFocused,
+    //this.draggableColor,
+    //this.dragDottedColor,
+    //this.dragFocused,
     this.onNewItem,
     this.actions,
     this.color,
@@ -316,7 +318,7 @@ class KanbanColumn {
 /// [KanbanController] informações de controle do Kanban
 class KanbanController {
   BlocModel<int> _reloadEvent = BlocModel<int>();
-  ValueNotifier<int> processingIndex = ValueNotifier<int>(-1);
+  ValueNotifier<String> processingIndex = ValueNotifier<String>('');
 
   int _key = 0;
   reload() {
@@ -328,7 +330,7 @@ class KanbanController {
     return this;
   }
 
-  String keyName;
+  String columnKeyName;
   int rowIndexOnColumn = 0;
   var widget;
 
@@ -367,7 +369,7 @@ class KanbanController {
   }
 
   _addData(item) {
-    var value = item[keyName];
+    var value = item[columnKeyName];
     if (data[value] == null) data[value] = [];
     data[value].add(item);
   }
@@ -407,14 +409,14 @@ class KanbanController {
   update(item) {}
 
   delete(Map<String, dynamic> item) {
-    var value = item[keyName];
+    var value = item[columnKeyName];
     source.remove(item);
     data[value].remove(item);
     reload();
   }
 
   Future<dynamic> _insert(KanbanColumn column, int index, dynamic item) async {
-    item[keyName] = column.id;
+    item[columnKeyName] = column.id;
     if (widget.onAcceptItem != null) {
       this.rowIndexOnColumn = index;
       return widget.onAcceptItem(this, column, item).then((rsp) {
@@ -442,7 +444,7 @@ class KanbanController {
 
   moveTo(oldItem, item, to) {
     /// tem que mandar o item original... para conseguir encontrar onde esta.
-    var from = oldItem[keyName]; // pega o card
+    var from = oldItem[columnKeyName]; // pega o card
     int rowFrom = -1;
     var columnDeIndex = columnIndexOf(from);
     var cardDe = columns[columnDeIndex].id;
@@ -630,19 +632,24 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
             },
             onAccept: (DraggableKanbanItem value) {
               try {
-                widget.controller.processingIndex.value = value.itemIndex;
+                widget.controller.processingIndex.value =
+                    '${value.data[kanban.primaryKey]}';
                 value.controller._remove(value.column, value.data);
                 widget.controller
                     ._insert(widget.column, -1, value.data)
                     .then((b) {
+                  widget.controller.processingIndex.value = '';
                   value.controller.reload();
                 });
-              } finally {
-                widget.controller.processingIndex.value = -1;
-              }
+              } finally {}
             },
             onLeave: (v) {
               accepted = false;
+            },
+            onAcceptWithDetails: (value) {
+              final data = value.data.data;
+              kanban.controller.processingIndex.value =
+                  (data != null) ? '${data[kanban.primaryKey]}' : '';
             },
             builder: (a, items, c) => Material(
               elevation: (accepted) ? kanban.dropElevation : 0,
@@ -741,7 +748,7 @@ class DragTargetKanbanCard extends StatefulWidget {
     Key key,
     this.child,
     this.controller,
-    this.itemIndex,
+    @required this.itemIndex,
     @required this.data,
     @required this.column,
   }) : super(key: key);
@@ -753,7 +760,6 @@ class DragTargetKanbanCard extends StatefulWidget {
 class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
     with SingleTickerProviderStateMixin {
   bool accepted = false;
-  //bool processing = false;
   bool inDetails = false;
   int itemAccept = -1;
 
@@ -766,8 +772,10 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
   }
 
   get index => widget.itemIndex ?? -1;
+  dynamic item;
   @override
   Widget build(BuildContext context) {
+    if (widget.itemIndex != null) item = widget.data[widget.itemIndex];
     KanbanGrid kanban = DefaultKanbanGrid.of(context).kanbanGrid;
     return Column(
       children: [
@@ -782,7 +790,7 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
                 ._insert(
                     widget.column, (widget.itemIndex ?? 0) /*+ 1*/, value.data)
                 .then((b) {
-              kanban.controller.processingIndex.value = -1;
+              kanban.controller.processingIndex.value = '';
               value.controller.reload();
             });
             setState(() {
@@ -825,25 +833,34 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
             ));
           },
           onAcceptWithDetails: (value) {
-            kanban.controller.processingIndex.value = widget.itemIndex;
-            setState(() {
-              inDetails = true;
-              //itemAccept = widget.itemIndex;
-            });
+            final data = value.data.data;
+            kanban.controller.processingIndex.value =
+                (data != null) ? '${data[kanban.primaryKey]}' : '';
+            inDetails = true;
           },
         ),
         ValueListenableBuilder(
           valueListenable: kanban.controller.processingIndex,
-          builder: (BuildContext context, dynamic value, Widget child) {
+          builder: (BuildContext context, String value, Widget child) {
+            final data = itemData;
             return Container(
                 height: 2,
-                child: (value == widget.itemIndex)
-                    ? LinearProgressIndicator()
-                    : null);
+                child:
+                    ((data != null) && (value == data['${kanban.primaryKey}']))
+                        ? LinearProgressIndicator()
+                        : null);
           },
         ),
       ],
     );
+  }
+
+  get itemData {
+    if (item != null) return item;
+    if (widget.itemIndex == null) return null;
+    return ((widget.itemIndex >= 0) && (widget.itemIndex < widget.data.length))
+        ? widget.data[widget.itemIndex]
+        : null;
   }
 }
 

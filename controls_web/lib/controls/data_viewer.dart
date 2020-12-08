@@ -49,12 +49,14 @@ class DataViewerController {
     this.onDelete,
     this.onChanged,
     this.columns,
+    this.onLog,
   }) {
     if (futureExtended != null) {
       this.future = () => futureExtended(this);
     }
     paginatedController.parent = this;
   }
+  final void Function(dynamic before, dynamic after) onLog;
 
   /// posicao da pagina a buscar
   int page = 1;
@@ -576,16 +578,19 @@ class _DataViewerState extends State<DataViewer> {
                             widget.canDelete)
                         ? (PaginatedGridController ctrl, dynamic dados,
                             PaginatedGridChangeEvent event) async {
+                            var rt;
                             if (event == PaginatedGridChangeEvent.delete) {
-                              return controller.doDelete(dados, manual: false);
-                            }
-                            if (event == PaginatedGridChangeEvent.insert) {
-                              return controller.doInsert(dados, manual: false);
-                            }
-                            if (event == PaginatedGridChangeEvent.update) {
-                              return controller.doUpdate(dados, manual: false);
-                            }
-                            return false;
+                              rt = controller.doDelete(dados, manual: false);
+                            } else if (event ==
+                                PaginatedGridChangeEvent.insert) {
+                              rt = controller.doInsert(dados, manual: false);
+                            } else if (event ==
+                                PaginatedGridChangeEvent.update) {
+                              rt = controller.doUpdate(dados, manual: false);
+                            } else
+                              return false;
+
+                            return rt;
                           }
                         : null,
                   ),
@@ -614,6 +619,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final bool showAppBar;
   final Widget appBar;
   final List<Widget> actions;
+
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
@@ -627,6 +633,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.showAppBar = true,
     this.appBar,
     this.onSaved,
+    //this.onLog,
     this.actions,
     @required this.event,
   }) : super(key: key);
@@ -645,8 +652,18 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   ThemeData theme;
   final _formKey = GlobalKey<FormState>();
   int itemsCount = 0;
+
+  var oldData = {};
+  clone(Map<String, dynamic> item) {
+    oldData = {};
+    item.forEach((key, value) {
+      oldData[key] = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    clone(widget.data);
     theme = Theme.of(context);
     col = 0;
     itemsCount = 0;
@@ -865,6 +882,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
       doPostEvent(widget.controller.paginatedController, p, widget.event)
           .then((rsp) {
         if (widget.onSaved != null) widget.onSaved(p);
+        if (widget.controller.onLog != null)
+          widget.controller.onLog(oldData, p);
         Navigator.pop(context);
       });
     }

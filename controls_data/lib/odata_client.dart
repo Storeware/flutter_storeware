@@ -352,7 +352,8 @@ class ODataClient {
     return v;
   }
 
-  Future<String> post(String resource, json, {bool removeNulls = true}) async {
+  Future<String> post(String resource, Map<String, dynamic> json,
+      {bool removeNulls = true}) async {
     Map<String, dynamic> data = {};
     try {
       if (removeNulls) {

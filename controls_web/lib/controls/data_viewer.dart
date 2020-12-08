@@ -613,6 +613,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final Function(dynamic) onSaved;
   final bool showAppBar;
   final Widget appBar;
+  final List<Widget> actions;
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
@@ -626,6 +627,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.showAppBar = true,
     this.appBar,
     this.onSaved,
+    this.actions,
     @required this.event,
   }) : super(key: key);
 
@@ -655,6 +657,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           ? null
           : widget.appBar ??
               AppBar(
+                  actions: widget.actions,
                   flexibleSpace: ValueListenableBuilder<bool>(
                       valueListenable: widget.controller.changedValues,
                       builder:

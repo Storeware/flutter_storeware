@@ -86,7 +86,7 @@ class EventosItemItem extends DataItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['data'] = this.data.format('yyyy-MM-dd HH:mm:ss');
+    data['data'] = toDateSql(this.data);
     data['obs'] = this.obs;
     data['link'] = this.link;
     data['inativo'] = this.inativo ?? 'N';

@@ -453,7 +453,9 @@ class _DataViewerState extends State<DataViewer> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (widget.leading != null) widget.leading,
+                              Expanded(child: Container()),
                               Expanded(
+                                flex: 1,
                                 child: TextFormField(
                                   controller: _filtroController,
                                   style: theme.textTheme.bodyText1,
@@ -472,7 +474,7 @@ class _DataViewerState extends State<DataViewer> {
                                     vertical: 5), // ios usa 5
                                 width: 90,
                                 child: StrapButton(
-                                    text: 'abrir',
+                                    text: 'filtrar',
                                     height: 30,
                                     onPressed: () {
                                       controller.page = 1;
@@ -835,7 +837,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         },
         onChanged: (x) {
           widget.controller.changedValues.value = true;
-          if (item.onChanged) item.onChanged(x);
+          if (item.onChanged != null) item.onChanged(x);
         },
         readOnly: (item.isPrimaryKey || item.readOnly),
         autofocus: item.autofocus && canFocus(item),

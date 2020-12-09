@@ -307,7 +307,9 @@ class _CardGridEditRowState extends State<CardGridEditRow> {
                                   else
                                     p[item.name] = x;
                                 }),
-                    Divider(),
+                    SizedBox(
+                      height: 10,
+                    ),
                     FlatButton(
                       child: Text('Salvar'),
                       onPressed: () {

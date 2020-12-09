@@ -1022,6 +1022,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
                               if (!readOnly)
                                 onSearch().then((item) {
                                   _controller.text = getValue(item);
+                                  if (onChanged != null) onChanged(item);
                                 });
                             })),
             enableSuggestions: true,

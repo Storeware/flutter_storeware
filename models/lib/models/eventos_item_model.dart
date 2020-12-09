@@ -79,7 +79,7 @@ class EventosItemItem extends DataItem {
     valor = toDouble(json['valor']);
     usuario = json['usuario'];
     gid = json['gid'];
-    if (json['id'] != null) id = '${json['id']}';
+    id = json['id'];
 
     return this;
   }
@@ -115,7 +115,7 @@ class EventosItemItem extends DataItem {
   }
 
   static get keys {
-    return EventosItemItem.fromJson({}).toJson().keys;
+    return EventosItemItem.fromJson({"id": ""}).toJson().keys;
   }
 }
 
@@ -130,8 +130,8 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
     collectionName = 'eventos_item';
     super.API = ODataInst();
     //super.CC = CloudV3().client; // inconsistencia no ID que é um double no firebird
-
-    columns = EventosItemItem.keys.join(',').replaceAll('obs',
+    final keys = EventosItemItem.fromJson({"id": ''}).toJson();
+    columns = keys.keys.join(',').replaceAll('obs',
         'cast(obs as varchar(255)) obs'); // troca o memo para um cast varchar
   }
   EventosItemItem newItem() => EventosItemItem();
@@ -142,9 +142,14 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
   }
 
   @override
-  put(dynamic item) {
-    return super.put(item).then((resp) {
-      EventosItemNotifier().notify(item['titulo']);
+  put(item) {
+    Map<String, dynamic> _item;
+    if (item is EventosItemItem)
+      _item = item.toJson();
+    else
+      _item = item;
+    return super.put(_item).then((resp) {
+      EventosItemNotifier().notify(_item['titulo']);
       return resp;
     });
   }

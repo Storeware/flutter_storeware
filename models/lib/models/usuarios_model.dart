@@ -1,6 +1,7 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
+import 'package:controls_data/cached.dart';
 
 class SenhasItem extends DataItem {
   String aplicacao;
@@ -55,7 +56,9 @@ class SenhasItem extends DataItem {
     data['trocasenha'] = this.trocasenha;
     data['dtatualiz'] = this.dtatualiz;
     data['vendedor'] = this.vendedor;
-    data['id'] = this.codigo;
+
+    /// quando é um insert, o codigo é gerado no servidor.
+    if (this.codigo != null) data['id'] = this.codigo;
     return data;
   }
 
@@ -72,4 +75,12 @@ class SenhasItemModel extends ODataModelClass<SenhasItem> {
     super.CC = CloudV3().client..client.silent = true;
   }
   SenhasItem newItem() => SenhasItem();
+  Future<Map<String, dynamic>> buscarByCodigo(codigo) async {
+    return Cached.value('usuario_$codigo',
+        builder: (x) => super.getOne(filter: "codigo eq '$codigo'"));
+  }
 }
+
+class UsuarioItem extends SenhasItem {}
+
+class UsuarioItemModel extends SenhasItemModel {}

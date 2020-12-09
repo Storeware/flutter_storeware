@@ -79,14 +79,14 @@ class EventosItemItem extends DataItem {
     valor = toDouble(json['valor']);
     usuario = json['usuario'];
     gid = json['gid'];
-    if (json['id'] != null) id = json['id'];
-    print(json);
+    if (json['id'] != null) id = '${json['id']}';
+
     return this;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['data'] = toDateSql(this.data);
+    data['data'] = toDateTime(this.data).toDateTimeSql();
     data['obs'] = this.obs;
     data['link'] = this.link;
     data['inativo'] = this.inativo ?? 'N';
@@ -94,7 +94,7 @@ class EventosItemItem extends DataItem {
     data['autor'] = this.autor;
     data['pessoa'] = this.pessoa;
     data['arquivado'] = this.arquivado ?? 'N';
-    data['datalimite'] = this.datalimite.format('yyyy-MM-dd HH:mm:ss');
+    data['datalimite'] = toDateTime(this.datalimite).toDateTimeSql();
     data['idestado'] = this.idestado ?? 0;
     data['idgrupo_estado'] = this.idgrupoEstado ?? 0;
     data['cliente'] = this.cliente ?? 0;
@@ -107,7 +107,10 @@ class EventosItemItem extends DataItem {
     data['valor'] = this.valor;
     data['usuario'] = this.usuario;
     data['gid'] ??= Uuid().v4();
-    // data['id'] = this.id; // no firebird id é um double
+
+    /// quando é insert o id é gerado no servidor.
+    if (this.id != null)
+      data['id'] = '${this.id}'; // no firebird id é um double
     return data;
   }
 

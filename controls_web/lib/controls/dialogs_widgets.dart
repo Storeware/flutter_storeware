@@ -31,7 +31,7 @@ class Dialogs {
         ));
   }
 
-  static showPage(context,
+  static Future<T> showPage<T>(context,
       {Widget child,
       double width,
       double height,
@@ -44,7 +44,7 @@ class Dialogs {
     Size size = MediaQuery.of(context).size;
     double plus = 0.0;
     if (size.width < 400) plus = 0.07;
-    return showGeneralDialog(
+    return showGeneralDialog<T>(
       context: context,
       barrierLabel: label,
       barrierColor: Colors.black.withOpacity(0.5),

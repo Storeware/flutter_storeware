@@ -97,7 +97,8 @@ class EstoperItemModel extends ODataModelClass<EstoperItem> {
   }
   EstoperItem newItem() => EstoperItem();
 
-  buscarByCodigo(String codigo) async {
-    return listCached(filter: "codigo eq '$codigo'", select: columns);
+  Future<Map<String, dynamic>> buscarByCodigo(String codigo) async {
+    return listCached(filter: "codigo eq '$codigo'", select: columns)
+        .then((rsp) => rsp[0]);
   }
 }

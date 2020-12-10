@@ -100,10 +100,12 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
 
   ProdutoItem newItem() => ProdutoItem();
 
-  listGrid(
-      {String filter, top: 20, skip: 0, String orderBy, double filial = 1}) {
-    //debugPrint('produto.listGrid');
-    //return Cached.value('listGrid_$filter', builder: (key) {
+  Future<List<dynamic>> listGrid(
+      {String filter,
+      top: 20,
+      skip: 0,
+      String orderBy,
+      double filial = 1}) async {
     return search(
             resource: 'ctprod',
             select:
@@ -146,31 +148,32 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
     });
   }
 
-  atalhoUpdate(item) {
+  Future<String> atalhoUpdate(item) async {
     if (item != null) {
-      if ((item['codtitulo'] ?? 0) == 0) return;
+      if ((item['codtitulo'] ?? 0) == 0) return null;
       // atalhoUpdate
       String upd =
           "update or insert into ctprod_atalho_itens (codtitulo,codprod) values(${item['codtitulo']},'${item['codigo']}') matching (codprod)   ";
-      API.execute(upd);
+      return API.execute(upd);
     }
   }
 
-  updatePrecoFilial(Map<String, dynamic> dados) {
+  Future<String> updatePrecoFilial(Map<String, dynamic> dados) async {
     var it = ProdutoItem.fromJson(dados);
     if ((it.filial ??= 0) > 0) {
       var p = '${it.precoweb}'.replaceAll(',', '.');
       var upd =
           "update or insert into ctprod_filial (codigo,filial,precoweb) values ('${it.codigo}',${it.filial}, ${p}) matching (codigo,filial)";
       print(upd);
-      API.execute(upd);
+      return API.execute(upd);
     }
   }
 
-  buscarByCodigo(String codigo) async {
+  Future<Map<String, dynamic>> buscarByCodigo(String codigo) async {
     return listCached(
-        filter: "codigo eq '$codigo'",
-        select:
-            'codigo,nome,precoweb,unidade,cast(sinopse as varchar(1024)) sinopse,obs,publicaweb,inservico');
+            filter: "codigo eq '$codigo'",
+            select:
+                'codigo,nome,precoweb,unidade,cast(sinopse as varchar(1024)) sinopse,obs,publicaweb,inservico')
+        .then((rsp) => rsp[0]);
   }
 }

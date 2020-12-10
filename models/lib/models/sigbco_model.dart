@@ -135,7 +135,8 @@ class SigbcoItemModel extends ODataModelClass<SigbcoItem> {
     super.CC = CloudV3().client..client.silent = true;
   }
   SigbcoItem newItem() => SigbcoItem();
-  buscarByCodigo(codigo) {
-    return listCached(filter: "codigo eq '$codigo'", select: 'codigo, nome');
+  Future<Map<String, dynamic>> buscarByCodigo(codigo) {
+    return listCached(filter: "codigo eq '$codigo'", select: 'codigo, nome')
+        .then((rsp) => rsp[0]);
   }
 }

@@ -72,6 +72,6 @@ class SigvenItemModel extends ODataModelClass<SigvenItem> {
     super.CC = CloudV3().client..client.silent = true;
   }
   SigvenItem newItem() => SigvenItem();
-  buscarByCodigo(String codigo) =>
-      listCached(filter: "codigo eq '$codigo'").then((rsp) => rsp.asMap());
+  Future<Map<String, dynamic>> buscarByCodigo(String codigo) =>
+      listCached(filter: "codigo eq '$codigo'").then((rsp) => rsp.asMap()[0]);
 }

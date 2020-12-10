@@ -109,6 +109,7 @@ class FilialItem extends DataItem {
 
   @override
   fromMap(Map<String, dynamic> json) {
+    if (json == null) return this;
     cgc = json['cgc'];
     codigo = toDouble(json['codigo']);
     ender = json['ender'];
@@ -218,7 +219,7 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
 
   FilialItem newItem() => FilialItem();
   @override
-  list({filter}) {
+  Future<List<dynamic>> list({filter}) {
     return Cached.value('_filial_list_${filter ?? ''}', builder: (x) {
       return super.list(filter: filter).then((rsp) {
         return rsp;
@@ -226,7 +227,7 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
     });
   }
 
-  exists(double codigo) {
+  Future<bool> exists(double codigo) async {
     return Cached.value('exists_filial_$codigo', builder: (v) {
       return super.getOne(filter: 'codigo=$codigo').then((rsp) {
         //print(rsp);
@@ -235,8 +236,9 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
     });
   }
 
-  buscarByCodigo(codigo, {String select}) {
+  Future<Map<String, dynamic>> buscarByCodigo(codigo, {String select}) async {
     return listCached(
-        filter: "codigo eq '$codigo'", select: select ?? 'codigo, nome');
+            filter: "codigo eq '$codigo'", select: select ?? 'codigo, nome')
+        .then((rsp) => rsp[0]);
   }
 }

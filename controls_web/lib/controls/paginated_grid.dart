@@ -385,13 +385,6 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 
   createColumns(List<dynamic> source) {
     controller.createColumns(source);
-    /*  controller.columns = [];
-    Map<String, dynamic> row = source.first;
-    if (row != null)
-      row.forEach((k, v) {
-        controller.columns.add(PaginatedGridColumn(
-            name: k, label: k.replaceAll('_', ' ').toCapital()));
-      });*/
   }
 
   _sort(int idx, bool ascending) {
@@ -486,6 +479,9 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                 widget.footerLeading ?? createPageNavigator(),
                             header: Column(
                                 crossAxisAlignment: widget.crossAxisAlignment,
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                //
                                 children: [
                                   widget.header ?? Container(),
                                   if (widget.canFilter)

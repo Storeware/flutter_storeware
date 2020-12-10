@@ -1,10 +1,10 @@
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
-
 import 'dialogs_widgets.dart';
+import 'package:controls_web/controls/strap_widgets.dart';
 
 class CardGridController {
-  var widget;
+  CardGrid widget;
   BlocModel<dynamic> subscribeChanges = BlocModel<dynamic>();
   List<CardGridColumn> columns;
   List<dynamic> source = [];
@@ -78,6 +78,8 @@ class CardGrid extends StatefulWidget {
   final bool canInsert;
   final bool canDelete;
   final bool canUpdate;
+  final Widget bottomEditLeading;
+  final List<Widget> bottomEditActions;
   //final bool Function(CardGridController, dynamic, CardGridChangeEvent)    onEditItem;
   //final bool Function(CardGridController, dynamic) onNewItem;
   //final Future<dynamic> Function(CardGridController, dynamic) onDeleteItem;
@@ -91,6 +93,8 @@ class CardGrid extends StatefulWidget {
     this.source,
     this.builder,
     this.controller,
+    this.bottomEditActions,
+    this.bottomEditLeading,
     this.futureSource,
     //  this.onNewItem,
     //  this.onEditItem,
@@ -310,12 +314,22 @@ class _CardGridEditRowState extends State<CardGridEditRow> {
                     SizedBox(
                       height: 10,
                     ),
-                    FlatButton(
-                      child: Text('Salvar'),
-                      onPressed: () {
-                        _save(context);
-                      },
-                    ),
+                    Container(
+                        height: 60,
+                        child: Row(children: [
+                          if (widget.controller.widget.bottomEditLeading !=
+                              null)
+                            widget.controller.widget.bottomEditLeading,
+                          StrapButton(
+                            text: 'Salvar',
+                            onPressed: () {
+                              _save(context);
+                            },
+                          ),
+                          if (widget.controller.widget.bottomEditActions !=
+                              null)
+                            ...widget.controller.widget.bottomEditActions,
+                        ])),
                   ],
                 ),
               ),

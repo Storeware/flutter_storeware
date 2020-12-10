@@ -963,9 +963,9 @@ class MaskedSearchFormField<T> extends StatelessWidget {
 
   String getValue(T v) {
     if (onGetValue != null)
-      return onGetValue(initialValue);
+      return onGetValue(v ?? initialValue);
     else
-      return (initialValue == null) ? '' : '$initialValue';
+      return '${v ?? initialValue ?? ''}';
   }
 
   Type typeOf<T>() => T;

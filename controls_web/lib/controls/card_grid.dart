@@ -78,13 +78,8 @@ class CardGrid extends StatefulWidget {
   final bool canInsert;
   final bool canDelete;
   final bool canUpdate;
-  final Widget bottomEditLeading;
-  final List<Widget> bottomEditActions;
-  //final bool Function(CardGridController, dynamic, CardGridChangeEvent)    onEditItem;
-  //final bool Function(CardGridController, dynamic) onNewItem;
-  //final Future<dynamic> Function(CardGridController, dynamic) onDeleteItem;
-  //final Function(CardGridController) onRefresh;
-  //final Function(bool, CardGridController) onSelectChanged;
+  final Widget Function(BuildContext context, dynamic row) bottomEditLeading;
+  final Widget Function(BuildContext context, dynamic row) bottomEditTrailling;
   final Future<dynamic> Function(
       CardGridController, dynamic, CardGridChangeEvent) onChangeEvent;
 
@@ -93,15 +88,11 @@ class CardGrid extends StatefulWidget {
     this.source,
     this.builder,
     this.controller,
-    this.bottomEditActions,
+    //this.bottomBuilder,
+    this.bottomEditTrailling,
     this.bottomEditLeading,
     this.futureSource,
-    //  this.onNewItem,
-    //  this.onEditItem,
-    //  this.onDeleteItem,
     this.columns,
-    //this.onRefresh,
-    //this.onSelectChanged,
     this.onChangeEvent,
     this.canInsert = false,
     this.canDelete = false,
@@ -316,20 +307,29 @@ class _CardGridEditRowState extends State<CardGridEditRow> {
                     ),
                     Container(
                         height: 60,
-                        child: Row(children: [
-                          if (widget.controller.widget.bottomEditLeading !=
-                              null)
-                            widget.controller.widget.bottomEditLeading,
-                          StrapButton(
-                            text: 'Salvar',
-                            onPressed: () {
-                              _save(context);
-                            },
-                          ),
-                          if (widget.controller.widget.bottomEditActions !=
-                              null)
-                            ...widget.controller.widget.bottomEditActions,
-                        ])),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (widget.controller.widget.bottomEditLeading !=
+                                  null)
+                                widget.controller.widget
+                                    .bottomEditLeading(context, p),
+                              SizedBox(width: 10),
+                              StrapButton(
+                                text: 'Salvar',
+                                onPressed: () {
+                                  _save(context);
+                                },
+                              ),
+                              SizedBox(width: 10),
+                              if (widget
+                                      .controller.widget.bottomEditTrailling !=
+                                  null)
+                                widget.controller.widget
+                                    .bottomEditTrailling(context, p),
+                            ])),
                   ],
                 ),
               ),

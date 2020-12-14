@@ -274,7 +274,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     final String Function(dynamic) onValidate,
     folded,
   }) : super(
-          defaultvalue: defaultValue,
+          defaultValue: defaultValue,
           onEditIconPressed: onEditIconPressed,
           numeric: numeric,
           autofocus: autofocus,

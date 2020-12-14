@@ -21,8 +21,11 @@ class EventosItemItem extends DataItem {
   double cliente;
   String dcto;
   double idmaster;
+  String master;
+  String masterGid;
   String tabela;
   double idtabela;
+  String tabelaGid;
   String eventosAutoNome;
   double ordemtabela;
   double valor;
@@ -66,7 +69,7 @@ class EventosItemItem extends DataItem {
     autor = json['autor'];
     pessoa = json['pessoa'];
     arquivado = json['arquivado'];
-    datalimite = toDateTime(json['datalimite']);
+    datalimite = toDateTime(json['datalimite'], zone: 0);
     idestado = toDouble(json['idestado']);
     idgrupoEstado = toDouble(json['idgrupo_estado']);
     cliente = toDouble(json['cliente']);
@@ -74,12 +77,15 @@ class EventosItemItem extends DataItem {
     idmaster = toDouble(json['idmaster']);
     tabela = json['tabela'];
     idtabela = toDouble(json['idtabela']);
+    tabelaGid = json['tabela_gid'];
     eventosAutoNome = json['eventos_auto_nome'];
     ordemtabela = toDouble(json['ordemtabela']);
     valor = toDouble(json['valor']);
     usuario = json['usuario'];
     gid = json['gid'];
     id = json['id'];
+    master = json['master'];
+    masterGid = json['master_gid'];
 
     return this;
   }
@@ -102,11 +108,14 @@ class EventosItemItem extends DataItem {
     data['idmaster'] = this.idmaster ?? 0;
     data['tabela'] = this.tabela;
     data['idtabela'] = this.idtabela ?? 0;
+    data['tabela_gid'] = this.tabelaGid;
     data['eventos_auto_nome'] = this.eventosAutoNome;
     data['ordemtabela'] = this.ordemtabela ?? 0;
     data['valor'] = this.valor;
     data['usuario'] = this.usuario;
     data['gid'] ??= Uuid().v4();
+    data['master'] = this.master;
+    data['master_gid'] = this.masterGid;
 
     /// quando é insert o id é gerado no servidor.
     if (this.id != null)

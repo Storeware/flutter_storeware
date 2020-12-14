@@ -228,6 +228,7 @@ class DataViewerColumn extends PaginatedGridColumn {
   DataViewerColumn({
     /// evento editPressed
     Function(PaginatedGridController) onEditIconPressed,
+    String defaultValue,
     bool numeric = false,
     bool autofocus = false,
     bool visible = true,
@@ -273,6 +274,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     final String Function(dynamic) onValidate,
     folded,
   }) : super(
+          defaultvalue: defaultValue,
           onEditIconPressed: onEditIconPressed,
           numeric: numeric,
           autofocus: autofocus,
@@ -817,7 +819,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     final TextEditingController txtController = TextEditingController(
         text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
-            : (p[item.name] ?? '').toString());
+            : (p[item.name] ?? item.defaultValue ?? '').toString());
     var focusNode = FocusNode();
     return Focus(
       //descendantsAreFocusable: canFocus(item),

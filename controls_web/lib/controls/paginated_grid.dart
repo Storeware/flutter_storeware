@@ -74,6 +74,7 @@ class PaginatedGridColumn {
   final String name;
   String label;
   String editInfo;
+  String defaultValue;
   TextStyle style;
   Alignment align;
   bool sort;
@@ -104,6 +105,7 @@ class PaginatedGridColumn {
   bool folded;
   Color color;
   PaginatedGridColumn({
+    this.defaultValue,
     this.onEditIconPressed,
     this.numeric = false,
     this.autofocus = false,

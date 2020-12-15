@@ -174,6 +174,6 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
             filter: "codigo eq '$codigo'",
             select:
                 'codigo,nome,precoweb,unidade,cast(sinopse as varchar(1024)) sinopse,obs,publicaweb,inservico')
-        .then((rsp) => rsp[0]);
+        .then((rsp) => (rsp.length > 0) ? rsp[0] : {});
   }
 }

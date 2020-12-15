@@ -268,7 +268,7 @@ class ExtendedAppBar extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      child: Wrap(children: [child]),
+      child: child,
       color: color,
     );
   }
@@ -330,17 +330,18 @@ class BoxContainer extends StatelessWidget {
   }
 }
 
-AppBar appBarLight(
-    {String text,
-    Widget title,
-    Widget leading,
-    Color backgroundColor,
-    List<Widget> actions}) {
+AppBar appBarLight({
+  String text,
+  Widget title,
+  Color backgroundColor,
+  List<Widget> actions,
+  Widget leading,
+}) {
   return AppBar(
       backgroundColor: backgroundColor,
-      title: title ?? Text(text ?? ''),
-      elevation: default_elevation,
+      title: title ?? Text(text),
       leading: leading,
+      elevation: default_elevation,
       actions: actions);
 }
 

@@ -37,8 +37,12 @@ class StorageApi {
       stalePeriod: Duration(days: 7),
       maxNrOfCacheObjects: 100,
     ));
+    inited = instance != null;
   }
 
+  StorageApi() {
+    init();
+  }
   //Future<Uint8List>
   download(String path, {bool cached = true}) async {
     init();
@@ -109,8 +113,12 @@ class StorageApi {
             contentType: 'application/json',
             cacheControl: 'public; max-age=3600')
         .then((rsp) {
-      //imageCache.
+      print('enviou imagem: $path -> $rsp');
+      init();
+      //instance.removeFile(path);
+      //instance.putFile(path, bytes);
       clear();
+
       return rsp.data;
     });
   }

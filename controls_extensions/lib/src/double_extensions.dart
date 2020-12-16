@@ -20,6 +20,10 @@ extension DoubleExtension on double {
     return oCcy.format(this);
   }
 
+  toStringSql([frac:2]){
+    return this.toStringAsFixed(frac).replaceAll(',', '.');
+  }
+  
   double from(value) {
     return ''.toDouble(value);
   }

@@ -55,12 +55,12 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   //var _storage;
   @override
   storage() {
-    //return FirebaseStorageDriver(); //fs.FirebaseStorage.instance;
+    return FirebaseStorageDriver(); //fs.FirebaseStorage.instance;
   }
 
   @override
   auth() {
-    //return FirebaseAuthDriver();
+    return FirebaseAuthDriver();
   }
 
   @override

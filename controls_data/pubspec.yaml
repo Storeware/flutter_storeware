@@ -3,6 +3,7 @@ description: A new Flutter package project.
 version: 1.0.1
 author:
 homepage: https://tireideletra.com.br
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -30,6 +31,9 @@ dependencies:
   #http:
   dio:
   connectivity:
+  uuid:
+  universal_platform:
+  flutter_cache_manager:
 
   control_data_platform_web:
     git:

@@ -1,11 +1,12 @@
 name: controls_firebase_macos
 description: A new Flutter package project.
-version: 0.0.2
+version: 0.0.3
 author:
-homepage:
+homepage: https://wbagestao.com
+#publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
@@ -13,9 +14,9 @@ dependencies:
     sdk: flutter
 
 controls_firebase_platform_interface:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_firebase/controls_firebase_platform_interface    
+  git:
+    url: https://github.com/amarildolacerda/flutter_dart.git
+    path: controls_firebase/controls_firebase_platform_interface
 
 dev_dependencies:
   flutter_test:
@@ -26,4 +27,3 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-

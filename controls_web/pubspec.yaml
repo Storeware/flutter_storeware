@@ -3,9 +3,10 @@ description: A new Flutter package project.
 version: 2.0.1+2
 author: <amarildo_51@msn.com>
 homepage: http://tireideletra.com.br
+publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -20,7 +21,6 @@ dependencies:
   universal_platform:
   font_awesome_flutter:
   flutter_slidable:
-
 
   controls_data:
     git:

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:convert';
 import 'package:connectivity/connectivity.dart';
@@ -22,6 +21,27 @@ class RestClientBloC<T> {
   void notify(T reply) {
     DataProcessingNotifier.stop();
     sink.add(reply);
+  }
+}
+
+class LinearDataProgressIndicator extends StatelessWidget {
+  final double height;
+  const LinearDataProgressIndicator({Key key, this.height = 3})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: this.height,
+        child: StreamBuilder<Object>(
+            stream: DataProcessingNotifier().stream,
+            builder: (context, snapshot) {
+              return (snapshot.data ?? false)
+                  ? LinearProgressIndicator(
+                      backgroundColor: Colors.transparent,
+                    )
+                  : Container();
+            }));
   }
 }
 

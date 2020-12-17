@@ -1,7 +1,7 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
-import 'package:console/config/config.dart';
+//import 'package:console/config/config.dart';
 import 'package:controls_extensions/extensions.dart';
 
 class TemplatesItem extends DataItem {
@@ -30,7 +30,8 @@ class TemplatesItem extends DataItem {
 }
 
 class TemplatesItemModel extends ODataModelClass<TemplatesItem> {
-  TemplatesItemModel() {
+  final dynamic configInstance;
+  TemplatesItemModel({this.configInstance}) {
     collectionName = 'templates';
     super.API = ODataInst();
     super.CC = CloudV3().client..client.silent = true;

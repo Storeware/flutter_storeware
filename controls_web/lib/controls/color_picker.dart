@@ -116,8 +116,8 @@ const List<Color> primariesColors = [
   Colors.blueGrey,
   Colors.grey,
   Colors.white54,
-  ...pastelColors,
-  ...amethistColors,
+  //...pastelColors,
+  //...amethistColors,
 ];
 
 extension ColorExtension on Color {

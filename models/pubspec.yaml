@@ -2,6 +2,7 @@ name: models
 description: A new Flutter package project.
 version: 1.0.1
 author:
+publish_to: none
 #homepage:
 
 environment:
@@ -12,6 +13,27 @@ dependencies:
     sdk: flutter
   # http:
   dio:
+  uuid:
+
+  console:
+    git:
+      url: https://github.com/amarildolacerda/console.git
+      #path: controls_web
+
+  controls_web:
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_web
+
+  controls_extensions:
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_extensions
+
+  controls_data:
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data
 
 dev_dependencies:
   flutter_test:

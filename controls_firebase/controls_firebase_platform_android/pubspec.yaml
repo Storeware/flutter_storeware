@@ -1,8 +1,9 @@
 name: controls_firebase_platform_android
 description: A new Flutter package project.
-version: 0.0.5
+version: 0.0.6
 author:
 homepage: https://tireideletra.com.br
+publish_to: none
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

@@ -16,6 +16,9 @@ class VerticalTopTabNavigatorController {
 }
 
 class VerticalTopTabView extends StatefulWidget {
+  final VerticalTopTabPosition position;
+  final double right;
+  final double left;
   final List<Widget> actions;
   final List<TabChoice> choices;
   final double height;
@@ -34,11 +37,14 @@ class VerticalTopTabView extends StatefulWidget {
 
   const VerticalTopTabView(
       {Key key,
+      this.position = VerticalTopTabPosition.right,
       this.initialIndex = 0,
       this.indicatorColor,
       this.selectedColor,
       this.spacing = 4,
       this.height = 32,
+      this.right,
+      this.left,
       this.actions,
       this.choices,
       this.controller,
@@ -84,7 +90,11 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+//        if (widget.left != null) SizedBox(width: widget.left),
         VerticalTopTabNavigator(
+          position: widget.position,
+          left: widget.left,
+          right: widget.right,
           height: widget.height,
           actions: widget.actions,
           choices: widget.choices,
@@ -132,19 +142,24 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
                     )),
           ),
         ),
+        if (widget.right != null) SizedBox(width: widget.right),
       ],
     );
   }
 }
 
+enum VerticalTopTabPosition { left, right }
+
 class VerticalTopTabNavigator extends StatefulWidget {
   final List<TabChoice> choices;
   final Function(int, TabChoice) onSelectItem;
   final int initialIndex;
+  final VerticalTopTabPosition position;
   final Color indicatorColor;
   final Color selectedColor;
   final List<Widget> actions;
   final Widget leading;
+  final double left, right;
   final Color tabColor;
   final Color iconColor;
   final TextStyle style;
@@ -159,10 +174,13 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.onSelectItem,
       this.initialIndex = 0,
       this.selectedColor,
+      this.left,
+      this.right,
       this.completedColor = Colors.green,
       this.leading,
       this.height = kMinInteractiveDimension,
       this.actions,
+      this.position = VerticalTopTabPosition.right,
       this.spacing = 4,
       this.controller,
       this.indicatorColor,
@@ -220,10 +238,11 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
         valueListenable: active,
         builder: (a, b, w) => Row(children: [
           /// objetos a esquerda
+          if (widget.left != null) SizedBox(width: widget.left),
           if (widget.leading != null) widget.leading,
 
           /// space em branco a esquerda do menu
-          Spacer(),
+          if (widget.position == VerticalTopTabPosition.right) Spacer(),
 
           /// lista itens do menu
           for (var index = 0; index < widget.choices.length; index++)
@@ -325,7 +344,10 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                 ),
               );
             }),
+          if (widget.position == VerticalTopTabPosition.left) Spacer(),
+
           if (widget.actions != null) ...widget.actions,
+          if (widget.right != null) SizedBox(width: widget.right),
         ]),
       ),
     );

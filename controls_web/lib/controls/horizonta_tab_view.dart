@@ -13,12 +13,14 @@ class HorizontalTabViewController {
 
 class HorizontalTabView extends StatelessWidget {
   final List<TabChoice> choices;
+  final double top, bottom, left, right;
   final HorizontalTabViewController controller;
   final Color tabColor;
   final Color sidebarBackgroundColor;
   final Color indicatorColor;
   final Color iconColor;
   final AppBar appBar;
+  final Widget topBar, bottomBar;
   final Widget sidebarHeader, sidebarFooter;
   final int mobileCrossCount;
   final Color color;
@@ -48,6 +50,12 @@ class HorizontalTabView extends StatelessWidget {
     this.padding,
     this.width = 220,
     this.tabHeight,
+    this.top = 0,
+    this.bottom = 0,
+    this.left = 0,
+    this.right = 0,
+    this.topBar,
+    this.bottomBar,
     //this.tabHeightCompact,
     this.sidebarBackgroundColor,
     this.sidebarType,
@@ -267,7 +275,23 @@ class HorizontalTabView extends StatelessWidget {
                               choices[_index.value].child =
                                   choices[_index.value].builder();
                             if (onChanged != null) onChanged(_index.value);
-                            return choices[_index.value].child;
+                            return Stack(children: [
+                              if (topBar != null)
+                                Positioned(
+                                    top: 0, left: 0, right: 0, child: topBar),
+                              Positioned(
+                                  top: top,
+                                  bottom: bottom,
+                                  left: left,
+                                  right: right,
+                                  child: choices[_index.value].child),
+                              if (bottomBar != null)
+                                Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 0,
+                                    child: bottomBar),
+                            ]);
                           })),
                     ),
                     if (sidebarRight != null) sidebarRight,

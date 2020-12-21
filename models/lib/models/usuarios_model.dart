@@ -63,7 +63,7 @@ class SenhasItem extends DataItem {
   }
 
   get isAdmin => grupo == 'Administrador';
-  get isGestor => 'Gerente,Diretor'.contains(grupo);
+  get isGestor => 'Gerente,Diretor'.contains(grupo ?? '') || isAdmin;
   get isOperador => (!isAdmin && !isGestor);
   get isReadOnly => 'Consulta'.contains(grupo);
 }

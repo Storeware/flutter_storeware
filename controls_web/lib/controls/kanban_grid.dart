@@ -350,11 +350,11 @@ class KanbanController {
   buildData() {
     data = {};
     var i = 0;
-    columns.forEach((col) {
+    (columns ?? []).forEach((col) {
       col.index = i++;
     });
 
-    source.forEach((item) {
+    (source ?? []).forEach((item) {
       _addData(item);
     });
     return this;

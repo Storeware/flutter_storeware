@@ -231,4 +231,57 @@ class SigcxItemModel extends ODataModelClass<SigcxItem> {
         )
         .then((rsp) => rsp['result']);
   }
+
+  despesasMensal({double filial, DateTime de, DateTime ate}) {
+    final sDe = toDateSql((de ?? DateTime.now().addMonths(-6)).startOfMonth());
+    final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
+    var filtro = '';
+    if (filial != null) filtro = 'a.filial eq $filial  and ';
+    final qry =
+        '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.valor) valor from 
+(select a.data, 
+ sum(case when a.codigo>='200' then a.valor else -a.valor end ) valor 
+ from sigcx a, sig01 b
+where $filtro a.codigo=b.codigo and a.codigo>='200' and b.ISRESULTADO=1 and data between '$sDe'  and '$sAte'
+group by 1) as r
+group by 1,2''';
+
+    return API.openJson(qry).then((rsp) => rsp['result']);
+  }
+
+  entradasMensal({double filial, DateTime de, DateTime ate}) {
+    final sDe = toDateSql((de ?? DateTime.now().addMonths(-6)).startOfMonth());
+    final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
+    var filtro = '';
+    if (filial != null) filtro = 'a.filial eq $filial  and ';
+    final qry =
+        '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.valor) valor from 
+(select a.data, 
+ sum(case when a.codigo<'200' then a.valor else -a.valor end ) valor 
+ from sigcx a, sig01 b
+where $filtro a.codigo=b.codigo and a.codigo<'200' and (b.ISRESULTADO=1 or b.contasreceber=1)  and data between '$sDe'  and '$sAte'
+group by 1) as r
+group by 1,2''';
+
+    return API.openJson(qry).then((rsp) => rsp['result']);
+  }
+
+  realizadoMensal({double filial, DateTime de, DateTime ate}) {
+    final sDe = toDateSql((de ?? DateTime.now().addMonths(-6)).startOfMonth());
+    final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
+    var filtro = '';
+    if (filial != null) filtro = 'a.filial = $filial  and ';
+    final qry =
+        '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.entradas) entradas, sum(r.saidas) saidas 
+        from 
+(select a.data, 
+ sum(case when a.codigo<'200' then a.valor else 0 end ) entradas, 
+ sum(case when a.codigo>='200' then a.valor else 0 end ) saidas 
+  from sigcx a, sig01 b
+where $filtro a.codigo=b.codigo  and (b.ISRESULTADO=1 or b.contasreceber=1)  and data between '$sDe'  and '$sAte'
+group by 1) as r
+group by 1,2''';
+    print(qry);
+    return API.openJson(qry).then((rsp) => rsp['result']);
+  }
 }

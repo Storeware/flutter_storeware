@@ -71,6 +71,7 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
   String textSelected;
 
   _onSelectionChanged(charts.SelectionModel model) {
+    if (widget.onSelected == null) return;
     final selectedDatum = model.selectedDatum;
     if (selectedDatum.isNotEmpty) {
       ChartPair dados = selectedDatum.first.datum;
@@ -117,17 +118,17 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
                     // By default, if the position of the chart is on the left or right of
                     // the chart, [horizontalFirst] is set to false. This means that the
                     // legend entries will grow as new rows first instead of a new column.
-                    horizontalFirst: true,
+                    //horizontalFirst: true,
                     // This defines the padding around each legend entry.
-                    cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                    //cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
                     // Set show measures to true to display measures in series legend,
                     // when the datum is selected.
-                    showMeasures: true,
+                    //showMeasures: true,
                     // Optionally provide a measure formatter to format the measure value.
                     // If none is specified the value is formatted as a decimal.
-                    measureFormatter: (num value) {
-                      return value == null ? '-' : '${value}';
-                    },
+                    //measureFormatter: (num value) {
+                    //  return value == null ? '-' : '${value}';
+                    //},
                   ),
               ],
         defaultRenderer: new charts.BarRendererConfig(

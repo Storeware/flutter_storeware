@@ -1,6 +1,7 @@
 /// Example of a time series chart using a bar renderer.
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DashTimeSeriesBar extends StatelessWidget {
   final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
@@ -98,8 +99,16 @@ class TimeSeriesSales {
 class DashTimeSeriesLine extends StatelessWidget {
   final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
   final bool animate;
-
-  DashTimeSeriesLine(this.seriesList, {this.animate});
+  final bool showSeriesNames;
+  final List<charts.SeriesRendererConfig<DateTime>> customSeriesRenderers;
+  final bool includeArea;
+  final bool stacked;
+  DashTimeSeriesLine(this.seriesList,
+      {this.animate,
+      this.customSeriesRenderers,
+      this.includeArea = false,
+      this.stacked = false,
+      this.showSeriesNames = false});
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +117,9 @@ class DashTimeSeriesLine extends StatelessWidget {
       animate: animate,
       // Set the default renderer to a bar renderer.
       // This can also be one of the custom renderers of the time series chart.
-      defaultRenderer: new charts.LineRendererConfig<DateTime>(),
+      defaultRenderer: new charts.LineRendererConfig<DateTime>(
+          includeArea: includeArea, stacked: stacked),
+      customSeriesRenderers: customSeriesRenderers,
       // It is recommended that default interactions be turned off if using bar
       // renderer, because the line point highlighter is the default for time
       // series chart.
@@ -118,12 +129,27 @@ class DashTimeSeriesLine extends StatelessWidget {
       behaviors: [
         new charts.SelectNearest(),
         new charts.DomainHighlighter(),
+        if (showSeriesNames)
+          charts.SeriesLegend(
+            position: charts.BehaviorPosition.bottom,
+          ),
       ],
+      dateTimeFactory:
+          LocalizedDateTimeFactory(Localizations.localeOf(context)),
+      primaryMeasureAxis: charts.NumericAxisSpec(
+          tickProviderSpec:
+              charts.BasicNumericTickProviderSpec(zeroBound: false)),
+      domainAxis: charts.DateTimeAxisSpec(
+          tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+              day: charts.TimeFormatterSpec(
+        format: 'dd MMMM',
+        transitionFormat: 'dd MMMM',
+      ))),
     );
   }
 
   static List<charts.Series<TimeSeriesSales, DateTime>> createSerie(
-      {String id, List<TimeSeriesSales> data}) {
+      {String id, List<TimeSeriesSales> data, num strokeWidth = 1}) {
     return [
       new charts.Series<TimeSeriesSales, DateTime>(
         id: id,
@@ -131,8 +157,20 @@ class DashTimeSeriesLine extends StatelessWidget {
             sales.color ?? charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        strokeWidthPxFn: (sales, idx) => strokeWidth,
         data: data,
       )
     ];
   }
+}
+
+class LocalizedDateTimeFactory extends charts.LocalDateTimeFactory {
+  final Locale locale;
+
+  @override
+  DateFormat createDateFormat(String pattern) {
+    return DateFormat(pattern, locale.languageCode);
+  }
+
+  LocalizedDateTimeFactory(this.locale);
 }

@@ -6,8 +6,13 @@ import 'package:flutter/material.dart';
 class PointsLineChart extends StatelessWidget {
   final List<charts.Series> seriesList;
   final bool animate;
+  final List<charts.SeriesRendererConfig> customSeriesRenderers;
 
-  PointsLineChart(this.seriesList, {this.animate});
+  PointsLineChart(
+    this.seriesList, {
+    this.animate,
+    this.customSeriesRenderers,
+  });
 
   /// Creates a [LineChart] with sample data and no transition.
   factory PointsLineChart.withSampleData() {
@@ -20,9 +25,12 @@ class PointsLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.LineChart(seriesList,
-        animate: animate,
-        defaultRenderer: new charts.LineRendererConfig(includePoints: true));
+    return new charts.LineChart(
+      seriesList,
+      animate: animate,
+      defaultRenderer: new charts.LineRendererConfig(includePoints: true),
+      customSeriesRenderers: customSeriesRenderers,
+    );
   }
 
   /// Create one series with sample hard coded data.
@@ -37,7 +45,8 @@ class PointsLineChart extends StatelessWidget {
     return [
       new charts.Series<ChartPairDouble, double>(
         id: 'Sales',
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (ChartPairDouble sales, __) =>
+            sales.color ?? charts.MaterialPalette.blue.shadeDefault,
         domainFn: (ChartPairDouble sales, _) => sales.title,
         measureFn: (ChartPairDouble sales, _) => sales.value,
         data: data,

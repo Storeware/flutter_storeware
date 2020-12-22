@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 class DashTimeSeriesBar extends StatelessWidget {
   final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
   final bool animate;
+  final bool showSeriesNames;
+  final List<charts.SeriesRendererConfig<DateTime>> customSeriesRenderers;
 
-  DashTimeSeriesBar(this.seriesList, {this.animate});
+  DashTimeSeriesBar(this.seriesList,
+      {this.animate, this.showSeriesNames = false, this.customSeriesRenderers});
 
   /// Creates a [TimeSeriesChart] with sample data and no transition.
   factory DashTimeSeriesBar.withSampleData() {
@@ -29,9 +32,15 @@ class DashTimeSeriesBar extends StatelessWidget {
       // renderer, because the line point highlighter is the default for time
       // series chart.
       defaultInteractions: false,
+      customSeriesRenderers: customSeriesRenderers,
       // If default interactions were removed, optionally add select nearest
       // and the domain highlighter that are typical for bar charts.
-      behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
+      behaviors: [
+        new charts.SelectNearest(),
+        new charts.DomainHighlighter(),
+        if (showSeriesNames)
+          charts.SeriesLegend(position: charts.BehaviorPosition.bottom)
+      ],
     );
   }
 
@@ -67,7 +76,8 @@ class DashTimeSeriesBar extends StatelessWidget {
     return [
       new charts.Series<TimeSeriesSales, DateTime>(
         id: id,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (TimeSeriesSales sales, __) =>
+            sales.color ?? charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: data,
@@ -80,8 +90,9 @@ class DashTimeSeriesBar extends StatelessWidget {
 class TimeSeriesSales {
   final DateTime time;
   final num sales;
+  final charts.Color color;
 
-  TimeSeriesSales(this.time, this.sales);
+  TimeSeriesSales(this.time, this.sales, {this.color});
 }
 
 class DashTimeSeriesLine extends StatelessWidget {
@@ -104,7 +115,10 @@ class DashTimeSeriesLine extends StatelessWidget {
       defaultInteractions: false,
       // If default interactions were removed, optionally add select nearest
       // and the domain highlighter that are typical for bar charts.
-      behaviors: [new charts.SelectNearest(), new charts.DomainHighlighter()],
+      behaviors: [
+        new charts.SelectNearest(),
+        new charts.DomainHighlighter(),
+      ],
     );
   }
 
@@ -113,7 +127,8 @@ class DashTimeSeriesLine extends StatelessWidget {
     return [
       new charts.Series<TimeSeriesSales, DateTime>(
         id: id,
-        //colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (TimeSeriesSales sales, __) =>
+            sales.color ?? charts.MaterialPalette.blue.shadeDefault,
         domainFn: (TimeSeriesSales sales, _) => sales.time,
         measureFn: (TimeSeriesSales sales, _) => sales.sales,
         data: data,

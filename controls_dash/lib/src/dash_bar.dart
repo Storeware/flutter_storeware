@@ -44,7 +44,8 @@ class DashBarChart extends StatelessWidget {
     return [
       new charts.Series<ChartPair, String>(
         id: id,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (ChartPair sales, __) =>
+            sales.color ?? charts.MaterialPalette.blue.shadeDefault,
         domainFn: (ChartPair sales, _) => sales.title,
         measureFn: (ChartPair sales, _) => sales.value,
         data: data,

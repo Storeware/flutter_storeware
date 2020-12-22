@@ -18,11 +18,15 @@ class DashHorizontalBarChart extends StatefulWidget {
   final bool showValues, showDomainAxis;
   final int barRadius;
   final bool showAxisLine;
+  final bool showSeriesNames;
+  final List<charts.SeriesRendererConfig<String>> customSeriesRenderers;
   final Function(ChartPair) onSelected;
 
   DashHorizontalBarChart(this.seriesList,
       {this.vertical = false,
       this.showValues = true,
+      this.showSeriesNames = false,
+      this.customSeriesRenderers,
       this.animate,
       this.barRadius = 15,
       this.onSelected,
@@ -82,9 +86,10 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
   Widget build(BuildContext context) {
     // For horizontal bar charts, set the [vertical] flag to false.
     Size size = MediaQuery.of(context).size;
-    return new charts.BarChart(widget.seriesList,
+    final ch = charts.BarChart(widget.seriesList,
         animate: widget.animate,
         vertical: widget.vertical,
+
         //barRendererDecorator: ,
         selectionModels: [
           new charts.SelectionModelConfig(
@@ -92,6 +97,7 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
             changedListener: _onSelectionChanged,
           )
         ],
+        customSeriesRenderers: widget.customSeriesRenderers,
         behaviors: (!widget.vertical)
             ? null
             : [
@@ -99,7 +105,30 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
                     symbolRenderer: CustomCircleSymbolRenderer(
                         size: size, onGetValue: () => textSelected ?? '?')),
                 new charts.SelectNearest(
-                    eventTrigger: charts.SelectionTrigger.tapAndDrag)
+                    eventTrigger: charts.SelectionTrigger.tapAndDrag),
+                if (widget.showSeriesNames)
+                  new charts.SeriesLegend(
+                    // Positions for "start" and "end" will be left and right respectively
+                    // for widgets with a build context that has directionality ltr.
+                    // For rtl, "start" and "end" will be right and left respectively.
+                    // Since this example has directionality of ltr, the legend is
+                    // positioned on the right side of the chart.
+                    position: charts.BehaviorPosition.bottom,
+                    // By default, if the position of the chart is on the left or right of
+                    // the chart, [horizontalFirst] is set to false. This means that the
+                    // legend entries will grow as new rows first instead of a new column.
+                    horizontalFirst: true,
+                    // This defines the padding around each legend entry.
+                    cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+                    // Set show measures to true to display measures in series legend,
+                    // when the datum is selected.
+                    showMeasures: true,
+                    // Optionally provide a measure formatter to format the measure value.
+                    // If none is specified the value is formatted as a decimal.
+                    measureFormatter: (num value) {
+                      return value == null ? '-' : '${value}';
+                    },
+                  ),
               ],
         defaultRenderer: new charts.BarRendererConfig(
             // By default, bar renderer will draw rounded bars with a constant
@@ -117,6 +146,8 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
                 showAxisLine: widget.showAxisLine,
               )
             : charts.OrdinalAxisSpec(renderSpec: new charts.NoneRenderSpec()));
+
+    return ch;
   }
 }
 

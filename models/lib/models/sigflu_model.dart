@@ -1,6 +1,7 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
+import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class SigfluItem extends DataItem {
   DateTime vcto;
@@ -40,7 +41,7 @@ class SigfluItem extends DataItem {
     this.dcto,
     this.codigo,
     this.control,
-    this.valor,
+    //this.valor,
     //this.ctrlId,
     //this.id,
     this.filial,
@@ -63,21 +64,21 @@ class SigfluItem extends DataItem {
   @override
   fromMap(Map<String, dynamic> json) {
     //  hist = json['hist_'];
-    vcto = json['vcto_'];
-    emissao = json['emissao'];
-    valor = json['valor'];
+    vcto = toDate(json['vcto_']);
+    emissao = toDate(json['emissao']);
+    this.valor = toDouble(json['valor']);
     banco = json['banco'];
     historico = json['historico'];
     dcto = json['dcto'];
     codigo = json['codigo'];
-    control = json['control'];
-    valor = json['valor_'];
-    ctrlId = json['ctrl_id'];
-    id = json['id'];
-    filial = json['filial'];
-    data = json['data'];
-    digitacao = json['digitacao'];
-    clifor = json['clifor'];
+    control = toDouble(json['control']);
+    valor = toDouble(json['valor_']);
+    ctrlId = toDouble(json['ctrl_id']);
+    id = toDouble(json['id']);
+    filial = toDouble(json['filial']);
+    data = toDate(json['data']);
+    digitacao = toDate(json['digitacao']);
+    clifor = toDouble(json['clifor']);
     // insercao = json['insercao'];
     //dtcontabil = json['dtcontabil'];
     dctook = json['dctook'];
@@ -134,4 +135,21 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
     super.CC = CloudV3().client..client.silent = true;
   }
   SigfluItem newItem() => SigfluItem();
+//Future<List<Map<String, dynamic>>>
+  entradaSaidasDiarias({double filial, DateTime de, DateTime ate}) async {
+    final sDe = (de ?? DateTime.now()).toDateSql();
+    final sAte = (ate ?? DateTime.now().endOfMonth()).toDateSql();
+    var filtro = "data between '$sDe' and '$sAte' ";
+    var sFilial = '';
+    if (filial != null) {
+      filtro += ' and filial eq $filial';
+      sFilial = 'filial, ';
+    }
+    var qry =
+        '''select $sFilial data,  sum(case when codigo < '200' then valor end) entradas, sum(case when codigo >= '200' then valor end) saidas  from sigflu
+        where $filtro
+        group by $sFilial data ''';
+    //print(qry);
+    return super.API.openJson(qry).then((rsp) => rsp['result']);
+  }
 }

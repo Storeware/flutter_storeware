@@ -38,6 +38,7 @@ class DashboardTile extends StatelessWidget {
   final Function() onPressed;
   final Color indicatorColor;
   final double avatarSize;
+  final Widget topBar;
   const DashboardTile(
       {Key key,
       this.value,
@@ -60,6 +61,7 @@ class DashboardTile extends StatelessWidget {
       this.width = 180,
       this.height = 80,
       this.left,
+      this.topBar,
       this.body})
       : super(key: key);
 
@@ -77,7 +79,7 @@ class DashboardTile extends StatelessWidget {
               //side: BorderSide(color: Colors.white70, width: 1),
               borderRadius: BorderRadius.circular(borderRadius),
             ),
-            color: _color.withAlpha(150),
+            color: color ?? _color.withAlpha(150),
             child: LayoutBuilder(builder: (ctx, sizes) {
               double w = (responsive.isSmall
                   ? (sizes.maxWidth)
@@ -99,6 +101,7 @@ class DashboardTile extends StatelessWidget {
                           child: Column(mainAxisSize: MainAxisSize.min,
                               //crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                if (topBar != null) topBar,
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -136,7 +139,8 @@ class DashboardTile extends StatelessWidget {
                                     alignment: Alignment.center,
                                     height: titleHeight,
                                     decoration: BoxDecoration(
-                                      color: _indicatorColor.withAlpha(100),
+                                      color: indicatorColor ??
+                                          _indicatorColor.withAlpha(100),
                                       borderRadius: BorderRadius.only(
                                         bottomLeft:
                                             Radius.circular(borderRadius),

@@ -1,6 +1,7 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
+//import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class SigcadItem extends DataItem {
   double codigo;
@@ -113,5 +114,18 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
   Future<Map<String, dynamic>> buscarByCodigo(double codigo) async {
     return listCached(filter: "codigo eq '$codigo'", select: 'codigo, nome')
         .then((rsp) => rsp[0]);
+  }
+
+  Future<num> indicadorAquisicaoClientes(
+      {dias = 7, String tipo, String filtro}) async {
+    final d = DateTime.now().add(Duration(days: -dias));
+    final sDe = toDateSql(d);
+    var s = '';
+    if (tipo != null) s = " and tipo like '%tipo%' ";
+    if (filtro != null) s += ' and $filtro';
+
+    final qry = "select count(*) conta from sigcad where data ge '$sDe' $s ";
+    //print(qry);
+    return API.openJson(qry).then((rsp) => rsp['result'][0]['conta']);
   }
 }

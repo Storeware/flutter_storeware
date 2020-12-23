@@ -103,11 +103,17 @@ class DashTimeSeriesLine extends StatelessWidget {
   final List<charts.SeriesRendererConfig<DateTime>> customSeriesRenderers;
   final bool includeArea;
   final bool stacked;
+  final String dateFormat;
+  final int labelRotation;
+  final bool includeLine;
   DashTimeSeriesLine(this.seriesList,
       {this.animate,
       this.customSeriesRenderers,
       this.includeArea = false,
       this.stacked = false,
+      this.dateFormat = 'dd/MMM',
+      this.labelRotation = 0,
+      this.includeLine = true,
       this.showSeriesNames = false});
 
   @override
@@ -118,7 +124,10 @@ class DashTimeSeriesLine extends StatelessWidget {
       // Set the default renderer to a bar renderer.
       // This can also be one of the custom renderers of the time series chart.
       defaultRenderer: new charts.LineRendererConfig<DateTime>(
-          includeArea: includeArea, stacked: stacked),
+        includeArea: includeArea,
+        stacked: stacked,
+        includeLine: includeLine,
+      ),
       customSeriesRenderers: customSeriesRenderers,
       // It is recommended that default interactions be turned off if using bar
       // renderer, because the line point highlighter is the default for time
@@ -140,11 +149,22 @@ class DashTimeSeriesLine extends StatelessWidget {
           tickProviderSpec:
               charts.BasicNumericTickProviderSpec(zeroBound: false)),
       domainAxis: charts.DateTimeAxisSpec(
+          renderSpec: charts.SmallTickRendererSpec(
+              minimumPaddingBetweenLabelsPx: 4,
+              labelAnchor: charts.TickLabelAnchor.centered,
+              labelStyle: charts.TextStyleSpec(
+                fontSize: 10,
+                color: charts.MaterialPalette.black,
+              ),
+              labelRotation: labelRotation,
+              // Change the line colors to match text color.
+              lineStyle:
+                  charts.LineStyleSpec(color: charts.MaterialPalette.white)),
           tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
               day: charts.TimeFormatterSpec(
-        format: 'dd MMMM',
-        transitionFormat: 'dd MMMM',
-      ))),
+            format: dateFormat,
+            transitionFormat: dateFormat,
+          ))),
     );
   }
 

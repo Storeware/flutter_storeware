@@ -121,152 +121,137 @@ class HorizontalTabView extends StatelessWidget {
                               color ??
                               Colors.transparent,
                           child: SizedBox.expand(
-                              child: Scaffold(
-                            appBar: sidebarAppBar,
-                            drawer: sidebarDrawer,
-                            body: SingleChildScrollView(
-                                key: UniqueKey(),
-                                child: Column(
+                            child: Scaffold(
+                                appBar: sidebarAppBar,
+                                drawer: sidebarDrawer,
+                                body: Column(
                                   children: [
-                                    if (sidebarHeader != null) sidebarHeader,
-                                    for (var index = 0;
-                                        index < choices.length;
-                                        index++)
-                                      Container(
-                                        key: ValueKey(
-                                            choices[index].label ?? '$index'),
-                                        alignment: Alignment.centerLeft,
-                                        color: (_index.value == index)
-                                            ? indicatorColor
-                                            : tabColor,
-                                        child: (_sidebarType !=
-                                                HorizontalTabViewSiderBarType
-                                                    .show)
-                                            ? Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 4),
-                                                /* height: (_index.value == index)
+                                    Expanded(
+                                      child: SingleChildScrollView(
+                                          key: UniqueKey(),
+                                          child: Column(children: [
+                                            if (sidebarHeader != null)
+                                              sidebarHeader,
+                                            for (var index = 0;
+                                                index < choices.length;
+                                                index++)
+                                              Container(
+                                                key: ValueKey(
+                                                    choices[index].label ??
+                                                        '$index'),
+                                                alignment: Alignment.centerLeft,
+                                                color: (_index.value == index)
+                                                    ? indicatorColor
+                                                    : tabColor,
+                                                child: (_sidebarType !=
+                                                        HorizontalTabViewSiderBarType
+                                                            .show)
+                                                    ? Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 4),
+                                                        /* height: (_index.value == index)
                                                 ? null
                                                 : tabHeightCompact ?? 40,
                                            */
-                                                child: Row(children: [
-                                                  if (_index.value == index)
-                                                    Container(
-                                                        height: tabHeight ??
-                                                            kMinInteractiveDimension,
-                                                        width: 5,
-                                                        color: (_index.value ==
-                                                                index)
-                                                            ? tagColor ??
-                                                                theme
-                                                                    .indicatorColor
-                                                            : tabColor),
-                                                  Expanded(
-                                                      child: InkWell(
-                                                          child: Container(
-                                                              constraints:
-                                                                  BoxConstraints(
-                                                                      minHeight:
-                                                                          35),
-                                                              color: (_index
-                                                                          .value ==
-                                                                      index)
-                                                                  ? indicatorColor
-                                                                  : null,
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              child: Column(
-                                                                children: [
-                                                                  if (choices[index]
-                                                                          .image !=
-                                                                      null)
-                                                                    choices[index]
-                                                                        .image,
-                                                                  if (choices[index]
-                                                                          .icon !=
-                                                                      null)
-                                                                    Icon(
-                                                                        choices[index]
-                                                                            .icon,
-                                                                        color:
-                                                                            _iconColor),
-                                                                  if (_index
-                                                                          .value ==
-                                                                      index) ...[
-                                                                    SizedBox(
-                                                                        height:
-                                                                            2),
-                                                                    choices[index]
-                                                                            .title ??
-                                                                        Text(
-                                                                            choices[index]
-                                                                                .label,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: 12,
+                                                        child: Row(children: [
+                                                          if (_index.value ==
+                                                              index)
+                                                            Container(
+                                                                height: tabHeight ??
+                                                                    kMinInteractiveDimension,
+                                                                width: 5,
+                                                                color: (_index
+                                                                            .value ==
+                                                                        index)
+                                                                    ? tagColor ??
+                                                                        theme
+                                                                            .indicatorColor
+                                                                    : tabColor),
+                                                          Expanded(
+                                                              child: InkWell(
+                                                                  child: Container(
+                                                                      constraints: BoxConstraints(minHeight: 35),
+                                                                      color: (_index.value == index) ? indicatorColor : null,
+                                                                      padding: EdgeInsets.zero,
+                                                                      child: Column(
+                                                                        children: [
+                                                                          if (choices[index].image !=
+                                                                              null)
+                                                                            choices[index].image,
+                                                                          if (choices[index].icon !=
+                                                                              null)
+                                                                            Icon(choices[index].icon,
+                                                                                color: _iconColor),
+                                                                          if (_index.value ==
+                                                                              index) ...[
+                                                                            SizedBox(height: 2),
+                                                                            choices[index].title ??
+                                                                                Text(choices[index].label,
+                                                                                    style: TextStyle(
+                                                                                      fontSize: 12,
+                                                                                      color: _iconColor,
+                                                                                      fontWeight: FontWeight.w500,
+                                                                                    ))
+                                                                          ],
+                                                                        ],
+                                                                      )),
+                                                                  onTap: () {
+                                                                    _index.value =
+                                                                        index;
+                                                                  }))
+                                                        ]))
+                                                    : Row(children: [
+                                                        Container(
+                                                            height: tabHeight ??
+                                                                kToolbarHeight,
+                                                            width: 5,
+                                                            color: (_index
+                                                                        .value ==
+                                                                    index)
+                                                                ? tagColor ??
+                                                                    theme
+                                                                        .indicatorColor
+                                                                : tabColor),
+                                                        Expanded(
+                                                            child: Container(
+                                                                height:
+                                                                    tabHeight,
+                                                                child: ListTile(
+                                                                  leading: (choices[index]
+                                                                              .image !=
+                                                                          null)
+                                                                      ? choices[
+                                                                              index]
+                                                                          .image
+                                                                      : (choices[index].icon !=
+                                                                              null)
+                                                                          ? Icon(
+                                                                              choices[index].icon,
                                                                               color: _iconColor,
-                                                                              fontWeight: FontWeight.w500,
-                                                                            ))
-                                                                  ],
-                                                                ],
-                                                              )),
-                                                          onTap: () {
-                                                            _index.value =
-                                                                index;
-                                                          }))
-                                                ]))
-                                            : Row(children: [
-                                                Container(
-                                                    height: tabHeight ??
-                                                        kToolbarHeight,
-                                                    width: 5,
-                                                    color: (_index.value ==
-                                                            index)
-                                                        ? tagColor ??
-                                                            theme.indicatorColor
-                                                        : tabColor),
-                                                Expanded(
-                                                    child: Container(
-                                                        height: tabHeight,
-                                                        child: ListTile(
-                                                          leading: (choices[
-                                                                          index]
-                                                                      .image !=
-                                                                  null)
-                                                              ? choices[index]
-                                                                  .image
-                                                              : (choices[index]
-                                                                          .icon !=
-                                                                      null)
-                                                                  ? Icon(
-                                                                      choices[index]
-                                                                          .icon,
-                                                                      color:
-                                                                          _iconColor,
-                                                                    )
-                                                                  : null,
-                                                          title: choices[index]
-                                                                  .title ??
-                                                              Text(
-                                                                  choices[index]
-                                                                      .label,
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          _iconColor)),
-                                                          onTap: () {
-                                                            _index.value =
-                                                                index;
-                                                          },
-                                                        ))),
-                                                if (sidebarFooter != null)
-                                                  sidebarFooter,
-                                              ]),
-                                      ),
+                                                                            )
+                                                                          : null,
+                                                                  title: choices[
+                                                                              index]
+                                                                          .title ??
+                                                                      Text(
+                                                                          choices[index]
+                                                                              .label,
+                                                                          style:
+                                                                              TextStyle(color: _iconColor)),
+                                                                  onTap: () {
+                                                                    _index.value =
+                                                                        index;
+                                                                  },
+                                                                ))),
+                                                      ]),
+                                              ),
+                                          ])),
+                                    ),
+                                    if (sidebarFooter != null) sidebarFooter,
                                   ],
                                 )),
-                          ))),
-                    //VerticalDivider(),
+                          )),
                     Expanded(
                       child: Scaffold(
                           backgroundColor: Colors.transparent,

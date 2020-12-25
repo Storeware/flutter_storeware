@@ -45,19 +45,27 @@ class DashTimeSeries extends StatelessWidget {
     String rendererId,
     num strokeWidth = 1,
     DashTimeSeriesType rendererType,
+    bool includeArea = false,
   }) {
-    final s = createSerie(id: id, data: data, strokeWidth: strokeWidth)[0];
+    final s = createSerie(
+      id: id,
+      data: data,
+      strokeWidth: strokeWidth,
+    )[0];
     s.setAttribute(charts.rendererIdKey, rendererId ?? id);
     seriesList.add(s);
     if (rendererType != null) {
       switch (rendererType) {
         case DashTimeSeriesType.bar:
-          addSerieRenderer(
-              charts.BarRendererConfig<DateTime>(customRendererId: rendererId));
+          addSerieRenderer(charts.BarRendererConfig<DateTime>(
+            customRendererId: rendererId,
+          ));
           break;
         default:
           addSerieRenderer(charts.LineRendererConfig<DateTime>(
-              customRendererId: rendererId));
+            customRendererId: rendererId,
+            includeArea: includeArea,
+          ));
       }
     }
     return s;

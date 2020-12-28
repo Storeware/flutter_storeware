@@ -284,4 +284,17 @@ group by 1,2''';
     print(qry);
     return API.openJson(qry).then((rsp) => rsp['result']);
   }
+
+  despesasMaiores({DateTime de, DateTime ate, int n = 10}) {
+    final sDe = toDateSql((de ?? DateTime.now().addDays(-30)));
+    final sAte = toDateSql((ate ?? DateTime.now()));
+
+    String qry = '''select first $n r.* from (
+select a.codigo,b.nome, sum(a.valor) valor from sigcx a, sig01 b
+where a.codigo=b.codigo and (b.isresultado=1) 
+and a.codigo>='200' and data between '$sDe' and '$sAte' 
+group by a.codigo, b.nome) r  order by valor desc''';
+
+    return API.openJson(qry).then((rsp) => rsp['result']);
+  }
 }

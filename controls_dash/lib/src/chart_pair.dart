@@ -1,5 +1,7 @@
 import 'package:charts_flutter/flutter.dart' as charts;
 
+enum DashSeriesType { bar, line }
+
 /// Sample linear data type.
 class ChartPair {
   dynamic key;

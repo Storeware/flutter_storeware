@@ -16,6 +16,7 @@ class ProdutoItem extends DataItem {
   bool publicaweb = true;
   bool inservico = false;
   double filial;
+  String inativo = 'N';
   ProdutoItem(
       {this.codigo,
       this.nome,
@@ -42,6 +43,7 @@ class ProdutoItem extends DataItem {
     data['inservico'] = (this.inservico ?? 'N') ? 'S' : 'N';
     data['id'] = '$codigo';
     data['filial'] = filial;
+    data['inativo'] = this.inativo;
     return data;
   }
 
@@ -68,6 +70,7 @@ class ProdutoItem extends DataItem {
     this.publicaweb = (json['publicaweb' ?? 'S'] == 'S');
     this.inservico = (json['inservico'] ?? 'N') == 'S';
     this.filial = toDouble(json['filial']);
+    this.inativo = json['inativo'] ?? 'N';
   }
 
   static List<String> get keys {
@@ -109,7 +112,7 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
     return search(
             resource: 'ctprod',
             select:
-                'ctprod.codigo,ctprod.inservico, ctprod.nome, coalesce( (select precoweb from ctprod_filial where codigo=ctprod.codigo and filial = $filial) ,ctprod.precoweb) precoweb ,ctprod.unidade,ctprod.obs,cast(ctprod.sinopse as varchar(1024)) sinopse , i.codtitulo',
+                'ctprod.codigo,ctprod.inservico,ctprod.inativo, ctprod.nome, coalesce( (select precoweb from ctprod_filial where codigo=ctprod.codigo and filial = $filial) ,ctprod.precoweb) precoweb ,ctprod.unidade,ctprod.obs,cast(ctprod.sinopse as varchar(1024)) sinopse , i.codtitulo',
             filter: filter,
             join:
                 ' left join ctprod_atalho_itens i on (i.codprod=ctprod.codigo)',

@@ -1,6 +1,7 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
+import 'ctrl_id_model.dart';
 //import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class SigcadItem extends DataItem {
@@ -127,5 +128,11 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
     final qry = "select count(*) conta from sigcad where data ge '$sDe' $s ";
     //print(qry);
     return API.openJson(qry).then((rsp) => rsp['result'][0]['conta']);
+  }
+
+  Future<double> proximoCodigo(double filial) async {
+    return CtrlIdItemModel.proximo('CLIFOR').then((rsp) {
+      return (rsp.numero * 1000) + filial;
+    });
   }
 }

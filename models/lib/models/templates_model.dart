@@ -31,7 +31,7 @@ class TemplatesItem extends DataItem {
 
 class TemplatesItemModel extends ODataModelClass<TemplatesItem> {
   final dynamic configInstance;
-  TemplatesItemModel({this.configInstance}) {
+  TemplatesItemModel(this.configInstance) {
     collectionName = 'templates';
     super.API = ODataInst();
     super.CC = CloudV3().client..client.silent = true;
@@ -115,9 +115,11 @@ class TemplatesItemModel extends ODataModelClass<TemplatesItem> {
       double sigcadCodigo,
       double filial}) async {
     /// dados customizados
-    var dados = configInstance.dadosLoja;
-    dados["vendedor.nome"] = configInstance.nomeVendedor;
-    dados['vendedor.codigo'] = configInstance.codigoVendedor;
+    Map<String, dynamic> dados = configInstance?.dadosLoja ?? {};
+    if (configInstance != null) {
+      dados["vendedor.nome"] = configInstance?.nomeVendedor ?? '';
+      dados['vendedor.codigo'] = configInstance?.codigoVendedor ?? '';
+    }
     if (titulo != null) dados['titulo'] = titulo;
     if (data != null) {
       dados['dia'] = data.format('dd');
@@ -175,11 +177,12 @@ class TemplatesItemModel extends ODataModelClass<TemplatesItem> {
     }
 
     /// informações de usuario
-    try {
-      result = traduzirTexto(result, configInstance.dadosUsuario.toJson());
-    } catch (e) {
-      //
-    }
+    if (configInstance != null)
+      try {
+        result = traduzirTexto(result, configInstance.dadosUsuario.toJson());
+      } catch (e) {
+        //
+      }
     return result;
   }
 }

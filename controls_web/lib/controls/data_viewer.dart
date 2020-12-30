@@ -359,6 +359,7 @@ class DataViewer extends StatefulWidget {
   final Color evenRowColor; //: widget.evenRowColor,
   final Color oddRowColor; //: widget.oddRowColor,
   final bool oneRowAutoEdit;
+  final Function(dynamic) onSaved;
   DataViewer({
     Key key,
     this.controller,
@@ -397,6 +398,7 @@ class DataViewer extends StatefulWidget {
     this.leading,
     this.height,
     this.width,
+    this.onSaved,
   })  : assert(source != null || controller != null),
         assert((columns == null) || (columns.length > 0)),
         super(key: key);
@@ -593,7 +595,7 @@ class _DataViewerState extends State<DataViewer> {
                               rt = controller.doUpdate(dados, manual: false);
                             } else
                               return false;
-
+                            if (widget.onSaved != null) widget.onSaved(dados);
                             return rt;
                           }
                         : null,
@@ -714,6 +716,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                           ],
                         );
                       })),
+      resizeToAvoidBottomInset: false, //don't forget this!
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),

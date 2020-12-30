@@ -1117,78 +1117,6 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
                   widget.controller.widget.canInsert,
               onReset: (ctx) => _formKey.currentState.reset(),
               onSaved: (ctx) => _save(ctx),
-              /*appBar: AppBar(
-                  //expandedHeight: kToolbarHeight,
-                  flexibleSpace: ValueListenableBuilder(
-                      valueListenable: widget.controller.changedValues,
-                      builder: (BuildContext context, dynamic changed,
-                          Widget child) {
-                        return AppBar(
-                            title: Text(widget.title ?? ''),
-                            actions: [
-                              ...widget.actions,
-                              if (widget.controller.widget.canDelete &&
-                                  (!changed))
-                                Tooltip(
-                                    message: 'Excluir o item',
-                                    child: IconButton(
-                                      icon: Icon(Icons.delete),
-                                      onPressed: () {
-                                        if (widget.controller.widget
-                                                .onDeleteItem ==
-                                            null)
-                                          widget.controller.widget
-                                              .onPostEvent(
-                                                  widget.controller,
-                                                  widget.controller.data,
-                                                  PaginatedGridChangeEvent
-                                                      .delete)
-                                              .then((rsp) {
-                                            if (rsp is bool && !rsp) return;
-                                            widget.controller
-                                                .removeAt(widget.index);
-                                            Timer.run(() {
-                                              Navigator.pop(
-                                                  widget.controller.context);
-                                            });
-                                            widget.controller
-                                                .changed(widget.data); //b);
-                                          });
-                                        else
-                                          widget.controller.widget
-                                              .onDeleteItem(widget.controller)
-                                              .then((x) {
-                                            if (x) {
-                                              widget.controller
-                                                  .removeAt(widget.index);
-                                              Timer.run(() {
-                                                Navigator.pop(
-                                                    widget.controller.context);
-                                              });
-                                              widget.controller
-                                                  .changed(p); //b);
-                                            }
-                                          });
-                                      },
-                                    )),
-                              if (changed) ...[
-                                InkWell(
-                                    child: Icon(Icons.settings_backup_restore),
-                                    onTap: () {
-                                      _formKey.currentState.reset();
-                                      widget.controller.changedValues.value =
-                                          false;
-                                    }),
-                                SizedBox(width: 8),
-                                InkWell(
-                                    child: Icon(Icons.check),
-                                    onTap: () {
-                                      _save(context);
-                                    })
-                              ],
-                            ]);
-                      })),
-             */
               body: SingleChildScrollView(child: buildPage(context)),
             ),
             // ),
@@ -1196,10 +1124,11 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
           );
   }
 
+  Widget _page;
   Widget buildPage(BuildContext context) {
     int col = 0;
     final int mxCol = widget.controller.columns.length;
-    return Padding(
+    return _page ??= Padding(
       padding: EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
       child: Center(
         child: Form(
@@ -1346,6 +1275,8 @@ class EditScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, //don't forget this!
+
       appBar: AppBar(
           //expandedHeight: kToolbarHeight,
           flexibleSpace: ValueListenableBuilder(

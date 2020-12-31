@@ -11,8 +11,9 @@ class ColorPickerField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    if (size.width > 550) size = Size(550, size.height);
-    if (size.height > 550) size = Size(size.width, 550);
+    if (size.width > 480) size = Size(480, size.height);
+
+    if (size.height > 500) size = Size(size.width, 500);
     Color _color = color;
     //ResponsiveInfo responsive = ResponsiveInfo(context);
     return (onChanged != null)
@@ -55,7 +56,8 @@ class ColorPickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Color> _colors = colors ?? [];
     if (_colors.length == 0) {
-      _colors = primariesColors;
+      _colors.addAll(primariesColors);
+      _colors.addAll(pastelColors);
     }
     return Scaffold(
       appBar: AppBar(title: Text('Selecionar uma cor')),

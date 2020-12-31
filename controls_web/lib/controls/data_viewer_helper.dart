@@ -26,18 +26,23 @@ class DataViewerHelper {
       if (v is bool) {
         t = true;
         f = false;
+        v ??= false;
       }
       if (v is int) {
         t = 1;
         f = 0;
+        v ??= 0;
       }
       if (v is double) {
         t = 1.0;
         f = 0.0;
+        v ??= 0.0;
       }
     }
     t ??= 'S';
     f ??= 'N';
+    v ??= 'N';
+    return {'t': t, 'f': f, 'v': v};
   }
 
   static simnaoColumn(column,
@@ -48,24 +53,17 @@ class DataViewerHelper {
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
-        DataViewerHelper._simnaoFn(
+        var r = DataViewerHelper._simnaoFn(
             {'v': row[column.name], 't': trueValue, 'f': falseValue});
 
-        bool b = (row[column.name] ?? falseValue) == trueValue;
+        bool b = (row[column.name] ?? r['v']) == r['t'];
         return Text(((b) ? 'Sim' : 'Não'),
             style: TextStyle(
               color: (b) ? color : null,
             ));
-        //return MaskedSwitchFormField(
-        //    activeColor: color,
-        //    activeTrackColor: (color != null) ? color.lighten(50) : null,
-        //    inactiveTrackColor: inactiveTrackColor ??
-        //       ((color != null) ? color.lighten(80) : null),
-        //   readOnly: true,
-        //   value: (row[column.name] ?? falseValue) == trueValue);
       };
       column.editBuilder = (a, b, c, row) {
-        DataViewerHelper._simnaoFn(
+        var r = DataViewerHelper._simnaoFn(
             {'v': row[column.name], 't': trueValue, 'f': falseValue});
 
         /// define switch para edição
@@ -75,9 +73,9 @@ class DataViewerHelper {
           inactiveTrackColor: inactiveTrackColor ??
               ((color != null) ? color.lighten(80) : null),
           label: column.label ?? column.name,
-          value: (row[column.name] ?? falseValue) == trueValue,
+          value: (row[column.name] ?? r['v']) == r['t'],
           onChanged: (x) {
-            row[column.name] = x ? trueValue : falseValue;
+            row[column.name] = x ? r['t'] : r['f'];
           },
         );
       };

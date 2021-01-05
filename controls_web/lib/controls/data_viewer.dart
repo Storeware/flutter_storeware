@@ -337,6 +337,7 @@ class DataViewer extends StatefulWidget {
   final bool canSearch;
   final Widget title;
   final Widget subtitle;
+  final Widget Function() placeHolder;
   final Future<dynamic> Function(PaginatedGridController) onInsertItem;
   final Future<dynamic> Function(PaginatedGridController) onEditItem;
   final Future<dynamic> Function(PaginatedGridController) onDeleteItem;
@@ -371,6 +372,7 @@ class DataViewer extends StatefulWidget {
     this.elevation = 0,
     this.oddRowColor,
     this.rowsPerPage,
+    this.placeHolder,
     this.headerHeight = kToolbarHeight + 8,
     this.headingRowHeight = kMinInteractiveDimension,
     this.showPageNavigatorButtons = true,
@@ -527,6 +529,7 @@ class _DataViewerState extends State<DataViewer> {
               width: widget.width,
               child: widget.child ??
                   PaginatedGrid(
+                    placeHolder: widget.placeHolder,
                     elevation: widget.elevation,
                     canSort: widget.canSort,
                     evenRowColor: widget.evenRowColor,

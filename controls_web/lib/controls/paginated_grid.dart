@@ -152,6 +152,7 @@ class PaginatedGrid extends StatefulWidget {
   /// dados a serem apresentados
   final List<dynamic> source;
   final bool oneRowAutoEdit;
+  final Widget Function() placeHolder;
 
   /// colunas de apresentação dos dados
   final List<PaginatedGridColumn> columns;
@@ -251,6 +252,7 @@ class PaginatedGrid extends StatefulWidget {
     this.oneRowAutoEdit = false,
     this.footerLeading,
     this.footerHeight = kToolbarHeight,
+    this.placeHolder,
     this.canSort = true,
     this.backgroundColor,
     this.columns,
@@ -432,8 +434,12 @@ class _PaginatedGridState extends State<PaginatedGrid> {
               initialData: widget.source,
               future: widget.futureSource,
               builder: (context, snapshot) {
-                if (!snapshot.hasData)
-                  return Align(child: CircularProgressIndicator());
+                if (!snapshot.hasData) {
+                  if (widget.placeHolder != null)
+                    return widget.placeHolder();
+                  else
+                    return Align(child: CircularProgressIndicator());
+                }
                 controller.originalSource = snapshot.data;
                 controller.widget = widget;
                 if (widget.onSort != null)

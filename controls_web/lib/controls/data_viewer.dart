@@ -768,14 +768,15 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           direction: Axis.horizontal,
           children: [
             for (var column in rows.children)
-              createColumn(context, column, isLast: (itemsCount == ++col))
+              createColumn(context, column, col, isLast: (itemsCount == ++col))
           ],
         ),
       ],
     );
   }
 
-  createColumn(context, column, {bool isLast, Function() onLastPressed}) {
+  createColumn(context, column, int order,
+      {bool isLast, Function() onLastPressed}) {
     var col;
     var ctrl;
 
@@ -793,7 +794,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
       edit = col.editBuilder(
           widget.controller.paginatedController, col, widget.data, widget.data);
     if (edit == null) {
-      edit = createFormField(context, col, isLast: isLast);
+      edit = createFormField(context, col, order, isLast: isLast);
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
@@ -821,7 +822,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   }
 
   get p => widget.data;
-  createFormField(BuildContext context, item, {bool isLast = false}) {
+  createFormField(BuildContext context, item, int order,
+      {bool isLast = false}) {
     final TextEditingController txtController = TextEditingController(
         text: (item.onGetValue != null)
             ? item.onGetValue(p[item.name])
@@ -848,7 +850,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           if (item.onChanged != null) item.onChanged(x);
         },
         readOnly: (item.isPrimaryKey || item.readOnly),
-        autofocus: item.autofocus && canFocus(item),
+        autofocus: (item.autofocus && canFocus(item)) ||
+            (order == 0 && canFocus(item)),
         maxLines: item.maxLines,
         maxLength: item.maxLength,
         enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),

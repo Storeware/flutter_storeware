@@ -1,8 +1,8 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
-import 'package:console/views/cadastros/produto.cadastro_page.dart';
+import 'package:console/views/cadastros/produtos/produto.cadastro_page.dart';
 import 'package:flutter/material.dart';
-import '../models/ctprod_model.dart';
+import 'package:models/models/ctprod_model.dart';
 
 class CodigoProdutoFormField extends StatefulWidget {
   final String codigo;
@@ -22,7 +22,7 @@ class _CodigoProdutoFormFieldState extends State<CodigoProdutoFormField> {
     notifier.value = {};
     ProdutoModel().buscarByCodigo(cd).then((rsp) {
       print(rsp);
-      if (rsp.length > 0) notifier.value = rsp[0];
+      if (rsp.length > 0) notifier.value = rsp;
     });
   }
 
@@ -67,17 +67,16 @@ class _CodigoProdutoFormFieldState extends State<CodigoProdutoFormField> {
                 return Dialogs.showPage(context,
                     child: Scaffold(
                       appBar: AppBar(title: Text('Selecionar produto')),
-                      body: CadastroProdutoView(
+                      body: CadastroProdutoPage(
                           canEdit: false,
                           canInsert: false,
                           onSelected: (x) async {
                             notifier.value = x;
-                            produtoController.text = x['codigo'];
+                            //produtoController.text = x['codigo'];
                             return x['codigo'];
                           }),
                     )).then((rsp) {
-                  print('achou ${produtoController.text}');
-                  return produtoController.text;
+                  return notifier.value['codigo'];
                 });
               },
             ),

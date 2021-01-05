@@ -11,6 +11,7 @@ class FilialBuilder extends StatelessWidget {
     return ODataBuilder(
       query: ODataQuery(
         resource: 'filial_todas',
+        filter: 'codigo>0',
         select: 'codigo, nome',
       ),
       cacheControl: 'max-age=360',

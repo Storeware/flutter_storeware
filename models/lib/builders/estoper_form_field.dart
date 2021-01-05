@@ -1,8 +1,8 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
-import 'package:console/models/estoper_model.dart';
 import 'package:console/views/estoque/cadastros/estoper_page.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models/estoper_model.dart';
 
 class EstOperFormField extends StatefulWidget {
   final String codigo;
@@ -28,7 +28,7 @@ class _CodigoProdutoFormFieldState extends State<EstOperFormField> {
     notifier.value = {};
     EstoperItemModel().buscarByCodigo(cd).then((rsp) {
       print(rsp);
-      if (rsp.length > 0) notifier.value = rsp[0];
+      if (rsp.length > 0) notifier.value = rsp;
     });
   }
 
@@ -77,9 +77,9 @@ class _CodigoProdutoFormFieldState extends State<EstOperFormField> {
                         canInsert: false,
                         onSelected: (x) async {
                           notifier.value = x;
-                          codigoController.text = x['codigo'];
+                          //codigoController.text = x['codigo'];
                           return x['codigo'];
-                        }));
+                        })).then((rsp) => notifier.value['codigo']);
               },
             ),
           ),

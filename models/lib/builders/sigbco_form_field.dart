@@ -1,9 +1,9 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
-import 'package:console/models/sigbco_model.dart';
 import 'package:console/views/financas/cadastros/sigbco_page.dart';
 import 'package:controls_web/controls/masked_field.dart';
 
 import 'package:flutter/material.dart';
+import 'package:models/models/sigbco_model.dart';
 
 class SigbcoFormField extends StatefulWidget {
   final String codigo;
@@ -28,7 +28,7 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
   buscar(cd) {
     notifier.value = {};
     SigbcoItemModel().buscarByCodigo('$cd').then((rsp) {
-      if (rsp.length > 0) return notifier.value = rsp[0];
+      if (rsp.length > 0) return notifier.value = rsp;
       notifier.value = {};
     });
   }
@@ -59,7 +59,10 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
               labelText: 'Cx/Bc',
               controller: codigoController,
               initialValue: widget.codigo,
-              onChanged: widget.onChanged,
+              onChanged: (x) {
+                print(x);
+                widget.onChanged(x);
+              },
               validator: (x) {
                 if (nomeBanco == '') return 'inválido';
                 return (widget.validator != null) ? widget.validator(x) : null;
@@ -78,9 +81,8 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
                         canInsert: false,
                         onSelected: (x) async {
                           notifier.value = x;
-                          codigoController.text = '${x['codigo']}';
-                          return codigoController.text;
-                        }));
+                          return x['codigo'];
+                        })).then((rsp) => notifier.value['codigo']);
               },
             ),
           ),
@@ -89,6 +91,8 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
               valueListenable: notifier,
               builder: (ctx, row, wg) {
                 nomeBanco = '${notifier.value['nome'] ?? ''}';
+                widget.onChanged(row['codigo']);
+
                 return MaskedLabeled(
                   padding: EdgeInsets.only(left: 4, bottom: 2),
                   value: nomeBanco,

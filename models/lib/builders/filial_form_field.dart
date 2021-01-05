@@ -1,9 +1,9 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
-import 'package:console/models/filial_model.dart';
-import 'package:console/views/cadastros/filial_page.dart';
+import 'package:console/views/cadastros/filiais/filial_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:models/models/filial_model.dart';
 
 class FilialFormField extends StatefulWidget {
   final double codigo;
@@ -29,7 +29,7 @@ class _CodigoProdutoFormFieldState extends State<FilialFormField> {
     notifier.value = {};
     FilialItemModel().buscarByCodigo(cd).then((rsp) {
       print(rsp);
-      if (rsp.length > 0) notifier.value = rsp[0];
+      if (rsp.length > 0) notifier.value = rsp;
     });
   }
 
@@ -54,34 +54,39 @@ class _CodigoProdutoFormFieldState extends State<FilialFormField> {
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             width: 100,
-            child: MaskedSearchFormField<double>(
+            child: MaskedSearchFormField<int>(
               readOnly: widget.readOnly,
               autofocus: (widget.codigo ?? 0) == 0,
               labelText: 'Filial',
               controller: codigoController,
               //initialValue: widget.codigo,
-              onChanged: widget.onChanged,
+              onChanged: (x) {
+                widget.onChanged(x + 0.0);
+              },
               validator: (x) {
                 if (nome == '') return 'inválido';
-                return (widget.validator != null) ? widget.validator(x) : null;
+                return (widget.validator != null)
+                    ? widget.validator(x + 0.0)
+                    : null;
               },
               onSaved: (x) {
-                if (widget.onSaved != null) return widget.onSaved(x);
+                if (widget.onSaved != null) return widget.onSaved(x + 0.0);
               },
               onFocusChange: (b, x) {
-                if (x > 0) buscar(x);
+                if (x != null) if (x > 0) buscar(x);
               },
-              onSearch: () {
+              onSearch: () async {
                 if (widget.readOnly) return null;
-                return Dialogs.showPage(context,
+                return await Dialogs.showPage(context,
                     child: FilialPage(
                         canEdit: false,
                         canInsert: false,
+                        todas: false,
                         onSelected: (x) async {
                           notifier.value = x;
-                          codigoController.text = x['codigo'].toString();
-                          return x['codigo'];
-                        }));
+                        })).then((rsp) {
+                  return notifier.value['codigo'] ~/ 1;
+                });
               },
             ),
           ),

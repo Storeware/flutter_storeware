@@ -1,10 +1,11 @@
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_web/controls/responsive.dart';
-import 'package:console/models/sigcad_model.dart';
-import 'package:console/views/cadastros/cadastro_clientes.dart';
+import 'package:console/views/cadastros/clientes/cadastro_clientes.dart';
+
 //import 'package:console/views/financas/cadastros/cadastro_contas_operacao_page.dart';
 import 'package:flutter/material.dart';
+import 'package:models/models/sigcad_model.dart';
 //import 'package:controls_data/odata_client.dart';
 
 class SigcadFormField extends StatefulWidget {
@@ -14,6 +15,8 @@ class SigcadFormField extends StatefulWidget {
   final bool readOnly;
   final String label;
   final Function(int) validator;
+  final Function(double) onFocusChanged;
+  final Function(dynamic) onItemChanged;
   SigcadFormField({
     Key key,
     this.codigo = 0.0,
@@ -22,6 +25,8 @@ class SigcadFormField extends StatefulWidget {
     this.readOnly = false,
     this.label,
     this.validator,
+    this.onItemChanged,
+    this.onFocusChanged,
   }) : super(key: key);
 
   @override
@@ -29,16 +34,14 @@ class SigcadFormField extends StatefulWidget {
 }
 
 class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
-  buscar(double cd) {
+  buscar(double cd) async {
     notifier.value = {};
-    print(['buscando:', cd]);
     if ((cd ?? 0.0) == 0) {
       notifier.value = {"codigo": 0.0, "nome": ''};
       return;
     }
-    SigcadItemModel().buscarByCodigo(cd).then((rsp) {
-      print(rsp);
-      if (rsp.length > 0) notifier.value = rsp[0];
+    return SigcadItemModel().buscarByCodigo(cd).then((rsp) {
+      if (rsp.length > 0) notifier.value = rsp;
     });
   }
 
@@ -48,6 +51,11 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
   void initState() {
     super.initState();
     notifier = ValueNotifier({});
+  }
+
+  doItemChanged(double codigo, String nome) {
+    if (widget.onItemChanged != null)
+      widget.onItemChanged({'codigo': codigo, 'nome': nome});
   }
 
   @override
@@ -60,6 +68,7 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
     }
     return Container(
         height: kToolbarHeight + 7,
+        alignment: Alignment.bottomLeft,
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             width: 140,
@@ -80,24 +89,29 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
               },
               onFocusChange: (b, x) {
                 print('onFocusChange $x');
-                buscar(x + 0.0);
+                buscar(x + 0.0).then((rsp) {});
+                if (widget.onFocusChanged != null)
+                  widget.onFocusChanged(x + 0.0);
               },
-              onSearch: () {
+              onSearch: () async {
                 if (widget.readOnly) return null;
+                //var rt = await
                 return Dialogs.showPage(context,
-                    child: Scaffold(
-                        appBar: AppBar(title: Text('Contatos')),
-                        body: CadastroClienteWidget(
-                            canChange: true,
-                            canInsert: true,
-                            top: 10,
-                            height: responsive.size.height * 0.90,
-                            //title: 'Contatos',
-                            onChange: (x) {
-                              codigoController.text = x.toInt().toString();
-                              if (widget.onChanged != null) widget.onChanged(x);
-                              buscar(x);
-                            }))).then((rsp) => true);
+                        child: Scaffold(
+                            appBar: AppBar(title: Text('Contatos')),
+                            body: CadastroClienteWidget(
+                                canChange: true,
+                                canInsert: true,
+                                top: 10,
+                                height: responsive.size.height * 0.90,
+                                onChange: (x) {
+                                  codigoController.text = x.toInt().toString();
+                                  buscar(x).then((rsp) {
+                                    //if (widget.onChanged != null)
+                                    //  widget.onChanged(x);
+                                  });
+                                })))
+                    .then((rsp) => int.tryParse(codigoController.text));
               },
             ),
           ),
@@ -106,8 +120,10 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
               valueListenable: notifier,
               builder: (ctx, row, wg) {
                 nomeContato = row['nome'] ?? '';
+                doItemChanged(
+                    double.tryParse(codigoController.text), nomeContato);
                 return MaskedLabeled(
-                  padding: EdgeInsets.only(left: 4, bottom: 2),
+                  padding: EdgeInsets.only(left: 4, bottom: 11),
                   value: nomeContato,
                 );
               },

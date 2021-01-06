@@ -35,6 +35,7 @@ class HorizontalTabView extends StatelessWidget {
   final Color tagColor;
   final bool isMobile;
   final double tabHeight;
+  final TextStyle tabStyle;
   //final double tabHeightCompact;
   final AppBar sidebarAppBar;
   final Drawer sidebarDrawer;
@@ -50,6 +51,7 @@ class HorizontalTabView extends StatelessWidget {
     this.padding,
     this.width = 220,
     this.tabHeight,
+    this.tabStyle,
     this.top = 0,
     this.bottom = 0,
     this.left = 0,
@@ -238,7 +240,7 @@ class HorizontalTabView extends StatelessWidget {
                                                                           choices[index]
                                                                               .label,
                                                                           style:
-                                                                              TextStyle(color: _iconColor)),
+                                                                              tabStyle ?? TextStyle(color: _iconColor)),
                                                                   onTap: () {
                                                                     _index.value =
                                                                         index;

@@ -123,7 +123,7 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
                 doItemChanged(
                     double.tryParse(codigoController.text), nomeContato);
                 return MaskedLabeled(
-                  padding: EdgeInsets.only(left: 4, bottom: 11),
+                  padding: EdgeInsets.only(left: 4, bottom: 7),
                   value: nomeContato,
                 );
               },

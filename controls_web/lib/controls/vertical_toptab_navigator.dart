@@ -362,7 +362,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           overflow: TextOverflow.ellipsis,
           style: (!widget.choices[index].enabled)
               ? TextStyle(color: theme.dividerColor)
-              : widget.style ??
+              : widget.choices[index].style ??
+                  widget.style ??
                   (theme.tabBarTheme?.labelStyle ??
                           theme.textTheme.button
                               .copyWith(color: theme.buttonColor))

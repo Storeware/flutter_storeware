@@ -628,12 +628,14 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final bool showAppBar;
   final Widget appBar;
   final List<Widget> actions;
+  final double elevation;
 
   const DataViewerEditGroupedPage({
     Key key,
     @required this.data,
     @required this.grouped,
     @required this.controller,
+    this.elevation = 0,
     this.title,
     this.dataRowHeight,
     this.canEdit = false,
@@ -689,6 +691,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                       builder:
                           (BuildContext context, bool changed, Widget child) {
                         return AppBar(
+                          elevation: widget.elevation,
                           title: Text(widget.title ?? 'Edição'),
                           actions: [
                             if (widget.canDelete && (!changed))

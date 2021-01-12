@@ -27,4 +27,17 @@ class SqlBuilder {
     s = 'update $collection set $s where $where';
     return s;
   }
+
+  // TODO: insert sql
+  static createSqlInsert(collection,
+      {Map<String, dynamic> dados, String colunas}) {
+    // TODO:
+    throw 'nao implementado';
+  }
+
+  // TODO: delete sql
+  static createSqlDelete(collection, key, {Map<String, dynamic> dados}) {
+    var where = "$key = '${dados[key]}' ";
+    return 'delete from $collection where $where';
+  }
 }

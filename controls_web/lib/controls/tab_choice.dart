@@ -20,8 +20,10 @@ class TabChoice<T> {
   List<TabChoice> items;
   double width;
   bool Function(int) completed;
+  TextStyle style;
   TabChoice(
       {this.builder,
+      this.style,
       this.data,
       this.image,
       this.onPressed,

@@ -472,6 +472,7 @@ class ODataInst extends ODataClient {
   ODataInst._create();
   factory ODataInst() => _singleton;
   DataNotifyChange loginNotifier = DataNotifyChange<Map>();
+  String token;
   auth(user, pass) {
     var bytes = utf8.encode('$user:$pass');
     var b64 = 'Basic ' + base64.encode(bytes);
@@ -486,7 +487,7 @@ class ODataInst extends ODataClient {
     return cli
         .openJson(cli.formatUrl(path: 'login'), method: 'GET')
         .then((rsp) {
-      var token = rsp['token'];
+      token = rsp['token'];
       client.authorization = 'Bearer $token';
       if (client.tokenId == null) client.setToken(auth(user, pass));
       client.addHeader('contaid', loja);

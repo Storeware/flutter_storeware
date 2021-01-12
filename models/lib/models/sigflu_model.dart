@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:models/data/sql_builder.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
@@ -23,6 +25,7 @@ class SigfluItem extends DataItem {
   /// S ou N
   String dctook;
   String prtserie;
+  String conferido;
 
   /// S ou N
   bool aprovado;
@@ -64,7 +67,7 @@ class SigfluItem extends DataItem {
   @override
   fromMap(Map<String, dynamic> json) {
     //  hist = json['hist_'];
-    vcto = toDate(json['vcto_']);
+    //vcto = toDate(json['vcto_']);
     emissao = toDate(json['emissao']);
     this.valor = toDouble(json['valor']);
     banco = json['banco'];
@@ -72,21 +75,23 @@ class SigfluItem extends DataItem {
     dcto = json['dcto'];
     codigo = json['codigo'];
     control = toDouble(json['control']);
-    valor = toDouble(json['valor_']);
+    //valor = toDouble(json['valor_']);
     ctrlId = toDouble(json['ctrl_id']);
     id = toDouble(json['id']);
     filial = toDouble(json['filial']);
     data = toDate(json['data']);
     digitacao = toDate(json['digitacao']);
     clifor = toDouble(json['clifor']);
+    conferido = json['conferido'];
     // insercao = json['insercao'];
     //dtcontabil = json['dtcontabil'];
     dctook = json['dctook'];
     prtserie = json['prtserie'];
-    aprovado = json['aprovado'];
+    aprovado = json['aprovado'] == 'S';
     //  tipoIdentPgto = json['tipo_ident_pgto'];
-    bdregdebito = json['bdregdebito'];
+    bdregdebito = (json['bdregdebito'] == '1');
     //  criadorRegistro = json['criador_registro'];
+
     _regularizar();
     return this;
   }
@@ -95,6 +100,15 @@ class SigfluItem extends DataItem {
     DateTime now = DateTime.now();
     this.emissao ??= toDate(now);
     this.digitacao ??= now;
+    //this.hist_ ??= this.historico;
+    //this.valor_ ??= this.valor;
+    //this.tipo = this.codigo < '200' ? 'E' : 'S';
+    this.banco ??= '';
+    this.conferido ??= 'N';
+    this.clifor ??= 0;
+    this.dctook ??= 'N';
+    this.bdregdebito ??= true;
+    this.dtcontabil ??= this.emissao;
   }
 
   Map<String, dynamic> toJson() {
@@ -109,6 +123,8 @@ class SigfluItem extends DataItem {
     data['dcto'] = this.dcto;
     data['codigo'] = this.codigo;
     data['control'] = this.control;
+    data['tipo'] = (this.codigo ?? '').compareTo('200') < 0 ? 'E' : 'S';
+    data['conferido'] = this.conferido;
     //data['valor_'] = this.valor;
     data['ctrl_id'] = this.ctrlId;
     data['id'] = this.id;
@@ -120,11 +136,22 @@ class SigfluItem extends DataItem {
     data['dtcontabil'] = this.dtcontabil;
     data['dctook'] = this.dctook;
     data['prtserie'] = this.prtserie;
-    data['aprovado'] = this.aprovado;
+    data['aprovado'] = this.aprovado ? 'S' : 'N';
     //data['tipo_ident_pgto'] = this.tipoIdentPgto;
-    data['bdregdebito'] = this.bdregdebito;
+    data['bdregdebito'] = this.bdregdebito ? '1' : '0';
     //data['criador_registro'] = this.criadorRegistro;
     return data;
+  }
+
+  static SigfluItem criarNovo({Map<String, dynamic> json}) {
+    var r = SigfluItem.fromJson(json ?? {});
+    var d = r.toDate(DateTime.now());
+    r.emissao ??= d;
+    r.data ??= d;
+    r.dctook ??= 'S';
+    r.digitacao ??= DateTime.now();
+
+    return r;
   }
 }
 
@@ -188,5 +215,29 @@ where $f  a.codigo lt '200' and a.data between '$sDe'  and '$sAte'
 ''';
     // print(qry);
     return API.openJson(qry).then((rsp) => rsp['result']);
+  }
+
+  @override
+  validate(value) {
+    var item = SigfluItem.fromJson(value);
+    var erro = '';
+    if (item.codigo == null) erro += 'Código de operação é obrigatório\n';
+    if (item.emissao == null)
+      erro += 'Não informou a data de emissão do documento\n';
+    if (item.data == null)
+      erro += 'Não informou a data de vencimento do documento\n';
+    //if (item.emissao > DateTime.now()) throw 'A data de emissão é inválida';
+    if (item.valor == null) erro += 'Falta informar o valor do documento\n';
+    if (item.filial == null) erro += 'Falta indicar a filial do documento\n';
+    if (erro != '') throw erro;
+    return true;
+  }
+
+  @override
+  put(value) {
+    if (validate(value)) {
+      var sql = SqlBuilder.createSqlUpdate('sigflu', 'id', value);
+      return this.API.execute(sql).then((rsp) => json.decode(rsp));
+    }
   }
 }

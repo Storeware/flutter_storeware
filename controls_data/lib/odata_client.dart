@@ -278,6 +278,7 @@ class ODataClient {
   get notifier => client.notify;
   get errorNotifier => client.notifyError;
   get processing => DataProcessingNotifier();
+  get driver => client.headers['db-driver'] ?? 'fb';
 
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {
@@ -483,6 +484,7 @@ class ODataInst extends ODataClient {
     RestClient cli = RestClient(baseUrl: baseUrl);
     cli.prefix = prefix;
     cli.authorization = auth(user, pass);
+    cli.headers.addAll(client.headers);
     cli.addHeader('contaid', loja);
     return cli
         .openJson(cli.formatUrl(path: 'login'), method: 'GET')
@@ -511,7 +513,7 @@ abstract class ODataModelClass<T extends DataItem> {
   String externalKeys = '';
   ODataClient API;
   ODataModelClass({this.API});
-
+  get driver => API.client.headers['db-driver'] ?? 'fb';
   makeCollection(Map<String, dynamic> item) {
     return collectionName;
   }

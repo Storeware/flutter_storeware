@@ -237,8 +237,25 @@ class SigcxItemModel extends ODataModelClass<SigcxItem> {
     final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
     var filtro = '';
     if (filial != null) filtro = 'a.filial eq $filial  and ';
-    final qry =
-        '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.valor) valor from 
+
+    var qry;
+    if (API.driver == 'mssql')
+      qry = '''select 
+year (r.data) ano, 
+month (r.data) mes,  
+sum(r.entradas) entradas, 
+sum(r.saidas) saidas
+        from
+(select a.data,
+ sum(case when a.codigo<'200' then a.valor else 0 end ) entradas,
+ sum(case when a.codigo>='200' then a.valor else 0 end ) saidas
+  from sigcx a, sig01 b
+where $filtro a.codigo=b.codigo  and (b.ISRESULTADO=1 or b.contasreceber=1)  and data between '$sDe'  and '$sAte'
+group by a.data)  r
+group by year(r.data),month(r.data)''';
+    else
+      qry =
+          '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.valor) valor from 
 (select a.data, 
  sum(case when a.codigo>='200' then a.valor else -a.valor end ) valor 
  from sigcx a, sig01 b
@@ -254,8 +271,21 @@ group by 1,2''';
     final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
     var filtro = '';
     if (filial != null) filtro = 'a.filial eq $filial  and ';
-    final qry =
-        '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.valor) valor from 
+    String qry;
+    if (API.driver == 'mssql')
+      qry = ''' select year (r.data) ano, month (r.data) mes, 
+ sum(r.entradas) entradas, sum(r.saidas) saidas
+        from
+(select a.data,
+ sum(case when a.codigo<'200' then a.valor else 0 end ) entradas,      
+ sum(case when a.codigo>='200' then a.valor else 0 end ) saidas        
+  from sigcx a, sig01 b
+where $filtro  a.codigo=b.codigo  and (b.ISRESULTADO=1 or b.contasreceber=1)  and data between '$sDe'  and '$sAte'
+group by a.data) r
+group by year (r.data),month (r.data)''';
+    else
+      qry =
+          '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.valor) valor from 
 (select a.data, 
  sum(case when a.codigo<'200' then a.valor else -a.valor end ) valor 
  from sigcx a, sig01 b
@@ -271,8 +301,21 @@ group by 1,2''';
     final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
     var filtro = '';
     if (filial != null) filtro = 'a.filial = $filial  and ';
-    final qry =
-        '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.entradas) entradas, sum(r.saidas) saidas 
+    String qry;
+    if (API.driver == 'mssql')
+      qry = '''  select year ( r.data) ano, month (r.data) mes, 
+ sum(r.entradas) entradas, sum(r.saidas) saidas
+        from
+(select a.data,
+ sum(case when a.codigo<'200' then a.valor else 0 end ) entradas,      
+ sum(case when a.codigo>='200' then a.valor else 0 end ) saidas        
+  from sigcx a, sig01 b
+where $filtro  a.codigo=b.codigo  and (b.ISRESULTADO=1 or b.contasreceber=1)  and data between '$sDe'  and '$sAte'
+group by a.data) as r
+group by year ( r.data) , month (r.data)  ''';
+    else
+      qry =
+          '''select extract(year from r.data) ano, extract(month from r.data) mes,  sum(r.entradas) entradas, sum(r.saidas) saidas 
         from 
 (select a.data, 
  sum(case when a.codigo<'200' then a.valor else 0 end ) entradas, 
@@ -281,7 +324,7 @@ group by 1,2''';
 where $filtro a.codigo=b.codigo  and (b.ISRESULTADO=1 or b.contasreceber=1)  and data between '$sDe'  and '$sAte'
 group by 1) as r
 group by 1,2''';
-    print(qry);
+
     return API.openJson(qry).then((rsp) => rsp['result']);
   }
 

@@ -99,14 +99,25 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
     String ini = toDateSql(dt.startOfMonth());
     String hoje = toDateSql(dt.toDate());
     String ontem = toDateSql(dt.toDate().add(Duration(days: -1)));
-    String qry = "select " +
-        "max(data) data,  " +
-        "sum(case when data = '$ontem' then total else 0 end) ontem,  " +
-        "sum(case when data = '$hoje' then total else 0 end) subtotal,  " +
-        "sum(total) total ,sum(qtde) qtde from SIGCAUT1_HORA " +
-        "where data>='$ini' " +
-        "order by total desc " +
-        "rows ${skip + 1} to ${top + skip}";
+    String qry;
+    if (API.driver == 'mssql')
+      qry = "select " +
+          "max(data) data,  " +
+          "sum(case when data = '$ontem' then total else 0 end) ontem,  " +
+          "sum(case when data = '$hoje' then total else 0 end) subtotal,  " +
+          "sum(total) total ,sum(qtde) qtde from SIGCAUT1_HORA " +
+          "where data>='$ini' " +
+          "order by total desc " +
+          "OFFSET $skip ROWS FETCH NEXT $top ROWS ONLY";
+    else
+      qry = "select " +
+          "max(data) data,  " +
+          "sum(case when data = '$ontem' then total else 0 end) ontem,  " +
+          "sum(case when data = '$hoje' then total else 0 end) subtotal,  " +
+          "sum(total) total ,sum(qtde) qtde from SIGCAUT1_HORA " +
+          "where data>='$ini' " +
+          "order by total desc " +
+          "rows ${skip + 1} to ${top + skip}";
     return API.openJson(qry).then((rsp) => rsp['result']);
   }
 
@@ -159,18 +170,32 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
       {DateTime data, filter, top, skip, double filialEstoque = 1}) {
     String d =
         toDateSql(data ?? DateTime.now().toDate().add(Duration(days: -30)));
-    String qry =
-        "select x.*, (select sum(qestfin) from ctprodsd s where s.codigo=x.codigo) estoque  from ("
-                "select codigo,nome,precoweb,unidade  " +
-            "from ctprod a " +
-            "where " +
-            "  ${(filter != null) ? filter + ' and ' : ''}" +
-            "  a.publicaweb='S' " +
-            "  and " +
-            "  ( " +
-            "  not exists  (select codigo from sigcaut1_hora b where a.codigo=b.codigo and b.data>='$d'  ) " +
-            "  ) rows ${skip + 1} to ${top + skip} ) x   " +
-            "  ";
+    String qry;
+    if (API.driver == 'mssql') {
+      /// TODO: refazer o select para MSSQL
+      qry = "select x.*, (select sum(qestfin) from ctprodsd s where s.codigo=x.codigo) estoque  from ("
+              "select codigo,nome,precoweb,unidade  " +
+          "from ctprod a " +
+          "where " +
+          "  ${(filter != null) ? filter + ' and ' : ''}" +
+          "  a.publicaweb='S' " +
+          "  and " +
+          "  ( " +
+          "  not exists  (select codigo from sigcaut1_hora b where a.codigo=b.codigo and b.data>='$d'  ) " +
+          "  ) ROWS ${skip + 1} to ${top + skip} ) x   " +
+          "  ";
+    } else
+      qry = "select x.*, (select sum(qestfin) from ctprodsd s where s.codigo=x.codigo) estoque  from ("
+              "select codigo,nome,precoweb,unidade  " +
+          "from ctprod a " +
+          "where " +
+          "  ${(filter != null) ? filter + ' and ' : ''}" +
+          "  a.publicaweb='S' " +
+          "  and " +
+          "  ( " +
+          "  not exists  (select codigo from sigcaut1_hora b where a.codigo=b.codigo and b.data>='$d'  ) " +
+          "  ) rows ${skip + 1} to ${top + skip} ) x   " +
+          "  ";
     return API.openJson(qry).then((rsp) => rsp['result']);
   }
 
@@ -205,7 +230,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
     var qry = "select data, sum(total) total, count(*) itens " +
         "from sigcaut1_hora " +
         "          where data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
-        "group by 1 ";
+        "group by data ";
     return API.openJson(qry).then((rsp) {
       return rsp['result'];
     });
@@ -222,7 +247,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
     var qry = "select data, sum(total) total, count(*) itens " +
         "from sigcauth " +
         "          where vendedor eq '$vendedor' and data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
-        "group by 1 ";
+        "group by data ";
     return API.openJson(qry).then((rsp) {
       return rsp['result'];
     });

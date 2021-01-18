@@ -298,8 +298,8 @@ class PaginatedGrid extends StatefulWidget {
   static show(context,
       {Widget child,
       String title,
-      width,
-      height,
+      double width,
+      double height,
       Alignment alignment,
       bool fullPage = false,
       String label = ''}) async {

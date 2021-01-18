@@ -612,8 +612,16 @@ class _DataViewerState extends State<DataViewer> {
 class DataViewerGroup {
   final String title;
   final List<String> children;
-
-  DataViewerGroup({this.title, this.children});
+  final Widget leadding;
+  final Widget trailling;
+  final TextStyle titleStyle;
+  DataViewerGroup({
+    this.title,
+    this.children,
+    this.leadding,
+    this.trailling,
+    this.titleStyle,
+  });
 }
 
 class DataViewerEditGroupedPage extends StatefulWidget {
@@ -625,10 +633,12 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final PaginatedGridChangeEvent event;
   final double dataRowHeight;
   final Function(dynamic) onSaved;
+  final Function(dynamic) onClose;
   final bool showAppBar;
   final Widget appBar;
   final List<Widget> actions;
   final double elevation;
+  final Widget floatingActionButton;
 
   const DataViewerEditGroupedPage({
     Key key,
@@ -642,8 +652,10 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.canInsert = false,
     this.canDelete = false,
     this.showAppBar = true,
+    this.onClose,
     this.appBar,
     this.onSaved,
+    this.floatingActionButton,
     //this.onLog,
     this.actions,
     @required this.event,
@@ -722,7 +734,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                           ],
                         );
                       })),
-      resizeToAvoidBottomInset: false, //don't forget this!
+      resizeToAvoidBottomInset: false,
+      floatingActionButton: widget.floatingActionButton, //don't forget this!
       body: SingleChildScrollView(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -766,7 +779,12 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               color: theme.primaryColor.withAlpha(50),
               alignment: Alignment.centerLeft,
               height: kMinInteractiveDimension * 0.6,
-              child: Text(rows.title, style: theme.textTheme.caption)),
+              child: Row(children: [
+                if (rows.leadding != null) rows.leadding,
+                Text(rows.title,
+                    style: rows.titleStyle ?? theme.textTheme.caption),
+                if (rows.trailling != null) rows.trailling,
+              ])),
         Wrap(
           direction: Axis.horizontal,
           children: [
@@ -901,6 +919,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         if (widget.controller.onLog != null)
           widget.controller.onLog(oldData, p);
         Navigator.pop(context);
+        if (widget.onClose != null) widget.onClose(p);
       });
     }
   }

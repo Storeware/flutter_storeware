@@ -78,7 +78,7 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
               labelText: widget.label ?? 'Parceiro',
               controller: codigoController,
               initialValue: widget?.codigo?.toInt() ?? 0,
-              onChanged: (x) => widget.onChanged(x + 0.0),
+              onChanged: (x) => widget.onChanged((x ?? 0) + 0.0),
               validator: (v) {
                 if (((v ?? 0) > 0) && (nomeContato == '')) return 'Inválido';
                 return (widget.validator != null) ? widget.validator(v) : null;

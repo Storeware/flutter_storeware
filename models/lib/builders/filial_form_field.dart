@@ -61,7 +61,7 @@ class _CodigoProdutoFormFieldState extends State<FilialFormField> {
               controller: codigoController,
               //initialValue: widget.codigo,
               onChanged: (x) {
-                widget.onChanged(x + 0.0);
+                widget.onChanged((x ?? 0) + 0.0);
               },
               validator: (x) {
                 if (nome == '') return 'inválido';

@@ -180,38 +180,48 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
     return super.API.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  contasAPagar(
-      {double filial,
-      DateTime de,
-      DateTime ate,
-      String filtro,
-      String select}) {
+  contasAPagar({
+    double filial,
+    DateTime de,
+    DateTime ate,
+    String filtro,
+    String select,
+    String orderBy,
+  }) {
     final sDe = toDateSql(de ?? (DateTime.now().addMonths(-2)).startOfDay());
     final sAte = toDateSql(ate ?? (DateTime.now()).endOfDay());
+    final _order = (orderBy != null) ? ' order by $orderBy' : '';
+
     String f = filtro ?? '';
     if (filial != null)
       f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial  and ';
     final qry = '''
 select ${select ?? '*'} from sigflu a
-where $f  a.codigo ge '200' and a.data between '$sDe'  and '$sAte'
+where $f  a.codigo ge '200' and a.data between '$sDe'  and '$sAte' $_order
 ''';
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API.openJson(qry, cacheControl: 'no-cache').then((rsp) {
+      // print(rsp);
+      return rsp['result'];
+    });
   }
 
-  contasAReceber(
-      {double filial,
-      DateTime de,
-      DateTime ate,
-      String filtro,
-      String select}) {
+  contasAReceber({
+    double filial,
+    DateTime de,
+    DateTime ate,
+    String filtro,
+    String select,
+    String orderBy,
+  }) {
     final sDe = toDateSql(de ?? (DateTime.now().addMonths(-2)).startOfDay());
     final sAte = toDateSql(ate ?? (DateTime.now()).endOfDay());
+    final _order = (orderBy != null) ? ' order by $orderBy' : '';
     String f = filtro ?? '';
     if (filial != null)
       f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial  and ';
     final qry = '''
 select ${select ?? '*'} from sigflu a
-where $f  a.codigo lt '200' and a.data between '$sDe'  and '$sAte'
+where $f  a.codigo lt '200' and a.data between '$sDe'  and '$sAte' $_order
 ''';
     // print(qry);
     return API.openJson(qry).then((rsp) => rsp['result']);

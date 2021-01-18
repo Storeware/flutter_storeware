@@ -391,21 +391,21 @@ class _PaginatedGridState extends State<PaginatedGrid> {
     controller.createColumns(source);
   }
 
-  _sort(int idx, bool ascending) {
+  _sort(int columnIndex, int idxColumn, bool ascending) {
     setState(() {
-      _sortColumnIndex = idx;
+      _sortColumnIndex = columnIndex;
       _sortAscending = ascending;
       controller.source.sort((a, b) {
-        if (controller.columns[idx].numeric || a is double || a is int) {
-          return a[controller.columns[idx].name]
-                  .compareTo(b[controller.columns[idx].name]) *
+        if (controller.columns[idxColumn].numeric || a is double || a is int) {
+          return a[controller.columns[idxColumn].name]
+                  .compareTo(b[controller.columns[idxColumn].name]) *
               (ascending ? 1 : -1);
         }
-
-        return a[controller.columns[idx].name]
-                .toString()
-                .compareTo(b[controller.columns[idx].name].toString()) *
-            (ascending ? 1 : -1);
+        final va =
+            a[controller.columns[idxColumn].name].toString().toLowerCase();
+        final vb =
+            b[controller.columns[idxColumn].name].toString().toLowerCase();
+        return va.compareTo(vb) * (ascending ? 1 : -1);
       });
     });
   }
@@ -545,9 +545,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                     onSort: (widget.canSort)
                                         ? controller.columns[i].onSort ??
                                                 (controller.columns[i].sort)
-                                            ? (int columnIndex,
-                                                    bool ascending) =>
-                                                _sort(columnIndex, ascending)
+                                            ? (columnIndex, bool ascending) =>
+                                                _sort(columnIndex, i, ascending)
                                             : (a, b) => null
                                         : null,
                                     numeric: controller.columns[i].numeric,

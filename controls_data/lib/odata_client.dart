@@ -432,12 +432,16 @@ class ODataClient {
     }
   }
 
-  Future<Map> openJson(String command) async {
+  Future<Map> openJson(String command, {String cacheControl}) async {
     try {
       //    print(command);
       var url = client.formatUrl(path: 'open');
       return client
-          .openJson(url + '?\$command=' + command, method: 'GET')
+          .openJson(
+            url + '?\$command=' + command,
+            method: 'GET',
+            cacheControl: cacheControl,
+          )
           .then((x) => x);
     } catch (e) {
       ErrorNotify.send('$e');

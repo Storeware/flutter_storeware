@@ -58,9 +58,8 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
               autofocus: ('${widget.codigo ?? ''}').length == 0,
               labelText: 'Cx/Bc',
               controller: codigoController,
-              initialValue: widget.codigo,
+              initialValue: widget.codigo ?? '',
               onChanged: (x) {
-                print(x);
                 widget.onChanged(x);
               },
               validator: (x) {
@@ -91,7 +90,8 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
               valueListenable: notifier,
               builder: (ctx, row, wg) {
                 nomeBanco = '${notifier.value['nome'] ?? ''}';
-                widget.onChanged(row['codigo']);
+                if (row['codigo'] != null && widget.onChanged != null)
+                  widget.onChanged(row['codigo']);
 
                 return MaskedLabeled(
                   padding: EdgeInsets.only(left: 4, bottom: 2),

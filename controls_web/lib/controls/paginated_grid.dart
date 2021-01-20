@@ -222,6 +222,7 @@ class PaginatedGrid extends StatefulWidget {
 
   final double dataRowHeight;
   final double headingRowHeight;
+  final TextStyle headingTextStyle;
   final Color headingRowColor;
   final double horizontalMargin;
   final DragStartBehavior dragStartBehavior;
@@ -239,6 +240,7 @@ class PaginatedGrid extends StatefulWidget {
     this.controller,
     this.dataRowHeight = kMinInteractiveDimension * .80,
     this.headingRowHeight = kMinInteractiveDimension,
+    this.headingTextStyle,
     this.headingRowColor,
     this.horizontalMargin = 10,
     this.dragStartBehavior = DragStartBehavior.start,
@@ -479,7 +481,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             headerHeight: (widget.header == null)
                                 ? 0
                                 : widget.headerHeight,
-
+                            headingTextStyle: widget.headingTextStyle,
                             dataRowHeight: widget.dataRowHeight,
                             columnSpacing: 0, //widget.columnSpacing,
                             footerTrailing: widget.footerTrailing,
@@ -559,36 +561,51 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                               : controller.columns[i].align ??
                                                   Alignment.centerLeft,
                                       child: Container(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 2),
                                         width: controller.columns[i].width,
+                                        height: widget.headingRowHeight,
                                         child: Builder(builder: (ctx) {
                                           var labels = (controller
                                                       .columns[i].label ??
                                                   '${controller.columns[i].name}'
                                                       .toCapital())
                                               .split('|');
-                                          return Column(children: [
-                                            if (labels.length == 1) Spacer(),
-                                            for (var l in labels)
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                    child: Text(l,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: widget
-                                                                .columnStyle ??
-                                                            theme.textTheme
-                                                                .caption
-                                                                .copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontSize: 14,
-                                                            ))),
-                                              )
-                                          ]);
+                                          return Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                //if (labels.length == 1)
+                                                //  Spacer(),
+                                                for (var l in labels)
+                                                  //Expanded(
+                                                  //  flex: 1,
+                                                  // child:
+                                                  Container(
+                                                      child: Text(l,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: widget
+                                                                  .columnStyle ??
+                                                              widget
+                                                                  .headingTextStyle ??
+                                                              theme.textTheme
+                                                                  .caption
+                                                                  .copyWith(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontSize: 14,
+                                                              ))),
+                                                //),
+                                                //if (labels.length == 1)
+                                                //  Spacer(),
+                                              ]);
                                         }),
                                       ),
                                     ),

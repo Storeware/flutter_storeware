@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 //import 'flutter_masked_text.dart';
 import 'package:intl/intl.dart';
 import 'package:controls_web/controls/currency.dart';
+import 'package:controls_extensions/extensions.dart';
 
 bool _showHelperText = true;
 
@@ -338,6 +339,7 @@ class MaskedDatePicker extends StatefulWidget {
   final MaskedDatePickerType type;
   final TextEditingController controller;
   final bool readOnly;
+  final int dayFly;
   MaskedDatePicker(
       {Key key,
       this.labelText,
@@ -349,6 +351,7 @@ class MaskedDatePicker extends StatefulWidget {
       this.type = MaskedDatePickerType.day,
       this.onChanged,
       this.firstDate,
+      this.dayFly = 365,
       this.lastDate,
       this.readOnly = false,
       this.onSaved})
@@ -362,12 +365,25 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
   var changed = StreamController<DateTime>.broadcast();
   DateFormat formatter;
   TextEditingController _dataController;
+  DateTime _lastDate;
+  DateTime _firstDate;
   @override
   void initState() {
+    _lastDate =
+        widget.lastDate ?? DateTime.now().add(Duration(days: widget.dayFly));
+    _firstDate =
+        widget.firstDate ?? DateTime.now().add(Duration(days: -widget.dayFly));
+
     _dataController = widget.controller ?? TextEditingController();
     formatter = DateFormat(widget.format);
-    if (widget.initialValue != null)
+    if (widget.initialValue != null) {
       _dataController.text = formatter.format(widget.initialValue);
+      if (_lastDate != null && (_lastDate.lessThen(widget.initialValue)))
+        _lastDate = widget.initialValue;
+      if (widget.initialValue.lessThen(_firstDate))
+        _firstDate = widget.initialValue;
+    }
+
     super.initState();
   }
 
@@ -403,10 +419,8 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
               DateTime d = formatter.parse(x);
               //DateTime b = formatter.parse(x);
               // debugPrint('init Validate $x $d');
-              if (widget.firstDate != null) if (widget.firstDate.isAfter(d))
-                d = widget.firstDate;
-              if (widget.lastDate != null) if (widget.lastDate.isBefore(d))
-                d = widget.lastDate;
+              if (_firstDate != null) if (_firstDate.isAfter(d)) d = _firstDate;
+              if (_lastDate != null) if (_lastDate.isBefore(d)) d = _lastDate;
 
               if (widget.validator != null) return widget.validator(d);
               //debugPrint('fim Validate $x $b $d');
@@ -415,8 +429,10 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             },
             onTap: () {
               if (widget.readOnly) return;
+              DateTime d = formatter.parse(_dataController.text);
+
               if (widget.type == MaskedDatePickerType.day)
-                getDate(context).then((x) {
+                getDate(context, d).then((x) {
                   _dataController.text = formatter.format(x);
 
                   if (widget.onChanged != null) widget.onChanged(x);
@@ -432,7 +448,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
                 });
          */
               if (widget.type == MaskedDatePickerType.dayAndTime)
-                getDate(context).then((x) {
+                getDate(context, d).then((x) {
                   var d1 = x;
                   /*             getTime(context).then((h) {
                     var d = DateTime(d1.year, d1.month, d1.day)
@@ -454,14 +470,14 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             }));
   }
 
-  Future<DateTime> getDate(BuildContext context) {
+  Future<DateTime> getDate(BuildContext context, DateTime data) {
     // Imagine that this function is
     // more complex and slow.
     return showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: widget.firstDate ?? DateTime.now().add(Duration(days: -180)),
-      lastDate: widget.lastDate ?? DateTime(DateTime.now().year + 10),
+      initialDate: data,
+      firstDate: _firstDate,
+      lastDate: _lastDate,
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.light(),
@@ -764,10 +780,12 @@ class MaskedMoneyFormField extends StatelessWidget {
   final dynamic Function(double) validator;
   final Function(double) onFocusChanged;
   final bool readOnly;
+  final Function(double) onChanged;
   const MaskedMoneyFormField({
     Key key,
     this.label,
     this.initialValue,
+    this.onChanged,
     this.onSaved,
     this.leftSymbol = '',
     this.precision,
@@ -833,6 +851,9 @@ class MaskedMoneyFormField extends StatelessWidget {
                       return null;
                     },
                     maxLength: maxLength,
+                    onChanged: (x) {
+                      if (onChanged != null) onChanged(_controller.numberValue);
+                    },
                     onSaved: (x) {
                       if (onSaved != null) onSaved(_controller.numberValue);
                     })),

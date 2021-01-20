@@ -8,6 +8,34 @@ import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter/src/material/constants.dart';
 
+class DefaultDataViewerTheme {
+  static final _singleton = DefaultDataViewerTheme._create();
+  DefaultDataViewerTheme._create();
+  factory DefaultDataViewerTheme() => _singleton;
+
+  Color headingRowColor;
+  double headingRowHeight = kMinInteractiveDimension;
+  double dataRowHeight = kMinInteractiveDimension * 0.8;
+  TextStyle headingTextStyle;
+  Color oddRowColor;
+  Color evenRowColor;
+
+  /// executar init() antes de comecar a usar o DataViewer
+  static DefaultDataViewerTheme of(BuildContext context) {
+    DefaultDataViewerTheme();
+    _singleton._theme = Theme.of(context);
+    _singleton.headingRowColor ??=
+        _singleton.theme.textTheme.bodyText1.backgroundColor;
+    _singleton.evenRowColor ??= _singleton._theme.primaryColor.withAlpha(10);
+    _singleton.oddRowColor ??= _singleton._theme.primaryColor.withAlpha(3);
+    return _singleton;
+  }
+
+  ThemeData _theme;
+
+  get theme => _singleton._theme;
+}
+
 /// [DefaultDataViewer] widget para propagar dependencia pela arvore
 class DefaultDataViewer extends InheritedWidget {
   final DataViewerController controller;
@@ -18,8 +46,9 @@ class DefaultDataViewer extends InheritedWidget {
     return false;
   }
 
-  static of(BuildContext context) =>
-      context.dependOnInheritedWidgetOfExactType<DefaultDataViewer>();
+  static of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<DefaultDataViewer>();
+  }
 }
 
 /// [DataViewerController] Controller de dados para [DataViewer]
@@ -221,6 +250,10 @@ class DataViewerController {
     return paginatedController.edit(context, data,
         title: title, width: width, height: height, event: event);
   }
+
+  remove(dados) {
+    return paginatedController.remove(dados);
+  }
 }
 
 /// [DataViewerColumn] cria as propriedade da coluna no grid
@@ -374,13 +407,13 @@ class DataViewer extends StatefulWidget {
     this.rowsPerPage,
     this.placeHolder,
     this.headerHeight = kToolbarHeight + 8,
-    this.headingRowHeight = kMinInteractiveDimension,
+    this.headingRowHeight,
     this.showPageNavigatorButtons = true,
     this.header,
     this.canSort = true,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
-    this.dataRowHeight = kMinInteractiveDimension * 0.8,
+    this.dataRowHeight,
     this.beforeShow,
     this.columns,
     this.columnStyle,
@@ -509,14 +542,18 @@ class _DataViewerState extends State<DataViewer> {
 
   @override
   Widget build(BuildContext context) {
+    var vt = DefaultDataViewerTheme.of(context);
     theme = Theme.of(context);
+    var _headingRowHeight = widget.headingRowHeight ?? vt.headingRowHeight;
+    var _dataRowHeight = widget.dataRowHeight ?? vt.dataRowHeight;
+    //theme = Theme.of(context);
     size = MediaQuery.of(context).size;
     int _top = (widget.height ??
             ((size.height * 0.90) - kToolbarHeight - 20) -
                 (widget.headerHeight) -
-                widget.headingRowHeight -
+                _headingRowHeight -
                 (widget.footerHeight * 2)) ~/
-        widget.dataRowHeight;
+        _dataRowHeight;
     if (_top <= 3) _top = 3;
     if (controller.top == null) controller.top = _top;
     return StreamBuilder<dynamic>(
@@ -532,9 +569,10 @@ class _DataViewerState extends State<DataViewer> {
                     placeHolder: widget.placeHolder,
                     elevation: widget.elevation,
                     canSort: widget.canSort,
-                    evenRowColor: widget.evenRowColor,
-                    oddRowColor: widget.oddRowColor,
-                    //sortColumnIndex: widget.sortColumnIndex,
+                    evenRowColor: widget.evenRowColor ?? vt.evenRowColor,
+                    oddRowColor: widget.oddRowColor ?? vt.oddRowColor,
+                    headingRowColor: vt.headingRowColor,
+                    headingTextStyle: vt.headingTextStyle,
                     actions: widget.actions,
                     onSelectChanged: (widget.onSelected != null)
                         ? (b, ctrl) {
@@ -556,8 +594,9 @@ class _DataViewerState extends State<DataViewer> {
                         : (widget.canSearch)
                             ? createHeader()
                             : null,
-                    headingRowHeight: widget.headingRowHeight,
-                    dataRowHeight: widget.dataRowHeight,
+                    headingRowHeight: _headingRowHeight,
+                    dataRowHeight: _dataRowHeight,
+
                     controller: controller.paginatedController,
                     beforeShow: (p) {
                       if (widget.beforeShow != null)

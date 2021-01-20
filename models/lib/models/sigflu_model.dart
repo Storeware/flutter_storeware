@@ -264,7 +264,7 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
     '${dadosPgto.banco}',${dadosPgto.valor},'${toDate(DateTime.now())}','${dadosPgto.dcto}',
     '${dadosPgto.historico}','${dadosPgto.dctook}',
     ${dadosPgto.valorPago},
-    ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros} )''';
+    ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros},'${dadosPgto.usuario}' )''';
     print(qry);
     return API.execute(qry).then((r) {
       print(r);
@@ -278,7 +278,7 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
     '${dadosPgto.banco}',${dadosPgto.valor},'${toDate(DateTime.now())}','${dadosPgto.dcto}',
     '${dadosPgto.historico}','${dadosPgto.dctook}',
     ${dadosPgto.valorPago},
-    ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros} )''';
+    ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros},'${dadosPgto.usuario}' )''';
     print(qry);
     return API.execute(qry).then((r) {
       print(r);
@@ -294,6 +294,7 @@ class PagamentoContasItem extends SigfluItem {
   double valorDesp;
   double valorDesc;
   double valorOutros;
+  double usuario;
   PagamentoContasItem.fromJson(json) {
     fromMap(json);
     valorPago = toDouble(json['valorPago']);
@@ -301,5 +302,6 @@ class PagamentoContasItem extends SigfluItem {
     valorDesp = toDouble(json['valorDesp']);
     valorDesc = toDouble(json['valorDesc']);
     valorOutros = toDouble(json['valorOutros']);
+    usuario = json('usuario');
   }
 }

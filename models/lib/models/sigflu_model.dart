@@ -294,7 +294,7 @@ class PagamentoContasItem extends SigfluItem {
   double valorDesp;
   double valorDesc;
   double valorOutros;
-  double usuario;
+  String usuario;
   PagamentoContasItem.fromJson(json) {
     fromMap(json);
     valorPago = toDouble(json['valorPago']);
@@ -302,6 +302,6 @@ class PagamentoContasItem extends SigfluItem {
     valorDesp = toDouble(json['valorDesp']);
     valorDesc = toDouble(json['valorDesc']);
     valorOutros = toDouble(json['valorOutros']);
-    usuario = json('usuario');
+    usuario = json['usuario'];
   }
 }

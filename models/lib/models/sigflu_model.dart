@@ -177,7 +177,10 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
         where $filtro
         group by $sFilial data ''';
     //print(qry);
-    return super.API.openJson(qry).then((rsp) => rsp['result']);
+    return super
+        .API
+        .openJson(qry, cacheControl: 'no-cache')
+        .then((rsp) => rsp['result']);
   }
 
   contasAPagar({
@@ -193,12 +196,15 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
     final _order = (orderBy != null) ? ' order by $orderBy' : '';
 
     String f = filtro ?? '';
-    if (filial != null)
-      f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial  and ';
+    if (filial != null) f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial ';
+
+    if (f != '') f += ' and ';
+
     final qry = '''
 select ${select ?? '*'} from sigflu a
-where $f  a.codigo ge '200' and a.data between '$sDe'  and '$sAte' $_order
+where $f  (a.codigo ge '200' and a.data between '$sDe'  and '$sAte') $_order
 ''';
+    print(qry);
     return API.openJson(qry, cacheControl: 'no-cache').then((rsp) {
       // print(rsp);
       return rsp['result'];
@@ -217,11 +223,12 @@ where $f  a.codigo ge '200' and a.data between '$sDe'  and '$sAte' $_order
     final sAte = toDateSql(ate ?? (DateTime.now()).endOfDay());
     final _order = (orderBy != null) ? ' order by $orderBy' : '';
     String f = filtro ?? '';
-    if (filial != null)
-      f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial  and ';
+    if (filial != null) f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial ';
+    if (f != '') f += ' and ';
+
     final qry = '''
 select ${select ?? '*'} from sigflu a
-where $f  a.codigo lt '200' and a.data between '$sDe'  and '$sAte' $_order
+where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe'  and '$sAte') $_order
 ''';
     // print(qry);
     return API.openJson(qry).then((rsp) => rsp['result']);
@@ -249,5 +256,50 @@ where $f  a.codigo lt '200' and a.data between '$sDe'  and '$sAte' $_order
       var sql = SqlBuilder.createSqlUpdate('sigflu', 'id', value);
       return this.API.execute(sql).then((rsp) => json.decode(rsp));
     }
+  }
+
+  liquidarPagamento(PagamentoContasItem dadosPgto) async {
+    String qry = '''select * from PROC_PAGAMENTO_CONTA (
+    ${dadosPgto.filial},'${dadosPgto.data}',${dadosPgto.ctrlId},${dadosPgto.clifor},
+    '${dadosPgto.banco}',${dadosPgto.valor},'${toDate(DateTime.now())}','${dadosPgto.dcto}',
+    '${dadosPgto.historico}','${dadosPgto.dctook}',
+    ${dadosPgto.valorPago},
+    ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros} )''';
+    print(qry);
+    return API.execute(qry).then((r) {
+      print(r);
+      return json.decode(r);
+    });
+  }
+
+  liquidarRecebimento(PagamentoContasItem dadosPgto) async {
+    String qry = '''select * from PROC_RECEBIMENTO_CONTA (
+    ${dadosPgto.filial},'${dadosPgto.data}',${dadosPgto.ctrlId},${dadosPgto.clifor},
+    '${dadosPgto.banco}',${dadosPgto.valor},'${toDate(DateTime.now())}','${dadosPgto.dcto}',
+    '${dadosPgto.historico}','${dadosPgto.dctook}',
+    ${dadosPgto.valorPago},
+    ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros} )''';
+    print(qry);
+    return API.execute(qry).then((r) {
+      print(r);
+      return json.decode(r);
+    });
+  }
+}
+
+class PagamentoContasItem extends SigfluItem {
+  //String banco;
+  double valorPago;
+  double valorJuros;
+  double valorDesp;
+  double valorDesc;
+  double valorOutros;
+  PagamentoContasItem.fromJson(json) {
+    fromMap(json);
+    valorPago = toDouble(json['valorPago']);
+    valorJuros = toDouble(json['valorJuros']);
+    valorDesp = toDouble(json['valorDesp']);
+    valorDesc = toDouble(json['valorDesc']);
+    valorOutros = toDouble(json['valorOutros']);
   }
 }

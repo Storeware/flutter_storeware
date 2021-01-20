@@ -23,11 +23,24 @@ class DefaultDataViewerTheme {
   /// executar init() antes de comecar a usar o DataViewer
   static DefaultDataViewerTheme of(BuildContext context) {
     DefaultDataViewerTheme();
-    _singleton._theme = Theme.of(context);
-    _singleton.headingRowColor ??=
-        _singleton.theme.textTheme.bodyText1.backgroundColor;
-    _singleton.evenRowColor ??= _singleton._theme.primaryColor.withAlpha(10);
-    _singleton.oddRowColor ??= _singleton._theme.primaryColor.withAlpha(3);
+    var theme = Theme.of(context);
+    _singleton._theme = theme;
+    _singleton.headingRowColor ??= (theme.brightness == Brightness.light)
+        ? _singleton._theme.indicatorColor
+        : Colors.black26;
+    _singleton.evenRowColor ??=
+        theme.primaryTextTheme.bodyText1.backgroundColor;
+    _singleton.oddRowColor ??= theme.primaryTextTheme.bodyText2.backgroundColor;
+    _singleton.headingTextStyle ??=
+        (_singleton._theme.brightness == Brightness.light)
+            ? TextStyle(
+                fontSize: 16,
+                color: Colors.black87,
+                fontWeight: FontWeight.bold)
+            : TextStyle(
+                fontSize: 16,
+                color: Colors.white70,
+                fontWeight: FontWeight.bold);
     return _singleton;
   }
 

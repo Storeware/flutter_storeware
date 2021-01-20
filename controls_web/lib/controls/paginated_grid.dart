@@ -104,6 +104,7 @@ class PaginatedGridColumn {
   bool placeHolder;
   bool folded;
   Color color;
+  int order;
   PaginatedGridColumn({
     this.defaultValue,
     this.onEditIconPressed,
@@ -122,6 +123,7 @@ class PaginatedGridColumn {
     this.align,
     this.style,
     this.name,
+    this.order = 0,
     this.required = false,
     this.readOnly = false,
     this.isPrimaryKey = false,

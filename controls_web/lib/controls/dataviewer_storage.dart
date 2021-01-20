@@ -22,9 +22,9 @@ class DataViewerStorage extends StatelessWidget {
       double height = 550,
       Function onSaved}) {
     Size size = MediaQuery.of(context).size;
-    return IconButton(
-      icon: Icon(Icons.reorder),
-      onPressed: () {
+    return InkButton(
+      child: Icon(Icons.reorder),
+      onTap: () {
         Dialogs.showPage(context,
             width: size.width < width ? size.width : width,
             height: size.height < height ? size.height : height,
@@ -49,11 +49,10 @@ class DataViewerStorage extends StatelessWidget {
             })
       ]),
       body: ListView(children: [
-        for (var item in columns)
-          ListTile(
-            title: Text(item.label ?? item.name),
-            subtitle: createItems(context, item),
-          ),
+        ListTile(
+          title: Text('Colunas Visíveis'),
+          subtitle: createItems(context),
+        ),
       ]),
     );
   }
@@ -63,15 +62,19 @@ class DataViewerStorage extends StatelessWidget {
     if (onSaved != null) onSaved();
   }
 
-  createItems(BuildContext context, item) {
+  createItems(BuildContext context) {
     return Wrap(children: [
-      ...createItem(context, item),
+      for (var item in columns) ...createItem(context, item),
     ]);
   }
 
   List<Widget> createItem(context, DataViewerColumn item) {
     return [
-      MaskedCheckbox(label: 'Visível', value: item.visible),
+      MaskedCheckbox(
+        label: item.label ?? item.name,
+        value: item.visible,
+        onChanged: (b) => item.visible = b,
+      ),
     ];
   }
 
@@ -88,7 +91,7 @@ class DataViewerStorage extends StatelessWidget {
   }
 
   static save(String keyStorage, List<DataViewerColumn> columns) {
-    var j = {};
+    Map<String, dynamic> j = {};
     for (var item in columns) j['${item.name}.visible'] = item.visible;
     LocalStorage().setJson(keyStorage, j);
     return columns;

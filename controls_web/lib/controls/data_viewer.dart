@@ -9,6 +9,7 @@ import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_data/data.dart';
+import 'ink_button.dart';
 
 part "dataviewer_storage.dart";
 
@@ -295,6 +296,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     String tooltip,
     Alignment align,
     TextStyle style,
+    int order,
 
     /// nome da coluna utilizado para localizar na lista de dados
     String name,
@@ -345,6 +347,7 @@ class DataViewerColumn extends PaginatedGridColumn {
           align: align,
           style: style,
           name: name,
+          order: order,
           onFocusChanged: onFocusChanged,
           required: required,
           readOnly: readOnly,

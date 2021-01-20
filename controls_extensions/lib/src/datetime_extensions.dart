@@ -26,6 +26,33 @@ extension DateTimeExtension on DateTime {
     return add(Duration(days: value));
   }
 
+  bool lessThen(DateTime d) {
+    var a = this;
+    return a.compareTo(d) < 0;
+  }
+
+  bool lessOrEqual(DateTime d) {
+    var a = this;
+    return a.compareTo(d) <= 0;
+  }
+
+  bool greatThen(DateTime d) {
+    var a = this;
+    return a.compareTo(d) > 0;
+  }
+
+  bool greatOrEqual(DateTime d) {
+    var a = this;
+    return a.compareTo(d) >= 0;
+  }
+
+  bool equal(DateTime d) {
+    var a = this;
+    return a.compareTo(d) == 0;
+  }
+
+  bool notEqual(DateTime d) => !equal(d);
+
   DateTime addHours(int value) => add(Duration(hours: value));
   DateTime addMinutes(int value) => add(Duration(minutes: value));
   DateTime addMonths(int value) =>

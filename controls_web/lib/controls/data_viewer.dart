@@ -1,3 +1,4 @@
+library data_viewer;
 //import 'dart:convert';
 
 import 'package:controls_data/odata_client.dart';
@@ -6,7 +7,15 @@ import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/src/material/constants.dart';
+import 'package:controls_web/controls/masked_field.dart';
+import 'package:controls_data/data.dart';
+
+part "dataviewer_storage.dart";
+
+class TValue<T> {
+  T value;
+  TValue(this.value);
+}
 
 class DefaultDataViewerTheme {
   static final _singleton = DefaultDataViewerTheme._create();
@@ -369,6 +378,7 @@ class DataViewer extends StatefulWidget {
   final double elevation;
   final bool canSort;
   final TextStyle columnStyle;
+  final String keyStorage;
 
   /// se permite editar um dado - default: true;
   final bool canEdit;
@@ -434,6 +444,7 @@ class DataViewer extends StatefulWidget {
     this.canDelete = false,
     this.canInsert = false,
     this.canSearch = true,
+    this.keyStorage,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     //this.backgroundColor,
     this.title,
@@ -469,6 +480,8 @@ class _DataViewerState extends State<DataViewer> {
     if (widget.keyName != null) controller.keyName = widget.keyName;
     controller.columns ??= widget.columns;
     controller.paginatedController.beforeChange = controller.beforeChange;
+    if (widget.keyStorage != null)
+      DataViewerStorage.load(widget.keyStorage, controller.columns);
     super.initState();
   }
 

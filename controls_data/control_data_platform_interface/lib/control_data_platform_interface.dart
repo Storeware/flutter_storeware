@@ -26,7 +26,7 @@ abstract class LocalStorageInterface {
 
   Map<String, dynamic> getJson(key) {
     String v = getKey(key);
-    if (v == null) return null;
+    if (v == null || v.isEmpty) return null;
     return jsonDecode(v);
   }
 

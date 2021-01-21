@@ -379,6 +379,7 @@ class DataViewer extends StatefulWidget {
   final double height;
   final double width;
   final double elevation;
+  final double dividerThickness;
   final bool canSort;
   final TextStyle columnStyle;
   final String keyStorage;
@@ -429,6 +430,7 @@ class DataViewer extends StatefulWidget {
     this.source,
     this.evenRowColor,
     this.elevation = 0,
+    this.dividerThickness = 1,
     this.oddRowColor,
     this.rowsPerPage,
     this.placeHolder,
@@ -614,6 +616,7 @@ class _DataViewerState extends State<DataViewer> {
                     onInsertItem: widget.onInsertItem,
                     onDeleteItem: widget.onDeleteItem,
                     crossAxisAlignment: widget.crossAxisAlignment,
+                    dividerThickness: widget.dividerThickness,
                     //backgroundColor: widget.backgroundColor,
                     headerHeight: (widget.canSearch || widget.header != null)
                         ? widget.headerHeight

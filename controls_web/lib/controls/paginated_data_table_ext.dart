@@ -59,13 +59,13 @@ class PaginatedDataTableExtended extends StatefulWidget {
     this.sortColumnIndex,
     this.sortAscending = true,
     this.elevation = 1,
+    this.dividerThickness = 1,
     this.onSelectAll,
     this.color,
     this.dataRowHeight = kMinInteractiveDimension,
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.alignment = Alignment.topLeft,
     this.headingRowHeight = kMinInteractiveDimension,
-    this.headingTextStyle,
     this.headingRowColor,
     this.headerHeight = 64,
     this.dataTextStyle,
@@ -130,6 +130,7 @@ class PaginatedDataTableExtended extends StatefulWidget {
 
   /// The configuration and labels for the columns in the table.
   final List<DataColumn> columns;
+  final double dividerThickness;
 
   /// The current primary sort key's column.
   ///
@@ -173,7 +174,6 @@ class PaginatedDataTableExtended extends StatefulWidget {
   final Alignment alignment;
   final Color color;
   final Color headingRowColor;
-  final TextStyle headingTextStyle;
   final TextStyle dataTextStyle;
 
   /// The horizontal margin between the contents of each data column.
@@ -512,9 +512,9 @@ class PaginatedDataTableExtendedState
                           ),
                           child: DataTable(
                             key: _tableKey,
-                            dividerThickness: 1,
+                            dividerThickness: wdget.dividerThickness,
                             columns: widget.columns,
-                            //dataTextStyle: widget.dataTextStyle,
+                            /*dataTextStyle: widget.dataTextStyle,
                             //decoration: BoxDecoration(
                             //    color: widget.color ?? Colors.transparent),
                             headingRowColor:
@@ -523,8 +523,7 @@ class PaginatedDataTableExtendedState
                               return widget.headingRowColor ??
                                   Colors.transparent;
                             }),
-                            headingTextStyle: widget.headingTextStyle,
-
+                            */
                             sortColumnIndex: widget.sortColumnIndex,
                             sortAscending: widget.sortAscending,
                             onSelectAll: widget.onSelectAll,

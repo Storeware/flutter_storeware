@@ -512,7 +512,7 @@ class PaginatedDataTableExtendedState
                           ),
                           child: DataTable(
                             key: _tableKey,
-                            dividerThickness: wdget.dividerThickness,
+                            dividerThickness: widget.dividerThickness,
                             columns: widget.columns,
                             /*dataTextStyle: widget.dataTextStyle,
                             //decoration: BoxDecoration(

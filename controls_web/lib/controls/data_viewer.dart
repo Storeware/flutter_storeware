@@ -403,6 +403,7 @@ class DataViewer extends StatefulWidget {
   final Future<dynamic> Function(PaginatedGridController) onDeleteItem;
   final List<Widget> actions;
   final Widget leading;
+  final Widget trailling;
 
   /// pressionou o botam abrir da barra de filtro
   final Function() onSearchPressed;
@@ -460,6 +461,7 @@ class DataViewer extends StatefulWidget {
     this.onDeleteItem,
     this.actions,
     this.leading,
+    this.trailling,
     this.height,
     this.width,
     this.onSaved,
@@ -507,62 +509,60 @@ class _DataViewerState extends State<DataViewer> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.title != null) widget.title,
-          Container(
-              //height: kToolbarHeight + 4,
-              //width: sizes.maxWidth,
-              alignment: Alignment.center,
-              child: Align(
-                child: Container(
-                  width: bwidth,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                          height: kToolbarHeight + 4,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (widget.leading != null) widget.leading,
-                              Expanded(child: Container()),
-                              Expanded(
-                                flex: 1,
-                                child: TextFormField(
-                                  controller: _filtroController,
-                                  style: theme.textTheme.bodyText1,
-                                  decoration: InputDecoration(
-                                    labelText: 'procurar por',
-                                  ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      height: kToolbarHeight + 4,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (widget.leading != null) widget.leading,
+                          //Expanded(child: Container()),
+                          Spacer(),
+                          Container(
+                              constraints: BoxConstraints(
+                                maxWidth: 250,
+                              ),
+                              child: TextFormField(
+                                controller: _filtroController,
+                                style: theme.textTheme.bodyText1,
+                                decoration: InputDecoration(
+                                  labelText: 'procurar por',
+                                  suffixIcon: InkWell(
+                                      child: Icon(Icons.clear),
+                                      onTap: () {
+                                        _filtroController.text = '';
+                                      }),
                                 ),
-                              ),
-                              InkWell(
-                                  child: Icon(Icons.clear),
-                                  onTap: () {
-                                    _filtroController.text = '';
-                                  }),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5), // ios usa 5
-                                width: 90,
-                                child: StrapButton(
-                                    text: 'filtrar',
-                                    height: 30,
-                                    onPressed: () {
-                                      controller.page = 1;
-                                      controller.filter =
-                                          _filtroController.text;
-                                      if (controller.onClearCache != null)
-                                        controller.onClearCache();
-                                      if (widget.onSearchPressed != null)
-                                        widget.onSearchPressed();
-                                      controller.goPage(1);
-                                    }),
-                              ),
-                            ],
-                          )),
-                    ],
-                  ),
-                ),
-              )),
+                              )),
+                          Container(
+                            padding:
+                                EdgeInsets.symmetric(vertical: 5), // ios usa 5
+                            width: 90,
+                            child: StrapButton(
+                                text: 'filtrar',
+                                height: 30,
+                                onPressed: () {
+                                  controller.page = 1;
+                                  controller.filter = _filtroController.text;
+                                  if (controller.onClearCache != null)
+                                    controller.onClearCache();
+                                  if (widget.onSearchPressed != null)
+                                    widget.onSearchPressed();
+                                  controller.goPage(1);
+                                }),
+                          ),
+                          if (widget.trailling != null) widget.trailling,
+                        ],
+                      )),
+                ],
+              ),
+            ),
+          ),
           if (widget.subtitle != null) widget.subtitle,
         ],
       ),

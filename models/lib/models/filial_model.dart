@@ -238,7 +238,9 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
 
   Future<Map<String, dynamic>> buscarByCodigo(codigo, {String select}) async {
     return listCached(
-            filter: "codigo eq '$codigo'", select: select ?? 'codigo, nome')
-        .then((rsp) => rsp[0]);
+            filter: "codigo eq $codigo ", select: select ?? 'codigo, nome')
+        .then((rsp) {
+      return (rsp.isEmpty) ? {} : rsp[0];
+    });
   }
 }

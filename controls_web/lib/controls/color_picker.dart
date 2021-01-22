@@ -5,7 +5,9 @@ import 'package:controls_web/controls/colores.dart';
 class ColorPickerField extends StatelessWidget {
   final Color color;
   final Function(Color) onChanged;
-  const ColorPickerField({Key key, this.color, this.onChanged})
+  final bool extended;
+  const ColorPickerField(
+      {Key key, this.extended = true, this.color, this.onChanged})
       : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class ColorPickerField extends StatelessWidget {
                     width: size.width,
                     height: size.height,
                     child: ColorPickerDialog(
+                      extended: extended,
                       color: _color,
                       onChanged: (c) {
                         onChanged(c);
@@ -48,8 +51,16 @@ class ColorPickerField extends StatelessWidget {
 class ColorPickerDialog extends StatelessWidget {
   final List<Color> colors;
   final Color color;
+  final String title;
   final Function(Color) onChanged;
-  const ColorPickerDialog({Key key, this.colors, this.color, this.onChanged})
+  final bool extended;
+  const ColorPickerDialog(
+      {Key key,
+      this.colors,
+      this.title,
+      this.color,
+      this.extended = true,
+      this.onChanged})
       : super(key: key);
 
   @override
@@ -57,10 +68,10 @@ class ColorPickerDialog extends StatelessWidget {
     List<Color> _colors = colors ?? [];
     if (_colors.length == 0) {
       _colors.addAll(primariesColors);
-      _colors.addAll(pastelColors);
+      if (extended) _colors.addAll(pastelColors);
     }
     return Scaffold(
-      appBar: AppBar(title: Text('Selecionar uma cor')),
+      appBar: AppBar(title: Text(title ?? 'Selecionar uma cor')),
       body: LayoutBuilder(
         builder: (ctx, constraints) {
           int x = constraints.maxWidth ~/ 60;

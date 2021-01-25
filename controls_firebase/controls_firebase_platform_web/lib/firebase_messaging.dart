@@ -45,7 +45,7 @@ class FBMessaging extends FBMessagingInterface {
       var title = notification.title;
       var body = notification.body;
       var data = message.data;
-      _controller.add({
+      _controller.sink.add({
         "notification": {"title": title, "body": body},
         "show": true
         //"data": TODO: data - web retorna objeto nao compativel

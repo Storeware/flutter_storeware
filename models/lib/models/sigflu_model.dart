@@ -118,7 +118,7 @@ class SigfluItem extends DataItem {
     //data['vcto_'] = this.vcto;
     data['emissao'] = toDate(this.emissao);
     data['valor'] = this.valor;
-    data['banco'] = this.banco;
+    data['banco'] = this.banco ?? '';
     data['historico'] = this.historico;
     data['dcto'] = this.dcto;
     data['codigo'] = this.codigo;

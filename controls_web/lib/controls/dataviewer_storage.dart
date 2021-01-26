@@ -7,17 +7,17 @@
 
 part of data_viewer;
 
-class DataViewerStorage extends StatelessWidget {
-  final List<DataViewerColumn> columns;
+class DataViewerStorage<T> extends StatelessWidget {
+  final List<T> columns;
   final String keyStorage;
   final Function() onSaved;
   const DataViewerStorage(
       {Key key, this.columns, this.keyStorage, this.onSaved})
       : super(key: key);
 
-  static Widget button(BuildContext context,
+  static Widget button<T>(BuildContext context,
       {String keyStorage,
-      List<DataViewerColumn> columns,
+      List columns,
       double width = 350,
       double height = 550,
       Function onSaved}) {
@@ -28,7 +28,7 @@ class DataViewerStorage extends StatelessWidget {
         Dialogs.showPage(context,
             width: size.width < width ? size.width : width,
             height: size.height < height ? size.height : height,
-            child: DataViewerStorage(
+            child: DataViewerStorage<T>(
               keyStorage: keyStorage,
               columns: columns,
               onSaved: onSaved,
@@ -68,7 +68,7 @@ class DataViewerStorage extends StatelessWidget {
     ]);
   }
 
-  List<Widget> createItem(context, DataViewerColumn item) {
+  List<Widget> createItem(context, item) {
     return [
       MaskedCheckbox(
         label: item.label ?? item.name,
@@ -78,19 +78,18 @@ class DataViewerStorage extends StatelessWidget {
     ];
   }
 
-  static load(String keyStorage, List<DataViewerColumn> columns) {
+  static load(String keyStorage, List columns) {
     var j = LocalStorage().getJson(keyStorage) ?? {};
     for (var key in j.keys) {
       var p = key.split('.');
-      Iterable<DataViewerColumn> column =
-          columns.where((element) => p[0] == element.name);
+      Iterable column = columns.where((element) => p[0] == element.name);
       if (column != null) column.first.visible = j[key];
     }
 
     return columns;
   }
 
-  static save(String keyStorage, List<DataViewerColumn> columns) {
+  static save(String keyStorage, List columns) {
     Map<String, dynamic> j = {};
     for (var item in columns) j['${item.name}.visible'] = item.visible;
     LocalStorage().setJson(keyStorage, j);

@@ -171,8 +171,8 @@ class SigcxItem extends DataItem {
     data['vendedor'] = this.vendedor;
     data['dtcontabil'] = this.dtcontabil;
     //data['insercao'] = this.insercao;
-    //data['dctook'] = this.dctook;
-    //data['compensado'] = this.compensado;
+    data['dctook'] = this.dctook;
+    data['compensado'] = this.compensado;
     data['control_ext'] = this.controlExt;
     data['celula_control'] = this.celulaControl;
     data['ordem'] = this.ordem;

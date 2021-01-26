@@ -89,6 +89,14 @@ class ProdutoItem extends DataItem {
   }
 }
 
+class CtprodItem extends ProdutoItem {
+  static fromJson(json) {
+    return ProdutoItem.fromJson(json);
+  }
+}
+
+class CtprodItemModel extends ProdutoModel {}
+
 class ProdutoModel extends ODataModelClass<ProdutoItem> {
   static final _singleton = ProdutoModel._create();
   ProdutoModel._create() {

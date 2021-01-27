@@ -101,4 +101,9 @@ class CategoriaModel extends ODataModelClass<CategoriaItem> {
   clearCached() {
     Cached.clearLike('categoria_');
   }
+
+  buscarByCodigo(codigo) {
+    return listCached(filter: "codigo eq $codigo", select: 'codigo, nome')
+        .then((rsp) => rsp[0]);
+  }
 }

@@ -340,6 +340,7 @@ class MaskedDatePicker extends StatefulWidget {
   final TextEditingController controller;
   final bool readOnly;
   final int dayFly;
+  final bool autofocus;
   MaskedDatePicker(
       {Key key,
       this.labelText,
@@ -348,6 +349,7 @@ class MaskedDatePicker extends StatefulWidget {
       this.format = "dd/MM/yyyy",
       this.validator,
       this.prefix,
+      this.autofocus = true,
       this.type = MaskedDatePickerType.day,
       this.onChanged,
       this.firstDate,
@@ -400,6 +402,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
         padding: EdgeInsets.only(top: 3),
         child: TextFormField(
             readOnly: widget.readOnly,
+            autofocus: widget.autofocus,
             controller: _dataController,
             keyboardType: TextInputType.phone,
             style: theme.textTheme

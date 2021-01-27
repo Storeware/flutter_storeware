@@ -882,9 +882,11 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
 
     if (col == null) return (Text('null $column'));
     var edit;
-    if (col.editBuilder != null)
+    if (col.editBuilder != null) {
       edit = col.editBuilder(
           widget.controller.paginatedController, col, widget.data, widget.data);
+      _first++;
+    }
     if (edit == null) {
       edit = createFormField(context, col, order, isLast: isLast);
     }
@@ -943,7 +945,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         },
         readOnly: (item.isPrimaryKey || item.readOnly),
         autofocus: (item.autofocus && canFocus(item)) ||
-            (order == 0 && canFocus(item)),
+            (_first == 0 && canFocus(item)),
         maxLines: item.maxLines,
         maxLength: item.maxLength,
         enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),

@@ -126,6 +126,7 @@ class DataViewerHelper {
           readOnly: column.readOnly,
           format: mask,
           labelText: column.label,
+          autofocus: column.autofocus,
           initialValue: d,
           onChanged: (x) {
             row[column.name] = x;

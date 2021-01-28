@@ -7,6 +7,7 @@ import 'package:controls_data/rest_client.dart';
 //import '../widgets/firebird_extensions.dart';
 import 'package:controls_extensions/extensions.dart';
 import '../data/sql_builder.dart';
+import 'ctrl_id_model.dart';
 
 toDouble(dynamic value) {
   if (value is double) return value;
@@ -330,5 +331,11 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
     if (item.impresso != null) colunas += ',impresso';
     return API.execute(
         SqlBuilder.createSqlUpdate('sigcauth', 'id', dados, colunas: colunas));
+  }
+
+  Future<double> proximoNumero(double filial) async {
+    return CtrlIdItemModel.proximo('PEDIDO').then((rsp) {
+      return (rsp.numero * 1000) + filial;
+    });
   }
 }

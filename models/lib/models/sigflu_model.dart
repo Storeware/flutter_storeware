@@ -96,7 +96,7 @@ class SigfluItem extends DataItem {
     bdregdebito = (json['bdregdebito'] == '1');
     //  criadorRegistro = json['criador_registro'];
 
-    baixaAutomatica = json['baixa_automatica'] ?? 0;
+    baixaAutomatica = json['baixa_automatica'];
     baixaBanco = json['baixa_banco'];
     baixaDtpgto = json['baixa_dtpgto'];
     baixaValor = toDouble(json['baixa_valor']);
@@ -150,10 +150,12 @@ class SigfluItem extends DataItem {
     data['bdregdebito'] = this.bdregdebito ? '1' : '0';
     //data['criador_registro'] = this.criadorRegistro;
 
-    data['baixa_automatica'] = this.baixaAutomatica ?? 0;
-    data['baixa_banco'] = this.baixaBanco;
-    data['baixa_dtpgto'] = this.baixaDtpgto;
-    data['baixa_valor'] = this.baixaValor;
+    if (this.baixaAutomatica != null) {
+      data['baixa_automatica'] = this.baixaAutomatica;
+      data['baixa_banco'] = this.baixaBanco;
+      data['baixa_dtpgto'] = this.baixaDtpgto;
+      data['baixa_valor'] = this.baixaValor;
+    }
 
     validarDadosBaixa();
     return data;

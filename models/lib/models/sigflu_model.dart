@@ -33,6 +33,10 @@ class SigfluItem extends DataItem {
   /// 1 ou 0
   bool bdregdebito;
   //String criadorRegistro;
+  int baixaAutomatica;
+  String baixaBanco;
+  DateTime baixaDtpgto;
+  double baixaValor;
 
   SigfluItem({
     //this.hist,
@@ -92,6 +96,11 @@ class SigfluItem extends DataItem {
     bdregdebito = (json['bdregdebito'] == '1');
     //  criadorRegistro = json['criador_registro'];
 
+    baixaAutomatica = json['baixa_automatica'] ?? 0;
+    baixaBanco = json['baixa_banco'];
+    baixaDtpgto = json['baixa_dtpgto'];
+    baixaValor = toDouble(json['baixa_valor']);
+
     _regularizar();
     return this;
   }
@@ -140,7 +149,21 @@ class SigfluItem extends DataItem {
     //data['tipo_ident_pgto'] = this.tipoIdentPgto;
     data['bdregdebito'] = this.bdregdebito ? '1' : '0';
     //data['criador_registro'] = this.criadorRegistro;
+
+    data['baixa_automatica'] = this.baixaAutomatica ?? 0;
+    data['baixa_banco'] = this.baixaBanco;
+    data['baixa_dtpgto'] = this.baixaDtpgto;
+    data['baixa_valor'] = this.baixaValor;
+
+    validarDadosBaixa();
     return data;
+  }
+
+  validarDadosBaixa() {
+    if (this.baixaAutomatica == 1 && this.baixaBanco != null) {
+      this.baixaValor ??= this.valor;
+      this.baixaDtpgto ??= toDate(this.data);
+    }
   }
 
   static SigfluItem criarNovo({Map<String, dynamic> json}) {

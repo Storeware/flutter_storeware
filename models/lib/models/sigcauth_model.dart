@@ -55,7 +55,7 @@ class SigcauthItem extends DataItem {
   String cnpjentr;
 
   double estprod;
-  String impresso;
+  String impresso = 'N';
 
   static get test => {
         "id": 66883,
@@ -150,7 +150,7 @@ class SigcauthItem extends DataItem {
       cnpjentr = json['cnpjentr'];
       estprod = toDouble(json['estprod']);
       valortroco = toDouble(json['valortroco']);
-      impresso = json['impresso'];
+      impresso = json['impresso'] ?? 'N';
     } catch (e) {
       //
     }
@@ -191,7 +191,7 @@ class SigcauthItem extends DataItem {
     data['estadoentr'] = estadoentr;
     data['cnpjentr'] = cnpjentr;
     data['estprod'] = estprod;
-    data['impresso'] = impresso;
+    data['impresso'] = impresso ?? 'N';
 
     return data;
   }
@@ -258,16 +258,17 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
         : '';
 
     return API
-        .openJson("select p.*, a.id, a.dtent_ret, a.cliente,a.total, c.nome $fldExtends from " +
-            "sigcauth a, " +
-            "(select dcto,filial,data,max(mesa) mesa ,count(*) itens, sum(case when qtdebaixa<qtde then 1 else 0 end) em_processo, min(estprod) estprod   " +
-            "from sigcaut1 x  " +
-            "where  $filtroItens " +
-            "group by dcto,filial,data " +
-            ") p, " +
-            "web_clientes c " +
-            "where (a.cliente gt 0) and (p.dcto=a.dcto and p.data=a.data and p.filial=a.filial) and (a.cliente=c.codigo) $filtro" +
-            " rows ${skip + 1} to ${skip + top} ")
+        .openJson(printLn(
+            "select p.*, a.id, a.dtent_ret, a.cliente,a.total, c.nome $fldExtends from " +
+                "sigcauth a, " +
+                "(select dcto,filial,data,max(mesa) mesa ,count(*) itens, sum(case when qtdebaixa<qtde then 1 else 0 end) em_processo, min(estprod) estprod   " +
+                "from sigcaut1 x  " +
+                "where  $filtroItens " +
+                "group by dcto,filial,data " +
+                ") p, " +
+                "web_clientes c " +
+                "where (a.cliente gt 0) and (p.dcto=a.dcto and p.data=a.data and p.filial=a.filial) and (a.cliente=c.codigo) $filtro" +
+                " rows ${skip + 1} to ${skip + top} "))
         .then((rsp) {
       return ODataResult(json: rsp);
     });
@@ -338,4 +339,9 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
       return (rsp.numero * 1000) + filial;
     });
   }
+}
+
+printLn(t) {
+  print(t);
+  return t;
 }

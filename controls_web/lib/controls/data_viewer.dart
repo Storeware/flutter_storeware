@@ -5,6 +5,7 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
+import 'package:controls_web/controls/responsive.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls/masked_field.dart';
@@ -495,6 +496,7 @@ class _DataViewerState extends State<DataViewer> {
   final TextEditingController _filtroController = TextEditingController();
   Size size;
   ThemeData theme;
+  ResponsiveInfo responsive;
 
   createHeader() {
     bool isSmall = size.width < 500;
@@ -525,7 +527,7 @@ class _DataViewerState extends State<DataViewer> {
                           Spacer(),
                           Container(
                               constraints: BoxConstraints(
-                                maxWidth: 250,
+                                maxWidth: responsive.isMobile ? 180 : 250,
                               ),
                               child: TextFormField(
                                 controller: _filtroController,
@@ -542,7 +544,7 @@ class _DataViewerState extends State<DataViewer> {
                           Container(
                             padding:
                                 EdgeInsets.symmetric(vertical: 5), // ios usa 5
-                            width: 90,
+                            width: responsive.isMobile ? 80 : 90,
                             child: StrapButton(
                                 text: 'filtrar',
                                 height: 30,
@@ -573,6 +575,7 @@ class _DataViewerState extends State<DataViewer> {
 
   @override
   Widget build(BuildContext context) {
+    responsive = ResponsiveInfo(context);
     var vt = DefaultDataViewerTheme.of(context);
     theme = Theme.of(context);
     var _headingRowHeight = widget.headingRowHeight ?? vt.headingRowHeight;

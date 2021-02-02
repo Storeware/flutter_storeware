@@ -26,10 +26,13 @@ class DefaultDataViewerTheme {
 
   Color headingRowColor;
   double headingRowHeight = kMinInteractiveDimension;
-  double dataRowHeight = kMinInteractiveDimension * 0.8;
+  double dataRowHeight = kMinInteractiveDimension * 0.75;
   TextStyle headingTextStyle;
+  TextStyle dataTextStyle;
   Color oddRowColor;
   Color evenRowColor;
+  double dataFontSize = 14;
+  double headingFontSize = 16;
 
   /// executar init() antes de comecar a usar o DataViewer
   static DefaultDataViewerTheme of(BuildContext context) {
@@ -42,16 +45,20 @@ class DefaultDataViewerTheme {
     _singleton.evenRowColor ??=
         theme.primaryTextTheme.bodyText1.backgroundColor;
     _singleton.oddRowColor ??= theme.primaryTextTheme.bodyText2.backgroundColor;
-    _singleton.headingTextStyle ??=
+    _singleton.headingTextStyle =
         (_singleton._theme.brightness == Brightness.light)
             ? TextStyle(
-                fontSize: 16,
+                fontSize: _singleton.headingFontSize,
                 color: Colors.black87,
-                fontWeight: FontWeight.bold)
+                fontWeight: FontWeight.w600)
             : TextStyle(
-                fontSize: 16,
+                fontSize: _singleton.headingFontSize,
                 color: Colors.white70,
-                fontWeight: FontWeight.bold);
+                fontWeight: FontWeight.w600);
+    _singleton.dataTextStyle = _singleton.headingTextStyle.copyWith(
+      fontSize: _singleton.dataFontSize,
+      fontWeight: FontWeight.w400,
+    );
     return _singleton;
   }
 

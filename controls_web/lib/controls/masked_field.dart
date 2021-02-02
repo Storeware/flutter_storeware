@@ -558,9 +558,10 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
             value: (widget.tristate) ? value : value ?? false,
             onChanged: (x) {
               if (widget.onChanged != null) widget.onChanged(x);
-              _setState(() {
-                value = x;
-              });
+              if (mounted)
+                _setState(() {
+                  value = x;
+                });
             },
           );
         }),
@@ -750,10 +751,12 @@ class MaskedDropDownFormField extends StatelessWidget {
                       if (onSaved != null) onSaved(x);
                       valueChange.value = x;
                     },
-                    hint: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(hintText),
-                    ),
+                    hint: (hintText == null)
+                        ? null
+                        : Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(hintText),
+                          ),
                     value: v,
                   ),
                 ),

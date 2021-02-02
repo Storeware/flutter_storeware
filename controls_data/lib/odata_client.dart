@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
+import 'cached.dart';
 
 const errorConnectionMsg =
     'Não executou a solicitação, provedor indisponível %s';
@@ -558,16 +559,23 @@ abstract class ODataModelClass<T extends DataItem> {
       skip,
       orderBy,
       select}) async {
-    return search(
-            resource: resource ?? makeCollection(null),
-            select: select ?? columns,
-            filter: filter,
-            top: top,
-            skip: skip,
-            orderBy: orderBy,
-            cacheControl: cacheControl ?? 'max-age=3600')
-        .then((ODataResult r) {
-      return r.asMap();
+    String cached = (cacheControl ?? 'max-age=3600');
+    String tempo = '1';
+    String res = resource ?? makeCollection(null);
+    if (cached.contains('=')) tempo = cached.split('=')[1];
+    String key = '$res $filter $select';
+    return Cached.value(key, maxage: int.tryParse(tempo) ?? 60, builder: (k) {
+      return search(
+              resource: res,
+              select: select ?? columns,
+              filter: filter,
+              top: top,
+              skip: skip,
+              orderBy: orderBy,
+              cacheControl: cached)
+          .then((ODataResult r) {
+        return r.asMap();
+      });
     });
   }
 

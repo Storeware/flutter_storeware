@@ -96,7 +96,8 @@ class SigfluItem extends DataItem {
     bdregdebito = (json['bdregdebito'] == '1');
     //  criadorRegistro = json['criador_registro'];
 
-    baixaAutomatica = toInt(json['baixa_automatica']);
+    // manter null para banco que nao tem a coluna
+    baixaAutomatica = json['baixa_automatica']; 
     baixaBanco = json['baixa_banco'];
     if (json['baixa_dtpgto'] != null)
       baixaDtpgto = toDate(json['baixa_dtpgto']);

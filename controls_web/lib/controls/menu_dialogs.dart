@@ -8,12 +8,16 @@ class MenuChoice {
   final int index;
   final Function(BuildContext) builder;
   final bool enabled;
+  final double width;
+  final double height;
   MenuChoice({
     this.icon,
     this.title,
     this.index,
     this.enabled = true,
     this.builder,
+    this.width,
+    this.height,
   });
 }
 
@@ -44,18 +48,28 @@ class MenuDialog extends StatefulWidget {
   }
 }
 
+extension _DoubleExt on double {
+  min(double b) => (this > b) ? b : this;
+}
+
 class _MenuDialogState extends State<MenuDialog> {
   int itemSelect = 0;
-
 //Cria uma listview com os itens do menu
   Widget _listMenu() {
+    final double maxWidth = size.width;
+    final double maxHeigth = size.height;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         for (var item in widget.choices)
           _tiles(item, item.title, item.icon, item.index, () {
             Navigator.pop(context);
-            Dialogs.showPage(context, child: item.builder(context));
+            Dialogs.showPage(
+              context,
+              width: (item.width ?? maxWidth * 0.8).min(maxWidth),
+              height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
+              child: item.builder(context),
+            );
           }),
       ],
     );
@@ -82,10 +96,12 @@ class _MenuDialogState extends State<MenuDialog> {
   }
 
   ThemeData theme;
+  Size size;
 
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
+    size = MediaQuery.of(context).size;
     return Material(child: _listMenu());
   }
 }

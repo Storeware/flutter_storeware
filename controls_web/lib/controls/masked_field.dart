@@ -662,8 +662,11 @@ class MaskedDropDownFormField extends StatelessWidget {
   final Widget trailing;
   final Widget leading;
   final bool readOnly;
+
   final Function(dynamic) onItemChanged;
   final EdgeInsetsGeometry padding;
+  final double top;
+  final double bottom;
   const MaskedDropDownFormField(
       {Key key,
       this.items,
@@ -677,6 +680,8 @@ class MaskedDropDownFormField extends StatelessWidget {
       this.hintColor,
       this.padding,
       this.trailing,
+      this.top = 4,
+      this.bottom = 8,
       this.onItemChanged,
       this.readOnly = false,
       this.leading})
@@ -716,7 +721,7 @@ class MaskedDropDownFormField extends StatelessWidget {
               if (leading != null) leading,
               if (hintText != null)
                 Container(
-                    padding: EdgeInsets.only(top: 4, bottom: 1),
+                    padding: EdgeInsets.only(top: top, bottom: 1),
                     alignment: Alignment.bottomLeft,
                     child: Text(
                       hintText ?? '',
@@ -763,7 +768,7 @@ class MaskedDropDownFormField extends StatelessWidget {
               ),
               if (trailing != null) trailing,
               SizedBox(
-                height: 8,
+                height: bottom,
               ),
               Container(height: 2, color: theme.dividerColor),
             ],

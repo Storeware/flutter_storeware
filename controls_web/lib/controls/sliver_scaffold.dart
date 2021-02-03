@@ -191,7 +191,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     if (widget.isScrollView) _body = SingleChildScrollView(child: widget.body);
     var theme = Theme.of(context);
     var scf = Scaffold(
-        resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+        //resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
         key: widget.key,
         bottomNavigationBar: widget.bottomNavigationBar,
         drawer: widget.drawer,
@@ -243,7 +243,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
     */
     return (widget.isScrollView
         ? Scaffold(
-            resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+            //resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
             body: (widget.body == null ? Text('no data.....') : _body))
         : widget.body);
   }

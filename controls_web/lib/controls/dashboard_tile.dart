@@ -81,11 +81,14 @@ class DashboardTile extends StatelessWidget {
             ),
             color: color ?? _color.withAlpha(150),
             child: LayoutBuilder(builder: (ctx, sizes) {
+              var size = MediaQuery.of(ctx).size;
+              if (sizes.maxWidth < size.width)
+                size = Size(sizes.maxWidth, size.height);
               double w = (responsive.isSmall
-                  ? (sizes.maxWidth)
+                  ? (size.width)
                   : responsive.isMobile
-                      ? ((width * 2) < sizes.maxWidth)
-                          ? (sizes.maxWidth / 2) - 16
+                      ? ((width * 2) < size.width)
+                          ? (size.width / 2) - 16
                           : width
                       : width ?? 180);
               //print(w);

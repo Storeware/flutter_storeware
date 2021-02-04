@@ -696,12 +696,16 @@ class DataViewerGroup {
   final Widget leadding;
   final Widget trailling;
   final TextStyle titleStyle;
+  final Widget header;
+  final Widget bottom;
   DataViewerGroup({
     this.title,
     this.children,
     this.leadding,
     this.trailling,
     this.titleStyle,
+    this.header,
+    this.bottom,
   });
 }
 
@@ -720,6 +724,8 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final List<Widget> actions;
   final double elevation;
   final Widget floatingActionButton;
+  final Widget headerAction;
+  final Widget bottomAction;
 
   const DataViewerEditGroupedPage({
     Key key,
@@ -739,6 +745,8 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.floatingActionButton,
     //this.onLog,
     this.actions,
+    this.headerAction,
+    this.bottomAction,
     @required this.event,
   }) : super(key: key);
 
@@ -826,10 +834,12 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
+                if (widget.headerAction != null) widget.headerAction,
                 for (var row in widget.grouped)
                   Builder(builder: (ctx) {
                     return createRow(context, row, widget.data);
                   }),
+                if (widget.bottomAction != null) widget.bottomAction,
                 SizedBox(
                   height: 15,
                 ),
@@ -869,8 +879,15 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         Wrap(
           direction: Axis.horizontal,
           children: [
+            if (rows.header != null) rows.header,
             for (var column in rows.children)
-              createColumn(context, column, col, isLast: (itemsCount == ++col))
+              createColumn(
+                context,
+                column,
+                col,
+                isLast: (itemsCount == ++col),
+              ),
+            if (rows.bottom != null) rows.bottom,
           ],
         ),
       ],

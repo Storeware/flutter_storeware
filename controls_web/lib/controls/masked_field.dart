@@ -369,8 +369,10 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
   TextEditingController _dataController;
   DateTime _lastDate;
   DateTime _firstDate;
+  bool autodispose;
   @override
   void initState() {
+    autodispose = widget.controller == null;
     _lastDate =
         widget.lastDate ?? DateTime.now().add(Duration(days: widget.dayFly));
     _firstDate =
@@ -391,6 +393,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
 
   @override
   void dispose() {
+    if (autodispose) _dataController.dispose();
     changed.close();
     super.dispose();
   }

@@ -148,7 +148,7 @@ class Sig01ItemModel extends ODataModelClass<Sig01Item> {
 
   Future<Map<String, dynamic>> buscarByCodigo(codigo) async {
     return listCached(filter: "codigo eq '$codigo'", select: 'codigo, nome')
-        .then((rsp) => rsp[0]);
+        .then((rsp) => (rsp.length == 0) ? {} : rsp[0]);
   }
 }
 

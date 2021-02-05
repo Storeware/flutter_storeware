@@ -44,6 +44,7 @@ class ProdutoItem extends DataItem {
     data['id'] = '$codigo';
     data['filial'] = filial;
     data['inativo'] = this.inativo;
+    data['codtitulo'] = this.codtitulo;
     return data;
   }
 
@@ -135,7 +136,7 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   put(item) {
     var it = ProdutoItem.copy(item);
     return super.put(it).then((rsp) {
-      atalhoUpdate(it);
+      atalhoUpdate(item);
       updatePrecoFilial(it);
       return rsp;
     });
@@ -145,7 +146,7 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   post(item) {
     var it = ProdutoItem.copy(item);
     return super.post(it).then((rsp) {
-      atalhoUpdate(it);
+      atalhoUpdate(item);
       updatePrecoFilial(it);
       return rsp;
     });

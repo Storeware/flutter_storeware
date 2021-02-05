@@ -116,7 +116,7 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
     return listCached(
             filter: "codigo eq '$codigo'",
             select: 'codigo, nome,cnpj,cep,cidade')
-        .then((rsp) => rsp[0]);
+        .then((rsp) => (rsp.length == 0) ? {} : rsp[0]);
   }
 
   Future<num> indicadorAquisicaoClientes(
@@ -129,7 +129,8 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
 
     final qry = "select count(*) conta from sigcad where data ge '$sDe' $s ";
     //print(qry);
-    return API.openJson(qry).then((rsp) => rsp['result'][0]['conta']);
+    return API.openJson(qry).then(
+        (rsp) => ((rsp['rows'] ?? 0) == 0) ? 0 : rsp['result'][0]['conta']);
   }
 
   Future<double> proximoCodigo(double filial) async {

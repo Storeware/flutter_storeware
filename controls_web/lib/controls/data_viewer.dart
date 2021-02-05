@@ -400,6 +400,7 @@ class DataViewer extends StatefulWidget {
 
   /// se permite incluir uma linha
   final bool canInsert;
+  final Size editSize;
 
   /// se o header de filtro esta habilitado - default: true;
   final bool canSearch;
@@ -459,6 +460,7 @@ class DataViewer extends StatefulWidget {
     this.canInsert = false,
     this.canSearch = true,
     this.keyStorage,
+    this.editSize,
     this.crossAxisAlignment = CrossAxisAlignment.center,
     //this.backgroundColor,
     this.title,
@@ -607,6 +609,7 @@ class _DataViewerState extends State<DataViewer> {
               width: widget.width,
               child: widget.child ??
                   PaginatedGrid(
+                    editSize: widget.editSize,
                     placeHolder: widget.placeHolder,
                     elevation: widget.elevation,
                     canSort: widget.canSort,

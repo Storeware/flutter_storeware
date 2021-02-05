@@ -682,6 +682,9 @@ class _PaginatedGridState extends State<PaginatedGrid> {
           else if (widget.onPostEvent != null) {
             PaginatedGrid.show(context,
                 title: 'Novo registro',
+                width: widget.editSize?.width,
+                height: widget.editSize?.height,
+                fullPage: controller.widget.editFullPage,
                 child: PaginatedGridEditRow(
                   width: widget.editSize?.width,
                   height: widget.editSize?.height,
@@ -1018,6 +1021,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
 
     return Dialogs.showPage(
       controller.context,
+      width: controller.widget.editSize?.width,
+      height: controller.widget.editSize?.height,
+      fullPage: controller.widget.editFullPage,
       child: PaginatedGridEditRow(
         index: index,
         fullPage: controller.widget.editFullPage,

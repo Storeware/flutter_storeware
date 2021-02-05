@@ -40,6 +40,7 @@ class FBMessaging extends FBMessagingInterface {
   }
 
   Future<void> goMessage(message) async {
+    if (message!=null)
     try {
       var notification = message.notification;
       var title = notification.title;

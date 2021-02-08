@@ -712,6 +712,14 @@ class DataViewerGroup {
   });
 }
 
+class DataViewerEditGroupedPageStateController {
+  _DataViewEditGroupedPageState state;
+  BuildContext get context => state.context;
+  save() {
+    state._save(context);
+  }
+}
+
 class DataViewerEditGroupedPage extends StatefulWidget {
   final String title;
   final Map<String, dynamic> data;
@@ -725,10 +733,13 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final bool showAppBar;
   final Widget appBar;
   final List<Widget> actions;
+  final Widget leading;
   final double elevation;
   final Widget floatingActionButton;
   final Widget headerAction;
   final Widget bottomAction;
+  final bool showSaveButton;
+  final DataViewerEditGroupedPageStateController stateController;
 
   const DataViewerEditGroupedPage({
     Key key,
@@ -745,11 +756,14 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.onClose,
     this.appBar,
     this.onSaved,
+    this.showSaveButton = false,
     this.floatingActionButton,
+    this.leading,
     //this.onLog,
     this.actions,
     this.headerAction,
     this.bottomAction,
+    this.stateController,
     @required this.event,
   }) : super(key: key);
 
@@ -759,9 +773,14 @@ class DataViewerEditGroupedPage extends StatefulWidget {
 }
 
 class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
+  DataViewerEditGroupedPageStateController _instance;
+
   @override
   void initState() {
     super.initState();
+    _instance =
+        widget.stateController ?? DataViewerEditGroupedPageStateController();
+    _instance.state = this;
   }
 
   ThemeData theme;
@@ -774,6 +793,11 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     item.forEach((key, value) {
       oldData[key] = value;
     });
+  }
+
+  _reset() {
+    _formKey.currentState.reset();
+    widget.controller.changedValues.value = false;
   }
 
   @override
@@ -789,6 +813,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
           ? null
           : widget.appBar ??
               AppBar(
+                  leading: widget.leading,
                   actions: widget.actions,
                   flexibleSpace: ValueListenableBuilder<bool>(
                       valueListenable: widget.controller.changedValues,
@@ -808,13 +833,11 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                       Navigator.pop(context);
                                     });
                                   }),
-                            if (changed) ...[
+                            if (changed || widget.showSaveButton) ...[
                               InkWell(
                                   child: Icon(Icons.settings_backup_restore),
                                   onTap: () {
-                                    _formKey.currentState.reset();
-                                    widget.controller.changedValues.value =
-                                        false;
+                                    _reset();
                                   }),
                               SizedBox(width: 8),
                               InkWell(

@@ -21,6 +21,7 @@ class DashHorizontalBarChart extends StatefulWidget {
   final bool showSeriesNames;
   final List<charts.SeriesRendererConfig<String>> customSeriesRenderers;
   final Function(ChartPair) onSelected;
+  final String Function(ChartPair) onGetValue;
 
   DashHorizontalBarChart(this.seriesList,
       {this.vertical = false,
@@ -30,6 +31,7 @@ class DashHorizontalBarChart extends StatefulWidget {
       this.animate,
       this.barRadius = 15,
       this.onSelected,
+      this.onGetValue,
       this.showAxisLine = true,
       this.showDomainAxis = true});
 
@@ -69,12 +71,13 @@ class DashHorizontalBarChart extends StatefulWidget {
 
 class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
   String textSelected;
+  ChartPair dados;
 
   _onSelectionChanged(charts.SelectionModel model) {
     if (widget.onSelected == null) return;
     final selectedDatum = model.selectedDatum;
     if (selectedDatum.isNotEmpty) {
-      ChartPair dados = selectedDatum.first.datum;
+      dados = selectedDatum.first.datum;
       textSelected = '${dados.value.toInt()}';
       if (widget.onSelected != null)
         widget.onSelected(dados);
@@ -104,7 +107,12 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
             : [
                 new charts.LinePointHighlighter(
                     symbolRenderer: CustomCircleSymbolRenderer(
-                        size: size, onGetValue: () => textSelected ?? '?')),
+                        size: size,
+                        onGetValue: () {
+                          if (widget.onGetValue != null)
+                            return widget.onGetValue(dados);
+                          return textSelected ?? '?';
+                        })),
                 new charts.SelectNearest(
                     eventTrigger: charts.SelectionTrigger.tapAndDrag),
                 if (widget.showSeriesNames)

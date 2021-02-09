@@ -99,6 +99,7 @@ class DrawerTile extends StatelessWidget {
   final Widget subtitle;
   final bool enabled;
   final Function() onPressed;
+  final double height;
 
   DrawerTile(
       {this.image,
@@ -106,6 +107,7 @@ class DrawerTile extends StatelessWidget {
       this.onPressed,
       this.leading,
       this.trailing,
+      this.height: 40,
       this.enabled = true,
       this.subtitle});
 
@@ -114,22 +116,37 @@ class DrawerTile extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     Color _color = (enabled) ? theme.popupMenuTheme.color : theme.dividerColor;
 
-    return ListTile(
-      onTap: (!enabled)
-          ? null
-          : () {
-              if (onPressed != null) onPressed();
-            },
-      leading: leading ?? image,
-      title: Text(
-        title,
-        style: theme.textTheme.caption.copyWith(
-          fontSize: 14,
-          color: _color,
-        ),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 8),
+      height: height,
+      child: InkWell(
+        child: Row(children: [
+          if (leading != null) leading,
+          if (image != null) image,
+          Expanded(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (title != null)
+                    Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.caption.copyWith(
+                        fontSize: 14,
+                        color: _color,
+                      ),
+                    ),
+                ]),
+          ),
+          trailing ?? Icon(Icons.chevron_right)
+        ]),
+        onTap: (!enabled)
+            ? null
+            : () {
+                if (onPressed != null) onPressed();
+              },
       ),
-      subtitle: subtitle,
-      trailing: trailing ?? Icon(Icons.chevron_right),
     );
   }
 }

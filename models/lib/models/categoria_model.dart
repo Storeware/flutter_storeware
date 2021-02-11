@@ -104,6 +104,6 @@ class CategoriaModel extends ODataModelClass<CategoriaItem> {
 
   buscarByCodigo(codigo) {
     return listCached(filter: "codigo eq $codigo", select: 'codigo, nome')
-        .then((rsp) => rsp[0]);
+        .then((rsp) => (rsp.length == 0) ? {} : rsp[0]);
   }
 }

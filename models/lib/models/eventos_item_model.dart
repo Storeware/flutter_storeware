@@ -31,6 +31,7 @@ class EventosItemItem extends DataItem {
   double valor;
   String usuario;
   String gid;
+  String leu;
 
   EventosItemItem(
       { //this.id,
@@ -86,7 +87,7 @@ class EventosItemItem extends DataItem {
     id = json['id'];
     master = json['master'];
     masterGid = json['master_gid'];
-
+    leu = json['leu'] ?? 'N';
     return this;
   }
 
@@ -116,6 +117,7 @@ class EventosItemItem extends DataItem {
     data['gid'] ??= Uuid().v4();
     data['master'] = this.master;
     data['master_gid'] = this.masterGid;
+    data['leu'] = this.leu;
 
     /// quando é insert o id é gerado no servidor.
     if (this.id != null)
@@ -160,6 +162,22 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
     return super.put(_item).then((resp) {
       EventosItemNotifier().notify(_item['titulo']);
       return resp;
+    });
+  }
+
+  marcarLeu(String gid, bool leu) {
+    return API.execute(
+        "update eventos_item set leu='${(leu ? 'S' : 'N')}' where gid = '$gid' ");
+  }
+
+  Future<num> pegarNaoLidas(String usuario) async {
+    return listNoCached(
+            select: 'count(*) n',
+            filter:
+                "pessoa='$usuario' and arquivado='N' and (leu='N' or leu is null) ")
+        .then((rsp) {
+      print(rsp);
+      return (rsp.length == 0) ? 0 : rsp[0]['n'];
     });
   }
 }

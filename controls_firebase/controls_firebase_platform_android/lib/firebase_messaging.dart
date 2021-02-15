@@ -52,8 +52,7 @@ class FBMessaging extends FBMessagingInterface {
       var title = notification['title'];
       var body = notification['body'];
       var data = message['data'];
-      if (this.localNotification != null)
-        this.localNotification.showNotification(title: title, body: body);
+      notification.showNotification(title: title, body: body);
       _controller.add({
         "notification": {"title": title, "body": body},
         "data": data,
@@ -62,6 +61,12 @@ class FBMessaging extends FBMessagingInterface {
     } catch (err) {
       print('$err');
     }
+  }
+  @override
+  notification(title,body){
+      if (this.localNotification != null)
+        this.localNotification.showNotification(title: title, body: body);
+    
   }
 
   Future<dynamic> myBackgroundMessageHandler(

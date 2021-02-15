@@ -13,5 +13,6 @@ abstract class FBMessagingInterface {
   Future<void> init(String keyPair);
   Future requestPermission();
   Future<String> getToken([bool force = false]);
+  notification(title,body){}
   //Function(String) onTokenRefresh;
 }

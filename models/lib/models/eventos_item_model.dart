@@ -117,7 +117,7 @@ class EventosItemItem extends DataItem {
     data['gid'] ??= Uuid().v4();
     data['master'] = this.master;
     data['master_gid'] = this.masterGid;
-    data['leu'] = this.leu;
+    data['leu'] = this.leu ?? 'N';
 
     /// quando é insert o id é gerado no servidor.
     if (this.id != null)
@@ -165,9 +165,9 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
     });
   }
 
-  marcarLeu(String gid, bool leu) {
-    return API.execute(
-        "update eventos_item set leu='${(leu ? 'S' : 'N')}' where gid = '$gid' ");
+  marcarLeu({String gid, String flag = 'S'}) {
+    return API
+        .execute("update eventos_item set leu='$flag' where gid = '$gid' ");
   }
 
   Future<num> pegarNaoLidas(String usuario) async {

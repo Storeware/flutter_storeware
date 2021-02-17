@@ -2,7 +2,7 @@
 //import 'tabview_widget.dart';
 import 'dart:async';
 import 'package:controls_web/controls/tab_choice.dart';
-import 'package:controls_web/controls/tabview_widget.dart';
+//import 'package:controls_web/controls/tabview_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -64,25 +64,56 @@ class _TabViewBottomState extends State<TabViewBottom> {
     super.initState();
     _isVisible = ValueNotifier<bool>(true);
     scrollController = ScrollController();
-    scrollController.addListener(() {
-      /* setState(() {
-        _isVisible.value = scrollController.position.userScrollDirection ==
-            ScrollDirection.forward;
-      });*/
-    });
+    scrollController.addListener(_scrollListener);
     index = ValueNotifier<int>(widget.activeIndex ?? 0);
     _pageController = PageController(
       initialPage: index.value,
       keepPage: widget.keepPage,
     );
     Timer.run(() {
-      double unit = widget.tabHeight;
-      scrollController.animateTo(index.value + unit,
-          duration: Duration(milliseconds: 500), curve: Curves.linear);
-      //scrollController.jumpTo(unit * index.value);
-      //scrollController.scrollToIndex(index.value,
-      //    preferPosition: AutoScrollPosition.begin);
+      hitTop = (bw * (length - index.value + 1)) > size.width;
+      pageTo(index.value);
     });
+  }
+
+  get length => widget.choices.length;
+  animateTo(int idx) {
+    scrollController.animateTo(idx * bw,
+        duration: Duration(milliseconds: 500), curve: Curves.linear);
+  }
+
+  pageTo(int idx) {
+    if (idx < 0) idx = 0;
+    if (idx >= widget.choices.length) idx = widget.choices.length - 1;
+    if (index.value != idx) index.value = idx;
+    animateTo(idx);
+  }
+
+  bool hitBottom = false;
+  bool hitTop = false;
+  Size size = Size(800, 450);
+  _scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      setState(() {
+        hitBottom = true;
+        hitTop = false;
+      });
+      return;
+    }
+    if (scrollController.offset <= scrollController.position.minScrollExtent &&
+        !scrollController.position.outOfRange) {
+      setState(() {
+        hitBottom = false;
+        hitTop = true;
+      });
+      return;
+    }
+    if (hitBottom || hitTop)
+      setState(() {
+        hitBottom = false;
+        hitTop = false;
+      });
   }
 
   int get activeIndex => index?.value ?? widget.activeIndex ?? 0;
@@ -95,16 +126,25 @@ class _TabViewBottomState extends State<TabViewBottom> {
   }
 
   double bw = 60;
+  Color _iconColor;
+  ThemeData theme;
+  Color _tagColor;
+  Color _tabColor;
+  Color _color;
+  Color _indicatorColor;
+
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    Color _color = widget.color ?? theme.bottomAppBarColor;
-    Color _tabColor =
-        widget.tabColor ?? theme.appBarTheme.color ?? Colors.amber;
-    Color _iconColor = theme.tabBarTheme?.labelColor ?? theme.buttonColor;
+    size = MediaQuery.of(context).size;
+    theme = Theme.of(context);
+    _color = widget.color ?? theme.bottomAppBarColor;
+    _tabColor = widget.tabColor ?? theme.appBarTheme.color ?? Colors.amber;
+    _iconColor = theme.tabBarTheme?.labelColor ?? theme.buttonColor;
 
-    Color _indicatorColor = widget.indicatorColor ?? Colors.grey.withAlpha(20);
-    Color _tagColor = widget.tagColor ?? theme.indicatorColor;
+    _indicatorColor = widget.indicatorColor ?? Colors.grey.withAlpha(20);
+    _tagColor = widget.tagColor ?? theme.indicatorColor;
+
+    bw = size.width / ((size.width / widget.tabHeight).floorToDouble());
 
     return Column(children: [
       if (widget.appBar != null) widget.appBar,
@@ -134,130 +174,32 @@ class _TabViewBottomState extends State<TabViewBottom> {
                       Container(
                           color: _color,
                           height: widget.tabHeight,
-                          child: Row(children: [
-                            if (widget.leading != null) widget.leading,
-                            Expanded(
-                                child: LayoutBuilder(builder: (_, constraints) {
-                              bw = constraints.maxWidth /
-                                  ((constraints.maxWidth /
-                                          constraints.maxHeight)
-                                      .floorToDouble());
-
-                              return ListView.builder(
-                                controller: scrollController,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: widget.choices.length,
-                                itemBuilder: (ctx, i) {
-                                  var choice = widget.choices[i];
-                                  return ValueListenableBuilder<int>(
-                                    valueListenable: index,
-                                    builder: (BuildContext context, int idx,
-                                        Widget child) {
-                                      activeIndex = idx;
-                                      return Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 0.0,
-                                            right: 0,
-                                            top: 2.0,
-                                            bottom: 2.0),
-                                        child: InkWell(
-                                          onTap: () {
-                                            _pageController.animateToPage(i,
-                                                duration:
-                                                    Duration(milliseconds: 500),
-                                                curve: Curves.ease);
-                                          },
-                                          child: Container(
-                                              //width: bw+8,
-                                              padding: const EdgeInsets.only(
-                                                  left: 2.0,
-                                                  bottom: 2,
-                                                  right: 2.0,
-                                                  top: 2.0),
-                                              alignment: Alignment.center,
-                                              decoration: BoxDecoration(
-                                                color: (idx == i)
-                                                    ? _indicatorColor
-                                                    : _tabColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  if (choice.image != null)
-                                                    Flexible(
-                                                        flex: 2,
-                                                        child: Center(
-                                                          child: Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(2),
-                                                              child: (choice
-                                                                          .icon !=
-                                                                      null)
-                                                                  ? Icon(choice
-                                                                      .icon)
-                                                                  : choice
-                                                                      .image),
-                                                        )),
-                                                  if (choice.label != null ||
-                                                      choice.title != null)
-                                                    Flexible(
-                                                      flex: 1,
-                                                      child: Container(
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            if (choice.title !=
-                                                                null)
-                                                              choice.title,
-                                                            if (choice.label !=
-                                                                null)
-                                                              Expanded(
-                                                                  child: Text(
-                                                                      choice
-                                                                          .label,
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                      style: widget
-                                                                              .style ??
-                                                                          theme?.tabBarTheme?.labelStyle?.copyWith(
-                                                                              color:
-                                                                                  _iconColor) ??
-                                                                          theme.textTheme.caption.copyWith(
-                                                                              fontSize: 11,
-                                                                              color: _iconColor))),
-                                                            SizedBox(
-                                                              height: 1,
-                                                            ),
-                                                            Container(
-                                                                height: 2,
-                                                                width: choice
-                                                                        .width ??
-                                                                    bw,
-                                                                color: (idx ==
-                                                                        i)
-                                                                    ? _tagColor
-                                                                    : null)
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                ],
-                                              )),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              );
-                            })),
-                            if (widget.actions != null) ...widget.actions
-                          ])),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (widget.leading != null) widget.leading,
+                              Expanded(
+                                child: Stack(
+                                  children: [
+                                    if (hitBottom)
+                                      Positioned(
+                                        left: -7,
+                                        top: -7,
+                                        child: Icon(Icons.arrow_left),
+                                      ),
+                                    if (hitTop)
+                                      Positioned(
+                                        right: -7,
+                                        top: -7,
+                                        child: Icon(Icons.arrow_right),
+                                      ),
+                                    buildItems(),
+                                  ],
+                                ),
+                              ),
+                              if (widget.actions != null) ...widget.actions
+                            ],
+                          )),
                       if (widget.bottomNavigationBar != null)
                         widget.bottomNavigationBar,
                     ],
@@ -267,4 +209,92 @@ class _TabViewBottomState extends State<TabViewBottom> {
       )
     ]);
   }
+
+  buildItems() =>
+      /*LayoutBuilder(builder: (_, constraints) {
+        bw = constraints.maxWidth /
+            ((constraints.maxWidth / constraints.maxHeight).floorToDouble());
+
+        return */
+      ListView.builder(
+        controller: scrollController,
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.choices.length,
+        itemBuilder: (ctx, i) {
+          var choice = widget.choices[i];
+          return ValueListenableBuilder<int>(
+            valueListenable: index,
+            builder: (BuildContext context, int idx, Widget child) {
+              activeIndex = idx;
+              return Padding(
+                padding: const EdgeInsets.only(
+                    left: 0.0, right: 0, top: 2.0, bottom: 2.0),
+                child: InkWell(
+                  onTap: () {
+                    _pageController.animateToPage(i,
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease);
+                  },
+                  child: Container(
+                      //width: bw+8,
+                      padding: const EdgeInsets.only(
+                          left: 2.0, bottom: 2, right: 2.0, top: 2.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: (idx == i) ? _indicatorColor : _tabColor,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          if (choice.image != null)
+                            Flexible(
+                                flex: 2,
+                                child: Center(
+                                  child: Padding(
+                                      padding: EdgeInsets.all(2),
+                                      child: (choice.icon != null)
+                                          ? Icon(choice.icon)
+                                          : choice.image),
+                                )),
+                          if (choice.label != null || choice.title != null)
+                            Flexible(
+                              flex: 1,
+                              child: Container(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (choice.title != null) choice.title,
+                                    if (choice.label != null)
+                                      Expanded(
+                                          child: Text(choice.label,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: widget.style ??
+                                                  theme?.tabBarTheme?.labelStyle
+                                                      ?.copyWith(
+                                                          color: _iconColor) ??
+                                                  theme.textTheme.caption
+                                                      .copyWith(
+                                                          fontSize: 11,
+                                                          color: _iconColor))),
+                                    SizedBox(
+                                      height: 1,
+                                    ),
+                                    Container(
+                                        height: 2,
+                                        width: choice.width ?? bw,
+                                        color: (idx == i) ? _tagColor : null)
+                                  ],
+                                ),
+                              ),
+                            ),
+                        ],
+                      )),
+                ),
+              );
+            },
+          );
+        },
+      );
+  //    });
 }

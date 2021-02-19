@@ -823,10 +823,10 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                           (BuildContext context, bool changed, Widget child) {
                         return AppBar(
                           elevation: widget.elevation,
-                          title: Text(widget.title ??
-                                  'Edição' + (widget.subtitle != null)
-                              ? ' - ${widget.subtitle}'
-                              : ''),
+                          title: Text((widget.title ?? 'Edição') +
+                              ((widget.subtitle != null)
+                                  ? ' - ${widget.subtitle}'
+                                  : '')),
                           actions: [
                             if (widget.canDelete && (!changed))
                               IconButton(

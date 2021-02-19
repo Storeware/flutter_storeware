@@ -722,6 +722,7 @@ class DataViewerEditGroupedPageStateController {
 
 class DataViewerEditGroupedPage extends StatefulWidget {
   final String title;
+  final String subtitle;
   final Map<String, dynamic> data;
   final List<DataViewerGroup> grouped;
   final DataViewerController controller;
@@ -748,6 +749,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     @required this.controller,
     this.elevation = 0,
     this.title,
+    this.subtitle,
     this.dataRowHeight,
     this.canEdit = false,
     this.canInsert = false,
@@ -821,7 +823,10 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                           (BuildContext context, bool changed, Widget child) {
                         return AppBar(
                           elevation: widget.elevation,
-                          title: Text(widget.title ?? 'Edição'),
+                          title: Text(widget.title ??
+                                  'Edição' + (widget.subtitle != null)
+                              ? ' - ${widget.subtitle}'
+                              : ''),
                           actions: [
                             if (widget.canDelete && (!changed))
                               IconButton(

@@ -357,18 +357,16 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
 
   buildLabel(index) {
     return widget.choices[index].title ??
-        Text(
-          widget.choices[index].label,
-          overflow: TextOverflow.ellipsis,
-          style: (!widget.choices[index].enabled)
-              ? TextStyle(color: theme.dividerColor)
-              : widget.choices[index].style ??
-                  widget.style ??
-                  (theme.tabBarTheme?.labelStyle ??
-                          theme.textTheme.button
-                              .copyWith(color: theme.buttonColor))
-                      .copyWith(color: _iconColor),
-        );
+        Text(widget.choices[index].label,
+            overflow: TextOverflow.ellipsis,
+            style: (!widget.choices[index].enabled)
+                ? TextStyle(color: theme.dividerColor)
+                : widget.choices[index].style ??
+                    widget.style ??
+                    theme.primaryTextTheme.bodyText2
+                        .copyWith(fontSize: 12) //.copyWith(fontSize: 12)
+            //.copyWith(color: _iconColor),
+            );
   }
 
   showDrownMenu(int mainIndex, List<TabChoice> items) {

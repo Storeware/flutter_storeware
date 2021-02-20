@@ -331,7 +331,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                           title: widget.choices[index].title ??
                               Text(widget.choices[index].label,
                                   style: widget.tabStyle ??
-                                      TextStyle(color: _iconColor)),
+                                      theme.primaryTextTheme.bodyText2),
                           onTap: () {
                             _index.value = index;
                           },

@@ -93,7 +93,9 @@ class DashboardTile extends StatelessWidget {
                       : width ?? 180);
               //print(w);
               return InkWell(
-                  onTap: onPressed,
+                  onTap: () {
+                    if (onPressed != null) onPressed();
+                  },
                   child: Container(
                     width: w,
                     height: height,

@@ -297,9 +297,12 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                     SizedBox(height: 2),
                                     widget.choices[index].title ??
                                         Text(widget.choices[index].label,
-                                            style: TextStyle(
+                                            style: (widget.tabStyle ??
+                                                    theme.primaryTextTheme
+                                                        .bodyText2)
+                                                .copyWith(
                                               fontSize: 12,
-                                              color: _iconColor,
+                                              //color: _iconColor,
                                               fontWeight: FontWeight.w500,
                                             ))
                                   ],

@@ -2,7 +2,6 @@ import 'package:controls_web/controls/tab_choice.dart';
 import 'package:flutter/material.dart';
 
 import 'swipe_detector.dart';
-//import 'tab_choice.dart';
 
 class VerticalTopTabNavigatorController {
   _VerticalTopTabNavigatorState parent;
@@ -34,6 +33,7 @@ class VerticalTopTabView extends StatefulWidget {
   final Color completedColor;
   final Widget Function(TabChoice) timelineBuild;
   final Function(int) onSelectedItem;
+  final Color backgroundColor;
 
   const VerticalTopTabView(
       {Key key,
@@ -43,6 +43,7 @@ class VerticalTopTabView extends StatefulWidget {
       this.selectedColor,
       this.spacing = 4,
       this.height = 32,
+      this.backgroundColor,
       this.right,
       this.left,
       this.actions,
@@ -85,66 +86,70 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
     ThemeData theme = Theme.of(context);
     DateTime ultimo = DateTime.now();
     int newIndex = widget.initialIndex;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+    return Container(
+        color: widget.backgroundColor,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
 //        if (widget.left != null) SizedBox(width: widget.left),
-        VerticalTopTabNavigator(
-          position: widget.position,
-          left: widget.left,
-          right: widget.right,
-          height: widget.height,
-          actions: widget.actions,
-          choices: widget.choices,
-          controller: controller,
-          leading: widget.leading,
-          iconColor: widget.iconColor,
-          initialIndex: widget.initialIndex,
-          indicatorColor: widget.indicatorColor ?? theme.indicatorColor,
-          selectedColor: widget.selectedColor,
-          spacing: widget.spacing,
-          tabColor: widget.tabColor,
-          completedColor: widget.completedColor,
-          timelineBuild: widget.timelineBuild,
-          onSelectItem: (index, tab) {
-            position = index;
-            if (widget.onSelectedItem != null) widget.onSelectedItem(index);
-            if (tab.onPressed != null)
-              tab.onPressed();
-            else {
-              tab.child ??= tab.builder();
-              _child.value = tab.child;
-            }
-          },
-        ),
-        Expanded(
-          child: ValueListenableBuilder<Widget>(
-            valueListenable: _child,
-            builder: (a, widget, c) => AnimatedSwitcher(
-                duration: Duration(milliseconds: 500),
-                child: SwipeDetector(
-                  child: _child.value ?? Container(),
-                  onSwipeRight: () {
-                    print(['right', position, maxIndex]);
-                    if (position > 0) controller.animateTo(position - 1);
-                  },
-                  onSwipeLeft: () {
-                    print(['left', position]);
-                    if (position < maxIndex) controller.animateTo(position + 1);
-                  },
-                ),
-                switchInCurve: Curves.ease,
-                transitionBuilder: (widget, animation) => ScaleTransition(
-                      scale: animation,
-                      child: widget,
-                    )),
-          ),
-        ),
-        if (widget.right != null) SizedBox(width: widget.right),
-      ],
-    );
+            VerticalTopTabNavigator(
+              backgroundColor: widget.backgroundColor,
+              position: widget.position,
+              left: widget.left,
+              right: widget.right,
+              height: widget.height,
+              actions: widget.actions,
+              choices: widget.choices,
+              controller: controller,
+              leading: widget.leading,
+              iconColor: widget.iconColor,
+              initialIndex: widget.initialIndex,
+              indicatorColor: widget.indicatorColor ?? theme.indicatorColor,
+              selectedColor: widget.selectedColor,
+              spacing: widget.spacing,
+              tabColor: widget.tabColor,
+              completedColor: widget.completedColor,
+              timelineBuild: widget.timelineBuild,
+              onSelectItem: (index, tab) {
+                position = index;
+                if (widget.onSelectedItem != null) widget.onSelectedItem(index);
+                if (tab.onPressed != null)
+                  tab.onPressed();
+                else {
+                  tab.child ??= tab.builder();
+                  _child.value = tab.child;
+                }
+              },
+            ),
+            Expanded(
+              child: ValueListenableBuilder<Widget>(
+                valueListenable: _child,
+                builder: (a, widget, c) => AnimatedSwitcher(
+                    duration: Duration(milliseconds: 500),
+                    child: SwipeDetector(
+                      child: _child.value ?? Container(),
+                      onSwipeRight: () {
+                        print(['right', position, maxIndex]);
+                        if (position > 0) controller.animateTo(position - 1);
+                      },
+                      onSwipeLeft: () {
+                        print(['left', position]);
+                        if (position < maxIndex)
+                          controller.animateTo(position + 1);
+                      },
+                    ),
+                    switchInCurve: Curves.ease,
+                    transitionBuilder: (widget, animation) => ScaleTransition(
+                          scale: animation,
+                          child: widget,
+                        )),
+              ),
+            ),
+            if (widget.right != null) SizedBox(width: widget.right),
+          ],
+        ));
   }
 }
 
@@ -165,6 +170,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final TextStyle style;
   final double spacing;
   final double height;
+  final Color backgroundColor;
   final Color completedColor;
   final Widget Function(TabChoice) timelineBuild;
   final VerticalTopTabNavigatorController controller;
@@ -186,6 +192,7 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.indicatorColor,
       this.iconColor,
       this.style,
+      this.backgroundColor,
       this.timelineBuild,
       this.tabColor})
       : super(key: key);
@@ -253,9 +260,6 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
 
               return Container(
                 width: widget.choices[index].width,
-                //padding: EdgeInsets.only(
-                //    left: existIndicator(index) ? 0 : widget.spacing,
-                //    right: existIndicator(index) ? 0 : widget.spacing),
                 color: (active.value == index) ? _selectedColor : _tabColor,
                 child: InkWell(
                   child: (!widget.choices[index].visible)
@@ -276,12 +280,15 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                           ? Padding(
                                               padding: EdgeInsets.symmetric(
                                                   horizontal: 8),
-                                              child: showDrownMenu(index,
+                                              child: showDrownMenu(
+                                                  context,
+                                                  index,
                                                   widget.choices[index].items),
                                             )
                                           : Align(
                                               alignment: Alignment.center,
-                                              child: buildLabel(index))),
+                                              child:
+                                                  buildLabel(context, index))),
                                   SizedBox(
                                     height: 2,
                                   ),
@@ -320,8 +327,6 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                         decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(50),
-                                            //border: Border.all(
-                                            //    width: 1, color: Colors.black),
                                             color: completed
                                                 ? widget.completedColor
                                                 : Colors.transparent)),
@@ -355,7 +360,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
 
   existIndicator(index) => widget.choices[index].completed != null;
 
-  buildLabel(index) {
+  buildLabel(context, index) {
+    var theme = Theme.of(context);
     return widget.choices[index].title ??
         Text(widget.choices[index].label,
             overflow: TextOverflow.ellipsis,
@@ -363,16 +369,25 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                 ? TextStyle(color: theme.dividerColor)
                 : widget.choices[index].style ??
                     widget.style ??
-                    theme.primaryTextTheme.bodyText2
-                        .copyWith(fontSize: 12) //.copyWith(fontSize: 12)
-            //.copyWith(color: _iconColor),
-            );
+                    theme.textTheme.bodyText1.copyWith(
+                      fontSize: 12,
+                      color: _getColor(theme).isDark
+                          ? Colors.white70
+                          : theme.appBarTheme.color,
+                      fontWeight: FontWeight.w500,
+                    ));
   }
 
-  showDrownMenu(int mainIndex, List<TabChoice> items) {
+  Color _getColor(ThemeData theme) {
+    return ((theme.brightness == Brightness.dark)
+        ? Colors.black
+        : Colors.white);
+  }
+
+  showDrownMenu(context, int mainIndex, List<TabChoice> items) {
     return DropdownButtonHideUnderline(
         child: DropdownButton<int>(
-      hint: buildLabel(mainIndex),
+      hint: buildLabel(context, mainIndex),
       items: [
         for (int item = 0; item < items.length; item++)
           ((items[item].label ?? '') == '-')

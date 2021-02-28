@@ -46,3 +46,20 @@ class TabChoice<T> {
             (label ?? '') == '-' ||
             (builder != null || child != null || onPressed != null));
 }
+
+extension ColorMix on Color {
+  Color mix(Color color) {
+    var r = (color.red + this.red) ~/ 2;
+    var g = (color.green + this.green) ~/ 2;
+    var b = (color.blue + this.blue) ~/ 2;
+    int a = (color.alpha + this.alpha) ~/ 2;
+    return Color.fromARGB(a, r, g, b);
+  }
+
+  double get luminance =>
+      (0.299 * this.red + 0.587 * this.green + 0.114 * this.blue) / 255;
+  get isDark {
+    print(luminance);
+    return luminance < 0.5;
+  }
+}

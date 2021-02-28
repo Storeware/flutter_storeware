@@ -298,13 +298,16 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                     widget.choices[index].title ??
                                         Text(widget.choices[index].label,
                                             style: (widget.tabStyle ??
-                                                    theme.primaryTextTheme
-                                                        .bodyText2)
-                                                .copyWith(
-                                              fontSize: 12,
-                                              //color: _iconColor,
-                                              fontWeight: FontWeight.w500,
-                                            ))
+                                                TextStyle(
+                                                  fontSize: 14,
+                                                  color: (widget.sidebarBackgroundColor ??
+                                                              theme
+                                                                  .scaffoldBackgroundColor)
+                                                          .isDark
+                                                      ? Colors.white70
+                                                      : Colors.black87,
+                                                  fontWeight: FontWeight.w500,
+                                                ))),
                                   ],
                                 ],
                               )),
@@ -334,7 +337,15 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                           title: widget.choices[index].title ??
                               Text(widget.choices[index].label,
                                   style: widget.tabStyle ??
-                                      theme.primaryTextTheme.bodyText2),
+                                      TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                          color: (widget.sidebarBackgroundColor ??
+                                                      theme
+                                                          .scaffoldBackgroundColor)
+                                                  .isDark
+                                              ? Colors.white70
+                                              : Colors.black87)),
                           onTap: () {
                             _index.value = index;
                           },

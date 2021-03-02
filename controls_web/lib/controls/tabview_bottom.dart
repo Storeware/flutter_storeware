@@ -270,13 +270,15 @@ class _TabViewBottomState extends State<TabViewBottom> {
                                           child: Text(choice.label,
                                               overflow: TextOverflow.ellipsis,
                                               style: widget.style ??
-                                                  theme?.tabBarTheme?.labelStyle
-                                                      ?.copyWith(
-                                                          color: _iconColor) ??
-                                                  theme.textTheme.caption
-                                                      .copyWith(
-                                                          fontSize: 11,
-                                                          color: _iconColor))),
+                                                  TextStyle(
+                                                    fontSize: 11,
+                                                    color:
+                                                        (theme.scaffoldBackgroundColor)
+                                                                .isDark
+                                                            ? Colors.white70
+                                                            : Colors.black87,
+                                                    fontWeight: FontWeight.w500,
+                                                  ))),
                                     SizedBox(
                                       height: 1,
                                     ),

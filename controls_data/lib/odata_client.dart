@@ -523,13 +523,8 @@ abstract class ODataModelClass<T extends DataItem> {
     return collectionName;
   }
 
-  Future<List<dynamic>> list({filter}) async {
-    return search(
-            resource: makeCollection(null), select: columns, filter: filter)
-        .then((ODataResult r) {
-      return r.asMap();
-    });
-  }
+  @deprecated //"sera desabilitado no em julho2021 - substituir por listNoChaced(..)"
+  list({filter}) => listCached(filter: filter);
 
   bool validate(Map<String, dynamic> value) {
     return true;
@@ -563,7 +558,7 @@ abstract class ODataModelClass<T extends DataItem> {
     String tempo = '1';
     String res = resource ?? makeCollection(null);
     if (cached.contains('=')) tempo = cached.split('=')[1];
-    String key = '$res $filter $select';
+    String key = '${API.client.headers['contaid']}$res $filter $select';
     return Cached.value(key, maxage: int.tryParse(tempo) ?? 60, builder: (k) {
       return search(
               resource: res,

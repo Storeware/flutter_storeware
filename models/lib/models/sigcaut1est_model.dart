@@ -75,8 +75,8 @@ class Sigcaut1estItemModel extends ODataModelClass<Sigcaut1estItem> {
 
   @override
   list({filter = ''}) async {
-    if (filter == '') if (items.length > 0) return items;
-    return super.list(filter: filter).then((rsp) {
+    //if (filter == '') if (items.length > 0) return items;
+    return super.listCached(filter: filter).then((rsp) {
       if (filter == '') {
         items.clear();
         items.addAll(rsp);

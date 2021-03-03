@@ -258,17 +258,16 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
         : '';
 
     return API
-        .openJson(printLn(
-            "select p.*, a.id, a.dtent_ret, a.cliente,a.total, c.nome $fldExtends from " +
-                "sigcauth a, " +
-                "(select dcto,filial,data,max(mesa) mesa ,count(*) itens, sum(case when qtdebaixa<qtde then 1 else 0 end) em_processo, min(estprod) estprod   " +
-                "from sigcaut1 x  " +
-                "where  $filtroItens " +
-                "group by dcto,filial,data " +
-                ") p, " +
-                "web_clientes c " +
-                "where (a.cliente gt 0) and (p.dcto=a.dcto and p.data=a.data and p.filial=a.filial) and (a.cliente=c.codigo) $filtro" +
-                " rows ${skip + 1} to ${skip + top} "))
+        .openJson("select p.*, a.id, a.dtent_ret, a.cliente,a.total, c.nome $fldExtends from " +
+            "sigcauth a, " +
+            "(select dcto,filial,data,max(mesa) mesa ,count(*) itens, sum(case when qtdebaixa<qtde then 1 else 0 end) em_processo, min(estprod) estprod   " +
+            "from sigcaut1 x  " +
+            "where  $filtroItens " +
+            "group by dcto,filial,data " +
+            ") p, " +
+            "web_clientes c " +
+            "where (a.cliente gt 0) and (p.dcto=a.dcto and p.data=a.data and p.filial=a.filial) and (a.cliente=c.codigo) $filtro" +
+            " rows ${skip + 1} to ${skip + top} ")
         .then((rsp) {
       return ODataResult(json: rsp);
     });

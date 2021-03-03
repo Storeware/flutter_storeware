@@ -1,7 +1,8 @@
+import 'package:controls_web/controls/swipe_detector.dart';
 import 'package:controls_web/controls/tab_choice.dart';
 import 'package:flutter/material.dart';
 
-import 'swipe_detector.dart';
+//import 'swipe_detector.dart';
 
 class VerticalTopTabNavigatorController {
   _VerticalTopTabNavigatorState parent;
@@ -238,7 +239,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
         widget.onSelectItem(active.value, widget.choices[active.value]);
     }
     return Container(
-      padding: const EdgeInsets.all(3.0),
+      padding: const EdgeInsets.only(left: 3.0, right: 3.0),
       height: widget.height,
       width: double.maxFinite,
       child: ValueListenableBuilder<int>(
@@ -271,9 +272,30 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                           children: [
                               Column(
                                 mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
+                                      decoration: new BoxDecoration(
+                                          border: Border(
+                                              /* top: BorderSide(
+                                                  width: 1.0,
+                                                  color: Colors.grey),
+                                              left: BorderSide(
+                                                  width: 1.0,
+                                                  color: Colors.grey),
+                                              right: BorderSide(
+                                                  width: 1.0,
+                                                  color: Colors.grey),
+                                             */
+                                              bottom: BorderSide(
+                                        width: 2.0,
+                                        color: (active.value == index)
+                                            ? widget.indicatorColor ??
+                                                theme.indicatorColor
+                                            : (completed)
+                                                ? widget.completedColor
+                                                : Colors.transparent,
+                                      ))),
                                       //width: widget.choices[index].width,
                                       child: (widget.choices[index].items !=
                                               null)
@@ -289,11 +311,14 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                               alignment: Alignment.center,
                                               child:
                                                   buildLabel(context, index))),
-                                  SizedBox(
+                                  /*SizedBox(
                                     height: 2,
                                   ),
                                   Container(
                                     height: 2,
+
+                                    //margin: new EdgeInsetsDirectional.only(
+                                    //    start: 1.0, end: 1.0),
                                     width: widget.choices[index].width ??
                                         (widget.choices[index].label.length *
                                                 8.0) +
@@ -301,21 +326,22 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                                     null)
                                                 ? 30
                                                 : 0),
+
                                     color: (active.value == index)
                                         ? widget.indicatorColor ??
                                             theme.indicatorColor
                                         : (completed)
                                             ? widget.completedColor
                                             : null,
-                                  ),
+                                  ),*/
                                   SizedBox(
                                     height: 2,
                                   ),
                                 ],
                               ),
-                              SizedBox(
-                                width: widget.spacing,
-                              ),
+                              // SizedBox(
+                              //   width: widget.spacing,
+                              // ),
                               if (existIndicator(index) &&
                                   active.value != index)
                                 (widget.timelineBuild != null)
@@ -362,20 +388,23 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
 
   buildLabel(context, index) {
     var theme = Theme.of(context);
-    return widget.choices[index].title ??
-        Text(widget.choices[index].label,
-            overflow: TextOverflow.ellipsis,
-            style: (!widget.choices[index].enabled)
-                ? TextStyle(color: theme.dividerColor)
-                : widget.choices[index].style ??
-                    widget.style ??
-                    theme.textTheme.bodyText1.copyWith(
-                      fontSize: 12,
-                      color: _getColor(theme).isDark
-                          ? Colors.white70
-                          : theme.appBarTheme.color,
-                      fontWeight: FontWeight.w500,
-                    ));
+    return Padding(
+        padding: EdgeInsets.only(left: 3.0, right: 3.0, top: 2.0, bottom: 2.0),
+        child: widget.choices[index].title ??
+            Text(widget.choices[index].label,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: (!widget.choices[index].enabled)
+                    ? TextStyle(color: theme.dividerColor)
+                    : widget.choices[index].style ??
+                        widget.style ??
+                        theme.textTheme.bodyText1.copyWith(
+                          fontSize: 12,
+                          color: _getColor(theme).isDark
+                              ? Colors.white70
+                              : theme.appBarTheme.color,
+                          fontWeight: FontWeight.w500,
+                        )));
   }
 
   Color _getColor(ThemeData theme) {

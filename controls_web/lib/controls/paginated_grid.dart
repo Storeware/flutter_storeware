@@ -322,8 +322,16 @@ class PaginatedGrid extends StatefulWidget {
           alignment: alignment ?? Alignment.center,
           child: Material(
               child: Container(
-            width: (fullPage) ? size.width : width ?? size.width * 0.90,
-            height: (fullPage) ? size.height : height ?? size.height * 0.90,
+            width: (fullPage)
+                ? size.width
+                : width ??
+                    PaginatedGrid.dialogWidth(
+                        maxSize: size), //?? size.width * 0.90,
+            height: (fullPage)
+                ? size.height
+                : height ??
+                    PaginatedGrid.dialogHeight(
+                        maxSize: size), // ?? size.height * 0.90,
             child: child,
           )),
         );
@@ -336,6 +344,9 @@ class PaginatedGrid extends StatefulWidget {
       },
     );
   }
+
+  static dialogWidth({Size maxSize}) => maxSize?.width ?? 450.0;
+  static dialogHeight({Size maxSize}) => maxSize?.height ?? 650.0;
 }
 
 extension StringExtGrid on String {
@@ -682,8 +693,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
           else if (widget.onPostEvent != null) {
             PaginatedGrid.show(context,
                 title: 'Novo registro',
-                width: widget.editSize?.width,
-                height: widget.editSize?.height,
+                width: widget.editSize?.width ?? PaginatedGrid.dialogWidth(),
+                height: widget.editSize?.height ?? PaginatedGrid.dialogHeight(),
                 fullPage: controller.widget.editFullPage,
                 child: PaginatedGridEditRow(
                   width: widget.editSize?.width,
@@ -749,8 +760,8 @@ class PaginatedGridController {
     return PaginatedGridEditRow(
       data: data,
       title: title,
-      width: width,
-      height: height,
+      width: width ?? PaginatedGrid.dialogWidth(),
+      height: height ?? PaginatedGrid.dialogHeight(),
       fullPage: false,
       controller: this,
       inScaffold: inScaffold,
@@ -781,6 +792,8 @@ class PaginatedGridController {
       PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
     return PaginatedGrid.show(context,
         title: title,
+        width: widget.editSize?.width ?? PaginatedGrid.dialogWidth(),
+        height: widget.editSize?.height ?? PaginatedGrid.dialogHeight(),
         child: editPage(context, data,
             title: title, width: width, height: height, event: event));
   }
@@ -1018,17 +1031,18 @@ class PaginatedGridDataTableSource extends DataTableSource {
   doEditItem(index, bool b) {
     if (controller.beforeChange != null)
       controller.beforeChange(controller.data, PaginatedGridChangeEvent.update);
-
+    var h = PaginatedGrid.dialogHeight();
+    var w = PaginatedGrid.dialogWidth();
     return Dialogs.showPage(
       controller.context,
-      width: controller.widget.editSize?.width,
-      height: controller.widget.editSize?.height,
+      width: controller.widget.editSize?.width ?? w,
+      height: controller.widget.editSize?.height ?? h,
       fullPage: controller.widget.editFullPage,
       child: PaginatedGridEditRow(
         index: index,
         fullPage: controller.widget.editFullPage,
-        width: controller.widget.editSize?.width,
-        height: controller.widget.editSize?.height,
+        width: controller.widget.editSize?.width ?? w,
+        height: controller.widget.editSize?.height ?? h,
         controller: controller,
         event: PaginatedGridChangeEvent.update,
         title: 'Alteração',

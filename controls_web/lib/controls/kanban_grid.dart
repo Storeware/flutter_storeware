@@ -217,29 +217,34 @@ class _KanbanGridState extends State<KanbanGrid> {
                       scrollDirection: Axis.horizontal,
                       children: [
                         for (var col in controller.columns)
-                          Card(
-                            color: col.color ?? Colors.transparent,
-                            elevation: col.elevation,
-                            child: Container(
-                              width: controller.getCardWidth(col,
-                                  col.minWidth ?? widget.minWidth, col.width),
-                              constraints: BoxConstraints(
-                                maxWidth: col.width,
-                                minWidth: col.minWidth ?? widget.minWidth,
-                                maxHeight: double.maxFinite,
+                          Builder(builder: (_) {
+                            double min_w = col.minWidth ?? widget.minWidth;
+                            double max_w = col.width;
+                            if (min_w > max_w) min_w = max_w;
+                            return Card(
+                              color: col.color ?? Colors.transparent,
+                              elevation: col.elevation,
+                              child: Container(
+                                width:
+                                    controller.getCardWidth(col, min_w, max_w),
+                                constraints: BoxConstraints(
+                                  maxWidth: max_w,
+                                  minWidth: min_w,
+                                  maxHeight: double.maxFinite,
+                                ),
+                                color: col.color,
+                                child: Column(children: [
+                                  Expanded(
+                                      child: KabanColumnCards(
+                                          minWidth: min_w,
+                                          controller: controller,
+                                          column: col)),
+                                  if (widget.columnBottom != null)
+                                    widget.columnBottom,
+                                ]),
                               ),
-                              color: col.color,
-                              child: Column(children: [
-                                Expanded(
-                                    child: KabanColumnCards(
-                                        minWidth: widget.minWidth,
-                                        controller: controller,
-                                        column: col)),
-                                if (widget.columnBottom != null)
-                                  widget.columnBottom,
-                              ]),
-                            ),
-                          ),
+                            );
+                          }),
                       ],
                     );
                   })),

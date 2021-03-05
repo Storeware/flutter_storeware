@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert' as CONVERT;
 
-
 class DatasetClient<T extends Fields> {
   List<T> items = [];
   bool _eof = true;
@@ -78,23 +77,31 @@ class DatasetClient<T extends Fields> {
   }
 }
 
+class Field {
+  String? fieldName;
+  dynamic value;
+  String get asString => value.toString();
+  set asString(v) {
+    value = v.toString();
+  }
 
-class Field{
-   String fieldName;
-   dynamic value;
-   String get asString => value.toString();
-   set asString(v) { value = v.toString(); }
-   double get asDouble => double.tryParse(asString);
-   set asDouble(v) { value = double.tryParse(v.toString());}
-   int get asInteger => int.tryParse(asString);
-   set asInteger(int v) { value = int.tryParse(v.toString());}
-   Map<String,dynamic> toJson(){
-     return {"fieldName":fieldName,"value":value};
-   }
+  double? get asDouble => double.tryParse(asString);
+  set asDouble(v) {
+    value = double.tryParse(v.toString());
+  }
+
+  int? get asInteger => int.tryParse(asString);
+  set asInteger(int? v) {
+    value = int.tryParse(v.toString());
+  }
+
+  Map<String, dynamic> toJson() {
+    return {"fieldName": fieldName, "value": value};
+  }
 }
 
 class Fields {
-  int rowid;
+  int? rowid;
   Map<String, dynamic> _data = {};
   fromJson(Map<String, dynamic> json) {
     return this;
@@ -105,32 +112,38 @@ class Fields {
   }
 
   String get json => CONVERT.json.encode(toJson());
-  String asText( { names = '' } ) {
-    String r='';
-    _update().forEach((k,v){
-      if (names=='' ||  names.contains(k)   )
-      {
-       r += (r==''?'':', ')+' $k: $v ';  
+  String asText({names = ''}) {
+    String r = '';
+    _update().forEach((k, v) {
+      if (names == '' || names.contains(k)) {
+        r += (r == '' ? '' : ', ') + ' $k: $v ';
       }
     });
     return r;
   }
+
   fieldByName(name) {
     _data = toJson();
     return _data[name];
   }
+
   fieldByNumber(int item) {
     return values.toList()[item];
   }
-  Map<String,dynamic> _update(){
+
+  Map<String, dynamic> _update() {
     _data = toJson();
     return _data;
   }
-  get keys {  return _update().keys;}
+
+  get keys {
+    return _update().keys;
+  }
+
   get values => _update().values;
   List<Field> get toList {
-    var r = [];
-    _update().forEach((k,v){
+    List<Field> r = [];
+    _update().forEach((k, v) {
       var f = Field();
       f.fieldName = k;
       f.value = v;
@@ -152,4 +165,3 @@ class FieldsChange<T> {
 
   get stream => _stream.stream;
 }
-

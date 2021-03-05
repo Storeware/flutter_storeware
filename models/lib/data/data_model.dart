@@ -18,27 +18,28 @@ class DataNotifyChange<T> {
 }
 
 abstract class DataService {
-  Future<Map<String, dynamic>> post(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> post(String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> put(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> put(String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> patch(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> patch(String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> delete(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> delete(
+      String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> send(String service, {header}) {
+  Future<Map<String, dynamic>?> send(String service, {header}) async {
     return null;
   }
 }
@@ -101,7 +102,7 @@ abstract class DataModel {
           v.substring(13, 14) == ':') {
         print([k, v, v is String, v.substring(10, 11)]);
         try {
-          DateTime d = DateTime.tryParse(v);
+          DateTime? d = DateTime.tryParse(v);
           print(['datetime', d]);
           if (d != null) rt[k] = d;
         } catch (e) {}
@@ -151,10 +152,10 @@ abstract class DataRows<T extends DataItem> {
     return resp['rows'] ?? 1;
   }
 
-  execute(Function callback,{rest}) async {
-      return callback(rest).then((resp) {
-        return checkError(resp);
-      });
+  execute(Function callback, {rest}) async {
+    return callback(rest).then((resp) {
+      return checkError(resp);
+    });
   }
 
   addItem(T item) {
@@ -187,7 +188,7 @@ abstract class DataRows<T extends DataItem> {
     return this;
   }
 
-  rowChanged(skip) {
+  rowChanged(int skip) {
     var old = rowNum;
     rowNum += skip;
     _eof = false;
@@ -239,7 +240,7 @@ abstract class DataRows<T extends DataItem> {
     return items;
   }
 
-  T getItem() {
+  T? getItem() {
     rowChanged(0);
     if (!eof && !bof) {
       return items[rowNum];

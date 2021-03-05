@@ -21,9 +21,9 @@ dependencies:
     sdk: flutter
 
   controls_web:
-    #git:
-    #url: https://github.com/amarildolacerda/flutter_dart.git
-    path: ../
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_web
   #controls_data:
   #git:
   #url: https://github.com/amarildolacerda/flutter_dart.git

@@ -18,6 +18,7 @@ class _KanbanSampleState extends State<KanbanSample> {
   Widget build(BuildContext context) {
     //print('kanbnTest');
     return KanbanGrid(
+        primaryKey: 'id',
         columnKeyName: 'id', // coluna com o valor do card
         builder: (column, row, data) {
           return ListTile(title: Text(data['nome']));
@@ -600,6 +601,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
       /// header
       if ((kanban.headerHeight ?? 40) > 0)
         DragTargetKanbanCard(
+          itemIndex: 0, // TODO: parece ser dinamico
           controller: widget.controller,
           data: data,
           column: widget.column,

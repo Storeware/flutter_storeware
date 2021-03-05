@@ -15,22 +15,22 @@ class JsonArray {
     });
     return '[' + rt + ']';
   }
-  static JsonArray fromList(List<dynamic> json){
-     JsonArray arr = JsonArray();
-     json.forEach((f){
-      arr.add( JsonObject.fromMap(f) );
-     });
-     return arr;
-  }
 
+  static JsonArray fromList(List<dynamic> json) {
+    JsonArray arr = JsonArray();
+    json.forEach((f) {
+      arr.add(JsonObject.fromMap(f));
+    });
+    return arr;
+  }
 }
 
 class JsonObject {
   Map<String, dynamic> _json = {};
 
-  String _jsonKey(String key, dynamic value, [bool encode=false]) {
+  String _jsonKey(String key, dynamic value, [bool encode = false]) {
     if (value is String) {
-      String r = (encode?Uri.encodeFull(value):value);
+      String r = (encode ? Uri.encodeFull(value) : value);
       return '"$key": "$r"';
     }
     if (value is double || value is int) return '"$key": $value';
@@ -49,16 +49,15 @@ class JsonObject {
     return '"$key": $value';
   }
 
-  get asMap{
+  get asMap {
     return _json;
   }
-  
-  add(String field, dynamic value,[bool encode = false]) {
-    if (value is String)
-      {
-         _json[field] = (encode? Uri.encodeFull(value):value);
-      } else
-        _json[field] = value;
+
+  add(String field, dynamic value, [bool encode = false]) {
+    if (value is String) {
+      _json[field] = (encode ? Uri.encodeFull(value) : value);
+    } else
+      _json[field] = value;
     return this;
   }
 
@@ -66,9 +65,9 @@ class JsonObject {
     return _json.containsKey(key);
   }
 
-  bool saveToFile(String pathFileName) {
+  bool saveToFile(String? pathFileName) {
     if (pathFileName != null) {
-      File fs = File(pathFileName);
+      File? fs = File(pathFileName);
       try {
         String s = toJson(false);
         fs.writeAsStringSync(s);
@@ -81,9 +80,9 @@ class JsonObject {
     return false;
   }
 
-  bool loadFromFile(String pathFileName) {
+  bool loadFromFile(String? pathFileName) {
     if (pathFileName != null) {
-      File fs = File(pathFileName);
+      File? fs = File(pathFileName);
       try {
         String json = fs.readAsStringSync();
         fs = null;
@@ -112,11 +111,11 @@ class JsonObject {
     return _json[key];
   }
 
-  JsonObject setValue(String key, dynamic value,[bool encode = false]) {
-    if (value is String){
-      _json[key] = (encode?Uri.decodeFull(value):value);
+  JsonObject setValue(String key, dynamic value, [bool encode = false]) {
+    if (value is String) {
+      _json[key] = (encode ? Uri.decodeFull(value) : value);
     } else
-    _json[key] = value;
+      _json[key] = value;
     return this;
   }
 
@@ -124,7 +123,7 @@ class JsonObject {
     String rt = '';
     _json.forEach((key, value) {
       if (key != null && value != null) {
-        rt += (rt != '' ? ',' : '') + _jsonKey(key, value,encode);
+        rt += (rt != '' ? ',' : '') + _jsonKey(key, value, encode);
       }
     });
     return '{' + rt + '}';
@@ -146,13 +145,11 @@ class JsonObject {
     return this;
   }
 
-  static JsonObject fromMap(  Map<String,dynamic> values   ){
-     JsonObject rt = JsonObject();
-     values.forEach((key,value){
-       rt.add(key, value);
-     });
-     return rt;
+  static JsonObject fromMap(Map<String, dynamic> values) {
+    JsonObject rt = JsonObject();
+    values.forEach((key, value) {
+      rt.add(key, value);
+    });
+    return rt;
   }
-
-
 }

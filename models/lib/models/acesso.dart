@@ -1,15 +1,15 @@
-import 'package:models/models/usuarios_model.dart';
+import 'usuarios_model.dart';
 
 enum TipoAcesso { todos, admin, gestor, adminGestor, operador, leitura }
 
 class Acesso {
-  num id;
-  String nome;
-  TipoAcesso tipo;
+  num? id;
+  String? nome;
+  TipoAcesso? tipo;
   List<Acesso> items = [];
   Acesso({this.id, this.nome, this.tipo});
   addOrReplace(Acesso item) {
-    int index = indexOf(item.id);
+    int index = indexOf(item.id ?? -1);
     if (index < 0) {
       items.add(item);
       return item;
@@ -32,7 +32,7 @@ class Acesso {
   }
 
   toJson() {
-    return {"id": id, "nome": nome, "tipo": tipo.index};
+    return {"id": id, "nome": nome, "tipo": tipo?.index};
   }
 
   /// usado durante a carga do app, não subsitui cargas já feitas
@@ -43,9 +43,10 @@ class Acesso {
 
   get key => id;
   get name => nome;
-  List<num> get keys => [for (var i = 0; i < items.length; i++) items[i].id];
+  List<num> get keys =>
+      [for (var i = 0; i < items.length; i++) items[i].id ?? 0];
   List<String> get names =>
-      [for (var i = 0; i < items.length; i++) items[i].nome];
+      [for (var i = 0; i < items.length; i++) items[i].nome ?? ''];
   operator [](num id) => findOf(id);
   findOf(num id) {
     int index = indexOf(id);
@@ -83,7 +84,7 @@ class Acessos {
     return findFirst(id);
   }
 
-  Acesso findFirst(num id) {
+  Acesso? findFirst(num id) {
     for (var i = 0; i < acessos.length; i++) {
       if (acessos[i].id == id) return acessos[i];
       var item = acessos[i].findOf(id);
@@ -95,26 +96,26 @@ class Acessos {
   static bool habilitado(num id) {
     // procura o item
     var ac = Acessos();
-    Acesso item = ac.findFirst(id);
+    Acesso? item = ac.findFirst(id);
     TipoAcesso tipo = item?.tipo ?? TipoAcesso.todos;
     switch (tipo) {
       case TipoAcesso.admin:
         return ac.dadosUsuario.isAdmin;
-        break;
+      //break;
       case TipoAcesso.gestor:
         return ac.dadosUsuario.isGestor;
-        break;
+      //break;
       case TipoAcesso.adminGestor:
         return ac.dadosUsuario.isAdmin || ac.dadosUsuario.isGestor;
-        break;
+      //break;
       case TipoAcesso.operador:
         return ac.dadosUsuario.isOperador ||
             ac.dadosUsuario.isAdmin ||
             ac.dadosUsuario.isGestor;
-        break;
+      //break;
       case TipoAcesso.leitura:
         return !ac.dadosUsuario.isReadOnly;
-        break;
+      //break;
 
       default:
         return true;
@@ -146,5 +147,5 @@ class Acessos {
   }
 
   operator [](num id) => _singleton.findFirst(id);
-  static String name(num id) => _singleton.findFirst(id)?.nome;
+  static String? name(num id) => _singleton.findFirst(id)?.nome;
 }

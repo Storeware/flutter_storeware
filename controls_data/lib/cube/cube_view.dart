@@ -5,7 +5,7 @@ import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:flutter/material.dart';
 
-import 'package:console/views/agenda/agenda_const.dart';
+//import 'package:console/views/agenda/agenda_const.dart';
 
 import 'cube_controller.dart';
 import 'cube_dataviewer.dart';
@@ -201,12 +201,12 @@ class _CubeViewState extends State<CubeView> {
                         builder: (a, b, w) => (!b)
                             ? Container()
                             : Container(
-                                height: kToolBarHeight +
+                                height: kToolbarHeight +
                                     (kMinInteractiveDimension * 2),
                                 child: Column(
                                   children: [
                                     Container(
-                                        height: kToolBarHeight,
+                                        height: kToolbarHeight,
                                         color: optionsColor,
                                         child: Row(
                                           children: [

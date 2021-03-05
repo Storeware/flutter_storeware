@@ -697,6 +697,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                 height: widget.editSize?.height ?? PaginatedGrid.dialogHeight(),
                 fullPage: controller.widget.editFullPage,
                 child: PaginatedGridEditRow(
+                  index: 0, // TODO: parece que isto é dinamico, avaliar.
                   width: widget.editSize?.width,
                   height: widget.editSize?.height,
                   fullPage: controller.widget.editFullPage,
@@ -758,6 +759,7 @@ class PaginatedGridController {
     if (beforeChange != null) beforeChange(this.data, event);
 
     return PaginatedGridEditRow(
+      index: 0, // TODO: checar se é dinamico.
       data: data,
       title: title,
       width: width ?? PaginatedGrid.dialogWidth(),

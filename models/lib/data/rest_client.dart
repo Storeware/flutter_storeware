@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 
-String tokenId;
+String? tokenId;
 
 class RestClientBloC<T> {
   var _controller = StreamController<T>.broadcast();
@@ -44,7 +44,7 @@ class RestClient {
   String service = '/';
   String accessControlAllowOrigin = '*';
   Map<String, String> _headers = {};
-  Map<String, dynamic> jsonResponse;
+  Map<String, dynamic>? jsonResponse;
   RestClient({this.baseUrl}) {}
   /* decode json string to object */
   decode(String texto) {
@@ -63,39 +63,39 @@ class RestClient {
   }
 
   dynamic fieldByName(key) {
-    return jsonResponse[key];
+    return jsonResponse?[key];
   }
 
-  get response => encode(jsonResponse);
+  String get response => encode(jsonResponse);
   set response(String data) {
-    if (data != null) jsonResponse = decode(data);
+    jsonResponse = decode(data);
   }
 
-  int rows({String data, key = 'rows'}) {
+  int rows({String? data, key = 'rows'}) {
     if (data != null) response = data;
     return fieldByName(key) ?? 0;
   }
 
-  bool checkError({String data, String key = 'error'}) {
-    response = data;
-    if (jsonResponse[key] != null) {
-      throw new StateError(jsonResponse[key]);
+  bool checkError({String? data, String key = 'error'}) {
+    if (data != null) response = data;
+    if (jsonResponse?[key] != null) {
+      throw new StateError(jsonResponse?[key]);
     }
     return true;
   }
 
-  result({String data, key = 'result'}) {
-    response = data;
+  result({String? data, key = 'result'}) {
+    if (data != null) response = data;
     return fieldByName(key);
   }
 
   /*  RestClient Interface */
-  String baseUrl;
+  String? baseUrl;
   Map<String, dynamic> params = {};
   String contentType = 'application/json';
   get headers => _headers;
-  autenticator({String key = 'authorization', String value}) {
-    _headers[key] = value;
+  autenticator({String key = 'authorization', String? value}) {
+    if (value != null) _headers[key] = value;
     return this;
   }
 
@@ -108,7 +108,7 @@ class RestClient {
     params.forEach((key, value) {
       p += (p == '' ? '?' : '&') + "$key=$value";
     });
-    return baseUrl + service + p;
+    return baseUrl ?? '' + service + p;
   }
 
   addParameter(String key, value) {
@@ -141,10 +141,10 @@ class RestClient {
     //print(headers);
   }
 
-  Future<String> openUrl(String url, {String method, body}) async {
+  Future<String> openUrl(String url, {String? method, body}) async {
     _setHeader();
     Response resp;
-    print('OpenUrl $method:$url');
+    //print('OpenUrl $method:$url');
     Dio dio = Dio();
     if (method == 'GET') resp = await dio.get(url);
     if (method == 'POST') resp = await dio.post(url, data: body);

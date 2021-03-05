@@ -1,8 +1,8 @@
 name: flutter_pix
 description: A new Flutter package project.
-version: 0.0.1
+version: 2021.03.05
 author:
-homepage:
+homepage: http://tireideletra.com.br
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

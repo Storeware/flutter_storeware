@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 abstract class Pix {
   g(String code, String value) {
     if ((value ?? '').length == 0) return '';
@@ -32,15 +34,16 @@ class PixMerchantAccount extends Pix {
     this.infoAdicionais,
   });
   validar() {
-  if (brCode.payloadFormat==PixPayloadFormat.dinamico){
-    if (instituicao==null ||  agencia==null || conta==null || tipoConta==null )
-      throw 'Dados do recebedor incompletos';
-  if (brCode.payloadFormat == PixPayloadFormat.estatico)
-    if (chave==null)
-      throw 'Nao informou a chave para transacao estatica';  
+    if (brCode.payloadFormat == PixPayloadFormat.dinamico) {
+      if (instituicao == null ||
+          agencia == null ||
+          conta == null ||
+          tipoConta == null) throw 'Dados do recebedor incompletos';
+      if (brCode.payloadFormat == PixPayloadFormat.estatico) if (chave == null)
+        throw 'Nao informou a chave para transacao estatica';
+    }
   }
 
-  }
   @override
   String toString() {
     validar();
@@ -94,7 +97,7 @@ enum PixPayloadFormat { estatico, dinamico }
 
 class PixBrCode extends Pix {
   PixPayloadFormat payloadFormat;
-  final PixMerchantAccount merchartAccount;
+  PixMerchantAccount merchartAccount;
   String merchantCategory;
   String transactionCurrency = '986';
   String countryCode = 'BR';
@@ -105,7 +108,7 @@ class PixBrCode extends Pix {
   final PixUnreservedTemplates unreservedTemplates = PixUnreservedTemplates();
   String crc;
   PixBrCode(
-      {@required this.payloadFormat = PixPayloadFormat.estatico,
+      {this.payloadFormat = PixPayloadFormat.estatico,
       this.merchantCategory,
       this.merchantName,
       this.merchantCity,
@@ -117,7 +120,7 @@ class PixBrCode extends Pix {
       throw 'URL possui limite de 77 caracteres';
   }
 
-  getAmout() {
+  getAmount() {
     if (transactionAmount == null) return '';
     return g('54', transactionAmount.toStringAsFixed(2));
   }
@@ -145,16 +148,14 @@ class PixBrCode extends Pix {
 class PixRequest {
   final PixBrCode brCode;
   final String urlBase;
-  PixRequest(
-      {@required this.urlBase = 'https://pix.bcb.gov.br/qr',
-      @required this.brCode});
+  PixRequest({this.urlBase = 'https://pix.bcb.gov.br/qr', this.brCode});
   get base64 => base64Decode(brCode.toString());
-  get url => '$urlbase/$base64';
+  get url => '$urlBase/$base64';
 }
 
 ///[PixResponse] formata a resposta da transacao
 // TODO;
 class PixResponse {
   final Map<String, dynamic> response;
-  PixResponse({@required this.response});
+  PixResponse({this.response});
 }

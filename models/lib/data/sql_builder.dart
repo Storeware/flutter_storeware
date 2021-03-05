@@ -2,7 +2,7 @@ import 'package:controls_extensions/extensions.dart';
 
 class SqlBuilder {
   static createSqlUpdate(collection, key, Map<String, dynamic> dados,
-      {String colunas}) {
+      {String? colunas}) {
     var where = "$key = '${dados[key]}' ";
     var s = '';
     List<String> keys = dados.keys.join(',').split(',');
@@ -30,14 +30,14 @@ class SqlBuilder {
 
   // TODO: insert sql
   static createSqlInsert(collection,
-      {Map<String, dynamic> dados, String colunas}) {
+      {Map<String, dynamic>? dados, String? colunas}) {
     // TODO:
     throw 'nao implementado';
   }
 
   // TODO: delete sql
-  static createSqlDelete(collection, key, {Map<String, dynamic> dados}) {
-    var where = "$key = '${dados[key]}' ";
+  static createSqlDelete(collection, key, {Map<String, dynamic>? dados}) {
+    var where = "$key = '${dados?[key]}' ";
     return 'delete from $collection where $where';
   }
 }

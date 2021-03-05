@@ -5,23 +5,23 @@
 */
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+//import 'dart:io';
 //import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 
 class ODataKey {
-  String name;
-  String value;
+  String? name;
+  String? value;
   ODataKey({this.name, this.value});
 }
 
 class ODataDocuments {
   List<dynamic> data = [];
-  int count;
+  int? count;
   List<dynamic> keys = [];
   Map<String, dynamic> properties = {};
-  DateTime startsAt;
-  DateTime endsAt;
+  DateTime? startsAt;
+  DateTime? endsAt;
 }
 
 class ODataBloc<T> {
@@ -49,16 +49,16 @@ class OData extends _ODataBuilder {
   String contentType = "application/json";
   ODataDocuments docs = ODataDocuments();
   ODataBloc<ODataDocuments> queryBloc = ODataBloc<ODataDocuments>();
-  Map<String, dynamic> responseBody;
+  Map<String, dynamic>? responseBody;
   OData(this.host,
-      {String collection,
-      String filter,
-      String group,
-      String select,
-      String order,
+      {String? collection,
+      String? filter,
+      String? group,
+      String? select,
+      String? order,
       int skip = 0,
       int top = 0,
-      String doc}) {
+      String? doc}) {
     super.collection(collection);
     super.filter(filter);
     super.group(group);
@@ -69,33 +69,34 @@ class OData extends _ODataBuilder {
     super.order(order);
   }
 
-  bool checkError({String data, String key = 'error'}) {
-    var response = responseBody;
+  bool checkError({String? data, String key = 'error'}) {
+    Map<String, dynamic>? response = responseBody;
     if (data != null) response = json.decode(data);
-    if (response[key] != null) {
+    if (response != null) if (response[key] != null) {
       throw new StateError(response[key]);
     }
     return true;
   }
 
-  Map<String, dynamic> value({Map<String, dynamic> data, key = 'value'}) {
+  Map<String, dynamic>? value({Map<String, dynamic>? data, key = 'value'}) {
     if (data == null) data = responseBody;
-    return data[key];
+    return (data == null) ? null : data[key];
   }
 
-  List<dynamic> toList({key = 'value'}) {
-    return responseBody[key];
+  List<dynamic>? toList({String key = 'value'}) {
+    return responseBody?[key];
   }
 
-  static Map<String, dynamic> encode(Map<String, dynamic> values) {
-    if (values == null) return null;
+  static Map<String, dynamic> encode(Map<String, dynamic>? values) {
+    //if (values == null) return null;
     Map<String, dynamic> m = {};
-    (values ?? {}).forEach((k, v) {
-      if (v is DateTime)
-        m[k] = v.toIso8601String();
-      else
-        m[k] = v;
-    });
+    if (values != null)
+      (values).forEach((k, v) {
+        if (v is DateTime)
+          m[k] = v.toIso8601String();
+        else
+          m[k] = v;
+      });
     return m;
   }
 
@@ -111,7 +112,7 @@ class OData extends _ODataBuilder {
     return jsonCodec.decode(json, reviver: (k, v) {
       if (v is String && v.length > 13) if (v.substring(10, 11) == 'T' &&
           v.substring(13, 14) == ':') {
-        DateTime d = DateTime.tryParse(v.substring(0, 23));
+        DateTime? d = DateTime.tryParse(v.substring(0, 23));
         if (d != null)
           return d;
         else
@@ -150,7 +151,7 @@ class OData extends _ODataBuilder {
 
   _setHeader() {
     _setHeaderValue('Content-Type', contentType);
-    Map<String, String> h = {};
+    Map<String?, String?> h = {};
     _header.forEach((k) {
       h[k.name] = k.value;
     });
@@ -183,7 +184,7 @@ class OData extends _ODataBuilder {
 
   int statusCode = 0;
   Future<String> openUrl(String method, url,
-      [Map<String, dynamic> body]) async {
+      [Map<String, dynamic>? body]) async {
     String _url = '${host}${url}';
     Map<String, String> headers = _setHeader();
     Response resp;
@@ -203,7 +204,7 @@ class OData extends _ODataBuilder {
       try {
         this.responseBody = {}; // json.decode(resp.data);
         resp.data.forEach((k, v) {
-          this.responseBody[k] = v;
+          if (this.responseBody != null) this.responseBody?[k] = v;
         });
       } catch (e) {
         // invalid json
@@ -216,19 +217,19 @@ class OData extends _ODataBuilder {
 }
 
 class _ODataBuilder {
-  String _collection;
-  String _select;
-  String _filter;
+  String? _collection;
+  String? _select;
+  String? _filter;
   String service = '/OData.svc';
   String servicePrefix = '/OData';
   bool count = false;
   dynamic _doc;
-  String _order;
+  String? _order;
   int skip = 0;
   int top = 0;
-  String _group;
+  String? _group;
 
-  _ODataBuilder collection(String cName) {
+  _ODataBuilder collection(String? cName) {
     _collection = cName;
     return this;
   }
@@ -294,7 +295,7 @@ class _ODataBuilder {
     return cmd;
   }
 
-  Stream<ODataDocuments> get() {
+  Stream<ODataDocuments>? get() {
     return null;
   }
 }

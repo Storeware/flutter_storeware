@@ -22,7 +22,7 @@ class PdfReportController {
       this.build}) {
     this.document ??= pw.Document();
   }
-  Uint8List save({PdfPageFormat format}) {
+  Future<Uint8List> save({PdfPageFormat format}) {
     if (format != null) this.pageFormat = format;
     if (!inited) callBuild();
     return document.save();
@@ -64,18 +64,19 @@ class PdfReportController {
       _path = '${output.path}/${fileName ?? 'examplo.pdf'}';
     }
     final file = File('$_path');
-    return await file.writeAsBytes(document.save());
+    return await file.writeAsBytes(await document.save());
   }
 
   Future<bool> sharePdf({String name}) async {
     return await Printing.sharePdf(
-        bytes: document.save(), filename: name ?? fileName ?? 'exemplo.pdf');
+        bytes: await document.save(),
+        filename: name ?? fileName ?? 'exemplo.pdf');
   }
 
   Future<List<Uint8List>> pagesAsByte(
       {int pageFrom = 1, int pageTo = 1}) async {
     List<Uint8List> rt = [];
-    await for (var page in Printing.raster(document.save(),
+    await for (var page in Printing.raster(await document.save(),
         pages: [
           for (var i = pageFrom; i <= pageTo; i++) i,
         ],

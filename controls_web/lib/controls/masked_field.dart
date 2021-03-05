@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 //import 'flutter_masked_text.dart';
 import 'package:intl/intl.dart';
 import 'package:controls_web/controls/currency.dart';
-import 'package:controls_extensions/extensions.dart';
+//import 'package:controls_extensions/extensions.dart';
 
 bool _showHelperText = true;
 
@@ -382,9 +382,9 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
     formatter = DateFormat(widget.format);
     if (widget.initialValue != null) {
       _dataController.text = formatter.format(widget.initialValue);
-      if (_lastDate != null && (_lastDate.lessThen(widget.initialValue)))
+      if (_lastDate != null && (_lastDate.compareTo(widget.initialValue) < 0))
         _lastDate = widget.initialValue;
-      if (widget.initialValue.lessThen(_firstDate))
+      if (widget.initialValue.compareTo(_firstDate) < 0)
         _firstDate = widget.initialValue;
     }
 

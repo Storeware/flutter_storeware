@@ -19,12 +19,12 @@ class Cached {
     _imageCached.remove(key);
   }
 
-  static Image image(BuildContext context, String url,
-      {Image Function(String) builder}) {
-    var item = _imageCached[url];
+  static Image? image(BuildContext context, String url,
+      {Image Function(String)? builder}) {
+    Image? item = _imageCached[url];
     //print(['Cache image:', url, (item != null)]);
     if (item != null) return item;
-    item = builder(url);
+    if (builder != null) item = builder(url);
     if (item != null) _imageCached[url] = item;
     return item;
   }
@@ -35,9 +35,9 @@ class Cached {
   }
 
   Map<String, DateTime> _lastAge = {};
-  static value<T>(String key, {int maxage = 0, T Function(String) builder}) {
+  static value<T>(String key, {int maxage = 0, T Function(String)? builder}) {
     if (maxage > 0) {
-      DateTime last = _singleton._lastAge[key];
+      DateTime? last = _singleton._lastAge[key];
       if ((last != null) &&
           (DateTime.now().difference(last).inMilliseconds > maxage)) {
         _cached.remove(key);
@@ -46,7 +46,7 @@ class Cached {
 
     var item = _cached[key];
     if (item != null) return item;
-    item = builder(key);
+    if (builder != null) item = builder(key);
     if (item != null) {
       _cached[key] = item;
       _singleton._lastAge[key] = DateTime.now();

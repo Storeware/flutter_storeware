@@ -1,12 +1,12 @@
-import 'package:controls_data/data_model.dart';
-import 'package:controls_data/odata_client.dart';
+import 'data_model.dart';
+import 'odata_client.dart';
 
-String cloudBaseUrl;
+String? cloudBaseUrl;
 String cloudPrefix = '/lojas/{project}';
-String cloudProject;
+String? cloudProject;
 
 abstract class CloudModelClass<T extends DataModelItem> {
-  String collectionName;
+  String? collectionName;
   ODataClient client = ODataClient();
   static project(id) {
     cloudProject = id;
@@ -28,7 +28,7 @@ abstract class CloudModelClass<T extends DataModelItem> {
 
   T createItem();
 
-  snapshots({bool inativo}) async {
+  snapshots({bool inativo = false}) async {
     return client
         .send(ODataQuery(
           resource: collectionName,
@@ -38,7 +38,7 @@ abstract class CloudModelClass<T extends DataModelItem> {
         .then((data) => ODataResult(json: data));
   }
 
-  getAll({String select = '*', String filter}) async {
+  getAll({String select = '*', String? filter}) async {
     return await client
         .send(ODataQuery(
       resource: collectionName,

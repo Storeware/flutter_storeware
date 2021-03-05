@@ -37,7 +37,7 @@ class CloudV3 {
     return client.send(query);
   }
 
-  storageUrl({String fileName, String fullPath, String part = 'p'}) {
+  storageUrl({String? fileName, String? fullPath, String part = 'p'}) {
     var p = fullPath ?? '$contaid/$part/$fileName';
     return '${client.baseUrl}/storage?path=$p';
   }

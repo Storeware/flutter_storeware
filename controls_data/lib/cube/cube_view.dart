@@ -95,23 +95,23 @@ class CubeViewTest {
 }
 
 class CubeView extends StatefulWidget {
-  final String id;
-  final List<CubeDimension> dimensionOptions;
-  final CubeController controller;
-  final List<CubeDimension> rows;
-  final List<CubeDimension> columns;
-  final List<dynamic> sources;
-  final List<CubeDimension> values;
-  final Color totalColor;
-  final Color optionsColor;
-  final Color selectsColor;
-  final bool propEnabled;
-  final bool opened;
-  final AppBar appBar;
-  final Function onReload;
-  final String textNotFind;
+  final String? id;
+  final List<CubeDimension>? dimensionOptions;
+  final CubeController? controller;
+  final List<CubeDimension>? rows;
+  final List<CubeDimension>? columns;
+  final List<dynamic>? sources;
+  final List<CubeDimension>? values;
+  final Color? totalColor;
+  final Color? optionsColor;
+  final Color? selectsColor;
+  final bool? propEnabled;
+  final bool? opened;
+  final AppBar? appBar;
+  final Function? onReload;
+  final String? textNotFind;
   const CubeView(
-      {Key key,
+      {Key? key,
       this.dimensionOptions,
       this.controller,
       this.rows,
@@ -134,32 +134,35 @@ class CubeView extends StatefulWidget {
 }
 
 class _CubeViewState extends State<CubeView> {
-  CubeController controller;
+  CubeController? controller;
+  Color? _selectsColor;
   @override
   void initState() {
     super.initState();
+    _selectsColor = widget.selectsColor ?? Colors.yellow[100];
+
     controller = widget.controller ?? CubeController();
-    controller.rows ??= widget.rows ?? [];
-    controller.columns ??= widget.columns ?? [];
-    controller.values ??= widget.values ?? [];
-    controller.dimensionOptions ??= widget.dimensionOptions ?? [];
-    controller.sources ??= widget.sources ?? [];
+    controller!.rows ??= widget.rows ?? [];
+    controller!.columns ??= widget.columns ?? [];
+    controller!.values ??= widget.values ?? [];
+    controller!.dimensionOptions ??= widget.dimensionOptions ?? [];
+    controller!.sources ??= widget.sources ?? [];
   }
 
   @override
   void dispose() {
-    if (widget.controller == null) controller.dispose();
+    if (widget.controller == null) controller!.dispose();
     super.dispose();
   }
 
   Color get optionsColor =>
-      widget.optionsColor ?? theme.primaryColor.withAlpha(50);
-  Color get selectsColor => widget.selectsColor ?? Colors.yellow[100];
-  ThemeData theme;
-  DataViewerController dvController;
+      widget.optionsColor ?? theme!.primaryColor.withAlpha(50);
+  Color? get selectsColor => _selectsColor;
+  ThemeData? theme;
+  DataViewerController? dvController;
   @override
   Widget build(BuildContext context) {
-    if (controller.sources.length == 0)
+    if (controller!.sources.length == 0)
       return Center(
         child: Container(
             child: Text(widget.textNotFind ??
@@ -167,20 +170,20 @@ class _CubeViewState extends State<CubeView> {
       );
 
     theme = Theme.of(context);
-    controller.id = widget.id;
-    ValueNotifier<bool> opened = ValueNotifier<bool>(widget.opened);
+    controller!.id = widget.id;
+    ValueNotifier<bool> opened = ValueNotifier<bool>(widget.opened!);
 
     dvController = DataViewerController(
       keyName: 'id',
       future: () async {
-        return controller.dataView;
+        return controller!.dataView;
       },
     );
     // inicializa;
-    controller.revisar();
-    controller.calculate();
+    controller!.revisar();
+    controller!.calculate();
     Timer.run(() {
-      controller.notifyChange();
+      controller!.notifyChange();
     });
 
     return DefaultCube(
@@ -188,15 +191,15 @@ class _CubeViewState extends State<CubeView> {
         child: StatefulBuilder(
           builder: (context, _) => Scaffold(
               appBar: widget.appBar,
-              body: StreamBuilder(
-                  stream: controller.stream,
+              body: StreamBuilder<List<Map<String, dynamic>>>(
+                  stream: controller!.stream,
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) return Align(child: Container());
                     if (snapshot.hasData) {
-                      createColumns(snapshot.data);
+                      createColumns(snapshot.data!);
                     }
                     return Column(children: [
-                      ValueListenableBuilder(
+                      ValueListenableBuilder<bool>(
                         valueListenable: opened,
                         builder: (a, b, w) => (!b)
                             ? Container()
@@ -214,7 +217,7 @@ class _CubeViewState extends State<CubeView> {
                                               child: Stack(
                                                 children: [
                                                   CubeListDragTarget(
-                                                      items: controller
+                                                      items: controller!
                                                           .dimensionOptions,
                                                       acceptTypes: [
                                                         CubeViewType.both,
@@ -222,7 +225,7 @@ class _CubeViewState extends State<CubeView> {
                                                         CubeViewType.all
                                                       ],
                                                       onAccept: (item) {
-                                                        controller
+                                                        controller!
                                                             .optionsAdd(item);
                                                       },
                                                       containerType:
@@ -231,7 +234,7 @@ class _CubeViewState extends State<CubeView> {
                                                       right: 0,
                                                       child: Text('opções',
                                                           style: TextStyle(
-                                                              color: theme
+                                                              color: theme!
                                                                   .dividerColor))),
                                                 ],
                                               ),
@@ -243,7 +246,7 @@ class _CubeViewState extends State<CubeView> {
                                       height: kMinInteractiveDimension * 2,
                                       child: Row(children: [
                                         Container(
-                                            width: controller.rowsWidth,
+                                            width: controller!.rowsWidth,
                                             child: Column(
                                               children: [
                                                 Flexible(
@@ -251,7 +254,7 @@ class _CubeViewState extends State<CubeView> {
                                                   child: Stack(
                                                     children: [
                                                       Container(
-                                                        color: selectsColor
+                                                        color: selectsColor!
                                                             .withAlpha(150),
                                                         child:
                                                             CubeValuesDragtaget(),
@@ -260,14 +263,14 @@ class _CubeViewState extends State<CubeView> {
                                                           right: 0,
                                                           child: Text('valores',
                                                               style: TextStyle(
-                                                                  color: theme
+                                                                  color: theme!
                                                                       .dividerColor))),
                                                     ],
                                                   ),
                                                 ),
                                                 Container(
                                                   height: 1,
-                                                  color: theme.dividerColor,
+                                                  color: theme!.dividerColor,
                                                 ),
                                                 Flexible(
                                                     flex: 1,
@@ -282,7 +285,7 @@ class _CubeViewState extends State<CubeView> {
                                                             child: Text(
                                                                 'descritivos',
                                                                 style: TextStyle(
-                                                                    color: theme
+                                                                    color: theme!
                                                                         .dividerColor))),
                                                       ],
                                                     )),
@@ -291,7 +294,7 @@ class _CubeViewState extends State<CubeView> {
                                         SizedBox(
                                             width: 2,
                                             child: Container(
-                                                color: theme.dividerColor)),
+                                                color: theme!.dividerColor)),
                                         Expanded(
                                             child: Column(
                                           mainAxisSize: MainAxisSize.min,
@@ -309,7 +312,7 @@ class _CubeViewState extends State<CubeView> {
                                                             child: Text(
                                                                 'totalizadores',
                                                                 style: TextStyle(
-                                                                    color: theme
+                                                                    color: theme!
                                                                         .dividerColor))),
                                                       ],
                                                     ))),
@@ -331,7 +334,7 @@ class _CubeViewState extends State<CubeView> {
                                     Container(
                                         alignment: Alignment.topLeft,
                                         width: double.maxFinite,
-                                        child: ValueListenableBuilder(
+                                        child: ValueListenableBuilder<bool>(
                                             valueListenable: opened,
                                             builder: (a, b, w) {
                                               return IconButton(
@@ -346,7 +349,7 @@ class _CubeViewState extends State<CubeView> {
                                             })),
                                     Expanded(
                                         child: CubeDataViewer(
-                                            controller: dvController))
+                                            controller: dvController!))
                                   ],
                                 ),
                         ),
@@ -358,7 +361,7 @@ class _CubeViewState extends State<CubeView> {
 
   List<Widget> buildActions(context) {
     return [
-      if (widget.propEnabled)
+      if (widget.propEnabled!)
         IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
@@ -369,7 +372,7 @@ class _CubeViewState extends State<CubeView> {
         IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              widget.onReload();
+              widget.onReload!();
               //controller.calculate();
             })
     ];
@@ -380,9 +383,9 @@ class _CubeViewState extends State<CubeView> {
 
   createColumns(List<Map<String, dynamic>> source) {
     //dvController.columns = [];
-    dvController.paginatedController.columns = [];
-    if ((controller.rows.length + controller.columns.length) <= 2)
-      dvController.paginatedController.columns.add(DataViewerColumn(
+    dvController!.paginatedController.columns = [];
+    if ((controller!.rows.length + controller!.columns.length) <= 2)
+      dvController!.paginatedController.columns.add(DataViewerColumn(
         name: 'icon',
         label: '',
         sort: false,
@@ -392,11 +395,11 @@ class _CubeViewState extends State<CubeView> {
         builder: (i, x) => Text('.'),
       ));
     List<CubeDimension> cols = [
-      ...controller.rows,
-      if (controller.aggrs.length == 0) ...controller.columns
+      ...controller!.rows,
+      if (controller!.aggrs.length == 0) ...controller!.columns
     ];
     for (var item in cols) {
-      dvController.paginatedController.columns.add(DataViewerColumn(
+      dvController!.paginatedController.columns.add(DataViewerColumn(
         name: item.name,
         label: item.label,
         width: item.width ?? 120,
@@ -428,8 +431,8 @@ class _CubeViewState extends State<CubeView> {
       ));
     }
 
-    for (var item in controller.aggrs) {
-      var option = controller.findByName(item.aggrName);
+    for (var item in controller!.aggrs) {
+      var option = controller!.findByName(item.aggrName);
       var c = DataViewerColumn(
           name: item.name,
           label: item.label,
@@ -439,7 +442,7 @@ class _CubeViewState extends State<CubeView> {
             return (item.onGetValue != null) ? item.onGetValue(x) : x;
           },
           builder: (i, v) {
-            String s, s0;
+            String? s, s0;
             var k = v.keys.toList()[0];
             s0 = '${v[k] ?? ''}';
 
@@ -453,7 +456,7 @@ class _CubeViewState extends State<CubeView> {
               if ((vl != null) && (vl == 0))
                 return Text('');
               else
-                return Text((s ?? '').toString());
+                return Text((s).toString());
             } else
               return SizedBox.expand(
                   child: Container(
@@ -469,18 +472,18 @@ class _CubeViewState extends State<CubeView> {
               ));
           },
           width: option?.width ?? 120);
-      dvController.paginatedController.columns.add(c);
+      dvController!.paginatedController.columns.add(c);
     }
 
-    if (dvController.paginatedController.columns.length == 0)
-      dvController.paginatedController.columns
+    if (dvController!.paginatedController.columns.length == 0)
+      dvController!.paginatedController.columns
           .add(PaginatedGridColumn(name: 'none'));
   }
 }
 
 class CubeColumnDragtarget extends StatelessWidget {
   const CubeColumnDragtarget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -500,7 +503,7 @@ class CubeColumnDragtarget extends StatelessWidget {
 
 class CubeRowDragtaget extends StatelessWidget {
   const CubeRowDragtaget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -521,7 +524,7 @@ class CubeRowDragtaget extends StatelessWidget {
 
 class CubeValuesDragtaget extends StatelessWidget {
   const CubeValuesDragtaget({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -541,12 +544,12 @@ class CubeValuesDragtaget extends StatelessWidget {
 }
 
 class CubeListDragTarget extends StatelessWidget {
-  final List<CubeDimension> items;
-  final Function(CubeDimension) onAccept;
-  final List<CubeViewType> acceptTypes;
-  final CubeViewType containerType;
+  final List<CubeDimension>? items;
+  final Function(CubeDimension)? onAccept;
+  final List<CubeViewType>? acceptTypes;
+  final CubeViewType? containerType;
   const CubeListDragTarget({
-    Key key,
+    Key? key,
     this.items,
     this.onAccept,
     this.acceptTypes,
@@ -560,26 +563,26 @@ class CubeListDragTarget extends StatelessWidget {
     return DragTarget<CubeDimension>(
       builder: (a, b, c) => SizedBox.expand(
         child: Wrap(children: [
-          for (var index = 0; index < items.length; index++)
+          for (var index = 0; index < items!.length; index++)
             Container(
               width: 100,
               child: _BuildDragSpace(
                   index: index,
-                  item: items[index],
-                  type: containerType,
+                  item: items![index],
+                  type: containerType!,
                   child:
-                      CubeOptionsDraggable(item: items[index], index: index)),
+                      CubeOptionsDraggable(item: items![index], index: index)),
             ),
           if (accepted) Icon(Icons.flip_to_front, size: 32),
         ]),
       ),
       onAccept: (item) {
-        onAccept(item);
+        onAccept!(item);
         accepted = false;
       },
       onLeave: (item) => accepted = false,
       onWillAccept: (item) {
-        return accepted = _types.contains(item.viewType);
+        return accepted = _types.contains(item!.viewType);
       },
       onAcceptWithDetails: (item) {},
     );
@@ -588,17 +591,17 @@ class CubeListDragTarget extends StatelessWidget {
 
 class CubeOptionsDraggable extends StatelessWidget {
   const CubeOptionsDraggable({
-    Key key,
+    Key? key,
     @required this.item,
     this.index,
   }) : super(key: key);
 
-  final CubeDimension item;
-  final int index;
+  final CubeDimension? item;
+  final int? index;
 
   @override
   Widget build(BuildContext context) {
-    item.tag = index;
+    item!.tag = index;
     return Draggable<CubeDimension>(
       data: item,
       feedback: Container(
@@ -608,13 +611,13 @@ class CubeOptionsDraggable extends StatelessWidget {
             width: 100,
             height: 60,
             child: Text(
-              item.label,
+              item!.label,
               style: TextStyle(fontSize: 14),
             ),
           )
           //FlatButton(child: Text(item.label), onPressed: () {}),
           ),
-      child: CubeOptionButton(item: item),
+      child: CubeOptionButton(item: item!),
       //childWhenDragging: Rounded(
       //color: Colors.grey,
       //onPressed: () {},
@@ -625,12 +628,12 @@ class CubeOptionsDraggable extends StatelessWidget {
 }
 
 class _BuildDragSpace extends StatelessWidget {
-  final CubeDimension item;
-  final CubeViewType type;
-  final int index;
-  final Widget child;
+  final CubeDimension? item;
+  final CubeViewType? type;
+  final int? index;
+  final Widget? child;
   const _BuildDragSpace({
-    Key key,
+    Key? key,
     @required this.item,
     @required this.type,
     @required this.index,
@@ -646,7 +649,7 @@ class _BuildDragSpace extends StatelessWidget {
         return Row(
           children: [
             if (accepted) Container(child: Icon(Icons.flip_to_front)),
-            Expanded(child: child),
+            Expanded(child: child!),
           ],
         );
       },
@@ -677,23 +680,23 @@ class _BuildDragSpace extends StatelessWidget {
               CubeViewType.both,
               CubeViewType.column,
               CubeViewType.all
-            ].contains(item.viewType);
-            break;
+            ].contains(item!.viewType);
+
           case CubeViewType.row:
             return accepted = [
               CubeViewType.both,
               CubeViewType.row,
               CubeViewType.all
-            ].contains(item.viewType);
-            break;
+            ].contains(item!.viewType);
+
           case CubeViewType.value:
             return accepted = [
               CubeViewType.all,
               CubeViewType.value,
-            ].contains(item.viewType);
+            ].contains(item!.viewType);
           case CubeViewType.none:
             return accepted = true;
-            break;
+
           default:
         }
         return accepted = false;
@@ -704,17 +707,17 @@ class _BuildDragSpace extends StatelessWidget {
 
 class CubeOptionButton extends StatelessWidget {
   const CubeOptionButton({
-    Key key,
+    Key? key,
     @required this.item,
   }) : super(key: key);
 
-  final CubeDimension item;
+  final CubeDimension? item;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
-      child: Rounded(height: 30, color: Colors.white, child: Text(item.label)),
+      child: Rounded(height: 30, color: Colors.white, child: Text(item!.label)),
     );
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:controls_data/odata_client.dart';
 
 class ODataFuture extends StatelessWidget {
-  final Future<dynamic> future;
-  final Function(BuildContext, ODataResult) builder;
-  final initialData;
-  const ODataFuture({Key key, this.initialData, this.future, this.builder})
+  final Future<dynamic>? future;
+  final Function(BuildContext, ODataResult)? builder;
+  final dynamic? initialData;
+  const ODataFuture({Key? key, this.initialData, this.future, this.builder})
       : super(key: key);
 
   @override
@@ -21,11 +21,11 @@ class ODataFuture extends StatelessWidget {
       builder: (context, response) {
         print('retorno:  ${response.data}');
         if (response.hasData) {
-          var rst = ODataResult(json: response.data);
+          var rst = ODataResult(json: (response.data as Map<String, dynamic>));
           print(rst.data.docs.length);
-          return builder(context, rst);
+          return builder!(context, rst);
         } else
-          return builder(context, ODataResult(json: null));
+          return builder!(context, ODataResult(json: null));
       },
     );
   }

@@ -1,12 +1,12 @@
 name: controls_data
 description: A new Flutter package project.
-version: 20.01.21
+version: 21.03.05
 author:
 homepage: https://tireideletra.com.br
 publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 flutter:
   plugin:
@@ -29,13 +29,13 @@ dependencies:
   intl:
   #universal_html:
   #http:
-  dio:
+  dio: ^4.0.0-beta5
   connectivity:
   uuid:
-  universal_platform:
+  universal_platform: ^1.0.0-nullsafety
   flutter_cache_manager:
-  pdf:
-  printing:  
+  pdf: ^3.0.1
+  printing: ^5.0.1 
   date_format:
 
   control_data_platform_web:

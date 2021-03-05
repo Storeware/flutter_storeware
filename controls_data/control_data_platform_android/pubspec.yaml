@@ -15,6 +15,8 @@ dependencies:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_data/control_data_platform_interface
   shared_preferences:
+  #universal_io:
+  #universal_platform:  
 
 dev_dependencies:
   flutter_test:

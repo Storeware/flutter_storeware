@@ -9,36 +9,31 @@ extension DataExtensionBool on bool {
 }
 
 extension DataExtensionNum on String {
-  double toDouble({String def = '0'}) {
-    return double.tryParse(this ?? def);
+  double toDouble({double def = 0}) {
+    return double.tryParse(this) ?? def;
   }
 
   String toSN() => toBool() ? 'S' : 'N';
-  int toInt({String def = '0'}) {
-    var value = this ?? def;
-    return int.tryParse(value);
+  int toInt({int def = 0}) {
+    return int.tryParse(this) ?? def;
   }
 
-  bool toBool({String def = 'F'}) {
-    var value = this ?? def;
-    switch (def) {
+  bool toBool({bool def = false}) {
+    var value = this;
+    switch (value) {
       case 'F':
         return false;
-        break;
       case 'T':
         return true;
-        break;
       case 'N':
         return false;
-        break;
+
       case 'Y':
         return true;
-        break;
       case 'S':
         return true;
-        break;
       default:
-        return false;
+        return def;
     }
   }
 }
@@ -80,27 +75,28 @@ class DataNotifyChange<T> {
 }
 
 abstract class DataService {
-  Future<Map<String, dynamic>> post(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> post(String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> put(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> put(String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> patch(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> patch(String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> delete(String service, Map<String, dynamic> data,
+  Future<Map<String, dynamic>?> delete(
+      String service, Map<String, dynamic> data,
       {header}) async {
     return null;
   }
 
-  Future<Map<String, dynamic>> send(String service, {header}) {
+  Future<Map<String, dynamic>?> send(String service, {header}) async {
     return null;
   }
 }
@@ -192,7 +188,7 @@ abstract class DataModel {
           v.substring(13, 14) == ':') {
         //print([k, v, v is String, v.substring(10, 11)]);
         try {
-          DateTime d = DateTime.tryParse(v);
+          DateTime? d = DateTime.tryParse(v);
           //print(['datetime', d]);
           if (d != null) rt[k] = d;
         } catch (e) {}
@@ -278,7 +274,7 @@ abstract class DataRows<T extends DataItem> {
     return this;
   }
 
-  rowChanged(skip) {
+  rowChanged(int skip) {
     var old = rowNum;
     rowNum += skip;
     _eof = false;
@@ -330,7 +326,7 @@ abstract class DataRows<T extends DataItem> {
     return items;
   }
 
-  T getItem() {
+  T? getItem() {
     rowChanged(0);
     if (!eof && !bof) {
       return items[rowNum];
@@ -366,7 +362,7 @@ abstract class DataRows<T extends DataItem> {
 enum DataState { dsBrowser, dsEdit, dsInsert, dsDelete }
 
 class DataModelItem {
-  String id;
+  String? id;
   DataState _state = DataState.dsBrowser;
   get isInserting => _state == DataState.dsInsert;
   get isDeleting => _state == DataState.dsDelete;
@@ -405,7 +401,7 @@ class DataModelItem {
 }
 
 abstract class DataModelClass<T> {
-  String collectionName;
+  String? collectionName;
   getById(id);
   enviar(T item);
   snapshots({bool inativo});

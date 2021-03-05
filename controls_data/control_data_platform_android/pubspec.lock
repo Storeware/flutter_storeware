@@ -48,10 +48,10 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "54a0b362768ada089afee2971dff0f63e3a1be6b"
+      resolved-ref: "840120755a997bd1ba6b455f31bffcee41943069"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "0.0.1"
+    version: "0.0.2"
   fake_async:
     dependency: transitive
     description:

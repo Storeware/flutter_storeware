@@ -52,7 +52,7 @@ extension DynamicExtension on dynamic {
   int toInt(value, {def = 0}) {
     if (value is int) return value;
     if (value is num) return value.toInt();
-    if (value is String) return int.tryParse(value);
+    if (value is String) return int.tryParse(value) ?? def;
     return def;
   }
 
@@ -60,7 +60,7 @@ extension DynamicExtension on dynamic {
     if (value is double) return value;
     if (value is int) return value + 0.0;
     if (value is num) return value + 0.0;
-    if (value is String) return double.tryParse(value);
+    if (value is String) return double.tryParse(value) ?? def;
     return def;
   }
 
@@ -71,16 +71,16 @@ extension DynamicExtension on dynamic {
     return def;
   }
 
-  DateTime toDateTime(value, {DateTime def, zone = 0}) {
+  DateTime? toDateTime(value, {DateTime? def, zone = 0}) {
     if (value is String) {
       int dif = (value.endsWith('Z') ? zone : 0);
-      return DateTime.tryParse(value).add(Duration(hours: dif));
+      return DateTime.tryParse(value)?.add(Duration(hours: dif)) ?? def;
     }
     if (value is DateTime) return value;
     return def ?? DateTime.now();
   }
 
-  DateTime toDate(value, {DateTime def}) {
+  DateTime? toDate(value, {DateTime? def}) {
     if (value is String) {
       def = DateTime.tryParse(value.substring(0, 10)) ?? DateTime.now();
     }
@@ -109,14 +109,14 @@ class LoginTokenChanged extends BlocModelX<bool> {
 }
 
 class ODataQuery {
-  final String resource;
-  String select;
-  String filter;
-  int top;
-  int skip;
-  String groupby;
-  String orderby;
-  String join;
+  final String? resource;
+  String? select;
+  String? filter;
+  int? top;
+  int? skip;
+  String? groupby;
+  String? orderby;
+  String? join;
   ODataQuery({
     @required this.resource,
     @required this.select,
@@ -130,12 +130,12 @@ class ODataQuery {
 }
 
 class ODataDocument {
-  String id;
-  Map<String, dynamic> doc;
+  String? id;
+  Map<String, dynamic>? doc;
   data() => doc;
-  dynamic operator [](String key) => doc[key];
+  dynamic operator [](String key) => doc![key];
   bool operator ==(item) {
-    return id == item.id;
+    return (id ?? '_') == ((item as ODataDocument).id ?? '');
   }
 
   ODataDocument({this.doc});
@@ -143,7 +143,7 @@ class ODataDocument {
 
 class ODataDocuments {
   /// compatibilidade com firebase
-  List<ODataDocument> docs;
+  List<ODataDocument> docs = [];
   get length => docs.length;
   dynamic operator [](int idx) => docs[idx];
   get first => docs.first;
@@ -155,7 +155,7 @@ class ODataDocuments {
 
 class ODataResult {
   int rows = 0;
-  Map<String, dynamic> response;
+  Map<String, dynamic>? response;
   ODataDocuments _data = ODataDocuments();
   bool hasData = false;
   toList() async {
@@ -166,10 +166,10 @@ class ODataResult {
     return [for (var item in _data.docs) item.data()];
   }
 
-  static ODataResult item({Map<String, dynamic> json}) {
+  static ODataResult item({Map<String, dynamic>? json}) {
     return ODataResult(json: {
       "rows": 1,
-      "result": [json]
+      "result": (json == null) ? [] : [json]
     });
   }
 
@@ -193,7 +193,7 @@ class ODataResult {
   ODataDocuments get data => _data;
   List<ODataDocument> get docs => _data.docs;
   int get length => _data.docs.length;
-  ODataResult({Map<String, dynamic> json}) {
+  ODataResult({Map<String, dynamic>? json}) {
     _encode(json);
   }
   void _encode(json) {
@@ -212,7 +212,7 @@ class ODataResult {
           doc.id = "${item['id']}";
           doc.doc = {};
           item.forEach((k, v) {
-            doc.doc[k] = v;
+            doc.doc![k] = v;
           });
           // print(item);
           _data.docs.add(doc);
@@ -227,13 +227,13 @@ class ODataResult {
 }
 
 class ODataBuilder extends StatelessWidget {
-  final ODataQuery query;
-  final ODataClient client;
-  final String cacheControl;
-  final Function(BuildContext, ODataResult) builder;
-  final initialData;
+  final ODataQuery? query;
+  final ODataClient? client;
+  final String? cacheControl;
+  final Function(BuildContext, ODataResult)? builder;
+  final dynamic? initialData;
   const ODataBuilder(
-      {Key key,
+      {Key? key,
       this.client,
       this.initialData,
       this.cacheControl,
@@ -248,24 +248,24 @@ class ODataBuilder extends StatelessWidget {
       initialData: (initialData != null)
           ? {
               "rows": 1,
-              "result": [initialData]
+              "result": (initialData == null) ? [] : [initialData]
             }
           : null,
-      future: execute(client, query),
+      future: execute(client!, query),
       builder: (context, response) {
         if (response.hasData) {
-          var rst = ODataResult(json: response.data);
-          return builder(context, rst);
+          var rst = ODataResult(json: response.data as Map<String, dynamic>);
+          return builder!(context, rst);
         } else
-          return builder(context, ODataResult(json: null));
+          return builder!(context, ODataResult(json: null));
       },
     );
   }
 
-  Future execute(ODataClient odata, query) async {
+  Future execute(ODataClient? odata, query) async {
     debug(['execute', odata]);
     var odt = odata ?? ODataInst();
-    return odt.send(query, cacheControl: cacheControl);
+    return odt.send(query, cacheControl: cacheControl!);
   }
 }
 
@@ -281,7 +281,7 @@ class ODataClient {
   get processing => DataProcessingNotifier();
   get driver => client.headers['db-driver'] ?? 'fb';
 
-  String get baseUrl => client.baseUrl;
+  String get baseUrl => client.baseUrl!;
   set baseUrl(x) {
     client.baseUrl = x;
   }
@@ -315,9 +315,9 @@ class ODataClient {
     return this;
   }
 
-  Future<dynamic> send(ODataQuery query, {String cacheControl}) async {
+  Future<dynamic> send(ODataQuery query, {String? cacheControl}) async {
     try {
-      String r = query.resource + '?';
+      String r = (query.resource ?? '') + '?';
       if (query.select != null) r += '\$select=${query.select}&';
       if (query.filter != null) r += '\$filter=${query.filter}&';
       if (query.top != null) r += '\$top=${query.top}&';
@@ -433,7 +433,7 @@ class ODataClient {
     }
   }
 
-  Future<Map> openJson(String command, {String cacheControl}) async {
+  Future<Map> openJson(String command, {String? cacheControl}) async {
     try {
       //    print(command);
       var url = client.formatUrl(path: 'open');
@@ -478,7 +478,7 @@ class ODataInst extends ODataClient {
   ODataInst._create();
   factory ODataInst() => _singleton;
   DataNotifyChange loginNotifier = DataNotifyChange<Map>();
-  String token;
+  String? token;
   auth(user, pass) {
     var bytes = utf8.encode('$user:$pass');
     var b64 = 'Basic ' + base64.encode(bytes);
@@ -512,14 +512,14 @@ class ODataInst extends ODataClient {
 get ODataClientDefault => ODataInst();
 
 abstract class ODataModelClass<T extends DataItem> {
-  ODataClient CC;
-  String collectionName;
+  ODataClient? CC;
+  String? collectionName;
   String columns = '*';
   String externalKeys = '';
-  ODataClient API;
+  ODataClient? API;
   ODataModelClass({this.API});
-  get driver => API.client.headers['db-driver'] ?? 'fb';
-  makeCollection(Map<String, dynamic> item) {
+  get driver => API!.client.headers['db-driver'] ?? 'fb';
+  makeCollection(Map<String, dynamic>? item) {
     return collectionName;
   }
 
@@ -531,13 +531,18 @@ abstract class ODataModelClass<T extends DataItem> {
   }
 
   Future<List<dynamic>> query(
-      {filter, String select, int top, int skip, orderBy, cacheControl}) async {
+      {filter,
+      String? select,
+      int? top,
+      int? skip,
+      orderBy,
+      cacheControl}) async {
     return search(
             resource: makeCollection(null),
             select: select ?? columns,
             filter: filter,
-            top: top,
-            skip: skip,
+            top: top!,
+            skip: skip!,
             orderBy: orderBy,
             cacheControl: cacheControl)
         .then((ODataResult r) {
@@ -558,7 +563,7 @@ abstract class ODataModelClass<T extends DataItem> {
     String tempo = '1';
     String res = resource ?? makeCollection(null);
     if (cached.contains('=')) tempo = cached.split('=')[1];
-    String key = '${API.client.headers['contaid']}$res $filter $select';
+    String key = '${API!.client.headers['contaid']}$res $filter $select';
     return Cached.value(key, maxage: int.tryParse(tempo) ?? 60, builder: (k) {
       return search(
               resource: res,
@@ -597,7 +602,7 @@ abstract class ODataModelClass<T extends DataItem> {
     });
   }
 
-  Future<Map<String, dynamic>> getOne({filter}) async {
+  Future<Map<String, dynamic>?> getOne({filter}) async {
     return search(
             resource: makeCollection(null),
             select: columns,
@@ -611,7 +616,7 @@ abstract class ODataModelClass<T extends DataItem> {
   Future<Map<String, dynamic>> enviar(T item) {
     var d = item.toJson();
     try {
-      return API.post(makeCollection(d), d).then((x) => jsonDecode(x));
+      return API!.post(makeCollection(d), d).then((x) => jsonDecode(x));
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;
@@ -627,7 +632,7 @@ abstract class ODataModelClass<T extends DataItem> {
 
   afterChangeEvent(item) {}
 
-  Future<Map<String, dynamic>> post(item) async {
+  Future<Map<String, dynamic>?> post(item) async {
     var d;
     if (item is T)
       d = item.toJson();
@@ -636,8 +641,8 @@ abstract class ODataModelClass<T extends DataItem> {
     if (validate(d)) {
       try {
         d = removeExternalKeys(d);
-        return API.post(makeCollection(d), d).then((x) {
-          if (CC != null) CC.post(collectionName, d);
+        return API!.post(makeCollection(d), d).then((x) {
+          if (CC != null) CC?.post(collectionName!, d);
           afterChangeEvent(d);
           return jsonDecode(x);
         });
@@ -649,7 +654,7 @@ abstract class ODataModelClass<T extends DataItem> {
     }
   }
 
-  Future<Map<String, dynamic>> put(item) async {
+  Future<Map<String, dynamic>?> put(item) async {
     var d;
     if (item is T)
       d = item.toJson();
@@ -658,34 +663,31 @@ abstract class ODataModelClass<T extends DataItem> {
     if (validate(d)) {
       try {
         d = removeExternalKeys(d);
-        return API.client
-            .openJsonAsync(API.client.formatUrl(path: collectionName),
-                method: "PUT", body: API.removeNulls(d))
+        return API!.client
+            .openJsonAsync(API!.client.formatUrl(path: collectionName),
+                method: "PUT", body: API!.removeNulls(d))
             .then((x) {
-          API.client.notifyLog.notify(x.toString());
-          if (CC != null) CC.put(makeCollection(d), d);
+          API!.client.notifyLog.notify(x.toString());
+          if (CC != null) CC!.put(makeCollection(d), d);
           afterChangeEvent(d);
           return x;
         });
       } catch (e) {
         ErrorNotify.send('$e');
         return null;
-        rethrow;
       }
     }
   }
 
-  Future<Map<String, dynamic>> send(ODataEventState event, T item) async {
+  Future<Map<String, dynamic>?> send(ODataEventState event, T item) async {
     switch (event) {
       case ODataEventState.insert:
         return post(item);
-        break;
       case ODataEventState.update:
         return put(item);
-        break;
+
       case ODataEventState.delete:
         return delete(item);
-        break;
       default:
         return null;
     }
@@ -694,18 +696,18 @@ abstract class ODataModelClass<T extends DataItem> {
   Future<Map<String, dynamic>> delete(item) async {
     Map<String, dynamic> d;
     if (item is T)
-      d = API.removeNulls(item.toJson());
+      d = API!.removeNulls(item.toJson());
     else
-      d = API.removeNulls(item);
+      d = API!.removeNulls(item);
     try {
       //return API.delete(collectionName, d).then((x) => jsonDecode(x));
-      return API.client
+      return API!.client
           .openJsonAsync(
-              API.client.formatUrl(path: 'delete/${makeCollection(d)}'),
+              API!.client.formatUrl(path: 'delete/${makeCollection(d)}'),
               method: 'POST',
               body: d)
           .then((x) {
-        if (CC != null) CC.post('delete/${makeCollection(d)}', d);
+        if (CC != null) CC!.post('delete/${makeCollection(d)}', d);
 
         return x;
       });
@@ -713,25 +715,24 @@ abstract class ODataModelClass<T extends DataItem> {
       ErrorNotify.send('$err');
       throw err;
     }
-    ;
   }
 
   Future<ODataResult> search(
-      {String resource,
-      String select,
-      String filter,
-      String orderBy,
-      String groupBy,
-      int top,
-      int skip,
-      String join,
-      String cacheControl}) async {
+      {String? resource,
+      String? select,
+      String? filter,
+      String? orderBy,
+      String? groupBy,
+      int? top,
+      int? skip,
+      String? join,
+      String? cacheControl}) async {
     try {
-      return API
+      return API!
           .send(
               ODataQuery(
                   resource: resource ?? makeCollection(null),
-                  select: select ?? columns ?? '*',
+                  select: (select ?? columns),
                   filter: filter,
                   top: top,
                   skip: skip,
@@ -752,16 +753,16 @@ abstract class ODataModelClass<T extends DataItem> {
   }
 
   Future<ODataResult> snapshots({
-    String select,
-    String filter,
-    String groupBy,
-    String orderBy,
+    String? select,
+    String? filter,
+    String? groupBy,
+    String? orderBy,
     bool inativo = false,
     int top = 200,
     int skip = 0,
-    String cacheControl,
+    String? cacheControl,
   }) async {
-    return API
+    return API!
         .send(
             ODataQuery(
               resource: makeCollection(null),

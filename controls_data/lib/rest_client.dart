@@ -26,7 +26,7 @@ class RestClientBloC<T> {
 
 class LinearDataProgressIndicator extends StatelessWidget {
   final double height;
-  const LinearDataProgressIndicator({Key key, this.height = 3})
+  const LinearDataProgressIndicator({Key? key, this.height = 3})
       : super(key: key);
 
   @override
@@ -36,7 +36,7 @@ class LinearDataProgressIndicator extends StatelessWidget {
         child: StreamBuilder<Object>(
             stream: DataProcessingNotifier().stream,
             builder: (context, snapshot) {
-              return (snapshot.data ?? false)
+              return (!snapshot.hasData)
                   ? LinearProgressIndicator(
                       backgroundColor: Colors.transparent,
                     )
@@ -60,17 +60,19 @@ class DataProcessingNotifier {
 }
 
 class RestClientProvider<T> extends StatelessWidget {
-  final RestClientBloC<T> bloc;
-  final AsyncWidgetBuilder builder;
-  final Widget noDataChild;
-  const RestClientProvider({Key key, this.bloc, this.builder, this.noDataChild})
+  final RestClientBloC<T>? bloc;
+  final AsyncWidgetBuilder? builder;
+  final Widget? noDataChild;
+  const RestClientProvider(
+      {Key? key, @required this.bloc, @required this.builder, this.noDataChild})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bloc.stream,
+      stream: bloc?.stream,
       builder: (a, b) {
-        return (b.hasData ? builder(a, b) : noDataChild ?? Container());
+        if (builder != null) return builder!(a, b);
+        return noDataChild ?? Container();
       },
     );
   }
@@ -83,13 +85,13 @@ class RestClient {
   String service = '/';
   String accessControlAllowOrigin = '*';
   Map<String, String> _headers = {};
-  Map<String, dynamic> jsonResponse;
-  RestClient({this.baseUrl}) {}
-  String tokenId;
-  String _authorization;
-  String get authorization => _authorization;
-  set authorization(String x) {
-    _authorization = x;
+  Map<String, dynamic>? jsonResponse;
+  RestClient({this.baseUrl});
+  String? tokenId;
+  String? _authorization;
+  String? get authorization => _authorization;
+  set authorization(String? x) {
+    _authorization = x!;
   }
 
   bool inDebug = false;
@@ -134,39 +136,39 @@ class RestClient {
   }
 
   dynamic fieldByName(key) {
-    return jsonResponse[key];
+    return jsonResponse?[key];
   }
 
-  get response => encode(jsonResponse);
+  String get response => encode(jsonResponse);
   set response(String data) {
-    if (data != null) jsonResponse = decode(data);
+    jsonResponse = decode(data);
   }
 
-  int rows({String data, key = 'rows'}) {
+  int rows({String? data, key = 'rows'}) {
     if (data != null) response = data;
     return fieldByName(key) ?? 0;
   }
 
-  bool checkError({String data, String key = 'error'}) {
-    response = data;
-    if (jsonResponse[key] != null) {
-      throw new StateError(jsonResponse[key]);
+  bool checkError({String? data, String key = 'error'}) {
+    response = data!;
+    if (jsonResponse?[key] != null) {
+      throw new StateError(jsonResponse?[key]);
     }
     return true;
   }
 
-  result({String data, key = 'result'}) {
-    response = data;
+  result({String? data, key = 'result'}) {
+    response = data!;
     return fieldByName(key);
   }
 
   /*  RestClient Interface */
-  String baseUrl;
+  String? baseUrl;
   Map<String, dynamic> params = {};
   String contentType = 'application/json';
   Map<String, String> get headers => _headers;
-  autenticator({String key = 'authorization', String value}) {
-    _headers[key] = value;
+  autenticator({String key = 'authorization', String? value}) {
+    _headers[key] = value!;
     return this;
   }
 
@@ -178,15 +180,13 @@ class RestClient {
   String prefix = '';
   formatUrl({path}) {
     String p = '';
-    (params ?? {}).forEach((key, value) {
+    (params).forEach((key, value) {
       p += (p == '' ? '?' : '&') + "$key=$value";
     });
     if (path != null) {
       service = path;
     }
-    String url = /*(baseUrl ?? '') +*/ (prefix ?? '') +
-        (service ?? '') +
-        (p ?? '');
+    String url = (prefix) + (service) + (p);
     return url;
   }
 
@@ -199,20 +199,20 @@ class RestClient {
     tokenId = value;
   }
 
-  getToken() => tokenId;
+  String? getToken() => tokenId;
 
   addHeader(String key, value) {
     _headers[key] = value ?? '';
     if (authorization != null) {
-      _headers['authorization'] = authorization;
+      _headers['authorization'] = authorization!;
     }
-    if (tokenId != null) _headers['token'] = tokenId;
+    if (tokenId != null) _headers['token'] = tokenId!;
     return this;
   }
 
   int statusCode = 0;
   _decodeResp(Response resp) {
-    statusCode = resp.statusCode;
+    statusCode = resp.statusCode!;
     if (resp.headers['content-type']
         .toString()
         .contains('json')) if (resp.data != null) {
@@ -220,14 +220,14 @@ class RestClient {
     }
   }
 
-  String cacheControl;
+  String? cacheControl;
   _setHeader() {
-    if ((contentType ?? '') != '') addHeader('content-type', contentType);
+    if ((contentType) != '') addHeader('content-type', contentType);
     if (cacheControl != null) addHeader('Cache-Control', cacheControl);
   }
 
   Future<String> openUrl(String url,
-      {String method, body, String contentType, String cacheControl}) async {
+      {String? method, body, String? contentType, String? cacheControl}) async {
     var resp = await openJson(url,
         method: method,
         body: body,
@@ -242,23 +242,30 @@ class RestClient {
   int receiveTimeout = 60000;
   bool followRedirects = true;
 
+  getContentType([String contentType = 'application/json']) {
+    if (contentType.contains('text')) return ContentType.text;
+    if (contentType.contains('json')) return ContentType.json;
+    return ContentType.binary;
+  }
+
   Future<dynamic> openJson(String url,
-      {String method = 'GET',
+      {String? method = 'GET',
       body,
-      String contentType,
-      String cacheControl}) async {
+      String? contentType,
+      String? cacheControl}) async {
     _setHeader();
     final _h = _headers;
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
-    Response resp;
+    Response? resp;
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
         receiveTimeout: receiveTimeout,
-        baseUrl: this.baseUrl,
+        baseUrl: this.baseUrl!,
         headers: _h,
         queryParameters: params,
-        contentType: contentType ?? this.contentType // [e automatic no DIO??]
+        contentType: getContentType(
+            contentType ?? this.contentType) // [e automatic no DIO??]
         );
 
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
@@ -323,12 +330,12 @@ class RestClient {
   bool silent = false;
 
   formataMensagemErro(path, e) {
-    var msg = '${e?.message}' ?? '';
+    var msg = '${e?.message}';
     if (inDebug) msg += '$path |';
     if ((e?.response?.statusCode ?? 0) == 403)
-      return 'A solicita√ß√£o foi recusada pelo servidor - checar permiss√µes de acesso (403) ($msg)';
+      return 'A solicitaÁ„o foi recusada pelo servidor - checar permissıes de acesso (403) ($msg)';
     if ((e?.response?.statusCode ?? 0) == 404)
-      return 'A solicita√ß√£o n√£o foi encontrada - checar se √© um objeto v√°lido (404) ($msg)';
+      return 'A solicitaÁ„o n„o foi encontrada - checar se È um objeto v·lido (404) ($msg)';
 
     String title = '${e?.message}';
     String es =
@@ -359,7 +366,7 @@ class RestClient {
   }
 
   Future<Map<String, dynamic>> openJsonAsync(String url,
-      {String method = 'GET', Map<String, dynamic> body, cacheControl}) async {
+      {String method = 'GET', Map<String, dynamic>? body, cacheControl}) async {
     _setHeader();
     final _h = _headers;
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
@@ -367,13 +374,13 @@ class RestClient {
       connectTimeout: connectionTimeout,
       followRedirects: followRedirects,
       receiveTimeout: receiveTimeout,
-      baseUrl: this.baseUrl,
+      baseUrl: this.baseUrl!,
       headers: _h,
 
       /// The request Content-Type. The default value is "application/json; charset=utf-8".
       //encoding: Encoding.getByName('utf-8'),
       queryParameters: params,
-      contentType: contentType, //formUrlEncodedContentType,
+      contentType: getContentType(contentType), //formUrlEncodedContentType,
       //contentType: this.contentType
     );
     notifyLog.send('$method: ${this.baseUrl}$url - $contentType');
@@ -438,7 +445,7 @@ class RestClient {
   }
 
   Future<String> send(String urlService,
-      {method = 'GET', body, String cacheControl}) async {
+      {method = 'GET', body, String? cacheControl}) async {
     this.service = urlService;
     var url = encodeUrl();
     if (inDebug) print(['SEND', url]);
@@ -467,7 +474,7 @@ class RestClient {
     return openUrl(url, method: 'DELETE', body: body).then((x) => x);
   }
 
-  Future<String> patch(String urlService, {body, String contentType}) async {
+  Future<String> patch(String urlService, {body, String? contentType}) async {
     this.service = urlService;
     var url = encodeUrl();
     contentType ??= this.contentType;
@@ -481,7 +488,7 @@ class RestClient {
   }
 
   rawData(String url,
-      {method = 'GET', body, String contentType, String cacheControl}) async {
+      {method = 'GET', body, String? contentType, String? cacheControl}) async {
     _setHeader();
     final _h = _headers;
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
@@ -490,10 +497,11 @@ class RestClient {
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
         receiveTimeout: receiveTimeout,
-        baseUrl: this.baseUrl,
+        baseUrl: this.baseUrl!,
         headers: _h,
         queryParameters: params,
-        contentType: contentType ?? this.contentType // [e automatic no DIO??]
+        contentType: getContentType(
+            contentType ?? this.contentType) // [e automatic no DIO??]
         );
 
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
@@ -548,8 +556,8 @@ class ClientTransformer extends DefaultTransformer {
 */
 
 class DioConnectivityRequestRetrier {
-  final Dio dio;
-  final Connectivity connectivity;
+  final Dio? dio;
+  final Connectivity? connectivity;
 
   DioConnectivityRequestRetrier({
     @required this.dio,
@@ -557,25 +565,25 @@ class DioConnectivityRequestRetrier {
   });
 
   Future<Response> scheduleRequestRetry(RequestOptions requestOptions) async {
-    StreamSubscription streamSubscription;
+    StreamSubscription? streamSubscription;
     final responseCompleter = Completer<Response>();
 
-    streamSubscription = connectivity.onConnectivityChanged.listen(
+    streamSubscription = connectivity?.onConnectivityChanged.listen(
       (connectivityResult) async {
         RestConnectionChanged()
             .notify(connectivityResult != ConnectivityResult.none);
         if (connectivityResult != ConnectivityResult.none) {
-          streamSubscription.cancel();
+          streamSubscription?.cancel();
           // Complete the completer instead of returning
           responseCompleter.complete(
-            dio.request(
+            dio?.request(
               requestOptions.path,
               cancelToken: requestOptions.cancelToken,
               data: requestOptions.data,
               onReceiveProgress: requestOptions.onReceiveProgress,
               onSendProgress: requestOptions.onSendProgress,
               queryParameters: requestOptions.queryParameters,
-              options: requestOptions,
+              //options: requestOptions,
             ),
           );
         }
@@ -587,7 +595,7 @@ class DioConnectivityRequestRetrier {
 }
 
 class RetryOnConnectionChangeInterceptor extends Interceptor {
-  final DioConnectivityRequestRetrier requestRetrier;
+  final DioConnectivityRequestRetrier? requestRetrier;
 
   RetryOnConnectionChangeInterceptor({
     @required this.requestRetrier,
@@ -597,7 +605,7 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
   Future onError(DioError err) async {
     if (_shouldRetry(err)) {
       try {
-        return requestRetrier.scheduleRequestRetry(err.request);
+        return requestRetrier?.scheduleRequestRetry(err.request!);
       } catch (e) {
         // Let any new error from the retrier pass through
         return e;
@@ -614,8 +622,8 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
   }
 
   bool _shouldRetry(DioError err) {
-    return err.type == DioErrorType.DEFAULT &&
-        err.error != null &&
+    return err.type == //DioErrorType.DEFAULT &&
+        //err.error != null &&
         err.error is SocketException;
   }
 }

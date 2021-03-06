@@ -21,53 +21,53 @@ class BlocModel<T> {
     close();
   }
 
-  initial({T Function() next}) {
-    var r = next();
+  initial({T Function()? next}) {
+    var r = next!();
     notify(r);
     return stream;
   }
 
-  Widget value(T value, {Widget Function(T) builder}) {
+  Widget value(T value, {Widget Function(T)? builder}) {
     return StreamBuilder<T>(
         stream: this.stream,
         initialData: value,
         builder: (ctx, snap) {
           if (!snap.hasData) return Container();
-          return builder(snap.data);
+          return builder!(snap.data!);
         });
   }
 }
 
 class BlocNotifier<T> extends StatelessWidget {
-  final Function(AsyncSnapshot<T>) builder;
-  final BlocModel<dynamic> bloc;
-  final T initialData;
-  const BlocNotifier({Key key, this.bloc, this.builder, this.initialData})
+  final Function(AsyncSnapshot)? builder;
+  final BlocModel<dynamic>? bloc;
+  final T? initialData;
+  const BlocNotifier({Key? key, this.bloc, this.builder, this.initialData})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: bloc.stream,
+    return StreamBuilder<dynamic>(
+      stream: bloc!.stream,
       initialData: initialData,
       builder: (x, y) {
-        return builder(y);
+        return builder!(y);
       },
     );
   }
 }
 
 class StreamNotifier<T> extends StatelessWidget {
-  final BlocModel<T> bloc;
-  final AsyncWidgetBuilder<T> builder;
-  final T initialData;
+  final BlocModel<T>? bloc;
+  final AsyncWidgetBuilder<T>? builder;
+  final T? initialData;
   const StreamNotifier({Key key, this.bloc, this.builder, this.initialData})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bloc.stream,
-      builder: builder,
+      stream: bloc!.stream,
+      builder: builder!,
       initialData: initialData,
     );
   }
@@ -80,9 +80,9 @@ class RebuilderBloc extends BlocModel<dynamic> {
 }
 
 class RebuildNotify extends StatelessWidget {
-  final Function(AsyncSnapshot<dynamic>) builder;
-  final BlocModel<dynamic> bloc;
-  const RebuildNotify({Key key, @required this.builder, this.bloc})
+  final Function(AsyncSnapshot<dynamic>)? builder;
+  final BlocModel<dynamic>? bloc;
+  const RebuildNotify({Key? key, @required this.builder, this.bloc})
       : super(key: key);
 
   @override

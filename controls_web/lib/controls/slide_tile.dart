@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 
 class SlideTile extends StatefulWidget {
-  final String button;
-  final Function onTap;
-  final Function onPressed;
-  final Function onRatingPressed;
-  final String img;
-  final String title;
-  final String subTitle;
-  final String rating;
-  final Color ratingBG;
-  final double elevation;
-  final Color color;
-  final Color textColor;
-  final Widget trailing;
+  final String? button;
+  final Function? onTap;
+  final Function? onPressed;
+  final Function? onRatingPressed;
+  final String? img;
+  final String? title;
+  final String? subTitle;
+  final String? rating;
+  final Color? ratingBG;
+  final double? elevation;
+  final Color? color;
+  final Color? textColor;
+  final Widget? trailing;
   SlideTile(
-      {Key key,
+      {Key? key,
       this.button,
       this.color,
       this.onTap,
@@ -56,7 +56,7 @@ class _SlideTileState extends State<SlideTile> {
                     height: MediaQuery.of(context).size.height / 3.7,
                     width: MediaQuery.of(context).size.width,
                     child: InkWell(
-                      onTap: widget.onTap,
+                      onTap: () => widget.onTap!(),
                       child: ClipRRect(
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
@@ -75,15 +75,15 @@ class _SlideTileState extends State<SlideTile> {
                     right: 6.0,
                     child: widget.rating != null
                         ? SlideButton(
-                            color: widget.color,
+                            color: widget.color!,
                             leading: Icon(
                               Icons.star,
                               color: widget.ratingBG,
                               size: 10,
                             ),
                             text: " ${widget.rating} ",
-                            textColor: widget.textColor,
-                            onPressed: widget.onRatingPressed,
+                            textColor: widget.textColor!,
+                            onPressed: () => widget.onRatingPressed!(),
                           )
                         : Container(),
                   ),
@@ -92,10 +92,10 @@ class _SlideTileState extends State<SlideTile> {
                     left: 6.0,
                     child: widget.button != null
                         ? SlideButton(
-                            color: widget.color,
-                            text: widget.button,
-                            textColor: widget.textColor,
-                            onPressed: widget.onPressed)
+                            color: widget.color!,
+                            text: widget.button!,
+                            textColor: widget.textColor!,
+                            onPressed: () => widget.onPressed!())
                         : Container(),
                   ),
                 ],
@@ -151,7 +151,7 @@ class SlideButton extends StatelessWidget {
       {this.text,
       this.textStyle,
       this.color,
-      Key key,
+      Key? key,
       this.elevation = 1.0,
       this.textColor,
       this.onPressed,
@@ -162,49 +162,50 @@ class SlideButton extends StatelessWidget {
       this.trailing})
       : super(key: key);
 
-  final String text;
-  final Color textColor;
-  final Function onPressed;
-  final Widget leading;
-  final Widget trailing;
-  final double elevation;
-  final TextStyle textStyle;
-  final Color color;
-  final Widget child;
-  final double width;
-  final double height;
+  final String? text;
+  final Color? textColor;
+  final Function? onPressed;
+  final Widget? leading;
+  final Widget? trailing;
+  final double? elevation;
+  final TextStyle? textStyle;
+  final Color? color;
+  final Widget? child;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-       width: width,
-       height: height,
+        width: width,
+        height: height,
         child: Card(
-      color: color,
-      elevation: elevation,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(3.0)),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Row(
-          children: <Widget>[
-            leading ?? Container(),
-            InkWell(
-              onTap: onPressed,
-              child: Text(
-                text ?? '',
-                style: textStyle ??
-                    TextStyle(
-                      fontSize: 10,
-                      color: textColor ?? Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
+          color: color,
+          elevation: elevation,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(3.0)),
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Row(
+              children: <Widget>[
+                leading ?? Container(),
+                InkWell(
+                  onTap: () => onPressed!(),
+                  child: Text(
+                    text ?? '',
+                    style: textStyle ??
+                        TextStyle(
+                          fontSize: 10,
+                          color: textColor ?? Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+                child ?? Container(),
+                trailing ?? Container()
+              ],
             ),
-            child ?? Container(),
-            trailing ?? Container()
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }

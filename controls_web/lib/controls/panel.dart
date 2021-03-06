@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Panel extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final Widget title;
-  final Widget appBar;
-  final List<Widget> actions;
-  final double elevation;
-  final EdgeInsets margin;
-  final Clip clipBehavior;
-  final ShapeBorder shape;
-  final Widget leading;
+  final Widget? child;
+  final Color? color;
+  final Widget? title;
+  final Widget? appBar;
+  final List<Widget>? actions;
+  final double? elevation;
+  final EdgeInsets? margin;
+  final Clip? clipBehavior;
+  final ShapeBorder? shape;
+  final Widget? leading;
   const Panel(
-      {Key key,
+      {Key? key,
       this.appBar,
       this.margin,
       this.color,
@@ -36,17 +36,18 @@ class Panel extends StatelessWidget {
       shape: shape,
       child: Column(
         children: <Widget>[
-          appBar ?? bappBar
-              ? AppBar(
-                  title: title,
-                  automaticallyImplyLeading: false,
-                  elevation: 0.0,
-                  actions: actions,
-                  leading: leading,
-                )
-              : Container(),
+          appBar ??
+              (bappBar
+                  ? AppBar(
+                      title: title,
+                      automaticallyImplyLeading: false,
+                      elevation: 0.0,
+                      actions: actions,
+                      leading: leading,
+                    )
+                  : Container()),
           Expanded(
-            child: child,
+            child: child!,
           )
         ],
       ),
@@ -55,12 +56,12 @@ class Panel extends StatelessWidget {
 }
 
 class PanelUserTile extends StatefulWidget {
-  final String title;
-  final int alpha;
-  final List<Widget> actions;
-  final double heigth;
-  final Widget user;
-  final Widget image;
+  final String? title;
+  final int? alpha;
+  final List<Widget>? actions;
+  final double? heigth;
+  final Widget? user;
+  final Widget? image;
   PanelUserTile(
       {this.user,
       this.title,
@@ -77,7 +78,7 @@ class PanelUserTile extends StatefulWidget {
 class _PanelUserTileState extends State<PanelUserTile> {
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).primaryColor;
+    //final color = Theme.of(context).primaryColor;
     final double _h = 50;
     return Container(
         child: Container(
@@ -89,28 +90,28 @@ class _PanelUserTileState extends State<PanelUserTile> {
         ),
         Center(
           child: Container(
-              color : Colors.transparent,
+              color: Colors.transparent,
               alignment: Alignment.center,
               height: _h,
               width: _h,
               child: CircleAvatar(child: widget.image ?? Icon(Icons.person))),
         ),
-        widget.user ?? Container() ,
+        widget.user ?? Container(),
       ]),
     ));
   }
 }
 
 class ListTileMenuItem extends StatelessWidget {
-  final Widget title;
-  final Function onTap;
-  const ListTileMenuItem({Key key, this.title, this.onTap}) : super(key: key);
+  final Widget? title;
+  final Function? onTap;
+  const ListTileMenuItem({Key? key, this.title, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: title,
-      onTap: onTap,
+      onTap: () => onTap!(),
       trailing: Icon(Icons.keyboard_arrow_right),
     );
   }

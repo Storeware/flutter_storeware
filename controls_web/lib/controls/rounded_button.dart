@@ -7,15 +7,16 @@ enum RoundedButtonType { rounded, vertical, horizontal, raised }
 
 Color defaultButtonColor = Colors.red;
 Color defaultTextButtonColor = Colors.white;
-TextStyle defaultTextStyleButton;
+TextStyle? defaultTextStyleButton;
 RoundedButtonType defaultButtonType = RoundedButtonType.rounded;
 
 enum BadgePosition { topCenter, left, right, center }
 
 class BadgeButton extends StatelessWidget {
-  final int value;
-  final Color color;
-  BadgeButton({Key key, this.value, this.color = Colors.red}) : super(key: key);
+  final int? value;
+  final Color? color;
+  BadgeButton({Key? key, this.value, this.color = Colors.red})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -26,14 +27,14 @@ class BadgeButton extends StatelessWidget {
 }
 
 class Rounded extends StatelessWidget {
-  final Widget child;
-  final double radius;
-  final double width;
-  final double height;
-  final Color color;
-  final Alignment alignment;
+  final Widget? child;
+  final double? radius;
+  final double? width;
+  final double? height;
+  final Color? color;
+  final Alignment? alignment;
   const Rounded(
-      {Key key,
+      {Key? key,
       this.child,
       this.radius = 5,
       this.width,
@@ -60,27 +61,27 @@ class Rounded extends StatelessWidget {
 }
 
 class RoundedButton extends StatelessWidget {
-  final String buttonName;
-  final String assertImagePath;
-  final VoidCallback onTap;
-  final double height;
-  final IconData icon;
-  final double width;
-  final double bottomMargin;
-  final double borderWidth;
-  Color textColor;
-  Color color;
-  final Color barColor;
-  final double barWidth;
-  final Widget child;
-  RoundedButtonType buttonType;
-  final RoundedButtonIconPosition iconPosition;
-  final double roundLeft;
-  final double roundRight;
-  final int badgeValue;
-  final bool showBadge;
-  final BadgePosition badgePosition;
-  TextStyle textStyle;
+  final String? buttonName;
+  final String? assertImagePath;
+  final VoidCallback? onTap;
+  final double? height;
+  final IconData? icon;
+  final double? width;
+  final double? bottomMargin;
+  final double? borderWidth;
+  Color? textColor;
+  Color? color;
+  final Color? barColor;
+  final double? barWidth;
+  final Widget? child;
+  RoundedButtonType? buttonType;
+  final RoundedButtonIconPosition? iconPosition;
+  final double? roundLeft;
+  final double? roundRight;
+  final int? badgeValue;
+  final bool? showBadge;
+  final BadgePosition? badgePosition;
+  TextStyle? textStyle;
   RoundedButton(
       {this.child,
       this.buttonName = '',
@@ -114,12 +115,12 @@ class RoundedButton extends StatelessWidget {
   }
 
   static rounded(
-      {Widget child,
-      double width,
-      double heigth,
+      {Widget? child,
+      double? width,
+      double? heigth,
       badgeValue,
-      BadgePosition badgePosition,
-      Function onPressed}) {
+      BadgePosition? badgePosition,
+      Function? onPressed}) {
     return RoundedButton(
       buttonType: RoundedButtonType.rounded,
       child: child,
@@ -127,86 +128,86 @@ class RoundedButton extends StatelessWidget {
       badgeValue: badgeValue,
       showBadge: (badgeValue ?? 0) > 0,
       badgePosition: badgePosition ?? BadgePosition.right,
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       height: heigth,
     );
   }
 
   static roundedLeft(
-      {Widget child, double width, double heigth, Function onPressed}) {
+      {Widget? child, double? width, double? heigth, Function? onPressed}) {
     return RoundedButton(
       buttonType: RoundedButtonType.rounded,
       child: child,
       roundRight: 0,
       width: width,
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       height: heigth,
     );
   }
 
   static roundedRight(
-      {Widget child, double width, double heigth, Function onPressed}) {
+      {Widget? child, double? width, double? heigth, Function? onPressed}) {
     return RoundedButton(
       buttonType: RoundedButtonType.rounded,
       child: child,
       width: width,
       roundLeft: 0,
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       height: heigth,
     );
   }
 
   static raised(
-      {Widget child, double width, double heigth, Function onPressed}) {
+      {Widget? child, double? width, double? heigth, Function? onPressed}) {
     return RoundedButton(
       buttonType: RoundedButtonType.raised,
       child: child,
       width: width,
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       height: heigth,
     );
   }
 
   static vertical(
-      {Widget child, double width, double heigth, Function onPressed}) {
+      {Widget? child, double? width, double? heigth, Function? onPressed}) {
     return RoundedButton(
       buttonType: RoundedButtonType.vertical,
       child: child,
       width: width,
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       height: heigth,
     );
   }
 
   static horizontal(
-      {Widget child, double width, double heigth, Function onPressed}) {
+      {Widget? child, double? width, double? heigth, Function? onPressed}) {
     return RoundedButton(
       buttonType: RoundedButtonType.horizontal,
       child: child,
       width: width,
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       height: heigth,
     );
   }
 
   createBadge() {
-    if (showBadge && badgePosition == BadgePosition.right)
+    if (showBadge! && badgePosition == BadgePosition.right)
       return Positioned(
           top: 0, right: 0, child: BadgeButton(value: badgeValue));
-    if (showBadge && badgePosition == BadgePosition.center)
+    if (showBadge! && badgePosition == BadgePosition.center)
       return Positioned(
           top: 0,
           left: 0,
           bottom: 0,
           right: 0,
           child: Center(child: BadgeButton(value: badgeValue)));
-    if (showBadge && badgePosition == BadgePosition.topCenter)
+    if (showBadge! && badgePosition == BadgePosition.topCenter)
       return Positioned(
           top: 0,
           left: 0,
           right: 0,
           child: Center(child: BadgeButton(value: badgeValue)));
-    if (showBadge && badgePosition == BadgePosition.left)
+    if (showBadge! && badgePosition == BadgePosition.left)
       return Positioned(top: 0, left: 0, child: BadgeButton(value: badgeValue));
     if (badgeValue == 0) return Container();
     return Positioned(
@@ -222,26 +223,26 @@ class RoundedButton extends StatelessWidget {
         onTap: onTap,
         child: new Container(
           padding:
-              EdgeInsets.all((roundLeft > 0 && roundRight > 0) ? 5.0 : 0.0),
+              EdgeInsets.all((roundLeft! > 0 && roundRight! > 0) ? 5.0 : 0.0),
           width: width,
           height: height,
-          margin: new EdgeInsets.only(bottom: bottomMargin),
+          margin: new EdgeInsets.only(bottom: bottomMargin!),
           alignment: FractionalOffset.center,
           decoration: new BoxDecoration(
               color: color,
               borderRadius: new BorderRadius.only(
-                  topLeft: Radius.circular(roundLeft),
-                  bottomLeft: Radius.circular(roundLeft),
-                  topRight: Radius.circular(roundRight),
-                  bottomRight: Radius.circular(roundRight)),
+                  topLeft: Radius.circular(roundLeft!),
+                  bottomLeft: Radius.circular(roundLeft!),
+                  topRight: Radius.circular(roundRight!),
+                  bottomRight: Radius.circular(roundRight!)),
               border: new Border.all(
                   color: const Color.fromRGBO(221, 221, 221, 1.0),
-                  width: borderWidth)),
+                  width: borderWidth!)),
           child: Container(
             child: (this.child != null
                 ? Center(
                     child: Stack(
-                        children: [this.child, if (showBadge) createBadge()]))
+                        children: [this.child!, if (showBadge!) createBadge()]))
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
@@ -258,7 +259,7 @@ class RoundedButton extends StatelessWidget {
                               children: [
                             if (barColor != null)
                               Container(width: barWidth, color: barColor),
-                            Text(buttonName,
+                            Text(buttonName!,
                                 style: textStyle, textAlign: TextAlign.center)
                           ])),
                       (icon != null
@@ -277,7 +278,7 @@ class RoundedButton extends StatelessWidget {
         child: new Container(
           width: width,
           height: height,
-          margin: new EdgeInsets.only(bottom: bottomMargin),
+          margin: new EdgeInsets.only(bottom: bottomMargin!),
           alignment: FractionalOffset.center,
           decoration: new BoxDecoration(
             color: color,
@@ -291,7 +292,7 @@ class RoundedButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       (icon != null ? Icon(icon) : Text('')),
-                      new Text(buttonName, style: textStyle),
+                      new Text(buttonName!, style: textStyle),
                     ],
                   ),
           ),
@@ -300,10 +301,10 @@ class RoundedButton extends StatelessWidget {
   }
 
   Widget _drawVertical() {
-    return FlatButton(
+    return TextButton(
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(
-          buttonName.toUpperCase(),
+          buttonName!.toUpperCase(),
           textAlign: TextAlign.center,
           style: textStyle,
         ),
@@ -325,7 +326,7 @@ class RoundedButton extends StatelessWidget {
             (icon != null) ? Container(width: 5) : Container(),
             (child != null) ? Center(child: child) : Container(),
             Text(
-              buttonName.toUpperCase(),
+              buttonName!.toUpperCase(),
               style: textStyle,
               textAlign: TextAlign.center,
             )
@@ -338,13 +339,14 @@ class RoundedButton extends StatelessWidget {
   }
 
   Widget _drawRaised() {
-    return RaisedButton(
+    return ElevatedButton(
       onPressed: onTap,
-      textColor: textColor,
-      color: color,
+      //textColor: textColor,
+      //color: color,
+
       child: Row(mainAxisSize: MainAxisSize.min, children: [
         Text(
-          buttonName,
+          buttonName!,
           style: textStyle,
         ),
         Icon(icon),
@@ -357,16 +359,15 @@ class RoundedButton extends StatelessWidget {
     switch (buttonType) {
       case RoundedButtonType.vertical:
         return _drawVertical();
-        break;
+
       case RoundedButtonType.horizontal:
         return _drawHorizontal();
-        break;
+
       case RoundedButtonType.raised:
         return _drawRaised();
-        break;
+
       default:
         return _drawRounded();
-        break;
     }
   }
 }

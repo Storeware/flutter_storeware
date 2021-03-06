@@ -2,12 +2,12 @@
 import 'package:flutter/material.dart';
 
 class BackgroundWidget extends StatelessWidget {
-  final Widget image;
-  final Widget child;
-  final Widget bottomNavigationBar;
-  final Widget topNavigationBar;
+  final Widget? image;
+  final Widget? child;
+  final Widget? bottomNavigationBar;
+  final Widget? topNavigationBar;
   BackgroundWidget({
-    Key key,
+    Key? key,
     this.image,
     this.child,
     this.topNavigationBar,
@@ -18,14 +18,14 @@ class BackgroundWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        if (topNavigationBar != null) topNavigationBar,
+        if (topNavigationBar != null) topNavigationBar!,
         Positioned(
           bottom: 1,
-          child: image, //?? LojaConfig.backgroundImage,
+          child: image!, //?? LojaConfig.backgroundImage,
         ),
         if (bottomNavigationBar != null)
           Align(alignment: Alignment.bottomCenter, child: bottomNavigationBar),
-        child,
+        child!,
       ],
     );
   }

@@ -27,19 +27,19 @@ class ImageLinks {
   }
 
   static IconData icon(key) {
-    IconData ic = _singleton.icons[key.toLowerCase()];
+    IconData ic = _singleton.icons[key.toLowerCase()]!;
     return ic;
   }
 
   static Widget image(String key,
-      {double width, double height, Color color, BoxFit fit}) {
+      {double? width, double? height, Color? color, BoxFit? fit}) {
     //return Container();
     // checa se é um icon
-    IconData ic = _singleton.icons[key];
+    IconData? ic = _singleton.icons[key];
     if (ic != null) return Icon(ic, color: color, size: width ?? height);
 
     // checa se é uma image
-    String src = of(key);
+    String? src = of(key);
     if (src == null) return Container();
     if (src.startsWith('assets/'))
       return Image.asset(

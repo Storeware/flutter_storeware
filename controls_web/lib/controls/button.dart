@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatefulWidget {
-  final Widget child;
-  final String text;
-  final Function onPressed;
-  Button({Key key, this.text, this.child, this.onPressed}) : super(key: key);
+  final Widget? child;
+  final String? text;
+  final Function? onPressed;
+  Button({Key? key, this.text, this.child, this.onPressed}) : super(key: key);
 
   _ButtonState createState() => _ButtonState();
 }
@@ -12,20 +12,20 @@ class Button extends StatefulWidget {
 class _ButtonState extends State<Button> {
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      child: widget.child ?? Text(widget.text),
-      onPressed: widget.onPressed,
+    return TextButton(
+      child: widget.child ?? Text(widget.text!),
+      onPressed: () => widget.onPressed!(),
     );
   }
 }
 
 class LinkButton extends StatelessWidget {
-  final Widget image;
-  final String text;
-  final Function onPressed;
-  final Color color;
+  final Widget? image;
+  final String? text;
+  final Function? onPressed;
+  final Color? color;
   const LinkButton(
-      {Key key,
+      {Key? key,
       this.text,
       this.image,
       this.color = Colors.blue,
@@ -38,7 +38,7 @@ class LinkButton extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Text(
-            text,
+            text!,
             style: TextStyle(
               color: color,
               decoration: TextDecoration.underline,
@@ -51,7 +51,7 @@ class LinkButton extends StatelessWidget {
               : Container(),
         ],
       ),
-      onTap: onPressed,
+      onTap: () => onPressed!(),
     );
   }
 }

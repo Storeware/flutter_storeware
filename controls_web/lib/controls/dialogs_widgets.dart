@@ -8,21 +8,21 @@ import 'package:controls_web/controls/strap_widgets.dart';
 
 class Dialogs {
   static showModal(context,
-      {String title,
-      Widget child,
-      double width,
-      double height,
-      Color color,
-      Widget bottom}) async {
+      {String? title,
+      Widget? child,
+      double? width,
+      double? height,
+      Color? color,
+      Widget? bottom}) async {
     double _height = 40;
     return showPage(context,
         label: title ?? '',
-        width: width,
-        height: height,
+        width: width!,
+        height: height!,
         child: Scaffold(
           appBar: (title == null)
               ? null
-              : AppBar(toolbarHeight: _height, title: Text(title ?? '')),
+              : AppBar(toolbarHeight: _height, title: Text(title)),
           body: Column(
             children: [
               if (child != null) child,
@@ -32,20 +32,20 @@ class Dialogs {
         ));
   }
 
-  static Future<T> showPage<T>(context,
-      {Widget child,
-      double width,
-      double height,
-      Alignment alignment,
+  static Future showPage<T>(context,
+      {Widget? child,
+      double? width,
+      double? height,
+      Alignment? alignment,
       bool fullPage = false,
-      Widget Function(BuildContext) builder,
-      RouteTransitionsBuilder transitionBuilder,
-      int transitionDuration,
+      Widget Function(BuildContext)? builder,
+      RouteTransitionsBuilder? transitionBuilder,
+      int? transitionDuration,
       String label = ''}) async {
     Size size = MediaQuery.of(context).size;
     double plus = 0.0;
     if (size.width < 400) plus = 0.07;
-    return showGeneralDialog<T>(
+    return showGeneralDialog(
       context: context,
       barrierLabel: label,
       barrierColor: Colors.black.withOpacity(0.5),
@@ -78,7 +78,7 @@ class Dialogs {
       {int seconds = 10,
       width: 250,
       height: 150,
-      @required Widget child}) async {
+      @required Widget? child}) async {
     var _closed = false;
     Timer(Duration(seconds: seconds), () {
       if (!_closed) Navigator.pop(context);
@@ -104,14 +104,14 @@ class Dialogs {
   }
 
   static showWaitDialog(context,
-      {String title, @required dynamic Function() onWaiting}) {
+      {String? title, @required dynamic Function()? onWaiting}) {
     return showDialog(
         context: context,
         builder: (ctx) =>
             new SimpleDialog(title: Text(title ?? ''), children: <Widget>[
               new SimpleDialogOption(
                 child: FutureBuilder(future: future(() {
-                  return onWaiting();
+                  return onWaiting!();
                 }), builder: (x, y) {
                   if (!y.hasData)
                     return Align(child: CircularProgressIndicator());
@@ -125,10 +125,10 @@ class Dialogs {
   }
 
   /// await Dialogs.showWaiting<bool>(context,title:'Processando',onWaiting:(){...},onDone:(v){...});
-  static Future<T> showWaiting<T>(BuildContext context,
-      {Future<T> Function() onWaiting,
-      String title,
-      Function(T) onDone}) async {
+  static Future showWaiting<T>(BuildContext context,
+      {Future<T> Function()? onWaiting,
+      String? title,
+      Function(T)? onDone}) async {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -138,12 +138,12 @@ class Dialogs {
                     style:
                         TextStyle(fontSize: 16, fontWeight: FontWeight.w500))),
             FutureBuilder<T>(
-                future: onWaiting(),
+                future: onWaiting!(),
                 builder: (a, b) {
                   print(b.connectionState);
                   if (b.connectionState == ConnectionState.waiting)
                     return Align(child: CircularProgressIndicator());
-                  if (onDone != null) onDone(b.data);
+                  if (onDone != null) onDone(b.data!);
                   Timer.run(() {
                     Navigator.pop(context, b.data);
                   });
@@ -154,7 +154,7 @@ class Dialogs {
   }
 
   static Future<void> showLoadingDialog(BuildContext context, GlobalKey key,
-      {Widget title, Widget content}) async {
+      {Widget? title, Widget? content}) async {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -184,7 +184,7 @@ class Dialogs {
   }
 
   static show(context,
-      {Widget title, List<Widget> children, List<Widget> actions}) {
+      {Widget? title, List<Widget>? children, List<Widget>? actions}) {
     showDialog(
         context: context,
         builder: (ctx) {
@@ -197,13 +197,13 @@ class Dialogs {
 
   static info(
     BuildContext context, {
-    String text,
+    String? text,
     double width: 300,
     double height = 150,
-    Widget icon,
-    Color color,
-    double tagWidth,
-    Widget content,
+    Widget? icon,
+    Color? color,
+    double? tagWidth,
+    Widget? content,
     double radius = 15,
   }) {
     return showDialog<void>(
@@ -237,7 +237,7 @@ class Dialogs {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (text != null)
-                                    Text(text ?? '',
+                                    Text(text,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(fontSize: 18)),
                                   if (content != null) content,
@@ -264,12 +264,12 @@ class Dialogs {
   }
 
   static alert<T>(BuildContext context,
-          {Color backgoundColor,
-          double elevation,
-          String text,
-          Widget title,
-          List<Widget> actions,
-          Widget content}) =>
+          {Color? backgoundColor,
+          double? elevation,
+          String? text,
+          Widget? title,
+          List<Widget>? actions,
+          Widget? content}) =>
       showDialog<T>(
           context: context,
           builder: (ctx) {
@@ -285,13 +285,13 @@ class Dialogs {
           });
 
   static okDlg(context,
-          {Widget content,
-          String text,
-          Widget title,
-          String textButton,
-          Color backgoundColor,
-          double elevation,
-          List<Widget> actions}) =>
+          {Widget? content,
+          String? text,
+          Widget? title,
+          String? textButton,
+          Color? backgoundColor,
+          double? elevation,
+          List<Widget>? actions}) =>
       showDialog<bool>(
           context: context,
           builder: (ctx) => AlertDialog(
@@ -309,7 +309,10 @@ class Dialogs {
                 ],
               ));
   static simNao(BuildContext context,
-          {String text, Widget title, List<Widget> actions, Widget content}) =>
+          {String? text,
+          Widget? title,
+          List<Widget>? actions,
+          Widget? content}) =>
       showDialog(
           context: context,
           builder: (ctx) {
@@ -321,13 +324,13 @@ class Dialogs {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      FlatButton(
+                      TextButton(
                           child: Text('Sim'),
                           onPressed: () {
                             Navigator.pop(context, true);
                           }),
                       if (actions != null) ...actions,
-                      FlatButton(
+                      TextButton(
                           child: Text('Não'),
                           onPressed: () {
                             Navigator.pop(context, false);
@@ -343,14 +346,14 @@ enum ProgressDialogType { Normal, Download, Percent }
 String _dialogMessage = "Carregando...";
 double _progress = 0.0, _maxProgress = 100.0;
 
-Widget _customBody;
+Widget? _customBody;
 
 TextAlign _textAlign = TextAlign.left;
 Alignment _progressWidgetAlignment = Alignment.centerLeft;
 
 bool _isShowing = false;
-BuildContext _context, _dismissingContext;
-ProgressDialogType _progressDialogType;
+BuildContext? _context, _dismissingContext;
+ProgressDialogType? _progressDialogType;
 bool _barrierDismissible = true, _showLogs = false;
 
 TextStyle _progressTextStyle = TextStyle(
@@ -369,13 +372,13 @@ Widget _progressWidget = Image.asset(
 );
 
 class ProgressDialog {
-  _Body _dialog;
+  _Body? _dialog;
 
   ProgressDialog(BuildContext context,
-      {ProgressDialogType type,
-      bool isDismissible,
-      bool showLogs,
-      Widget customBody}) {
+      {ProgressDialogType? type,
+      bool? isDismissible,
+      bool? showLogs,
+      Widget? customBody}) {
     _context = context;
     _progressDialogType = type ?? ProgressDialogType.Normal;
     _barrierDismissible = isDismissible ?? true;
@@ -384,20 +387,20 @@ class ProgressDialog {
   }
 
   void style(
-      {Widget child,
-      double progress,
-      double maxProgress,
-      String message,
-      Widget progressWidget,
-      Color backgroundColor,
-      TextStyle progressTextStyle,
-      TextStyle messageTextStyle,
-      double elevation,
-      TextAlign textAlign,
-      double borderRadius,
-      Curve insetAnimCurve,
-      EdgeInsets padding,
-      Alignment progressWidgetAlignment}) {
+      {Widget? child,
+      double? progress,
+      double? maxProgress,
+      String? message,
+      Widget? progressWidget,
+      Color? backgroundColor,
+      TextStyle? progressTextStyle,
+      TextStyle? messageTextStyle,
+      double? elevation,
+      TextAlign? textAlign,
+      double? borderRadius,
+      Curve? insetAnimCurve,
+      EdgeInsets? padding,
+      Alignment? progressWidgetAlignment}) {
     if (_isShowing) return;
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
@@ -420,12 +423,12 @@ class ProgressDialog {
   }
 
   void update(
-      {double progress,
-      double maxProgress,
-      String message,
-      Widget progressWidget,
-      TextStyle progressTextStyle,
-      TextStyle messageTextStyle}) {
+      {double? progress,
+      double? maxProgress,
+      String? message,
+      Widget? progressWidget,
+      TextStyle? progressTextStyle,
+      TextStyle? messageTextStyle}) {
     if (_progressDialogType == ProgressDialogType.Download) {
       _progress = progress ?? _progress;
     }
@@ -437,7 +440,7 @@ class ProgressDialog {
     _progressTextStyle = progressTextStyle ?? _progressTextStyle;
     _progress = progress ?? _progress;
 
-    if (_isShowing) _dialog.update();
+    if (_isShowing) _dialog!.update();
   }
 
   bool isShowing() {
@@ -448,7 +451,7 @@ class ProgressDialog {
     try {
       if (_isShowing) {
         _isShowing = false;
-        Navigator.of(_dismissingContext).pop();
+        Navigator.of(_dismissingContext!).pop();
         if (_showLogs) debugPrint('ProgressDialog dismissed');
         return Future.value(true);
       } else {
@@ -456,8 +459,8 @@ class ProgressDialog {
         return Future.value(false);
       }
     } catch (err) {
-      debugPrint('Seems there is an issue hiding dialog');
-      debugPrint(err);
+      print('Seems there is an issue hiding dialog');
+      print(err);
       return Future.value(false);
     }
   }
@@ -467,7 +470,7 @@ class ProgressDialog {
       if (!_isShowing) {
         _dialog = new _Body();
         showDialog<dynamic>(
-          context: _context,
+          context: _context!,
           barrierDismissible: _barrierDismissible,
           builder: (BuildContext context) {
             _dismissingContext = context;
@@ -498,7 +501,7 @@ class ProgressDialog {
     } catch (err) {
       _isShowing = false;
       debugPrint('Exception while showing the dialog');
-      debugPrint(err);
+      print(err);
       return false;
     }
   }

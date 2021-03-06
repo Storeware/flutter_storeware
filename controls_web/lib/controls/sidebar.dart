@@ -5,23 +5,23 @@ import 'package:flutter/material.dart';
 enum SidebarPosition { none, left, right }
 
 class SidebarScaffold extends StatefulWidget {
-  final Widget appBar;
-  final Widget body;
-  final Widget floatingActionButton;
-  final Widget sidebar;
-  final SidebarPosition sidebarPosition;
-  final SidebarController controller;
-  final bool sidebarVisible;
-  final bool canShowCompact;
-  final Widget bottomNavigationBar;
+  final PreferredSizeWidget? appBar;
+  final Widget? body;
+  final Widget? floatingActionButton;
+  final Widget? sidebar;
+  final SidebarPosition? sidebarPosition;
+  final SidebarController? controller;
+  final bool? sidebarVisible;
+  final bool? canShowCompact;
+  final Widget? bottomNavigationBar;
 
-  final bool resizeToAvoidBottomInset;
-  final Key scaffoldKey;
+  final bool? resizeToAvoidBottomInset;
+  final Key? scaffoldKey;
 
-  final Color backgroundColor;
-  final Color sidebarColor;
+  final Color? backgroundColor;
+  final Color? sidebarColor;
   SidebarScaffold(
-      {Key key,
+      {Key? key,
       this.appBar,
       this.sidebarVisible = true,
       this.sidebar,
@@ -38,64 +38,65 @@ class SidebarScaffold extends StatefulWidget {
       this.sidebarColor})
       : super(key: key);
 
-  final Widget drawer;
+  final Widget? drawer;
 
   @override
   _SidebarScaffoldState createState() => _SidebarScaffoldState();
 }
 
 class _SidebarScaffoldState extends State<SidebarScaffold> {
-  SidebarController _controller;
+  SidebarController? _controller;
   @override
   void initState() {
     _controller = widget.controller ?? SidebarController();
-    _controller.visible = widget.sidebarVisible;
+    _controller!.visible = widget.sidebarVisible!;
     super.initState();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller!.dispose();
     super.dispose();
   }
 
-  ThemeData theme;
+  ThemeData? theme;
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    _controller.position = widget.sidebarPosition;
-    _controller.canShowCompact = widget.canShowCompact;
-    if (_controller.homeWidget == null) _controller.homeWidget = widget.body;
+    _controller!.position = widget.sidebarPosition!;
+    _controller!.canShowCompact = widget.canShowCompact!;
+    if (_controller!.homeWidget == null) _controller!.homeWidget = widget.body!;
     return Scaffold(
-      appBar: widget.appBar, //?? AppBar(title: Text('sidebar')),
+      appBar: widget.appBar!, //?? AppBar(title: Text('sidebar')),
       drawer: widget.drawer,
       key: widget.scaffoldKey,
-      backgroundColor: _controller.backgroudColor ??
+      backgroundColor: _controller!.backgroudColor ??
           widget.backgroundColor ??
-          theme.scaffoldBackgroundColor,
+          theme!.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       body: Stack(
         children: <Widget>[
-          if (_controller.position == SidebarPosition.left) buildHiddenButton(),
+          if (_controller!.position == SidebarPosition.left)
+            buildHiddenButton(),
           Row(
             children: <Widget>[
               if ((widget.sidebarPosition == SidebarPosition.left) &&
                   (widget.sidebar != null))
-                buildSidebar(widget.sidebar),
+                buildSidebar(widget.sidebar!),
               Expanded(
                 child: StreamBuilder<Widget>(
-                    stream: _controller.pageStream,
+                    stream: _controller!.pageStream,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) return widget.body ?? Container();
-                      return snapshot.data;
+                      return snapshot.data!;
                     }),
               ),
               if ((widget.sidebarPosition == SidebarPosition.right) &&
                   (widget.sidebar != null))
-                buildSidebar(widget.sidebar),
+                buildSidebar(widget.sidebar!),
             ],
           ),
-          if (_controller.position == SidebarPosition.right)
+          if (_controller!.position == SidebarPosition.right)
             Positioned(right: 1, child: buildHiddenButton()),
         ],
       ),
@@ -106,14 +107,14 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
 
   StreamBuilder<bool> buildHiddenButton() {
     return StreamBuilder<bool>(
-        stream: _controller.visibleStream,
+        stream: _controller!.visibleStream,
         initialData: widget.sidebarVisible,
         builder: (context, snapshot) {
-          if (snapshot.data) return Container();
+          if (snapshot.data!) return Container();
           return InkWell(
             child: buildExpandIcon(),
             onTap: () {
-              _controller.show();
+              _controller!.show();
             },
             //hoverColor: Colors.blue,
           );
@@ -121,12 +122,12 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
   }
 
   Widget buildExpandIcon() {
-    if (_controller.position == SidebarPosition.right)
+    if (_controller!.position == SidebarPosition.right)
       return ClipPath(
         clipper: CustomMenuClipperRight(),
         child: Container(
           decoration: BoxDecoration(
-            color: theme.primaryColor.withAlpha(50),
+            color: theme!.primaryColor.withAlpha(50),
           ),
           width: 20,
           height: 70,
@@ -139,7 +140,7 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
       clipper: CustomMenuClipperLeft(),
       child: Container(
         decoration: BoxDecoration(
-          color: theme.primaryColor.withAlpha(50),
+          color: theme!.primaryColor.withAlpha(50),
         ),
         width: 20,
         height: 70,
@@ -152,11 +153,11 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
 
   StreamBuilder<bool> buildSidebar(Widget wg) {
     return StreamBuilder<bool>(
-        stream: _controller.visibleStream,
+        stream: _controller!.visibleStream,
         initialData: widget.sidebarVisible,
         builder: (context, snapshot) {
           //print(snapshot.data);
-          if ((!snapshot.hasData) || (!snapshot.data)) return SizedBox();
+          if ((!snapshot.hasData) || (!snapshot.data!)) return SizedBox();
           return Expanded(
             flex: 0,
             child: Container(
@@ -169,16 +170,16 @@ class _SidebarScaffoldState extends State<SidebarScaffold> {
 }
 
 class SidebarButton extends StatelessWidget {
-  final Widget image;
-  final String title;
-  final Color color;
-  final Function onPressed;
-  final double width;
-  final double height;
-  final SidebarController controller;
+  final Widget? image;
+  final String? title;
+  final Color? color;
+  final Function? onPressed;
+  final double? width;
+  final double? height;
+  final SidebarController? controller;
   //final bool compact;
   SidebarButton(
-      {Key key,
+      {Key? key,
       this.height = 70,
       this.width = double.maxFinite,
       @required this.controller,
@@ -192,10 +193,10 @@ class SidebarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<bool>(
-        stream: controller.compactStream,
-        initialData: controller.compacted,
+        stream: controller!.compactStream,
+        initialData: controller!.compacted,
         builder: (context, snapshot) {
-          bool cmpt = snapshot.data;
+          bool cmpt = snapshot.data!;
           //print('cmpt');
           return Padding(
             padding:
@@ -205,11 +206,11 @@ class SidebarButton extends StatelessWidget {
               highlightColor: Colors.red,
               onTap: () {
                 //print('onPressed');
-                if (onPressed != null) onPressed();
+                if (onPressed != null) onPressed!();
               },
               child: Container(
                 width: width,
-                height: (!cmpt) ? height : controller.compactSize,
+                height: (!cmpt) ? height : controller!.compactSize,
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
@@ -219,7 +220,7 @@ class SidebarButton extends StatelessWidget {
                   child: (cmpt)
                       ? image
                       : Column(
-                          children: <Widget>[image, Text(title)],
+                          children: <Widget>[image!, Text(title!)],
                         ),
                 ),
               ),
@@ -230,19 +231,19 @@ class SidebarButton extends StatelessWidget {
 }
 
 class SidebarController {
-  final Widget bottom;
-  final AppBar appBar;
-  final Widget body;
-  final Widget bottomNavigationBar;
-  final Widget Function(BuildContext) backgroundBuilder;
-  bool compacted;
-  double compactSize;
-  double width;
-  Color backgroudColor;
-  Color color;
-  bool isMobile;
+  final Widget? bottom;
+  final AppBar? appBar;
+  final Widget? body;
+  final Widget? bottomNavigationBar;
+  final Widget Function(BuildContext)? backgroundBuilder;
+  bool? compacted;
+  double? compactSize;
+  double? width;
+  Color? backgroudColor;
+  Color? color;
+  bool? isMobile;
   double get currentWidth =>
-      (visible) ? ((compacted) ? compactSize : width) : 0;
+      (visible) ? ((compacted!) ? compactSize! : width!) : 0.0;
   bool visible;
   SidebarController(
       {this.color,
@@ -260,7 +261,7 @@ class SidebarController {
       this.body,
       this.bottomNavigationBar,
       this.homeWidget});
-  var position = SidebarPosition.left;
+  SidebarPosition? position = SidebarPosition.left;
 
   bool canShowCompact;
   var _pageStream = StreamController<Widget>.broadcast();
@@ -277,7 +278,7 @@ class SidebarController {
     _pageStream.sink.add(wg);
   }
 
-  Widget homeWidget;
+  Widget? homeWidget;
   pop() {
     if (_navigators.length == 0) return homeWidget;
     var p = _navigators.removeLast();
@@ -285,7 +286,7 @@ class SidebarController {
   }
 
   goHome() {
-    _pageStream.sink.add(homeWidget);
+    _pageStream.sink.add(homeWidget!);
   }
 
   get pageStream => _pageStream.stream;
@@ -320,15 +321,15 @@ class SidebarController {
 }
 
 class SidebarHeader extends StatelessWidget {
-  final String title;
-  final Widget leading;
-  final Widget trailing;
-  final Color color;
-  final Color titleColor;
-  final double height;
-  final SidebarController controller;
+  final String? title;
+  final Widget? leading;
+  final Widget? trailing;
+  final Color? color;
+  final Color? titleColor;
+  final double? height;
+  final SidebarController? controller;
   const SidebarHeader({
-    Key key,
+    Key? key,
     this.color,
     this.titleColor,
     this.title,
@@ -344,77 +345,77 @@ class SidebarHeader extends StatelessWidget {
     return Container(
       height: height,
       decoration: BoxDecoration(
-        color: controller.color ?? color ?? theme.primaryColor,
+        color: controller!.color ?? color ?? theme.primaryColor,
       ),
       child: StreamBuilder<bool>(
-          stream: controller.compactStream,
-          initialData: controller.compacted,
+          stream: controller!.compactStream,
+          initialData: controller!.compacted,
           builder: (context, snapshot) {
-            if (snapshot.data)
+            if (snapshot.data!)
               return IconButton(
                 icon: Icon(
-                  (controller.position == SidebarPosition.left)
+                  (controller!.position == SidebarPosition.left)
                       ? Icons.arrow_right
                       : Icons.arrow_left,
-                  color: titleColor ?? theme.primaryTextTheme.headline6.color,
+                  color: titleColor ?? theme.primaryTextTheme.headline6!.color,
                 ),
                 onPressed: () {
                   //print('showCompact');
-                  controller.showCompact(compact: false);
+                  controller!.showCompact(compact: false);
                 },
               );
             return Row(
               children: [
                 if (leading != null) Align(child: leading),
-                if (controller.position == SidebarPosition.left)
+                if (controller!.position == SidebarPosition.left)
                   InkWell(
                     child: Icon(
                       Icons.arrow_left,
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6.color,
+                          titleColor ?? theme.primaryTextTheme.headline6!.color,
                     ),
                     onTap: () {
                       //print('hide');
-                      controller.hide();
+                      controller!.hide();
                     },
                   ),
                 Expanded(
                     child: Align(
-                  alignment: (controller.position == SidebarPosition.left)
+                  alignment: (controller!.position == SidebarPosition.left)
                       ? Alignment.centerLeft
                       : Alignment.center,
                   child: Text(
                     title ?? '',
                     style: TextStyle(
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6.color,
-                      fontSize: theme.primaryTextTheme.headline6.fontSize,
+                          titleColor ?? theme.primaryTextTheme.headline6!.color,
+                      fontSize: theme.primaryTextTheme.headline6!.fontSize,
                     ),
                   ),
                 )),
-                if (controller.canShowCompact)
+                if (controller!.canShowCompact)
                   InkWell(
                     child: Icon(
                       Icons.view_compact,
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6.color,
+                          titleColor ?? theme.primaryTextTheme.headline6!.color,
                     ),
                     onTap: () {
                       //print('showCompact-true');
-                      controller.showCompact(compact: true);
+                      controller!.showCompact(compact: true);
                     },
                   ),
                 if (trailing != null) Align(child: trailing),
-                if (controller.position == SidebarPosition.right)
+                if (controller!.position == SidebarPosition.right)
                   InkWell(
                     child: Icon(
                       Icons.arrow_right,
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6.color,
+                          titleColor ?? theme.primaryTextTheme.headline6!.color,
                     ),
                     onTap: () {
                       //print('hide_');
-                      controller.hide();
+                      controller!.hide();
                     },
                   ),
               ],
@@ -425,15 +426,15 @@ class SidebarHeader extends StatelessWidget {
 }
 
 class SidebarContainer extends StatelessWidget {
-  final double width;
-  final Widget child;
-  final Color color;
-  final bool compact;
-  final double compactWidth;
-  final SidebarController controller;
-  final Widget Function(BuildContext) backgroundBuilder;
+  final double? width;
+  final Widget? child;
+  final Color? color;
+  final bool? compact;
+  final double? compactWidth;
+  final SidebarController? controller;
+  final Widget Function(BuildContext)? backgroundBuilder;
   const SidebarContainer({
-    Key key,
+    Key? key,
     this.width = 150,
     @required this.controller,
     this.compactWidth = 50,
@@ -445,30 +446,30 @@ class SidebarContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (controller.compactSize == null) {
-      controller.compactSize = this.compactWidth;
-      controller.compacted = this.compact;
-      controller.width = this.width;
+    if (controller!.compactSize == null) {
+      controller!.compactSize = this.compactWidth;
+      controller!.compacted = this.compact;
+      controller!.width = this.width;
     }
     return StreamBuilder<bool>(
-        stream: controller.compactStream,
+        stream: controller!.compactStream,
         initialData: controller?.compacted ?? false,
         builder: (context, snapshot) {
           return Container(
               color: color ?? Colors.transparent,
-              width: controller
+              width: controller!
                   .currentWidth, //(!snapshot.data) ? width : compactWidth,
               child: Scaffold(
                   appBar: controller?.appBar,
                   backgroundColor: controller?.color,
                   body: Stack(children: [
-                    if (backgroundBuilder != null) backgroundBuilder(context),
-                    ((controller.body == null) && (controller.bottom == null))
+                    if (backgroundBuilder != null) backgroundBuilder!(context),
+                    ((controller!.body == null) && (controller!.bottom == null))
                         ? child ?? Container()
                         : Column(children: [
-                            if (controller.body != null) controller.body,
-                            if (child != null) Expanded(child: child),
-                            if (controller.bottom != null) controller.bottom
+                            if (controller!.body != null) controller!.body!,
+                            if (child != null) Expanded(child: child!),
+                            if (controller!.bottom != null) controller!.bottom!
                           ])
                   ]),
                   bottomNavigationBar: controller?.bottomNavigationBar));

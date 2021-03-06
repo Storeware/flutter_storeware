@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:controls_web/controls/colores.dart';
 
 class ColorPickerField extends StatelessWidget {
-  final Color color;
-  final Function(Color) onChanged;
-  final bool extended;
+  final Color? color;
+  final Function(Color)? onChanged;
+  final bool? extended;
   const ColorPickerField(
-      {Key key, this.extended = true, this.color, this.onChanged})
+      {Key? key, this.extended = true, this.color, this.onChanged})
       : super(key: key);
 
   @override
@@ -16,7 +16,7 @@ class ColorPickerField extends StatelessWidget {
     if (size.width > 480) size = Size(480, size.height);
 
     if (size.height > 500) size = Size(size.width, 500);
-    Color _color = color;
+    Color _color = color!;
     //ResponsiveInfo responsive = ResponsiveInfo(context);
     return (onChanged != null)
         ? StatefulBuilder(builder: (a, _setState) {
@@ -30,10 +30,10 @@ class ColorPickerField extends StatelessWidget {
                     width: size.width,
                     height: size.height,
                     child: ColorPickerDialog(
-                      extended: extended,
+                      extended: extended!,
                       color: _color,
                       onChanged: (c) {
-                        onChanged(c);
+                        onChanged!(c);
                         _setState(() {
                           _color = c;
                         });
@@ -49,13 +49,13 @@ class ColorPickerField extends StatelessWidget {
 }
 
 class ColorPickerDialog extends StatelessWidget {
-  final List<Color> colors;
-  final Color color;
-  final String title;
-  final Function(Color) onChanged;
-  final bool extended;
+  final List<Color>? colors;
+  final Color? color;
+  final String? title;
+  final Function(Color)? onChanged;
+  final bool? extended;
   const ColorPickerDialog(
-      {Key key,
+      {Key? key,
       this.colors,
       this.title,
       this.color,
@@ -68,7 +68,7 @@ class ColorPickerDialog extends StatelessWidget {
     List<Color> _colors = colors ?? [];
     if (_colors.length == 0) {
       _colors.addAll(primariesColors);
-      if (extended) _colors.addAll(pastelColors);
+      if (extended!) _colors.addAll(pastelColors);
     }
     return Scaffold(
       appBar: AppBar(title: Text(title ?? 'Selecionar uma cor')),
@@ -93,7 +93,7 @@ class ColorPickerDialog extends StatelessWidget {
                     ),
                   ),
                   onTap: () {
-                    if (onChanged != null) onChanged(item);
+                    if (onChanged != null) onChanged!(item);
                     Navigator.of(context).pop();
                   },
                 )
@@ -162,14 +162,14 @@ extension ColorExtension on Color {
     return def;
   }
 
-  static Color fromString(String str, {Color def}) => hexToARGB(str, def);
+  static Color fromString(String str, {Color? def}) => hexToARGB(str, def!);
   int toRGBInt() {
     return int.parse('0x' + this.toHex(leadingHashSign: false).substring(2));
   }
 
   static Color hexToARGB(String str, Color def) {
     if (str == null || str == '') return def;
-    Color g;
+    Color? g;
     if (str != null) g = dRGBColor(str);
 
     if (g != null) return g;

@@ -2,16 +2,16 @@ import 'package:controls_web/controls/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 class ActivityInfo extends StatelessWidget {
-  final Widget title;
-  final String buttonName;
-  final onPressed;
-  final double width;
-  final double height;
-  final String text;
-  final Color color;
-  final Widget image;
+  final Widget? title;
+  final String? buttonName;
+  final Function()? onPressed;
+  final double? width;
+  final double? height;
+  final String? text;
+  final Color? color;
+  final Widget? image;
   const ActivityInfo(
-      {Key key,
+      {Key? key,
       this.title,
       this.buttonName = 'OK',
       this.onPressed,
@@ -32,16 +32,16 @@ class ActivityInfo extends StatelessWidget {
           Expanded(
               child: Stack(
             children: <Widget>[
-              if (image != null) Positioned(left: 12, top: 12, child: image),
+              if (image != null) Positioned(left: 12, top: 12, child: image!),
               Center(
-                  child: title ?? Text(text, style: TextStyle(fontSize: 18))),
+                  child: title ?? Text(text!, style: TextStyle(fontSize: 18))),
             ],
           )),
           SizedBox(height: 5),
           ActivityButton(
             //icon: Icons.check,
-            title: buttonName,
-            onPressed: onPressed,
+            title: buttonName!,
+            onPressed: onPressed!,
           ),
         ],
       ),
@@ -50,16 +50,16 @@ class ActivityInfo extends StatelessWidget {
 }
 
 class ActivityPanel extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final double height;
-  final double width;
-  final double topRadius;
-  final double bottomRadius;
-  final double leftRadius;
-  final double rightRadius;
+  final Widget? child;
+  final Color? color;
+  final double? height;
+  final double? width;
+  final double? topRadius;
+  final double? bottomRadius;
+  final double? leftRadius;
+  final double? rightRadius;
   const ActivityPanel(
-      {Key key,
+      {Key? key,
       this.topRadius = 15,
       this.bottomRadius = 15,
       this.leftRadius,
@@ -86,17 +86,17 @@ class ActivityPanel extends StatelessWidget {
       decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(rightRadius ?? topRadius),
-            topLeft: Radius.circular(leftRadius ?? topRadius),
-            bottomLeft: Radius.circular(leftRadius ?? bottomRadius),
-            bottomRight: Radius.circular(rightRadius ?? bottomRadius),
+            topRight: Radius.circular(rightRadius! ?? topRadius!),
+            topLeft: Radius.circular(leftRadius! ?? topRadius!),
+            bottomLeft: Radius.circular(leftRadius! ?? bottomRadius!),
+            bottomRight: Radius.circular(rightRadius! ?? bottomRadius!),
           )),
       child: child,
       // ),
     );
   }
 
-  static header({Key key, radius = 20, color, width, height, child}) =>
+  static header({Key? key, radius = 20, color, width, height, child}) =>
       ActivityPanel(
         child: child,
         topRadius: radius,
@@ -105,7 +105,7 @@ class ActivityPanel extends StatelessWidget {
         height: height,
         width: width,
       );
-  static bottom({Key key, radius = 20, color, width, height, child}) =>
+  static bottom({Key? key, radius = 20, color, width, height, child}) =>
       ActivityPanel(
         child: child,
         topRadius: 0,
@@ -114,7 +114,7 @@ class ActivityPanel extends StatelessWidget {
         height: height,
         width: width,
       );
-  static left({Key key, radius = 20, color, width, height, child}) =>
+  static left({Key? key, radius = 20, color, width, height, child}) =>
       ActivityPanel(
         child: child,
         leftRadius: radius,
@@ -122,7 +122,7 @@ class ActivityPanel extends StatelessWidget {
         height: height,
         width: width,
       );
-  static right({Key key, radius = 20, color, width, height, child}) =>
+  static right({Key? key, radius = 20, color, width, height, child}) =>
       ActivityPanel(
         child: child,
         rightRadius: radius,
@@ -133,17 +133,17 @@ class ActivityPanel extends StatelessWidget {
 }
 
 class ActivityTile extends StatelessWidget {
-  final String title;
-  final IconData icon;
-  final String subtitle;
-  final Color avatarBackgroudColor;
-  final Color iconColor;
-  final Color color;
-  final Function onTap;
-  final Widget trailing;
-  final double radius;
+  final String? title;
+  final IconData? icon;
+  final String? subtitle;
+  final Color? avatarBackgroudColor;
+  final Color? iconColor;
+  final Color? color;
+  final Function? onTap;
+  final Widget? trailing;
+  final double? radius;
   const ActivityTile(
-      {Key key,
+      {Key? key,
       this.color,
       this.radius = 0,
       this.avatarBackgroudColor,
@@ -166,20 +166,20 @@ class ActivityTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            onTap: onTap,
+            onTap: () => onTap!(),
             contentPadding: EdgeInsets.all(1),
             trailing: trailing,
             leading: Container(
               width: 65,
               height: 65,
               child: ActivityAvatar(
-                avatarBackgroudColor: avatarBackgroudColor,
-                iconColor: iconColor,
-                icon: icon,
+                avatarBackgroudColor: avatarBackgroudColor!,
+                iconColor: iconColor!,
+                icon: icon!,
               ),
             ),
-            title: ActivityTextTitle(title: title),
-            subtitle: ActivityTextSubtitle(subtitle: subtitle),
+            title: ActivityTextTitle(title: title!),
+            subtitle: ActivityTextSubtitle(subtitle: subtitle!),
           ),
         ),
       ),
@@ -189,11 +189,11 @@ class ActivityTile extends StatelessWidget {
 
 class ActivityTextSubtitle extends StatelessWidget {
   const ActivityTextSubtitle({
-    Key key,
+    Key? key,
     @required this.subtitle,
   }) : super(key: key);
 
-  final String subtitle;
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -205,12 +205,9 @@ class ActivityTextSubtitle extends StatelessWidget {
 }
 
 class ActivityTextTitle extends StatelessWidget {
-  const ActivityTextTitle({
-    Key key,
-    @required this.title,
-  }) : super(key: key);
+  const ActivityTextTitle({Key? key, @required this.title}) : super(key: key);
 
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -224,15 +221,15 @@ class ActivityTextTitle extends StatelessWidget {
 
 class ActivityAvatar extends StatelessWidget {
   const ActivityAvatar({
-    Key key,
+    Key? key,
     @required this.avatarBackgroudColor,
     @required this.iconColor,
     @required this.icon,
   }) : super(key: key);
 
-  final Color avatarBackgroudColor;
-  final Color iconColor;
-  final IconData icon;
+  final Color? avatarBackgroudColor;
+  final Color? iconColor;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -247,15 +244,15 @@ class ActivityAvatar extends StatelessWidget {
 }
 
 class ActivityButton extends StatelessWidget {
-  final Widget image;
-  final IconData icon;
-  final String title;
-  final Function onPressed;
-  final Color fontColor;
-  final Color iconColor;
-  final TextStyle textStyle;
+  final Widget? image;
+  final IconData? icon;
+  final String? title;
+  final Function? onPressed;
+  final Color? fontColor;
+  final Color? iconColor;
+  final TextStyle? textStyle;
   const ActivityButton({
-    Key key,
+    Key? key,
     this.icon,
     this.image,
     this.title,
@@ -271,7 +268,7 @@ class ActivityButton extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: <Widget>[
-          if (image != null) image,
+          if (image != null) image!,
           if (icon != null)
             Icon(
               icon,
@@ -283,7 +280,7 @@ class ActivityButton extends StatelessWidget {
           ),
           RoundedButton(
             buttonName: title,
-            onTap: onPressed,
+            onTap: () => onPressed!(),
           )
         ],
       ),
@@ -292,11 +289,11 @@ class ActivityButton extends StatelessWidget {
 }
 
 class ActivityCount extends StatelessWidget {
-  final String value;
-  final String title;
-  final Color fontColor;
+  final String? value;
+  final String? title;
+  final Color? fontColor;
   const ActivityCount(
-      {Key key, this.fontColor, this.value = 'xxx', this.title = 'yyyyyyyy'})
+      {Key? key, this.fontColor, this.value = 'xxx', this.title = 'yyyyyyyy'})
       : super(key: key);
 
   @override
@@ -305,10 +302,10 @@ class ActivityCount extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(
-            value,
+            value!,
             style: TextStyle(fontSize: 30, color: fontColor ?? Colors.white),
           ),
-          Text(title,
+          Text(title!,
               style: TextStyle(
                 fontSize: 18,
                 color: fontColor ?? Colors.white60,
@@ -321,21 +318,21 @@ class ActivityCount extends StatelessWidget {
 }
 
 class ActivityCard extends StatelessWidget {
-  final double height;
-  final double width;
-  final List<Widget> children;
-  final String title;
-  final String subtitle;
-  final IconData icon;
-  final Widget image;
-  final Color color;
-  final double spacing;
-  final TextStyle style;
-  final Color titleColor;
-  final double avatarSize;
-  final List<Widget> actions;
+  final double? height;
+  final double? width;
+  final List<Widget>? children;
+  final String? title;
+  final String? subtitle;
+  final IconData? icon;
+  final Widget? image;
+  final Color? color;
+  final double? spacing;
+  final TextStyle? style;
+  final Color? titleColor;
+  final double? avatarSize;
+  final List<Widget>? actions;
   const ActivityCard(
-      {Key key,
+      {Key? key,
       this.color,
       this.title,
       this.subtitle,
@@ -353,9 +350,9 @@ class ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    TextStyle _style = style ??
-        theme.primaryTextTheme.headline5.copyWith(
+    ThemeData? theme = Theme.of(context);
+    TextStyle? _style = style ??
+        theme.primaryTextTheme.headline5!.copyWith(
           color: titleColor,
           fontWeight: FontWeight.bold,
         );
@@ -378,12 +375,12 @@ class ActivityCard extends StatelessWidget {
                     child: (image != null)
                         ? CircleAvatar(
                             backgroundColor:
-                                theme.primaryTextTheme.bodyText1.color,
+                                theme.primaryTextTheme.bodyText1!.color,
                             child: image)
                         : ActivityAvatar(
                             avatarBackgroudColor:
-                                theme.primaryTextTheme.bodyText1.color,
-                            iconColor: theme.textTheme.button.color,
+                                theme.primaryTextTheme.bodyText1!.color,
+                            iconColor: theme.textTheme.button!.color,
                             icon: icon ?? Icons.person_pin,
                           ),
                   ),
@@ -393,17 +390,19 @@ class ActivityCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(title ?? '',
-                          style: _style ??
+                          style:
+                              _style /*??
                               TextStyle(
                                 fontSize: 32,
                                 color: Colors.white,
-                              )),
+                              )*/
+                          ),
                       Text(
                         subtitle ?? '',
-                        style: theme.primaryTextTheme.headline6.copyWith(
+                        style: theme.primaryTextTheme.headline6!.copyWith(
                           color: titleColor,
                           fontSize:
-                              theme.primaryTextTheme.headline6.fontSize * 0.8,
+                              theme.primaryTextTheme.headline6!.fontSize! * 0.8,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
@@ -436,20 +435,20 @@ class ActivityCard extends StatelessWidget {
 enum ActivitySummaryPosition { none, left, right }
 
 class ActivitySummary extends StatelessWidget {
-  final String title;
-  final double fontSize;
-  final Color color;
-  final Color fontColor;
-  final String value;
-  final Color valueFontColor;
-  final double percent;
-  final int percentDec;
-  final String percentLabel;
-  final Widget image;
-  final double radius;
-  final ActivitySummaryPosition position;
+  final String? title;
+  final double? fontSize;
+  final Color? color;
+  final Color? fontColor;
+  final String? value;
+  final Color? valueFontColor;
+  final double? percent;
+  final int? percentDec;
+  final String? percentLabel;
+  final Widget? image;
+  final double? radius;
+  final ActivitySummaryPosition? position;
   const ActivitySummary(
-      {Key key,
+      {Key? key,
       this.fontSize = 72,
       this.radius = 15,
       this.value,
@@ -481,8 +480,8 @@ class ActivitySummary extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(radius),
-                  topRight: Radius.circular(radius),
+                  topLeft: Radius.circular(radius!),
+                  topRight: Radius.circular(radius!),
                 ),
                 color: cor,
               ),
@@ -519,7 +518,7 @@ class ActivitySummary extends StatelessWidget {
                       )),
                     ),
                     ActivityBar(
-                      value: percent,
+                      value: percent!,
                       showValue: false,
                     ),
                     SizedBox(
@@ -538,28 +537,28 @@ class ActivitySummary extends StatelessWidget {
 
   ActivityPercentValue buildActivityPercentValue() {
     return ActivityPercentValue(
-        fontColor: valueFontColor,
-        image: image,
-        percentLabel: percentLabel,
-        percent: percent,
-        percentDec: percentDec);
+        fontColor: valueFontColor!,
+        image: image!,
+        percentLabel: percentLabel!,
+        percent: percent!,
+        percentDec: percentDec!);
   }
 }
 
 class ActivityPercentValue extends StatelessWidget {
   const ActivityPercentValue({
-    Key key,
+    Key? key,
     this.fontColor,
     this.image,
     this.percentLabel = '%',
     this.percent,
     this.percentDec = 1,
   }) : super(key: key);
-  final Color fontColor;
-  final Widget image;
-  final String percentLabel;
-  final double percent;
-  final int percentDec;
+  final Color? fontColor;
+  final Widget? image;
+  final String? percentLabel;
+  final double? percent;
+  final int? percentDec;
 
   @override
   Widget build(BuildContext context) {
@@ -579,7 +578,7 @@ class ActivityPercentValue extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: fontColor,
                   )),
-              Text(percent.toStringAsFixed(percentDec),
+              Text(percent!.toStringAsFixed(percentDec!),
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w500,
@@ -597,14 +596,14 @@ class ActivityPercentValue extends StatelessWidget {
 }
 
 class ActivityBar extends StatelessWidget {
-  final double width;
-  final double height;
-  final double value;
-  final Color color;
-  final Color backgroundColor;
-  final bool showValue;
+  final double? width;
+  final double? height;
+  final double? value;
+  final Color? color;
+  final Color? backgroundColor;
+  final bool? showValue;
   ActivityBar(
-      {Key key,
+      {Key? key,
       this.value,
       this.color,
       this.showValue = true,
@@ -616,7 +615,7 @@ class ActivityBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var w = width * (value / 100);
+    var w = width! * (value! / 100);
     //('$width $w');
     return Container(
       padding: EdgeInsets.only(left: 2, right: 2, bottom: 2, top: 2),
@@ -626,7 +625,8 @@ class ActivityBar extends StatelessWidget {
       //color: Colors.amber,
       decoration: BoxDecoration(
         color: backgroundColor ?? theme.backgroundColor,
-        border: Border.all(color: theme.textTheme.overline.color.withAlpha(50)),
+        border:
+            Border.all(color: theme.textTheme.overline!.color!.withAlpha(50)),
         //shape: BoxShape.circle,
       ),
       child: Row(
@@ -636,7 +636,7 @@ class ActivityBar extends StatelessWidget {
               height: height,
               color: color ?? theme.primaryColor, //Colors.amber,
               child: Center(
-                child: showValue
+                child: showValue!
                     ? Text(
                         '$value %',
                         style: TextStyle(fontSize: 10),
@@ -652,19 +652,19 @@ class ActivityBar extends StatelessWidget {
 }
 
 class ActivityTextSection extends StatelessWidget {
-  final Widget appBar;
-  final String title;
-  final String text;
-  final Widget body;
-  final Widget bottom;
-  final Color color;
-  final Color fontColor;
-  final double fontSize;
-  final int ordem;
-  final String ordemLabel;
-  final String Function(BuildContext, String) builder;
+  final Widget? appBar;
+  final String? title;
+  final String? text;
+  final Widget? body;
+  final Widget? bottom;
+  final Color? color;
+  final Color? fontColor;
+  final double? fontSize;
+  final int? ordem;
+  final String? ordemLabel;
+  final String Function(BuildContext, String)? builder;
   const ActivityTextSection(
-      {Key key,
+      {Key? key,
       this.color,
       this.fontColor,
       this.ordem,
@@ -682,7 +682,7 @@ class ActivityTextSection extends StatelessWidget {
   Widget build(BuildContext context) {
     //echo(MediaQuery.of(context).size);
     var t = this.text;
-    if (this.builder != null) t = builder(context, text);
+    if (this.builder != null) t = builder!(context, text!);
     return ActivityPanel(
       color: color ?? Colors.white,
       child: Padding(
@@ -691,7 +691,7 @@ class ActivityTextSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (appBar != null) appBar,
+            if (appBar != null) appBar!,
             if (title != null)
               Text(
                   ((ordem != null)
@@ -700,24 +700,24 @@ class ActivityTextSection extends StatelessWidget {
                           : '') +
                       (title ?? ''),
                   style: TextStyle(
-                    fontSize: fontSize + 10,
+                    fontSize: fontSize! + 10,
                     fontWeight: FontWeight.w300,
                     color: fontColor ?? Colors.black45,
                   )),
-            if (body != null) body,
+            if (body != null) body!,
             if (text != null)
               Padding(
                 padding: const EdgeInsets.only(
                   top: 2,
                   bottom: 2,
                 ),
-                child: Text(t,
+                child: Text(t!,
                     style: TextStyle(
                       fontSize: fontSize,
                       color: fontColor ?? Colors.black54,
                     )),
               ),
-            if (bottom != null) bottom,
+            if (bottom != null) bottom!,
           ],
         ),
       ),
@@ -726,20 +726,20 @@ class ActivityTextSection extends StatelessWidget {
 }
 
 class ActivityImage extends StatelessWidget {
-  final double width;
-  final double height;
-  final Widget image;
-  final Widget child;
-  final Widget title;
+  final double? width;
+  final double? height;
+  final Widget? image;
+  final Widget? child;
+  final Widget? title;
 
-  final Widget body;
-  final Color color;
-  final Color titleColor;
-  final Color childColor;
-  final double radius;
-  final Widget background;
+  final Widget? body;
+  final Color? color;
+  final Color? titleColor;
+  final Color? childColor;
+  final double? radius;
+  final Widget? background;
   const ActivityImage(
-      {Key key,
+      {Key? key,
       this.title,
       this.body,
       this.width,
@@ -764,7 +764,7 @@ class ActivityImage extends StatelessWidget {
       color: color ?? theme.scaffoldBackgroundColor,
       child: Stack(
         children: <Widget>[
-          if (background != null) background,
+          if (background != null) background!,
           Column(
             children: <Widget>[
               if (title != null)
@@ -772,9 +772,9 @@ class ActivityImage extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: titleColor ?? theme.primaryColor,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(radius),
-                      topRight: Radius.circular(radius),
-                      bottomRight: Radius.circular(radius),
+                      topLeft: Radius.circular(radius!),
+                      topRight: Radius.circular(radius!),
+                      bottomRight: Radius.circular(radius!),
                     ),
                   ),
                   constraints: BoxConstraints(minHeight: 30),
@@ -782,20 +782,20 @@ class ActivityImage extends StatelessWidget {
                   child: Align(child: title),
                 ),
               (image != null)
-                  ? Expanded(child: image)
+                  ? Expanded(child: image!)
                   : Expanded(child: body ?? Container()),
               if (child != null)
                 Container(
                   width: double.maxFinite,
                   constraints: BoxConstraints(
-                    maxHeight: height,
+                    maxHeight: height!,
                   ),
                   decoration: BoxDecoration(
                     color: childColor ?? theme.primaryColor.withAlpha(150),
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(radius),
-                      topRight: Radius.circular(radius),
-                      bottomRight: Radius.circular(radius),
+                      bottomLeft: Radius.circular(radius!),
+                      topRight: Radius.circular(radius!),
+                      bottomRight: Radius.circular(radius!),
                     ),
                   ),
                   child: Padding(

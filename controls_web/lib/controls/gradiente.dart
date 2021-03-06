@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class GradientBox extends StatelessWidget {
-  final double height;
-  final List<Widget> children;
-  final List<Color> colors;
-  final List<double> stops;
-  final Alignment begin;
-  final Alignment end;
-  final Widget child;
+  final double? height;
+  final List<Widget>? children;
+  final List<Color>? colors;
+  final List<double>? stops;
+  final Alignment? begin;
+  final Alignment? end;
+  final Widget? child;
   const GradientBox(
-      {Key key,
+      {Key? key,
       this.height = kToolbarHeight,
       this.children,
       this.colors,
@@ -22,12 +22,12 @@ class GradientBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return gradiente(
-      height: height,
-      children: children,
+      height: height!,
+      children: children!,
     );
   }
 
-  gradiente({double height = kToolbarHeight + 30, List<Widget> children}) {
+  gradiente({double height = kToolbarHeight + 30, List<Widget>? children}) {
     return Container(
         height: height,
         // alingment:Alingment.bottom,
@@ -44,10 +44,11 @@ class GradientBox extends StatelessWidget {
                 Color(0xff00afef),
               ],
         )),
-        child: child ?? (children == null)
-            ? null
-            : Stack(children: [
-                ...children,
-              ]));
+        child: child ??
+            ((children == null)
+                ? null
+                : Stack(children: [
+                    ...children,
+                  ])));
   }
 }

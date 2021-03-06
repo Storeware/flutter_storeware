@@ -2,21 +2,21 @@ import 'package:controls_web/controls/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 class ScaffoldSplash extends StatefulWidget {
-  final Widget body;
-  final Widget image;
-  final Widget toptitle;
-  final String title;
-  final AppBar appBar;
-  final Drawer drawer;
-  final Widget floatingActionButton;
-  final Widget bottomNavigationBar;
-  final Widget child;
-  final Function onPressed;
-  final String buttonName;
-  final Color backgroundColor;
-  final double topMargin;
+  final Widget? body;
+  final Widget? image;
+  final Widget? toptitle;
+  final String? title;
+  final AppBar? appBar;
+  final Drawer? drawer;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
+  final Widget? child;
+  final Function? onPressed;
+  final String? buttonName;
+  final Color? backgroundColor;
+  final double? topMargin;
   ScaffoldSplash({
-    Key key,
+    Key? key,
     this.appBar,
     this.drawer,
     this.toptitle,
@@ -49,7 +49,7 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
             height: widget.topMargin,
           ),
           Container(child: Center(child: widget.image)),
-          if (widget.toptitle != null) widget.toptitle,
+          if (widget.toptitle != null) widget.toptitle!,
           if (widget.title != null) ...[
             SizedBox(
               height: 40,
@@ -65,17 +65,17 @@ class _ScaffoldSplashState extends State<ScaffoldSplash> {
               height: 30,
             ),
           ],
-          if (widget.body != null) widget.body,
+          if (widget.body != null) widget.body!,
           if (widget.onPressed != null)
             RoundedButton(
               height: 40,
               width: 180,
               buttonName: widget.buttonName ?? 'Entrar',
               onTap: () {
-                if (widget.onPressed != null) widget.onPressed();
+                if (widget.onPressed != null) widget.onPressed!();
               },
             ),
-          if (widget.child != null) widget.child,
+          if (widget.child != null) widget.child!,
         ]),
       ),
       bottomNavigationBar: widget.bottomNavigationBar,

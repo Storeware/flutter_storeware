@@ -12,7 +12,7 @@ class Money {
   }
 
   static tryParse(String value) {
-    return Money(double.tryParse(value));
+    return Money(double.tryParse(value) ?? 0);
   }
 
   @override
@@ -37,7 +37,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
   static String toMoney(double v) {
     if (v > 0) {
-      String value = v.toString() ?? '0';
+      String value = v.toString(); // ?? '0';
       if (value.contains('.'))
         value = value.replaceAll(RegExp(r'[\.]+'), ',');
       else

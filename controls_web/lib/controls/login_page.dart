@@ -2,20 +2,20 @@ import 'package:controls_web/controls/rounded_button.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  final bool Function(String, String) onValidate;
-  final String usuarioLabel;
-  final String senhaLabel;
-  final int minUsuario;
-  final int minSenha;
-  final double maxWidth;
-  final String buttonName;
-  final Widget link;
-  final Widget bottom;
-  final Widget image;
-  final String userName;
-  final String userPassword;
+  final bool Function(String, String)? onValidate;
+  final String? usuarioLabel;
+  final String? senhaLabel;
+  final int? minUsuario;
+  final int? minSenha;
+  final double? maxWidth;
+  final String? buttonName;
+  final Widget? link;
+  final Widget? bottom;
+  final Widget? image;
+  final String? userName;
+  final String? userPassword;
   LoginPage({
-    Key key,
+    Key? key,
     this.onValidate,
     this.usuarioLabel = 'Usuário',
     this.senhaLabel = 'Senha',
@@ -35,9 +35,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String usuario;
+  String? usuario;
 
-  String senha;
+  String? senha;
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final double brd =
-        (MediaQuery.of(context).size.width - widget.maxWidth) / 2;
+        (MediaQuery.of(context).size.width - widget.maxWidth!) / 2;
     return Form(
         key: _formKey,
         child: Padding(
@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                 //height: 170,
                 title: Column(
                   children: <Widget>[
-                    if (widget.image != null) widget.image,
+                    if (widget.image != null) widget.image!,
                     TextFormField(
                         autofocus: true,
                         initialValue: usuario,
@@ -77,10 +77,10 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: widget.usuarioLabel,
                         ),
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return 'Falta informar: ${widget.usuarioLabel}';
                           }
-                          if (value.length < widget.minUsuario)
+                          if (value.length < widget.minUsuario!)
                             return 'Inválido';
                           return null;
                         },
@@ -96,16 +96,17 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: widget.senhaLabel,
                         ),
                         validator: (value) {
-                          if (value.isEmpty) {
+                          if (value!.isEmpty) {
                             return 'Falta informar: ${widget.senhaLabel}';
                           }
-                          if (value.length < widget.minSenha) return 'Inválido';
+                          if (value.length < widget.minSenha!)
+                            return 'Inválido';
                           return null;
                         },
                         onSaved: (x) {
                           senha = x;
                         }),
-                    if (widget.link != null) widget.link,
+                    if (widget.link != null) widget.link!,
                     SizedBox(
                       height: 10,
                     ),
@@ -116,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                         validate();
                       },
                     ),
-                    if (widget.bottom != null) widget.bottom
+                    if (widget.bottom != null) widget.bottom!
                   ],
                 ),
               ),
@@ -126,9 +127,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   validate() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      if (widget.onValidate != null) if (widget.onValidate(usuario, senha)) {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      if (widget.onValidate != null) if (widget.onValidate!(usuario!, senha!)) {
         return true;
       }
     }

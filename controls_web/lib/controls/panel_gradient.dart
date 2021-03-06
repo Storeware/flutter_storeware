@@ -2,20 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PanelGradient extends StatefulWidget {
-  final Color color;
+  final Color? color;
   final titleColor;
-  final double radius;
+  final double? radius;
   final onPressed;
-  final double height;
-  final Widget image;
+  final double? height;
+  final Widget? image;
   //final String title;
   //final String subTitle;
   //final Color subTitleColor;
-  final Widget child;
-  final double width;
-  final double opacity;
+  final Widget? child;
+  final double? width;
+  final double? opacity;
   PanelGradient(
-      {Key key,
+      {Key? key,
       this.color,
       this.titleColor = Colors.white,
       this.onPressed,
@@ -55,7 +55,7 @@ class _PanelGradientState extends State<PanelGradient> {
                     height: 30.0,
                   ),
                   ClipRRect(
-                    borderRadius: new BorderRadius.circular(widget.radius),
+                    borderRadius: new BorderRadius.circular(widget.radius!),
                     child: Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -63,10 +63,10 @@ class _PanelGradientState extends State<PanelGradient> {
                           end: Alignment.bottomCenter,
                           stops: [0.1, 0.5, 0.7, 0.9],
                           colors: [
-                            Colors.blue[500], //widget.color.withOpacity(0.4),
-                            Colors.blue[600], //widget.color.withOpacity(0.8),
-                            Colors.blue[800], //widget.color.withOpacity(0.95),
-                            Colors.blue[800], //widget.color.withOpacity(1),
+                            Colors.blue[500]!, //widget.color.withOpacity(0.4),
+                            Colors.blue[600]!, //widget.color.withOpacity(0.8),
+                            Colors.blue[800]!, //widget.color.withOpacity(0.95),
+                            Colors.blue[800]!, //widget.color.withOpacity(1),
                           ],
                         ),
                       ),

@@ -3,37 +3,37 @@ import 'package:flutter/material.dart';
 
 extension MaskedTextFieldBr on MaskedTextField {
   static cpf(
-          {Key key,
+          {Key? key,
           String label = 'CPF',
-          String initialValue,
+          String? initialValue,
           onChanged,
           onSave,
           String mask = '000.000.000-00',
-          String match, // = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
-          Function(String) validator,
-          TextStyle style}) =>
+          String? match, // = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
+          Function(String)? validator,
+          TextStyle? style}) =>
       MaskedTextField(
-          key: key,
+          key: key!,
           label: label,
           mask: mask,
           initialValue: initialValue ?? '',
           onSaved: onSave,
-          validator: validator,
+          validator: validator!,
           sample: '000.000.000-00',
-          match: match,
+          match: match!,
           onChanged: onChanged,
           keyboardType: TextInputType.phone,
           style: style);
   static cep(
-          {Key key,
+          {Key? key,
           String label = 'CEP',
-          String initialValue,
+          String? initialValue,
           onChanged,
           onSave,
           String mask = '00000-000',
-          String match, // = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
-          Function(String) validator,
-          TextStyle style}) =>
+          String? match, // = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
+          Function(String)? validator,
+          TextStyle? style}) =>
       MaskedTextField(
           key: key,
           label: label,
@@ -49,13 +49,13 @@ extension MaskedTextFieldBr on MaskedTextField {
 }
 
 class MaskedEndereco extends StatefulWidget {
-  final Function(Map<String, dynamic>) onSave;
-  final Map<String, dynamic> initialValues;
-  final double width;
-  final Function(String) onChanged;
-  final String Function(Map<String, dynamic>) validator;
+  final Function(Map<String, dynamic>)? onSave;
+  final Map<String, dynamic>? initialValues;
+  final double? width;
+  final Function(String)? onChanged;
+  final String Function(Map<String, dynamic>)? validator;
   MaskedEndereco({
-    Key key,
+    Key? key,
     this.initialValues,
     this.onSave,
     this.width,
@@ -68,7 +68,7 @@ class MaskedEndereco extends StatefulWidget {
 }
 
 class _MaskedEnderecoState extends State<MaskedEndereco> {
-  Map<String, dynamic> values;
+  Map<String, dynamic>? values;
 
   //final TextEditingController _cepController = TextEditingController();
 
@@ -91,10 +91,10 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
             ),
             child: MaskedTextFieldBr.cep(
                 label: 'CEP',
-                initialValue: values['cep'] ?? '',
+                initialValue: values!['cep'] ?? '',
                 onChanged: widget.onChanged,
                 onSave: (x) {
-                  values['cep'] = x;
+                  values!['cep'] = x;
                   doSave();
                 })),
         SizedBox(
@@ -108,9 +108,9 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
             child: MaskedTextField.text(
                 label: 'num casa',
                 maxLength: 10,
-                initialValue: values['numero'] ?? '',
+                initialValue: values!['numero'] ?? '',
                 onSaved: (x) {
-                  values['numero'] = x;
+                  values!['numero'] = x;
                   doSave();
                 })),
         SizedBox(
@@ -122,12 +122,12 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
                   label: 'complemento',
                   maxLength: 60,
                   validator: (x) {
-                    values['compl'] = x;
+                    values!['compl'] = x;
                     doValidator();
                   },
-                  initialValue: values['compl'] ?? '',
+                  initialValue: values!['compl'] ?? '',
                   onSaved: (x) {
-                    values['compl'] = x;
+                    values!['compl'] = x;
                     doSave();
                   })),
         ),
@@ -136,12 +136,12 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
   }
 
   doSave() {
-    if (widget.onSave != null) widget.onSave(values);
+    if (widget.onSave != null) widget.onSave!(values!);
   }
 
   doValidator() {
     if (widget.validator != null) {
-      return widget.validator(values);
+      return widget.validator!(values!);
     } else
       return null;
   }

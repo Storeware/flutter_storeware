@@ -2,12 +2,12 @@ import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:flutter/material.dart';
 
 class CardPanel extends StatelessWidget {
-  final Widget hideOption;
-  final Widget title;
-  final List<Widget> children;
-  final Widget bottom;
+  final Widget? hideOption;
+  final Widget? title;
+  final List<Widget>? children;
+  final Widget? bottom;
   const CardPanel(
-      {Key key, this.title, this.children, this.bottom, this.hideOption})
+      {Key? key, this.title, this.children, this.bottom, this.hideOption})
       : super(key: key);
 
   @override

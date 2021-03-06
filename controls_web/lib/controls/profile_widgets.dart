@@ -3,7 +3,7 @@ import 'package:controls_web/controls/image_links.dart';
 import 'package:flutter/material.dart';
 
 class Usuario {
-  String codigo, nome, grupo, caixa;
+  String? codigo, nome, grupo, caixa;
   Usuario.fromJson(json) {
     codigo = json['codigo'];
     nome = json['nome'];
@@ -16,9 +16,9 @@ class Usuario {
 }
 
 class ProfileHeader extends StatelessWidget {
-  final List<Widget> actions;
-  final String title;
-  const ProfileHeader({Key key, this.title, this.actions}) : super(key: key);
+  final List<Widget>? actions;
+  final String? title;
+  const ProfileHeader({Key? key, this.title, this.actions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +38,12 @@ class ProfileHeader extends StatelessWidget {
 }
 
 class ProfileUser extends StatelessWidget {
-  final Widget image;
-  final Usuario usuario;
-  final double filial;
-  final String versao;
+  final Widget? image;
+  final Usuario? usuario;
+  final double? filial;
+  final String? versao;
   const ProfileUser(
-      {Key key, this.image, this.usuario, this.filial, this.versao})
+      {Key? key, this.image, this.usuario, this.filial, this.versao})
       : super(key: key);
 
   @override
@@ -67,9 +67,9 @@ class ProfileUser extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  Text(usuario.nome ?? ''),
-                  Text(usuario.grupo ?? ''),
-                  Text(usuario.codigo ?? ''),
+                  Text(usuario!.nome ?? ''),
+                  Text(usuario!.grupo ?? ''),
+                  Text(usuario!.codigo ?? ''),
                 ])),
           ),
           Positioned(
@@ -91,15 +91,15 @@ class ProfileUser extends StatelessWidget {
 }
 
 class DrawerTile extends StatelessWidget {
-  final Widget leading;
-  final Widget trailing;
+  final Widget? leading;
+  final Widget? trailing;
 
-  final Widget image;
-  final String title;
-  final Widget subtitle;
-  final bool enabled;
-  final Function() onPressed;
-  final double height;
+  final Widget? image;
+  final String? title;
+  final Widget? subtitle;
+  final bool? enabled;
+  final Function()? onPressed;
+  final double? height;
 
   DrawerTile(
       {this.image,
@@ -114,15 +114,16 @@ class DrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Color _color = (enabled) ? theme.popupMenuTheme.color : theme.dividerColor;
+    Color _color =
+        (enabled!) ? theme.popupMenuTheme.color! : theme.dividerColor;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
       height: height,
       child: InkWell(
         child: Row(children: [
-          if (leading != null) leading,
-          if (image != null) image,
+          if (leading != null) leading!,
+          if (image != null) image!,
           Expanded(
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -130,9 +131,9 @@ class DrawerTile extends StatelessWidget {
                 children: [
                   if (title != null)
                     Text(
-                      title,
+                      title!,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.caption.copyWith(
+                      style: theme.textTheme.caption!.copyWith(
                         fontSize: 14,
                         color: _color,
                       ),
@@ -141,10 +142,10 @@ class DrawerTile extends StatelessWidget {
           ),
           trailing ?? Icon(Icons.chevron_right)
         ]),
-        onTap: (!enabled)
+        onTap: (!enabled!)
             ? null
             : () {
-                if (onPressed != null) onPressed();
+                if (onPressed != null) onPressed!();
               },
       ),
     );

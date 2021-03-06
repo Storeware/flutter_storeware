@@ -8,19 +8,19 @@
 part of data_viewer;
 
 class DataViewerStorage<T> extends StatelessWidget {
-  final List<T> columns;
-  final String keyStorage;
-  final Function() onSaved;
+  final List<T>? columns;
+  final String? keyStorage;
+  final Function()? onSaved;
   const DataViewerStorage(
-      {Key key, this.columns, this.keyStorage, this.onSaved})
+      {Key? key, this.columns, this.keyStorage, this.onSaved})
       : super(key: key);
 
   static Widget button<T>(BuildContext context,
-      {String keyStorage,
-      List columns,
+      {String? keyStorage,
+      List<T>? columns,
       double width = 350,
       double height = 550,
-      Function onSaved}) {
+      Function()? onSaved}) {
     Size size = MediaQuery.of(context).size;
     return InkButton(
       child: Icon(Icons.reorder),
@@ -30,8 +30,8 @@ class DataViewerStorage<T> extends StatelessWidget {
             height: size.height < height ? size.height : height,
             child: DataViewerStorage<T>(
               keyStorage: keyStorage,
-              columns: columns,
-              onSaved: onSaved,
+              columns: columns!,
+              onSaved: onSaved!,
             ));
       },
     );
@@ -58,13 +58,13 @@ class DataViewerStorage<T> extends StatelessWidget {
   }
 
   _save() {
-    DataViewerStorage.save(keyStorage, columns);
-    if (onSaved != null) onSaved();
+    DataViewerStorage.save(keyStorage!, columns!);
+    if (onSaved != null) onSaved!();
   }
 
   createItems(BuildContext context) {
     return Wrap(children: [
-      for (var item in columns) ...createItem(context, item),
+      for (var item in columns!) ...createItem(context, item),
     ]);
   }
 
@@ -82,7 +82,8 @@ class DataViewerStorage<T> extends StatelessWidget {
     var j = LocalStorage().getJson(keyStorage) ?? {};
     for (var key in j.keys) {
       var p = key.split('.');
-      Iterable column = columns.where((element) => p[0] == element.name);
+      Iterable<dynamic>? column =
+          columns.where((element) => p[0] == element.name);
       if (column != null) column.first.visible = j[key];
     }
 

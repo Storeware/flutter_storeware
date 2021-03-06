@@ -15,15 +15,15 @@ class PageNavigatorController {
 }
 
 class PageNavigator extends StatefulWidget {
-  final int pagina;
-  final int count;
-  final Color color;
-  final Function(int) onChange;
-  final double width;
-  final double height;
-  final PageNavigatorController controller;
+  final int? pagina;
+  final int? count;
+  final Color? color;
+  final Function(int)? onChange;
+  final double? width;
+  final double? height;
+  final PageNavigatorController? controller;
   const PageNavigator(
-      {Key key,
+      {Key? key,
       this.pagina = 1,
       this.onChange,
       this.count = 5,
@@ -38,14 +38,14 @@ class PageNavigator extends StatefulWidget {
 }
 
 class _PageNavigatorState extends State<PageNavigator> {
-  int _pagina;
+  int _pagina = 0;
 
-  StreamSubscription navStream;
+  StreamSubscription? navStream;
   @override
   void initState() {
-    _pagina = widget.pagina;
+    _pagina = widget.pagina ?? 0;
     if (widget.controller != null)
-      navStream = widget.controller.notifiler.stream.listen((p) {
+      navStream = widget.controller!.notifiler.stream.listen((p) {
         goTo(p);
       });
 
@@ -54,7 +54,7 @@ class _PageNavigatorState extends State<PageNavigator> {
 
   @override
   void dispose() {
-    if (navStream != null) navStream.cancel();
+    if (navStream != null) navStream!.cancel();
     super.dispose();
   }
 
@@ -74,30 +74,30 @@ class _PageNavigatorState extends State<PageNavigator> {
         IconButton(
           icon: Icon(Icons.chevron_left),
           onPressed: () {
-            _pagina -= widget.count;
-            widget.onChange(_pagina);
+            _pagina -= (widget.count ?? 0);
+            widget.onChange!(_pagina);
           },
         ),
         InkWell(
           child: Text('0'),
           onTap: () {
             _pagina = 1;
-            widget.onChange(_pagina);
+            widget.onChange!(_pagina);
           },
         ),
-        for (var i = _pagina; i < _pagina + widget.count; i++)
+        for (var i = _pagina; i < _pagina + widget.count!; i++)
           InkWell(
             child: Text(i.toString()),
             onTap: () {
               _pagina = i;
-              widget.onChange(_pagina);
+              widget.onChange!(_pagina);
             },
           ),
         IconButton(
           icon: Icon(Icons.chevron_right),
           onPressed: () {
-            _pagina += widget.count;
-            widget.onChange(_pagina);
+            _pagina += widget.count!;
+            widget.onChange!(_pagina);
           },
         )
       ]),

@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class TabButton extends StatelessWidget {
-  final Widget icon;
-  final String label;
-  final Widget child;
-  final Widget footer;
-  final double width;
-  final Function() onPressed;
+  final Widget? icon;
+  final String? label;
+  final Widget? child;
+  final Widget? footer;
+  final double? width;
+  final Function()? onPressed;
   const TabButton(
-      {Key key,
+      {Key? key,
       this.icon,
       this.label,
       this.onPressed,
@@ -23,7 +23,7 @@ class TabButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return (onPressed == null)
         ? buildContainer()
-        : FlatButton(
+        : TextButton(
             child: buildContainer(),
             onPressed: onPressed,
           );
@@ -35,10 +35,10 @@ class TabButton extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (icon != null) icon,
+          if (icon != null) icon!,
           if (label != null) Text(label ?? ''),
-          if (child != null) child,
-          if (footer != null) footer,
+          if (child != null) child!,
+          if (footer != null) footer!,
         ],
       ),
     );
@@ -46,17 +46,17 @@ class TabButton extends StatelessWidget {
 }
 
 class CleanButton extends StatelessWidget {
-  final Widget icon;
-  final String label;
-  final Color labelColor;
-  final String subLabel;
-  final Function() onPressed;
-  final Color color;
-  final double elevation;
-  final double width;
-  final double radius;
+  final Widget? icon;
+  final String? label;
+  final Color? labelColor;
+  final String? subLabel;
+  final Function()? onPressed;
+  final Color? color;
+  final double? elevation;
+  final double? width;
+  final double? radius;
   const CleanButton(
-      {Key key,
+      {Key? key,
       this.icon,
       this.label,
       this.width,
@@ -70,12 +70,12 @@ class CleanButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    //ThemeData theme = Theme.of(context);
     return CleanContainer(
-      radius: radius,
-      elevation: elevation,
-      width: width,
-      color: color, //?? theme.cardColor,
+      radius: radius!,
+      elevation: elevation!,
+      width: width!,
+      color: color!, //?? theme.cardColor,
       child: (onPressed == null)
           ? buildContainer(context)
           : MaterialButton(
@@ -95,7 +95,7 @@ class CleanButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) icon,
+          if (icon != null) icon!,
           Text(label ?? '',
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -103,7 +103,7 @@ class CleanButton extends StatelessWidget {
                 fontSize: 12,
               )),
           if (subLabel != null)
-            Text(subLabel,
+            Text(subLabel!,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   fontSize: 10,
@@ -116,21 +116,21 @@ class CleanButton extends StatelessWidget {
 }
 
 class CleanContainer extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final bool selected;
-  final Color selectedColor;
-  final double radius;
-  final double leftRadius;
-  final double rightRadius;
-  final double width;
-  final double height;
-  final double elevation;
-  final double border;
-  final Color borderColor;
-  final EdgeInsets padding;
+  final Widget? child;
+  final Color? color;
+  final bool? selected;
+  final Color? selectedColor;
+  final double? radius;
+  final double? leftRadius;
+  final double? rightRadius;
+  final double? width;
+  final double? height;
+  final double? elevation;
+  final double? border;
+  final Color? borderColor;
+  final EdgeInsets? padding;
   const CleanContainer({
-    Key key,
+    Key? key,
     this.child,
     this.padding,
     this.color,
@@ -156,7 +156,7 @@ class CleanContainer extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: (selected) ? _selectedColor : _color,
+        color: (selected!) ? _selectedColor : _color,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(leftRadius ?? radius ?? 10),
           topRight: Radius.circular(rightRadius ?? radius ?? 10),
@@ -175,7 +175,7 @@ class CleanContainer extends StatelessWidget {
             : [
                 BoxShadow(
                   color: Colors.black26, // theme.dividerColor,
-                  blurRadius: elevation,
+                  blurRadius: elevation!,
                   // spreadRadius: elevation,
                   offset: Offset(0, 2), // shadow direction: bottom right
                 )
@@ -187,18 +187,18 @@ class CleanContainer extends StatelessWidget {
 }
 
 class ActionButton extends StatelessWidget {
-  final String label;
-  final Function() onPressed;
-  final Color color;
-  final TextStyle style;
-  final bool selected;
-  final Color selectedColor;
-  final double width;
-  final double height;
-  final Widget child;
-  final double radius;
+  final String? label;
+  final Function()? onPressed;
+  final Color? color;
+  final TextStyle? style;
+  final bool? selected;
+  final Color? selectedColor;
+  final double? width;
+  final double? height;
+  final Widget? child;
+  final double? radius;
   const ActionButton(
-      {Key key,
+      {Key? key,
       this.label,
       this.onPressed,
       this.radius = 15,
@@ -215,12 +215,12 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return InkWell(
-      borderRadius: BorderRadius.circular(radius),
+      borderRadius: BorderRadius.circular(radius!),
       onTap: onPressed,
       child: CleanContainer(
         radius: 30,
         width: width, height: height,
-        color: (selected) ? selectedColor ?? theme.dividerColor : color,
+        color: (selected!) ? selectedColor ?? theme.dividerColor : color,
         // label: label,
         // labelColor: Colors.black87,
         // onPressed: onPressed,
@@ -231,13 +231,13 @@ class ActionButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: DefaultTextStyle(
               style: style ??
-                  theme.textTheme.subtitle2
+                  theme.textTheme.subtitle2!
                       .copyWith(fontWeight: FontWeight.w300),
               child: Column(children: [
-                if (child != null) child,
+                if (child != null) child!,
                 if (label != null)
                   Text(
-                    label,
+                    label!,
                     textAlign: TextAlign.center,
                   ),
               ])),
@@ -248,15 +248,15 @@ class ActionButton extends StatelessWidget {
 }
 
 class LabeledRow extends StatelessWidget {
-  final String label;
-  final Widget title;
-  final double spacing;
-  final MainAxisAlignment mainAxisAlignment;
-  final List<Widget> children;
-  final double top;
-  final TextStyle style;
+  final String? label;
+  final Widget? title;
+  final double? spacing;
+  final MainAxisAlignment? mainAxisAlignment;
+  final List<Widget>? children;
+  final double? top;
+  final TextStyle? style;
   const LabeledRow(
-      {Key key,
+      {Key? key,
       this.label,
       this.children,
       this.title,
@@ -284,13 +284,13 @@ class LabeledRow extends StatelessWidget {
           height: spacing,
         ),
         DefaultTextStyle(
-          style: (style ?? theme.textTheme.subtitle2).copyWith(
+          style: (style ?? theme.textTheme.subtitle2!).copyWith(
               fontWeight: FontWeight.w300,
-              color: theme.textTheme.subtitle2.color),
+              color: theme.textTheme.subtitle2!.color),
           child: SafeArea(
             child: Row(
                 mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
-                children: [for (var item in children) ...doitem(item)]),
+                children: [for (var item in children!) ...doitem(item)]),
           ),
         ),
       ],
@@ -306,14 +306,14 @@ class LabeledRow extends StatelessWidget {
 }
 
 class LabeledColumn extends StatelessWidget {
-  final String label;
-  final List<Widget> children;
-  final Widget title;
-  final double spacing;
-  final Color backgroundColor;
-  final double elevation;
+  final String? label;
+  final List<Widget>? children;
+  final Widget? title;
+  final double? spacing;
+  final Color? backgroundColor;
+  final double? elevation;
   const LabeledColumn(
-      {Key key,
+      {Key? key,
       this.elevation = 0,
       this.backgroundColor,
       this.label,
@@ -325,7 +325,7 @@ class LabeledColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    var fs = theme.textTheme.subtitle1.fontSize - 2;
+    //double? fs = (theme.textTheme.subtitle1!.fontSize??0) - 2;
     return Card(
         color: backgroundColor ?? Colors.transparent,
         elevation: elevation,
@@ -342,13 +342,13 @@ class LabeledColumn extends StatelessWidget {
                 height: 5,
               ),
               DefaultTextStyle(
-                style: theme.textTheme.subtitle2
+                style: theme.textTheme.subtitle2!
                     .copyWith(fontWeight: FontWeight.w300),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
-                    children: [for (var item in children) ...doitem(item)]),
+                    children: [for (var item in children!) ...doitem(item)]),
               ),
             ]));
   }
@@ -362,17 +362,17 @@ class LabeledColumn extends StatelessWidget {
 }
 
 class Labeled extends StatelessWidget {
-  final String label;
-  final Widget title;
-  final double spacing;
-  final WrapAlignment alignment;
-  final WrapCrossAlignment crossAxisAlignment;
-  final Axis direction;
-  final List<Widget> children;
-  final double top, runSpacing;
-  final TextStyle style;
+  final String? label;
+  final Widget? title;
+  final double? spacing;
+  final WrapAlignment? alignment;
+  final WrapCrossAlignment? crossAxisAlignment;
+  final Axis? direction;
+  final List<Widget>? children;
+  final double? top, runSpacing;
+  final TextStyle? style;
   const Labeled(
-      {Key key,
+      {Key? key,
       this.label,
       this.title,
       this.spacing = 1,
@@ -403,18 +403,18 @@ class Labeled extends StatelessWidget {
           height: 5,
         ),
         DefaultTextStyle(
-          style: (style ?? theme.textTheme.subtitle2).copyWith(
+          style: (style ?? theme.textTheme.subtitle2!).copyWith(
               fontWeight: FontWeight.w300,
-              color: theme.textTheme.subtitle2.color),
+              color: theme.textTheme.subtitle2!.color),
           child: SafeArea(
             child: Wrap(
-              alignment: alignment,
-              crossAxisAlignment: crossAxisAlignment,
-              direction: direction,
-              spacing: spacing,
-              runSpacing: runSpacing,
+              alignment: alignment!,
+              crossAxisAlignment: crossAxisAlignment!,
+              direction: direction!,
+              spacing: spacing!,
+              runSpacing: runSpacing!,
               //mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
-              children: [for (var item in children) ...doitem(item)],
+              children: [for (var item in children!) ...doitem(item)],
             ),
           ),
         ),
@@ -431,17 +431,17 @@ class Labeled extends StatelessWidget {
 }
 
 class ButtonAvatar extends StatelessWidget {
-  final Widget icon;
-  final String label;
-  final Widget child;
-  final Widget footer;
-  final double width;
-  final Color color;
-  final Color avatarBackgoundColor;
-  final Color avatarForegoundColor;
-  final Function() onPressed;
+  final Widget? icon;
+  final String? label;
+  final Widget? child;
+  final Widget? footer;
+  final double? width;
+  final Color? color;
+  final Color? avatarBackgoundColor;
+  final Color? avatarForegoundColor;
+  final Function()? onPressed;
   const ButtonAvatar(
-      {Key key,
+      {Key? key,
       this.icon,
       this.label,
       this.onPressed,
@@ -487,12 +487,12 @@ class ButtonAvatar extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
               ),
-            if (child != null) child,
+            if (child != null) child!,
             if (footer != null)
               DefaultTextStyle(
                 style: TextStyle(
-                    fontSize: 12, color: theme.textTheme.bodyText1.color),
-                child: footer,
+                    fontSize: 12, color: theme.textTheme.bodyText1!.color),
+                child: footer!,
               ),
           ],
         ),
@@ -502,17 +502,17 @@ class ButtonAvatar extends StatelessWidget {
 }
 
 class ActionText extends StatelessWidget {
-  final String label;
-  final String sublabel;
-  final Color color;
-  final TextStyle style;
-  final double radius;
-  final Function() onPressed;
-  final double height, width;
-  final Widget child;
-  final double borderWidth;
+  final String? label;
+  final String? sublabel;
+  final Color? color;
+  final TextStyle? style;
+  final double? radius;
+  final Function()? onPressed;
+  final double? height, width;
+  final Widget? child;
+  final double? borderWidth;
   const ActionText(
-      {Key key,
+      {Key? key,
       this.label,
       this.sublabel,
       this.color,
@@ -529,17 +529,18 @@ class ActionText extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TextStyle _style = style ??
-        theme.textTheme.bodyText1.copyWith(color: theme.tabBarTheme.labelColor);
+        theme.textTheme.bodyText1!
+            .copyWith(color: theme.tabBarTheme.labelColor);
     return InkWell(
       child: Container(
         width: width,
         height: height,
-        decoration: (borderWidth > 0)
+        decoration: (borderWidth! > 0)
             ? BoxDecoration(
-                borderRadius: BorderRadius.circular(radius),
+                borderRadius: BorderRadius.circular(radius!),
                 color: color ?? theme.scaffoldBackgroundColor,
                 border:
-                    Border.all(width: borderWidth, color: theme.dividerColor))
+                    Border.all(width: borderWidth!, color: theme.dividerColor))
             : null,
         color:
             (borderWidth == 0) ? color ?? theme.scaffoldBackgroundColor : null,
@@ -547,14 +548,14 @@ class ActionText extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              if (child != null) child,
+              if (child != null) child!,
               if (label != null)
-                Text(label,
+                Text(label!,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: _style),
               if (sublabel != null)
-                Text(sublabel,
+                Text(sublabel!,
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.ellipsis,
                     style: _style.copyWith(
@@ -563,19 +564,19 @@ class ActionText extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () => onPressed(),
+      onTap: () => onPressed!(),
     );
   }
 }
 
 class ActionCounter extends StatelessWidget {
-  final String label;
-  final String value;
-  final int charCount;
-  final TextStyle style;
-  final Widget Function(String) builder;
+  final String? label;
+  final String? value;
+  final int? charCount;
+  final TextStyle? style;
+  final Widget Function(String)? builder;
   const ActionCounter(
-      {Key key,
+      {Key? key,
       this.label,
       this.value,
       this.style,
@@ -585,13 +586,13 @@ class ActionCounter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cs = (charCount == null) ? value : value.padLeft(charCount, '0');
+    var cs = (charCount == null) ? value : value!.padLeft(charCount!, '0');
     return Labeled(
       label: label,
       children: [
-        for (var s in cs.characters)
+        for (var s in cs!.characters)
           (builder != null)
-              ? builder(s)
+              ? builder!(s)
               : ActionText(
                   label: s,
                   style: style ??
@@ -602,15 +603,15 @@ class ActionCounter extends StatelessWidget {
 }
 
 class ActionTimer extends StatefulWidget {
-  final String label;
-  final Duration interval;
-  final String Function(Timer) onGetValue;
-  final Widget Function(String) builder;
-  final Widget Function(String) itemBuilder;
-  final String Function(String) onTransform;
-  final int charCount;
+  final String? label;
+  final Duration? interval;
+  final String Function(Timer)? onGetValue;
+  final Widget Function(String)? builder;
+  final Widget Function(String)? itemBuilder;
+  final String Function(String)? onTransform;
+  final int? charCount;
   const ActionTimer({
-    Key key,
+    Key? key,
     this.label,
     this.interval,
     this.onGetValue,
@@ -624,8 +625,8 @@ class ActionTimer extends StatefulWidget {
 }
 
 class _ActionTimerState extends State<ActionTimer> {
-  Timer timer;
-  ValueNotifier<String> valueN;
+  Timer? timer;
+  ValueNotifier<String>? valueN;
 
   @override
   void initState() {
@@ -633,32 +634,32 @@ class _ActionTimerState extends State<ActionTimer> {
     valueN = ValueNotifier<String>('');
     timer = Timer.periodic(widget.interval ?? Duration(seconds: 1), (t) {
       if (widget.onGetValue != null)
-        valueN.value = widget.onGetValue(t);
+        valueN!.value = widget.onGetValue!(t);
       else
-        valueN.value = t.tick.toString();
+        valueN!.value = t.tick.toString();
     });
   }
 
   @override
   void dispose() {
-    timer.cancel();
+    timer!.cancel();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-        valueListenable: valueN,
+    return ValueListenableBuilder<String>(
+        valueListenable: valueN!,
         builder: (a, value, w) {
-          var v = value;
-          if (widget.onTransform != null) v = widget.onTransform(v);
+          String v = value;
+          if (widget.onTransform != null) v = widget.onTransform!(v);
           return (widget.builder != null)
-              ? widget.builder(v)
+              ? widget.builder!(v)
               : ActionCounter(
                   label: widget.label ?? 'Duração',
                   builder: widget.itemBuilder,
-                  value: value.padLeft(widget.charCount, '0'));
+                  value: value.padLeft(widget.charCount!, '0'));
         });
   }
 }

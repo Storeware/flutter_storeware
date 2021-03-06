@@ -1,13 +1,14 @@
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_web/controls/paginated_grid.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 //import 'package:controls_data/odata_client.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
-DateTime _toDateTime(value, {DateTime def, zone = -3}) {
+DateTime _toDateTime(value, {DateTime? def, zone = -3}) {
   if (value is String) {
     int dif = (value.endsWith('Z') ? zone : 0);
-    return DateTime.tryParse(value).add(Duration(hours: dif));
+    return DateTime.tryParse(value)!.add(Duration(hours: dif));
   }
   if (value is DateTime) return value;
   return def ?? DateTime.now();
@@ -48,8 +49,8 @@ class DataViewerHelper {
   static simnaoColumn(column,
       {dynamic trueValue,
       dynamic falseValue,
-      Color color,
-      Color inactiveTrackColor}) {
+      Color? color,
+      Color? inactiveTrackColor}) {
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
@@ -68,10 +69,10 @@ class DataViewerHelper {
 
         /// define switch para edição
         return MaskedSwitchFormField(
-          activeColor: color,
-          activeTrackColor: (color != null) ? color.lighten(50) : null,
+          activeColor: color!,
+          activeTrackColor: (color != null) ? color.lighten(50) : Colors.blue,
           inactiveTrackColor: inactiveTrackColor ??
-              ((color != null) ? color.lighten(80) : null),
+              ((color != null) ? color.lighten(80) : Colors.blue),
           label: column.label ?? column.name,
           value: (row[column.name] ?? r['v']) == r['t'],
           onChanged: (x) {
@@ -106,7 +107,7 @@ class DataViewerHelper {
   }
 
   static dateTimeColumn(column,
-      {mask = 'dd/MM/yyyy', DateTime firstDate, DateTime lastDate}) {
+      {mask = 'dd/MM/yyyy', DateTime? firstDate, DateTime? lastDate}) {
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
@@ -121,8 +122,8 @@ class DataViewerHelper {
         dynamic v = row[column.name];
         DateTime d = _toDateTime(v);
         return MaskedDatePicker(
-          firstDate: firstDate,
-          lastDate: lastDate,
+          firstDate: firstDate!,
+          lastDate: lastDate!,
           readOnly: column.readOnly,
           format: mask,
           labelText: column.label,
@@ -152,7 +153,7 @@ class DataViewerHelper {
     return column;
   }
 
-  static text(column, {int decimais = 2, double width, Color color}) {
+  static text(column, {int decimais = 2, double? width, Color? color}) {
     if (column != null) {
       column.editBuilder = (a, b, c, row) {
         return Container(
@@ -171,7 +172,7 @@ class DataViewerHelper {
     return column;
   }
 
-  static moneyColumn(column, {int decimais = 2, double width, Color color}) {
+  static moneyColumn(column, {int decimais = 2, double? width, Color? color}) {
     if (column != null) {
       column.align = Alignment.centerRight;
       column.builder = (idx, row) {

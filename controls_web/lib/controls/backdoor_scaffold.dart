@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 
 class BackdoorScaffold extends StatelessWidget {
-  final Widget body;
-  final Size preferredSize;
-  final Widget appBarChild;
-  final List<Widget> children;
-  final Drawer drawer;
-  final Widget bottomNavigationBar;
-  final Widget title;
-  final double expandedHeight;
-  final List<Widget> slivers;
-  final bool extendBody;
-  final AppBar appBar;
-  final Widget bottomSheet;
-  final Widget floatingActionButton;
-  final bool pinned;
-  final Color backgroundColor;
+  final Widget? body;
+  final Size? preferredSize;
+  final Widget? appBarChild;
+  final List<Widget>? children;
+  final Drawer? drawer;
+  final Widget? bottomNavigationBar;
+  final Widget? title;
+  final double? expandedHeight;
+  final List<Widget>? slivers;
+  final bool? extendBody;
+  final AppBar? appBar;
+  final Widget? bottomSheet;
+  final Widget? floatingActionButton;
+  final bool? pinned;
+  final Color? backgroundColor;
   BackdoorScaffold(
-      {Key key,
+      {Key? key,
       this.body,
       this.drawer,
       this.bottomNavigationBar,
@@ -37,29 +37,29 @@ class BackdoorScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
+    //ThemeData theme = Theme.of(context);
     return Scaffold(
       appBar: appBar,
-      extendBody: extendBody,
+      extendBody: extendBody!,
       body: CustomScrollView(
         slivers: [
           if (appBarChild != null)
             SliverAppBar(
                 backgroundColor: backgroundColor,
                 floating: true,
-                pinned: pinned,
+                pinned: pinned!,
                 expandedHeight:
                     (appBar == null) ? 0 : expandedHeight ?? kToolbarHeight,
                 bottom: PreferredSize(
                   preferredSize: preferredSize ?? Size.fromHeight(125),
-                  child: appBarChild,
+                  child: appBarChild!,
                 )),
           if (children != null)
             SliverToBoxAdapter(
                 child: Stack(
-              children: [if (body != null) body, ...children],
+              children: [if (body != null) body!, ...children!],
             )),
-          if (slivers != null) ...slivers,
+          if (slivers != null) ...slivers!,
         ],
       ),
       drawer: drawer,

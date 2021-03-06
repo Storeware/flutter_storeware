@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:controls_extensions/extensions.dart';
 
 class Calendario extends StatefulWidget {
-  final DateTime initialDate;
-  final DateTime firstDate;
-  final DateTime lastDate;
-  final List<DateTime> datas;
-  final String title;
-  final int days;
-  final Color color;
-  final double elevation;
-  final double width;
-  final Function(DateTime) onDateChanged;
+  final DateTime? initialDate;
+  final DateTime? firstDate;
+  final DateTime? lastDate;
+  final List<DateTime>? datas;
+  final String? title;
+  final int? days;
+  final Color? color;
+  final double? elevation;
+  final double? width;
+  final Function(DateTime)? onDateChanged;
 
   Calendario({
-    Key key,
+    Key? key,
     this.initialDate,
     this.onDateChanged,
     this.datas,
@@ -32,7 +32,7 @@ class Calendario extends StatefulWidget {
 }
 
 class _CalendarioState extends State<Calendario> {
-  DateTime selectedDate;
+  DateTime? selectedDate;
   @override
   void initState() {
     selectedDate = widget.initialDate.toDate();
@@ -44,7 +44,7 @@ class _CalendarioState extends State<Calendario> {
     DateTime inicio = widget.firstDate.startOfWeek();
     Size size = MediaQuery.of(context).size;
     double w = size.width * 0.9;
-    if (w > widget.width) w = widget.width;
+    if (w > widget.width!) w = widget.width!;
     double h1 = (w / 7);
     double h = h1 * 5;
     return Card(
@@ -52,7 +52,7 @@ class _CalendarioState extends State<Calendario> {
       child: Column(
         children: [
           if (widget.title != null)
-            Text(widget.title,
+            Text(widget.title!,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           Container(
               constraints: BoxConstraints(maxHeight: 40, maxWidth: w),
@@ -82,7 +82,8 @@ class _CalendarioState extends State<Calendario> {
               primary: false,
               crossAxisCount: 7,
               children: [
-                for (DateTime d in inicio.rangeTo(widget.lastDate)) createDay(d)
+                for (DateTime d in inicio.rangeTo(widget.lastDate!))
+                  createDay(d)
               ],
             ),
           ),
@@ -118,7 +119,7 @@ class _CalendarioState extends State<Calendario> {
               onTap: () {
                 setState(() {
                   selectedDate = d;
-                  if (widget.onDateChanged != null) widget.onDateChanged(d);
+                  if (widget.onDateChanged != null) widget.onDateChanged!(d);
                 });
               },
             )
@@ -173,14 +174,14 @@ extension DateTimeEx on DateTime {
 }
 
 class CalendarioHoras extends StatefulWidget {
-  final double width;
-  final List<String> horas;
-  final String value;
-  final Function(String) onChanged;
-  final String title;
-  final double elevation;
+  final double? width;
+  final List<String>? horas;
+  final String? value;
+  final Function(String)? onChanged;
+  final String? title;
+  final double? elevation;
   CalendarioHoras({
-    Key key,
+    Key? key,
     this.width = 350,
     this.horas,
     this.onChanged,
@@ -194,7 +195,7 @@ class CalendarioHoras extends StatefulWidget {
 }
 
 class _CalendarioHorasState extends State<CalendarioHoras> {
-  String selected;
+  String? selected;
   @override
   void initState() {
     super.initState();
@@ -203,7 +204,7 @@ class _CalendarioHorasState extends State<CalendarioHoras> {
 
   @override
   Widget build(BuildContext context) {
-    double w = widget.width / 7;
+    double w = widget.width! / 7;
     int index = 0;
     return Card(
       elevation: widget.elevation,
@@ -212,10 +213,10 @@ class _CalendarioHorasState extends State<CalendarioHoras> {
         child: Column(
           children: [
             if (widget.title != null)
-              Text(widget.title,
+              Text(widget.title!,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             Wrap(spacing: 0, children: [
-              for (String item in widget.horas)
+              for (String item in widget.horas!)
                 Padding(
                   padding: const EdgeInsets.all(2),
                   child: InkWell(
@@ -232,7 +233,7 @@ class _CalendarioHorasState extends State<CalendarioHoras> {
                         child: Text(item)),
                     onTap: () {
                       setState(() => selected = item);
-                      if (widget.onChanged != null) widget.onChanged(item);
+                      if (widget.onChanged != null) widget.onChanged!(item);
                     },
                   ),
                 )

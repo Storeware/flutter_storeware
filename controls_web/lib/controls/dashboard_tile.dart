@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:controls_web/controls/responsive.dart';
 
 class DashboardIcon extends StatelessWidget {
-  final IconData icon;
-  final double size;
-  const DashboardIcon({Key key, this.icon, this.size = 32}) : super(key: key);
+  final IconData? icon;
+  final double? size;
+  const DashboardIcon({Key? key, this.icon, this.size = 32}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,30 +17,30 @@ class DashboardIcon extends StatelessWidget {
 }
 
 class DashboardTile extends StatelessWidget {
-  final String value;
-  final TextStyle valueStyle;
-  final String title;
-  final TextStyle titleStyle;
-  final double titleHeight;
-  final Color color;
-  final Widget image;
-  final Widget icon;
-  final Widget body;
-  final double width;
-  final double height;
-  final Widget left;
-  final double borderRadius;
-  final double avatarRadius;
-  final Widget avatarChild;
-  final Color avatarColor;
-  final double avatarMargin;
-  final double elevation;
-  final Function() onPressed;
-  final Color indicatorColor;
-  final double avatarSize;
-  final Widget topBar;
+  final String? value;
+  final TextStyle? valueStyle;
+  final String? title;
+  final TextStyle? titleStyle;
+  final double? titleHeight;
+  final Color? color;
+  final Widget? image;
+  final Widget? icon;
+  final Widget? body;
+  final double? width;
+  final double? height;
+  final Widget? left;
+  final double? borderRadius;
+  final double? avatarRadius;
+  final Widget? avatarChild;
+  final Color? avatarColor;
+  final double? avatarMargin;
+  final double? elevation;
+  final Function()? onPressed;
+  final Color? indicatorColor;
+  final double? avatarSize;
+  final Widget? topBar;
   const DashboardTile(
-      {Key key,
+      {Key? key,
       this.value,
       this.elevation = 2,
       this.valueStyle,
@@ -69,7 +69,7 @@ class DashboardTile extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     Color _color = color ?? theme.primaryColor;
-    ResponsiveInfo responsive = ResponsiveInfo(context);
+    ResponsiveInfo? responsive = ResponsiveInfo(context);
     Color _indicatorColor = indicatorColor ?? theme.indicatorColor;
     return Theme(
         data: theme.copyWith(primaryColor: _color),
@@ -77,24 +77,24 @@ class DashboardTile extends StatelessWidget {
             elevation: elevation,
             shape: RoundedRectangleBorder(
               //side: BorderSide(color: Colors.white70, width: 1),
-              borderRadius: BorderRadius.circular(borderRadius),
+              borderRadius: BorderRadius.circular(borderRadius!),
             ),
             color: color ?? _color.withAlpha(150),
             child: LayoutBuilder(builder: (ctx, sizes) {
-              var size = MediaQuery.of(ctx).size;
+              Size size = MediaQuery.of(ctx).size;
               if (sizes.maxWidth < size.width)
                 size = Size(sizes.maxWidth, size.height);
               double w = (responsive.isSmall
                   ? (size.width)
                   : responsive.isMobile
-                      ? ((width * 2) < size.width)
+                      ? ((width! * 2) < size.width)
                           ? (size.width / 2) - 16
-                          : width
-                      : width ?? 180);
+                          : width!
+                      : width ?? 180.0);
               //print(w);
               return InkWell(
                   onTap: () {
-                    if (onPressed != null) onPressed();
+                    if (onPressed != null) onPressed!();
                   },
                   child: Container(
                     width: w,
@@ -106,7 +106,7 @@ class DashboardTile extends StatelessWidget {
                           child: Column(mainAxisSize: MainAxisSize.min,
                               //crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                if (topBar != null) topBar,
+                                if (topBar != null) topBar!,
                                 Expanded(
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -116,13 +116,13 @@ class DashboardTile extends StatelessWidget {
                                         Container(
                                           alignment: Alignment.center,
                                           child: Text(
-                                            value,
+                                            value!,
                                             style: valueStyle ??
                                                 TextStyle(
                                                     fontSize: 32,
                                                     color: theme
                                                         .primaryTextTheme
-                                                        .bodyText1
+                                                        .bodyText1!
                                                         .color),
                                           ),
                                         ),
@@ -130,12 +130,13 @@ class DashboardTile extends StatelessWidget {
                                         Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              left,
+                                              left!,
                                               if (body != null)
-                                                Expanded(child: body)
+                                                Expanded(child: body!)
                                             ]),
                                       if (left == null)
-                                        if (body != null) Expanded(child: body),
+                                        if (body != null)
+                                          Expanded(child: body!),
                                     ],
                                   ),
                                 ),
@@ -148,15 +149,15 @@ class DashboardTile extends StatelessWidget {
                                           _indicatorColor.withAlpha(100),
                                       borderRadius: BorderRadius.only(
                                         bottomLeft:
-                                            Radius.circular(borderRadius),
+                                            Radius.circular(borderRadius!),
                                         bottomRight:
-                                            Radius.circular(borderRadius),
+                                            Radius.circular(borderRadius!),
                                       ),
                                     ),
                                     child: Text(
                                       title ?? '',
                                       style: titleStyle ??
-                                          theme.primaryTextTheme.caption
+                                          theme.primaryTextTheme.caption!
                                               .copyWith(fontSize: 18),
                                     ),
                                   ),
@@ -172,8 +173,8 @@ class DashboardTile extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: avatarColor ?? _color.withOpacity(0.5),
                                 borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(borderRadius),
-                                  bottomRight: Radius.circular(avatarRadius),
+                                  topLeft: Radius.circular(borderRadius!),
+                                  bottomRight: Radius.circular(avatarRadius!),
                                 ),
                               ),
                               child: avatarChild,
@@ -182,7 +183,7 @@ class DashboardTile extends StatelessWidget {
                           ),
                         if (image != null)
                           Positioned(
-                            bottom: this.titleHeight / 2,
+                            bottom: this.titleHeight! / 2,
                             right: 4,
                             child: Container(
                                 color: Colors.transparent, child: image),
@@ -191,7 +192,7 @@ class DashboardTile extends StatelessWidget {
                           Positioned(
                             left: 10,
                             top: 10,
-                            child: icon,
+                            child: icon!,
                           ),
                       ],
                     ),

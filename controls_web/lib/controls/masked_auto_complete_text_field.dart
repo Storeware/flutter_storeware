@@ -4,26 +4,26 @@ import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:flutter/material.dart';
 
 class MaskedAutoCompleteTextField extends StatefulWidget {
-  final Function(dynamic) onChanged;
-  final String initialValue;
-  final List<dynamic> suggestions;
-  final String name;
-  final String label;
-  final Widget suffixIcon;
+  final Function(dynamic)? onChanged;
+  final String? initialValue;
+  final List<dynamic>? suggestions;
+  final String? name;
+  final String? label;
+  final Widget? suffixIcon;
   //final Function(String) onSearch;
-  final int interval;
-  final int minChars;
-  final TextInputType keyboardType;
-  final String sublabel;
+  final int? interval;
+  final int? minChars;
+  final TextInputType? keyboardType;
+  final String? sublabel;
 
   /// [futureBulider] para carregar uma novo ciclo de dados
-  final Future<List<dynamic>> Function(String) future;
+  final Future<List<dynamic>> Function(String)? future;
 
   /// [onLoaded] evento chamado depois que gerou o ciclo de dados
-  final List<dynamic> Function(List<dynamic>) onLoaded;
+  final List<dynamic> Function(List<dynamic>)? onLoaded;
 
   const MaskedAutoCompleteTextField({
-    Key key,
+    Key? key,
     this.initialValue,
     @required this.suggestions,
     @required this.onChanged,
@@ -46,18 +46,18 @@ class MaskedAutoCompleteTextField extends StatefulWidget {
 
 class _MaskedAutoCompleteTextFieldState
     extends State<MaskedAutoCompleteTextField> {
-  DateTime lastTime;
-  String lastValue;
-  TextEditingController _controller;
-  ValueNotifier<String> valueChanged = ValueNotifier<String>(null);
-  List<dynamic> _suggestions;
-  bool _loading;
+  DateTime? lastTime;
+  String? lastValue;
+  TextEditingController? _controller;
+  ValueNotifier<String> valueChanged = ValueNotifier<String>('');
+  List<dynamic>? _suggestions;
+  bool? _loading;
   resetTimer() {
     createTimer();
     lastTime = DateTime.now();
   }
 
-  Timer timer;
+  Timer? timer;
   @override
   void initState() {
     super.initState();
@@ -71,36 +71,36 @@ class _MaskedAutoCompleteTextFieldState
 
   createTimer() {
     if (timer != null) {
-      timer.cancel();
+      timer!.cancel();
       timer = null;
     }
-    timer ??= Timer(Duration(milliseconds: widget.interval), () {
+    timer ??= Timer(Duration(milliseconds: widget.interval!), () {
       checkProcura(lastTime, widget.interval, widget.minChars, false);
 
-      checkProcura(lastTime, widget.interval * 2, widget.minChars + 3, true);
+      checkProcura(lastTime, widget.interval! * 2, widget.minChars! + 3, true);
     });
   }
 
   checkProcura(lstTime, interval, minChars, bool suplementar) {
     print([
       'checkProcura.enter',
-      _controller.text,
-      _controller.text.length,
+      _controller!.text,
+      _controller!.text.length,
       lastValue
     ]);
-    if (_controller.text.length >= minChars) if (lastValue !=
-        _controller.text) {
+    if (_controller!.text.length >= minChars) if (lastValue !=
+        _controller!.text) {
       if (DateTime.now().difference(lstTime).inMilliseconds > interval) {
-        if (!_loading) {
+        if (!_loading!) {
           _loading = true;
           try {
             print('checkProcura.filtered');
 
             if (suplementar ||
                 (key.currentState?.filteredSuggestions?.length ?? -1) == 0) {
-              lastValue = _controller.text;
+              lastValue = _controller!.text;
               lastTime = DateTime.now();
-              valueChanged.value = _controller.text;
+              valueChanged.value = _controller!.text;
               print('checkProcura.value $lastValue');
 
               //setState(() {
@@ -120,37 +120,37 @@ class _MaskedAutoCompleteTextFieldState
 
   @override
   void dispose() {
-    timer.cancel();
+    timer!.cancel();
     super.dispose();
   }
 
-  Future<List<dynamic>> doFuture(String b) {
+  Future<List<dynamic>> doFuture(String? b) {
     if (b == null || widget.future == null) return Future.value([]);
-    return widget.future(b);
+    return widget.future!(b);
   }
 
-  get suggestions => _suggestions ?? key.currentState.suggestions;
+  get suggestions => _suggestions ?? key.currentState!.suggestions;
   doOnLoaded(data) {
     if (data != null) {
-      var l = _suggestions.length;
+      var l = _suggestions!.length;
       if (widget.onLoaded != null) {
-        addSuggestions(widget.onLoaded(data));
+        addSuggestions(widget.onLoaded!(data));
       } else
         addSuggestions(data);
-      if (l != _suggestions.length)
+      if (l != _suggestions!.length)
         Timer.run(() {
           updateSuggestions();
         });
     }
   }
 
-  addSuggestions(List<dynamic> data) {
+  addSuggestions(List<dynamic>? data) {
     if ((data ?? []).length > 0) {
-      data.forEach((elem) {
-        if (_suggestions
+      data!.forEach((elem) {
+        if (_suggestions!
                 .where((it) => it[widget.name] == elem[widget.name])
                 .length ==
-            0) _suggestions.add(elem);
+            0) _suggestions!.add(elem);
       });
       print(_suggestions);
     }
@@ -159,16 +159,16 @@ class _MaskedAutoCompleteTextFieldState
   updateSuggestions() {
     print('updateSuggestions');
     if (key.currentState != null)
-      key.currentState.updateSuggestions(_suggestions);
+      key.currentState!.updateSuggestions(_suggestions);
   }
 
   @override
   Widget build(BuildContext context) {
-    _controller.text = widget.initialValue;
+    _controller!.text = widget.initialValue!;
     return ValueListenableBuilder<String>(
       valueListenable: valueChanged,
       builder: (a, b, c) {
-        print(_controller.text);
+        print(_controller!.text);
         return FutureBuilder<List<dynamic>>(
             future: doFuture(b),
             builder: (context, snapshot) {
@@ -176,8 +176,8 @@ class _MaskedAutoCompleteTextFieldState
               print([
                 widget.initialValue,
                 b,
-                _controller.text,
-                _suggestions.length
+                _controller!.text,
+                _suggestions!.length
               ]);
               return Stack(
                 children: [
@@ -190,7 +190,7 @@ class _MaskedAutoCompleteTextFieldState
                     itemSorter: (a, b) => '$a'.compareTo('$b'),
                     suggestions: _suggestions,
                     itemSubmitted: (x) {
-                      if (widget.onChanged != null) widget.onChanged(x);
+                      if (widget.onChanged != null) widget.onChanged!(x);
                     },
                     itemFilter: (suggestion, input) {
                       var ret = ('${suggestion[widget.name]}')

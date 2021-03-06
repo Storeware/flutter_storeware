@@ -5,21 +5,21 @@ import 'package:controls_web/controls/home_elements.dart';
 import 'package:controls_web/controls/defaults.dart';
 
 class DataGridPageColumn {
-  String label;
-  String name;
-  final Function(dynamic) onClick;
-  dynamic controller;
+  String? label;
+  String? name;
+  final Function(dynamic)? onClick;
+  dynamic? controller;
   bool required = true;
-  bool readOnly;
-  bool canOrder;
-  final Function canChangeEvent;
-  final double width;
-  bool hide;
-  final TextAlign align;
-  final TextStyle style;
-  final Function(dynamic) onGetValue;
-  final Function(dynamic) onGetChild;
-  final Function(dynamic) onEditChild;
+  bool? readOnly;
+  bool? canOrder;
+  final Function()? canChangeEvent;
+  final double? width;
+  bool? hide;
+  final TextAlign? align;
+  final TextStyle? style;
+  final Function(dynamic)? onGetValue;
+  final Function(dynamic)? onGetChild;
+  final Function(dynamic)? onEditChild;
   DataGridPageColumn(
       {this.label,
       this.name,
@@ -37,22 +37,22 @@ class DataGridPageColumn {
 }
 
 class DataGridPage extends StatefulWidget {
-  final Function onNewClick;
-  final Function onColumnCreate;
-  final Function onRowCreate;
-  final dataSnap;
-  final List<DataGridPageColumn> columns;
-  final Function(Map<String, dynamic>) onEdit;
+  final Function? onNewClick;
+  final Function? onColumnCreate;
+  final Function? onRowCreate;
+  final dynamic? dataSnap;
+  final List<DataGridPageColumn>? columns;
+  final Function(Map<String, dynamic>)? onEdit;
   final onSelectedChange;
-  final Function(String, Map<String, dynamic>) onColumnClick;
-  final bool canChange;
-  final Function onDeleteClick;
-  final Function onInactive;
-  final bool inactive;
-  final Map<String, dynamic> initialValues;
+  final Function(String, Map<String, dynamic>)? onColumnClick;
+  final bool? canChange;
+  final Function? onDeleteClick;
+  final Function? onInactive;
+  final bool? inactive;
+  final Map<String, dynamic>? initialValues;
   final onRowEdit;
   DataGridPage(
-      {Key key,
+      {Key? key,
       this.initialValues,
       this.onRowEdit,
       this.dataSnap,
@@ -111,14 +111,14 @@ class _DataGridPageState extends State<DataGridPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            if (widget.canChange)
+            if (widget.canChange!)
               RoundedButton(
                 height: 30,
                 color: Theme.of(context).primaryColor,
                 buttonName: 'Novo',
                 onTap: () {
                   if (widget.onRowEdit != null) widget.onRowEdit({});
-                  if (widget.canChange) widget.onNewClick();
+                  if (widget.canChange!) widget.onNewClick!();
                 },
               ),
             if (widget.onInactive != null)
@@ -132,7 +132,7 @@ class _DataGridPageState extends State<DataGridPage> {
                     //inactiveTrackColor: Theme.of(context).primaryColor,
                     onChanged: (b) {
                       inactive = !inactive;
-                      widget.onInactive(inactive);
+                      widget.onInactive!(inactive);
                     }),
               ])
           ],
@@ -150,9 +150,9 @@ class _DataGridPageState extends State<DataGridPage> {
                   builder: (x, s) {
                     print('Builder ${s.data}:$dataSortIndex');
                     if (dataSortIndex > -1) {
-                      var col = widget.columns[dataSortIndex];
+                      var col = widget.columns![dataSortIndex];
                       print(col.name);
-                      if (dataSource != null) if (col.canOrder)
+                      if (dataSource != null) if (col.canOrder!)
                         dataSource.sort((a, b) {
                           try {
                             if (a[col.name] is num)
@@ -172,10 +172,10 @@ class _DataGridPageState extends State<DataGridPage> {
                       sortColumnIndex: dataSortIndex,
                       columns: (widget.columns != null)
                           ? _columns(d.data)
-                          : widget.onColumnCreate(d.data),
+                          : widget.onColumnCreate!(d.data),
                       rows: (widget.columns != null)
                           ? _rows(d.data)
-                          : widget.onRowCreate(d.data),
+                          : widget.onRowCreate!(d.data),
                     );
                   });
             }),
@@ -190,7 +190,7 @@ class _DataGridPageState extends State<DataGridPage> {
     //print('_column $data');
     return <DataColumn>[
       if (widget.onDeleteClick != null) DataColumn(label: Container()),
-      for (var item in widget.columns)
+      for (var item in widget.columns!)
         if (!(item.hide ?? false))
           DataColumn(
               label: Text(item.label ?? item.name ?? ''),
@@ -216,12 +216,12 @@ class _DataGridPageState extends State<DataGridPage> {
   generateValue(DataGridPageColumn item, d, index) {
     var v = d[item.name];
     var _align = item.align ?? _genAlign(v);
-    if (item.onGetValue != null) v = item.onGetValue(v);
-    Widget g;
-    if (item.onGetChild != null) g = item.onGetChild(v);
+    if (item.onGetValue != null) v = item.onGetValue!(v);
+    Widget? g;
+    if (item.onGetChild != null) g = item.onGetChild!(v);
     if (g == null)
       g = Text(
-        v.toString() ?? '',
+        v.toString(),
         textAlign: _align,
         style: item.style,
       );
@@ -232,7 +232,7 @@ class _DataGridPageState extends State<DataGridPage> {
         child: g,
       ),
       onTap: () {
-        if (widget.onColumnClick != null) widget.onColumnClick(item.name, d);
+        if (widget.onColumnClick != null) widget.onColumnClick!(item.name!, d);
       },
     );
   }
@@ -277,7 +277,7 @@ class _DataGridPageState extends State<DataGridPage> {
                       ? Icons.add_circle_outline
                       : Icons.remove_circle_outline),
                   onPressed: () {
-                    widget.onDeleteClick(d);
+                    widget.onDeleteClick!(d);
                   },
                 ),
                 Positioned(
@@ -286,13 +286,13 @@ class _DataGridPageState extends State<DataGridPage> {
                       icon: Icon(Icons.mode_edit),
                       onPressed: () {
                         if (widget.onRowEdit != null) widget.onRowEdit(d);
-                        if (widget.canChange) widget.onEdit(d);
+                        if (widget.canChange!) widget.onEdit!(d);
                       },
                     ))
               ]),
             ),
           ),
-        for (var item in widget.columns)
+        for (var item in widget.columns!)
           if (!(item.hide ?? false)) generateValue(item, d, index),
       ];
       rows.add(DataRow(
@@ -324,32 +324,32 @@ var alternateRowBackgroundColorOdd = Colors.transparent;
 var alternateRowBackgroundColorEven = Colors.grey[300];
 
 class DataGridScaffold extends StatefulWidget {
-  final Widget title;
-  final double cardElevation;
-  final List<Widget> actions;
-  final Function onNewClick;
-  final Function onDeleteClick;
-  final Function onGetValues;
-  final Function(String) onStateChange;
-  final Function onColumnCreate;
-  final Function onRowCreate;
+  final Widget? title;
+  final double? cardElevation;
+  final List<Widget>? actions;
+  final Function? onNewClick;
+  final Function? onDeleteClick;
+  final Function? onGetValues;
+  final Function(String)? onStateChange;
+  final Function? onColumnCreate;
+  final Function? onRowCreate;
   final dataSnap;
-  final List<DataGridPageColumn> columns;
-  final Function(Map<String, dynamic>) onEdit;
-  final Function(int) onNext;
-  final Function onFirst;
-  final Function onLast;
-  final bool readOnly;
-  final bool canChange;
+  final List<DataGridPageColumn>? columns;
+  final Function(Map<String, dynamic>)? onEdit;
+  final Function(int)? onNext;
+  final Function()? onFirst;
+  final Function()? onLast;
+  final bool? readOnly;
+  final bool? canChange;
   final onSelectedChange;
   final onColumnClick;
-  final Function onSave;
-  final Function onInactive;
-  final bool inactive;
-  final Map<String, dynamic> initialValues;
-  final Function(Map<String, dynamic>) onRowEdit;
+  final Function(dynamic)? onSave;
+  final Function()? onInactive;
+  final bool? inactive;
+  final Map<String, dynamic>? initialValues;
+  final Function(Map<String, dynamic>)? onRowEdit;
   DataGridScaffold(
-      {Key key,
+      {Key? key,
       this.initialValues,
       this.title,
       this.actions,
@@ -402,25 +402,25 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
           IconButton(
               icon: Icon(Icons.first_page),
               onPressed: () {
-                widget.onFirst();
+                widget.onFirst!();
               }),
         if (widget.onNext != null)
           IconButton(
               icon: Icon(Icons.navigate_before),
               onPressed: () {
-                widget.onNext(-1);
+                widget.onNext!(-1);
               }),
         if (widget.onNext != null)
           IconButton(
               icon: Icon(Icons.navigate_next),
               onPressed: () {
-                widget.onNext(1);
+                widget.onNext!(1);
               }),
         if (widget.onLast != null)
           IconButton(
               icon: Icon(Icons.last_page),
               onPressed: () {
-                widget.onLast();
+                widget.onLast!();
               }),
       ]));
 
@@ -438,7 +438,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
               inactive: widget.inactive,
               canChange: widget.canChange,
               dataSnap: widget.dataSnap,
-              onNewClick: widget.readOnly
+              onNewClick: widget.readOnly!
                   ? () {}
                   : widget.onNewClick ??
                       () {
@@ -446,7 +446,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
                         _onNewClick();
                       },
               onDeleteClick: widget.onDeleteClick,
-              onEdit: widget.readOnly
+              onEdit: widget.readOnly!
                   ? (x) {}
                   : widget.onEdit ??
                       (x) {
@@ -462,7 +462,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
   }
 
   _onGetValues() {
-    var r = (widget.onGetValues != null) ? widget.onGetValues() : {};
+    var r = (widget.onGetValues != null) ? widget.onGetValues!() : {};
     print('onGetValues->$r');
     return r;
   }
@@ -470,13 +470,13 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
   _onNewClick() {
     Navigator.of(context).push(MaterialPageRoute(builder: (x) {
       print('DataNew');
-      if (widget.onStateChange != null) widget.onStateChange('new');
+      if (widget.onStateChange != null) widget.onStateChange!('new');
       print('loading GridItemView');
       return DataGridItemView(
-        title: Row(children: [Text('Novo - '), widget.title]),
+        title: Row(children: [Text('Novo - '), widget.title!]),
         data: _onGetValues(),
-        columns: widget.columns,
-        onSave: widget.onSave,
+        columns: widget.columns!,
+        onSave: widget.onSave!,
       );
     }));
   }
@@ -484,16 +484,16 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
   _onEditClick(Map<String, dynamic> data) {
     Navigator.of(context).push(MaterialPageRoute(builder: (x) {
       print('DataEdit');
-      if (widget.onStateChange != null) widget.onStateChange('edit');
+      if (widget.onStateChange != null) widget.onStateChange!('edit');
       //print(data);
       return DataGridItemView(
         title: Row(children: [
           Text('Alteração - ' /*Translate.string('Alteração - ')*/),
-          widget.title
+          widget.title!
         ]),
         data: data,
-        columns: widget.columns,
-        onSave: widget.onSave,
+        columns: widget.columns!,
+        onSave: widget.onSave!,
       );
     }));
   }
@@ -501,10 +501,10 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
 
 class DataGridItemView extends StatefulWidget {
   final data;
-  final Widget title;
-  final List<DataGridPageColumn> columns;
-  final Function onSave;
-  DataGridItemView({Key key, this.title, this.data, this.columns, this.onSave})
+  final Widget? title;
+  final List<DataGridPageColumn>? columns;
+  final Function(dynamic)? onSave;
+  DataGridItemView({Key? key, this.title, this.data, this.columns, this.onSave})
       : super(key: key) {
     print('DataGridItemView->created');
   }
@@ -553,29 +553,29 @@ class _DataGridItemViewState extends State<DataGridItemView> {
   _createItem(DataGridPageColumn item) {
     _currentIndex++;
     if (item.onEditChild != null) {
-      return item.onEditChild(values[item.name]);
+      return item.onEditChild!(values[item.name!]);
     } else {
       var frm = TextFormField(
         autofocus: _currentIndex == 0,
         obscureText: item.hide ?? false,
         enabled: (item.canChangeEvent != null)
-            ? item.canChangeEvent()
+            ? item.canChangeEvent!()
             : !(item.readOnly ?? false),
         initialValue: (values[item.name] ?? '').toString(),
         decoration: InputDecoration(
           labelText: item.label, // Translate.string(item.label),
         ),
         validator: (value) {
-          if (item.required && value.isEmpty) {
-            return 'Falta informar: ' + item.label;
+          if (item.required && value!.isEmpty) {
+            return 'Falta informar: ' + item.label!;
           }
           return null;
         },
         onSaved: (x) {
-          values[item.name] = x;
+          values[item.name!] = x;
         },
       );
-      formControls.addAll({item.name: frm});
+      formControls.addAll({item.name!: frm});
       return frm;
     }
   }
@@ -594,7 +594,7 @@ class _DataGridItemViewState extends State<DataGridItemView> {
     }
     _currentIndex = -1;
     List<Widget> rt = [];
-    for (var item in widget.columns) rt.add(_createItem(item));
+    for (var item in widget.columns!) rt.add(_createItem(item));
 
     rt.add(Divider());
     rt.add(SizedBox(
@@ -624,8 +624,8 @@ class _DataGridItemViewState extends State<DataGridItemView> {
 
   _salvar() {
     print('_salvar-init');
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       try {
         var s = Scaffold.of(context);
         if (s != null)
@@ -637,7 +637,7 @@ class _DataGridItemViewState extends State<DataGridItemView> {
       }
       if (widget.onSave != null) {
         print('_salvar-onSave');
-        var r = widget.onSave(values);
+        var r = widget.onSave!(values);
         if (r == null) {
           try {
             var scaff = Scaffold.of(context);

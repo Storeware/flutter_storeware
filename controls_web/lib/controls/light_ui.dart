@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 /// [LigthButton] apresentação para dash
 class LightButton extends StatelessWidget {
-  final double width, height;
-  final Color color, backgroundColor;
-  final Widget image;
-  final Widget title;
-  final Function onPressed;
-  final String value;
+  final double? width, height;
+  final Color? color, backgroundColor;
+  final Widget? image;
+  final Widget? title;
+  final Function? onPressed;
+  final String? value;
 
   /// indicar [label] para mostra o titulo
-  final String label, sublabel;
+  final String? label, sublabel;
   const LightButton({
-    Key key,
+    Key? key,
     this.width = 140,
     this.height = 160,
     this.color,
@@ -54,20 +54,20 @@ class LightButton extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (value != null)
-                          Text(value,
+                          Text(value!,
                               style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w500,
                                   color: backgroundColor ?? Colors.white)),
-                        for (var s in label.split('|'))
+                        for (var s in label!.split('|'))
                           Text(s,
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               )),
-                        if (title != null) title,
+                        if (title != null) title!,
                         if (sublabel != null) ...[
-                          for (var s in sublabel.split('|'))
+                          for (var s in sublabel!.split('|'))
                             Text(s,
                                 style: TextStyle(fontSize: 12, color: _color))
                         ],
@@ -76,15 +76,15 @@ class LightButton extends StatelessWidget {
             ],
           ),
         ),
-        onTap: onPressed);
+        onTap: () => onPressed!());
   }
 }
 
 class LightAmmount extends StatelessWidget {
-  final String value, label, sublabel;
-  final Widget child;
+  final String? value, label, sublabel;
+  final Widget? child;
   const LightAmmount(
-      {Key key, this.value, this.label, this.sublabel, this.child})
+      {Key? key, this.value, this.label, this.sublabel, this.child})
       : super(key: key);
 
   @override
@@ -96,31 +96,31 @@ class LightAmmount extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (value != null)
-              Text(value,
+              Text(value!,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22)),
             if (label != null)
               Text(
-                label,
-                style: TextStyle(color: theme.textTheme.caption.color),
+                label!,
+                style: TextStyle(color: theme.textTheme.caption!.color),
               ),
             if (sublabel != null)
               Text(
-                sublabel,
-                style: TextStyle(color: theme.textTheme.caption.color),
+                sublabel!,
+                style: TextStyle(color: theme.textTheme.caption!.color),
               ),
-            if (child != null) child,
+            if (child != null) child!,
           ]),
     );
   }
 }
 
 class LightTile extends StatelessWidget {
-  final Widget title, subtitle, leading, trailing;
-  final Function() onPressed;
-  final double height;
-  final Color tagColor;
+  final Widget? title, subtitle, leading, trailing;
+  final Function()? onPressed;
+  final double? height;
+  final Color? tagColor;
   const LightTile(
-      {Key key,
+      {Key? key,
       this.title,
       this.subtitle,
       this.leading,
@@ -148,12 +148,12 @@ class LightTile extends StatelessWidget {
 }
 
 class LightInfo extends StatelessWidget {
-  final Widget image, title, subtitle;
-  final String label, sublabel;
-  final Function() onPressed;
-  final Widget leading, trailing;
+  final Widget? image, title, subtitle;
+  final String? label, sublabel;
+  final Function()? onPressed;
+  final Widget? leading, trailing;
   const LightInfo(
-      {Key key,
+      {Key? key,
       this.image,
       this.title,
       this.subtitle,
@@ -172,12 +172,12 @@ class LightInfo extends StatelessWidget {
       children: [
         if (image != null) CircleAvatar(child: image),
         if (label != null)
-          for (var s in label.split('|'))
+          for (var s in label!.split('|'))
             Text(s,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
         if (sublabel != null)
           Text(
-            sublabel,
+            sublabel!,
           ),
         if (title != null)
           ListTile(
@@ -192,11 +192,11 @@ class LightInfo extends StatelessWidget {
 }
 
 class LightImageTile extends StatelessWidget {
-  final Widget image;
-  final Widget title, subtitle;
-  final String label, sublabel;
+  final Widget? image;
+  final Widget? title, subtitle;
+  final String? label, sublabel;
   const LightImageTile(
-      {Key key,
+      {Key? key,
       this.image,
       this.title,
       this.subtitle,
@@ -207,16 +207,16 @@ class LightImageTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      if (image != null) image,
+      if (image != null) image!,
       if (title != null) ListTile(title: title, subtitle: subtitle),
       if (label != null)
-        Text(label,
+        Text(label!,
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w600,
             )),
       if (sublabel != null)
-        Text(sublabel,
+        Text(sublabel!,
             style: TextStyle(
               fontSize: 12,
             )),
@@ -225,13 +225,13 @@ class LightImageTile extends StatelessWidget {
 }
 
 class LightValueButton extends StatelessWidget {
-  final String label, sublabel;
-  final Function() onPressed;
-  final Widget image;
-  final Widget leading;
+  final String? label, sublabel;
+  final Function()? onPressed;
+  final Widget? image;
+  final Widget? leading;
   //final double width, height;
   const LightValueButton({
-    Key key,
+    Key? key,
     this.label,
     this.sublabel,
     this.onPressed,
@@ -256,32 +256,32 @@ class LightValueButton extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (leading != null) leading,
-                      if (image != null) image,
+                      if (leading != null) leading!,
+                      if (image != null) image!,
                     ]),
               ),
               if (label != null)
-                Text(label,
-                    style: theme.textTheme.button.copyWith(
+                Text(label!,
+                    style: theme.textTheme.button!.copyWith(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                     )),
               if (sublabel != null)
-                Text(sublabel, style: theme.textTheme.caption),
+                Text(sublabel!, style: theme.textTheme.caption),
             ]),
         onTap: onPressed);
   }
 }
 
 class LightContainer extends StatelessWidget {
-  final List<Widget> children;
-  final String label, sublabel;
-  final Function() onPressed;
-  final double elevation;
-  final double width, height;
-  final Color color;
+  final List<Widget>? children;
+  final String? label, sublabel;
+  final Function()? onPressed;
+  final double? elevation;
+  final double? width, height;
+  final Color? color;
   const LightContainer(
-      {Key key,
+      {Key? key,
       this.children,
       this.label,
       this.sublabel,
@@ -311,7 +311,7 @@ class LightContainer extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      for (var item in children)
+                      for (var item in children!)
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: item,

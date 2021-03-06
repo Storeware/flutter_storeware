@@ -1,16 +1,16 @@
 import 'package:flutter/widgets.dart';
 
 class InjectItem<T> {
-  final String name;
-  final Widget Function(BuildContext, dynamic) builder;
-  final Future<T> Function(BuildContext, dynamic) builderAsync;
+  final String? name;
+  final Widget Function(BuildContext, dynamic)? builder;
+  final Future<T> Function(BuildContext, dynamic)? builderAsync;
   InjectItem({this.name, this.builder, this.builderAsync});
 }
 
 class InjectBuilder extends InheritedWidget {
   final List<InjectItem> injects = [];
-  InjectBuilder({Key key, Widget child, List<InjectItem> items})
-      : super(key: key, child: child) {
+  InjectBuilder({Key? key, Widget? child, List<InjectItem>? items})
+      : super(key: key, child: child!) {
     if (items != null) items.forEach((item) => injects.add(item));
   }
 
@@ -19,9 +19,9 @@ class InjectBuilder extends InheritedWidget {
     return false;
   }
 
-  static InjectBuilder of(BuildContext context) =>
+  static InjectBuilder? of(BuildContext context) =>
       context.findAncestorWidgetOfExactType<InjectBuilder>();
-  InjectItem operator [](String name) {
+  InjectItem? operator [](String name) {
     for (var i = 0; i < injects.length; i++)
       if (injects[i].name == name) return injects[i];
     return null;
@@ -34,7 +34,7 @@ class InjectBuilder extends InheritedWidget {
   }
 
   InjectItem register(InjectItem item) {
-    delete(item.name);
+    delete(item.name!);
     injects.add(item);
     return item;
   }
@@ -45,26 +45,26 @@ class InjectBuilder extends InheritedWidget {
   }
 
   static builderAsync(BuildContext context, nome, dados) async {
-    InjectBuilder alvo = InjectBuilder.of(context);
+    InjectBuilder? alvo = InjectBuilder.of(context);
     if (alvo != null) {
       var idx = alvo.indexOf(nome);
       if (idx >= 0) {
         var inj = alvo.injects[idx];
-        return inj.builderAsync(context, dados);
+        return inj.builderAsync!(context, dados);
       }
     }
     return null;
   }
 
   static Widget builder(BuildContext context, nome, dados) {
-    InjectBuilder alvo = InjectBuilder.of(context);
+    InjectBuilder? alvo = InjectBuilder.of(context);
     if (alvo != null) {
       var idx = alvo.indexOf(nome);
       if (idx >= 0) {
         var inj = alvo.injects[idx];
-        return inj.builder(context, dados);
+        return inj.builder!(context, dados);
       }
     }
-    return null;
+    return Container();
   }
 }

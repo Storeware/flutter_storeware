@@ -3,22 +3,22 @@ import 'package:flutter/material.dart';
 import 'sliver_scaffold.dart';
 
 class DashboardView extends StatefulWidget {
-  final Color backgroundColor;
-  final List<Widget> cards;
-  final AppBar appBar;
-  final List<Widget> listView;
+  final Color? backgroundColor;
+  final List<Widget>? cards;
+  final AppBar? appBar;
+  final List<Widget>? listView;
   //final double gridMaxCrossAxisExtend;
-  final int gridCrossAxisCount;
-  final double gridChildAspectRatio;
-  final Color cardColor;
-  final double cardElevation;
-  final double cardMargin;
-  final double radius;
-  final double topRadius;
-  final double bottomRadius;
-  final WidgetListBuilderContext gridBuilder;
-  final Widget floatingActionButton;
-  final Widget bottomNavigationBar;
+  final int? gridCrossAxisCount;
+  final double? gridChildAspectRatio;
+  final Color? cardColor;
+  final double? cardElevation;
+  final double? cardMargin;
+  final double? radius;
+  final double? topRadius;
+  final double? bottomRadius;
+  final WidgetListBuilderContext? gridBuilder;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
   DashboardView(
       {this.appBar,
       this.cards,
@@ -44,10 +44,10 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   _gridBuilder(context, index) {
     return Card(
-        margin: EdgeInsets.all(widget.cardMargin),
+        margin: EdgeInsets.all(widget.cardMargin!),
         elevation: widget.cardElevation,
         color: widget.cardColor,
-        child: widget.cards[index]);
+        child: widget.cards![index]);
   }
 
   @override
@@ -58,10 +58,10 @@ class _DashboardViewState extends State<DashboardView> {
         radius: widget.radius,
         topRadius: widget.topRadius,
         bottomRadius: widget.bottomRadius,
-        grid: WidgetList.count(context, itemCount: widget.cards.length,
+        grid: WidgetList.count(context, itemCount: widget.cards!.length,
             itemBuilder: (context, index) {
           return (widget.gridBuilder != null
-              ? widget.gridBuilder(context, index)
+              ? widget.gridBuilder!(context, index)
               : _gridBuilder(context, index));
         }),
         //gridMaxCrossAxisExtend: widget.gridMaxCrossAxisExtend,

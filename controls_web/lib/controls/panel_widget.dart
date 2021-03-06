@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class PanelBottom extends StatelessWidget {
-  final double height;
-  final double width;
-  final Color color;
-  final Widget child;
+  final double? height;
+  final double? width;
+  final Color? color;
+  final Widget? child;
   const PanelBottom(
-      {Key key,
+      {Key? key,
       this.child,
       this.color,
       this.height = 45,
@@ -20,19 +20,19 @@ class PanelBottom extends StatelessWidget {
       height: height,
       width: width,
       alignment: Alignment.centerLeft,
-      child: Padding(padding: const EdgeInsets.only(left:8), child: child),
+      child: Padding(padding: const EdgeInsets.only(left: 8), child: child),
       color: cor,
     );
   }
 }
 
 class PanelTitle extends StatelessWidget {
-  final double height;
-  final double width;
-  final Color color;
-  final Widget child;
+  final double? height;
+  final double? width;
+  final Color? color;
+  final Widget? child;
   const PanelTitle(
-      {Key key,
+      {Key? key,
       this.child,
       this.color,
       this.height = 45,
@@ -46,25 +46,25 @@ class PanelTitle extends StatelessWidget {
       height: height,
       width: width,
       alignment: Alignment.centerLeft,
-      child: Padding(padding: const EdgeInsets.only(left:8), child: child),
+      child: Padding(padding: const EdgeInsets.only(left: 8), child: child),
       color: cor,
     );
   }
 }
 
 class Panel extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final Widget title;
-  final Widget appBar;
-  final List<Widget> actions;
-  final double elevation;
-  final EdgeInsets margin;
-  final Clip clipBehavior;
-  final ShapeBorder shape;
-  final Widget leading;
+  final Widget? child;
+  final Color? color;
+  final Widget? title;
+  final Widget? appBar;
+  final List<Widget>? actions;
+  final double? elevation;
+  final EdgeInsets? margin;
+  final Clip? clipBehavior;
+  final ShapeBorder? shape;
+  final Widget? leading;
   const Panel(
-      {Key key,
+      {Key? key,
       this.appBar,
       this.margin,
       this.color,
@@ -88,17 +88,18 @@ class Panel extends StatelessWidget {
       shape: shape,
       child: Column(
         children: <Widget>[
-          appBar ?? bappBar
-              ? AppBar(
-                  title: title,
-                  automaticallyImplyLeading: false,
-                  elevation: 0.0,
-                  actions: actions,
-                  leading: leading,
-                )
-              : Container(),
+          appBar ??
+              (bappBar
+                  ? AppBar(
+                      title: title,
+                      automaticallyImplyLeading: false,
+                      elevation: 0.0,
+                      actions: actions,
+                      leading: leading,
+                    )
+                  : Container()),
           Expanded(
-            child: child,
+            child: child!,
           )
         ],
       ),
@@ -107,12 +108,12 @@ class Panel extends StatelessWidget {
 }
 
 class PanelUserTile extends StatefulWidget {
-  final String title;
-  final int alpha;
-  final List<Widget> actions;
-  final double heigth;
-  final Widget user;
-  final Widget image;
+  final String? title;
+  final int? alpha;
+  final List<Widget>? actions;
+  final double? heigth;
+  final Widget? user;
+  final Widget? image;
   PanelUserTile(
       {this.user,
       this.title,
@@ -133,7 +134,7 @@ class _PanelUserTileState extends State<PanelUserTile> {
     return Container(
         child: Container(
       height: widget.heigth,
-      color: color.withAlpha(widget.alpha),
+      color: color.withAlpha(widget.alpha!),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Container(
           height: 10,
@@ -152,15 +153,15 @@ class _PanelUserTileState extends State<PanelUserTile> {
 }
 
 class ListTileMenuItem extends StatelessWidget {
-  final Widget title;
-  final Function onTap;
-  const ListTileMenuItem({Key key, this.title, this.onTap}) : super(key: key);
+  final Widget? title;
+  final Function? onTap;
+  const ListTileMenuItem({Key? key, this.title, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: title,
-      onTap: onTap,
+      onTap: () => onTap!(),
       trailing: Icon(Icons.keyboard_arrow_right),
     );
   }

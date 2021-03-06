@@ -7,45 +7,45 @@ import 'package:controls_web/controls/tab_choice.dart';
 enum HorizontalTabViewSiderBarType { hide, compact, show }
 
 class HorizontalTabViewController {
-  _HorizontalTabViewState tabControl;
+  _HorizontalTabViewState? tabControl;
   animateTo(int index) {
-    if (tabControl != null) tabControl.animateTo(index);
+    if (tabControl != null) tabControl!.animateTo(index);
   }
 }
 
 class HorizontalTabView extends StatefulWidget {
-  final List<TabChoice> choices;
-  final double top, bottom, left, right;
-  final HorizontalTabViewController controller;
-  final Color tabColor;
-  final Color sidebarBackgroundColor;
-  final Color indicatorColor;
-  final Color iconColor;
-  final AppBar appBar;
-  final Widget topBar, bottomBar;
-  final Widget sidebarHeader, sidebarFooter;
-  final int mobileCrossCount;
-  final Color color;
-  final double width;
-  final double minWidth;
-  final Color backgroundColor;
-  final Widget pageBottom;
-  final EdgeInsets padding;
-  final HorizontalTabViewSiderBarType sidebarType;
-  final double elevation;
-  final Widget floatingActionButton;
-  final Color tagColor;
-  final bool isMobile;
-  final double tabHeight;
-  final TextStyle tabStyle;
+  final List<TabChoice>? choices;
+  final double? top, bottom, left, right;
+  final HorizontalTabViewController? controller;
+  final Color? tabColor;
+  final Color? sidebarBackgroundColor;
+  final Color? indicatorColor;
+  final Color? iconColor;
+  final AppBar? appBar;
+  final Widget? topBar, bottomBar;
+  final Widget? sidebarHeader, sidebarFooter;
+  final int? mobileCrossCount;
+  final Color? color;
+  final double? width;
+  final double? minWidth;
+  final Color? backgroundColor;
+  final Widget? pageBottom;
+  final EdgeInsets? padding;
+  final HorizontalTabViewSiderBarType? sidebarType;
+  final double? elevation;
+  final Widget? floatingActionButton;
+  final Color? tagColor;
+  final bool? isMobile;
+  final double? tabHeight;
+  final TextStyle? tabStyle;
   //final double tabHeightCompact;
-  final AppBar sidebarAppBar;
-  final Drawer sidebarDrawer;
-  final Widget sidebarRight;
-  final Function(int) onChanged;
-  final int activeIndex;
+  final AppBar? sidebarAppBar;
+  final Drawer? sidebarDrawer;
+  final Widget? sidebarRight;
+  final Function(int)? onChanged;
+  final int? activeIndex;
   HorizontalTabView({
-    Key key,
+    Key? key,
     this.choices,
     this.appBar,
     this.sidebarAppBar,
@@ -92,22 +92,22 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
 
   animateTo(int index) {
     if (index < 0) index = 0;
-    if (index >= widget.choices.length) index = widget.choices.length - 1;
+    if (index >= widget.choices!.length) index = widget.choices!.length - 1;
     if (mounted) _index.value = index;
     jumpTo(index);
   }
 
   jumpTo(index) {
-    scrollController.animateTo(
+    scrollController!.animateTo(
       index * widget.tabHeight,
       duration: Duration(milliseconds: 500),
       curve: Curves.linear,
     );
   }
 
-  Color _iconColor;
-  HorizontalTabViewSiderBarType _sidebarType;
-  ThemeData theme;
+  Color? _iconColor;
+  HorizontalTabViewSiderBarType? _sidebarType;
+  ThemeData? theme;
   @override
   Widget build(BuildContext context) {
     if (_index.value < 0) _index.value = widget.activeIndex ?? 0;
@@ -123,13 +123,14 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
             : HorizontalTabViewSiderBarType.show);
     theme = Theme.of(context);
     _iconColor =
-        widget.iconColor ?? theme.tabBarTheme?.labelColor ?? theme.buttonColor;
+        widget.iconColor ?? theme!.tabBarTheme.labelColor ?? theme!.buttonColor;
 
     return ValueListenableBuilder(
         valueListenable: _index,
         builder: (a, b, c) {
           return Theme(
-              data: theme.copyWith(scaffoldBackgroundColor: Colors.transparent),
+              data:
+                  theme!.copyWith(scaffoldBackgroundColor: Colors.transparent),
               child: Scaffold(
                 backgroundColor: widget.backgroundColor,
                 appBar: widget.appBar,
@@ -142,36 +143,38 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                     Expanded(
                       child: buildPages(),
                     ),
-                    if (widget.sidebarRight != null) widget.sidebarRight,
+                    if (widget.sidebarRight != null) widget.sidebarRight!,
                   ],
                 ),
               ));
         });
   }
 
-  ScrollController scrollController;
+  ScrollController? scrollController;
   bool hitTop = false;
   bool hitBottom = false;
   @override
   void initState() {
     super.initState();
     scrollController = ScrollController();
-    scrollController.addListener(_scrollListener);
+    scrollController!.addListener(_scrollListener);
     Timer.run(() {
       jumpTo(widget.activeIndex);
     });
   }
 
   _scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController!.offset >=
+            scrollController!.position.maxScrollExtent &&
+        !scrollController!.position.outOfRange) {
       setState(() {
         hitBottom = true;
         hitTop = false;
       });
     }
-    if (scrollController.offset <= scrollController.position.minScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController!.offset <=
+            scrollController!.position.minScrollExtent &&
+        !scrollController!.position.outOfRange) {
       setState(() {
         hitBottom = false;
         hitTop = true;
@@ -181,7 +184,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
 
   buildItems() => Container(
       // lateral
-      width: [0.0, widget.minWidth, widget.width][_sidebarType.index],
+      width: [0.0, widget.minWidth, widget.width][_sidebarType!.index],
       color:
           widget.sidebarBackgroundColor ?? widget.color ?? Colors.transparent,
       child: SizedBox.expand(
@@ -190,7 +193,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
             drawer: widget.sidebarDrawer,
             body: Column(
               children: [
-                if (widget.sidebarHeader != null) widget.sidebarHeader,
+                if (widget.sidebarHeader != null) widget.sidebarHeader!,
                 Expanded(
                     child:
                         /*SingleChildScrollView(
@@ -200,7 +203,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                   children: [
                     ListView(controller: scrollController, children: [
                       for (var index = 0;
-                          index < widget.choices.length;
+                          index < widget.choices!.length;
                           index++)
                         buildItem(index)
                     ]),
@@ -225,41 +228,41 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                       ),
                   ],
                 )),
-                if (widget.sidebarFooter != null) widget.sidebarFooter,
+                if (widget.sidebarFooter != null) widget.sidebarFooter!,
               ],
             )),
       ));
 
-  buildPages() => (widget.choices.length == 0)
+  buildPages() => (widget.choices!.length == 0)
       ? Container()
       : Scaffold(
 
           /// paginas
           backgroundColor: Colors.transparent,
           body: Builder(builder: (x) {
-            if (widget.choices[_index.value].child ==
-                null) if (widget.choices[_index.value].builder != null)
-              widget.choices[_index.value].child =
-                  widget.choices[_index.value].builder();
-            if (widget.onChanged != null) widget.onChanged(_index.value);
-            if (widget.choices[_index.value].child == null) return Container();
+            if (widget.choices![_index.value].child ==
+                null) if (widget.choices![_index.value].builder != null)
+              widget.choices![_index.value].child =
+                  widget.choices![_index.value].builder();
+            if (widget.onChanged != null) widget.onChanged!(_index.value);
+            if (widget.choices![_index.value].child == null) return Container();
             return Stack(children: [
               if (widget.topBar != null)
-                Positioned(top: 0, left: 0, right: 0, child: widget.topBar),
+                Positioned(top: 0, left: 0, right: 0, child: widget.topBar!),
               Positioned(
                   top: widget.top,
                   bottom: widget.bottom,
                   left: widget.left,
                   right: widget.right,
-                  child: widget.choices[_index.value].child),
+                  child: widget.choices![_index.value].child),
               if (widget.bottomBar != null)
                 Positioned(
-                    bottom: 0, left: 0, right: 0, child: widget.bottomBar),
+                    bottom: 0, left: 0, right: 0, child: widget.bottomBar!),
             ]);
           }));
 
   buildItem(int index) => Container(
-        key: ValueKey(widget.choices[index].label ?? '$index'),
+        key: ValueKey(widget.choices![index].label ?? '$index'),
         alignment: Alignment.centerLeft,
         color:
             (_index.value == index) ? widget.indicatorColor : widget.tabColor,
@@ -276,7 +279,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                         height: widget.tabHeight ?? kMinInteractiveDimension,
                         width: 5,
                         color: (_index.value == index)
-                            ? widget.tagColor ?? theme.indicatorColor
+                            ? widget.tagColor ?? theme!.indicatorColor
                             : widget.tabColor),
                   Expanded(
                       child: InkWell(
@@ -288,20 +291,20 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                               padding: EdgeInsets.zero,
                               child: Column(
                                 children: [
-                                  if (widget.choices[index].image != null)
-                                    widget.choices[index].image,
-                                  if (widget.choices[index].icon != null)
-                                    Icon(widget.choices[index].icon,
+                                  if (widget.choices![index].image != null)
+                                    widget.choices![index].image,
+                                  if (widget.choices![index].icon != null)
+                                    Icon(widget.choices![index].icon,
                                         color: _iconColor),
                                   if (_index.value == index) ...[
                                     SizedBox(height: 2),
-                                    widget.choices[index].title ??
-                                        Text(widget.choices[index].label,
+                                    widget.choices![index].title ??
+                                        Text(widget.choices![index].label,
                                             style: (widget.tabStyle ??
                                                 TextStyle(
                                                   fontSize: 14,
                                                   color: (widget.sidebarBackgroundColor ??
-                                                              theme
+                                                              theme!
                                                                   .scaffoldBackgroundColor)
                                                           .isDark
                                                       ? Colors.white70
@@ -320,27 +323,27 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                     height: widget.tabHeight ?? kToolbarHeight,
                     width: 5,
                     color: (_index.value == index)
-                        ? widget.tagColor ?? theme.indicatorColor
+                        ? widget.tagColor ?? theme!.indicatorColor
                         : widget.tabColor),
                 Expanded(
                     child: Container(
                         height: widget.tabHeight,
                         child: ListTile(
-                          leading: (widget.choices[index].image != null)
-                              ? widget.choices[index].image
-                              : (widget.choices[index].icon != null)
+                          leading: (widget.choices![index].image != null)
+                              ? widget.choices![index].image
+                              : (widget.choices![index].icon != null)
                                   ? Icon(
-                                      widget.choices[index].icon,
+                                      widget.choices![index].icon,
                                       color: _iconColor,
                                     )
                                   : null,
-                          title: widget.choices[index].title ??
-                              Text(widget.choices[index].label,
+                          title: widget.choices![index].title ??
+                              Text(widget.choices![index].label,
                                   style: widget.tabStyle ??
-                                      theme.textTheme.bodyText1.copyWith(
+                                      theme!.textTheme.bodyText1!.copyWith(
                                           fontWeight: FontWeight.w500,
                                           color: (widget.sidebarBackgroundColor ??
-                                                      theme
+                                                      theme!
                                                           .scaffoldBackgroundColor)
                                                   .isDark
                                               ? Colors.white70
@@ -356,7 +359,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
     Size size = MediaQuery.of(context).size;
     ThemeData theme = Theme.of(context);
     int cols = widget.mobileCrossCount ?? size.width ~/ 150;
-    if (size.width < widget.mobileCrossCount ?? 2)
+    if (size.width < (widget.mobileCrossCount ?? 2))
       cols = widget.mobileCrossCount ?? 2;
 
     return Scaffold(
@@ -370,9 +373,9 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
               primary: false,
               crossAxisCount: cols,
               children: List.generate(
-                widget.choices.length,
+                widget.choices!.length,
                 (index) {
-                  TabChoice tab = widget.choices[index];
+                  TabChoice tab = widget.choices![index];
                   return Padding(
                       padding: widget.padding ?? EdgeInsets.all(8),
                       child: InkWell(
@@ -391,8 +394,8 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                       tab.icon,
                                       size: 80,
                                       color: _iconColor ??
-                                          theme
-                                              .primaryTextTheme.bodyText1.color,
+                                          theme.primaryTextTheme.bodyText1!
+                                              .color,
                                     ),
                                 tab.title ??
                                     Text(
@@ -402,7 +405,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                         fontSize: 18,
                                         fontWeight: FontWeight.w500,
                                         color: _iconColor ??
-                                            theme.textTheme.button.color,
+                                            theme.textTheme.button!.color,
                                       ),
                                     ),
                               ],

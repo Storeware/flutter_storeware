@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ShipsImage extends StatelessWidget {
-  final Widget image;
-  final Function onPressed;
-  const ShipsImage({Key key, this.image, this.onPressed}) : super(key: key);
+  final Widget? image;
+  final Function? onPressed;
+  const ShipsImage({Key? key, this.image, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -11,22 +11,22 @@ class ShipsImage extends StatelessWidget {
       child: Container(
         child: image,
       ),
-      onTap: onPressed,
+      onTap: () => onPressed!(),
     );
   }
 }
 
 class ShipsValue extends StatelessWidget {
-  final String title;
-  final dynamic value;
-  const ShipsValue({Key key, this.title, this.value}) : super(key: key);
+  final String? title;
+  final dynamic? value;
+  const ShipsValue({Key? key, this.title, this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          title,
+          title!,
           style: TextStyle(
             fontSize: 18,
           ),
@@ -43,14 +43,14 @@ class ShipsValue extends StatelessWidget {
 }
 
 class ShipsTile extends StatelessWidget {
-  final String title;
-  final String subTitle;
-  final List<Widget> children;
-  final Widget image;
-  final Widget action;
-  final Function onPressed;
+  final String? title;
+  final String? subTitle;
+  final List<Widget>? children;
+  final Widget? image;
+  final Widget? action;
+  final Function? onPressed;
   const ShipsTile(
-      {Key key,
+      {Key? key,
       this.image,
       this.title,
       this.subTitle,
@@ -64,9 +64,9 @@ class ShipsTile extends StatelessWidget {
     return ListTile(
       leading: image,
       trailing: action,
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       title: Text(
-        title,
+        title!,
         style: TextStyle(
           fontSize: 18,
         ),
@@ -74,8 +74,8 @@ class ShipsTile extends StatelessWidget {
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          if (subTitle != null) Text(subTitle),
-          if (children != null) ...children,
+          if (subTitle != null) Text(subTitle!),
+          if (children != null) ...children!,
         ],
       ),
     );
@@ -83,14 +83,14 @@ class ShipsTile extends StatelessWidget {
 }
 
 class ShipsBar extends StatelessWidget {
-  final double width;
-  final double height;
-  final double value;
-  final Color color;
-  final Color backgroundColor;
-  final bool showValue;
+  final double? width;
+  final double? height;
+  final double? value;
+  final Color? color;
+  final Color? backgroundColor;
+  final bool? showValue;
   ShipsBar(
-      {Key key,
+      {Key? key,
       this.value,
       this.color,
       this.showValue = true,
@@ -102,7 +102,7 @@ class ShipsBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var w = width * (value / 100);
+    var w = width! * (value! / 100);
     print('$width $w');
     return Container(
       padding: EdgeInsets.only(left: 2, right: 2, bottom: 2, top: 2),
@@ -112,7 +112,8 @@ class ShipsBar extends StatelessWidget {
       //color: Colors.amber,
       decoration: BoxDecoration(
         color: backgroundColor ?? theme.backgroundColor,
-        border: Border.all(color: theme.textTheme.overline.color.withAlpha(50)),
+        border:
+            Border.all(color: theme.textTheme.overline!.color!.withAlpha(50)),
         //shape: BoxShape.circle,
       ),
       child: Row(
@@ -122,7 +123,7 @@ class ShipsBar extends StatelessWidget {
               height: height,
               color: color ?? theme.primaryColor, //Colors.amber,
               child: Center(
-                child: showValue
+                child: showValue!
                     ? Text(
                         '$value %',
                         style: TextStyle(fontSize: 10),
@@ -138,32 +139,32 @@ class ShipsBar extends StatelessWidget {
 }
 
 class ShipsHorizontal extends StatelessWidget {
-  final List<Widget> children;
-  const ShipsHorizontal({Key key, this.children}) : super(key: key);
+  final List<Widget>? children;
+  const ShipsHorizontal({Key? key, this.children}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [...children],
+      children: [...children!],
     );
   }
 }
 
 class ShipsIconButton extends StatelessWidget {
-  final Widget icon;
-  final String title;
-  final Function onPressed;
-  const ShipsIconButton({Key key, this.icon, this.title, this.onPressed})
+  final Widget? icon;
+  final String? title;
+  final Function? onPressed;
+  const ShipsIconButton({Key? key, this.icon, this.title, this.onPressed})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: () => onPressed!(),
       child: Column(
         children: <Widget>[
-          icon,
-          if (title != null) Text(title),
+          icon!,
+          if (title != null) Text(title!),
         ],
       ),
     );
@@ -171,31 +172,31 @@ class ShipsIconButton extends StatelessWidget {
 }
 
 class ShipsButtons extends StatelessWidget {
-  final List<Widget> children;
-  const ShipsButtons({Key key, this.children}) : super(key: key);
+  final List<Widget>? children;
+  const ShipsButtons({Key? key, this.children}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        if (children != null) ...children,
+        if (children != null) ...children!,
       ],
     );
   }
 }
 
 class ShipsRoundedButton extends StatelessWidget {
-  final Color color;
-  final Function onPressed;
-  final String label;
-  final Color labelColor;
-  final double width;
-  final double border;
-  final Color borderColor;
-  final Widget child;
+  final Color? color;
+  final Function? onPressed;
+  final String? label;
+  final Color? labelColor;
+  final double? width;
+  final double? border;
+  final Color? borderColor;
+  final Widget? child;
   const ShipsRoundedButton(
-      {Key key,
+      {Key? key,
       this.color,
       this.onPressed,
       this.label,
@@ -218,7 +219,7 @@ class ShipsRoundedButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
               color: borderColor ?? Colors.black26,
-              width: border,
+              width: border!,
             ),
           ),
           child: Padding(
@@ -233,21 +234,21 @@ class ShipsRoundedButton extends StatelessWidget {
                     label ?? '',
                     style: TextStyle(color: labelColor ?? Colors.black),
                   ),
-                if (child != null) child,
+                if (child != null) child!,
               ]),
             ),
           )),
-      onTap: onPressed,
+      onTap: () => onPressed!(),
     );
   }
 }
 
 class ShipsListView extends StatelessWidget {
-  final List<Widget> children;
-  final Axis direction;
-  final double spaces;
+  final List<Widget>? children;
+  final Axis? direction;
+  final double? spaces;
   const ShipsListView(
-      {Key key,
+      {Key? key,
       this.children,
       this.direction = Axis.horizontal,
       this.spaces = 4})
@@ -256,13 +257,13 @@ class ShipsListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      scrollDirection: direction,
+      scrollDirection: direction!,
       primary: true,
       children: [
         if (children != null)
-          for (var item in children)
+          for (var item in children!)
             Padding(
-              padding: EdgeInsets.only(right: spaces),
+              padding: EdgeInsets.only(right: spaces!),
               child: item,
             ),
       ],
@@ -271,16 +272,16 @@ class ShipsListView extends StatelessWidget {
 }
 
 class ShipsDetail extends StatelessWidget {
-  final Widget image;
-  final Function onPressed;
-  final List<Widget> buttons;
-  final Widget action;
-  final Widget leading;
-  final String title;
-  final String subTitle;
-  final List<Widget> children;
+  final Widget? image;
+  final Function? onPressed;
+  final List<Widget>? buttons;
+  final Widget? action;
+  final Widget? leading;
+  final String? title;
+  final String? subTitle;
+  final List<Widget>? children;
   const ShipsDetail({
-    Key key,
+    Key? key,
     this.image,
     this.buttons,
     this.action,
@@ -302,7 +303,7 @@ class ShipsDetail extends StatelessWidget {
           ),
         if (buttons != null)
           ShipsButtons(
-            children: <Widget>[...buttons],
+            children: <Widget>[...buttons!],
           ),
         ShipsTile(
             action: action,
@@ -318,20 +319,20 @@ class ShipsDetail extends StatelessWidget {
 enum ShipsSummaryPosition { none, left, right }
 
 class ShipsSummary extends StatelessWidget {
-  final String title;
-  final double fontSize;
-  final Color color;
-  final Color fontColor;
-  final String value;
-  final Color valueFontColor;
-  final double percent;
-  final int percentDec;
-  final String percentLabel;
-  final Widget image;
-  final double radius;
-  final ShipsSummaryPosition position;
+  final String? title;
+  final double? fontSize;
+  final Color? color;
+  final Color? fontColor;
+  final String? value;
+  final Color? valueFontColor;
+  final double? percent;
+  final int? percentDec;
+  final String? percentLabel;
+  final Widget? image;
+  final double? radius;
+  final ShipsSummaryPosition? position;
   const ShipsSummary(
-      {Key key,
+      {Key? key,
       this.fontSize = 72,
       this.radius = 15,
       this.value,
@@ -353,8 +354,8 @@ class ShipsSummary extends StatelessWidget {
     return ShipsPanel(
         width: 300,
         height: 150,
-        topRadius: radius,
-        bottomRadius: radius,
+        topRadius: radius!,
+        bottomRadius: radius!,
         color: cor.withAlpha(50),
         child: Column(
           children: <Widget>[
@@ -363,8 +364,8 @@ class ShipsSummary extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(radius),
-                  topRight: Radius.circular(radius),
+                  topLeft: Radius.circular(radius!),
+                  topRight: Radius.circular(radius!),
                 ),
                 color: cor,
               ),
@@ -421,10 +422,10 @@ class ShipsSummary extends StatelessWidget {
   Widget buildActivityPercentValue() {
     return Column(
       children: <Widget>[
-        if (image != null) image,
+        if (image != null) image!,
         ShipsValue(
           title: percentLabel,
-          value: percent.toStringAsFixed(percentDec),
+          value: percent!.toStringAsFixed(percentDec!),
         ),
       ],
     );
@@ -432,16 +433,16 @@ class ShipsSummary extends StatelessWidget {
 }
 
 class ShipsPanel extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final double height;
-  final double width;
-  final double topRadius;
-  final double bottomRadius;
-  final double leftRadius;
-  final double rightRadius;
+  final Widget? child;
+  final Color? color;
+  final double? height;
+  final double? width;
+  final double? topRadius;
+  final double? bottomRadius;
+  final double? leftRadius;
+  final double? rightRadius;
   const ShipsPanel(
-      {Key key,
+      {Key? key,
       this.topRadius = 20,
       this.bottomRadius = 20,
       this.leftRadius,
@@ -456,10 +457,10 @@ class ShipsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(leftRadius ?? bottomRadius),
-        topRight: Radius.circular(rightRadius ?? topRadius),
-        topLeft: Radius.circular(leftRadius ?? topRadius),
-        bottomRight: Radius.circular(rightRadius ?? bottomRadius),
+        bottomLeft: Radius.circular(leftRadius ?? bottomRadius!),
+        topRight: Radius.circular(rightRadius ?? topRadius!),
+        topLeft: Radius.circular(leftRadius ?? topRadius!),
+        bottomRight: Radius.circular(rightRadius ?? bottomRadius!),
       ),
       child: Container(
         height: height,
@@ -472,7 +473,7 @@ class ShipsPanel extends StatelessWidget {
     );
   }
 
-  static header({Key key, radius = 20, color, width, height, child}) =>
+  static header({Key? key, radius = 20, color, width, height, child}) =>
       ShipsPanel(
         child: child,
         topRadius: radius,
@@ -481,7 +482,7 @@ class ShipsPanel extends StatelessWidget {
         height: height,
         width: width,
       );
-  static bottom({Key key, radius = 20, color, width, height, child}) =>
+  static bottom({Key? key, radius = 20, color, width, height, child}) =>
       ShipsPanel(
         child: child,
         topRadius: 0,
@@ -490,7 +491,7 @@ class ShipsPanel extends StatelessWidget {
         height: height,
         width: width,
       );
-  static left({Key key, radius = 20, color, width, height, child}) =>
+  static left({Key? key, radius = 20, color, width, height, child}) =>
       ShipsPanel(
         child: child,
         leftRadius: radius,
@@ -498,7 +499,7 @@ class ShipsPanel extends StatelessWidget {
         height: height,
         width: width,
       );
-  static right({Key key, radius = 20, color, width, height, child}) =>
+  static right({Key? key, radius = 20, color, width, height, child}) =>
       ShipsPanel(
         child: child,
         rightRadius: radius,
@@ -509,14 +510,14 @@ class ShipsPanel extends StatelessWidget {
 }
 
 class ShipsStars extends StatefulWidget {
-  final int max;
-  final int value;
-  final Function(int) onPressed;
-  final Color color;
-  final double width;
-  final double height;
+  final int? max;
+  final int? value;
+  final Function(int)? onPressed;
+  final Color? color;
+  final double? width;
+  final double? height;
   const ShipsStars(
-      {Key key,
+      {Key? key,
       this.max,
       this.onPressed,
       this.value = 0,
@@ -533,7 +534,7 @@ class _ShipsStarsState extends State<ShipsStars> {
   int _v = 0;
   @override
   void initState() {
-    _v = widget.value;
+    _v = widget.value!;
     super.initState();
   }
 
@@ -546,13 +547,13 @@ class _ShipsStarsState extends State<ShipsStars> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            for (var i = 1; i <= widget.max; i++)
+            for (var i = 1; i <= widget.max!; i++)
               InkWell(
                 child: Icon(Icons.star,
                     size: 18, color: (_v >= i) ? Colors.red : Colors.amber),
                 onTap: () {
                   _v = i;
-                  if (widget.onPressed != null) widget.onPressed(_v);
+                  if (widget.onPressed != null) widget.onPressed!(_v);
                   setState(() {});
                 },
               ),

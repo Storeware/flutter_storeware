@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class PageNavigatorRow extends StatelessWidget {
-  final Function(int) onPageSelected;
-  final int currentPage;
-  final double height;
-  final double width;
-  final int count;
+  final Function(int)? onPageSelected;
+  final int? currentPage;
+  final double? height;
+  final double? width;
+  final int? count;
 
   const PageNavigatorRow(
-      {Key key,
+      {Key? key,
       this.height = kBottomNavigationBarHeight,
       this.count = 4,
       this.width,
@@ -32,9 +32,9 @@ class PageNavigatorRow extends StatelessWidget {
           alignment: Alignment.centerLeft,
           child: ListView(scrollDirection: Axis.horizontal, children: [
             createNavButton(1),
-            for (var i = currentPage - 1; i < currentPage + count; i++)
+            for (var i = currentPage! - 1; i < currentPage! + count!; i++)
               if (i > 1)
-                if ((n++) < count) createNavButton(i)
+                if ((n++) < count!) createNavButton(i)
           ]),
         ),
       ),
@@ -51,7 +51,7 @@ class PageNavigatorRow extends StatelessWidget {
         : IconButton(
             icon: Text('$i'),
             onPressed: () {
-              onPageSelected(i);
+              onPageSelected!(i);
             },
           );
   }

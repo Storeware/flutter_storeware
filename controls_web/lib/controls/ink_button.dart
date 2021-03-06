@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class InkButton extends StatelessWidget {
-  final Widget child;
-  final Function() onTap;
-  final String tooltip;
-  final EdgeInsets padding;
-  final double radius;
+class InkButton extends StatefulWidget {
+  final Widget? child;
+  final Function()? onTap;
+  final String? tooltip;
+  final EdgeInsets? padding;
+  final double? radius;
   InkButton({
-    Key key,
+    Key? key,
     //this.shape,
     this.child,
     this.onTap,
@@ -17,24 +17,30 @@ class InkButton extends StatelessWidget {
     //this.side,
   }) : super(key: key);
 
-  ThemeData theme;
+  @override
+  _InkButtonState createState() => _InkButtonState();
+}
+
+class _InkButtonState extends State<InkButton> {
+  ThemeData? theme;
+
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    return (tooltip == null)
+    return (widget.tooltip == null)
         ? createButton()
         : Tooltip(
-            message: tooltip,
+            message: widget.tooltip!,
             child: createButton(),
           );
   }
 
   createButton() => InkResponse(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(radius),
-      splashColor: theme.indicatorColor,
+      onTap: widget.onTap,
+      borderRadius: BorderRadius.circular(widget.radius!),
+      splashColor: theme!.indicatorColor,
       child: Padding(
-        padding: padding ?? EdgeInsets.all(4),
-        child: child,
+        padding: widget.padding ?? EdgeInsets.all(4),
+        child: widget.child,
       ));
 }

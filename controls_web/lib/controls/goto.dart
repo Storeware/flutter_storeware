@@ -21,7 +21,7 @@ class GoTo {
     await launch('tel:$fone');
   }
 
-  goWhats(String numero, {String texto}) async {
+  goWhats(String numero, {String? texto}) async {
     var s = '';
     for (var i = 0; i < numero.length; i++) {
       var k = numero[i];

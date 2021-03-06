@@ -32,11 +32,11 @@ class ShareSocial {
 }
 
 class ShareWhatsAppWebButton extends StatelessWidget {
-  final String fone;
-  final Future<String> Function() builder;
-  final String texto;
+  final String? fone;
+  final Future<String> Function()? builder;
+  final String? texto;
 
-  const ShareWhatsAppWebButton({Key key, this.texto, this.fone, this.builder})
+  const ShareWhatsAppWebButton({Key? key, this.texto, this.fone, this.builder})
       : super(key: key);
 
   @override
@@ -53,13 +53,13 @@ class ShareWhatsAppWebButton extends StatelessWidget {
   }
 
   bool validar() {
-    return (fone.validarCelular().length == 0);
+    return (fone!.validarCelular().length == 0);
   }
 
   void compartilharAgendaWhatsWeb() {
     // chamar o whats.
     if (builder != null)
-      builder().then((texto) => GoTo().goWhats(fone, texto: texto));
+      builder!().then((texto) => GoTo().goWhats(fone!, texto: texto));
   }
 }
 

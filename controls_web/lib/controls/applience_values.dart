@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'fonts.dart';
 
 class ApplienceValue extends StatelessWidget {
-  final Color titleColor;
-  final String title;
-  final String value;
-  final double spaces;
-  final double width;
-  final double height;
+  final Color? titleColor;
+  final String? title;
+  final String? value;
+  final double? spaces;
+  final double? width;
+  final double? height;
   const ApplienceValue(
-      {Key key,
+      {Key? key,
       this.title,
       this.spaces = 2,
       this.titleColor,
@@ -23,7 +23,7 @@ class ApplienceValue extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Padding(
-      padding: EdgeInsets.all(spaces),
+      padding: EdgeInsets.all(spaces!),
       child: Container(
         width: width,
         height: height,
@@ -31,10 +31,10 @@ class ApplienceValue extends StatelessWidget {
           Container(
               width: double.maxFinite,
               alignment: Alignment.center,
-              child: Text(title,
+              child: Text(title!,
                   style: TextStyle(color: theme.scaffoldBackgroundColor)),
               color: titleColor ?? theme.primaryColor),
-          Text(value,
+          Text(value!,
               style: TextStyle(fontSize: 28, fontWeight: FontWeight.w300)),
         ]),
       ),
@@ -43,15 +43,15 @@ class ApplienceValue extends StatelessWidget {
 }
 
 class ApplienceContainer extends StatefulWidget {
-  final String title;
-  final Widget child;
-  final Color color;
-  final double width;
-  final double height;
-  final double elevation;
-  final double radius;
+  final String? title;
+  final Widget? child;
+  final Color? color;
+  final double? width;
+  final double? height;
+  final double? elevation;
+  final double? radius;
   ApplienceContainer({
-    Key key,
+    Key? key,
     this.child,
     this.color,
     this.width,
@@ -66,7 +66,7 @@ class ApplienceContainer extends StatefulWidget {
 }
 
 class _ApplienceContainerState extends State<ApplienceContainer> {
-  ThemeData theme;
+  ThemeData? theme;
 
   @override
   Widget build(BuildContext context) {
@@ -91,28 +91,28 @@ class _ApplienceContainerState extends State<ApplienceContainer> {
         decoration: BoxDecoration(
             boxShadow: [
               new BoxShadow(
-                color: theme.scaffoldBackgroundColor.withAlpha(50),
+                color: theme!.scaffoldBackgroundColor.withAlpha(50),
                 //color: Colors.grey.withAlpha(50),
-                blurRadius: widget.elevation,
+                blurRadius: widget.elevation!,
               ),
               new BoxShadow(
-                color: theme.scaffoldBackgroundColor.withAlpha(50),
+                color: theme!.scaffoldBackgroundColor.withAlpha(50),
 //                color: Colors.grey.withAlpha(50),
-                blurRadius: widget.elevation,
+                blurRadius: widget.elevation!,
               ),
             ],
-            color: widget.color ?? theme.dividerColor,
+            color: widget.color ?? theme!.dividerColor,
             borderRadius:
-                BorderRadius.vertical(top: Radius.circular(widget.radius))),
+                BorderRadius.vertical(top: Radius.circular(widget.radius!))),
         child: widget.child);
   }
 }
 
 class ApplienceBody extends StatelessWidget {
-  final Widget child;
-  final EdgeInsets padding;
-  final BoxConstraints constraints;
-  const ApplienceBody({Key key, this.child, this.padding, this.constraints})
+  final Widget? child;
+  final EdgeInsets? padding;
+  final BoxConstraints? constraints;
+  const ApplienceBody({Key? key, this.child, this.padding, this.constraints})
       : super(key: key);
 
   @override

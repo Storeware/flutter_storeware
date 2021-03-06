@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 enum MainImagePosition { left, rigth, top, bottom }
 
-nullIf(Widget wg) {
+nullIf(Widget? wg) {
   if (wg != null)
     return wg;
   else
@@ -10,28 +10,28 @@ nullIf(Widget wg) {
 }
 
 class ShoppingPanel extends StatelessWidget {
-  final Widget header;
-  final double width;
-  final double height;
-  final double elevator;
-  final String title;
-  final TextStyle titleStyle;
-  final String subTitle;
-  final TextStyle subTitleStyle;
-  final Widget body;
-  final Widget image;
-  final String value;
-  final TextStyle valueStyle;
-  final Color color;
+  final Widget? header;
+  final double? width;
+  final double? height;
+  final double? elevator;
+  final String? title;
+  final TextStyle? titleStyle;
+  final String? subTitle;
+  final TextStyle? subTitleStyle;
+  final Widget? body;
+  final Widget? image;
+  final String? value;
+  final TextStyle? valueStyle;
+  final Color? color;
   //final Widget stars;
-  final Widget bottom;
-  final Widget action;
-  final Widget leading;
-  final Widget trailing;
-  final List<Widget> children;
-  final Widget bottomBar;
+  final Widget? bottom;
+  final Widget? action;
+  final Widget? leading;
+  final Widget? trailing;
+  final List<Widget>? children;
+  final Widget? bottomBar;
   ShoppingPanel({
-    Key key,
+    Key? key,
     this.header,
     this.width,
     this.height,
@@ -66,12 +66,12 @@ class ShoppingPanel extends StatelessWidget {
           width: width,
           height: height,
           child: Column(children: [
-            if (header != null) header,
+            if (header != null) header!,
             if (title != null)
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                 leading ?? Container(),
                 Text(
-                  title,
+                  title!,
                   style: titleStyle ??
                       TextStyle(
                         fontSize: 18,
@@ -81,12 +81,12 @@ class ShoppingPanel extends StatelessWidget {
                 trailing ?? Container(),
               ]),
             if ((subTitle ?? '').length > 0)
-              Text(subTitle,
+              Text(subTitle!,
                   style: subTitleStyle ??
                       TextStyle(
                         fontSize: 12,
                       )),
-            if (body != null) Expanded(child: body),
+            if (body != null) Expanded(child: body!),
             Row(children: [
               image ?? Container(),
               Expanded(child: Container()),
@@ -99,29 +99,28 @@ class ShoppingPanel extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           )),
                   //        stars ?? Container(),
-                  if (action != null)
-                    action,
+                  if (action != null) action!,
                 ],
               ),
             ]),
-            if (bottom != null) bottom,
+            if (bottom != null) bottom!,
             ...children ?? [],
-            if (bottomBar != null) bottomBar,
+            if (bottomBar != null) bottomBar!,
           ]),
         ));
   }
 }
 
 class ShoppingStatus extends StatelessWidget {
-  final String title;
-  final Color titleColor;
-  final String value;
-  final Color valueColor;
-  final Color color;
-  final double width;
-  final Function onPressed;
+  final String? title;
+  final Color? titleColor;
+  final String? value;
+  final Color? valueColor;
+  final Color? color;
+  final double? width;
+  final Function? onPressed;
   const ShoppingStatus({
-    Key key,
+    Key? key,
     this.title,
     this.titleColor = Colors.indigo,
     this.value,
@@ -141,10 +140,10 @@ class ShoppingStatus extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               if (value != null)
-                Text(value, style: TextStyle(color: valueColor, fontSize: 18)),
+                Text(value!, style: TextStyle(color: valueColor, fontSize: 18)),
               if (title != null)
                 Text(
-                  title,
+                  title!,
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
@@ -154,31 +153,31 @@ class ShoppingStatus extends StatelessWidget {
             ],
           ),
         ),
-        onTap: onPressed);
+        onTap: () => onPressed!());
   }
 }
 
 class ShoppingDescriptionPage extends StatelessWidget {
-  final String id;
-  final Widget image;
-  final Widget icon;
-  final String title;
-  final Color titleColor;
-  final Color baseColor;
-  final String subTitle;
-  final String price;
-  final String rank;
-  final Widget stars;
-  final List<Widget> items;
-  final String description;
-  final String buttonText;
-  final Color buttonColor;
-  final Function onPressed;
-  final Function(String, double) onQtdePressed;
-  final Function onClose;
-  final Widget button;
-  final BoxDecoration decoration;
-  final String fontFamily;
+  final String? id;
+  final Widget? image;
+  final Widget? icon;
+  final String? title;
+  final Color? titleColor;
+  final Color? baseColor;
+  final String? subTitle;
+  final String? price;
+  final String? rank;
+  final Widget? stars;
+  final List<Widget>? items;
+  final String? description;
+  final String? buttonText;
+  final Color? buttonColor;
+  final Function? onPressed;
+  final Function(String, double)? onQtdePressed;
+  final Function? onClose;
+  final Widget? button;
+  final BoxDecoration? decoration;
+  final String? fontFamily;
   const ShoppingDescriptionPage(
       {this.id,
       this.image,
@@ -200,7 +199,7 @@ class ShoppingDescriptionPage extends StatelessWidget {
       this.onClose,
       this.button,
       this.onQtdePressed,
-      Key key})
+      Key? key})
       : super(key: key);
 
   @override
@@ -216,7 +215,7 @@ class ShoppingDescriptionPage extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          if (image != null) image,
+          if (image != null) image!,
           if (icon != null)
             Container(alignment: Alignment.centerRight, child: icon),
           if (title != null)
@@ -227,7 +226,7 @@ class ShoppingDescriptionPage extends StatelessWidget {
             Container(
               alignment: Alignment.topLeft,
               child: Text(
-                title,
+                title!,
                 softWrap: true,
                 textAlign: TextAlign.left,
                 style: TextStyle(
@@ -282,14 +281,14 @@ class ShoppingDescriptionPage extends StatelessWidget {
               runAlignment: WrapAlignment.start,
               direction: Axis.horizontal,
               spacing: 8,
-              children: items,
+              children: items!,
             ),
           if ((description ?? '').length > 0)
             SizedBox(
               height: 8,
             ),
           if ((description ?? '').length > 0)
-            Text(description,
+            Text(description!,
                 style: TextStyle(
                     fontFamily: fontFamily,
                     fontSize: 12,
@@ -304,7 +303,7 @@ class ShoppingDescriptionPage extends StatelessWidget {
                 maxWidth: 50,
                 child: Text('X'),
                 onPressed: () {
-                  onClose();
+                  onClose!();
                 },
               ),
             SizedBox(
@@ -319,13 +318,13 @@ class ShoppingDescriptionPage extends StatelessWidget {
                   ),
                 ),
                 onPressed: (qtde) {
-                  if (onQtdePressed != null) onQtdePressed(id, qtde);
+                  if (onQtdePressed != null) onQtdePressed!(id!, qtde);
                 },
               ),
             SizedBox(
               width: 5,
             ),
-            if (button != null) button
+            if (button != null) button!
           ]),
         ],
       ),
@@ -335,7 +334,7 @@ class ShoppingDescriptionPage extends StatelessWidget {
 
 class ShoppingCard extends StatelessWidget {
   const ShoppingCard({
-    Key key,
+    Key? key,
     @required this.child,
     this.color = Colors.white,
     this.minWidth,
@@ -345,14 +344,14 @@ class ShoppingCard extends StatelessWidget {
     this.width,
     this.elevation = 0,
   }) : super(key: key);
-  final double elevation;
-  final Widget child;
-  final double minWidth;
-  final double maxWidth;
-  final double width;
-  final double height;
-  final Color color;
-  final BoxDecoration decoration;
+  final double? elevation;
+  final Widget? child;
+  final double? minWidth;
+  final double? maxWidth;
+  final double? width;
+  final double? height;
+  final Color? color;
+  final BoxDecoration? decoration;
 
   @override
   Widget build(BuildContext context) {
@@ -361,36 +360,36 @@ class ShoppingCard extends StatelessWidget {
         height: height,
         alignment: Alignment.center,
         constraints: (maxWidth != null && minWidth != null)
-            ? BoxConstraints(maxWidth: maxWidth, minWidth: minWidth ?? 1)
+            ? BoxConstraints(maxWidth: maxWidth!, minWidth: minWidth ?? 1)
             : null,
         decoration: decoration ??
             BoxDecoration(
                 color: color,
                 gradient: buildLinearGradient(context, colors: [
-                  color.withAlpha(200),
-                  color,
-                  color,
-                  color.withAlpha(200),
+                  color!.withAlpha(200),
+                  color!,
+                  color!,
+                  color!.withAlpha(200),
                 ]),
                 borderRadius: BorderRadius.circular(10)),
         child: child);
 
-    if (elevation > 0) return Card(elevation: elevation, child: ctn);
+    if (elevation! > 0) return Card(elevation: elevation, child: ctn);
     return ctn;
   }
 }
 
 class ShoppingScrollView extends StatelessWidget {
   final appBar;
-  final List<Widget> topBars;
-  final Widget body;
-  final List<Widget> children;
-  final List<Widget> grid;
-  final List<Widget> bottomBars;
-  final double topBarsHeight;
-  final EdgeInsetsGeometry padding;
+  final List<Widget>? topBars;
+  final Widget? body;
+  final List<Widget>? children;
+  final List<Widget>? grid;
+  final List<Widget>? bottomBars;
+  final double? topBarsHeight;
+  final EdgeInsetsGeometry? padding;
   const ShoppingScrollView(
-      {Key key,
+      {Key? key,
       this.appBar,
       this.topBars,
       this.padding,
@@ -442,12 +441,12 @@ class ShoppingScrollView extends StatelessWidget {
 }
 
 class ShoppingCategory extends StatelessWidget {
-  final String title;
-  final String id;
-  final Color color;
-  final Function(String) onPressed;
+  final String? title;
+  final String? id;
+  final Color? color;
+  final Function(String)? onPressed;
   const ShoppingCategory(
-      {Key key, this.id, this.color, this.title, this.onPressed})
+      {Key? key, this.id, this.color, this.title, this.onPressed})
       : super(key: key);
 
   @override
@@ -455,8 +454,8 @@ class ShoppingCategory extends StatelessWidget {
     return ShoppingButton(
         minWidth: 80,
         maxWidth: 110,
-        child: Text(title),
-        color: color,
+        child: Text(title!),
+        color: color!,
         /*child: Container(
           padding: EdgeInsets.only(left: 8, right: 8),
           decoration: BoxDecoration(
@@ -467,15 +466,15 @@ class ShoppingCategory extends StatelessWidget {
         ),
         */
         onPressed: () {
-          onPressed(id);
+          onPressed!(id!);
         });
   }
 }
 
 class ShoppingListView extends StatelessWidget {
-  final List<Widget> children;
-  final Color color;
-  const ShoppingListView({Key key, this.color, this.children})
+  final List<Widget>? children;
+  final Color? color;
+  const ShoppingListView({Key? key, this.color, this.children})
       : super(key: key);
 
   @override
@@ -486,7 +485,7 @@ class ShoppingListView extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           children: [
             if (children != null)
-              for (var item in children)
+              for (var item in children!)
                 Padding(
                   padding: const EdgeInsets.only(
                       left: 1, right: 1, top: 5, bottom: 5),
@@ -498,20 +497,20 @@ class ShoppingListView extends StatelessWidget {
 }
 
 class ShoppingTile extends StatelessWidget {
-  final String id;
-  final MainImagePosition position;
-  final Widget image;
-  final String title;
-  final String subTitle;
-  final String price;
-  final double rank;
-  final double stars;
-  final Function(String) onPressed;
-  final double width;
-  final double elevation;
-  final Color color;
+  final String? id;
+  final MainImagePosition? position;
+  final Widget? image;
+  final String? title;
+  final String? subTitle;
+  final String? price;
+  final double? rank;
+  final double? stars;
+  final Function(String)? onPressed;
+  final double? width;
+  final double? elevation;
+  final Color? color;
   const ShoppingTile({
-    Key key,
+    Key? key,
     this.position = MainImagePosition.left,
     this.width,
     this.elevation = 1,
@@ -528,7 +527,7 @@ class ShoppingTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _stars = (stars > 0)
+    var _stars = (stars! > 0)
         ? Icon(
             Icons.stars,
             size: 14,
@@ -561,13 +560,13 @@ class ShoppingTile extends StatelessWidget {
                       Expanded(
                           child: _ShoppingDiscriptions(
                               csize: csize,
-                              title: title,
-                              subTitle: subTitle,
-                              rank: rank,
+                              title: title!,
+                              subTitle: subTitle!,
+                              rank: rank!,
                               stars: _stars,
-                              price: price,
-                              onPressed: onPressed,
-                              id: id)),
+                              price: price!,
+                              onPressed: (x) => onPressed!(x),
+                              id: id!)),
                       if (position == MainImagePosition.rigth)
                         SizedBox(
                           width: 10,
@@ -590,13 +589,13 @@ class ShoppingTile extends StatelessWidget {
                         ),
                       _ShoppingDiscriptions(
                           csize: size.width,
-                          title: title,
-                          subTitle: subTitle,
-                          rank: rank,
+                          title: title!,
+                          subTitle: subTitle!,
+                          rank: rank!,
                           stars: _stars,
-                          price: price,
-                          onPressed: onPressed,
-                          id: id),
+                          price: price!,
+                          onPressed: (x) => onPressed!(x),
+                          id: id!),
                       if (position == MainImagePosition.bottom)
                         SizedBox(
                           height: 10,
@@ -609,7 +608,7 @@ class ShoppingTile extends StatelessWidget {
                   ),
           ),
           onTap: () {
-            onPressed(id);
+            onPressed!(id!);
           }),
     );
   }
@@ -617,26 +616,26 @@ class ShoppingTile extends StatelessWidget {
 
 class _ShoppingDiscriptions extends StatelessWidget {
   const _ShoppingDiscriptions({
-    Key key,
+    Key? key,
     @required this.csize,
     @required this.title,
     @required this.subTitle,
     @required this.rank,
-    @required StatelessWidget stars,
+    @required StatelessWidget? stars,
     @required this.price,
     @required this.onPressed,
     @required this.id,
   })  : _stars = stars,
         super(key: key);
 
-  final double csize;
-  final String title;
-  final String subTitle;
-  final double rank;
-  final StatelessWidget _stars;
-  final String price;
-  final Function(String) onPressed;
-  final String id;
+  final double? csize;
+  final String? title;
+  final String? subTitle;
+  final double? rank;
+  final StatelessWidget? _stars;
+  final String? price;
+  final Function(String)? onPressed;
+  final String? id;
 
   @override
   Widget build(BuildContext context) {
@@ -644,7 +643,7 @@ class _ShoppingDiscriptions extends StatelessWidget {
       direction: Axis.vertical,
       children: <Widget>[
         Container(
-          width: csize - 20,
+          width: csize! - 20,
           child: Text(
             title ?? '',
             maxLines: 2,
@@ -653,12 +652,12 @@ class _ShoppingDiscriptions extends StatelessWidget {
           ),
         ),
         Container(
-          width: csize - 20,
+          width: csize! - 20,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             if (subTitle != null)
               Text(
-                subTitle,
+                subTitle!,
                 maxLines: 2,
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w200),
               ),
@@ -668,12 +667,12 @@ class _ShoppingDiscriptions extends StatelessWidget {
                   '$rank',
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w200),
                 ),
-                _stars
+                _stars!
               ]),
           ]),
         ),
         Container(
-          width: csize - 20,
+          width: csize! - 20,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -684,7 +683,7 @@ class _ShoppingDiscriptions extends StatelessWidget {
                       child: Icon(Icons.plus_one, size: 22),
                     ),
                     onTap: () {
-                      onPressed(id);
+                      onPressed!(id!);
                     })
             ],
           ),
@@ -698,7 +697,7 @@ BoxDecoration buildBoxGradient(context) {
   return BoxDecoration(gradient: buildLinearGradient(context));
 }
 
-LinearGradient buildLinearGradient(context, {List<Color> colors}) {
+LinearGradient buildLinearGradient(context, {List<Color>? colors}) {
   var colores = Theme.of(context).primaryColor;
   return LinearGradient(
     // Where the linear gradient begins and ends
@@ -717,13 +716,13 @@ LinearGradient buildLinearGradient(context, {List<Color> colors}) {
 }
 
 class ShoppingButton extends StatelessWidget {
-  final Widget child;
-  final Function onPressed;
-  final Color color;
-  final double minWidth;
-  final double maxWidth;
+  final Widget? child;
+  final Function? onPressed;
+  final Color? color;
+  final double? minWidth;
+  final double? maxWidth;
   const ShoppingButton(
-      {Key key,
+      {Key? key,
       this.color = Colors.red,
       this.child,
       this.minWidth = 90,
@@ -744,7 +743,7 @@ class ShoppingButton extends StatelessWidget {
         height: 32,
       ),
       onTap: () {
-        onPressed();
+        onPressed!();
       },
       splashColor: Theme.of(context).primaryColor,
     );
@@ -752,9 +751,9 @@ class ShoppingButton extends StatelessWidget {
 }
 
 class ShoppingQtdeButton extends StatefulWidget {
-  final Widget child;
-  final Function(double) onPressed;
-  ShoppingQtdeButton({Key key, this.child, this.onPressed}) : super(key: key);
+  final Widget? child;
+  final Function(double)? onPressed;
+  ShoppingQtdeButton({Key? key, this.child, this.onPressed}) : super(key: key);
 
   @override
   _ShoppingQtdeButtonState createState() => _ShoppingQtdeButtonState();
@@ -802,7 +801,7 @@ class _ShoppingQtdeButtonState extends State<ShoppingQtdeButton> {
               child: InkWell(
             child: Align(child: widget.child),
             onTap: () {
-              if (widget.onPressed != null) widget.onPressed(_qtde);
+              if (widget.onPressed != null) widget.onPressed!(_qtde);
             },
           )),
         ],

@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:controls_web/controls/tab_choice.dart';
 
 class PageTabViewController {
-  TabController tabController;
+  TabController? tabController;
 
   animateTo(index) {
-    tabController.animateTo(index);
+    tabController!.animateTo(index);
   }
 
   next() {
-    tabController.animateTo(tabController.index + 1);
+    tabController!.animateTo(tabController!.index + 1);
   }
 
   previus() {
-    tabController.animateTo(tabController.previousIndex);
+    tabController!.animateTo(tabController!.previousIndex);
   }
 }
 
@@ -31,30 +31,30 @@ class PageTabViewTheme {
 }
 
 class PageTabView extends StatefulWidget {
-  final List<TabChoice> choices;
-  final PageTabViewController controller;
-  final int initialIndex;
-  final Widget title;
-  final List<Widget> actions;
-  final double elevation;
-  final PageTabViewTheme theme;
-  final Color tabColor;
+  final List<TabChoice>? choices;
+  final PageTabViewController? controller;
+  final int? initialIndex;
+  final Widget? title;
+  final List<Widget>? actions;
+  final double? elevation;
+  final PageTabViewTheme? theme;
+  final Color? tabColor;
 
-  final Widget tabTitle;
-  final List<Widget> tabActions;
-  final double tabHeight;
-  final Widget tabLeading;
-  final bool isScrollable;
-  final Widget Function(TabController, TabChoice, int) tabBuilder;
-  final Color iconColor;
-  final Color indicatorColor;
-  final Widget bottomNavigationBar;
-  final Widget floatingActionButton;
-  final Widget leading;
-  final Widget appBar;
-  final Size preferredSize;
-  final bool automaticallyImplyLeading;
-  final Color appBackgroundColor;
+  final Widget? tabTitle;
+  final List<Widget>? tabActions;
+  final double? tabHeight;
+  final Widget? tabLeading;
+  final bool? isScrollable;
+  final Widget Function(TabController, TabChoice, int)? tabBuilder;
+  final Color? iconColor;
+  final Color? indicatorColor;
+  final Widget? bottomNavigationBar;
+  final Widget? floatingActionButton;
+  final Widget? leading;
+  final Widget? appBar;
+  final Size? preferredSize;
+  final bool? automaticallyImplyLeading;
+  final Color? appBackgroundColor;
   PageTabView({
     this.title,
     this.appBar,
@@ -85,48 +85,48 @@ class PageTabView extends StatefulWidget {
 
 class _TabBarViewState extends State<PageTabView>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  ThemeData theme;
+  TabController? _tabController;
+  ThemeData? theme;
   var tabChangeEvent = StreamController<int>.broadcast();
-  PageTabViewTheme tabTheme;
-  Color _tabColor;
-  Color _iconColor;
-  Color _indicatorColor;
-  Color _appBackgroundColor;
+  PageTabViewTheme? tabTheme;
+  Color? _tabColor;
+  Color? _iconColor;
+  Color? _indicatorColor;
+  Color? _appBackgroundColor;
 
   @override
   void initState() {
     tabTheme = widget.theme ?? PageTabViewTheme();
-    _tabColor = widget.tabColor ?? tabTheme.tabColor;
-    _iconColor = widget.iconColor ?? tabTheme.iconColor;
-    _indicatorColor = widget.indicatorColor ?? tabTheme.indicatorColor;
+    _tabColor = widget.tabColor ?? tabTheme!.tabColor;
+    _iconColor = widget.iconColor ?? tabTheme!.iconColor;
+    _indicatorColor = widget.indicatorColor ?? tabTheme!.indicatorColor;
     _appBackgroundColor =
-        widget.appBackgroundColor ?? tabTheme.appBackgroundColor;
+        widget.appBackgroundColor ?? tabTheme!.appBackgroundColor;
     super.initState();
-    indexSelected = widget.initialIndex;
-    _tabController = TabController(vsync: this, length: widget.choices.length);
-    _tabController.addListener(_nextPage);
+    indexSelected = widget.initialIndex!;
+    _tabController = TabController(vsync: this, length: widget.choices!.length);
+    _tabController!.addListener(_nextPage);
     if (widget.controller != null) {
-      widget.controller.tabController = _tabController;
+      widget.controller!.tabController = _tabController;
     }
-    _tabController.index = indexSelected;
+    _tabController!.index = indexSelected!;
   }
 
   @override
   void dispose() {
-    _tabController.removeListener(_nextPage);
-    _tabController.dispose();
+    _tabController!.removeListener(_nextPage);
+    _tabController!.dispose();
     tabChangeEvent.close();
     super.dispose();
   }
 
-  int indexSelected;
+  int? indexSelected;
 
-  void _nextPage({int delta = 0, int to}) {
-    int newIndex = _tabController.index + delta;
+  void _nextPage({int delta = 0, int? to}) {
+    int newIndex = _tabController!.index + delta;
     if (to != null) newIndex = to;
-    if (newIndex < 0 || newIndex >= _tabController.length) return;
-    _tabController.animateTo(newIndex);
+    if (newIndex < 0 || newIndex >= _tabController!.length) return;
+    _tabController!.animateTo(newIndex);
     indexSelected = newIndex;
     tabChangeEvent.sink.add(newIndex);
   }
@@ -134,7 +134,7 @@ class _TabBarViewState extends State<PageTabView>
   List<Widget> _pages() {
     List<Widget> rt = [];
     if (widget.choices != null)
-      widget.choices.forEach((c) {
+      widget.choices!.forEach((c) {
         rt.add(c.child);
       });
     return rt;
@@ -170,8 +170,8 @@ class _TabBarViewState extends State<PageTabView>
         ),
       ),
       onTap: () {
-        if (widget.choices[idx].onPressed != null)
-          widget.choices[idx].onPressed();
+        if (widget.choices![idx].onPressed != null)
+          widget.choices![idx].onPressed();
         else
           _nextPage(to: idx);
       },
@@ -181,7 +181,7 @@ class _TabBarViewState extends State<PageTabView>
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double w = size.width / widget.choices.length;
+    double w = size.width / widget.choices!.length;
     theme = Theme.of(context);
     return Container(
       child: Scaffold(
@@ -190,14 +190,14 @@ class _TabBarViewState extends State<PageTabView>
             title: widget.title,
             elevation: widget.elevation,
             leading: widget.leading,
-            automaticallyImplyLeading: widget.automaticallyImplyLeading,
+            automaticallyImplyLeading: widget.automaticallyImplyLeading!,
             actions: widget.actions,
             bottom: PreferredSize(
               child: Column(children: [
-                if (widget.appBar != null) widget.appBar,
+                if (widget.appBar != null) widget.appBar!,
                 Row(
                   children: <Widget>[
-                    if (widget.tabLeading != null) widget.tabLeading,
+                    if (widget.tabLeading != null) widget.tabLeading!,
                     Expanded(
                       child: Container(
                           height: widget.tabHeight,
@@ -205,9 +205,9 @@ class _TabBarViewState extends State<PageTabView>
                           child: ListView(
                               scrollDirection: Axis.horizontal,
                               children: [
-                                for (int i = 0; i < widget.choices.length; i++)
+                                for (int i = 0; i < widget.choices!.length; i++)
                                   Container(
-                                      width: widget.choices[i].width ?? w,
+                                      width: widget.choices![i].width ?? w,
                                       child: Column(
                                         children: <Widget>[
                                           (widget.tabBuilder == null)
@@ -215,13 +215,13 @@ class _TabBarViewState extends State<PageTabView>
                                                   child: createTab(
                                                       context,
                                                       _tabController,
-                                                      widget.choices[i],
+                                                      widget.choices![i],
                                                       i,
                                                       w))
                                               : Expanded(
-                                                  child: widget.tabBuilder(
-                                                      _tabController,
-                                                      widget.choices[i],
+                                                  child: widget.tabBuilder!(
+                                                      _tabController!,
+                                                      widget.choices![i],
                                                       i),
                                                 ),
                                           StreamBuilder<int>(
@@ -241,7 +241,7 @@ class _TabBarViewState extends State<PageTabView>
                                               })
                                         ],
                                       )),
-                                if (widget.tabTitle != null) widget.tabTitle,
+                                if (widget.tabTitle != null) widget.tabTitle!,
                               ])),
                     ),
                     for (var item in widget.tabActions ?? []) item

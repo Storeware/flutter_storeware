@@ -1,41 +1,29 @@
-// Copyright 2016 The Chromium Authors. All rights reserved.
+// Copyright 2014 The Flutter Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
 import 'dart:math' as math;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart';
-/*
-import 'checkbox.dart';
-import 'colors.dart';
-import 'debug.dart';
-import 'divider.dart';
-import 'dropdown.dart';
-import 'icons.dart';
-import 'ink_well.dart';
-import 'material.dart';
-import 'theme.dart';
-import 'theme_data.dart';
-import 'tooltip.dart';
-*/
-/// Signature for [DataColumnX.onSort] callback.
+
+/// Signature for [DataColumn.onSort] callback.
 typedef DataColumnSortCallback = void Function(int columnIndex, bool ascending);
 
-/// Column configuration for a [DataTableX].
+/// Column configuration for a [DataTable].
 ///
 /// One column configuration must be provided for each column to
-/// display in the table. The list of [DataColumnX] objects is passed
+/// display in the table. The list of [DataColumn] objects is passed
 /// as the `columns` argument to the [new DataTable] constructor.
 @immutable
-class DataColumnX {
-  /// Creates the configuration for a column of a [DataTableX].
+class DataColumn {
+  /// Creates the configuration for a column of a [DataTable].
   ///
   /// The [label] argument must not be null.
-  const DataColumnX({
-    @required this.label,
+  const DataColumn({
+    required this.label,
     this.tooltip,
     this.numeric = false,
     this.onSort,
@@ -47,6 +35,10 @@ class DataColumnX {
   /// [Icon] (typically using size 18), or a [Row] with an icon and
   /// some text.
   ///
+  /// By default, this widget will only occupy the minimal space. If you want
+  /// it to take the entire remaining space, e.g. when you want to use [Center],
+  /// you can wrap it with an [Expanded].
+  ///
   /// The label should not include the sort indicator.
   final Widget label;
 
@@ -55,7 +47,7 @@ class DataColumnX {
   /// This is a longer description of the column heading, for cases
   /// where the heading might have been abbreviated to keep the column
   /// width to a reasonable size.
-  final String tooltip;
+  final String? tooltip;
 
   /// Whether this column represents numeric data or not.
   ///
@@ -67,45 +59,45 @@ class DataColumnX {
   ///
   /// If null, the column will not be considered sortable.
   ///
-  /// See [DataTableX.sortColumnIndex] and [DataTableX.sortAscending].
-  final DataColumnSortCallback onSort;
+  /// See [DataTable.sortColumnIndex] and [DataTable.sortAscending].
+  final DataColumnSortCallback? onSort;
 
   bool get _debugInteractive => onSort != null;
 }
 
-/// Row configuration and cell data for a [DataTableX].
+/// Row configuration and cell data for a [DataTable].
 ///
 /// One row configuration must be provided for each row to
-/// display in the table. The list of [DataRowX] objects is passed
+/// display in the table. The list of [DataRow] objects is passed
 /// as the `rows` argument to the [new DataTable] constructor.
 ///
 /// The data for this row of the table is provided in the [cells]
-/// property of the [DataRowX] object.
+/// property of the [DataRow] object.
 @immutable
-class DataRowX {
-  /// Creates the configuration for a row of a [DataTableX].
+class DataRow {
+  /// Creates the configuration for a row of a [DataTable].
   ///
   /// The [cells] argument must not be null.
-  const DataRowX({
+  const DataRow({
     this.key,
     this.selected = false,
     this.onSelectChanged,
-    this.showCheckbox = true,
-    @required this.cells,
+    this.color,
+    required this.cells,
   }) : assert(cells != null);
 
-  /// Creates the configuration for a row of a [DataTableX], deriving
+  /// Creates the configuration for a row of a [DataTable], deriving
   /// the key from a row index.
   ///
   /// The [cells] argument must not be null.
-  DataRowX.byIndex({
-    int index,
+  DataRow.byIndex({
+    int? index,
     this.selected = false,
     this.onSelectChanged,
-    this.showCheckbox = true,
-    @required this.cells,
-  })  : assert(cells != null),
-        key = ValueKey<int>(index);
+    this.color,
+    required this.cells,
+  })   : assert(cells != null),
+        key = ValueKey<int?>(index);
 
   /// A [Key] that uniquely identifies this row. This is used to
   /// ensure that if a row is added or removed, any stateful widgets
@@ -113,7 +105,7 @@ class DataRowX {
   /// remain on the right row visually.
   ///
   /// If the table never changes once created, no key is necessary.
-  final LocalKey key;
+  final LocalKey? key;
 
   /// Called when the user selects or unselects a selectable row.
   ///
@@ -128,8 +120,11 @@ class DataRowX {
   /// A row whose [onSelectChanged] callback is null is ignored for
   /// the purposes of determining the state of the "all" checkbox,
   /// and its checkbox is disabled.
-  final ValueChanged<bool> onSelectChanged;
-  final bool showCheckbox;
+  ///
+  /// If a [DataCell] in the row has its [DataCell.onTap] callback defined,
+  /// that callback behavior overrides the gesture behavior of the row for
+  /// that particular cell.
+  final ValueChanged<bool?>? onSelectChanged;
 
   /// Whether the row is selected.
   ///
@@ -145,21 +140,49 @@ class DataRowX {
   ///
   /// There must be exactly as many cells as there are columns in the
   /// table.
-  final List<DataCellX> cells;
+  final List<DataCell> cells;
+
+  /// The color for the row.
+  ///
+  /// By default, the color is transparent unless selected. Selected rows has
+  /// a grey translucent color.
+  ///
+  /// The effective color can depend on the [MaterialState] state, if the
+  /// row is selected, pressed, hovered, focused, disabled or enabled. The
+  /// color is painted as an overlay to the row. To make sure that the row's
+  /// [InkWell] is visible (when pressed, hovered and focused), it is
+  /// recommended to use a translucent color.
+  ///
+  /// ```dart
+  /// DataRow(
+  ///   color: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+  ///     if (states.contains(MaterialState.selected))
+  ///       return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+  ///     return null;  // Use the default value.
+  ///   }),
+  /// )
+  /// ```
+  ///
+  /// See also:
+  ///
+  ///  * The Material Design specification for overlay colors and how they
+  ///    match a component's state:
+  ///    <https://material.io/design/interaction/states.html#anatomy>.
+  final MaterialStateProperty<Color?>? color;
 
   bool get _debugInteractive =>
       onSelectChanged != null ||
-      cells.any((DataCellX cell) => cell._debugInteractive);
+      cells.any((DataCell cell) => cell._debugInteractive);
 }
 
-/// The data for a cell of a [DataTableX].
+/// The data for a cell of a [DataTable].
 ///
-/// One list of [DataCellX] objects must be provided for each [DataRowX]
-/// in the [DataTableX], in the [new DataRow] constructor's `cells`
+/// One list of [DataCell] objects must be provided for each [DataRow]
+/// in the [DataTable], in the new [DataRow] constructor's `cells`
 /// argument.
 @immutable
-class DataCellX {
-  /// Creates an object to hold the data for a cell in a [DataTableX].
+class DataCell {
+  /// Creates an object to hold the data for a cell in a [DataTable].
   ///
   /// The first argument is the widget to show for the cell, typically
   /// a [Text] or [DropdownButton] widget; this becomes the [child]
@@ -168,15 +191,19 @@ class DataCellX {
   /// If the cell has no data, then a [Text] widget with placeholder
   /// text should be provided instead, and then the [placeholder]
   /// argument should be set to true.
-  const DataCellX(
+  const DataCell(
     this.child, {
     this.placeholder = false,
     this.showEditIcon = false,
     this.onTap,
+    this.onLongPress,
+    this.onTapDown,
+    this.onDoubleTap,
+    this.onTapCancel,
   }) : assert(child != null);
 
   /// A cell that has no content and has zero width and height.
-  static final DataCellX empty = DataCellX(Container(width: 0.0, height: 0.0));
+  static const DataCell empty = DataCell(SizedBox(width: 0.0, height: 0.0));
 
   /// The data for the row.
   ///
@@ -186,7 +213,7 @@ class DataCellX {
   /// text should be provided instead, and [placeholder] should be set
   /// to true.
   ///
-  /// {@macro flutter.widgets.child}
+  /// {@macro flutter.widgets.ProxyWidget.child}
   final Widget child;
 
   /// Whether the [child] is actually a placeholder.
@@ -208,14 +235,54 @@ class DataCellX {
   /// Called if the cell is tapped.
   ///
   /// If non-null, tapping the cell will call this callback. If
-  /// null, tapping the cell will attempt to select the row (if
-  /// [DataRowX.onSelectChanged] is provided).
-  final VoidCallback onTap;
+  /// null (including [onDoubleTap], [onLongPress], [onTapCancel] and [onTapDown]),
+  /// tapping the cell will attempt to select the row (if
+  /// [DataRow.onSelectChanged] is provided).
+  final GestureTapCallback? onTap;
 
-  bool get _debugInteractive => onTap != null;
+  /// Called when the cell is double tapped.
+  ///
+  /// If non-null, tapping the cell will call this callback. If
+  /// null (including [onTap], [onLongPress], [onTapCancel] and [onTapDown]),
+  /// tapping the cell will attempt to select the row (if
+  /// [DataRow.onSelectChanged] is provided).
+  final GestureTapCallback? onDoubleTap;
+
+  /// Called if the cell is long-pressed.
+  ///
+  /// If non-null, tapping the cell will invoke this callback. If
+  /// null (including [onDoubleTap], [onTap], [onTapCancel] and [onTapDown]),
+  /// tapping the cell will attempt to select the row (if
+  /// [DataRow.onSelectChanged] is provided).
+  final GestureLongPressCallback? onLongPress;
+
+  /// Called if the cell is tapped down.
+  ///
+  /// If non-null, tapping the cell will call this callback. If
+  /// null (including [onTap] [onDoubleTap], [onLongPress] and [onTapCancel]),
+  /// tapping the cell will attempt to select the row (if
+  /// [DataRow.onSelectChanged] is provided).
+  final GestureTapDownCallback? onTapDown;
+
+  /// Called if the user cancels a tap was started on cell.
+  ///
+  /// If non-null, cancelling the tap gesture will invoke this callback.
+  /// If null (including [onTap], [onDoubleTap] and [onLongPress]),
+  /// tapping the cell will attempt to select the
+  /// row (if [DataRow.onSelectChanged] is provided).
+  final GestureTapCancelCallback? onTapCancel;
+
+  bool get _debugInteractive =>
+      onTap != null ||
+      onDoubleTap != null ||
+      onLongPress != null ||
+      onTapDown != null ||
+      onTapCancel != null;
 }
 
 /// A material design data table.
+///
+/// {@youtube 560 315 https://www.youtube.com/watch?v=ktTajqbhIcY}
 ///
 /// Displaying data in a table is expensive, because to lay out the
 /// table all the data must be measured twice, once to negotiate the
@@ -227,32 +294,144 @@ class DataCellX {
 /// target device), it is suggested that you use a
 /// [PaginatedDataTable] which automatically splits the data into
 /// multiple pages.
-// TODO(ianh): Also suggest [ScrollingDataTable] once we have it.
+///
+/// {@tool dartpad --template=stateless_widget_scaffold}
+///
+/// This sample shows how to display a [DataTable] with three columns: name, age, and
+/// role. The columns are defined by three [DataColumn] objects. The table
+/// contains three rows of data for three example users, the data for which
+/// is defined by three [DataRow] objects.
+///
+/// ![](https://flutter.github.io/assets-for-api-docs/assets/material/data_table.png)
+///
+/// ```dart
+/// Widget build(BuildContext context) {
+///   return DataTable(
+///     columns: const <DataColumn>[
+///       DataColumn(
+///         label: Text(
+///           'Name',
+///           style: TextStyle(fontStyle: FontStyle.italic),
+///         ),
+///       ),
+///       DataColumn(
+///         label: Text(
+///           'Age',
+///           style: TextStyle(fontStyle: FontStyle.italic),
+///         ),
+///       ),
+///       DataColumn(
+///         label: Text(
+///           'Role',
+///           style: TextStyle(fontStyle: FontStyle.italic),
+///         ),
+///       ),
+///     ],
+///     rows: const <DataRow>[
+///       DataRow(
+///         cells: <DataCell>[
+///           DataCell(Text('Sarah')),
+///           DataCell(Text('19')),
+///           DataCell(Text('Student')),
+///         ],
+///       ),
+///       DataRow(
+///         cells: <DataCell>[
+///           DataCell(Text('Janine')),
+///           DataCell(Text('43')),
+///           DataCell(Text('Professor')),
+///         ],
+///       ),
+///       DataRow(
+///         cells: <DataCell>[
+///           DataCell(Text('William')),
+///           DataCell(Text('27')),
+///           DataCell(Text('Associate Professor')),
+///         ],
+///       ),
+///     ],
+///   );
+/// }
+/// ```
+///
+/// {@end-tool}
+///
+///
+/// {@tool dartpad --template=stateful_widget_scaffold}
+///
+/// This sample shows how to display a [DataTable] with alternate colors per
+/// row, and a custom color for when the row is selected.
+///
+/// ```dart
+/// static const int numItems = 10;
+/// List<bool> selected = List<bool>.generate(numItems, (index) => false);
+///
+/// @override
+/// Widget build(BuildContext context) {
+///   return SizedBox(
+///     width: double.infinity,
+///     child: DataTable(
+///       columns: const <DataColumn>[
+///         DataColumn(
+///           label: const Text('Number'),
+///         ),
+///       ],
+///       rows: List<DataRow>.generate(
+///         numItems,
+///         (index) => DataRow(
+///           color: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
+///             // All rows will have the same selected color.
+///             if (states.contains(MaterialState.selected))
+///               return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+///             // Even rows will have a grey color.
+///             if (index % 2 == 0)
+///               return Colors.grey.withOpacity(0.3);
+///             return null;  // Use default value for other states and odd rows.
+///           }),
+///           cells: [DataCell(Text('Row $index'))],
+///           selected: selected[index],
+///           onSelectChanged: (bool? value) {
+///             setState(() {
+///               selected[index] = value!;
+///             });
+///           },
+///         ),
+///       ),
+///     ),
+///   );
+/// }
+/// ```
+/// {@end-tool}
+///
+/// [DataTable] can be sorted on the basis of any column in [columns] in
+/// ascending or descending order. If [sortColumnIndex] is non-null, then the
+/// table will be sorted by the values in the specified column. The boolean
+/// [sortAscending] flag controls the sort order.
 ///
 /// See also:
 ///
-///  * [DataColumnX], which describes a column in the data table.
-///  * [DataRowX], which contains the data for a row in the data table.
-///  * [DataCellX], which contains the data for a single cell in the data table.
+///  * [DataColumn], which describes a column in the data table.
+///  * [DataRow], which contains the data for a row in the data table.
+///  * [DataCell], which contains the data for a single cell in the data table.
 ///  * [PaginatedDataTable], which shows part of the data in a data table and
 ///    provides controls for paging through the remainder of the data.
-///  * <https://material.google.com/components/data-tables.html>
-class DataTableX extends StatelessWidget {
+///  * <https://material.io/design/components/data-tables.html>
+class DataTable extends StatelessWidget {
   /// Creates a widget describing a data table.
   ///
-  /// The [columns] argument must be a list of as many [DataColumnX]
+  /// The [columns] argument must be a list of as many [DataColumn]
   /// objects as the table is to have columns, ignoring the leading
   /// checkbox column if any. The [columns] argument must have a
   /// length greater than zero and must not be null.
   ///
-  /// The [rows] argument must be a list of as many [DataRowX] objects
+  /// The [rows] argument must be a list of as many [DataRow] objects
   /// as the table is to have rows, ignoring the leading heading row
   /// that contains the column headings (derived from the [columns]
   /// argument). There may be zero rows, but the rows argument must
   /// not be null.
   ///
-  /// Each [DataRowX] object in [rows] must have as many [DataCellX]
-  /// objects in the [DataRowX.cells] list as the table has columns.
+  /// Each [DataRow] object in [rows] must have as many [DataCell]
+  /// objects in the [DataRow.cells] list as the table has columns.
   ///
   /// If the table is sorted, the column that provides the current
   /// primary key should be specified by index in [sortColumnIndex], 0
@@ -262,25 +441,40 @@ class DataTableX extends StatelessWidget {
   /// The actual sort order can be specified using [sortAscending]; if
   /// the sort order is ascending, this should be true (the default),
   /// otherwise it should be false.
-  DataTableX({
-    Key key,
-    @required this.columns,
+  DataTable({
+    Key? key,
+    required this.columns,
     this.sortColumnIndex,
     this.sortAscending = true,
     this.onSelectAll,
-    @required this.rows,
+    this.decoration,
+    this.dataRowColor,
+    this.dataRowHeight,
+    this.dataTextStyle,
+    this.headingRowColor,
+    this.headingRowHeight,
+    this.headingTextStyle,
+    this.horizontalMargin,
+    this.columnSpacing,
+    this.showCheckboxColumn = true,
+    this.showBottomBorder = false,
+    this.dividerThickness,
+    required this.rows,
+    this.checkboxHorizontalMargin,
   })  : assert(columns != null),
         assert(columns.isNotEmpty),
         assert(sortColumnIndex == null ||
             (sortColumnIndex >= 0 && sortColumnIndex < columns.length)),
         assert(sortAscending != null),
+        assert(showCheckboxColumn != null),
         assert(rows != null),
-        assert(!rows.any((DataRowX row) => row.cells.length != columns.length)),
+        assert(!rows.any((DataRow row) => row.cells.length != columns.length)),
+        assert(dividerThickness == null || dividerThickness >= 0),
         _onlyTextColumn = _initOnlyTextColumn(columns),
         super(key: key);
 
   /// The configuration and labels for the columns in the table.
-  final List<DataColumnX> columns;
+  final List<DataColumn> columns;
 
   /// The current primary sort key's column.
   ///
@@ -293,7 +487,7 @@ class DataTableX extends StatelessWidget {
   ///
   /// When this is null, it implies that the table's sort order does
   /// not correspond to any of the columns.
-  final int sortColumnIndex;
+  final int? sortColumnIndex;
 
   /// Whether the column mentioned in [sortColumnIndex], if any, is sorted
   /// in ascending order.
@@ -310,25 +504,195 @@ class DataTableX extends StatelessWidget {
   /// Invoked when the user selects or unselects every row, using the
   /// checkbox in the heading row.
   ///
-  /// If this is null, then the [DataRowX.onSelectChanged] callback of
+  /// If this is null, then the [DataRow.onSelectChanged] callback of
   /// every row in the table is invoked appropriately instead.
   ///
   /// To control whether a particular row is selectable or not, see
-  /// [DataRowX.onSelectChanged]. This callback is only relevant if any
+  /// [DataRow.onSelectChanged]. This callback is only relevant if any
   /// row is selectable.
-  final ValueSetter<bool> onSelectAll;
+  final ValueSetter<bool?>? onSelectAll;
+
+  /// {@template flutter.material.dataTable.decoration}
+  /// The background and border decoration for the table.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.decoration] is used. By default there is no
+  /// decoration.
+  final Decoration? decoration;
+
+  /// {@template flutter.material.dataTable.dataRowColor}
+  /// The background color for the data rows.
+  ///
+  /// The effective background color can be made to depend on the
+  /// [MaterialState] state, i.e. if the row is selected, pressed, hovered,
+  /// focused, disabled or enabled. The color is painted as an overlay to the
+  /// row. To make sure that the row's [InkWell] is visible (when pressed,
+  /// hovered and focused), it is recommended to use a translucent background
+  /// color.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.dataRowColor] is used. By default, the
+  /// background color is transparent unless selected. Selected rows have a grey
+  /// translucent color. To set a different color for individual rows, see
+  /// [DataRow.color].
+  ///
+  /// {@template flutter.material.DataTable.dataRowColor}
+  /// ```dart
+  /// DataTable(
+  ///   dataRowColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+  ///     if (states.contains(MaterialState.selected))
+  ///       return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+  ///     return null;  // Use the default value.
+  ///   }),
+  /// )
+  /// ```
+  ///
+  /// See also:
+  ///
+  ///  * The Material Design specification for overlay colors and how they
+  ///    match a component's state:
+  ///    <https://material.io/design/interaction/states.html#anatomy>.
+  /// {@endtemplate}
+  final MaterialStateProperty<Color?>? dataRowColor;
+
+  /// {@template flutter.material.dataTable.dataRowHeight}
+  /// The height of each row (excluding the row that contains column headings).
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.dataRowHeight] is used. This value defaults
+  /// to [kMinInteractiveDimension] to adhere to the Material Design
+  /// specifications.
+  final double? dataRowHeight;
+
+  /// {@template flutter.material.dataTable.dataTextStyle}
+  /// The text style for data rows.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.dataTextStyle] is used. By default, the text
+  /// style is [TextTheme.bodyText2].
+  final TextStyle? dataTextStyle;
+
+  /// {@template flutter.material.dataTable.headingRowColor}
+  /// The background color for the heading row.
+  ///
+  /// The effective background color can be made to depend on the
+  /// [MaterialState] state, i.e. if the row is pressed, hovered, focused when
+  /// sorted. The color is painted as an overlay to the row. To make sure that
+  /// the row's [InkWell] is visible (when pressed, hovered and focused), it is
+  /// recommended to use a translucent color.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.headingRowColor] is used.
+  ///
+  /// {@template flutter.material.DataTable.headingRowColor}
+  /// ```dart
+  /// DataTable(
+  ///   headingRowColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+  ///     if (states.contains(MaterialState.hovered))
+  ///       return Theme.of(context).colorScheme.primary.withOpacity(0.08);
+  ///     return null;  // Use the default value.
+  ///   }),
+  /// )
+  /// ```
+  ///
+  /// See also:
+  ///
+  ///  * The Material Design specification for overlay colors and how they
+  ///    match a component's state:
+  ///    <https://material.io/design/interaction/states.html#anatomy>.
+  /// {@endtemplate}
+  final MaterialStateProperty<Color?>? headingRowColor;
+
+  /// {@template flutter.material.dataTable.headingRowHeight}
+  /// The height of the heading row.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.headingRowHeight] is used. This value
+  /// defaults to 56.0 to adhere to the Material Design specifications.
+  final double? headingRowHeight;
+
+  /// {@template flutter.material.dataTable.headingTextStyle}
+  /// The text style for the heading row.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.headingTextStyle] is used. By default, the
+  /// text style is [TextTheme.subtitle2].
+  final TextStyle? headingTextStyle;
+
+  /// {@template flutter.material.dataTable.horizontalMargin}
+  /// The horizontal margin between the edges of the table and the content
+  /// in the first and last cells of each row.
+  ///
+  /// When a checkbox is displayed, it is also the margin between the checkbox
+  /// the content in the first data column.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.horizontalMargin] is used. This value
+  /// defaults to 24.0 to adhere to the Material Design specifications.
+  ///
+  /// If [checkboxHorizontalMargin] is null, then [horizontalMargin] is also the
+  /// margin between the edge of the table and the checkbox, as well as the
+  /// margin between the checkbox and the content in the first data column.
+  final double? horizontalMargin;
+
+  /// {@template flutter.material.dataTable.columnSpacing}
+  /// The horizontal margin between the contents of each data column.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.columnSpacing] is used. This value defaults
+  /// to 56.0 to adhere to the Material Design specifications.
+  final double? columnSpacing;
+
+  /// {@template flutter.material.dataTable.showCheckboxColumn}
+  /// Whether the widget should display checkboxes for selectable rows.
+  ///
+  /// If true, a [Checkbox] will be placed at the beginning of each row that is
+  /// selectable. However, if [DataRow.onSelectChanged] is not set for any row,
+  /// checkboxes will not be placed, even if this value is true.
+  ///
+  /// If false, all rows will not display a [Checkbox].
+  /// {@endtemplate}
+  final bool showCheckboxColumn;
 
   /// The data to show in each row (excluding the row that contains
-  /// the column headings). Must be non-null, but may be empty.
-  final List<DataRowX> rows;
+  /// the column headings).
+  ///
+  /// Must be non-null, but may be empty.
+  final List<DataRow> rows;
+
+  /// {@template flutter.material.dataTable.dividerThickness}
+  /// The width of the divider that appears between [TableRow]s.
+  ///
+  /// Must be greater than or equal to zero.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.dividerThickness] is used. This value
+  /// defaults to 1.0.
+  final double? dividerThickness;
+
+  /// Whether a border at the bottom of the table is displayed.
+  ///
+  /// By default, a border is not shown at the bottom to allow for a border
+  /// around the table defined by [decoration].
+  final bool showBottomBorder;
+
+  /// {@template flutter.material.dataTable.checkboxHorizontalMargin}
+  /// Horizontal margin around the checkbox, if it is displayed.
+  /// {@endtemplate}
+  ///
+  /// If null, [DataTableThemeData.checkboxHorizontalMargin] is used. If that is
+  /// also null, then [horizontalMargin] is used as the margin between the edge
+  /// of the table and the checkbox, as well as the margin between the checkbox
+  /// and the content in the first data column. This value defaults to 24.0.
+  final double? checkboxHorizontalMargin;
 
   // Set by the constructor to the index of the only Column that is
   // non-numeric, if there is exactly one, otherwise null.
-  final int _onlyTextColumn;
-  static int _initOnlyTextColumn(List<DataColumnX> columns) {
-    int result;
+  final int? _onlyTextColumn;
+  static int? _initOnlyTextColumn(List<DataColumn> columns) {
+    int? result;
     for (int index = 0; index < columns.length; index += 1) {
-      final DataColumnX column = columns[index];
+      final DataColumn column = columns[index];
       if (!column.numeric) {
         if (result != null) return null;
         result = index;
@@ -338,59 +702,89 @@ class DataTableX extends StatelessWidget {
   }
 
   bool get _debugInteractive {
-    return columns.any((DataColumnX column) => column._debugInteractive) ||
-        rows.any((DataRowX row) => row._debugInteractive);
+    return columns.any((DataColumn column) => column._debugInteractive) ||
+        rows.any((DataRow row) => row._debugInteractive);
   }
 
   static final LocalKey _headingRowKey = UniqueKey();
 
-  void _handleSelectAll(bool checked) {
+  void _handleSelectAll(bool? checked, bool someChecked) {
+    // If some checkboxes are checked, all checkboxes are selected. Otherwise,
+    // use the new checked value but default to false if it's null.
+    final bool effectiveChecked = someChecked || (checked ?? false);
     if (onSelectAll != null) {
-      onSelectAll(checked);
+      onSelectAll!(effectiveChecked);
     } else {
-      for (DataRowX row in rows) {
-        if ((row.onSelectChanged != null) && (row.selected != checked))
-          row.onSelectChanged(checked);
+      for (final DataRow row in rows) {
+        if (row.onSelectChanged != null && row.selected != effectiveChecked)
+          row.onSelectChanged!(effectiveChecked);
       }
     }
   }
 
+  /// The default height of the heading row.
   static const double _headingRowHeight = 56.0;
-  static const double _dataRowHeight = 48.0;
-  static const double _tablePadding = 24.0;
+
+  /// The default horizontal margin between the edges of the table and the content
+  /// in the first and last cells of each row.
+  static const double _horizontalMargin = 24.0;
+
+  /// The default horizontal margin between the contents of each data column.
   static const double _columnSpacing = 56.0;
+
+  /// The default padding between the heading content and sort arrow.
   static const double _sortArrowPadding = 2.0;
-  static const double _headingFontSize = 12.0;
+
+  /// The default divider thickness.
+  static const double _dividerThickness = 1.0;
+
   static const Duration _sortArrowAnimationDuration =
       Duration(milliseconds: 150);
-  static const Color _grey100Opacity =
-      Color(0x0A000000); // Grey 100 as opacity instead of solid color
-  static const Color _grey300Opacity =
-      Color(0x1E000000); // Dark theme variant is just a guess.
 
-  Widget _buildCheckbox(
-      {Color color,
-      bool checked,
-      VoidCallback onRowTap,
-      ValueChanged<bool> onCheckboxChanged}) {
+  Widget _buildCheckbox({
+    required BuildContext context,
+    required bool? checked,
+    required VoidCallback? onRowTap,
+    required ValueChanged<bool?>? onCheckboxChanged,
+    required MaterialStateProperty<Color?>? overlayColor,
+    required bool tristate,
+  }) {
+    final ThemeData themeData = Theme.of(context);
+    final double effectiveHorizontalMargin = horizontalMargin ??
+        themeData.dataTableTheme.horizontalMargin ??
+        _horizontalMargin;
+    final double effectiveCheckboxHorizontalMarginStart =
+        checkboxHorizontalMargin ??
+            themeData.dataTableTheme.checkboxHorizontalMargin ??
+            effectiveHorizontalMargin;
+    final double effectiveCheckboxHorizontalMarginEnd =
+        checkboxHorizontalMargin ??
+            themeData.dataTableTheme.checkboxHorizontalMargin ??
+            effectiveHorizontalMargin / 2.0;
     Widget contents = Semantics(
       container: true,
       child: Padding(
-        padding: const EdgeInsetsDirectional.only(
-            start: _tablePadding, end: _tablePadding / 2.0),
+        padding: EdgeInsetsDirectional.only(
+          start: effectiveCheckboxHorizontalMarginStart,
+          end: effectiveCheckboxHorizontalMarginEnd,
+        ),
         child: Center(
           child: Checkbox(
-            activeColor: color,
+            // TODO(per): Remove when Checkbox has theme, https://github.com/flutter/flutter/issues/53420.
+            activeColor: themeData.colorScheme.primary,
+            checkColor: themeData.colorScheme.onPrimary,
             value: checked,
             onChanged: onCheckboxChanged,
+            tristate: tristate,
           ),
         ),
       ),
     );
     if (onRowTap != null) {
-      contents = TableRowInkWellX(
+      contents = TableRowInkWell(
         onTap: onRowTap,
         child: contents,
+        overlayColor: overlayColor,
       );
     }
     return TableCell(
@@ -400,42 +794,45 @@ class DataTableX extends StatelessWidget {
   }
 
   Widget _buildHeadingCell({
-    BuildContext context,
-    EdgeInsetsGeometry padding,
-    Widget label,
-    String tooltip,
-    bool numeric,
-    VoidCallback onSort,
-    bool sorted,
-    bool ascending,
+    required BuildContext context,
+    required EdgeInsetsGeometry padding,
+    required Widget label,
+    required String? tooltip,
+    required bool numeric,
+    required VoidCallback? onSort,
+    required bool sorted,
+    required bool ascending,
+    required MaterialStateProperty<Color?>? overlayColor,
   }) {
-    if (onSort != null) {
-      final Widget arrow = _SortArrow(
-        visible: sorted,
-        down: sorted ? ascending : null,
-        duration: _sortArrowAnimationDuration,
-      );
-      const Widget arrowPadding = SizedBox(width: _sortArrowPadding);
-      label = Row(
-        textDirection: numeric ? TextDirection.rtl : null,
-        children: <Widget>[label, arrowPadding, arrow],
-      );
-    }
+    final ThemeData themeData = Theme.of(context);
+    label = Row(
+      textDirection: numeric ? TextDirection.rtl : null,
+      children: <Widget>[
+        label,
+        if (onSort != null) ...<Widget>[
+          _SortArrow(
+            visible: sorted,
+            up: sorted ? ascending : null,
+            duration: _sortArrowAnimationDuration,
+          ),
+          const SizedBox(width: _sortArrowPadding),
+        ],
+      ],
+    );
+
+    final TextStyle effectiveHeadingTextStyle = headingTextStyle ??
+        themeData.dataTableTheme.headingTextStyle ??
+        themeData.textTheme.subtitle2!;
+    final double effectiveHeadingRowHeight = headingRowHeight ??
+        themeData.dataTableTheme.headingRowHeight ??
+        _headingRowHeight;
     label = Container(
       padding: padding,
-      height: _headingRowHeight,
+      height: effectiveHeadingRowHeight,
       alignment:
           numeric ? Alignment.centerRight : AlignmentDirectional.centerStart,
       child: AnimatedDefaultTextStyle(
-        style: TextStyle(
-          // TODO(ianh): font family should match Theme; see https://github.com/flutter/flutter/issues/3116
-          fontWeight: FontWeight.w500,
-          fontSize: _headingFontSize,
-          height: math.min(1.0, _headingRowHeight / _headingFontSize),
-          color: (Theme.of(context).brightness == Brightness.light)
-              ? ((onSort != null && sorted) ? Colors.black87 : Colors.black54)
-              : ((onSort != null && sorted) ? Colors.white : Colors.white70),
-        ),
+        style: effectiveHeadingTextStyle,
         softWrap: false,
         duration: _sortArrowAnimationDuration,
         child: label,
@@ -447,26 +844,33 @@ class DataTableX extends StatelessWidget {
         child: label,
       );
     }
-    if (onSort != null) {
-      label = InkWell(
-        onTap: onSort,
-        child: label,
-      );
-    }
+
+    // TODO(dkwingsmt): Only wrap Inkwell if onSort != null. Blocked by
+    // https://github.com/flutter/flutter/issues/51152
+    label = InkWell(
+      onTap: onSort,
+      overlayColor: overlayColor,
+      child: label,
+    );
     return label;
   }
 
   Widget _buildDataCell({
-    BuildContext context,
-    EdgeInsetsGeometry padding,
-    Widget label,
-    bool numeric,
-    bool placeholder,
-    bool showEditIcon,
-    VoidCallback onTap,
-    VoidCallback onSelectChanged,
+    required BuildContext context,
+    required EdgeInsetsGeometry padding,
+    required Widget label,
+    required bool numeric,
+    required bool placeholder,
+    required bool showEditIcon,
+    required GestureTapCallback? onTap,
+    required VoidCallback? onSelectChanged,
+    required GestureTapCallback? onDoubleTap,
+    required GestureLongPressCallback? onLongPress,
+    required GestureTapDownCallback? onTapDown,
+    required GestureTapCancelCallback? onTapCancel,
+    required MaterialStateProperty<Color?>? overlayColor,
   }) {
-    final bool isLightTheme = Theme.of(context).brightness == Brightness.light;
+    final ThemeData themeData = Theme.of(context);
     if (showEditIcon) {
       const Widget icon = Icon(Icons.edit, size: 18.0);
       label = Expanded(child: label);
@@ -475,34 +879,46 @@ class DataTableX extends StatelessWidget {
         children: <Widget>[label, icon],
       );
     }
+
+    final TextStyle effectiveDataTextStyle = dataTextStyle ??
+        themeData.dataTableTheme.dataTextStyle ??
+        themeData.textTheme.bodyText2!;
+    final double effectiveDataRowHeight = dataRowHeight ??
+        themeData.dataTableTheme.dataRowHeight ??
+        kMinInteractiveDimension;
     label = Container(
-        padding: padding,
-        height: _dataRowHeight,
-        alignment:
-            numeric ? Alignment.centerRight : AlignmentDirectional.centerStart,
-        child: DefaultTextStyle(
-            style: TextStyle(
-              // TODO(ianh): font family should be Roboto; see https://github.com/flutter/flutter/issues/3116
-              fontSize: 13.0,
-              color: isLightTheme
-                  ? (placeholder ? Colors.black38 : Colors.black87)
-                  : (placeholder ? Colors.white30 : Colors.white70),
-            ),
-            child: IconTheme.merge(
-              data: IconThemeData(
-                color: isLightTheme ? Colors.black54 : Colors.white70,
-              ),
-              child: DropdownButtonHideUnderline(child: label),
-            )));
-    if (onTap != null) {
+      padding: padding,
+      height: effectiveDataRowHeight,
+      alignment:
+          numeric ? Alignment.centerRight : AlignmentDirectional.centerStart,
+      child: DefaultTextStyle(
+        style: effectiveDataTextStyle.copyWith(
+          color: placeholder
+              ? effectiveDataTextStyle.color!.withOpacity(0.6)
+              : null,
+        ),
+        child: DropdownButtonHideUnderline(child: label),
+      ),
+    );
+    if (onTap != null ||
+        onDoubleTap != null ||
+        onLongPress != null ||
+        onTapDown != null ||
+        onTapCancel != null) {
       label = InkWell(
         onTap: onTap,
+        onDoubleTap: onDoubleTap,
+        onLongPress: onLongPress,
+        onTapCancel: onTapCancel,
+        onTapDown: onTapDown,
         child: label,
+        overlayColor: overlayColor,
       );
     } else if (onSelectChanged != null) {
-      label = TableRowInkWellX(
+      label = TableRowInkWell(
         onTap: onSelectChanged,
         child: label,
+        overlayColor: overlayColor,
       );
     }
     return label;
@@ -513,55 +929,116 @@ class DataTableX extends StatelessWidget {
     assert(!_debugInteractive || debugCheckHasMaterial(context));
 
     final ThemeData theme = Theme.of(context);
-    final BoxDecoration _kSelectedDecoration = BoxDecoration(
-      border: Border(bottom: Divider.createBorderSide(context, width: 1.0)),
-      // The backgroundColor has to be transparent so you can see the ink on the material
-      color: (Theme.of(context).brightness == Brightness.light)
-          ? _grey100Opacity
-          : _grey300Opacity,
+    final MaterialStateProperty<Color?>? effectiveHeadingRowColor =
+        headingRowColor ?? theme.dataTableTheme.headingRowColor;
+    final MaterialStateProperty<Color?>? effectiveDataRowColor =
+        dataRowColor ?? theme.dataTableTheme.dataRowColor;
+    final MaterialStateProperty<Color?> defaultRowColor =
+        MaterialStateProperty.resolveWith(
+      (Set<MaterialState> states) {
+        if (states.contains(MaterialState.selected))
+          return theme.colorScheme.primary.withOpacity(0.08);
+        return null;
+      },
     );
-    final BoxDecoration _kUnselectedDecoration = BoxDecoration(
-      border: Border(bottom: Divider.createBorderSide(context, width: 1.0)),
-    );
+    final bool anyRowSelectable =
+        rows.any((DataRow row) => row.onSelectChanged != null);
+    final bool displayCheckboxColumn = showCheckboxColumn && anyRowSelectable;
+    final Iterable<DataRow> rowsWithCheckbox = displayCheckboxColumn
+        ? rows.where((DataRow row) => row.onSelectChanged != null)
+        : <DataRow>[];
+    final Iterable<DataRow> rowsChecked =
+        rowsWithCheckbox.where((DataRow row) => row.selected);
+    final bool allChecked =
+        displayCheckboxColumn && rowsChecked.length == rowsWithCheckbox.length;
+    final bool anyChecked = displayCheckboxColumn && rowsChecked.isNotEmpty;
+    final bool someChecked = anyChecked && !allChecked;
+    final double effectiveHorizontalMargin = horizontalMargin ??
+        theme.dataTableTheme.horizontalMargin ??
+        _horizontalMargin;
+    final double effectiveCheckboxHorizontalMarginStart =
+        checkboxHorizontalMargin ??
+            theme.dataTableTheme.checkboxHorizontalMargin ??
+            effectiveHorizontalMargin;
+    final double effectiveCheckboxHorizontalMarginEnd =
+        checkboxHorizontalMargin ??
+            theme.dataTableTheme.checkboxHorizontalMargin ??
+            effectiveHorizontalMargin / 2.0;
+    final double effectiveColumnSpacing =
+        columnSpacing ?? theme.dataTableTheme.columnSpacing ?? _columnSpacing;
 
-    final bool showCheckboxColumn =
-        rows.any((DataRowX row) => row.onSelectChanged != null && row.showCheckbox);
-    final bool allChecked = showCheckboxColumn &&
-        !rows
-            .any((DataRowX row) => row.onSelectChanged != null && !row.selected);
-
-    final List<TableColumnWidth> tableColumns =
-        List<TableColumnWidth>(columns.length + (showCheckboxColumn ? 1 : 0));
+    final List<TableColumnWidth> tableColumns = List<TableColumnWidth>.filled(
+        columns.length + (displayCheckboxColumn ? 1 : 0),
+        const _NullTableColumnWidth());
     final List<TableRow> tableRows = List<TableRow>.generate(
       rows.length + 1, // the +1 is for the header row
       (int index) {
+        final bool isSelected = index > 0 && rows[index - 1].selected;
+        final bool isDisabled = index > 0 &&
+            anyRowSelectable &&
+            rows[index - 1].onSelectChanged == null;
+        final Set<MaterialState> states = <MaterialState>{
+          if (isSelected) MaterialState.selected,
+          if (isDisabled) MaterialState.disabled,
+        };
+        final Color? resolvedDataRowColor = index > 0
+            ? (rows[index - 1].color ?? effectiveDataRowColor)?.resolve(states)
+            : null;
+        final Color? resolvedHeadingRowColor =
+            effectiveHeadingRowColor?.resolve(<MaterialState>{});
+        final Color? rowColor =
+            index > 0 ? resolvedDataRowColor : resolvedHeadingRowColor;
+        final BorderSide borderSide = Divider.createBorderSide(
+          context,
+          width: dividerThickness ??
+              theme.dataTableTheme.dividerThickness ??
+              _dividerThickness,
+        );
+        final Border? border = showBottomBorder
+            ? Border(bottom: borderSide)
+            : index == 0
+                ? null
+                : Border(top: borderSide);
         return TableRow(
-            key: index == 0 ? _headingRowKey : rows[index - 1].key,
-            decoration: index > 0 && rows[index - 1].selected
-                ? _kSelectedDecoration
-                : _kUnselectedDecoration,
-            children: List<Widget>(tableColumns.length));
+          key: index == 0 ? _headingRowKey : rows[index - 1].key,
+          decoration: BoxDecoration(
+            border: border,
+            color: rowColor ?? defaultRowColor.resolve(states),
+          ),
+          children:
+              List<Widget>.filled(tableColumns.length, const _NullWidget()),
+        );
       },
     );
 
     int rowIndex;
 
     int displayColumnIndex = 0;
-    if (showCheckboxColumn) {
-      tableColumns[0] = const FixedColumnWidth(
-          _tablePadding + Checkbox.width + _tablePadding / 2.0);
-      tableRows[0].children[0] = _buildCheckbox(
-        color: theme.accentColor,
-        checked: allChecked,
-        onCheckboxChanged: _handleSelectAll,
+    if (displayCheckboxColumn) {
+      tableColumns[0] = FixedColumnWidth(
+          effectiveCheckboxHorizontalMarginStart +
+              Checkbox.width +
+              effectiveCheckboxHorizontalMarginEnd);
+      tableRows[0].children![0] = _buildCheckbox(
+        context: context,
+        checked: someChecked ? null : allChecked,
+        onRowTap: null,
+        onCheckboxChanged: (bool? checked) =>
+            _handleSelectAll(checked, someChecked),
+        overlayColor: null,
+        tristate: true,
       );
       rowIndex = 1;
-      for (DataRowX row in rows) {
-        tableRows[rowIndex].children[0] = _buildCheckbox(
-          color: theme.accentColor,
+      for (final DataRow row in rows) {
+        tableRows[rowIndex].children![0] = _buildCheckbox(
+          context: context,
           checked: row.selected,
-          onRowTap: () => row.onSelectChanged(!row.selected),
+          onRowTap: () => row.onSelectChanged != null
+              ? row.onSelectChanged!(!row.selected)
+              : null,
           onCheckboxChanged: row.onSelectChanged,
+          overlayColor: row.color ?? effectiveDataRowColor,
+          tristate: false,
         );
         rowIndex += 1;
       }
@@ -571,14 +1048,31 @@ class DataTableX extends StatelessWidget {
     for (int dataColumnIndex = 0;
         dataColumnIndex < columns.length;
         dataColumnIndex += 1) {
-      final DataColumnX column = columns[dataColumnIndex];
+      final DataColumn column = columns[dataColumnIndex];
+
+      final double paddingStart;
+      if (dataColumnIndex == 0 &&
+          displayCheckboxColumn &&
+          checkboxHorizontalMargin != null) {
+        paddingStart = effectiveHorizontalMargin;
+      } else if (dataColumnIndex == 0 && displayCheckboxColumn) {
+        paddingStart = effectiveHorizontalMargin / 2.0;
+      } else if (dataColumnIndex == 0 && !displayCheckboxColumn) {
+        paddingStart = effectiveHorizontalMargin;
+      } else {
+        paddingStart = effectiveColumnSpacing / 2.0;
+      }
+
+      final double paddingEnd;
+      if (dataColumnIndex == columns.length - 1) {
+        paddingEnd = effectiveHorizontalMargin;
+      } else {
+        paddingEnd = effectiveColumnSpacing / 2.0;
+      }
+
       final EdgeInsetsDirectional padding = EdgeInsetsDirectional.only(
-        start: dataColumnIndex == 0
-            ? showCheckboxColumn ? _tablePadding / 2.0 : _tablePadding
-            : _columnSpacing / 2.0,
-        end: dataColumnIndex == columns.length - 1
-            ? _tablePadding
-            : _columnSpacing / 2.0,
+        start: paddingStart,
+        end: paddingEnd,
       );
       if (dataColumnIndex == _onlyTextColumn) {
         tableColumns[displayColumnIndex] =
@@ -586,21 +1080,24 @@ class DataTableX extends StatelessWidget {
       } else {
         tableColumns[displayColumnIndex] = const IntrinsicColumnWidth();
       }
-      tableRows[0].children[displayColumnIndex] = _buildHeadingCell(
+      tableRows[0].children![displayColumnIndex] = _buildHeadingCell(
         context: context,
         padding: padding,
         label: column.label,
         tooltip: column.tooltip,
         numeric: column.numeric,
-        onSort: () => column.onSort(dataColumnIndex,
-            sortColumnIndex == dataColumnIndex ? !sortAscending : true),
+        onSort: column.onSort != null
+            ? () => column.onSort!(dataColumnIndex,
+                sortColumnIndex != dataColumnIndex || !sortAscending)
+            : null,
         sorted: dataColumnIndex == sortColumnIndex,
         ascending: sortAscending,
+        overlayColor: effectiveHeadingRowColor,
       );
       rowIndex = 1;
-      for (DataRowX row in rows) {
-        final DataCellX cell = row.cells[dataColumnIndex];
-        tableRows[rowIndex].children[displayColumnIndex] = _buildDataCell(
+      for (final DataRow row in rows) {
+        final DataCell cell = row.cells[dataColumnIndex];
+        tableRows[rowIndex].children![displayColumnIndex] = _buildDataCell(
           context: context,
           padding: padding,
           label: cell.child,
@@ -608,16 +1105,29 @@ class DataTableX extends StatelessWidget {
           placeholder: cell.placeholder,
           showEditIcon: cell.showEditIcon,
           onTap: cell.onTap,
-          onSelectChanged: () => row.onSelectChanged(!row.selected),
+          onDoubleTap: cell.onDoubleTap,
+          onLongPress: cell.onLongPress,
+          onTapCancel: cell.onTapCancel,
+          onTapDown: cell.onTapDown,
+          onSelectChanged: () => row.onSelectChanged != null
+              ? row.onSelectChanged!(!row.selected)
+              : null,
+          overlayColor: row.color ?? effectiveDataRowColor,
         );
         rowIndex += 1;
       }
       displayColumnIndex += 1;
     }
 
-    return Table(
-      columnWidths: tableColumns.asMap(),
-      children: tableRows,
+    return Container(
+      decoration: decoration ?? theme.dataTableTheme.decoration,
+      child: Material(
+        type: MaterialType.transparency,
+        child: Table(
+          columnWidths: tableColumns.asMap(),
+          children: tableRows,
+        ),
+      ),
     );
   }
 }
@@ -628,22 +1138,29 @@ class DataTableX extends StatelessWidget {
 /// Must have an ancestor [Material] widget in which to cause ink
 /// reactions and an ancestor [Table] widget to establish a row.
 ///
-/// The [TableRowInkWellX] must be in the same coordinate space (modulo
+/// The [TableRowInkWell] must be in the same coordinate space (modulo
 /// translations) as the [Table]. If it's rotated or scaled or
 /// otherwise transformed, it will not be able to describe the
 /// rectangle of the row in its own coordinate system as a [Rect], and
 /// thus the splash will not occur. (In general, this is easy to
-/// achieve: just put the [TableRowInkWellX] as the direct child of the
+/// achieve: just put the [TableRowInkWell] as the direct child of the
 /// [Table], and put the other contents of the cell inside it.)
-class TableRowInkWellX extends InkResponse {
+///
+/// See also:
+///
+///  * [DataTable], which makes use of [TableRowInkWell] when
+///    [DataRow.onSelectChanged] is defined and [DataCell.onTap]
+///    is not.
+class TableRowInkWell extends InkResponse {
   /// Creates an ink well for a table row.
-  const TableRowInkWellX({
-    Key key,
-    Widget child,
-    GestureTapCallback onTap,
-    GestureTapCallback onDoubleTap,
-    GestureLongPressCallback onLongPress,
-    ValueChanged<bool> onHighlightChanged,
+  const TableRowInkWell({
+    Key? key,
+    Widget? child,
+    GestureTapCallback? onTap,
+    GestureTapCallback? onDoubleTap,
+    GestureLongPressCallback? onLongPress,
+    ValueChanged<bool>? onHighlightChanged,
+    MaterialStateProperty<Color?>? overlayColor,
   }) : super(
           key: key,
           child: child,
@@ -653,29 +1170,30 @@ class TableRowInkWellX extends InkResponse {
           onHighlightChanged: onHighlightChanged,
           containedInkWell: true,
           highlightShape: BoxShape.rectangle,
+          overlayColor: overlayColor,
         );
 
   @override
   RectCallback getRectCallback(RenderBox referenceBox) {
     return () {
       RenderObject cell = referenceBox;
-      AbstractNode table = cell.parent;
+      AbstractNode? table = cell.parent;
       final Matrix4 transform = Matrix4.identity();
       while (table is RenderObject && table is! RenderTable) {
-        final RenderTable parentBox = table;
-        parentBox.applyPaintTransform(cell, transform);
+        table.applyPaintTransform(cell, transform);
         assert(table == cell.parent);
         cell = table;
         table = table.parent;
       }
       if (table is RenderTable) {
-        final TableCellParentData cellParentData = cell.parentData;
+        final TableCellParentData cellParentData =
+            cell.parentData! as TableCellParentData;
         assert(cellParentData.y != null);
-        final Rect rect = table.getRowBox(cellParentData.y);
+        final Rect rect = table.getRowBox(cellParentData.y!);
         // The rect is in the table's coordinate space. We need to change it to the
         // TableRowInkWell's coordinate space.
         table.applyPaintTransform(cell, transform);
-        final Offset offset = MatrixUtils.getAsTranslation(transform);
+        final Offset? offset = MatrixUtils.getAsTranslation(transform);
         if (offset != null) return rect.shift(-offset);
       }
       return Rect.zero;
@@ -691,15 +1209,15 @@ class TableRowInkWellX extends InkResponse {
 
 class _SortArrow extends StatefulWidget {
   const _SortArrow({
-    Key key,
-    this.visible,
-    this.down,
-    this.duration,
+    Key? key,
+    required this.visible,
+    required this.up,
+    required this.duration,
   }) : super(key: key);
 
   final bool visible;
 
-  final bool down;
+  final bool? up;
 
   final Duration duration;
 
@@ -708,14 +1226,14 @@ class _SortArrow extends StatefulWidget {
 }
 
 class _SortArrowState extends State<_SortArrow> with TickerProviderStateMixin {
-  AnimationController _opacityController;
-  Animation<double> _opacityAnimation;
+  late AnimationController _opacityController;
+  late Animation<double> _opacityAnimation;
 
-  AnimationController _orientationController;
-  Animation<double> _orientationAnimation;
+  late AnimationController _orientationController;
+  late Animation<double> _orientationAnimation;
   double _orientationOffset = 0.0;
 
-  bool _down;
+  bool? _up;
 
   static final Animatable<double> _turnTween =
       Tween<double>(begin: 0.0, end: math.pi)
@@ -725,12 +1243,12 @@ class _SortArrowState extends State<_SortArrow> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _opacityAnimation = CurvedAnimation(
-        parent: _opacityController = AnimationController(
-          duration: widget.duration,
-          vsync: this,
-        ),
-        curve: Curves.fastOutSlowIn)
-      ..addListener(_rebuild);
+      parent: _opacityController = AnimationController(
+        duration: widget.duration,
+        vsync: this,
+      ),
+      curve: Curves.fastOutSlowIn,
+    )..addListener(_rebuild);
     _opacityController.value = widget.visible ? 1.0 : 0.0;
     _orientationController = AnimationController(
       duration: widget.duration,
@@ -739,7 +1257,7 @@ class _SortArrowState extends State<_SortArrow> with TickerProviderStateMixin {
     _orientationAnimation = _orientationController.drive(_turnTween)
       ..addListener(_rebuild)
       ..addStatusListener(_resetOrientationAnimation);
-    if (widget.visible) _orientationOffset = widget.down ? 0.0 : math.pi;
+    if (widget.visible) _orientationOffset = widget.up! ? 0.0 : math.pi;
   }
 
   void _rebuild() {
@@ -761,13 +1279,13 @@ class _SortArrowState extends State<_SortArrow> with TickerProviderStateMixin {
   void didUpdateWidget(_SortArrow oldWidget) {
     super.didUpdateWidget(oldWidget);
     bool skipArrow = false;
-    final bool newDown = widget.down != null ? widget.down : _down;
+    final bool? newUp = widget.up ?? _up;
     if (oldWidget.visible != widget.visible) {
       if (widget.visible &&
           (_opacityController.status == AnimationStatus.dismissed)) {
         _orientationController.stop();
         _orientationController.value = 0.0;
-        _orientationOffset = newDown ? 0.0 : math.pi;
+        _orientationOffset = newUp! ? 0.0 : math.pi;
         skipArrow = true;
       }
       if (widget.visible) {
@@ -776,14 +1294,14 @@ class _SortArrowState extends State<_SortArrow> with TickerProviderStateMixin {
         _opacityController.reverse();
       }
     }
-    if ((_down != newDown) && !skipArrow) {
+    if ((_up != newUp) && !skipArrow) {
       if (_orientationController.status == AnimationStatus.dismissed) {
         _orientationController.forward();
       } else {
         _orientationController.reverse();
       }
     }
-    _down = newDown;
+    _up = newUp;
   }
 
   @override
@@ -805,14 +1323,30 @@ class _SortArrowState extends State<_SortArrow> with TickerProviderStateMixin {
             Matrix4.rotationZ(_orientationOffset + _orientationAnimation.value)
               ..setTranslationRaw(0.0, _arrowIconBaselineOffset, 0.0),
         alignment: Alignment.center,
-        child: Icon(
-          Icons.arrow_downward,
+        child: const Icon(
+          Icons.arrow_upward,
           size: _arrowIconSize,
-          color: (Theme.of(context).brightness == Brightness.light)
-              ? Colors.black87
-              : Colors.white70,
         ),
       ),
     );
   }
+}
+
+class _NullTableColumnWidth extends TableColumnWidth {
+  const _NullTableColumnWidth();
+
+  @override
+  double maxIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth) =>
+      throw UnimplementedError();
+
+  @override
+  double minIntrinsicWidth(Iterable<RenderBox> cells, double containerWidth) =>
+      throw UnimplementedError();
+}
+
+class _NullWidget extends Widget {
+  const _NullWidget();
+
+  @override
+  Element createElement() => throw UnimplementedError();
 }

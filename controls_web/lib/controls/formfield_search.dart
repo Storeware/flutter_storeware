@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class FormFieldSearch extends StatefulWidget {
   const FormFieldSearch({
-    Key key,
+    Key? key,
     this.label = 'Nome',
     @required this.text,
     this.onSearch,
@@ -11,13 +11,13 @@ class FormFieldSearch extends StatefulWidget {
     this.btnClear = true,
     this.color,
   }) : super(key: key);
-  final Color color;
-  final String text;
-  final String label;
-  final IconData icon;
-  final bool btnClear;
-  final TextEditingController controller;
-  final Function(String) onSearch;
+  final Color? color;
+  final String? text;
+  final String? label;
+  final IconData? icon;
+  final bool? btnClear;
+  final TextEditingController? controller;
+  final Function(String)? onSearch;
 
   @override
   _FormFieldSearchState createState() => _FormFieldSearchState();
@@ -32,7 +32,7 @@ class _FormFieldSearchState extends State<FormFieldSearch> {
 
   @override
   void initState() {
-    controller.text = widget.text;
+    controller.text = widget.text!;
     super.initState();
   }
 
@@ -61,7 +61,7 @@ class _FormFieldSearchState extends State<FormFieldSearch> {
         fillColor: widget.color,
         suffixIcon: Wrap(
           children: <Widget>[
-            if (widget.btnClear)
+            if (widget.btnClear!)
               IconButton(
                 icon: Icon(Icons.clear),
                 onPressed: () {
@@ -72,14 +72,15 @@ class _FormFieldSearchState extends State<FormFieldSearch> {
               IconButton(
                 icon: Icon(widget.icon ?? Icons.search),
                 onPressed: () {
-                  if (widget.onSearch != null) widget.onSearch(controller.text);
+                  if (widget.onSearch != null)
+                    widget.onSearch!(controller.text);
                 },
               )
           ],
         ),
       ), //suffixIcon: ,
       validator: (value) {
-        if (value.isEmpty) {
+        if (value!.isEmpty) {
           return 'Falta informar: ${widget.label}';
         }
         return null;

@@ -10,16 +10,16 @@ import '../services/routes.dart';
 /// userPerfil -> passa o perfil do usuario, utilizado para selecionar os itens a serem mostrados
 /// items -> são os itens de menu a serem mostrados
 class MainMenu extends StatefulWidget {
-  final List<MenuItem> items;
-  final Widget title;
-  final Widget extended;
-  final Function(BuildContext) init;
-  final double appBarElevation;
-  final List<Widget> actions;
-  final String userPerfil;
-  final Widget child;
+  final List<MenuItem>? items;
+  final Widget? title;
+  final Widget? extended;
+  final Function(BuildContext)? init;
+  final double? appBarElevation;
+  final List<Widget>? actions;
+  final String? userPerfil;
+  final Widget? child;
   MainMenu(
-      {Key key,
+      {Key? key,
       this.title,
       this.child,
       this.items,
@@ -32,14 +32,14 @@ class MainMenu extends StatefulWidget {
   _MainMenuState createState() => _MainMenuState();
 
   static MainMenu builder(context,
-      {@required int itemCount,
-      @required MenuItem Function(BuildContext, int) itemBuilder,
-      Widget title,
-      Widget extended,
-      @required String userPerfil}) {
+      {@required int? itemCount,
+      @required MenuItem Function(BuildContext, int)? itemBuilder,
+      Widget? title,
+      Widget? extended,
+      @required String? userPerfil}) {
     List<MenuItem> l = [];
-    for (var i = 0; i < itemCount; i++) {
-      l.add(itemBuilder(context, i));
+    for (var i = 0; i < itemCount!; i++) {
+      l.add(itemBuilder!(context, i));
     }
     return MainMenu(
       items: l,
@@ -53,7 +53,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   @override
   Widget build(BuildContext context) {
-    if (widget.init != null) widget.init(context);
+    if (widget.init != null) widget.init!(context);
     return ListView(children: _create(widget.items));
   }
 
@@ -93,7 +93,7 @@ class _MainMenuState extends State<MainMenu> {
     if (item.logged != null) {
       //if (LoginModel().logado != item.logged) return Container();
     }
-    List<MenuItem> items = item.items;
+    List<MenuItem>? items = item.items;
     if (items == null) {
       if (item.text == '-') {
         return menuDivider();
@@ -101,10 +101,10 @@ class _MainMenuState extends State<MainMenu> {
         return ListTile(
           title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
             Container(width: 30, child: item.icon),
-            Text(item.text)
+            Text(item.text!)
           ]),
           onTap: () {
-            item.onclick(context);
+            item.onclick!(context);
           },
           trailing: Icon(Icons.chevron_right),
         );
@@ -120,20 +120,20 @@ class _MainMenuState extends State<MainMenu> {
               child: ListTile(
                   contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
                   dense: true,
-                  selected: item.selected,
+                  selected: item.selected!,
                   //leading: item.icon,
                   subtitle: item.subtitle,
                   title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(width: 30, child: item.icon),
-                        Text(item.text)
+                        Text(item.text!)
                       ]),
                   onTap: () {
-                    if (item.acesso > 0) {
-                      if (!PermissionsList.enabled(item.acesso)) return;
+                    if (item.acesso! > 0) {
+                      if (!PermissionsList.enabled(item.acesso!)) return;
                     }
-                    item.onclick(context);
+                    item.onclick!(context);
                   }));
           menus.add(wg);
         }
@@ -142,7 +142,7 @@ class _MainMenuState extends State<MainMenu> {
         //leading: item.icon,
         title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
           Container(width: 30, child: item.icon),
-          Text(item.text)
+          Text(item.text!)
         ]),
         children: menus,
       );
@@ -158,8 +158,8 @@ class _MainMenuState extends State<MainMenu> {
 }
 
 class Permission {
-  double acesso;
-  int flag;
+  double? acesso;
+  int? flag;
   Permission(double acesso, int flag) {
     this.acesso = acesso;
     this.flag = flag;
@@ -198,15 +198,15 @@ class PermissionsList {
 /// perfil -> pode ser uma lista separado por "|" indicando quais perfis de usuarios tem acesso
 /// acesso -> id de acesso do item de menu, reservado para implementar acessibilidade
 class MenuItem extends DataModelItem {
-  String text;
-  String perfil;
-  final Widget icon;
-  Widget subtitle;
-  final Function onclick;
-  List<MenuItem> items;
-  bool selected;
-  double acesso;
-  bool logged;
+  String? text;
+  String? perfil;
+  final Widget? icon;
+  Widget? subtitle;
+  final Function? onclick;
+  List<MenuItem>? items;
+  bool? selected;
+  double? acesso;
+  bool? logged;
   MenuItem(this.text, this.onclick,
       {this.icon,
       this.logged,
@@ -220,7 +220,7 @@ class MenuItem extends DataModelItem {
   }
 
   bool isPerfil(perfil) {
-    return this.perfil.contains(perfil);
+    return this.perfil!.contains(perfil);
   }
 
   MenuItem setAcesso(double acesso) {
@@ -230,15 +230,15 @@ class MenuItem extends DataModelItem {
 }
 
 class MenuModel {
-  static MenuModel _instance;
+  static MenuModel? _instance;
   final List<MenuItem> _list = [];
 
-  factory MenuModel({Function creator}) {
+  factory MenuModel({Function? creator}) {
     if (_instance == null) {
       _instance = MenuModel._create(); // Causes singleton instantiation
       if (creator != null) creator();
     }
-    return _instance;
+    return _instance!;
   }
   static of() {
     return MenuModel();
@@ -255,14 +255,14 @@ class MenuModel {
 
   static MenuItem addDivider() {
     MenuItem item = MenuItem('-', (x) {});
-    _instance.add(item);
+    _instance!.add(item);
     return item;
   }
 
   static MenuItem addItem(String text, Function(BuildContext) click,
-      {Widget icon, String route, bool logged}) {
+      {Widget? icon, String? route, bool? logged}) {
     MenuItem rt = MenuItem(text, click, icon: icon, logged: logged);
-    _instance.add(rt);
+    _instance!.add(rt);
     if (route != null) {
       Routes().add(route, (context) {
         return click(context); //????

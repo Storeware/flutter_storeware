@@ -11,9 +11,9 @@ double responsiveHeight(context, height) {
 }
 
 class ProfileView extends StatefulWidget {
-  final List<Widget> children;
-  final Key sliversKey;
-  ProfileView({Key key, this.children, this.sliversKey}) : super(key: key);
+  final List<Widget>? children;
+  final Key? sliversKey;
+  ProfileView({Key? key, this.children, this.sliversKey}) : super(key: key);
 
   _ProfileViewState createState() => _ProfileViewState();
 }
@@ -22,23 +22,25 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      slivers: [SliverList(
-        key: widget.sliversKey,
-        delegate: SliverChildListDelegate(widget.children),
-      )],
+      slivers: [
+        SliverList(
+          key: widget.sliversKey,
+          delegate: SliverChildListDelegate(widget.children!),
+        )
+      ],
     );
   }
 }
 
 class ProfileList extends StatelessWidget {
-  final Widget title;
-  final double height;
-  final List<Widget> children;
-  final Axis scrollDirection;
-  final Color backgroundColor;
-  final EdgeInsetsGeometry padding;
+  final Widget? title;
+  final double? height;
+  final List<Widget>? children;
+  final Axis? scrollDirection;
+  final Color? backgroundColor;
+  final EdgeInsetsGeometry? padding;
   const ProfileList(
-      {Key key,
+      {Key? key,
       this.title,
       this.children,
       this.backgroundColor,
@@ -60,8 +62,8 @@ class ProfileList extends StatelessWidget {
           color: backgroundColor,
           child: ListView(
             padding: padding,
-            scrollDirection: scrollDirection,
-            children: children,
+            scrollDirection: scrollDirection!,
+            children: children!,
           ),
         ),
       ],
@@ -70,19 +72,19 @@ class ProfileList extends StatelessWidget {
 }
 
 class ProfileTile extends StatelessWidget {
-  final EdgeInsetsGeometry padding;
-  final Widget child;
-  final Function onTap;
-  final double radius;
-  final Widget topBar;
-  final Widget bottomBar;
-  final Widget title;
-  final double height;
-  final double width;
-  final double elevation;
-  final Color color;
+  final EdgeInsetsGeometry? padding;
+  final Widget? child;
+  final Function? onTap;
+  final double? radius;
+  final Widget? topBar;
+  final Widget? bottomBar;
+  final Widget? title;
+  final double? height;
+  final double? width;
+  final double? elevation;
+  final Color? color;
   const ProfileTile(
-      {Key key,
+      {Key? key,
       this.onTap,
       this.padding,
       this.radius = 10,
@@ -120,19 +122,19 @@ class ProfileTile extends StatelessWidget {
 }
 
 class ProfileValue extends StatefulWidget {
-  final String value;
-  final String label;
-  final double height;
-  final double width;
+  final String? value;
+  final String? label;
+  final double? height;
+  final double? width;
   final backgroundColor;
   final borderColor;
-  final double elevation;
-  final String unit;
-  final Function onTap;
-  final EdgeInsetsGeometry padding;
-  final Axis direction;
+  final double? elevation;
+  final String? unit;
+  final Function? onTap;
+  final EdgeInsetsGeometry? padding;
+  final Axis? direction;
   ProfileValue(
-      {Key key,
+      {Key? key,
       this.elevation = 0,
       this.direction = Axis.horizontal,
       this.value = '',
@@ -152,27 +154,27 @@ class _ProfileValueState extends State<ProfileValue> {
   @override
   Widget build(BuildContext context) {
     return ProfileButton(
-        height: widget.height,
-        width: widget.width,
+        height: widget.height!,
+        width: widget.width!,
         radius: 8,
-        onPressed: widget.onTap,
+        onPressed: widget.onTap!,
         padding: widget.padding ?? EdgeInsets.all(0),
         color: widget.borderColor ?? widget.backgroundColor,
         child: Card(
           elevation: widget.elevation,
           color: widget.backgroundColor,
           child: Wrap(
-            direction: widget.direction,
+            direction: widget.direction!,
             children: <Widget>[
-              Text(widget.label, style: TextStyle(fontSize: 16)),
+              Text(widget.label!, style: TextStyle(fontSize: 16)),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    widget.value,
+                    widget.value!,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text((widget.unit != null ? '/' + widget.unit : ''))
+                  Text((widget.unit != null ? '/' + widget.unit! : ''))
                 ],
               ),
             ],
@@ -182,12 +184,12 @@ class _ProfileValueState extends State<ProfileValue> {
 }
 
 class ProfileContainer extends StatelessWidget {
-  final double height;
-  final double width;
-  final Color color;
-  final Widget child;
+  final double? height;
+  final double? width;
+  final Color? color;
+  final Widget? child;
   const ProfileContainer(
-      {Key key, this.child, this.height = 10, this.width = 10, this.color})
+      {Key? key, this.child, this.height = 10, this.width = 10, this.color})
       : super(key: key);
 
   @override
@@ -200,17 +202,17 @@ class ProfileContainer extends StatelessWidget {
 }
 
 class ProfileButton extends StatefulWidget {
-  final Widget child;
-  final Function onPressed;
-  final double radius;
-  final EdgeInsetsGeometry padding;
-  final double height;
-  final double width;
-  final BoxBorder border;
-  final BoxShape shape;
-  final Color color;
+  final Widget? child;
+  final Function? onPressed;
+  final double? radius;
+  final EdgeInsetsGeometry? padding;
+  final double? height;
+  final double? width;
+  final BoxBorder? border;
+  final BoxShape? shape;
+  final Color? color;
   const ProfileButton(
-      {Key key,
+      {Key? key,
       this.child,
       this.color,
       this.height = 60,
@@ -227,7 +229,7 @@ class ProfileButton extends StatefulWidget {
 }
 
 class _ProfileButtonState extends State<ProfileButton> {
-  bool _tapInProgress;
+  bool? _tapInProgress;
 
   @override
   void initState() {
@@ -265,12 +267,12 @@ class _ProfileButtonState extends State<ProfileButton> {
             border: widget.border,
             //shape: widget.shape,
             color: (widget.color ?? Theme.of(context).buttonColor)
-                .withAlpha(_tapInProgress ? 100 : 255),
-            borderRadius: BorderRadius.circular(widget.radius),
+                .withAlpha(_tapInProgress! ? 100 : 255),
+            borderRadius: BorderRadius.circular(widget.radius!),
           ),
           child: Center(child: widget.child),
         ),
-        onTap: this.widget.onPressed,
+        onTap: () => this.widget.onPressed!(),
         onTapDown: _tapDown,
         onTapUp: _tapUp,
         onTapCancel: _tapCancel,

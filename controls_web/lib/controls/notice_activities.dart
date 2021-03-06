@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class NoticeTitle extends StatelessWidget {
-  final String title;
-  final TextStyle style;
-  const NoticeTitle({Key key, this.title, this.style}) : super(key: key);
+  final String? title;
+  final TextStyle? style;
+  const NoticeTitle({Key? key, this.title, this.style}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: Text(
-        title,
+        title!,
         style: style ?? TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
       ),
     );
@@ -18,19 +18,19 @@ class NoticeTitle extends StatelessWidget {
 }
 
 class NoticeTag extends StatelessWidget {
-  final Widget icon;
-  final String text;
-  final Color tagColor;
-  final double border;
-  final double tagWidth;
-  final Function onPressed;
-  final double width;
-  final double height;
-  final double radius;
-  final TextStyle style;
-  final Widget content;
+  final Widget? icon;
+  final String? text;
+  final Color? tagColor;
+  final double? border;
+  final double? tagWidth;
+  final Function? onPressed;
+  final double? width;
+  final double? height;
+  final double? radius;
+  final TextStyle? style;
+  final Widget? content;
   const NoticeTag({
-    Key key,
+    Key? key,
     this.icon,
     this.text,
     this.content,
@@ -53,11 +53,11 @@ class NoticeTag extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
         borderRadius: BorderRadius.only(
-          topRight: Radius.circular(radius),
-          bottomRight: Radius.circular(radius),
+          topRight: Radius.circular(radius!),
+          bottomRight: Radius.circular(radius!),
         ),
-        border: (border > 0)
-            ? Border.all(width: border, color: theme.dividerColor)
+        border: (border! > 0)
+            ? Border.all(width: border!, color: theme.dividerColor)
             : Border.symmetric(),
       ),
       child: Row(
@@ -70,16 +70,16 @@ class NoticeTag extends StatelessWidget {
             Expanded(
               child: ListTile(
                 contentPadding: EdgeInsets.zero,
-                onTap: onPressed,
+                onTap: () => onPressed!(),
                 leading: icon ?? Icon(Icons.info, size: 42),
                 title: Center(
-                    child: Text(text,
+                    child: Text(text!,
                         style: style ??
                             TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.w500))),
               ),
             ),
-          if (content != null) content,
+          if (content != null) content!,
         ],
       ),
     );
@@ -87,27 +87,27 @@ class NoticeTag extends StatelessWidget {
 }
 
 class NoticeText extends StatelessWidget {
-  final String text;
-  final TextStyle style;
-  const NoticeText(this.text, {Key key, this.style}) : super(key: key);
+  final String? text;
+  final TextStyle? style;
+  const NoticeText(this.text, {Key? key, this.style}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      text,
+      text!,
       style: style ?? TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
     );
   }
 }
 
 class NoticeHeader extends StatelessWidget {
-  final Color color;
-  final String title;
-  final double fontSize;
-  final String subtitle;
-  final Color fontColor;
+  final Color? color;
+  final String? title;
+  final double? fontSize;
+  final String? subtitle;
+  final Color? fontColor;
   const NoticeHeader(
-      {Key key,
+      {Key? key,
       this.title,
       this.color,
       this.fontSize = 24,
@@ -118,8 +118,8 @@ class NoticeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NoticeTile(
-      title: title,
-      color: color,
+      title: title!,
+      color: color!,
       //fontSize: fontSize,
       //subtitle: subtitle,
       //fontColor: fontColor,
@@ -128,30 +128,30 @@ class NoticeHeader extends StatelessWidget {
 }
 
 class NoticeTile extends StatelessWidget {
-  final Widget image;
-  final String title;
-  final TextStyle titleStyle;
-  final Widget body;
-  final double elevation;
-  final String value;
-  final TextStyle valueStyle;
-  final Color color;
-  final double titleFontSize;
-  final double valueFontSize;
-  final double height;
-  final double width;
-  final double top;
-  final double left;
-  final Widget appBar;
-  final Widget bottomBar;
-  final Widget topBar;
-  final double dividerHeight;
-  final Function onPressed;
+  final Widget? image;
+  final String? title;
+  final TextStyle? titleStyle;
+  final Widget? body;
+  final double? elevation;
+  final String? value;
+  final TextStyle? valueStyle;
+  final Color? color;
+  final double? titleFontSize;
+  final double? valueFontSize;
+  final double? height;
+  final double? width;
+  final double? top;
+  final double? left;
+  final Widget? appBar;
+  final Widget? bottomBar;
+  final Widget? topBar;
+  final double? dividerHeight;
+  final Function? onPressed;
   final padding;
-  final Widget chart;
+  final Widget? chart;
   final textAlign;
   const NoticeTile(
-      {Key key,
+      {Key? key,
       this.padding,
       this.color,
       this.top = 10,
@@ -178,11 +178,11 @@ class NoticeTile extends StatelessWidget {
 
   static status(
       {padding,
-      Widget image,
-      String value,
-      String title,
-      Color color,
-      double width}) {
+      Widget? image,
+      String? value,
+      String? title,
+      Color? color,
+      double? width}) {
     return NoticeTile(
       padding: padding ?? EdgeInsets.only(right: 5),
       value: value,
@@ -198,12 +198,12 @@ class NoticeTile extends StatelessWidget {
 
   static panel(
       {padding,
-      Widget image,
-      String value,
-      String title,
-      Color color,
-      double width,
-      Function onPressed}) {
+      Widget? image,
+      String? value,
+      String? title,
+      Color? color,
+      double? width,
+      Function? onPressed}) {
     return NoticeTile(
       value: value,
       title: title,
@@ -227,17 +227,17 @@ class NoticeTile extends StatelessWidget {
     var theme = Theme.of(context);
     List<Widget> items = [];
     if (value != null)
-      items.add(Text(value,
+      items.add(Text(value!,
           textAlign: textAlign,
           style: valueStyle ??
               TextStyle(
                   color: theme.primaryColor,
                   fontSize: valueFontSize,
                   fontWeight: FontWeight.w200)));
-    if (body != null) items.add(body);
+    if (body != null) items.add(body!);
 
     if (title != null)
-      items.add(Text(title,
+      items.add(Text(title!,
           textAlign: textAlign,
           style: titleStyle ??
               TextStyle(
@@ -252,7 +252,7 @@ class NoticeTile extends StatelessWidget {
       height: height,
       width: width,
       child: InkWell(
-          onTap: onPressed,
+          onTap: () => onPressed!(),
           splashColor: Theme.of(context).primaryColor,
           child: Container(
               child: Stack(children: [
@@ -266,8 +266,8 @@ class NoticeTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     appBar ?? Container(),
-                    if (topBar != null) topBar,
-                    if (dividerHeight > 0)
+                    if (topBar != null) topBar!,
+                    if (dividerHeight! > 0)
                       Container(
                         height: dividerHeight,
                         color: Colors.black54,
@@ -283,9 +283,9 @@ class NoticeTile extends StatelessWidget {
 }
 
 class NoticeButton extends StatelessWidget {
-  final Widget child;
-  final Function onPressed;
-  const NoticeButton({Key key, this.child, this.onPressed}) : super(key: key);
+  final Widget? child;
+  final Function? onPressed;
+  const NoticeButton({Key? key, this.child, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -293,22 +293,22 @@ class NoticeButton extends StatelessWidget {
       child: MaterialButton(
         padding: EdgeInsets.all(0),
         child: child,
-        onPressed: onPressed,
+        onPressed: () => onPressed!(),
       ),
     );
   }
 }
 
 class NoticeInfo extends StatelessWidget {
-  final Widget child;
-  final Widget icon;
-  final double width;
-  final double height;
-  final Color color;
-  final Function onPressed;
-  final double tagWidth;
+  final Widget? child;
+  final Widget? icon;
+  final double? width;
+  final double? height;
+  final Color? color;
+  final Function? onPressed;
+  final double? tagWidth;
   const NoticeInfo(
-      {Key key,
+      {Key? key,
       this.color,
       this.child,
       this.icon,
@@ -322,9 +322,9 @@ class NoticeInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return NoticeBox(
-      color: color,
-      width: width,
-      height: height,
+      color: color!,
+      width: width!,
+      height: height!,
       child: Container(
         alignment: Alignment.center,
         child: Row(
@@ -336,7 +336,7 @@ class NoticeInfo extends StatelessWidget {
                 child: InkWell(
                   child: icon ??
                       Icon(Icons.info, size: 40, color: theme.backgroundColor),
-                  onTap: onPressed,
+                  onTap: () => onPressed!(),
                 )),
             Expanded(child: Center(child: child)),
           ],
@@ -347,11 +347,11 @@ class NoticeInfo extends StatelessWidget {
 }
 
 class NoticeBox extends StatelessWidget {
-  final Widget child;
-  final double width;
-  final double height;
-  final Color color;
-  const NoticeBox({Key key, this.color, this.child, this.width, this.height})
+  final Widget? child;
+  final double? width;
+  final double? height;
+  final Color? color;
+  const NoticeBox({Key? key, this.color, this.child, this.width, this.height})
       : super(key: key);
 
   @override
@@ -372,21 +372,21 @@ class NoticeBox extends StatelessWidget {
 }
 
 class NoticeRow extends StatefulWidget {
-  final double width;
-  final double height;
-  final Widget bar;
-  final Widget bottom;
-  final double spacing;
-  final List<Widget> children;
-  final double radius;
-  final Color color;
-  final Color titleColor;
+  final double? width;
+  final double? height;
+  final Widget? bar;
+  final Widget? bottom;
+  final double? spacing;
+  final List<Widget>? children;
+  final double? radius;
+  final Color? color;
+  final Color? titleColor;
   //final double elevation;
-  final Widget leading;
-  final List<Widget> actions;
-  final double childAspectRatio;
+  final Widget? leading;
+  final List<Widget>? actions;
+  final double? childAspectRatio;
   NoticeRow(
-      {Key key,
+      {Key? key,
       this.bar,
       this.bottom,
       //  this.body,
@@ -411,12 +411,12 @@ class _NoticeListState extends State<NoticeRow> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var cols = widget.children.length;
+    var cols = widget.children!.length;
 
     return Container(
       decoration: BoxDecoration(
         color: widget.color,
-        borderRadius: BorderRadius.circular(widget.radius),
+        borderRadius: BorderRadius.circular(widget.radius!),
       ),
       width: widget.width,
       height: widget.height,
@@ -428,32 +428,32 @@ class _NoticeListState extends State<NoticeRow> {
               decoration: BoxDecoration(
                 color: widget.titleColor ?? theme.primaryColor.withAlpha(150),
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(widget.radius),
-                  topRight: Radius.circular(widget.radius),
+                  topLeft: Radius.circular(widget.radius!),
+                  topRight: Radius.circular(widget.radius!),
                 ),
               ),
               child: Row(
                 children: <Widget>[
-                  if (widget.leading != null) widget.leading,
+                  if (widget.leading != null) widget.leading!,
                   Expanded(
                       child: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     child: widget.bar,
                   )),
-                  if (widget.actions != null) ...widget.actions,
+                  if (widget.actions != null) ...widget.actions!,
                 ],
               )),
         Expanded(
             child: GridView.extent(
           childAspectRatio: widget.childAspectRatio ?? (cols / 2),
-          maxCrossAxisExtent: widget.width,
+          maxCrossAxisExtent: widget.width!,
           //crossAxisCount: 1,
-          mainAxisSpacing: widget.spacing,
-          crossAxisSpacing: widget.spacing,
+          mainAxisSpacing: widget.spacing!,
+          crossAxisSpacing: widget.spacing!,
           scrollDirection: Axis.horizontal,
           children: <Widget>[
             if (widget.children != null)
-              for (var item in widget.children)
+              for (var item in widget.children!)
                 Container(
                   //                constraints: BoxConstraints(maxWidth: max),
                   child: item,
@@ -467,8 +467,8 @@ class _NoticeListState extends State<NoticeRow> {
             decoration: BoxDecoration(
               color: widget.titleColor ?? theme.primaryColor.withAlpha(150),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(widget.radius),
-                bottomRight: Radius.circular(widget.radius),
+                bottomLeft: Radius.circular(widget.radius!),
+                bottomRight: Radius.circular(widget.radius!),
               ),
             ),
             child: Row(
@@ -487,12 +487,12 @@ class _NoticeListState extends State<NoticeRow> {
 }
 
 class NoticeContainer extends StatelessWidget {
-  final Color color;
-  final Widget child;
-  final double width;
-  final BorderRadius borderRadius;
+  final Color? color;
+  final Widget? child;
+  final double? width;
+  final BorderRadius? borderRadius;
   const NoticeContainer(
-      {Key key,
+      {Key? key,
       this.child,
       this.color = Colors.blueAccent,
       this.width,
@@ -514,13 +514,13 @@ class NoticeContainer extends StatelessWidget {
 }
 
 class NoticeValue extends StatelessWidget {
-  final Color color;
-  final String value;
-  final double width;
-  final BorderRadius borderRadius;
-  final FontStyle style;
+  final Color? color;
+  final String? value;
+  final double? width;
+  final BorderRadius? borderRadius;
+  final TextStyle? style;
   const NoticeValue(
-      {Key key,
+      {Key? key,
       this.value,
       this.color,
       this.borderRadius,
@@ -534,7 +534,7 @@ class NoticeValue extends StatelessWidget {
       width: width,
       color: color,
       borderRadius: borderRadius,
-      child: Text(value ?? '', style: style ?? TextStyle(fontSize: 32)),
+      child: Text(value ?? '', style: (style ?? TextStyle(fontSize: 32))),
     );
   }
 }

@@ -3,10 +3,10 @@ library marquee_widget;
 import 'package:flutter/material.dart';
 
 class Marquee extends StatelessWidget {
-  final Widget child;
-  final TextDirection textDirection;
-  final Axis direction;
-  final Duration animationDuration, backDuration, pauseDuration;
+  final Widget? child;
+  final TextDirection? textDirection;
+  final Axis? direction;
+  final Duration? animationDuration, backDuration, pauseDuration;
 
   Marquee({
     @required this.child,
@@ -22,20 +22,20 @@ class Marquee extends StatelessWidget {
   scroll() async {
     while (true) {
       if (_scrollController.hasClients) {
-        await Future.delayed(pauseDuration);
+        await Future.delayed(pauseDuration!);
         if (_scrollController.hasClients) {
           await _scrollController.animateTo(
               _scrollController.position.maxScrollExtent,
-              duration: animationDuration,
+              duration: animationDuration!,
               curve: Curves.easeIn);
         }
-        await Future.delayed(pauseDuration);
+        await Future.delayed(pauseDuration!);
         if (_scrollController.hasClients) {
           await _scrollController.animateTo(0.0,
-              duration: backDuration, curve: Curves.easeOut);
+              duration: backDuration!, curve: Curves.easeOut);
         }
       } else {
-        await Future.delayed(pauseDuration);
+        await Future.delayed(pauseDuration!);
       }
     }
   }
@@ -44,10 +44,10 @@ class Marquee extends StatelessWidget {
   Widget build(BuildContext context) {
     scroll();
     return Directionality(
-      textDirection: textDirection,
+      textDirection: textDirection!,
       child: SingleChildScrollView(
         child: child,
-        scrollDirection: direction,
+        scrollDirection: direction!,
         controller: _scrollController,
       ),
     );

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class IconBadge extends StatefulWidget {
-  final IconData icon;
-  final int value;
+  final IconData? icon;
+  final int? value;
 
-  IconBadge({Key key, this.icon, this.value = 0}) : super(key: key);
+  IconBadge({Key? key, this.icon, this.value = 0}) : super(key: key);
 
   @override
   _IconBadgeState createState() => _IconBadgeState();
@@ -27,10 +27,10 @@ class _IconBadgeState extends State<IconBadge> {
 }
 
 class BadgeText extends StatelessWidget {
-  final String value;
-  final Color color;
+  final String? value;
+  final Color? color;
   const BadgeText({
-    Key key,
+    Key? key,
     this.value,
     this.color,
     //@required this.value,

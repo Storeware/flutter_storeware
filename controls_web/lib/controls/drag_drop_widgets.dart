@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DraggableData<T> {
-  final T data;
-  final Function(T) onCompleted;
+  final T? data;
+  final Function(T)? onCompleted;
   DraggableData({
     this.data,
     this.onCompleted,
@@ -10,15 +10,15 @@ class DraggableData<T> {
 }
 
 class DraggableItem<T> extends StatelessWidget {
-  final T data;
-  final Widget child;
-  final Widget feedback;
-  final Function(T) onCompleted;
-  final Function() onStarted;
-  final Function(DraggableDetails) onEnd;
-  final IconData icon;
+  final T? data;
+  final Widget? child;
+  final Widget? feedback;
+  final Function(T)? onCompleted;
+  final Function()? onStarted;
+  final Function(DraggableDetails)? onEnd;
+  final IconData? icon;
   const DraggableItem({
-    Key key,
+    Key? key,
     @required this.child,
     this.feedback,
     this.onCompleted,
@@ -33,11 +33,11 @@ class DraggableItem<T> extends StatelessWidget {
       data: DraggableData<T>(
           data: data,
           onCompleted: (data) {
-            if (onCompleted != null) onCompleted(data);
+            if (onCompleted != null) onCompleted!(data);
           }),
       feedback:
           feedback ?? CircleAvatar(child: Icon(icon ?? Icons.my_location)),
-      child: child,
+      child: child!,
       //onDragCompleted: onCompleted,
       onDragStarted: onStarted,
       onDragEnd: onEnd,
@@ -46,17 +46,17 @@ class DraggableItem<T> extends StatelessWidget {
 }
 
 class DragTargetItem<T> extends StatelessWidget {
-  final Widget child;
-  final T item;
-  final Future<bool> Function(T) onAccept;
-  final Function(T) afterAccept;
-  final IconData icon;
-  final double iconSize;
-  final Color color;
-  final Function(T) onWillAccept;
+  final Widget? child;
+  final T? item;
+  final Future<bool> Function(T)? onAccept;
+  final Function(T)? afterAccept;
+  final IconData? icon;
+  final double? iconSize;
+  final Color? color;
+  final Function(T)? onWillAccept;
 
   const DragTargetItem({
-    Key key,
+    Key? key,
     @required this.child,
     @required this.item,
     @required this.onAccept,
@@ -69,19 +69,19 @@ class DragTargetItem<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var accepted = false;
+    bool accepted = false;
     return DragTarget<DraggableData<T>>(
-      builder: (BuildContext context, List<DraggableData<T>> candidateData,
+      builder: (BuildContext context, List<DraggableData<T>?> candidateData,
           List<dynamic> rejectedData) {
         return (!accepted)
-            ? child
+            ? child!
             : Icon(icon ?? Icons.camera,
                 color: color ?? Colors.grey, size: iconSize);
       },
       onAccept: (data) {
-        onAccept(data.data).then((rsp) {
-          if (afterAccept != null) afterAccept(data.data);
-          if (data.onCompleted != null) data.onCompleted(data.data);
+        onAccept!(data.data!).then((rsp) {
+          if (afterAccept != null) afterAccept!(data.data!);
+          if (data.onCompleted != null) data.onCompleted!(data.data!);
         });
         accepted = false;
       },
@@ -89,7 +89,7 @@ class DragTargetItem<T> extends StatelessWidget {
         accepted = false;
       },
       onWillAccept: (data) {
-        accepted = (onWillAccept != null) ? onWillAccept(data.data) : true;
+        accepted = (onWillAccept != null) ? onWillAccept!(data!.data!) : true;
         return accepted;
       },
     );

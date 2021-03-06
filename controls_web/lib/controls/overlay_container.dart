@@ -96,7 +96,7 @@ import 'package:flutter/material.dart';
 /// ```
 class OverlayContainer extends StatefulWidget {
   /// The child to render inside the container.
-  final Widget child;
+  final Widget? child;
 
   /// By default, the child will be rendered right below (if the parent is `Column`)
   /// the widget which is defined alongside the OverlayContainer.
@@ -106,16 +106,16 @@ class OverlayContainer extends StatefulWidget {
   /// It's position can be altered and the overlay can
   /// be moved to any part of the screen by supplying a `position`
   /// argument.
-  final OverlayContainerPosition position;
+  final OverlayContainerPosition? position;
 
   /// Controlling whether the overlay is current showing or not.
-  final bool show;
+  final bool? show;
 
   /// Whether the overlay is wide as its enclosing parent.
-  final bool asWideAsParent;
+  final bool? asWideAsParent;
 
   OverlayContainer({
-    Key key,
+    Key? key,
     @required this.show,
     @required this.child,
     this.asWideAsParent = false,
@@ -128,23 +128,23 @@ class OverlayContainer extends StatefulWidget {
 
 class _OverlayContainerState extends State<OverlayContainer>
     with WidgetsBindingObserver {
-  OverlayEntry _overlayEntry;
+  OverlayEntry? _overlayEntry;
   bool _opened = false;
 
   @override
   void initState() {
     super.initState();
-    if (widget.show) {
+    if (widget.show!) {
       _show();
     }
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
   void didChangeMetrics() {
     // We would want to re render the overlay if any metrics
     // ever change.
-    if (widget.show) {
+    if (widget.show!) {
       _show();
     } else {
       _hide();
@@ -156,7 +156,7 @@ class _OverlayContainerState extends State<OverlayContainer>
     super.didChangeDependencies();
     // We would want to re render the overlay if any of the dependencies
     // ever change.
-    if (widget.show) {
+    if (widget.show!) {
       _show();
     } else {
       _hide();
@@ -166,7 +166,7 @@ class _OverlayContainerState extends State<OverlayContainer>
   @override
   void didUpdateWidget(OverlayContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.show) {
+    if (widget.show!) {
       _show();
     } else {
       _hide();
@@ -175,29 +175,29 @@ class _OverlayContainerState extends State<OverlayContainer>
 
   @override
   void dispose() {
-    if (widget.show) {
+    if (widget.show!) {
       _hide();
     }
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
   void _show() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
       await Future.delayed(Duration(milliseconds: 280));
       if (_opened) {
-        _overlayEntry.remove();
+        _overlayEntry!.remove();
       }
       _overlayEntry = _buildOverlayEntry();
-      Overlay.of(context).insert(_overlayEntry);
+      Overlay.of(context)!.insert(_overlayEntry!);
       _opened = true;
     });
   }
 
   void _hide() {
     if (_opened) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _overlayEntry.remove();
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
+        _overlayEntry!.remove();
         _opened = false;
       });
     }
@@ -212,15 +212,15 @@ class _OverlayContainerState extends State<OverlayContainer>
   }
 
   OverlayEntry _buildOverlayEntry() {
-    RenderBox renderBox = context.findRenderObject();
+    RenderBox renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
     final offset = renderBox.localToGlobal(Offset.zero);
     return OverlayEntry(
       builder: (context) {
         return Positioned(
-          left: offset.dx + widget.position.left,
-          top: offset.dy - widget.position.bottom,
-          width: widget.asWideAsParent ? size.width : null,
+          left: offset.dx + widget.position!.left,
+          top: offset.dy - widget.position!.bottom,
+          width: widget.asWideAsParent! ? size.width : null,
           child: Material(
             color: Colors.transparent,
             child: widget.child,

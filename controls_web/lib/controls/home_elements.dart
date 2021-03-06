@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 class ColumnScroll extends StatefulWidget {
-  final List<Widget> children;
-  final double spacing;
-  ColumnScroll({Key key, this.spacing = 1, this.children}) : super(key: key);
+  final List<Widget>? children;
+  final double? spacing;
+  ColumnScroll({Key? key, this.spacing = 1, this.children}) : super(key: key);
 
   @override
   _ColumnScrollState createState() => _ColumnScrollState();
@@ -15,9 +15,9 @@ class _ColumnScrollState extends State<ColumnScroll> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      for (var item in widget.children)
+      for (var item in widget.children!)
         SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: widget.spacing),
+          padding: EdgeInsets.only(bottom: widget.spacing!),
           scrollDirection: Axis.horizontal,
           child: Container(child: item),
         ),
@@ -26,8 +26,8 @@ class _ColumnScrollState extends State<ColumnScroll> {
 }
 
 class RowScroll extends StatefulWidget {
-  final List<Widget> children;
-  final double spacing;
+  final List<Widget>? children;
+  final double? spacing;
   RowScroll({this.children, this.spacing = 1});
 
   @override
@@ -38,9 +38,9 @@ class _RowScrollState extends State<RowScroll> {
   @override
   Widget build(BuildContext context) {
     return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      for (var item in widget.children)
+      for (var item in widget.children!)
         SingleChildScrollView(
-          padding: EdgeInsets.only(right: widget.spacing),
+          padding: EdgeInsets.only(right: widget.spacing!),
           scrollDirection: Axis.vertical,
           child: Container(child: item),
         ),
@@ -49,24 +49,24 @@ class _RowScrollState extends State<RowScroll> {
 }
 
 class SliverContents extends StatefulWidget {
-  final Widget appBar;
-  final Widget sliverAppBar;
-  final List<Widget> children;
-  final List<Widget> grid;
-  final List<Widget> slivers;
-  final Widget body;
-  final Widget bottonBar;
-  final int crossAxisCount;
-  final Axis scrollDirection;
-  final int itemCount;
-  final Function builder;
-  final double crossAxisSpacing;
-  final double mainAxisSpacing;
-  final List<Widget> topBars;
-  final Widget toolBar;
-  final double topBarsHeight;
+  final Widget? appBar;
+  final Widget? sliverAppBar;
+  final List<Widget>? children;
+  final List<Widget>? grid;
+  final List<Widget>? slivers;
+  final Widget? body;
+  final Widget? bottonBar;
+  final int? crossAxisCount;
+  final Axis? scrollDirection;
+  final int? itemCount;
+  final Function? builder;
+  final double? crossAxisSpacing;
+  final double? mainAxisSpacing;
+  final List<Widget>? topBars;
+  final Widget? toolBar;
+  final double? topBarsHeight;
   SliverContents(
-      {Key key,
+      {Key? key,
       this.children,
       this.appBar,
       this.toolBar,
@@ -93,15 +93,15 @@ class _SliverContentsState extends State<SliverContents> {
   Widget build(BuildContext context) {
     List<Widget> items = [];
     if (widget.builder != null)
-      for (var i = 0; i < widget.itemCount; i++) {
-        items.add(widget.builder(i));
+      for (var i = 0; i < widget.itemCount!; i++) {
+        items.add(widget.builder!(i));
       }
-    return CustomScrollView(scrollDirection: widget.scrollDirection, slivers: [
-      if (widget.sliverAppBar != null) widget.sliverAppBar,
+    return CustomScrollView(scrollDirection: widget.scrollDirection!, slivers: [
+      if (widget.sliverAppBar != null) widget.sliverAppBar!,
       SliverToBoxAdapter(
           child: Column(children: [
-        if (widget.appBar != null) widget.appBar,
-        if (widget.toolBar != null) widget.toolBar,
+        if (widget.appBar != null) widget.appBar!,
+        if (widget.toolBar != null) widget.toolBar!,
         if (widget.topBars != null)
           Container(
               height: widget.topBarsHeight,
@@ -110,16 +110,16 @@ class _SliverContentsState extends State<SliverContents> {
                   SliverToBoxAdapter(child: item)
               ], scrollDirection: Axis.horizontal)),
         widget.body ?? Container(),
-        ...items ?? [],
+        ...items,
         ...widget.children ?? []
       ])),
       ...(widget.slivers ?? []),
       widget.grid != null
           ? SliverGrid.count(
-              crossAxisCount: widget.crossAxisCount,
-              children: widget.grid,
-              crossAxisSpacing: widget.crossAxisSpacing,
-              mainAxisSpacing: widget.mainAxisSpacing,
+              crossAxisCount: widget.crossAxisCount!,
+              children: widget.grid!,
+              crossAxisSpacing: widget.crossAxisSpacing!,
+              mainAxisSpacing: widget.mainAxisSpacing!,
             )
           : SliverToBoxAdapter(child: Container()),
       SliverToBoxAdapter(
@@ -147,31 +147,31 @@ createBoxDecoration(
         ]);
 
 class ApplienceTile extends StatelessWidget {
-  final Widget image;
-  final String title;
-  final TextStyle titleStyle;
-  final Widget body;
-  final double elevation;
-  final String value;
-  final TextStyle valueStyle;
-  final Color color;
-  final double titleFontSize;
-  final double valueFontSize;
-  final double height;
-  final double width;
-  final double top;
-  final double left;
-  final Widget appBar;
-  final Widget bottomBar;
-  final Widget topBar;
-  final double dividerHeight;
-  final Function onPressed;
-  final EdgeInsets padding;
-  final double borderWidth;
-  final Widget chart;
-  final TextAlign textAlign;
+  final Widget? image;
+  final String? title;
+  final TextStyle? titleStyle;
+  final Widget? body;
+  final double? elevation;
+  final String? value;
+  final TextStyle? valueStyle;
+  final Color? color;
+  final double? titleFontSize;
+  final double? valueFontSize;
+  final double? height;
+  final double? width;
+  final double? top;
+  final double? left;
+  final Widget? appBar;
+  final Widget? bottomBar;
+  final Widget? topBar;
+  final double? dividerHeight;
+  final Function()? onPressed;
+  final EdgeInsets? padding;
+  final double? borderWidth;
+  final Widget? chart;
+  final TextAlign? textAlign;
   const ApplienceTile(
-      {Key key,
+      {Key? key,
       this.padding,
       this.color,
       this.top = 10,
@@ -199,11 +199,11 @@ class ApplienceTile extends StatelessWidget {
 
   static status(
       {padding,
-      Widget image,
-      String value,
-      String title,
-      Color color,
-      double width}) {
+      Widget? image,
+      String? value,
+      String? title,
+      Color? color,
+      double? width}) {
     return ApplienceTile(
       padding: padding ?? EdgeInsets.only(right: 5),
       value: value,
@@ -219,18 +219,18 @@ class ApplienceTile extends StatelessWidget {
 
   static panel(
       {padding,
-      Widget image,
-      String value,
-      String title,
-      Color color,
-      double width,
-      Function onPressed}) {
+      Widget? image,
+      String? value,
+      String? title,
+      Color? color,
+      double? width,
+      Function? onPressed}) {
     return ApplienceTile(
       value: value,
       title: title,
       color: color,
       image: image,
-      onPressed: onPressed,
+      onPressed: () => onPressed!(),
       textAlign: TextAlign.end,
       padding: padding ?? EdgeInsets.only(right: 5),
       valueStyle: TextStyle(
@@ -248,17 +248,17 @@ class ApplienceTile extends StatelessWidget {
     var theme = Theme.of(context);
     List<Widget> items = [];
     if (value != null)
-      items.add(Text(value,
+      items.add(Text(value!,
           textAlign: textAlign,
           style: valueStyle ??
               TextStyle(
                   color: theme.primaryColor,
                   fontSize: valueFontSize,
                   fontWeight: FontWeight.w200)));
-    if (body != null) items.add(body);
+    if (body != null) items.add(body!);
 
     if (title != null)
-      items.add(Text(title,
+      items.add(Text(title!,
           textAlign: textAlign,
           style: titleStyle ??
               TextStyle(
@@ -268,7 +268,7 @@ class ApplienceTile extends StatelessWidget {
 
     return Container(
       padding: padding,
-      decoration: createBoxDecoration(color: color, borderWidth: borderWidth),
+      decoration: createBoxDecoration(color: color, borderWidth: borderWidth!),
       height: height,
       width: width,
       child: InkWell(
@@ -286,8 +286,8 @@ class ApplienceTile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     appBar ?? Container(),
-                    if (topBar != null) topBar,
-                    if (dividerHeight > 0)
+                    if (topBar != null) topBar!,
+                    if (dividerHeight! > 0)
                       Container(
                         height: dividerHeight,
                         color: Colors.black54,
@@ -303,20 +303,20 @@ class ApplienceTile extends StatelessWidget {
 }
 
 class ApplienceTicket extends StatelessWidget {
-  final String title;
-  final Color color;
-  final Color fontColor;
-  final IconData icon;
-  final Widget image;
-  final String value;
-  final String subTitle;
-  final double width;
-  final double height;
-  final double elevation;
-  final Function onPressed;
-  final double valueFontSize;
+  final String? title;
+  final Color? color;
+  final Color? fontColor;
+  final IconData? icon;
+  final Widget? image;
+  final String? value;
+  final String? subTitle;
+  final double? width;
+  final double? height;
+  final double? elevation;
+  final Function()? onPressed;
+  final double? valueFontSize;
   const ApplienceTicket(
-      {Key key,
+      {Key? key,
       this.title = '',
       this.color,
       this.fontColor = Colors.white,
@@ -350,7 +350,7 @@ class ApplienceTicket extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                if (image != null) image,
+                if (image != null) image!,
                 if (icon != null)
                   Icon(
                     icon,
@@ -359,7 +359,7 @@ class ApplienceTicket extends StatelessWidget {
                   ),
                 if (title != null)
                   Text(
-                    title,
+                    title!,
                     style: TextStyle(
                       fontSize: 18,
                       color: fontColor,
@@ -379,7 +379,7 @@ class ApplienceTicket extends StatelessWidget {
               children: <Widget>[
                 if (value != null)
                   Text(
-                    value,
+                    value!,
                     style: TextStyle(
                       fontSize: valueFontSize,
                       color: fontColor,
@@ -413,22 +413,22 @@ class ApplienceTicket extends StatelessWidget {
 }
 
 class ApplienceStatus extends StatelessWidget {
-  final EdgeInsets padding;
-  final String value;
-  final Color color;
-  final String title;
-  final Widget child;
-  final double valueFontSize;
-  final Color fontColor;
-  final Function onPressed;
-  final Widget image;
-  final IconData icon;
-  final double elevation;
-  final Widget bottom;
-  final double width;
-  final double height;
+  final EdgeInsets? padding;
+  final String? value;
+  final Color? color;
+  final String? title;
+  final Widget? child;
+  final double? valueFontSize;
+  final Color? fontColor;
+  final Function? onPressed;
+  final Widget? image;
+  final IconData? icon;
+  final double? elevation;
+  final Widget? bottom;
+  final double? width;
+  final double? height;
   const ApplienceStatus(
-      {Key key,
+      {Key? key,
       this.padding,
       this.image,
       this.title,
@@ -446,8 +446,8 @@ class ApplienceStatus extends StatelessWidget {
       : super(key: key);
 
   static transparent(
-      {String title,
-      String value,
+      {String? title,
+      String? value,
       double valueFontSize = 16,
       Color fontColor = Colors.white}) {
     return ApplienceStatus(
@@ -473,7 +473,7 @@ class ApplienceStatus extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              if (image != null) image,
+              if (image != null) image!,
               if (icon != null)
                 Icon(
                   icon,
@@ -482,7 +482,7 @@ class ApplienceStatus extends StatelessWidget {
                 ),
               if (value != null)
                 Text(
-                  value,
+                  value!,
                   style: TextStyle(
                     fontSize: valueFontSize,
                     color: fontColor,
@@ -490,7 +490,7 @@ class ApplienceStatus extends StatelessWidget {
                     fontFamily: 'Raleway',
                   ),
                 ),
-              if (child != null) child,
+              if (child != null) child!,
               if (value != null)
                 SizedBox(
                   height: 2,
@@ -498,7 +498,7 @@ class ApplienceStatus extends StatelessWidget {
               Divider(),
               if (title != null)
                 InkWell(
-                    onTap: onPressed,
+                    onTap: () => onPressed!(),
                     child: Text(
                       title ?? '',
                       style: TextStyle(
@@ -509,7 +509,7 @@ class ApplienceStatus extends StatelessWidget {
                       ),
                     )),
               if (bottom != null) Expanded(child: Container()),
-              if (bottom != null) bottom,
+              if (bottom != null) bottom!,
             ],
           )),
     );
@@ -517,17 +517,17 @@ class ApplienceStatus extends StatelessWidget {
 }
 
 class ApplienceCards extends StatelessWidget {
-  final List<Widget> children;
-  final double elevation;
-  final Color color;
-  final Axis direction;
-  final WrapAlignment alignment;
-  final WrapCrossAlignment crossAxisAlignment;
-  final double spacing;
-  final double runSpacing;
-  final WrapAlignment runAlignment;
+  final List<Widget>? children;
+  final double? elevation;
+  final Color? color;
+  final Axis? direction;
+  final WrapAlignment? alignment;
+  final WrapCrossAlignment? crossAxisAlignment;
+  final double? spacing;
+  final double? runSpacing;
+  final WrapAlignment? runAlignment;
   const ApplienceCards(
-      {Key key,
+      {Key? key,
       this.children,
       this.color = Colors.transparent,
       this.direction = Axis.horizontal,
@@ -542,14 +542,14 @@ class ApplienceCards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      direction: direction,
-      alignment: alignment,
-      crossAxisAlignment: crossAxisAlignment,
-      spacing: spacing,
-      runAlignment: runAlignment,
-      runSpacing: runSpacing,
+      direction: direction!,
+      alignment: alignment!,
+      crossAxisAlignment: crossAxisAlignment!,
+      spacing: spacing!,
+      runAlignment: runAlignment!,
+      runSpacing: runSpacing!,
       children: <Widget>[
-        for (var item in children)
+        for (var item in children!)
           Card(color: color, elevation: elevation, child: item)
       ],
     );
@@ -576,23 +576,24 @@ class CarouselSlider extends StatefulWidget {
       this.scrollPhysics,
       this.scrollDirection: Axis.horizontal})
       : this.realPage =
-            enableInfiniteScroll ? realPage + initialPage : initialPage,
+            enableInfiniteScroll! ? realPage + initialPage! : initialPage,
         this.pageController = PageController(
-          viewportFraction: viewportFraction,
-          initialPage:
-              enableInfiniteScroll ? realPage + initialPage : initialPage,
+          viewportFraction: viewportFraction as double,
+          initialPage: (enableInfiniteScroll
+              ? realPage + (initialPage as int)
+              : initialPage) as int,
         );
 
   /// The widgets to be shown in the carousel.
-  final List<Widget> items;
+  final List<Widget>? items;
 
   /// Set carousel height and overrides any existing [aspectRatio].
-  final double height;
+  final double? height;
 
   /// Aspect ratio is used if no height have been declared.
   ///
   /// Defaults to 16:9 aspect ratio.
-  final double aspectRatio;
+  final double? aspectRatio;
 
   /// The fraction of the viewport that each page should occupy.
   ///
@@ -602,66 +603,66 @@ class CarouselSlider extends StatefulWidget {
   /// The initial page to show when first creating the [CarouselSlider].
   ///
   /// Defaults to 0.
-  final num initialPage;
+  final num? initialPage;
 
   /// The actual index of the [PageView].
   ///
   /// This value can be ignored unless you know the carousel will be scrolled
   /// backwards more then 10000 pages.
   /// Defaults to 10000 to simulate infinite backwards scrolling.
-  final num realPage;
+  final num? realPage;
 
   ///Determines if carousel should loop infinitely or be limited to item length.
   ///
   ///Defaults to true, i.e. infinite loop.
-  final bool enableInfiniteScroll;
+  final bool? enableInfiniteScroll;
 
   /// Reverse the order of items if set to true.
   ///
   /// Defaults to false.
-  final bool reverse;
+  final bool? reverse;
 
   /// Enables auto play, sliding one page at a time.
   ///
   /// Use [autoPlayInterval] to determent the frequency of slides.
   /// Defaults to false.
-  final bool autoPlay;
+  final bool? autoPlay;
 
   /// Sets Duration to determent the frequency of slides when
   ///
   /// [autoPlay] is set to true.
   /// Defaults to 4 seconds.
-  final Duration autoPlayInterval;
+  final Duration? autoPlayInterval;
 
   /// The animation duration between two transitioning pages while in auto playback.
   ///
   /// Defaults to 800 ms.
-  final Duration autoPlayAnimationDuration;
+  final Duration? autoPlayAnimationDuration;
 
   /// Determines the animation curve physics.
   ///
   /// Defaults to [Curves.fastOutSlowIn].
-  final Curve autoPlayCurve;
+  final Curve? autoPlayCurve;
 
   /// Sets a timer on touch detected that pause the auto play with
   /// the given [Duration].
   ///
   /// Touch Detection is only active if [autoPlay] is true.
-  final Duration pauseAutoPlayOnTouch;
+  final Duration? pauseAutoPlayOnTouch;
 
   /// Determines if current page should be larger then the side images,
   /// creating a feeling of depth in the carousel.
   ///
   /// Defaults to false.
-  final bool enlargeCenterPage;
+  final bool? enlargeCenterPage;
 
   /// The axis along which the page view scrolls.
   ///
   /// Defaults to [Axis.horizontal].
-  final Axis scrollDirection;
+  final Axis? scrollDirection;
 
   /// Called whenever the page in the center of the viewport changes.
-  final Function(int index) onPageChanged;
+  final Function(int index)? onPageChanged;
 
   /// How the carousel should respond to user input.
   ///
@@ -672,26 +673,26 @@ class CarouselSlider extends StatefulWidget {
   /// [PageScrollPhysics] prior to being used.
   ///
   /// Defaults to matching platform conventions.
-  final ScrollPhysics scrollPhysics;
+  final ScrollPhysics? scrollPhysics;
 
   /// [pageController] is created using the properties passed to the constructor
   /// and can be used to control the [PageView] it is passed to.
-  final PageController pageController;
+  final PageController? pageController;
 
   /// Animates the controlled [CarouselSlider] to the next page.
   ///
   /// The animation lasts for the given duration and follows the given curve.
   /// The returned [Future] resolves when the animation completes.
-  Future<void> nextPage({Duration duration, Curve curve}) {
-    return pageController.nextPage(duration: duration, curve: curve);
+  Future<void> nextPage({Duration? duration, Curve? curve}) {
+    return pageController!.nextPage(duration: duration!, curve: curve!);
   }
 
   /// Animates the controlled [CarouselSlider] to the previous page.
   ///
   /// The animation lasts for the given duration and follows the given curve.
   /// The returned [Future] resolves when the animation completes.
-  Future<void> previousPage({Duration duration, Curve curve}) {
-    return pageController.previousPage(duration: duration, curve: curve);
+  Future<void> previousPage({Duration? duration, Curve? curve}) {
+    return pageController!.previousPage(duration: duration!, curve: curve!);
   }
 
   /// Changes which page is displayed in the controlled [CarouselSlider].
@@ -699,23 +700,23 @@ class CarouselSlider extends StatefulWidget {
   /// Jumps the page position from its current value to the given value,
   /// without animation, and without checking if the new value is in range.
   void jumpToPage(int page) {
-    final index =
-        _getRealIndex(pageController.page.toInt(), realPage, items.length);
-    return pageController
-        .jumpToPage(pageController.page.toInt() + page - index);
+    final index = _getRealIndex(
+        pageController!.page!.toInt(), (realPage ?? 0) ~/ 1, items!.length);
+    return pageController!
+        .jumpToPage(pageController!.page!.toInt() + page - index);
   }
 
   /// Animates the controlled [CarouselSlider] from the current page to the given page.
   ///
   /// The animation lasts for the given duration and follows the given curve.
   /// The returned [Future] resolves when the animation completes.
-  Future<void> animateToPage(int page, {Duration duration, Curve curve}) {
-    final index =
-        _getRealIndex(pageController.page.toInt(), realPage, items.length);
-    return pageController.animateToPage(
-        pageController.page.toInt() + page - index,
-        duration: duration,
-        curve: curve);
+  Future<void> animateToPage(int page, {Duration? duration, Curve? curve}) {
+    final index = _getRealIndex(
+        pageController!.page!.toInt(), (realPage ?? 0) ~/ 1, items!.length);
+    return pageController!.animateToPage(
+        pageController!.page!.toInt() + page - index,
+        duration: duration!,
+        curve: curve!);
   }
 
   @override
@@ -724,7 +725,7 @@ class CarouselSlider extends StatefulWidget {
 
 class _CarouselSliderState extends State<CarouselSlider>
     with TickerProviderStateMixin {
-  Timer timer;
+  Timer? timer;
 
   @override
   void initState() {
@@ -733,18 +734,18 @@ class _CarouselSliderState extends State<CarouselSlider>
   }
 
   Timer getTimer() {
-    return Timer.periodic(widget.autoPlayInterval, (_) {
-      if (widget.autoPlay) {
-        widget.pageController.nextPage(
-            duration: widget.autoPlayAnimationDuration,
-            curve: widget.autoPlayCurve);
+    return Timer.periodic(widget.autoPlayInterval!, (_) {
+      if (widget.autoPlay!) {
+        widget.pageController!.nextPage(
+            duration: widget.autoPlayAnimationDuration!,
+            curve: widget.autoPlayCurve!);
       }
     });
   }
 
   void pauseOnTouch() {
-    timer.cancel();
-    timer = Timer(widget.pauseAutoPlayOnTouch, () {
+    timer!.cancel();
+    timer = Timer(widget.pauseAutoPlayOnTouch!, () {
       timer = getTimer();
     });
   }
@@ -752,13 +753,13 @@ class _CarouselSliderState extends State<CarouselSlider>
   Widget getWrapper(Widget child) {
     if (widget.height != null) {
       final Widget wrapper = Container(height: widget.height, child: child);
-      return widget.autoPlay && widget.pauseAutoPlayOnTouch != null
+      return widget.autoPlay! && widget.pauseAutoPlayOnTouch != null
           ? addGestureDetection(wrapper)
           : wrapper;
     } else {
       final Widget wrapper =
-          AspectRatio(aspectRatio: widget.aspectRatio, child: child);
-      return widget.autoPlay && widget.pauseAutoPlayOnTouch != null
+          AspectRatio(aspectRatio: widget.aspectRatio!, child: child);
+      return widget.autoPlay! && widget.pauseAutoPlayOnTouch != null
           ? addGestureDetection(wrapper)
           : wrapper;
     }
@@ -777,40 +778,42 @@ class _CarouselSliderState extends State<CarouselSlider>
   Widget build(BuildContext context) {
     return getWrapper(PageView.builder(
       physics: widget.scrollPhysics,
-      scrollDirection: widget.scrollDirection,
+      scrollDirection: widget.scrollDirection!,
       controller: widget.pageController,
-      reverse: widget.reverse,
-      itemCount: widget.enableInfiniteScroll ? null : widget.items.length,
+      reverse: widget.reverse!,
+      itemCount: widget.enableInfiniteScroll! ? null : widget.items!.length,
       onPageChanged: (int index) {
         int currentPage = _getRealIndex(
-            index + widget.initialPage, widget.realPage, widget.items.length);
+            index + ((widget.initialPage ?? 0) ~/ 1),
+            (widget.realPage ?? 0) ~/ 1,
+            widget.items!.length);
         if (widget.onPageChanged != null) {
-          widget.onPageChanged(currentPage);
+          widget.onPageChanged!(currentPage);
         }
       },
       itemBuilder: (BuildContext context, int i) {
-        final int index = _getRealIndex(
-            i + widget.initialPage, widget.realPage, widget.items.length);
+        final int index = _getRealIndex(i + (widget.initialPage ?? 0) ~/ 1,
+            (widget.realPage ?? 0) ~/ 1, widget.items!.length);
 
         return AnimatedBuilder(
-          animation: widget.pageController,
-          child: widget.items[index],
+          animation: widget.pageController!,
+          child: widget.items![index],
           builder: (BuildContext context, child) {
             // on the first render, the pageController.page is null,
             // this is a dirty hack
-            if (widget?.pageController?.position?.minScrollExtent == null ||
-                widget?.pageController?.position?.maxScrollExtent == null) {
+            if (widget.pageController?.position?.minScrollExtent == null ||
+                widget.pageController?.position?.maxScrollExtent == null) {
               Future.delayed(Duration(microseconds: 1), () {
                 setState(() {});
               });
               return Container();
             }
-            double value = widget.pageController.page - i;
+            double value = widget.pageController!.page! - i;
             value = (1 - (value.abs() * 0.3)).clamp(0.0, 1.0);
 
             final double height = widget.height ??
-                MediaQuery.of(context).size.width * (1 / widget.aspectRatio);
-            final double distortionValue = widget.enlargeCenterPage
+                MediaQuery.of(context).size.width * (1 / widget.aspectRatio!);
+            final double distortionValue = widget.enlargeCenterPage!
                 ? Curves.easeOut.transform(value)
                 : 1.0;
 
@@ -856,27 +859,27 @@ int _remainder(int input, int source) {
 }
 
 class ApplienceCarrousel extends StatefulWidget {
-  final List<Widget> children;
-  final bool enabled;
-  final Color navColor;
-  final bool autoPlay;
-  final Function(int) onPageChanged;
-  final double height;
-  final double aspectRatio;
-  final double viewportFraction;
-  final int initialPage;
-  final bool enableInfiniteScroll;
-  final bool reverse;
-  final Duration autoPlayInterval;
-  final Duration autoPlayAnimationDuration;
-  final Axis scrollDirection;
+  final List<Widget>? children;
+  final bool? enabled;
+  final Color? navColor;
+  final bool? autoPlay;
+  final Function(int)? onPageChanged;
+  final double? height;
+  final double? aspectRatio;
+  final double? viewportFraction;
+  final int? initialPage;
+  final bool? enableInfiniteScroll;
+  final bool? reverse;
+  final Duration? autoPlayInterval;
+  final Duration? autoPlayAnimationDuration;
+  final Axis? scrollDirection;
   /*
   final autoPlayCurve;
   final Duration pauseAutoPlayOnTouch;
   final bool enlargeCenterPage;
   */
   ApplienceCarrousel(
-      {Key key,
+      {Key? key,
       this.children,
       this.enabled = true,
       this.navColor,
@@ -908,25 +911,25 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
   @override
   Widget build(BuildContext context) {
     CarouselSlider carrousel = CarouselSlider(
-      autoPlay: widget?.autoPlay,
-      items: widget?.children,
-      onPageChanged: widget?.onPageChanged,
-      aspectRatio: widget?.aspectRatio,
-      autoPlayAnimationDuration: widget?.autoPlayAnimationDuration,
-      autoPlayInterval: widget?.autoPlayInterval,
-      height: widget?.height,
-      initialPage: widget?.initialPage,
-      reverse: widget?.reverse,
-      scrollDirection: widget?.scrollDirection,
+      autoPlay: widget.autoPlay,
+      items: widget.children,
+      onPageChanged: widget.onPageChanged,
+      aspectRatio: widget.aspectRatio,
+      autoPlayAnimationDuration: widget.autoPlayAnimationDuration,
+      autoPlayInterval: widget.autoPlayInterval,
+      height: widget.height,
+      initialPage: widget.initialPage,
+      reverse: widget.reverse,
+      scrollDirection: widget.scrollDirection,
     );
     var size = MediaQuery.of(context).size;
     return Row(
       children: [
-        if (widget.enabled)
+        if (widget.enabled!)
           InkWell(
             child: Container(
-                color: widget?.navColor,
-                height: size?.height,
+                color: widget.navColor,
+                height: size.height,
                 width: 18,
                 child: Icon(
                   Icons.keyboard_arrow_left,
@@ -936,11 +939,11 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
                 duration: Duration(milliseconds: 300), curve: Curves.linear),
           ),
         Expanded(child: carrousel),
-        if (widget.enabled)
+        if (widget.enabled!)
           InkWell(
             child: Container(
-                color: widget?.navColor,
-                height: size?.height,
+                color: widget.navColor,
+                height: size.height,
                 width: 18,
                 child: Icon(
                   Icons.keyboard_arrow_right,
@@ -955,15 +958,15 @@ class _ApplienceCarrouselState extends State<ApplienceCarrousel> {
 }
 
 class ApplienceTimeline extends StatelessWidget {
-  final Widget leadding;
-  final Widget body;
-  final Widget actions;
-  final Color color;
-  final double height;
-  final double width;
-  final Color tagColor;
+  final Widget? leadding;
+  final Widget? body;
+  final Widget? actions;
+  final Color? color;
+  final double? height;
+  final double? width;
+  final Color? tagColor;
   const ApplienceTimeline({
-    Key key,
+    Key? key,
     this.height = 90,
     this.width,
     this.color,
@@ -991,26 +994,26 @@ class ApplienceTimeline extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: body,
             )),
-            if (actions != null) actions,
+            if (actions != null) actions!,
           ],
         ));
   }
 }
 
 class ApplienceTag extends StatelessWidget {
-  final double height;
-  final String title;
-  final String value;
-  final List<Widget> children;
-  final Color tagColor;
-  final double tagWidth;
-  final double tagHeight;
-  final List<Widget> tagChildren;
-  final double width;
-  final Icon icon;
-  final Widget actions;
+  final double? height;
+  final String? title;
+  final String? value;
+  final List<Widget>? children;
+  final Color? tagColor;
+  final double? tagWidth;
+  final double? tagHeight;
+  final List<Widget>? tagChildren;
+  final double? width;
+  final Icon? icon;
+  final Widget? actions;
   const ApplienceTag({
-    Key key,
+    Key? key,
     this.title,
     this.value,
     this.children,
@@ -1031,7 +1034,7 @@ class ApplienceTag extends StatelessWidget {
       width: width,
       leadding: Stack(
         children: <Widget>[
-          if (tagWidth > 0)
+          if (tagWidth! > 0)
             Container(
               width: tagWidth,
               height: tagHeight,
@@ -1068,19 +1071,19 @@ class ApplienceTag extends StatelessWidget {
 }
 
 class ApplienceReport extends StatelessWidget {
-  final Widget title;
-  final Widget footer;
-  final Color color;
-  final double width;
-  final double height;
-  final Widget body;
-  final double divider;
-  final double elevation;
-  final Alignment alignment;
-  final CrossAxisAlignment crossAxisAlignment;
-  final MainAxisAlignment mainAxisAlignment;
+  final Widget? title;
+  final Widget? footer;
+  final Color? color;
+  final double? width;
+  final double? height;
+  final Widget? body;
+  final double? divider;
+  final double? elevation;
+  final Alignment? alignment;
+  final CrossAxisAlignment? crossAxisAlignment;
+  final MainAxisAlignment? mainAxisAlignment;
   const ApplienceReport(
-      {Key key,
+      {Key? key,
       this.title,
       this.body,
       this.footer,
@@ -1104,23 +1107,23 @@ class ApplienceReport extends StatelessWidget {
         color: color,
         alignment: alignment,
         child: Column(
-          crossAxisAlignment: crossAxisAlignment,
-          mainAxisAlignment: mainAxisAlignment,
+          crossAxisAlignment: crossAxisAlignment!,
+          mainAxisAlignment: mainAxisAlignment!,
           children: <Widget>[
             if (title != null) ...[
-              title,
-              if (divider > 0)
+              title!,
+              if (divider! > 0)
                 Divider(
                   height: divider,
                 )
             ],
-            if (body != null) body,
+            if (body != null) body!,
             if (footer != null) ...[
-              if (divider > 0)
+              if (divider! > 0)
                 Divider(
                   height: divider,
                 ),
-              footer
+              footer!
             ],
           ],
         ),

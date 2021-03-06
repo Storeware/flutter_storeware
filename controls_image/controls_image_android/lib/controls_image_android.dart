@@ -6,7 +6,7 @@ import 'package:universal_io/io.dart' as io;
 
 class ControlsImage extends ControlsImageInterface {
   @override
-  Future<io.File?> pickFromGallary({int? imageQuality}) async {
+  pickFromGallary({int? imageQuality}) async {
     var f = await ImagePicker().getImage(
       source: ImageSource.gallery,
       imageQuality: imageQuality ?? 60,
@@ -16,7 +16,7 @@ class ControlsImage extends ControlsImageInterface {
   }
 
   @override
-  Future<io.File?> pickFromCamera({int? imageQuality}) async {
+  pickFromCamera({int? imageQuality}) async {
     var f = await ImagePicker().getImage(
       source: ImageSource.camera,
       imageQuality: imageQuality ?? 60,

@@ -1,6 +1,6 @@
 name: controls_image_web
 description: A new Flutter package project.
-version: 0.0.1
+version: 2021.03.06
 author:
 homepage: https://tireideletra.com.br
 
@@ -11,8 +11,8 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker_web:
-  universal_html:
-  universal_io:
+  universal_html: ^1.2.4
+  universal_io: ^2.0.0
 
   controls_image_interface:
     git:

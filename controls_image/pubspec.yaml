@@ -5,7 +5,7 @@ author:
 homepage: https://tireideletra.com.br
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 flutter:
   plugin:
@@ -32,6 +32,11 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_image/controls_image_android
+
+  controls_web:
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_web  
 
 dev_dependencies:
   flutter_test:

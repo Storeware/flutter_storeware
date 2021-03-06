@@ -6,12 +6,12 @@ import 'camera_picture_interface.dart';
 
 class TakeAPictureImpl extends TakeAPictureInterface {
   @override
-  Future<Uint8List> gallery(Object context) {
+  Future<Uint8List?> gallery(BuildContext context) async {
     return null;
   }
 
   @override
-  Future<Uint8List> take(BuildContext context) {
+  Future<Uint8List?> take(BuildContext context) async {
     return null;
   }
 }

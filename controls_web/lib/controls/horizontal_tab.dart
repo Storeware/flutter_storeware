@@ -97,11 +97,11 @@ class _HorizontalTabState extends State<HorizontalTab> {
                         //width: double.maxFinite,
                         alignment: Alignment.center,
                         child: tab.title ??
-                            Text(tab.label,
+                            Text(tab.label!,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(color: _iconColor))),
                     if (tab.image != null) Expanded(child: Container()),
-                    if (tab.trailing != null) tab.trailing
+                    if (tab.trailing != null) tab.trailing!
                   ],
                 )),
                 Container(

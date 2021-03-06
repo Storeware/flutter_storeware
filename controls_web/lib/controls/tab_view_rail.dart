@@ -5,18 +5,18 @@ enum TabViewRailPosition { left, rigth }
 
 class TabViewRailController {
   int activeIndex = 0;
-  Function(TabChoice) onTabChanged;
+  Function(TabChoice)? onTabChanged;
 }
 
 class TabViewRail extends StatelessWidget {
-  final AppBar appBar;
-  final TabViewRailPosition position;
-  final List<TabChoice> choices;
-  final double divider;
-  final TabViewRailController controller;
-  final Function(TabChoice) builder;
+  final AppBar? appBar;
+  final TabViewRailPosition? position;
+  final List<TabChoice>? choices;
+  final double? divider;
+  final TabViewRailController? controller;
+  final Function(TabChoice)? builder;
   TabViewRail(
-      {Key key,
+      {Key? key,
       this.appBar,
       this.choices,
       this.position = TabViewRailPosition.left,
@@ -43,24 +43,24 @@ class TabViewRail extends StatelessWidget {
             if (isRight)
               Expanded(
                 child: (builder != null)
-                    ? builder(choices[_selectedIndex.value])
-                    : choices[_selectedIndex.value].child,
+                    ? builder!(choices![_selectedIndex.value])
+                    : choices![_selectedIndex.value].child,
               ),
-            if (isRight && (divider > 0))
+            if (isRight && (divider! > 0))
               VerticalDivider(thickness: 1, width: divider),
 
             NavigationRail(
               selectedIndex: _selectedIndex.value,
               onDestinationSelected: (int index) {
                 if (_controller.onTabChanged != null)
-                  _controller.onTabChanged(choices[index]);
+                  _controller.onTabChanged!(choices![index]);
                 _selectedIndex.value = index;
               },
               labelType: NavigationRailLabelType.selected,
               destinations: [
-                for (var tab in choices)
+                for (var tab in choices!)
                   NavigationRailDestination(
-                    label: Text(tab.label),
+                    label: Text(tab.label!),
                     icon: tab.image ?? Icon(tab.icon),
                     selectedIcon: (tab.selectedIcon != null)
                         ? Icon(tab.selectedIcon)
@@ -68,14 +68,14 @@ class TabViewRail extends StatelessWidget {
                   ),
               ],
             ),
-            if (isLeft && (divider > 0))
+            if (isLeft && (divider! > 0))
               VerticalDivider(thickness: 1, width: divider),
             // This is the main content.
             if (isLeft)
               Expanded(
                 child: (builder != null)
-                    ? builder(choices[_selectedIndex.value])
-                    : choices[_selectedIndex.value].child,
+                    ? builder!(choices![_selectedIndex.value])
+                    : choices![_selectedIndex.value].child,
               )
           ],
         ),

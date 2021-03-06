@@ -1,26 +1,26 @@
 import 'package:flutter/widgets.dart';
 
 class TabChoice<T> {
-  T data;
-  Widget Function() builder;
-  Function() onPressed;
-  String label;
-  Widget title;
-  bool visible;
-  bool enabled;
-  int index;
-  Widget image;
-  Widget child;
-  IconData icon;
-  IconData selectedIcon;
-  bool primary;
-  Widget trailing;
-  int count;
-  String tooltip;
-  List<TabChoice> items;
-  double width;
-  bool Function(int) completed;
-  TextStyle style;
+  T? data;
+  Widget Function()? builder;
+  Function()? onPressed;
+  String? label;
+  Widget? title;
+  bool? visible;
+  bool? enabled;
+  int? index;
+  Widget? image;
+  Widget? child;
+  IconData? icon;
+  IconData? selectedIcon;
+  bool? primary;
+  Widget? trailing;
+  int? count;
+  String? tooltip;
+  List<TabChoice>? items;
+  double? width;
+  bool Function(int)? completed;
+  TextStyle? style;
   TabChoice(
       {this.builder,
       this.style,

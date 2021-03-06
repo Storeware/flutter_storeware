@@ -7,24 +7,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 class TabViewBottom extends StatefulWidget {
-  final List<TabChoice> choices;
-  final int activeIndex;
-  final Color tabColor;
-  final Color iconColor;
-  final Color tagColor;
-  final Color color;
-  final Color indicatorColor;
-  final double tabHeight;
-  final TextStyle style;
-  final Widget leading;
-  final List<Widget> actions;
-  final Widget bottomNavigationBar;
-  final Widget appBar;
-  final EdgeInsets padding;
-  final Function(int) onChanged;
-  final bool keepPage;
+  final List<TabChoice>? choices;
+  final int? activeIndex;
+  final Color? tabColor;
+  final Color? iconColor;
+  final Color? tagColor;
+  final Color? color;
+  final Color? indicatorColor;
+  final double? tabHeight;
+  final TextStyle? style;
+  final Widget? leading;
+  final List<Widget>? actions;
+  final Widget? bottomNavigationBar;
+  final Widget? appBar;
+  final EdgeInsets? padding;
+  final Function(int)? onChanged;
+  final bool? keepPage;
   const TabViewBottom({
-    Key key,
+    Key? key,
     this.choices,
     this.style,
     this.activeIndex = 0,
@@ -49,43 +49,43 @@ class TabViewBottom extends StatefulWidget {
 
 class _TabViewBottomState extends State<TabViewBottom> {
   Widget getChild(int idx) {
-    return widget.choices[idx].child ??= Container(
-        key: ValueKey(widget.choices[idx].label ?? '$idx'),
-        child: widget.choices[idx].builder());
+    return widget.choices![idx].child ??= Container(
+        key: ValueKey(widget.choices![idx].label ?? '$idx'),
+        child: widget.choices![idx].builder!());
   }
 
   //TabController tabController;
-  ValueNotifier<int> index;
-  ValueNotifier<bool> _isVisible;
-  PageController _pageController;
-  ScrollController scrollController;
+  ValueNotifier<int>? index;
+  ValueNotifier<bool>? _isVisible;
+  PageController? _pageController;
+  ScrollController? scrollController;
   @override
   void initState() {
     super.initState();
     _isVisible = ValueNotifier<bool>(true);
     scrollController = ScrollController();
-    scrollController.addListener(_scrollListener);
+    scrollController!.addListener(_scrollListener);
     index = ValueNotifier<int>(widget.activeIndex ?? 0);
     _pageController = PageController(
-      initialPage: index.value,
-      keepPage: widget.keepPage,
+      initialPage: index!.value,
+      keepPage: widget.keepPage!,
     );
     Timer.run(() {
-      hitTop = (bw * (length - index.value + 1)) > size.width;
-      pageTo(index.value);
+      hitTop = (bw * (length - index!.value + 1)) > size.width;
+      pageTo(index!.value);
     });
   }
 
-  get length => widget.choices.length;
+  get length => widget.choices!.length;
   animateTo(int idx) {
-    scrollController.animateTo(idx * bw,
+    scrollController!.animateTo(idx * bw,
         duration: Duration(milliseconds: 500), curve: Curves.linear);
   }
 
   pageTo(int idx) {
     if (idx < 0) idx = 0;
-    if (idx >= widget.choices.length) idx = widget.choices.length - 1;
-    if (index.value != idx) index.value = idx;
+    if (idx >= widget.choices!.length) idx = widget.choices!.length - 1;
+    if (index!.value != idx) index!.value = idx;
     animateTo(idx);
   }
 
@@ -93,16 +93,18 @@ class _TabViewBottomState extends State<TabViewBottom> {
   bool hitTop = false;
   Size size = Size(800, 450);
   _scrollListener() {
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController!.offset >=
+            scrollController!.position.maxScrollExtent &&
+        !scrollController!.position.outOfRange) {
       setState(() {
         hitBottom = true;
         hitTop = false;
       });
       return;
     }
-    if (scrollController.offset <= scrollController.position.minScrollExtent &&
-        !scrollController.position.outOfRange) {
+    if (scrollController!.offset <=
+            scrollController!.position.minScrollExtent &&
+        !scrollController!.position.outOfRange) {
       setState(() {
         hitBottom = false;
         hitTop = true;
@@ -121,42 +123,42 @@ class _TabViewBottomState extends State<TabViewBottom> {
   set activeIndex(int v) {
     if (v != _oldIndex) {
       _oldIndex = v;
-      if (widget.onChanged != null) widget.onChanged(v);
+      if (widget.onChanged != null) widget.onChanged!(v);
     }
   }
 
   double bw = 60;
-  Color _iconColor;
-  ThemeData theme;
-  Color _tagColor;
-  Color _tabColor;
-  Color _color;
-  Color _indicatorColor;
+  //Color? _iconColor;
+  ThemeData? theme;
+  Color? _tagColor;
+  Color? _tabColor;
+  Color? _color;
+  Color? _indicatorColor;
 
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     theme = Theme.of(context);
-    _color = widget.color ?? theme.bottomAppBarColor;
-    _tabColor = widget.tabColor ?? theme.appBarTheme.color ?? Colors.amber;
-    _iconColor = theme.tabBarTheme?.labelColor ?? theme.buttonColor;
+    _color = widget.color ?? theme!.bottomAppBarColor;
+    _tabColor = widget.tabColor ?? theme!.appBarTheme.color ?? Colors.amber;
+    // _iconColor = theme!.tabBarTheme.labelColor ?? theme!.buttonColor;
 
     _indicatorColor = widget.indicatorColor ?? Colors.grey.withAlpha(20);
-    _tagColor = widget.tagColor ?? theme.indicatorColor;
+    _tagColor = widget.tagColor ?? theme!.indicatorColor;
 
-    bw = size.width / ((size.width / widget.tabHeight).floorToDouble());
+    bw = size.width / ((size.width / widget.tabHeight!).floorToDouble());
 
     return Column(children: [
-      if (widget.appBar != null) widget.appBar,
+      if (widget.appBar != null) widget.appBar!,
       Expanded(
           child: PageView.builder(
         controller: _pageController,
-        onPageChanged: (idx) => index.value = idx,
+        onPageChanged: (idx) => index!.value = idx,
         itemBuilder: (ctx, idx) => getChild(idx),
-        itemCount: widget.choices.length,
+        itemCount: widget.choices!.length,
       )),
       ValueListenableBuilder<bool>(
-        valueListenable: _isVisible,
+        valueListenable: _isVisible!,
         builder: (a, b, c) => (!b)
             ? Container()
             : Container(
@@ -167,7 +169,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
                     children: [
                       Container(
                           height: 1,
-                          color: theme.dividerColor,
+                          color: theme!.dividerColor,
                           child: SizedBox.expand(
                               //child: Container(height: 2, color: theme.dividerColor),
                               )),
@@ -177,7 +179,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (widget.leading != null) widget.leading,
+                              if (widget.leading != null) widget.leading!,
                               Expanded(
                                 child: Stack(
                                   children: [
@@ -197,11 +199,11 @@ class _TabViewBottomState extends State<TabViewBottom> {
                                   ],
                                 ),
                               ),
-                              if (widget.actions != null) ...widget.actions
+                              if (widget.actions != null) ...widget.actions!
                             ],
                           )),
                       if (widget.bottomNavigationBar != null)
-                        widget.bottomNavigationBar,
+                        widget.bottomNavigationBar!,
                     ],
                   ),
                 ),
@@ -219,19 +221,19 @@ class _TabViewBottomState extends State<TabViewBottom> {
       ListView.builder(
         controller: scrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: widget.choices.length,
+        itemCount: widget.choices!.length,
         itemBuilder: (ctx, i) {
-          var choice = widget.choices[i];
+          var choice = widget.choices![i];
           return ValueListenableBuilder<int>(
-            valueListenable: index,
-            builder: (BuildContext context, int idx, Widget child) {
+            valueListenable: index!,
+            builder: (BuildContext context, int idx, Widget? child) {
               activeIndex = idx;
               return Padding(
                 padding: const EdgeInsets.only(
                     left: 0.0, right: 0, top: 2.0, bottom: 2.0),
                 child: InkWell(
                   onTap: () {
-                    _pageController.animateToPage(i,
+                    _pageController!.animateToPage(i,
                         duration: Duration(milliseconds: 500),
                         curve: Curves.ease);
                   },
@@ -264,16 +266,16 @@ class _TabViewBottomState extends State<TabViewBottom> {
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    if (choice.title != null) choice.title,
+                                    if (choice.title != null) choice.title!,
                                     if (choice.label != null)
                                       Expanded(
-                                          child: Text(choice.label,
+                                          child: Text(choice.label!,
                                               overflow: TextOverflow.ellipsis,
                                               style: widget.style ??
                                                   TextStyle(
                                                     fontSize: 11,
                                                     color:
-                                                        (theme.scaffoldBackgroundColor)
+                                                        (theme!.scaffoldBackgroundColor)
                                                                 .isDark
                                                             ? Colors.white70
                                                             : Colors.black87,

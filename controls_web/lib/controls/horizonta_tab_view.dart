@@ -243,7 +243,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
             if (widget.choices![_index.value].child ==
                 null) if (widget.choices![_index.value].builder != null)
               widget.choices![_index.value].child =
-                  widget.choices![_index.value].builder();
+                  widget.choices![_index.value].builder!();
             if (widget.onChanged != null) widget.onChanged!(_index.value);
             if (widget.choices![_index.value].child == null) return Container();
             return Stack(children: [
@@ -254,7 +254,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                   bottom: widget.bottom,
                   left: widget.left,
                   right: widget.right,
-                  child: widget.choices![_index.value].child),
+                  child: widget.choices![_index.value].child!),
               if (widget.bottomBar != null)
                 Positioned(
                     bottom: 0, left: 0, right: 0, child: widget.bottomBar!),
@@ -292,14 +292,14 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                               child: Column(
                                 children: [
                                   if (widget.choices![index].image != null)
-                                    widget.choices![index].image,
+                                    widget.choices![index].image!,
                                   if (widget.choices![index].icon != null)
                                     Icon(widget.choices![index].icon,
                                         color: _iconColor),
                                   if (_index.value == index) ...[
                                     SizedBox(height: 2),
                                     widget.choices![index].title ??
-                                        Text(widget.choices![index].label,
+                                        Text(widget.choices![index].label!,
                                             style: (widget.tabStyle ??
                                                 TextStyle(
                                                   fontSize: 14,
@@ -338,7 +338,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                     )
                                   : null,
                           title: widget.choices![index].title ??
-                              Text(widget.choices![index].label,
+                              Text(widget.choices![index].label!,
                                   style: widget.tabStyle ??
                                       theme!.textTheme.bodyText1!.copyWith(
                                           fontWeight: FontWeight.w500,
@@ -399,7 +399,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                     ),
                                 tab.title ??
                                     Text(
-                                      tab.label,
+                                      tab.label!,
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 18,
@@ -413,13 +413,13 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                           ),
                         ),
                         onTap: () {
-                          if (tab.primary)
+                          if (tab.primary!)
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (x) {
                                 if (tab.child == null)
-                                  tab.child = tab.builder();
-                                return tab.child;
+                                  tab.child = tab.builder!();
+                                return tab.child!;
                               }),
                             );
                           else
@@ -427,12 +427,12 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                               context,
                               MaterialPageRoute(builder: (x) {
                                 if (tab.child == null)
-                                  tab.child = tab.builder();
+                                  tab.child = tab.builder!();
                                 return Scaffold(
                                   appBar: AppBar(
                                       title: tab.title ??
                                           Text(
-                                            tab.label,
+                                            tab.label!,
                                           )),
                                   body: tab.child,
                                 );

@@ -11,12 +11,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 const hideListAtividadeIniciais = 'hideListAtividadeIniciais';
 
 class VerAtividadesIniciaisPage extends StatefulWidget {
-  final String urlYourtube;
-  final List<Widget> children;
-  final Widget child;
-  final int delay;
+  final String? urlYourtube;
+  final List<Widget>? children;
+  final Widget? child;
+  final int? delay;
   const VerAtividadesIniciaisPage(
-      {Key key, this.child, this.urlYourtube, this.delay = 500, this.children})
+      {Key? key, this.child, this.urlYourtube, this.delay = 500, this.children})
       : super(key: key);
 
   @override
@@ -26,32 +26,32 @@ class VerAtividadesIniciaisPage extends StatefulWidget {
 
 class _VerAtividadesIniciaisPageState extends State<VerAtividadesIniciaisPage> {
   bool inited = false;
-  Timer timer;
+  Timer? timer;
   @override
   Widget build(BuildContext context) {
     if (!inited) {
-      timer = Timer(Duration(milliseconds: widget.delay), () {
+      timer = Timer(Duration(milliseconds: widget.delay!), () {
         inited = true;
         if (!LocalStorage().getBool(hideListAtividadeIniciais))
           Dialogs.showPage(context,
               height: 350,
               width: 250,
               child: _VerPalyListaPage(
-                urlYourtube: widget.urlYourtube,
-                children: widget.children,
+                urlYourtube: widget.urlYourtube!,
+                children: widget.children!,
               ));
-        timer.cancel();
+        timer!.cancel();
       });
     }
 
-    return widget.child;
+    return widget.child!;
   }
 }
 
 class _VerPalyListaPage extends StatefulWidget {
-  final String urlYourtube;
-  final List<Widget> children;
-  _VerPalyListaPage({Key key, this.urlYourtube, this.children})
+  final String? urlYourtube;
+  final List<Widget>? children;
+  _VerPalyListaPage({Key? key, this.urlYourtube, this.children})
       : super(key: key);
 
   @override
@@ -72,7 +72,7 @@ class __VerPalyListaPageState extends State<_VerPalyListaPage> {
               title: Text('Ver treinamentos'),
               trailing: Icon(FontAwesomeIcons.youtube, color: Colors.red),
               onTap: () {
-                launch(widget.urlYourtube);
+                launch(widget.urlYourtube!);
               },
             ),
           ),

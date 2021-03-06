@@ -51,28 +51,28 @@ Color strapFontColor(StrapButtonType type) {
 enum StrapButtonState { none, pressed, processing, waiting }
 
 class StrapButton extends StatefulWidget {
-  final String text;
-  final Widget title, subtitle;
-  final Function onPressed;
-  final int maxLines;
-  final Future<StrapButtonState> Function() onPressedAsync;
+  final String? text;
+  final Widget? title, subtitle;
+  final Function? onPressed;
+  final int? maxLines;
+  final Future<StrapButtonState> Function()? onPressedAsync;
 
-  final StrapButtonType type;
-  final double height;
-  final double width;
-  final double margin;
-  final double radius;
-  final double borderWidth;
-  final Widget leading;
-  final Widget trailing;
-  final Widget image;
-  final bool enabled;
-  final bool visible;
+  final StrapButtonType? type;
+  final double? height;
+  final double? width;
+  final double? margin;
+  final double? radius;
+  final double? borderWidth;
+  final Widget? leading;
+  final Widget? trailing;
+  final Widget? image;
+  final bool? enabled;
+  final bool? visible;
   final StrapButtonState Function(
-      StrapButtonState, ValueNotifier<StrapButtonState>) onStateChanged;
-  final ValueNotifier<StrapButtonState> stateNotifier;
+      StrapButtonState, ValueNotifier<StrapButtonState>)? onStateChanged;
+  final ValueNotifier<StrapButtonState>? stateNotifier;
   const StrapButton({
-    Key key,
+    Key? key,
     this.text,
     this.onPressed,
     this.margin = 1,
@@ -99,7 +99,7 @@ class StrapButton extends StatefulWidget {
 }
 
 class _StrapButtonState extends State<StrapButton> {
-  ValueNotifier<StrapButtonState> _valueNotifier;
+  ValueNotifier<StrapButtonState>? _valueNotifier;
 
   @override
   void initState() {
@@ -110,9 +110,9 @@ class _StrapButtonState extends State<StrapButton> {
 
   stateChanged(StrapButtonState value) {
     if (widget.onStateChanged != null) {
-      _valueNotifier.value = widget.onStateChanged(value, _valueNotifier);
+      _valueNotifier!.value = widget.onStateChanged!(value, _valueNotifier!);
     } else {
-      _valueNotifier.value = value;
+      _valueNotifier!.value = value;
     }
   }
 
@@ -121,7 +121,7 @@ class _StrapButtonState extends State<StrapButton> {
     stateChanged(StrapButtonState.none);
     var theme = Theme.of(context);
     primaryColor = theme.primaryColor;
-    return (!widget.visible)
+    return (!widget.visible!)
         ? Container()
         : Container(
             height: widget.height,
@@ -129,26 +129,26 @@ class _StrapButtonState extends State<StrapButton> {
             decoration: widget.type == StrapButtonType.none
                 ? null
                 : BoxDecoration(
-                    borderRadius: BorderRadius.circular(widget.radius),
+                    borderRadius: BorderRadius.circular(widget.radius!),
                     border: Border.all(
-                        width: widget.borderWidth,
+                        width: widget.borderWidth!,
                         color: Colors.grey.withOpacity(0.2)),
                     color: (widget.type == StrapButtonType.primary)
                         ? primaryColor
-                        : strapColor(widget.type),
+                        : strapColor(widget.type!),
                   ),
             child: ValueListenableBuilder<StrapButtonState>(
-                valueListenable: _valueNotifier,
+                valueListenable: _valueNotifier!,
                 builder: (BuildContext context, StrapButtonState stateValue,
-                    Widget child) {
-                  return FlatButton(
+                    Widget? child) {
+                  return TextButton(
                     child: Padding(
                         padding: const EdgeInsets.all(1),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             if (widget.leading != null)
-                              Flexible(flex: 1, child: widget.leading),
+                              Flexible(flex: 1, child: widget.leading!),
                             Expanded(
                               //flex: 4,
                               child: Column(
@@ -156,25 +156,25 @@ class _StrapButtonState extends State<StrapButton> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  if (widget.image != null) widget.image,
+                                  if (widget.image != null) widget.image!,
                                   if (widget.title != null)
                                     DefaultTextStyle(
-                                        style: theme.textTheme.button,
-                                        child: widget.title),
+                                        style: theme.textTheme.button!,
+                                        child: widget.title!),
                                   if (widget.text != null)
-                                    Text(widget.text,
+                                    Text(widget.text!,
                                         maxLines: widget.maxLines,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: (widget.enabled)
-                                              ? strapFontColor(widget.type)
+                                          color: (widget.enabled!)
+                                              ? strapFontColor(widget.type!)
                                               : theme.dividerColor,
                                           fontSize: 16,
                                         )),
                                   if (widget.subtitle != null)
                                     DefaultTextStyle(
-                                        style: theme.textTheme.caption,
-                                        child: widget.subtitle),
+                                        style: theme.textTheme.caption!,
+                                        child: widget.subtitle!),
                                   if ([
                                     StrapButtonState.waiting,
                                     StrapButtonState.processing
@@ -183,32 +183,32 @@ class _StrapButtonState extends State<StrapButton> {
                                         child: Container(
                                             width: double.maxFinite,
                                             height: 2,
-                                            color: strapColor(widget.type),
+                                            color: strapColor(widget.type!),
                                             child: LinearProgressIndicator(
                                               backgroundColor:
                                                   Colors.transparent,
                                               valueColor:
                                                   AlwaysStoppedAnimation(
                                                       strapFontColor(
-                                                          widget.type)),
+                                                          widget.type!)),
                                             ))),
                                 ],
                               ),
                             ),
                             if (widget.trailing != null)
-                              Flexible(flex: 1, child: widget.trailing),
+                              Flexible(flex: 1, child: widget.trailing!),
                           ],
                         )),
-                    onPressed: (widget.enabled &&
+                    onPressed: (widget.enabled! &&
                             (stateValue != StrapButtonState.waiting))
                         ? () async {
                             stateChanged(StrapButtonState.pressed);
                             if (widget.onPressedAsync != null) {
                               stateChanged(StrapButtonState.waiting);
-                              stateChanged(await widget.onPressedAsync() ??
+                              stateChanged((await widget.onPressedAsync!()) ??
                                   StrapButtonState.none);
                             } else {
-                              widget.onPressed();
+                              widget.onPressed!();
                             }
                           }
                         : null,

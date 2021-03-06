@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 
-doubleMoneyStr(double total, {dec = 2}) {
-  return (total ?? 0).toStringAsFixed(dec).replaceAll('.', ',');
+String doubleMoneyStr(double total, {int? dec = 2}) {
+  return (total).toStringAsFixed(dec!).replaceAll('.', ',');
 }
 
 class TotalWidget extends StatelessWidget {
   const TotalWidget({
-    Key key,
+    Key? key,
     @required this.total,
     this.fontSize = 20,
     this.fontColor,
   }) : super(key: key);
 
-  final double total;
-  final double fontSize;
-  final Color fontColor;
+  final double? total;
+  final double? fontSize;
+  final Color? fontColor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class TotalWidget extends StatelessWidget {
           child: Text('R\$',
               style: TextStyle(
                   color: fontColor,
-                  fontSize: fontSize * 0.5,
+                  fontSize: fontSize! * 0.5,
                   fontWeight: FontWeight.bold)),
         ),
         Container(
@@ -47,11 +47,11 @@ class TotalWidget extends StatelessWidget {
 
 class TotalPainel extends StatelessWidget {
   const TotalPainel({
-    Key key,
+    Key? key,
     @required this.total,
   }) : super(key: key);
 
-  final double total;
+  final double? total;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +69,7 @@ class TotalPainel extends StatelessWidget {
                 'VALOR TOTAL: ',
                 textAlign: TextAlign.left,
                 style: TextStyle(
-                    fontSize: 20, color: theme.textTheme.bodyText1.color),
+                    fontSize: 20, color: theme.textTheme.bodyText1!.color),
               ),
             ),
             Align(

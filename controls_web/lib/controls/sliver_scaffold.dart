@@ -5,10 +5,10 @@ typedef WidgetListBuilderContext(BuildContext context, int index);
 
 class WidgetList {
   static List<Widget> count(context,
-      {int itemCount = 0, WidgetListBuilderContext itemBuilder}) {
+      {int itemCount = 0, WidgetListBuilderContext? itemBuilder}) {
     List<Widget> rt = [];
     for (var i = 0; i < itemCount; i++) {
-      rt.add(itemBuilder(context, i));
+      rt.add(itemBuilder!(context, i));
     }
     return rt;
   }
@@ -16,35 +16,35 @@ class WidgetList {
 
 // ignore: must_be_immutable
 class SliverScaffold extends StatefulWidget {
-  final AppBar appBar;
-  final SliverAppBar sliverAppBar;
-  final List<Widget> slivers;
-  final List<Widget> grid;
-  final List<Widget> bottomSlivers;
-  final Widget body;
-  final Widget drawer;
-  final Widget endDrawer;
-  final double radius;
-  Color backgroundColor;
-  final Widget floatingActionButton;
-  final Widget bottomNavigationBar;
+  final AppBar? appBar;
+  final SliverAppBar? sliverAppBar;
+  final List<Widget>? slivers;
+  final List<Widget>? grid;
+  final List<Widget>? bottomSlivers;
+  final Widget? body;
+  final Widget? drawer;
+  final Widget? endDrawer;
+  final double? radius;
+  Color? backgroundColor;
+  final Widget? floatingActionButton;
+  final Widget? bottomNavigationBar;
   final afterLoaded;
-  final ScrollController controller;
-  final bool isScrollView;
-  double topRadius;
-  double bottomRadius;
-  final bool reverse;
-  final bool resizeToAvoidBottomPadding;
-  final double gridMainAxisSpacing;
-  final double gridCrossAxisSpacing;
-  final double gridChildAspectRatio;
-  final int gridCrossAxisCount;
-  final Widget extendedBar;
-  final double bodyTop;
-  final double elevation;
-  final FloatingActionButtonLocation floatingActionButtonLocation;
+  final ScrollController? controller;
+  final bool? isScrollView;
+  double? topRadius;
+  double? bottomRadius;
+  final bool? reverse;
+  final bool? resizeToAvoidBottomPadding;
+  final double? gridMainAxisSpacing;
+  final double? gridCrossAxisSpacing;
+  final double? gridChildAspectRatio;
+  final int? gridCrossAxisCount;
+  final Widget? extendedBar;
+  final double? bodyTop;
+  final double? elevation;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   SliverScaffold(
-      {Key key,
+      {Key? key,
       this.appBar,
       this.sliverAppBar,
       this.slivers,
@@ -80,7 +80,7 @@ class SliverScaffold extends StatefulWidget {
   }
 
   static scrollable(
-      {Key key,
+      {Key? key,
       appBar,
       sliverAppBar,
       slivers,
@@ -113,9 +113,9 @@ class SliverScaffold extends StatefulWidget {
   }
 
   static nested(
-      {AppBar appBar,
-      SliverAppBar sliverAppBar,
-      @required Widget body,
+      {AppBar? appBar,
+      SliverAppBar? sliverAppBar,
+      @required Widget? body,
       double radius = 0.0,
       bottomNavigationBar,
       bool isScrollView = false}) {
@@ -129,10 +129,10 @@ class SliverScaffold extends StatefulWidget {
   }
 
   static sliverGrid(
-      {AppBar appBar,
-      SliverAppBar sliverAppBar,
-      List<Widget> grid,
-      @required Widget body,
+      {AppBar? appBar,
+      SliverAppBar? sliverAppBar,
+      List<Widget>? grid,
+      @required Widget? body,
       double radius = 0.0,
       bottomNavigationBar,
       bool isScrollView = false}) {
@@ -153,11 +153,11 @@ class SliverScaffold extends StatefulWidget {
 class _SliverScaffoldState extends State<SliverScaffold> {
   List<Widget> _builder() {
     List<Widget> rt = [];
-    if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar);
+    if (widget.sliverAppBar != null) rt.add(widget.sliverAppBar!);
     if (widget.extendedBar != null)
       rt.add(SliverToBoxAdapter(child: widget.extendedBar));
     if (widget.slivers != null)
-      widget.slivers.forEach((f) {
+      widget.slivers!.forEach((f) {
         rt.add(f);
       });
     if (widget.grid != null) {
@@ -165,30 +165,30 @@ class _SliverScaffoldState extends State<SliverScaffold> {
       rt.add(
         SliverGrid(
           gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-            mainAxisSpacing: widget.gridMainAxisSpacing,
-            crossAxisSpacing: widget.gridCrossAxisSpacing,
-            childAspectRatio: widget.gridChildAspectRatio,
-            crossAxisCount: widget.gridCrossAxisCount,
+            mainAxisSpacing: widget.gridMainAxisSpacing!,
+            crossAxisSpacing: widget.gridCrossAxisSpacing!,
+            childAspectRatio: widget.gridChildAspectRatio!,
+            crossAxisCount: widget.gridCrossAxisCount!,
           ),
           delegate: new SliverChildBuilderDelegate(
             (BuildContext context, int index) {
-              return widget.grid[index];
+              return widget.grid![index];
             },
-            childCount: widget.grid.length,
+            childCount: widget.grid!.length,
           ),
         ),
       );
     }
     if (widget.bottomSlivers != null)
-      for (var item in widget.bottomSlivers)
+      for (var item in widget.bottomSlivers!)
         rt.add(SliverToBoxAdapter(child: item));
     return rt;
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget _body = widget.body;
-    if (widget.isScrollView) _body = SingleChildScrollView(child: widget.body);
+    Widget _body = widget.body!;
+    if (widget.isScrollView!) _body = SingleChildScrollView(child: widget.body);
     var theme = Theme.of(context);
     var scf = Scaffold(
         //resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
@@ -205,19 +205,19 @@ class _SliverScaffoldState extends State<SliverScaffold> {
             color: widget.backgroundColor ?? theme.primaryColor,
             child: ClipRRect(
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(widget.topRadius),
-                topRight: Radius.circular(widget.topRadius),
-                bottomLeft: Radius.circular(widget.bottomRadius),
-                bottomRight: Radius.circular(widget.bottomRadius),
+                topLeft: Radius.circular(widget.topRadius!),
+                topRight: Radius.circular(widget.topRadius!),
+                bottomLeft: Radius.circular(widget.bottomRadius!),
+                bottomRight: Radius.circular(widget.bottomRadius!),
               ),
               child: Container(
                   color: widget.backgroundColor ??
                       Theme.of(context).scaffoldBackgroundColor,
                   child: NestedScrollView(
                     controller: widget.controller,
-                    reverse: widget.reverse,
+                    reverse: widget.reverse!,
                     headerSliverBuilder: (context, inner) {
-                      return _builder() ?? Container();
+                      return _builder() ?? [Container()];
                     },
                     body: _createBody(_body) ?? Container(),
                   )),
@@ -225,7 +225,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
 
     var rt = Container(
         child: ClipRRect(
-            borderRadius: BorderRadius.circular(widget.radius), child: scf));
+            borderRadius: BorderRadius.circular(widget.radius!), child: scf));
 
     if (widget.afterLoaded != null) widget.afterLoaded(scf);
 
@@ -241,22 +241,22 @@ class _SliverScaffoldState extends State<SliverScaffold> {
       );
     } else {
     */
-    return (widget.isScrollView
+    return ((widget.isScrollView ?? false)
         ? Scaffold(
             //resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
             body: (widget.body == null ? Text('no data.....') : _body))
-        : widget.body);
+        : widget.body!);
   }
   //}
 }
 
 class ExtendedAppBar extends StatelessWidget {
-  final Widget child;
-  final double height;
-  final Color color;
-  final double width;
+  final Widget? child;
+  final double? height;
+  final Color? color;
+  final double? width;
   const ExtendedAppBar(
-      {Key key,
+      {Key? key,
       this.height = 120,
       this.width = double.maxFinite,
       this.child,
@@ -275,17 +275,17 @@ class ExtendedAppBar extends StatelessWidget {
 }
 
 class BoxContainer extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final double topLeft;
-  final double topRight;
-  final double bottomLeft;
-  final double bottomRight;
-  final double topPositioned;
-  final BoxDecoration decoration;
-  final EdgeInsets padding;
+  final Widget? child;
+  final Color? color;
+  final double? topLeft;
+  final double? topRight;
+  final double? bottomLeft;
+  final double? bottomRight;
+  final double? topPositioned;
+  final BoxDecoration? decoration;
+  final EdgeInsets? padding;
   const BoxContainer(
-      {Key key,
+      {Key? key,
       this.child,
       this.color,
       this.decoration,
@@ -303,24 +303,24 @@ class BoxContainer extends StatelessWidget {
       return _createChild(context);
     else
       return Padding(
-        padding: padding,
+        padding: padding!,
         child: _createChild(context),
       );
   }
 
   Container _createChild(context) {
     return Container(
-      constraints: BoxConstraints(minHeight: topPositioned + 20, minWidth: 20),
+      constraints: BoxConstraints(minHeight: topPositioned! + 20, minWidth: 20),
       height: double.maxFinite,
       width: double.maxFinite,
       decoration: decoration ??
           BoxDecoration(
               color: color,
               borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(topLeft),
-                  topRight: Radius.circular(topRight),
-                  bottomLeft: Radius.circular(bottomLeft),
-                  bottomRight: Radius.circular(bottomRight))),
+                  topLeft: Radius.circular(topLeft!),
+                  topRight: Radius.circular(topRight!),
+                  bottomLeft: Radius.circular(bottomLeft!),
+                  bottomRight: Radius.circular(bottomRight!))),
       child: Stack(
         children: <Widget>[
           child ?? Container(),
@@ -331,34 +331,34 @@ class BoxContainer extends StatelessWidget {
 }
 
 AppBar appBarLight({
-  String text,
-  Widget title,
-  Color backgroundColor,
-  List<Widget> actions,
-  Widget leading,
+  String? text,
+  Widget? title,
+  Color? backgroundColor,
+  List<Widget>? actions,
+  Widget? leading,
 }) {
   return AppBar(
       backgroundColor: backgroundColor,
-      title: title ?? Text(text),
+      title: title ?? Text(text!),
       leading: leading,
       elevation: default_elevation,
       actions: actions);
 }
 
 class ScaffoldLight extends StatefulWidget {
-  final String title;
-  final Widget body;
-  final ExtendedAppBar extendedBar;
-  final Widget appBar;
-  final double bodyTop;
-  final Widget bottomNavigationBar;
-  final Widget panelImage;
-  final double extendedPanelHeigh;
-  final Color backgroudColor;
-  final Widget drawer;
-  final Key scaffoldKey;
+  final String? title;
+  final Widget? body;
+  final ExtendedAppBar? extendedBar;
+  final PreferredSizeWidget? appBar;
+  final double? bodyTop;
+  final Widget? bottomNavigationBar;
+  final Widget? panelImage;
+  final double? extendedPanelHeigh;
+  final Color? backgroudColor;
+  final Widget? drawer;
+  final Key? scaffoldKey;
   ScaffoldLight(
-      {Key key,
+      {Key? key,
       this.title,
       this.scaffoldKey,
       this.drawer,
@@ -380,7 +380,7 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
   Widget build(BuildContext context) {
     Color bg = Theme.of(context).scaffoldBackgroundColor;
     double h = 0;
-    if (widget.extendedBar != null) h = widget.extendedBar.height ?? 0;
+    if (widget.extendedBar != null) h = widget.extendedBar!.height ?? 0;
     return Scaffold(
       key: widget.scaffoldKey,
       appBar: widget.appBar,
@@ -391,7 +391,7 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
             widget.backgroudColor ?? Theme.of(context).scaffoldBackgroundColor,
         height: double.maxFinite,
         child: Stack(children: [
-          if (widget.extendedBar != null) widget.extendedBar,
+          if (widget.extendedBar != null) widget.extendedBar!,
           Container(
               width: double.infinity,
               height: widget.extendedPanelHeigh,
@@ -399,11 +399,11 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
                   color: bg,
                   child: Center(
                     child: widget.title != null
-                        ? Text(widget.title,
+                        ? Text(widget.title!,
                             style: TextStyle(color: Colors.white, fontSize: 18))
                         : widget.panelImage,
                   ))),
-          widget.body
+          widget.body!
         ]),
       ),
       bottomNavigationBar: widget.bottomNavigationBar,
@@ -413,13 +413,13 @@ class _ScaffoldLightState extends State<ScaffoldLight> {
 
 class SliverHeader extends StatelessWidget {
   final text;
-  final Color color;
-  final TextStyle style;
-  final Widget child;
-  final double max;
-  final double min;
+  final Color? color;
+  final TextStyle? style;
+  final Widget? child;
+  final double? max;
+  final double? min;
   const SliverHeader(this.text,
-      {Key key,
+      {Key? key,
       this.child,
       this.max = 60,
       this.min = 30,
@@ -433,24 +433,24 @@ class SliverHeader extends StatelessWidget {
       pinned: false,
       floating: true,
       delegate: Delegate(
-          max: max,
-          min: min,
+          max: max!,
+          min: min!,
           child: child ??
               Center(
                   child: Text(
                 text,
                 style: style,
               )),
-          color: color),
+          color: color!),
     );
   }
 }
 
 class Delegate extends SliverPersistentHeaderDelegate {
-  final Color color;
-  final Widget child;
-  final double max;
-  final double min;
+  final Color? color;
+  final Widget? child;
+  final double? max;
+  final double? min;
   Delegate({this.color, this.child, this.max = 60, this.min = 30});
 
   @override
@@ -459,10 +459,10 @@ class Delegate extends SliverPersistentHeaderDelegate {
       Container(child: child, color: color);
 
   @override
-  double get maxExtent => max;
+  double get maxExtent => max!;
 
   @override
-  double get minExtent => min;
+  double get minExtent => min!;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;

@@ -135,7 +135,7 @@ class _TabBarViewState extends State<PageTabView>
     List<Widget> rt = [];
     if (widget.choices != null)
       widget.choices!.forEach((c) {
-        rt.add(c.child);
+        rt.add(c.child!);
       });
     return rt;
   }
@@ -149,7 +149,7 @@ class _TabBarViewState extends State<PageTabView>
           ),
           tooltip: tc.tooltip,
           onPressed: () {
-            if (tc.index < 0) {
+            if (tc.index! < 0) {
               Navigator.pop(context);
             } else
               _nextPage(to: idx);
@@ -165,13 +165,13 @@ class _TabBarViewState extends State<PageTabView>
           children: <Widget>[
             tc.image ?? Icon(tc.icon, size: 25, color: _iconColor),
             if (tc.label != null)
-              Text(tc.label, style: TextStyle(fontSize: 18, color: _iconColor))
+              Text(tc.label!, style: TextStyle(fontSize: 18, color: _iconColor))
           ],
         ),
       ),
       onTap: () {
         if (widget.choices![idx].onPressed != null)
-          widget.choices![idx].onPressed();
+          widget.choices![idx].onPressed!();
         else
           _nextPage(to: idx);
       },

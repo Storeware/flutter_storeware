@@ -1,12 +1,12 @@
 import 'package:flutter/widgets.dart';
 
 class VerticalText extends StatelessWidget {
-  final String text;
-  final TextStyle style;
-  final double runSpacing;
+  final String? text;
+  final TextStyle? style;
+  final double? runSpacing;
   const VerticalText(
     this.text, {
-    Key key,
+    Key? key,
     this.style,
     this.runSpacing = 30,
   }) : super(key: key);
@@ -14,11 +14,11 @@ class VerticalText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-        runSpacing: runSpacing,
+        runSpacing: runSpacing!,
         direction: Axis.vertical,
         alignment: WrapAlignment.center,
         children: [
-          ...text.split("").map((string) => Text(string, style: style)),
+          ...text!.split("").map((string) => Text(string, style: style)),
         ]);
   }
 }

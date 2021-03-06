@@ -5,39 +5,39 @@ import 'package:flutter/material.dart';
 //import 'swipe_detector.dart';
 
 class VerticalTopTabNavigatorController {
-  _VerticalTopTabNavigatorState parent;
-  animateTo(index) => parent.animateTo(index);
-  get activeIndex => parent.activeIndex;
+  _VerticalTopTabNavigatorState? parent;
+  animateTo(index) => parent!.animateTo(index);
+  get activeIndex => parent!.activeIndex;
   showPage(Widget page) {
-    if (pageView != null) pageView.showPage(page);
+    if (pageView != null) pageView!.showPage(page);
   }
 
-  _VerticalTopTabViewState pageView;
+  _VerticalTopTabViewState? pageView;
 }
 
 class VerticalTopTabView extends StatefulWidget {
-  final VerticalTopTabPosition position;
-  final double right;
-  final double left;
-  final List<Widget> actions;
-  final List<TabChoice> choices;
-  final double height;
-  final VerticalTopTabNavigatorController controller;
-  final int initialIndex;
-  final Color iconColor;
-  final TextStyle style;
-  final Color indicatorColor;
-  final Color selectedColor;
-  final Color tabColor;
-  final Widget leading;
-  final double spacing;
-  final Color completedColor;
-  final Widget Function(TabChoice) timelineBuild;
-  final Function(int) onSelectedItem;
-  final Color backgroundColor;
+  final VerticalTopTabPosition? position;
+  final double? right;
+  final double? left;
+  final List<Widget>? actions;
+  final List<TabChoice>? choices;
+  final double? height;
+  final VerticalTopTabNavigatorController? controller;
+  final int? initialIndex;
+  final Color? iconColor;
+  final TextStyle? style;
+  final Color? indicatorColor;
+  final Color? selectedColor;
+  final Color? tabColor;
+  final Widget? leading;
+  final double? spacing;
+  final Color? completedColor;
+  final Widget Function(TabChoice)? timelineBuild;
+  final Function(int)? onSelectedItem;
+  final Color? backgroundColor;
 
   const VerticalTopTabView(
-      {Key key,
+      {Key? key,
       this.position = VerticalTopTabPosition.right,
       this.initialIndex = 0,
       this.indicatorColor,
@@ -64,29 +64,29 @@ class VerticalTopTabView extends StatefulWidget {
 }
 
 class _VerticalTopTabViewState extends State<VerticalTopTabView> {
-  VerticalTopTabNavigatorController controller;
-  ValueNotifier<Widget> _child;
-  int position;
+  VerticalTopTabNavigatorController? controller;
+  ValueNotifier<Widget>? _child;
+  int? position;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? VerticalTopTabNavigatorController();
-    controller.pageView = this;
+    controller!.pageView = this;
     _child = ValueNotifier<Widget>(Container());
     position = widget.initialIndex;
   }
 
   showPage(Widget page) {
-    _child.value = page;
+    _child!.value = page;
   }
 
-  get maxIndex => widget.choices.length - 1;
+  get maxIndex => widget.choices!.length - 1;
   get minIndex => 0;
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    DateTime ultimo = DateTime.now();
-    int newIndex = widget.initialIndex;
+    //DateTime ultimo = DateTime.now();
+    //int newIndex = widget.initialIndex!;
     return Container(
         color: widget.backgroundColor,
         child: Column(
@@ -96,16 +96,16 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           children: [
 //        if (widget.left != null) SizedBox(width: widget.left),
             VerticalTopTabNavigator(
-              backgroundColor: widget.backgroundColor,
-              position: widget.position,
-              left: widget.left,
-              right: widget.right,
-              height: widget.height,
-              actions: widget.actions,
-              choices: widget.choices,
-              controller: controller,
-              leading: widget.leading,
-              iconColor: widget.iconColor,
+              backgroundColor: widget.backgroundColor!,
+              position: widget.position!,
+              left: widget.left!,
+              right: widget.right!,
+              height: widget.height!,
+              actions: widget.actions!,
+              choices: widget.choices!,
+              controller: controller!,
+              leading: widget.leading!,
+              iconColor: widget.iconColor!,
               initialIndex: widget.initialIndex,
               indicatorColor: widget.indicatorColor ?? theme.indicatorColor,
               selectedColor: widget.selectedColor,
@@ -115,30 +115,31 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
               timelineBuild: widget.timelineBuild,
               onSelectItem: (index, tab) {
                 position = index;
-                if (widget.onSelectedItem != null) widget.onSelectedItem(index);
+                if (widget.onSelectedItem != null)
+                  widget.onSelectedItem!(index);
                 if (tab.onPressed != null)
-                  tab.onPressed();
+                  tab.onPressed!();
                 else {
-                  tab.child ??= tab.builder();
-                  _child.value = tab.child;
+                  tab.child ??= tab.builder!();
+                  _child!.value = tab.child!;
                 }
               },
             ),
             Expanded(
               child: ValueListenableBuilder<Widget>(
-                valueListenable: _child,
-                builder: (a, widget, c) => AnimatedSwitcher(
+                valueListenable: _child!,
+                builder: (a, widget, Widget? c) => AnimatedSwitcher(
                     duration: Duration(milliseconds: 500),
                     child: SwipeDetector(
-                      child: _child.value ?? Container(),
+                      child: _child!.value ?? Container(),
                       onSwipeRight: () {
                         print(['right', position, maxIndex]);
-                        if (position > 0) controller.animateTo(position - 1);
+                        if (position! > 0) controller!.animateTo(position! - 1);
                       },
                       onSwipeLeft: () {
                         print(['left', position]);
-                        if (position < maxIndex)
-                          controller.animateTo(position + 1);
+                        if (position! < maxIndex)
+                          controller!.animateTo(position! + 1);
                       },
                     ),
                     switchInCurve: Curves.ease,
@@ -157,26 +158,26 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
 enum VerticalTopTabPosition { left, right }
 
 class VerticalTopTabNavigator extends StatefulWidget {
-  final List<TabChoice> choices;
-  final Function(int, TabChoice) onSelectItem;
-  final int initialIndex;
-  final VerticalTopTabPosition position;
-  final Color indicatorColor;
-  final Color selectedColor;
-  final List<Widget> actions;
-  final Widget leading;
-  final double left, right;
-  final Color tabColor;
-  final Color iconColor;
-  final TextStyle style;
-  final double spacing;
-  final double height;
-  final Color backgroundColor;
-  final Color completedColor;
-  final Widget Function(TabChoice) timelineBuild;
-  final VerticalTopTabNavigatorController controller;
+  final List<TabChoice>? choices;
+  final Function(int, TabChoice)? onSelectItem;
+  final int? initialIndex;
+  final VerticalTopTabPosition? position;
+  final Color? indicatorColor;
+  final Color? selectedColor;
+  final List<Widget>? actions;
+  final Widget? leading;
+  final double? left, right;
+  final Color? tabColor;
+  final Color? iconColor;
+  final TextStyle? style;
+  final double? spacing;
+  final double? height;
+  final Color? backgroundColor;
+  final Color? completedColor;
+  final Widget Function(TabChoice)? timelineBuild;
+  final VerticalTopTabNavigatorController? controller;
   VerticalTopTabNavigator(
-      {Key key,
+      {Key? key,
       @required this.choices,
       this.onSelectItem,
       this.initialIndex = 0,
@@ -204,66 +205,66 @@ class VerticalTopTabNavigator extends StatefulWidget {
 }
 
 class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
-  ValueNotifier<int> active;
-  VerticalTopTabNavigatorController controller;
+  ValueNotifier<int>? active;
+  VerticalTopTabNavigatorController? controller;
   @override
   void initState() {
     super.initState();
     controller = widget.controller ?? VerticalTopTabNavigatorController();
-    controller.parent = this;
+    controller!.parent = this;
   }
 
   animateTo(index) {
-    widget.onSelectItem(index, widget.choices[index]);
-    active.value = index;
+    widget.onSelectItem!(index, widget.choices![index]);
+    active!.value = index;
   }
 
-  get activeIndex => active.value;
+  get activeIndex => active!.value;
   //ValueNotifier<bool> bShowDrownMenu;
-  Color _iconColor;
-  Color _tabColor;
-  ThemeData theme;
+  //Color? _iconColor;
+  Color? _tabColor;
+  ThemeData? theme;
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    _iconColor = widget.iconColor ??
-        theme.tabBarTheme?.labelColor ??
-        theme.textTheme.bodyText1.color.withAlpha(100);
-    _tabColor = widget.tabColor ?? theme.scaffoldBackgroundColor;
+    //_iconColor = widget.iconColor ??
+    //    theme!.tabBarTheme.labelColor ??
+    //    theme!.textTheme.bodyText1!.color!.withAlpha(100);
+    _tabColor = widget.tabColor ?? theme!.scaffoldBackgroundColor;
     Color _selectedColor =
-        widget.selectedColor ?? theme.scaffoldBackgroundColor;
+        widget.selectedColor ?? theme!.scaffoldBackgroundColor;
     //bShowDrownMenu = ValueNotifier<bool>(false);
     if (active == null) {
       active = ValueNotifier<int>(widget.initialIndex ?? 0);
-      if (active.value >= 0)
-        widget.onSelectItem(active.value, widget.choices[active.value]);
+      if (active!.value >= 0)
+        widget.onSelectItem!(active!.value, widget.choices![active!.value]);
     }
     return Container(
       padding: const EdgeInsets.only(left: 3.0, right: 3.0),
       height: widget.height,
       width: double.maxFinite,
       child: ValueListenableBuilder<int>(
-        valueListenable: active,
+        valueListenable: active!,
         builder: (a, b, w) => Row(children: [
           /// objetos a esquerda
           if (widget.left != null) SizedBox(width: widget.left),
-          if (widget.leading != null) widget.leading,
+          if (widget.leading != null) widget.leading!,
 
           /// space em branco a esquerda do menu
           if (widget.position == VerticalTopTabPosition.right) Spacer(),
 
           /// lista itens do menu
-          for (var index = 0; index < widget.choices.length; index++)
+          for (var index = 0; index < widget.choices!.length; index++)
             Builder(builder: (x) {
-              bool completed = (widget.choices[index].completed != null)
-                  ? widget.choices[index].completed(activeIndex) ?? false
+              bool completed = (widget.choices![index].completed != null)
+                  ? (widget.choices![index].completed!(activeIndex) ?? false)
                   : false;
 
               return Container(
-                width: widget.choices[index].width,
-                color: (active.value == index) ? _selectedColor : _tabColor,
+                width: widget.choices![index].width,
+                color: (active!.value == index) ? _selectedColor : _tabColor,
                 child: InkWell(
-                  child: (!widget.choices[index].visible)
+                  child: (!widget.choices![index].visible!)
                       ? Container()
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -289,15 +290,15 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                              */
                                               bottom: BorderSide(
                                         width: 2.0,
-                                        color: (active.value == index)
+                                        color: (active!.value == index)
                                             ? widget.indicatorColor ??
-                                                theme.indicatorColor
+                                                theme!.indicatorColor
                                             : (completed)
-                                                ? widget.completedColor
+                                                ? widget.completedColor!
                                                 : Colors.transparent,
                                       ))),
                                       //width: widget.choices[index].width,
-                                      child: (widget.choices[index].items !=
+                                      child: (widget.choices![index].items !=
                                               null)
                                           ? Padding(
                                               padding: EdgeInsets.symmetric(
@@ -305,7 +306,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                               child: showDrownMenu(
                                                   context,
                                                   index,
-                                                  widget.choices[index].items),
+                                                  widget
+                                                      .choices![index].items!),
                                             )
                                           : Align(
                                               alignment: Alignment.center,
@@ -343,10 +345,10 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                               //   width: widget.spacing,
                               // ),
                               if (existIndicator(index) &&
-                                  active.value != index)
+                                  active!.value != index)
                                 (widget.timelineBuild != null)
                                     ? widget
-                                        .timelineBuild(widget.choices[index])
+                                        .timelineBuild!(widget.choices![index])
                                     : Container(
                                         width: widget.spacing,
                                         height: widget.spacing,
@@ -360,16 +362,16 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                 width: widget.spacing,
                               ),
                             ]),
-                  onTap: (!widget.choices[index].enabled)
+                  onTap: (!widget.choices![index].enabled!)
                       ? null
                       : () {
-                          var choice = widget.choices[index];
+                          var choice = widget.choices![index];
                           if ((choice.items ?? []).length > 0) {
-                            active.value = index;
+                            active!.value = index;
                             //bShowDrownMenu.value = true;
                           } else {
-                            widget.onSelectItem(index, widget.choices[index]);
-                            active.value = index;
+                            widget.onSelectItem!(index, widget.choices![index]);
+                            active!.value = index;
                           }
                         },
                 ),
@@ -377,28 +379,28 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
             }),
           if (widget.position == VerticalTopTabPosition.left) Spacer(),
 
-          if (widget.actions != null) ...widget.actions,
+          if (widget.actions != null) ...widget.actions!,
           if (widget.right != null) SizedBox(width: widget.right),
         ]),
       ),
     );
   }
 
-  existIndicator(index) => widget.choices[index].completed != null;
+  existIndicator(index) => widget.choices![index].completed != null;
 
   buildLabel(context, index) {
     var theme = Theme.of(context);
     return Padding(
         padding: EdgeInsets.only(left: 3.0, right: 3.0, top: 2.0, bottom: 2.0),
-        child: widget.choices[index].title ??
-            Text(widget.choices[index].label,
+        child: widget.choices![index].title ??
+            Text(widget.choices![index].label!,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: (!widget.choices[index].enabled)
+                style: (!widget.choices![index].enabled!)
                     ? TextStyle(color: theme.dividerColor)
-                    : widget.choices[index].style ??
+                    : widget.choices![index].style ??
                         widget.style ??
-                        theme.textTheme.bodyText1.copyWith(
+                        theme.textTheme.bodyText1!.copyWith(
                           fontSize: 12,
                           color: _getColor(theme).isDark
                               ? Colors.white70
@@ -424,13 +426,13 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                   value: -item, child: items[item].title ?? Divider())
               : DropdownMenuItem(
                   value: item,
-                  child: items[item].title ?? Text(items[item].label),
+                  child: items[item].title ?? Text(items[item].label!),
                 )
       ],
       onChanged: (index) {
-        active.value = mainIndex;
-        if ((items[index].enabled)) if ((items[index].label ?? '') != '-')
-          widget.onSelectItem(index, items[index]);
+        active!.value = mainIndex;
+        if ((items[index!].enabled!)) if ((items[index].label ?? '') != '-')
+          widget.onSelectItem!(index, items[index]);
       },
     ));
   }

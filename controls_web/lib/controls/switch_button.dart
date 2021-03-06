@@ -3,18 +3,18 @@ library switch_button;
 import 'package:flutter/material.dart';
 
 class SwitchButton extends StatefulWidget {
-  final bool value;
-  final ValueChanged<bool> onChanged;
-  final Color activeColor;
-  final Color inactiveColor;
-  final String activeText;
+  final bool? value;
+  final ValueChanged<bool>? onChanged;
+  final Color? activeColor;
+  final Color? inactiveColor;
+  final String? activeText;
 
-  final String inactiveText;
-  final Color activeTextColor;
-  final Color inactiveTextColor;
+  final String? inactiveText;
+  final Color? activeTextColor;
+  final Color? inactiveTextColor;
 
   const SwitchButton(
-      {Key key,
+      {Key? key,
       this.value,
       this.onChanged,
       this.activeColor,
@@ -31,8 +31,8 @@ class SwitchButton extends StatefulWidget {
 
 class _CustomSwitchState extends State<SwitchButton>
     with SingleTickerProviderStateMixin {
-  Animation _circleAnimation;
-  AnimationController _animationController;
+  Animation? _circleAnimation;
+  AnimationController? _animationController;
 
   @override
   void initState() {
@@ -40,34 +40,34 @@ class _CustomSwitchState extends State<SwitchButton>
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 60));
     _circleAnimation = AlignmentTween(
-            begin: widget.value ? Alignment.centerRight : Alignment.centerLeft,
-            end: widget.value ? Alignment.centerLeft : Alignment.centerRight)
+            begin: widget.value! ? Alignment.centerRight : Alignment.centerLeft,
+            end: widget.value! ? Alignment.centerLeft : Alignment.centerRight)
         .animate(CurvedAnimation(
-            parent: _animationController, curve: Curves.linear));
+            parent: _animationController!, curve: Curves.linear));
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
         return GestureDetector(
           onTap: () {
-            if (_animationController.isCompleted) {
-              _animationController.reverse();
+            if (_animationController!.isCompleted) {
+              _animationController!.reverse();
             } else {
-              _animationController.forward();
+              _animationController!.forward();
             }
             widget.value == false
-                ? widget.onChanged(true)
-                : widget.onChanged(false);
+                ? widget.onChanged!(true)
+                : widget.onChanged!(false);
           },
           child: Container(
             width: 70.0,
             height: 35.0,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.0),
-                color: _circleAnimation.value == Alignment.centerLeft
+                color: _circleAnimation!.value == Alignment.centerLeft
                     ? widget.inactiveColor
                     : widget.activeColor),
             child: Padding(
@@ -76,11 +76,11 @@ class _CustomSwitchState extends State<SwitchButton>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  _circleAnimation.value == Alignment.centerRight
+                  _circleAnimation!.value == Alignment.centerRight
                       ? Padding(
                           padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                           child: Text(
-                            widget.activeText,
+                            widget.activeText!,
                             style: TextStyle(
                                 color: widget.activeTextColor,
                                 fontWeight: FontWeight.w900,
@@ -89,7 +89,7 @@ class _CustomSwitchState extends State<SwitchButton>
                         )
                       : Container(),
                   Align(
-                    alignment: _circleAnimation.value,
+                    alignment: _circleAnimation!.value,
                     child: Container(
                       width: 25.0,
                       height: 25.0,
@@ -97,11 +97,11 @@ class _CustomSwitchState extends State<SwitchButton>
                           shape: BoxShape.circle, color: Colors.white),
                     ),
                   ),
-                  _circleAnimation.value == Alignment.centerLeft
+                  _circleAnimation!.value == Alignment.centerLeft
                       ? Padding(
                           padding: const EdgeInsets.only(left: 4.0, right: 5.0),
                           child: Text(
-                            widget.inactiveText,
+                            widget.inactiveText!,
                             style: TextStyle(
                                 color: widget.inactiveTextColor,
                                 fontWeight: FontWeight.w900,

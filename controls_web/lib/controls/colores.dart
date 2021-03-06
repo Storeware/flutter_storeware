@@ -1,8 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-Color genColor(num index, [bool isRandom = false]) {
-  if (index < 0 || isRandom) index = new Random().nextInt(1000);
+Color genColor(num index, [bool? isRandom = false]) {
+  if (index < 0 || isRandom!) index = new Random().nextInt(1000);
   var y = (index ~/ 5) % 5;
   var x = (index % 5).toInt();
   if (y < 0) y = 0;

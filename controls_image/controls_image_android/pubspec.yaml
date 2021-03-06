@@ -5,12 +5,12 @@ author:
 homepage: https://tireideletra.com.br
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.10.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  image_picker:
+  image_picker: ^0.7.2
   universal_io:
   controls_image_interface:
     git:

@@ -1,15 +1,13 @@
 import './bloc_model.dart';
 
-
 class TopMessageEvent extends BlocModel<String> {
   static final _singleton = TopMessageEvent._create();
   TopMessageEvent._create();
   factory TopMessageEvent() => _singleton;
-  static send(String texto) {
-    _singleton.notify(texto);
+  static send(String? texto) {
+    _singleton.notify(texto!);
   }
 }
-
 
 class BodyMessageEvent extends BlocModel<String> {
   static final _singleton = BodyMessageEvent._create();
@@ -20,7 +18,6 @@ class BodyMessageEvent extends BlocModel<String> {
   }
 }
 
-
 class MainMessageEvent extends BlocModel<String> {
   static final _singleton = MainMessageEvent._create();
   MainMessageEvent._create();
@@ -29,7 +26,6 @@ class MainMessageEvent extends BlocModel<String> {
     _singleton.notify(texto);
   }
 }
-
 
 class BottomMessageEvent extends BlocModel<String> {
   static final _singleton = BottomMessageEvent._create();

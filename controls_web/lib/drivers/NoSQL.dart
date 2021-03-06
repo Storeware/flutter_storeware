@@ -2,7 +2,7 @@
 //import 'package:firebase_web/firestore.dart';
 
 class NoSQL {
-  String _collection;
+  String? _collection;
   set(key, values) {
     /*return FirestoreApp()
         .collection(_collection)
@@ -16,7 +16,7 @@ class NoSQL {
     return this;
   }
 
-  String insert(values) {
+  String? insert(values) {
     /* var qry = FirestoreApp().collection(_collection);
     var key = qry.id;
     qry.doc(key).set(values);
@@ -32,7 +32,7 @@ class NoSQL {
     // return FirestoreApp().collection(_collection).doc(key).delete();
   }
 
-  find(fieldPath, opStr, value, {num limit}) {
+  find(fieldPath, opStr, value, {num? limit}) {
     /* Query qry = FirestoreApp()
         .collection(_collection)
         .where(fieldPath, opStr, value)

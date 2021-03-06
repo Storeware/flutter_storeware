@@ -1,11 +1,11 @@
 library controls_image_interface;
 
 abstract class ControlsImageInterface {
-  pickFromGallary({imageQuality}) {
+  pickFromGallary({int ? imageQuality}) async {
     return UnimplementedError();
   }
 
-  pickFromCamera({imageQuality}) {
+  pickFromCamera({int ? imageQuality}) async {
     return UnimplementedError();
   }
 }

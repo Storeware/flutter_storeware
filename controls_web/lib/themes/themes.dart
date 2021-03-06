@@ -91,7 +91,7 @@ class DynamicThemeState extends State<DynamicTheme> {
   Brightness? get brightness => _brightness;
 
   Color get backColor => (brightness == Brightness.light)
-      ? defaultScaffoldBackgroudColor
+      ? defaultScaffoldBackgroudColor!
       : Colors.black;
   Color get color =>
       (brightness == Brightness.light) ? Colors.black : Colors.white;

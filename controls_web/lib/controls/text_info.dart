@@ -11,12 +11,12 @@ class Noop extends StatelessWidget {
 }
 
 class NotNull extends StatelessWidget {
-  final bool check;
-  final Widget child;
+  final bool? check;
+  final Widget? child;
   NotNull(this.check, this.child);
   @override
   Widget build(BuildContext context) {
-    return (check != null ? child : Noop());
+    return (check != null ? child! : Noop());
   }
 }
 
@@ -26,19 +26,19 @@ dynamic nullIf(dynamic t, dynamic ret) {
 }
 
 class Processing extends StatelessWidget {
-  final bool waiting;
-  final Color color;
+  final bool? waiting;
+  final Color? color;
   Processing(this.waiting, {this.color = Colors.black});
   @override
   Widget build(BuildContext context) {
-    return (waiting ? TextInfo(color: color) : Noop());
+    return (waiting! ? TextInfo(color: color!) : Noop());
   }
 }
 
 // ignore: must_be_immutable
 class TextInfo extends StatelessWidget {
-  final String text;
-  final Color color;
+  final String? text;
+  final Color? color;
   TextInfo({this.text = '', this.color = Colors.black});
 
   @override

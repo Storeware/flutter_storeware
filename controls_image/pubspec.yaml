@@ -22,6 +22,8 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
+
+  universal_io: ^2.0.0  
   controls_image_web:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

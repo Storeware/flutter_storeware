@@ -48,7 +48,7 @@ packages:
     description:
       path: "controls_image/controls_image_android"
       ref: HEAD
-      resolved-ref: "38c2e7c9db987aa52910a2c07480fb1749c78f79"
+      resolved-ref: "35471980ca6cef34a6053515110c1362b826cee6"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -57,7 +57,7 @@ packages:
     description:
       path: "controls_image/controls_image_interface"
       ref: HEAD
-      resolved-ref: "38c2e7c9db987aa52910a2c07480fb1749c78f79"
+      resolved-ref: "35471980ca6cef34a6053515110c1362b826cee6"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"
@@ -66,7 +66,7 @@ packages:
     description:
       path: "controls_image/controls_image_web"
       ref: HEAD
-      resolved-ref: "38c2e7c9db987aa52910a2c07480fb1749c78f79"
+      resolved-ref: "35471980ca6cef34a6053515110c1362b826cee6"
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.1"

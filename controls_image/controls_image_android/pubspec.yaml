@@ -5,13 +5,13 @@ author:
 homepage: https://tireideletra.com.br
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   image_picker: ^0.7.2
-  universal_io:
+  universal_io: ^2.0.0
   controls_image_interface:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

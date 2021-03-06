@@ -7,7 +7,6 @@ import '../drivers.dart';
 final translate = Translate._create();
 final translateHistory = {};
 
-
 /// Bloc para notificar alteração
 class TranslateChangedBloc extends BlocModel<bool> {
   static final _singleton = TranslateChangedBloc._create();
@@ -18,22 +17,21 @@ class TranslateChangedBloc extends BlocModel<bool> {
 /// widget de notificado de alteração do idioma
 /// Notifier para indicar que o idioma foi alterado pelo usuário
 class TranslateNotify extends StatelessWidget {
-  final Function builder;
-  const TranslateNotify({Key key,@required this.builder}) : super(key: key);
+  final Function? builder;
+  const TranslateNotify({Key? key, @required this.builder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: TranslateChangedBloc().stream,
-      builder: (x,y){
-        return this.builder();
-      }
-    );
+        stream: TranslateChangedBloc().stream,
+        builder: (x, y) {
+          return this.builder!();
+        });
   }
 }
 
 /// Translate permite fazer tradução para idiomas - localização
-/// 
+///
 class Translate extends AssetsJson {
   Translate._create() {
     this.filename = 'intl/pt_br.json';
@@ -50,15 +48,15 @@ class Translate extends AssetsJson {
     return this;
   }
 
-  log(){
+  log() {
     String hist = json.encode(translateHistory);
     //print([this.filename,hist]);
   }
 
   /// a instancia fica armazenada na pasta assets/intl/<lang>.json
-  static instance({String lang}) async {
-    String l = lang ?? translate.filename;
-    if (!l.contains('.')) l = 'assets/intl/' + lang + '.json';
+  static instance({String? lang}) async {
+    String? l = lang ?? translate.filename!;
+    if (!l.contains('.')) l = 'assets/intl/' + lang! + '.json';
     try {
       //print(['translate', l]);
       await translate.load(l);
@@ -71,7 +69,7 @@ class Translate extends AssetsJson {
 
   /// executa a tradução ou mantem o default
   static String string(String key) {
-    if (key=='') return '';
+    if (key == '') return '';
     String base = key.replaceAll(' ', '_').toLowerCase();
     var r = (translate.value(base) ?? '').toString();
     if (r.isEmpty)
@@ -95,18 +93,18 @@ class Translate extends AssetsJson {
 
 /// widget para selecionar o idioma desejado
 class LangWidget extends StatefulWidget {
-  final Function(String) onChanged;
-  const LangWidget({Key key, this.onChanged}) : super(key: key);
+  final Function(String)? onChanged;
+  const LangWidget({Key? key, this.onChanged}) : super(key: key);
 
   @override
   _LangWidgetState createState() => _LangWidgetState();
 }
 
 class _LangWidgetState extends State<LangWidget> {
-  String _current;
+  String? _current;
   @override
   void initState() {
-    _current = configModel.lang;
+    _current = configModel!.lang;
     super.initState();
   }
 
@@ -118,25 +116,25 @@ class _LangWidgetState extends State<LangWidget> {
             child: new DropdownButton<String>(
           value: _current,
           items: getDropDownMenuItems(),
-          onChanged: changedDropDownItem,
+          onChanged: (x) => changedDropDownItem(x!),
         )));
   }
 
   void changedDropDownItem(String selected) {
     //print("Selected $selected, we are going to refresh the UI");
-    configModel.lang = selected;
-    configModel.save();
+    configModel!.lang = selected;
+    configModel!.save();
     Translate.instance(lang: selected);
     setState(() {
       _current = selected;
     });
-    if (this.widget.onChanged != null) this.widget.onChanged(selected);
+    if (this.widget.onChanged != null) this.widget.onChanged!(selected);
     RebuilderBloc().notify(selected);
   }
 
   getDropDownMenuItems() {
-    List<DropdownMenuItem<String>> items = List();
-    for (String item in configModel.langList) {
+    List<DropdownMenuItem<String>> items = [];
+    for (String item in configModel!.langList) {
       items.add(DropdownMenuItem(value: item, child: new Text(item)));
     }
     return items;

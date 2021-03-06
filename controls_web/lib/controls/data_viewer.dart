@@ -3,7 +3,7 @@ library data_viewer;
 
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
-import 'package:controls_web/controls/paginated_grid.dart';
+import 'paginated_grid.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:controls_web/controls/responsive.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
@@ -729,7 +729,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final Function(dynamic)? onSaved;
   final Function(dynamic)? onClose;
   final bool? showAppBar;
-  final Widget? appBar;
+  final PreferredSizeWidget? appBar;
   final List<Widget>? actions;
   final Widget? leading;
   final double? elevation;

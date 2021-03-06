@@ -19,17 +19,17 @@ ThemeData changedTheme(brightness) {
 }
 
 class DynamicTheme extends StatefulWidget {
-  const DynamicTheme({Key key, this.onData, this.builder, this.initial})
+  const DynamicTheme({Key? key, this.onData, this.builder, this.initial})
       : super(key: key);
 
-  final ThemedWidgetBuilder builder;
-  final ThemeDataWithBrightnessBuilder onData;
-  final Brightness initial;
+  final ThemedWidgetBuilder? builder;
+  final ThemeDataWithBrightnessBuilder? onData;
+  final Brightness? initial;
 
   @override
   DynamicThemeState createState() => DynamicThemeState();
 
-  static DynamicThemeState of(BuildContext context) {
+  static DynamicThemeState? of(BuildContext context) {
     return context.findAncestorStateOfType<
         DynamicThemeState>(); //ancestorStateOfType(const TypeMatcher<DynamicThemeState>());
   }
@@ -39,7 +39,7 @@ class DynamicTheme extends StatefulWidget {
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
       textTheme: TextTheme(
-        title: TextStyle(color: Colors.black),
+        headline6: TextStyle(color: Colors.black),
       ),
       elevation: 0,
       color: th.scaffoldBackgroundColor,
@@ -80,15 +80,15 @@ class DynamicThemeNotifier {
 }
 
 class DynamicThemeState extends State<DynamicTheme> {
-  ThemeData _data;
+  ThemeData? _data;
 
-  Brightness _brightness;
+  Brightness? _brightness;
 
   static const String _sharedPreferencesKey = 'isDark';
 
-  ThemeData get data => _data;
+  ThemeData? get data => _data;
 
-  Brightness get brightness => _brightness;
+  Brightness? get brightness => _brightness;
 
   Color get backColor => (brightness == Brightness.light)
       ? defaultScaffoldBackgroudColor
@@ -98,7 +98,7 @@ class DynamicThemeState extends State<DynamicTheme> {
 
   onData(b) {
     //print('onData $b');
-    return (widget.onData != null) ? widget.onData(b) : changedTheme(b);
+    return (widget.onData != null) ? widget.onData!(b) : changedTheme(b);
   }
 
   @override
@@ -175,6 +175,6 @@ class DynamicThemeState extends State<DynamicTheme> {
   @override
   Widget build(BuildContext context) {
     //print('build $_brightness');
-    return widget.builder(context, _data);
+    return widget.builder!(context, _data!);
   }
 }

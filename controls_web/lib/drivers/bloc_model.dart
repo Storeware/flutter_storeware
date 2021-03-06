@@ -60,7 +60,7 @@ class StreamNotifier<T> extends StatelessWidget {
   final BlocModel<T>? bloc;
   final AsyncWidgetBuilder<T>? builder;
   final T? initialData;
-  const StreamNotifier({Key key, this.bloc, this.builder, this.initialData})
+  const StreamNotifier({Key? key, this.bloc, this.builder, this.initialData})
       : super(key: key);
 
   @override

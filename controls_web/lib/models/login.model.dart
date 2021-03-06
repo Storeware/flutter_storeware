@@ -10,13 +10,13 @@ import 'package:flutter/material.dart';
 /// UsuarioItem
 /// Model para a estrutura da tabela de Usuarios
 class UsuarioItem extends DataModelItem {
-  String id = '';
-  String email;
-  String nome = '';
-  String _perfil;
-  String cargo = '';
-  String proprietario = '';
-  String token = '';
+  String? id = '';
+  String? email;
+  String? nome = '';
+  String? _perfil;
+  String? cargo = '';
+  String? proprietario = '';
+  String? token = '';
 
   DateTime create_data = DateTime.now();
   UsuarioItem();
@@ -47,7 +47,7 @@ class UsuarioItem extends DataModelItem {
     return rt;
   }
 
-  set perfil(String v) {
+  set perfil(String? v) {
     this._perfil = v ?? '';
   }
 
@@ -100,7 +100,7 @@ class LoginModelBase extends AuthUser {
   }
 
   String get usuario => LocalStorage().getKey('usuario');
-  set usuario(String x) {
+  set usuario(String? x) {
     if (x != null) LocalStorage().setKey('usuario', x);
   }
 
@@ -110,7 +110,8 @@ class LoginModelBase extends AuthUser {
   get logo => dadosConta['logo'];
   get inativo => dadosConta['inativo'] ?? false;
   get notifier => _notifier;
-  get dadosConta => LocalStorage().getJson('dadosConta') ?? {};
+  Map<String, dynamic> get dadosConta =>
+      LocalStorage().getJson('dadosConta') ?? {};
   set dadosConta(Map<String, dynamic> d) {
     LocalStorage().setJson('dadosConta', d);
   }
@@ -121,8 +122,8 @@ class LoginModelBase extends AuthUser {
     Routes.go(context, LogoutView());
   }
 
-  Future<bool> login(String userId, String senha, String email,
-      {String conta}) async {
+  Future<bool?> login(String userId, String senha, String email,
+      {String? conta}) async {
     usuario = userId;
     this.email = email;
     //debug('login.model->login.email $email Get Token for');
@@ -144,7 +145,7 @@ class LoginModelBase extends AuthUser {
     return null;
   }
 
-  Future<bool> validarConta(String conta, {Function(bool) next}) async {
+  Future<bool> validarConta(String? conta, {Function(bool)? next}) async {
     if ((conta ?? '') == '') return false;
     //debug('login.model->pre-validarConta( $conta ) logado: $logado ');
     return true;
@@ -171,8 +172,8 @@ class LoginModelBase extends AuthUser {
         future: LoginModel().checaAndEnter(context, pushOnOk: null),
         builder: (x, y) {
           if (!y.hasData) return Scaffold(body: Text('....'));
-          LoginModel().lastResult = y.data;
-          if (!y.data) return Scaffold(body: Text('Não autorizado'));
+          LoginModel().lastResult = y.data!;
+          if (!y.data!) return Scaffold(body: Text('Não autorizado'));
           return child ?? Scaffold(body: Text('não há conteúdo'));
         });
   }
@@ -180,11 +181,11 @@ class LoginModelBase extends AuthUser {
   String lastCheckAndEnter = '';
   bool lastResult = false;
   Future<bool> checaAndEnter(BuildContext context,
-      {String pushOnOk = '/main', String pushNotOk = '/login'}) async {
+      {String? pushOnOk = '/main', String? pushNotOk = '/login'}) async {
     try {
       if (lastCheckAndEnter == pushOnOk) return lastResult;
       print('checkLogin');
-      lastCheckAndEnter = pushOnOk;
+      lastCheckAndEnter = pushOnOk!;
       if (requerLogin) {
         print('pedir login');
         goEnter(context, pushOnOk);
@@ -192,7 +193,7 @@ class LoginModelBase extends AuthUser {
       }
       return validarConta(conta).then((bool existe) {
         print('validarConta: $existe');
-        String goto = existe ? pushOnOk : pushNotOk;
+        String? goto = existe ? pushOnOk : pushNotOk;
         if (goto != null) Routes.pushNamed(context, goto);
         return existe;
       });
@@ -207,28 +208,28 @@ class LoginModelBase extends AuthUser {
     return UsuarioModel().getByEmail(email);
   }
 
-  novoUsuario(userId, email, nome, token, peril, {String conta}) {
+  novoUsuario(userId, email, nome, token, peril, {String? conta}) {
     UsuarioModel().novoUsuario(userId, email, nome, token, peril);
   }
 
   goLogar(context, String pushNext,
-      {Widget background, Color backgroundColor}) {
+      {Widget? background, Color? backgroundColor}) {
     Routes.pushReplacement(
       context,
       MaterialPageRoute(
           builder: (context) => LogarContaView(
-                background: background,
-                backgroundColor: backgroundColor,
+                background: background!,
+                backgroundColor: backgroundColor!,
                 pushNamed: pushNext,
               )),
     );
   }
 
-  goEnter(context, String pushNext,
-      {Widget background, Color backgroundColor}) {
+  goEnter(context, String? pushNext,
+      {Widget? background, Color? backgroundColor}) {
     if (requerLogin) {
-      return goLogar(context, pushNext,
-          background: background, backgroundColor: backgroundColor);
+      return goLogar(context, pushNext!,
+          background: background!, backgroundColor: backgroundColor!);
     }
     LoginModel().validarConta(conta).then((exist) {
       if (exist) Routes.pushNamed(context, pushNext);
@@ -255,7 +256,7 @@ class UsuarioModel {
     }*/
   }
 
-  novoUsuario(userId, email, nome, token, perfil, {String conta}) {
+  novoUsuario(userId, email, nome, token, perfil, {String? conta}) {
     UsuarioItem usr = UsuarioItem();
     usr.perfil = perfil;
     usr.email = email;

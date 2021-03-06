@@ -41,7 +41,7 @@ class Routes {
     return MaterialPageRoute(settings: settings, builder: getRoute(route));
   }
 
-  static pushNamed(context, name, {RouteSettings args}) {
+  static pushNamed(context, name, {RouteSettings? args}) {
     if (!goHome(context, name)) {
       print('pushNamed: $name');
       var func = Routes().routes[name];
@@ -59,7 +59,7 @@ class Routes {
     Navigator.of(context).push(page);
   }
 
-  static go(context, page, {RouteSettings args}) {
+  static go(context, page, {RouteSettings? args}) {
     Routes.push(
         context, MaterialPageRoute(settings: args, builder: (x) => page));
   }
@@ -80,7 +80,7 @@ class Routes {
     return Navigator.of(context).pop();
   }
 
-  static popAndPushNamed(context, String name, {RouteSettings args}) {
+  static popAndPushNamed(context, String name, {RouteSettings? args}) {
     if (!goHome(context, name)) {
       var func = Routes().routes[name];
       if (func != null) {
@@ -92,12 +92,12 @@ class Routes {
     }
   }
 
-  static goPage(BuildContext context, {Function next}) {
-    var scaff = Scaffold.of(context);
+  static goPage(BuildContext context, {Function? next}) {
+    ScaffoldState? scaff = Scaffold.of(context);
     if (scaff != null && scaff.hasDrawer) {
       Scaffold.of(context).openEndDrawer();
     }
-    var page = next();
+    var page = next!();
     Routes.push(context, page);
   }
 

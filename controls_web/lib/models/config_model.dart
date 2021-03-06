@@ -4,7 +4,7 @@ import "package:controls_data/local_storage.dart";
 /// instance utilizada para criar ao entrar,
 /// na sequencia usar a mesma instancia
 /// do objeto
-ConfigModel configModel;
+ConfigModel? configModel;
 
 /// ConfigModel é base um classe de aplicativo
 ///   fazer herança e implementar seus atributos
@@ -47,7 +47,7 @@ class ConfigModel {
     };
   }
 
-  int appBarElevation;
-  String lang;
+  int? appBarElevation = 0;
+  String lang = 'pt_br';
   List<String> langList = ['pt_br', 'en_us'];
 }

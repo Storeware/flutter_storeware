@@ -93,8 +93,9 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
             return currentValue;
           }
         },
-        autovalidateMode:
-            autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
+        autovalidateMode: (autoValidate)
+            ? AutovalidateMode.always
+            : AutovalidateMode.disabled,
         validator: (date) {
           if (widget.validator != null) return widget.validator(date);
           return date == null ? 'Data inválida' : null;

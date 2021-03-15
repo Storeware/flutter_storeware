@@ -168,8 +168,7 @@ class DynamicThemeState extends State<DynamicTheme> {
 
   Future<bool> loadBrightness() async {
     //print('loadBrightness');
-    return LocalStorage().getBool(_sharedPreferencesKey) ??
-        widget.initial == Brightness.dark;
+    return LocalStorage().getBool(_sharedPreferencesKey);
   }
 
   @override

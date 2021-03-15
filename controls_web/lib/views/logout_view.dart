@@ -5,7 +5,7 @@ import '../controls.dart';
 import '../models.dart';
 
 class LogoutView extends StatefulWidget {
-  LogoutView({Key key}) : super(key: key);
+  LogoutView({Key? key}) : super(key: key);
 
   _LogoutViewState createState() => _LogoutViewState();
 }

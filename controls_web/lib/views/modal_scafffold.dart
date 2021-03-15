@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../controls/panel.dart';
 
 class ModalScaffold extends StatelessWidget {
-  final Widget body;
-  final Widget appBar;
-  final List<Widget> actions;
-  final double elevation;
-  final Function onExit;
+  final Widget? body;
+  final Widget? appBar;
+  final List<Widget>? actions;
+  final double? elevation;
+  final Function? onExit;
   const ModalScaffold(
-      {Key key,
+      {Key? key,
       this.body,
       this.appBar,
       this.actions,

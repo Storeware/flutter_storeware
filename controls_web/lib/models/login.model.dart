@@ -99,7 +99,7 @@ class LoginModelBase extends AuthUser {
     }
   }
 
-  String get usuario => LocalStorage().getKey('usuario');
+  String get usuario => LocalStorage().getKey('usuario') ?? '';
   set usuario(String? x) {
     if (x != null) LocalStorage().setKey('usuario', x);
   }

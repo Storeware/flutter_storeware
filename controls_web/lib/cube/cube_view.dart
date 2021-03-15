@@ -385,7 +385,7 @@ class _CubeViewState extends State<CubeView> {
     //dvController.columns = [];
     dvController!.paginatedController.columns = [];
     if ((controller!.rows!.length + controller!.columns!.length) <= 2)
-      dvController!.paginatedController.columns.add(DataViewerColumn(
+      dvController!.paginatedController.columns!.add(DataViewerColumn(
         name: 'icon',
         label: '',
         sort: false,
@@ -399,7 +399,7 @@ class _CubeViewState extends State<CubeView> {
       if (controller!.aggrs.length == 0) ...controller!.columns!
     ];
     for (var item in cols) {
-      dvController!.paginatedController.columns.add(DataViewerColumn(
+      dvController!.paginatedController.columns!.add(DataViewerColumn(
         name: item.name!,
         label: item.label!,
         width: item.width ?? 120,
@@ -473,11 +473,11 @@ class _CubeViewState extends State<CubeView> {
               ));
           },
           width: option?.width ?? 120);
-      dvController!.paginatedController.columns.add(c);
+      dvController!.paginatedController.columns!.add(c);
     }
 
-    if (dvController!.paginatedController.columns.length == 0)
-      dvController!.paginatedController.columns
+    if (dvController!.paginatedController.columns!.length == 0)
+      dvController!.paginatedController.columns!
           .add(PaginatedGridColumn(name: 'none'));
   }
 }

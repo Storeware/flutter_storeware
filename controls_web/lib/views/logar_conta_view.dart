@@ -8,18 +8,18 @@ import 'package:controls_web/services/routes.dart';
 import 'package:controls_web/services/translate.dart';
 import 'package:flutter/material.dart';
 
-String defaultLoginImagemSrc;
+String? defaultLoginImagemSrc;
 
 class LogarContaView extends StatefulWidget {
-  final Widget image;
-  final Widget appBar;
-  final Widget bottom;
-  final String pushNamed;
-  final Widget background;
-  final Color backgroundColor;
-  final Function(String, String, String) onLogin;
+  final Widget? image;
+  final Widget? appBar;
+  final Widget? bottom;
+  final String? pushNamed;
+  final Widget? background;
+  final Color? backgroundColor;
+  final Function(String, String, String)? onLogin;
   LogarContaView(
-      {Key key,
+      {Key? key,
       this.pushNamed,
       this.image,
       this.background,
@@ -49,7 +49,7 @@ class _LogarContaViewState extends State<LogarContaView> {
                 initialData: '',
                 stream: BottomMessageEvent().stream,
                 builder: (x, s) {
-                  if (s.hasData) mensagem = s.data;
+                  if (s.hasData) mensagem = s.data!;
                   return _createBody();
                 }),
           );
@@ -60,20 +60,20 @@ class _LogarContaViewState extends State<LogarContaView> {
     return widget.appBar ?? appBarLight(title: Text(Translate.string('Conta')));
   }
 
-  String conta;
-  String usuario;
-  String senha;
+  String? conta;
+  String? usuario;
+  String? senha;
   double maxHeight = 300;
   String mensagem = '';
   final _formKey = GlobalKey<FormState>();
   _createBody() {
-    conta = LoginModel().conta ?? '';
-    usuario = LoginModel().usuario ?? '';
+    conta = LoginModel().conta;
+    usuario = LoginModel().usuario;
     var size = MediaQuery.of(context).size;
     return Stack(children: [
       if (widget.background != null)
         Positioned(
-            top: 1, left: 1, bottom: 1, right: 1, child: widget.background),
+            top: 1, left: 1, bottom: 1, right: 1, child: widget.background!),
       Positioned(
           top: size.height / 12,
           left: 20,
@@ -110,7 +110,7 @@ class _LogarContaViewState extends State<LogarContaView> {
                                 labelText: Translate.string('conta'),
                               ),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return 'Falta informar: conta';
                                 }
                                 return null;
@@ -124,7 +124,7 @@ class _LogarContaViewState extends State<LogarContaView> {
                                 labelText: Translate.string('E-mail'),
                               ),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return 'Falta informar: email';
                                 }
                                 return null;
@@ -139,7 +139,7 @@ class _LogarContaViewState extends State<LogarContaView> {
                                 labelText: Translate.string('Senha'),
                               ),
                               validator: (value) {
-                                if (value.isEmpty) {
+                                if (value!.isEmpty) {
                                   return 'Falta informar: senha';
                                 }
                                 return null;
@@ -177,9 +177,9 @@ class _LogarContaViewState extends State<LogarContaView> {
   }
 
   _save() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      String u = usuario, s = senha, c = conta;
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      String u = usuario!, s = senha!, c = conta!;
       LoginModel().validarConta(c).then((existe) {
         //print('Conta <$dbfirestoreSuffix> existe: $existe');
         if (!existe) {
@@ -190,7 +190,7 @@ class _LogarContaViewState extends State<LogarContaView> {
         }
         if (widget.onLogin != null) {
           // print('Validando onLogin event conta $dbfirestoreSuffix');
-          if (widget.onLogin(u, s, c)) {
+          if (widget.onLogin!(u, s, c)) {
             LoginModel().conta = c;
             Routes.pushNamed(context, widget.pushNamed);
           }

@@ -14,9 +14,10 @@ class CubeDataViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     DefaultCube? cube = DefaultCube.of(context);
     print(
-        [for (var item in controller!.paginatedController.columns) item.name]);
-    print(
-        [for (var item in controller!.paginatedController.columns) item.width]);
+        [for (var item in controller!.paginatedController.columns!) item.name]);
+    print([
+      for (var item in controller!.paginatedController.columns!) item.width
+    ]);
     // print([cube.controller.dataView]);
     if (cube!.controller!.dataView.length == 0)
       return Container(child: Text('Não há dados para mostrar'));

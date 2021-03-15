@@ -1,6 +1,7 @@
 library data_viewer;
 //import 'dart:convert';
 
+import 'package:controls_data/local_storage.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'paginated_grid.dart';
@@ -40,7 +41,7 @@ class DefaultDataViewerTheme {
     var theme = Theme.of(context);
     _singleton._theme = theme;
     _singleton.headingRowColor ??= (theme.brightness == Brightness.light)
-        ? _singleton._theme!.indicatorColor!
+        ? _singleton._theme!.indicatorColor
         : Colors.black26;
     _singleton.evenRowColor ??=
         theme.primaryTextTheme.bodyText1!.backgroundColor;
@@ -146,7 +147,7 @@ class DataViewerController {
   /// Lista de dados
   //List<dynamic> source;
   set source(List<dynamic> data) => paginatedController.source;
-  List<dynamic> get source => paginatedController.source;
+  List<dynamic> get source => paginatedController.source!;
 
   /// Observer que notifica mudança dos dados
   BlocModel<int> subscribeChanges = BlocModel<int>();
@@ -190,9 +191,9 @@ class DataViewerController {
       return dataSource!.delete(dados).then((rsp) {
         //print('resposta: $rsp');
 
-        int rows = (rsp ?? {})['rows'] ?? 1;
+        int rows = (rsp)['rows'] ?? 1;
         if (rows > 0) {
-          if (!manual && (rsp != null)) paginatedController.remove(dados);
+          if (!manual) paginatedController.remove(dados);
           if (onChanged != null) onChanged!(dados);
           return true;
         }
@@ -222,7 +223,7 @@ class DataViewerController {
       });
     }
     if (!manual && (rsp != null)) {
-      paginatedController.source.add(dados);
+      paginatedController.source!.add(dados);
       if (onChanged != null) onChanged!(dados);
     }
     return rsp!;
@@ -808,7 +809,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     for (DataViewerGroup row in widget.grouped!)
       itemsCount += row.children!.length;
     return Scaffold(
-      appBar: !widget.showAppBar
+      appBar: !widget.showAppBar!
           ? null
           : widget.appBar ??
               AppBar(
@@ -817,7 +818,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                   flexibleSpace: ValueListenableBuilder<bool>(
                       valueListenable: widget.controller!.changedValues,
                       builder:
-                          (BuildContext context, bool changed, Widget child) {
+                          (BuildContext context, bool changed, Widget? child) {
                         return AppBar(
                           elevation: widget.elevation,
                           title: Text((widget.title ?? 'Edição') +
@@ -862,16 +863,16 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (widget.headerAction != null) widget.headerAction,
-                for (var row in widget.grouped)
+                if (widget.headerAction != null) widget.headerAction!,
+                for (var row in widget.grouped!)
                   Builder(builder: (ctx) {
-                    return createRow(context, row, widget.data);
+                    return createRow(context, row, widget.data!);
                   }),
-                if (widget.bottomAction != null) widget.bottomAction,
+                if (widget.bottomAction != null) widget.bottomAction!,
                 SizedBox(
                   height: 15,
                 ),
-                if (widget.canEdit || widget.canInsert)
+                if (widget.canEdit! || widget.canInsert!)
                   Container(
                       alignment: Alignment.center,
                       child: StrapButton(
@@ -895,27 +896,27 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
       children: [
         if (rows.title != null)
           Container(
-              color: theme.primaryColor.withAlpha(50),
+              color: theme!.primaryColor.withAlpha(50),
               alignment: Alignment.centerLeft,
               height: kMinInteractiveDimension * 0.6,
               child: Row(children: [
-                if (rows.leadding != null) rows.leadding,
-                Text(rows.title,
-                    style: rows.titleStyle ?? theme.textTheme.caption),
-                if (rows.trailling != null) rows.trailling,
+                if (rows.leadding != null) rows.leadding!,
+                Text(rows.title!,
+                    style: rows.titleStyle ?? theme!.textTheme.caption),
+                if (rows.trailling != null) rows.trailling!,
               ])),
         Wrap(
           direction: Axis.horizontal,
           children: [
-            if (rows.header != null) rows.header,
-            for (var column in rows.children)
+            if (rows.header != null) rows.header!,
+            for (var column in rows.children!)
               createColumn(
                 context,
                 column,
                 col,
                 isLast: (itemsCount == ++col),
               ),
-            if (rows.bottom != null) rows.bottom,
+            if (rows.bottom != null) rows.bottom!,
           ],
         ),
       ],
@@ -923,27 +924,27 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   }
 
   createColumn(context, column, int order,
-      {bool isLast, Function() onLastPressed}) {
+      {bool? isLast, Function()? onLastPressed}) {
     var col;
     var ctrl;
 
-    if (widget.controller.columns != null) {
+    if (widget.controller!.columns != null) {
       ctrl = widget.controller;
       col = ctrl?.findColumn(column);
     } else {
-      ctrl = widget.controller.paginatedController;
+      ctrl = widget.controller!.paginatedController;
       col = ctrl?.findColumn(column);
     }
 
     if (col == null) return (Text('null $column'));
     var edit;
     if (col.editBuilder != null) {
-      edit = col.editBuilder(
-          widget.controller.paginatedController, col, widget.data, widget.data);
+      edit = col.editBuilder(widget.controller!.paginatedController, col,
+          widget.data, widget.data);
       _first++;
     }
     if (edit == null) {
-      edit = createFormField(context, col, order, isLast: isLast);
+      edit = createFormField(context, col, order, isLast: isLast!);
     }
     return Container(
         padding: EdgeInsets.only(right: 8),
@@ -951,15 +952,15 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
             (col.editHeight ??
                 kToolbarHeight + (((col.maxLength ?? 0) > 0) ? 24.0 : 8)),
         width: col.editWidth ?? col.width ?? 150.0,
-        child: edit ?? Text('${widget.data[column]}'));
+        child: edit ?? Text('${widget.data![column]}'));
   }
 
   bool _focused = false;
   int _first = 0;
   bool canFocus(PaginatedGridColumn col) {
     if (_focused) return false;
-    if (col.readOnly) return false;
-    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey)
+    if (col.readOnly!) return false;
+    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey!)
       return false;
 
     if (widget.event == PaginatedGridChangeEvent.insert) {
@@ -995,7 +996,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
             focusNode.nextFocus();
         },
         onChanged: (x) {
-          widget.controller.changedValues.value = true;
+          widget.controller!.changedValues.value = true;
           if (item.onChanged != null) item.onChanged(x);
         },
         readOnly: (item.isPrimaryKey || item.readOnly),
@@ -1003,7 +1004,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
             (_first == 0 && canFocus(item)),
         maxLines: item.maxLines,
         maxLength: item.maxLength,
-        enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
+        enabled: (widget.canEdit! || widget.canInsert!) && (!item.readOnly),
         controller: txtController,
         style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
@@ -1011,11 +1012,11 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         ),
         validator: (value) {
           if (item.onValidate != null) return item.onValidate(value);
-          if (item.required) if (value.isEmpty) {
+          if (item.required) if (value!.isEmpty) {
             return (item.editInfo
                 .replaceAll('{label}', item.label ?? item.name));
           }
-          if ((item.minLength != null) && (value.length < item.minLength))
+          if ((item.minLength != null) && (value!.length < item.minLength))
             return 'Texto insuficientes (min: ${item.minLength} caracteres)';
 
           return null;
@@ -1026,9 +1027,9 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
             return;
           }
           if (p[item.name] is int)
-            p[item.name] = int.tryParse(x);
+            p[item.name] = int.tryParse(x!);
           else if (p[item.name] is double)
-            p[item.name] = double.tryParse(x);
+            p[item.name] = double.tryParse(x!);
           else if (p[item.name] is bool)
             p[item.name] = x;
           else
@@ -1039,15 +1040,15 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   }
 
   _save(context) {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      doPostEvent(widget.controller.paginatedController, p, widget.event)
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      doPostEvent(widget.controller!.paginatedController, p, widget.event!)
           .then((rsp) {
-        if (widget.onSaved != null) widget.onSaved(p);
-        if (widget.controller.onLog != null)
-          widget.controller.onLog(oldData, p);
+        if (widget.onSaved != null) widget.onSaved!(p);
+        if (widget.controller!.onLog != null)
+          widget.controller!.onLog!(oldData, p);
         Navigator.pop(context);
-        if (widget.onClose != null) widget.onClose(p);
+        if (widget.onClose != null) widget.onClose!(p);
       });
     }
   }
@@ -1055,13 +1056,13 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   doPostEvent(PaginatedGridController ctrl, dynamic dados,
       PaginatedGridChangeEvent event) async {
     if (event == PaginatedGridChangeEvent.delete) {
-      return widget.controller.doDelete(dados, manual: false);
+      return widget.controller!.doDelete(dados, manual: false);
     }
     if (event == PaginatedGridChangeEvent.insert) {
-      return widget.controller.doInsert(dados, manual: false);
+      return widget.controller!.doInsert(dados, manual: false);
     }
     if (event == PaginatedGridChangeEvent.update) {
-      return widget.controller.doUpdate(dados, manual: false);
+      return widget.controller!.doUpdate(dados, manual: false);
     }
     return false;
   }

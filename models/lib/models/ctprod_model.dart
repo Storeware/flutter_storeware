@@ -6,17 +6,17 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class ProdutoItem extends DataItem {
-  String codigo;
-  String nome;
-  double precoweb = 0;
-  String unidade = "UN";
-  String sinopse;
-  String obs;
-  double codtitulo; // codigo do atalho
-  bool publicaweb = true;
-  bool inservico = false;
-  double filial;
-  String inativo = 'N';
+  String? codigo;
+  String? nome;
+  double? precoweb = 0;
+  String? unidade = "UN";
+  String? sinopse;
+  String? obs;
+  double? codtitulo; // codigo do atalho
+  bool? publicaweb = true;
+  bool? inservico = false;
+  double? filial;
+  String? inativo = 'N';
   ProdutoItem(
       {this.codigo,
       this.nome,
@@ -39,8 +39,8 @@ class ProdutoItem extends DataItem {
     data['sinopse'] = this.sinopse;
     data['obs'] = this.obs;
     data['codtitulo'] = this.codtitulo;
-    data['publicaweb'] = (this.publicaweb ?? 'S') ? 'S' : 'N';
-    data['inservico'] = (this.inservico ?? 'N') ? 'S' : 'N';
+    data['publicaweb'] = (this.publicaweb!) ? 'S' : 'N';
+    data['inservico'] = (this.inservico!) ? 'S' : 'N';
     data['id'] = '$codigo';
     data['filial'] = filial;
     data['inativo'] = this.inativo;
@@ -68,7 +68,7 @@ class ProdutoItem extends DataItem {
     }
     obs = json['obs'];
     codtitulo = toDouble(json['codtitulo']);
-    this.publicaweb = (json['publicaweb' ?? 'S'] == 'S');
+    this.publicaweb = ((json['publicaweb'] ?? 'S') == 'S');
     this.inservico = (json['inservico'] ?? 'N') == 'S';
     this.filial = toDouble(json['filial']);
     this.inativo = json['inativo'] ?? 'N';
@@ -105,10 +105,10 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
   ProdutoItem newItem() => ProdutoItem();
 
   Future<List<dynamic>> listGrid(
-      {String filter,
+      {String? filter,
       top: 20,
       skip: 0,
-      String orderBy,
+      String? orderBy,
       double filial = 1}) async {
     return search(
             resource: 'ctprod',
@@ -152,24 +152,25 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
     });
   }
 
-  Future<String> atalhoUpdate(item) async {
+  Future<String?> atalhoUpdate(dynamic? item) async {
     if (item != null) {
       if ((item['codtitulo'] ?? 0) == 0) return null;
       // atalhoUpdate
       String upd =
           "update or insert into ctprod_atalho_itens (codtitulo,codprod) values(${item['codtitulo']},'${item['codigo']}') matching (codprod)   ";
-      return API.execute(upd);
+      return API!.execute(upd);
     }
+    return null;
   }
 
-  Future<String> updatePrecoFilial(Map<String, dynamic> dados) async {
+  Future<String?> updatePrecoFilial(Map<String, dynamic> dados) async {
     var it = ProdutoItem.fromJson(dados);
     if ((it.filial ??= 0) > 0) {
       var p = '${it.precoweb}'.replaceAll(',', '.');
       var upd =
           "update or insert into ctprod_filial (codigo,filial,precoweb) values ('${it.codigo}',${it.filial}, ${p}) matching (codigo,filial)";
       print(upd);
-      return API.execute(upd);
+      return API!.execute(upd);
     }
   }
 

@@ -4,47 +4,47 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class SigcxItem extends DataItem {
-  String agencia;
-  String banco;
-  String cartao;
-  String cheque;
-  double clifor;
-  String codigo;
-  String conta;
-  double control;
-  String cpf;
-  String cupomhr;
-  DateTime data;
+  String? agencia;
+  String? banco;
+  String? cartao;
+  String? cheque;
+  double? clifor;
+  String? codigo;
+  String? conta;
+  double? control;
+  String? cpf;
+  String? cupomhr;
+  DateTime? data;
   //String data;
-  String dcto;
-  double desctotal;
-  int diasbloq;
-  String emitente;
-  double filial;
-  String historico;
+  String? dcto;
+  double? desctotal;
+  int? diasbloq;
+  String? emitente;
+  double? filial;
+  String? historico;
   //String hist;
   //int id;
-  String nrbanco;
-  String olddcto;
-  int operadora;
-  String prtserie;
+  String? nrbanco;
+  String? olddcto;
+  int? operadora;
+  String? prtserie;
   //int sacado;
-  double valor;
+  double? valor;
   //int valor;
-  DateTime vcto;
-  String vendedor;
-  DateTime dtcontabil;
-  DateTime insercao;
-  String dctook;
-  String compensado;
-  double controlExt;
-  double celulaControl;
-  int ordem;
-  String criadorRegistro;
-  DateTime dataCompensado;
-  String moedaEx;
-  DateTime valorEx;
-  DateTime cotacaoEx;
+  DateTime? vcto;
+  String? vendedor;
+  DateTime? dtcontabil;
+  DateTime? insercao;
+  String? dctook;
+  String? compensado;
+  double? controlExt;
+  double? celulaControl;
+  int? ordem;
+  String? criadorRegistro;
+  DateTime? dataCompensado;
+  String? moedaEx;
+  DateTime? valorEx;
+  DateTime? cotacaoEx;
 
   SigcxItem(
       {this.agencia,
@@ -195,7 +195,7 @@ class SigcxItemModel extends ODataModelClass<SigcxItem> {
   dctoOk(id, bool ok) async {
     if (id != null) {
       String v = (ok) ? 'S' : 'N';
-      return API
+      return API!
           .execute("update sigcx set dctook = '$v' where id = $id ")
           .then((rsp) => true);
     }
@@ -205,20 +205,20 @@ class SigcxItemModel extends ODataModelClass<SigcxItem> {
   compensado(id, bool ok) async {
     if (id != null) {
       String v = (ok) ? 'S' : 'N';
-      return API
+      return API!
           .execute("update sigcx set compensado = '$v' where id = $id ")
           .then((rsp) => true);
     }
     return false;
   }
 
-  despesas({double filial, DateTime de, DateTime ate}) {
+  despesas({double? filial, DateTime? de, DateTime? ate}) {
     de ??= DateTime.now().startOfMonth();
     ate ??= de.endOfMonth();
     String d1, d2;
     d1 = (de).toDateSql();
     d2 = (ate).toDateSql();
-    return API
+    return API!
         .send(
           ODataQuery(
               resource: 'sigcx a',
@@ -232,14 +232,14 @@ class SigcxItemModel extends ODataModelClass<SigcxItem> {
         .then((rsp) => rsp['result']);
   }
 
-  despesasMensal({double filial, DateTime de, DateTime ate}) {
+  despesasMensal({double? filial, DateTime? de, DateTime? ate}) {
     final sDe = toDateSql((de ?? DateTime.now().addMonths(-6)).startOfMonth());
     final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
     var filtro = '';
     if (filial != null) filtro = 'a.filial eq $filial  and ';
 
     var qry;
-    if (API.driver == 'mssql')
+    if (API!.driver == 'mssql')
       qry = '''select 
 year (r.data) ano, 
 month (r.data) mes,  
@@ -263,16 +263,16 @@ where $filtro a.codigo=b.codigo and a.codigo>='200' and b.ISRESULTADO=1 and data
 group by 1) as r
 group by 1,2''';
 
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  entradasMensal({double filial, DateTime de, DateTime ate}) {
+  entradasMensal({double? filial, DateTime? de, DateTime? ate}) {
     final sDe = toDateSql((de ?? DateTime.now().addMonths(-6)).startOfMonth());
     final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
     var filtro = '';
     if (filial != null) filtro = 'a.filial eq $filial  and ';
     String qry;
-    if (API.driver == 'mssql')
+    if (API!.driver == 'mssql')
       qry = ''' select year (r.data) ano, month (r.data) mes, 
  sum(r.entradas) entradas, sum(r.saidas) saidas
         from
@@ -293,16 +293,16 @@ where $filtro a.codigo=b.codigo and a.codigo<'200' and (b.ISRESULTADO=1 or b.con
 group by 1) as r
 group by 1,2''';
 
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  realizadoMensal({double filial, DateTime de, DateTime ate}) {
+  realizadoMensal({double? filial, DateTime? de, DateTime? ate}) {
     final sDe = toDateSql((de ?? DateTime.now().addMonths(-6)).startOfMonth());
     final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
     var filtro = '';
     if (filial != null) filtro = 'a.filial = $filial  and ';
     String qry;
-    if (API.driver == 'mssql')
+    if (API!.driver == 'mssql')
       qry = '''  select year ( r.data) ano, month (r.data) mes, 
  sum(r.entradas) entradas, sum(r.saidas) saidas
         from
@@ -325,10 +325,10 @@ where $filtro a.codigo=b.codigo  and (b.ISRESULTADO=1 or b.contasreceber=1)  and
 group by 1) as r
 group by 1,2''';
 
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  despesasMaiores({DateTime de, DateTime ate, int n = 10}) {
+  despesasMaiores({DateTime? de, DateTime? ate, int n = 10}) {
     final sDe = toDateSql((de ?? DateTime.now().addDays(-30)));
     final sAte = toDateSql((ate ?? DateTime.now()));
 
@@ -338,6 +338,6 @@ where a.codigo=b.codigo and (b.isresultado=1)
 and a.codigo>='200' and data between '$sDe' and '$sAte' 
 group by a.codigo, b.nome) r  order by valor desc''';
 
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 }

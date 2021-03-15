@@ -3,13 +3,13 @@ import 'package:controls_web/controls/masked_field.dart';
 import 'package:flutter/material.dart';
 
 class DropdownDataBuilder extends StatelessWidget {
-  final String collection;
-  final String fields;
-  final String keyField;
-  final String nameField;
-  final Widget Function(BuildContext, List<dynamic>) builder;
+  final String? collection;
+  final String? fields;
+  final String? keyField;
+  final String? nameField;
+  final Widget Function(BuildContext, List<dynamic>)? builder;
   const DropdownDataBuilder(
-      {Key key,
+      {Key? key,
       @required this.builder,
       this.collection,
       this.fields = 'codigo,nome',
@@ -33,7 +33,7 @@ class DropdownDataBuilder extends StatelessWidget {
               .toUpperCase()
               .compareTo((b[nameField] ?? '').toString().toUpperCase()));
           items.insert(0, {'$keyField': '0', '$nameField': ''});
-          return builder(ctx, items);
+          return builder!(ctx, items);
         }
         return Container();
       },
@@ -42,14 +42,14 @@ class DropdownDataBuilder extends StatelessWidget {
 
   static createDropDownFormField(BuildContext context,
       {value,
-      @required String label,
-      @required String collection,
+      @required String? label,
+      @required String? collection,
       String fields = 'codigo,nome',
-      Function(String) onChanged,
+      Function(String)? onChanged,
       String keyField = 'codigo',
       String nameField = 'nome'}) {
     return DropdownDataBuilder(
-        collection: collection,
+        collection: collection!,
         fields: fields,
         keyField: keyField,
         nameField: nameField,
@@ -68,7 +68,7 @@ class DropdownDataBuilder extends StatelessWidget {
                 var item = items.firstWhere((it) => it[nameField] == newValue);
                 if (item != null) {
                   var codigo = '${item[keyField]}';
-                  onChanged(codigo);
+                  onChanged!(codigo);
                 }
               },
               value: corrente[nameField] ?? '');
@@ -77,16 +77,16 @@ class DropdownDataBuilder extends StatelessWidget {
 }
 
 Widget createDropDownFormFieldContainer(
-    {List<String> items,
-    String hintText,
-    TextStyle style,
-    String value,
-    Function onChanged,
-    Function onSaved,
-    Function validator,
-    String errorMsg,
-    Color hintColor,
-    EdgeInsetsGeometry padding}) {
+    {List<String>? items,
+    String? hintText,
+    TextStyle? style,
+    String? value,
+    Function? onChanged,
+    Function? onSaved,
+    Function? validator,
+    String? errorMsg,
+    Color? hintColor,
+    EdgeInsetsGeometry? padding}) {
   return MaskedDropDownFormField(
     items: items,
     hintText: hintText,

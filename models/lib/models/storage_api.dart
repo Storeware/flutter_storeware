@@ -11,11 +11,11 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:universal_platform/universal_platform.dart';
 
 class ProdutoMetadata {
-  String gtin;
-  String unit;
-  String description;
-  String tag;
-  String origem;
+  String? gtin;
+  String? unit;
+  String? description;
+  String? tag;
+  String? origem;
   toJson() {
     return {
       "gtin": gtin,
@@ -29,7 +29,7 @@ class ProdutoMetadata {
 
 class StorageApi {
   bool inited = false;
-  CacheManager instance;
+  CacheManager? instance;
   init() {
     if (inited) return;
     instance = CacheManager(Config(
@@ -43,7 +43,7 @@ class StorageApi {
   download(String path, {bool cached = true}) async {
     init();
     if (path.startsWith('http'))
-      return instance.getSingleFile(path).then((f) => f.readAsBytes());
+      return instance!.getSingleFile(path).then((f) => f.readAsBytes());
     if (path.startsWith('assets'))
       return rootBundle.load(path).then((f) => f.buffer.asUint8List());
 
@@ -65,7 +65,7 @@ class StorageApi {
           if (UniversalPlatform.isWeb) {
             Cached.add('image_$path', decoded);
           } else {
-            instance.putFile(_img, decoded);
+            instance!.putFile(_img, decoded);
           }
           return decoded;
         }).catchError((err) {
@@ -74,25 +74,25 @@ class StorageApi {
     if (!cached) return cache();
     if (UniversalPlatform.isWeb)
       return Cached.value('image_$path', builder: (k) => cache());
-    var file = await instance.getFileFromCache(_img);
+    var file = await instance!.getFileFromCache(_img);
     if (file != null) return await file.file.readAsBytes();
     return cache();
   }
 
   clear() {
     init();
-    instance.emptyCache();
+    instance!.emptyCache();
   }
 
-  upload(Uint8List file, String path, {Map<String, dynamic> metadata}) async {
+  upload(Uint8List file, String path, {Map<String, dynamic>? metadata}) async {
     // carregar o arquivo
     final Uint8List bytes = file;
-    final ext = path.split('.').last ?? 'jpg';
+    final ext = path.split('.').last; // ?? 'jpg';
     // gerar base64
     String img64 = base64Encode(bytes);
     var data = {
       "path": path,
-      "metadata": (metadata??{})..["sender"]="Storeware Console",
+      "metadata": (metadata ?? {})..["sender"] = "Storeware Console",
       "content": 'data:image/$ext;base64,' + img64,
       "contentType": 'image/jpeg'
     };

@@ -1,5 +1,5 @@
+import 'package:controls_data/local_storage.dart';
 import 'package:controls_web/services/routes.dart';
-import 'package:controls_data/data.dart';
 import '../views/left_menu.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +9,7 @@ class LeftMenuItems {
     _init();
   }
   factory LeftMenuItems() => _singleton;
-  BuildContext context;
+  BuildContext? context;
   List<LeftMenuItem> items = [];
   bool get visible => (LocalStorage().getKey('leftMenu') ?? '1') == '1';
   set visible(bool x) {

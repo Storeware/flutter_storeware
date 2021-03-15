@@ -4,14 +4,14 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class Sigcaut2DataItem extends DataItem {
-  DateTime data;
-  String codigo;
-  int filial;
-  String operacao;
-  int qtde;
-  int valor;
-  int descontos;
-  int acrescimos;
+  DateTime? data;
+  String? codigo;
+  int? filial;
+  String? operacao;
+  int? qtde;
+  int? valor;
+  int? descontos;
+  int? acrescimos;
 
   Sigcaut2DataItem(
       {this.data,
@@ -62,9 +62,9 @@ class Sigcaut2DataItemModel extends ODataModelClass<Sigcaut2DataItem> {
     super.CC = CloudV3().client;
   }
   Sigcaut2DataItem newItem() => Sigcaut2DataItem();
-  vendasPeriodo({double filial, DateTime de, DateTime ate}) {
-    String dDe = de.toIso8601String().substring(0, 10);
-    String dAte = ate.toIso8601String().substring(0, 10);
+  vendasPeriodo({double? filial, DateTime? de, DateTime? ate}) {
+    String? dDe = de!.toIso8601String().substring(0, 10);
+    String? dAte = ate!.toIso8601String().substring(0, 10);
     return search(
             select:
                 "filial,data,sum(valor*(case when operacao<'200' then 1 else -1 end)) valor",

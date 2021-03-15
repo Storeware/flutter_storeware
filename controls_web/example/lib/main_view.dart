@@ -26,7 +26,9 @@ class _MainViewState extends State<MainView> {
             title: 'Olá Galera baljqçwelrkjçerk;s,fm erkj çqlwekrj oweiruç nm ',
           ),
           Container(
-              child: Center(child: Image.network(Constantes.imagemEntrar))),
+              child: Center(
+            child: Image.asset('images/entrar.png'),
+          )),
           SizedBox(
             height: 40,
           ),

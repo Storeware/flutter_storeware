@@ -483,9 +483,9 @@
     },
     {
       "name": "universal_platform",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_platform-0.1.3",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_platform-1.0.0-nullsafety",
       "packageUri": "lib/",
-      "languageVersion": "2.6"
+      "languageVersion": "2.12"
     },
     {
       "name": "url_launcher",
@@ -566,7 +566,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-15T00:27:03.719966Z",
+  "generated": "2021-03-15T13:41:32.032647Z",
   "generator": "pub",
   "generatorVersion": "2.13.0-116.0.dev"
 }

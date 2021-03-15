@@ -2,10 +2,10 @@ import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 
 class CtrlIdItem extends DataItem {
-  String nome;
-  double numero;
-  int status;
-  double valor;
+  String? nome;
+  double? numero;
+  int? status;
+  double? valor;
 
   CtrlIdItem({this.nome, this.numero, this.status, this.valor});
 
@@ -40,7 +40,7 @@ class CtrlIdItemModel extends ODataModelClass<CtrlIdItem> {
 
   static Future<CtrlIdItem> proximo(String nome) async {
     return CtrlIdItemModel()
-        .API
+        .API!
         .openJson("select * from obter_id('$nome')")
         .then((rsp) {
       return CtrlIdItem.fromJson(rsp['result'][0]);

@@ -4,13 +4,13 @@ import 'package:controls_data/odata_firestore.dart';
 //import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class CtprodFilialItem extends DataItem {
-  String codigo;
-  double filial;
+  String? codigo;
+  double? filial;
   //double qtdegond;
-  double precovenda;
-  double precovda2;
-  double precovda3;
-  double precoweb;
+  double? precovenda;
+  double? precovda2;
+  double? precovda3;
+  double? precoweb;
   //double margemfixa;
   //double margxata;
   //double margfxrev;
@@ -150,7 +150,7 @@ class CtprodFilialItem extends DataItem {
     //data['nf_codpiscofins'] = this.nfCodpiscofins;
     //data['custtransf'] = this.custtransf;
     //data['precovenda_ex'] = this.precovendaEx;
-    data['id'] = '${filial ~/ 1}-$codigo';
+    data['id'] = '${filial! ~/ 1}-$codigo';
     return data;
   }
 }

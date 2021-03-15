@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:models/models/sigven_model.dart';
 
 class VendedorFormField extends StatefulWidget {
-  final String codigo;
-  final Function(String) onChanged;
-  final Function(String) onSaved;
-  final bool readOnly;
-  final bool required;
-  final Function(String) validator;
+  final String? codigo;
+  final Function(String)? onChanged;
+  final Function(String)? onSaved;
+  final bool? readOnly;
+  final bool? required;
+  final Function(String)? validator;
   //final bool inPagamento;
   //final bool inRecebimento;
   //final String filter;
   VendedorFormField({
-    Key key,
+    Key? key,
     this.codigo,
     this.onChanged,
     this.onSaved,
@@ -33,13 +33,13 @@ class VendedorFormField extends StatefulWidget {
 
 class _VendedorFormFieldState extends State<VendedorFormField> {
   buscar(cd) {
-    notifier.value = {};
+    notifier!.value = {};
     SigvenItemModel().buscarByCodigo(cd).then((rsp) {
-      if (rsp.length > 0) notifier.value = rsp;
+      if (rsp.length > 0) notifier!.value = rsp;
     });
   }
 
-  ValueNotifier<Map<String, dynamic>> notifier;
+  ValueNotifier<Map<String, dynamic>>? notifier;
   String nomeVendedor = '';
   @override
   void initState() {
@@ -67,38 +67,38 @@ class _VendedorFormFieldState extends State<VendedorFormField> {
               //required: widget.required,
               initialValue: widget.codigo,
               onChanged: (x) {
-                widget.onChanged(x);
+                widget.onChanged!(x);
               },
               validator: (x) {
-                if (!widget.required && x == '') return null;
+                if (!widget.required! && x == '') return null;
                 if (nomeVendedor == '') return 'Inválido';
-                return (widget.validator != null) ? widget.validator(x) : null;
+                return (widget.validator != null) ? widget.validator!(x) : null;
               },
               onSaved: (x) {
-                if (widget.onSaved != null) return widget.onSaved(x);
+                if (widget.onSaved != null) return widget.onSaved!(x);
               },
               onFocusChange: (b, x) {
                 if (x.length > 0) buscar(x);
               },
               onSearch: () async {
-                if (widget.readOnly) return null;
+                if (widget.readOnly!) return null;
                 return Dialogs.showPage(context,
                     child: Scaffold(
                         appBar: AppBar(title: Text('Agente de negócio')),
                         body: VendedorPage(
-                            required: widget.required,
+                            required: widget.required!,
                             onSelected: (x) async {
-                              notifier.value = x;
+                              notifier!.value = x;
 
                               Navigator.pop(context);
                               return x['codigo'];
-                            }))).then((rsp) => notifier.value['codigo']);
+                            }))).then((rsp) => notifier!.value['codigo']);
               },
             ),
           ),
           Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: notifier,
+            child: ValueListenableBuilder<dynamic>(
+              valueListenable: notifier!,
               builder: (ctx, row, wg) {
                 nomeVendedor = row['nome'] ?? '';
                 return MaskedLabeled(
@@ -113,12 +113,12 @@ class _VendedorFormFieldState extends State<VendedorFormField> {
 }
 
 class VendedorPage extends StatelessWidget {
-  final Function(dynamic) onSelected;
-  final bool required;
-  final bool canEdit;
-  final bool canInsert;
+  final Function(dynamic)? onSelected;
+  final bool? required;
+  final bool? canEdit;
+  final bool? canInsert;
   const VendedorPage(
-      {Key key,
+      {Key? key,
       this.onSelected,
       this.canEdit = false,
       this.canInsert = false,
@@ -134,7 +134,7 @@ class VendedorPage extends StatelessWidget {
       controller: DataViewerController(
         keyName: 'codigo',
         future: () => SigvenItemModel().listNoCached().then((rsp) {
-          if (!required) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
+          if (!required!) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
           return rsp;
         }),
         dataSource: SigvenItemModel(),

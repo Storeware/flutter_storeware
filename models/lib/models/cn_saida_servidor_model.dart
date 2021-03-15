@@ -4,18 +4,18 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class CnSaidaServidorItem extends DataItem {
-  String gidServidor;
-  String protocolo;
-  String nome;
-  String conta;
-  String senha;
-  String contaMestre;
-  String inativo;
-  DateTime data;
-  DateTime dtatualiz;
-  String servidor;
-  int porta;
-  String autenticar;
+  String? gidServidor;
+  String? protocolo;
+  String? nome;
+  String? conta;
+  String? senha;
+  String? contaMestre;
+  String? inativo;
+  DateTime? data;
+  DateTime? dtatualiz;
+  String? servidor;
+  int? porta;
+  String? autenticar;
 
   CnSaidaServidorItem(
       {this.gidServidor,

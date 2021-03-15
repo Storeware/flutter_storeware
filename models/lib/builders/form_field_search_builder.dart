@@ -3,20 +3,20 @@ import 'package:controls_web/controls/masked_field.dart';
 import 'package:flutter/material.dart';
 
 class FormFieldSearchBuilder extends StatefulWidget {
-  final String label;
-  final String value;
-  final Function(String) onChanged;
-  final bool readOnly;
-  final Function(String) validator;
-  final String filter;
-  final Function(String, Function(dynamic)) onSearch;
-  final Function(String) onSaved;
-  final Widget Function(String, Function(dynamic)) onDialogBuild;
-  final String keyField;
-  final String nameField;
-  final bool requiredResult;
+  final String? label;
+  final String? value;
+  final Function(String)? onChanged;
+  final bool? readOnly;
+  final Function(String)? validator;
+  final String? filter;
+  final Function(String, Function(dynamic))? onSearch;
+  final Function(String)? onSaved;
+  final Widget Function(String, Function(dynamic))? onDialogBuild;
+  final String? keyField;
+  final String? nameField;
+  final bool? requiredResult;
   FormFieldSearchBuilder({
-    Key key,
+    Key? key,
     @required this.value,
     this.requiredResult,
     @required this.onChanged,
@@ -37,12 +37,12 @@ class FormFieldSearchBuilder extends StatefulWidget {
 
 class _FormFieldSearchBuilderState extends State<FormFieldSearchBuilder> {
   buscar(cd) {
-    widget.onSearch(cd, (rsp) {
-      if (rsp != null) notifier.value = rsp;
+    widget.onSearch!(cd, (rsp) {
+      if (rsp != null) notifier!.value = rsp;
     });
   }
 
-  ValueNotifier<dynamic> notifier;
+  ValueNotifier<dynamic>? notifier;
   String nomeConta = '';
   @override
   void initState() {
@@ -69,30 +69,31 @@ class _FormFieldSearchBuilderState extends State<FormFieldSearchBuilder> {
                   controller: codigoController,
                   initialValue: widget.value,
                   onChanged: (x) {
-                    widget.onChanged(x);
+                    widget.onChanged!(x);
                   },
                   validator: (x) {
                     if (nomeConta == '') return 'Inválido';
                     return (widget.validator != null)
-                        ? widget.validator(x)
+                        ? widget.validator!(x)
                         : null;
                   },
                   onSaved: (x) {
-                    if (widget.onSaved != null) return widget.onSaved(x);
+                    if (widget.onSaved != null) return widget.onSaved!(x);
                   },
                   onFocusChange: (b, x) {
                     if (x.length > 0) buscar(x);
                   },
                   onSearch: () async {
-                    if (widget.readOnly) return null;
+                    if (widget.readOnly!) return null;
                     return Dialogs.showPage(context,
-                        child: widget.onDialogBuild(codigoController.text, (x) {
-                          notifier.value = x;
-                        })).then((rsp) => notifier.value[widget.keyField]);
+                        child:
+                            widget.onDialogBuild!(codigoController.text, (x) {
+                          notifier!.value = x;
+                        })).then((rsp) => notifier!.value[widget.keyField]);
                   })),
           Expanded(
-            child: ValueListenableBuilder(
-                valueListenable: notifier,
+            child: ValueListenableBuilder<dynamic>(
+                valueListenable: notifier!,
                 builder: (ctx, row, wg) {
                   row ??= {};
                   nomeConta = row[widget.nameField] ?? '';

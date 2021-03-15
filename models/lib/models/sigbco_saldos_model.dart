@@ -2,9 +2,9 @@ import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 
 class SigbcoSaldosItem extends DataItem {
-  String codigo;
-  int valor;
-  String dtatualiz;
+  String? codigo;
+  int? valor;
+  String? dtatualiz;
 
   SigbcoSaldosItem({this.codigo, this.valor, this.dtatualiz});
 
@@ -34,7 +34,7 @@ class SigbcoSaldosItemModel extends ODataModelClass<SigbcoSaldosItem> {
     super.API = ODataInst();
   }
   SigbcoSaldosItem newItem() => SigbcoSaldosItem();
-  saldos({String filter}) {
+  saldos({String? filter}) {
     return listNoCached(
         filter: filter,
         resource: 'sigbco_saldos a join sigbco b on (a.codigo=b.codigo)',

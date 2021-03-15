@@ -4,12 +4,12 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class CtprodFilialPromocaoItem extends DataItem {
-  double filial;
-  String codigo;
-  DateTime promdtini;
-  DateTime promdtfim;
-  double prompreco;
-  DateTime dtatualiz;
+  double? filial;
+  String? codigo;
+  DateTime? promdtini;
+  DateTime? promdtfim;
+  double? prompreco;
+  DateTime? dtatualiz;
 
   CtprodFilialPromocaoItem(
       {this.filial,

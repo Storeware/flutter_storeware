@@ -4,16 +4,16 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class CnSaidaTituloItem extends DataItem {
-  String titulo;
-  DateTime data;
-  String gidMensagem;
-  String gidServidor;
-  String de;
-  String para;
-  String cc;
-  String gidEstado;
-  String usuario;
-  String registrado;
+  String? titulo;
+  DateTime? data;
+  String? gidMensagem;
+  String? gidServidor;
+  String? de;
+  String? para;
+  String? cc;
+  String? gidEstado;
+  String? usuario;
+  String? registrado;
 
   CnSaidaTituloItem(
       {this.data,
@@ -61,15 +61,15 @@ class CnSaidaTituloItem extends DataItem {
     return data;
   }
 
-  String erro;
+  String erro = '';
   bool validar() {
     bool rt = true;
     erro = '';
-    if (gidEstado.isEmpty) {
+    if (gidEstado!.isEmpty) {
       rt = false;
       erro += 'Não identificou o estado\n';
     }
-    if (gidServidor.isEmpty) {
+    if (gidServidor!.isEmpty) {
       rt = false;
       erro += 'Não indicou o provedor da mensagem\n';
     }

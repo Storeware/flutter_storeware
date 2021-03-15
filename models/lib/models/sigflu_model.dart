@@ -6,37 +6,37 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class SigfluItem extends DataItem {
-  DateTime vcto;
-  DateTime emissao;
-  double valor;
-  String banco;
-  String historico;
-  String dcto;
-  String codigo;
-  double control;
-  double ctrlId;
-  double filial;
-  DateTime data;
-  DateTime digitacao;
-  double clifor;
+  DateTime? vcto;
+  DateTime? emissao;
+  double? valor;
+  String? banco;
+  String? historico;
+  String? dcto;
+  String? codigo;
+  double? control;
+  double? ctrlId;
+  double? filial;
+  DateTime? data;
+  DateTime? digitacao;
+  double? clifor;
   //DateTime insercao;
-  DateTime dtcontabil;
+  DateTime? dtcontabil;
 
   /// S ou N
-  String dctook;
-  String prtserie;
-  String conferido;
+  String? dctook;
+  String? prtserie;
+  String? conferido;
 
   /// S ou N
-  bool aprovado;
+  bool? aprovado;
   //int tipoIdentPgto;
   /// 1 ou 0
-  bool bdregdebito;
+  bool? bdregdebito;
   //String criadorRegistro;
-  int baixaAutomatica;
-  String baixaBanco;
-  DateTime baixaDtpgto;
-  double baixaValor;
+  int? baixaAutomatica;
+  String? baixaBanco;
+  DateTime? baixaDtpgto;
+  double? baixaValor;
 
   SigfluItem({
     //this.hist,
@@ -97,7 +97,7 @@ class SigfluItem extends DataItem {
     //  criadorRegistro = json['criador_registro'];
 
     // manter null para banco que nao tem a coluna
-    baixaAutomatica = json['baixa_automatica']; 
+    baixaAutomatica = json['baixa_automatica'];
     baixaBanco = json['baixa_banco'];
     if (json['baixa_dtpgto'] != null)
       baixaDtpgto = toDate(json['baixa_dtpgto']);
@@ -147,9 +147,9 @@ class SigfluItem extends DataItem {
     data['dtcontabil'] = this.dtcontabil;
     data['dctook'] = this.dctook;
     data['prtserie'] = this.prtserie;
-    data['aprovado'] = this.aprovado ? 'S' : 'N';
+    data['aprovado'] = this.aprovado! ? 'S' : 'N';
     //data['tipo_ident_pgto'] = this.tipoIdentPgto;
-    data['bdregdebito'] = this.bdregdebito ? '1' : '0';
+    data['bdregdebito'] = this.bdregdebito! ? '1' : '0';
     //data['criador_registro'] = this.criadorRegistro;
 
     if (this.baixaAutomatica != null) {
@@ -170,7 +170,7 @@ class SigfluItem extends DataItem {
     }
   }
 
-  static SigfluItem criarNovo({Map<String, dynamic> json}) {
+  static SigfluItem criarNovo({Map<String, dynamic>? json}) {
     var r = SigfluItem.fromJson(json ?? {});
     var d = r.toDate(DateTime.now());
     r.emissao ??= d;
@@ -190,7 +190,7 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
   }
   SigfluItem newItem() => SigfluItem();
 //Future<List<Map<String, dynamic>>>
-  entradaSaidasDiarias({double filial, DateTime de, DateTime ate}) async {
+  entradaSaidasDiarias({double? filial, DateTime? de, DateTime? ate}) async {
     final sDe = (de ?? DateTime.now()).toDateSql();
     final sAte = (ate ?? DateTime.now().endOfMonth()).toDateSql();
     var filtro = "data between '$sDe' and '$sAte' ";
@@ -205,18 +205,18 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
         group by $sFilial data ''';
     //print(qry);
     return super
-        .API
+        .API!
         .openJson(qry, cacheControl: 'no-cache')
         .then((rsp) => rsp['result']);
   }
 
   contasAPagar({
-    double filial,
-    DateTime de,
-    DateTime ate,
-    String filtro,
-    String select,
-    String orderBy,
+    double? filial,
+    DateTime? de,
+    DateTime? ate,
+    String? filtro,
+    String? select,
+    String? orderBy,
   }) {
     final sDe = toDateSql(de ?? (DateTime.now().addMonths(-2)).startOfDay());
     final sAte = toDateSql(ate ?? (DateTime.now()).endOfDay());
@@ -232,19 +232,19 @@ select ${select ?? '*'} from sigflu a
 where $f  (a.codigo ge '200' and a.data between '$sDe'  and '$sAte') $_order
 ''';
     print(qry);
-    return API.openJson(qry, cacheControl: 'no-cache').then((rsp) {
+    return API!.openJson(qry, cacheControl: 'no-cache').then((rsp) {
       // print(rsp);
       return rsp['result'];
     });
   }
 
   contasAReceber({
-    double filial,
-    DateTime de,
-    DateTime ate,
-    String filtro,
-    String select,
-    String orderBy,
+    double? filial,
+    DateTime? de,
+    DateTime? ate,
+    String? filtro,
+    String? select,
+    String? orderBy,
   }) {
     final sDe = toDateSql(de ?? (DateTime.now().addMonths(-2)).startOfDay());
     final sAte = toDateSql(ate ?? (DateTime.now()).endOfDay());
@@ -258,7 +258,7 @@ select ${select ?? '*'} from sigflu a
 where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe'  and '$sAte') $_order
 ''';
     // print(qry);
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
   @override
@@ -278,11 +278,12 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
   }
 
   @override
-  put(value) {
+  Future<Map<String, dynamic>?> put(value) async {
     if (validate(value)) {
       var sql = SqlBuilder.createSqlUpdate('sigflu', 'id', value);
-      return this.API.execute(sql).then((rsp) => json.decode(rsp));
+      return this.API!.execute(sql).then((rsp) => json.decode(rsp));
     }
+    return null;
   }
 
   liquidarPagamento(PagamentoContasItem dadosPgto) async {
@@ -293,7 +294,7 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
     ${dadosPgto.valorPago},
     ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros},'${dadosPgto.usuario}' )''';
     print(qry);
-    return API.execute(qry).then((r) {
+    return API!.execute(qry).then((r) {
       print(r);
       return json.decode(r);
     });
@@ -307,7 +308,7 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
     ${dadosPgto.valorPago},
     ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros},'${dadosPgto.usuario}' )''';
     print(qry);
-    return API.execute(qry).then((r) {
+    return API!.execute(qry).then((r) {
       print(r);
       return json.decode(r);
     });
@@ -316,12 +317,12 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
 
 class PagamentoContasItem extends SigfluItem {
   //String banco;
-  double valorPago;
-  double valorJuros;
-  double valorDesp;
-  double valorDesc;
-  double valorOutros;
-  String usuario;
+  double? valorPago;
+  double? valorJuros;
+  double? valorDesp;
+  double? valorDesc;
+  double? valorOutros;
+  String? usuario;
   PagamentoContasItem.fromJson(json) {
     fromMap(json);
     valorPago = toDouble(json['valorPago']);

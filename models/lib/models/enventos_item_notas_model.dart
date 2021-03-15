@@ -2,11 +2,11 @@ import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 
 class EventosItemNotasItem extends DataItem {
-  double eventosid;
-  DateTime data;
-  String texto;
-  String pessoa;
-  String usuario;
+  double? eventosid;
+  DateTime? data;
+  String? texto;
+  String? pessoa;
+  String? usuario;
 
   EventosItemNotasItem(
       {this.eventosid, this.data, this.texto, this.pessoa, this.usuario});
@@ -31,7 +31,7 @@ class EventosItemNotasItem extends DataItem {
     return {
       'id': id,
       'eventosid': this.eventosid,
-      'data': toDateTimeSql(this.data),
+      'data': toDateTimeSql(this.data!),
       'texto': texto,
       'pessoa': pessoa,
       'usuario': usuario

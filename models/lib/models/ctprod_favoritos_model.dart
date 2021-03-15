@@ -2,10 +2,10 @@ import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 
 class CtprodFavoritosItem extends DataItem {
-  String codigo;
-  double filial;
-  int curtidas;
-  int visualizados;
+  String? codigo;
+  double? filial;
+  int? curtidas;
+  int? visualizados;
 
   CtprodFavoritosItem(
       {this.codigo, this.filial, this.curtidas, this.visualizados});

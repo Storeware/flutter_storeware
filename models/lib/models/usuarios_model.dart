@@ -4,16 +4,16 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_data/cached.dart';
 
 class SenhasItem extends DataItem {
-  String aplicacao;
-  String caixa;
-  String codigo;
-  int inativo;
-  String nome;
-  String grupo;
-  String validade;
-  String trocasenha;
-  DateTime dtatualiz;
-  String vendedor;
+  String? aplicacao;
+  String? caixa;
+  String? codigo;
+  int? inativo;
+  String? nome;
+  String? grupo;
+  String? validade;
+  String? trocasenha;
+  DateTime? dtatualiz;
+  String? vendedor;
 
   SenhasItem(
       {this.aplicacao,
@@ -65,7 +65,7 @@ class SenhasItem extends DataItem {
   get isAdmin => grupo == 'Administrador';
   get isGestor => 'Gerente,Diretor'.contains(grupo ?? '') || isAdmin;
   get isOperador => (!isAdmin && !isGestor);
-  get isReadOnly => 'Consulta'.contains(grupo);
+  get isReadOnly => 'Consulta'.contains(grupo!);
 }
 
 class SenhasItemModel extends ODataModelClass<SenhasItem> {

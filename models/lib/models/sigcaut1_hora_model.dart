@@ -10,14 +10,14 @@ import 'package:controls_data/odata_firestore.dart';
  */
 
 class Sigcaut1HoraItem extends DataItem {
-  String codigo;
-  DateTime data;
-  String hora;
-  double qtde;
-  String grupo;
-  double filial;
-  double total;
-  int itens;
+  String? codigo;
+  DateTime? data;
+  String? hora;
+  double? qtde;
+  String? grupo;
+  double? filial;
+  double? total;
+  int? itens;
 
   Sigcaut1HoraItem(
       {this.codigo,
@@ -67,40 +67,40 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
   }
   Sigcaut1HoraItem newItem() => Sigcaut1HoraItem();
 
-  Future<ODataResult> resumoDiaHora({DateTime data, filial}) {
+  Future<ODataResult?> resumoDiaHora({DateTime? data, filial}) {
     String dt = ((data ?? DateTime.now())).toIso8601String().substring(0, 10);
     String qry =
         "select data,hora, sum(qtde) qtde,sum(total) total, count(*) itens from sigcaut1_hora " +
             "where data = '$dt' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data,hora ";
-    return API.openJson(qry).then((rsp) {
+    return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });
   }
 
-  Future<ODataResult> resumoDia({DateTime inicio, DateTime fim, filial}) {
-    DateTime _de = inicio;
+  Future<ODataResult> resumoDia({DateTime? inicio, DateTime? fim, filial}) {
+    DateTime? _de = inicio;
     if (_de == null) {
       _de = DateTime.now().startOfMonth();
     }
-    DateTime _ate = fim;
+    DateTime? _ate = fim;
     if (_ate == null) _ate = DateTime.now().endOfMonth();
     String qry =
         "select data, sum(qtde) qtde,sum(total) total, count(*) itens from sigcaut1_hora " +
             "where data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data ";
-    return API.openJson(qry).then((rsp) {
+    return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });
   }
 
-  rankDoDia({DateTime data, top = 10, skip = 0}) {
-    DateTime dt = data;
+  rankDoDia({DateTime? data, top = 10, skip = 0}) {
+    DateTime? dt = data;
     String ini = toDateSql(dt.startOfMonth());
     String hoje = toDateSql(dt.toDate());
     String ontem = toDateSql(dt.toDate().add(Duration(days: -1)));
     String qry;
-    if (API.driver == 'mssql')
+    if (API!.driver == 'mssql')
       qry = "select " +
           "max(data) data,  " +
           "sum(case when data = '$ontem' then total else 0 end) ontem,  " +
@@ -118,11 +118,15 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
           "where data>='$ini' " +
           "order by total desc " +
           "rows ${skip + 1} to ${top + skip}";
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
   produtosMaisVendidos(
-      {String filter, DateTime dataDe, DateTime dataAte, top = 30, skip = 0}) {
+      {String? filter,
+      DateTime? dataDe,
+      DateTime? dataAte,
+      top = 30,
+      skip = 0}) {
     DateTime dt = dataDe ?? DateTime.now();
     dataAte = dataAte ?? dt;
     String ini = toDateSql(dt.startOfMonth());
@@ -140,7 +144,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
             "rows ${skip + 1} to ${top + skip} ) b " +
             "${(filter != null) ? 'where ' + filter : ''} ";
 
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
   toDateSql(DateTime data) {
@@ -152,7 +156,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
     return data.toIso8601String().substring(0, 19).replaceAll('T', ' ');
   }
 
-  contaProdutoSemVendas({DateTime data}) {
+  contaProdutoSemVendas({DateTime? data}) {
     String d =
         toDateSql(data ?? DateTime.now().toDate().add(Duration(days: -30)));
     String qry = "select count(*) conta " +
@@ -163,15 +167,15 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
         "  ( " +
         "  not exists  (select codigo from sigcaut1_hora b where a.codigo=b.codigo and b.data>='$d'  ) " +
         "  ) ";
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
   produtosSemVenda(
-      {DateTime data, filter, top, skip, double filialEstoque = 1}) {
+      {DateTime? data, filter, top, skip, double filialEstoque = 1}) {
     String d =
         toDateSql(data ?? DateTime.now().toDate().add(Duration(days: -30)));
     String qry;
-    if (API.driver == 'mssql') {
+    if (API!.driver == 'mssql') {
       /// TODO: refazer o select para MSSQL
       qry = "select x.*, (select sum(qestfin) from ctprodsd s where s.codigo=x.codigo) estoque  from ("
               "select codigo,nome,precoweb,unidade  " +
@@ -196,15 +200,15 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
           "  not exists  (select codigo from sigcaut1_hora b where a.codigo=b.codigo and b.data>='$d'  ) " +
           "  ) rows ${skip + 1} to ${top + skip} ) x   " +
           "  ";
-    return API.openJson(qry).then((rsp) => rsp['result']);
+    return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  resumoPorAtalho({DateTime inicio, DateTime fim, filial}) {
-    DateTime _de = inicio;
+  resumoPorAtalho({DateTime? inicio, DateTime? fim, filial}) {
+    DateTime? _de = inicio;
     if (_de == null) {
       _de = DateTime.now().startOfMonth();
     }
-    DateTime _ate = fim;
+    DateTime? _ate = fim;
     if (_ate == null) _ate = DateTime.now().endOfMonth();
     var qry = "select t.nome, x.total, x.itens from " +
         "(" +
@@ -215,40 +219,40 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
         "group by b.CODTITULO " +
         ") x , CTPROD_ATALHO_TITULO t " +
         "where x.codtitulo = t.codigo order by 2 desc";
-    return API.openJson(qry).then((rsp) {
+    return API!.openJson(qry).then((rsp) {
       return rsp['result'];
     });
   }
 
-  evolucao({DateTime inicio, DateTime fim, filial}) {
-    DateTime _de = inicio;
+  evolucao({DateTime? inicio, DateTime? fim, filial}) {
+    DateTime? _de = inicio;
     if (_de == null) {
       _de = DateTime.now().startOfMonth();
     }
-    DateTime _ate = fim;
+    DateTime? _ate = fim;
     if (_ate == null) _ate = DateTime.now().endOfMonth();
     var qry = "select data, sum(total) total, count(*) itens " +
         "from sigcaut1_hora " +
         "          where data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
         "group by data ";
-    return API.openJson(qry).then((rsp) {
+    return API!.openJson(qry).then((rsp) {
       return rsp['result'];
     });
   }
 
   evolucaoPorVendedor(
-      {String vendedor, DateTime inicio, DateTime fim, filial}) {
-    DateTime _de = inicio;
+      {String? vendedor, DateTime? inicio, DateTime? fim, filial}) {
+    DateTime? _de = inicio;
     if (_de == null) {
       _de = DateTime.now().startOfMonth();
     }
-    DateTime _ate = fim;
+    DateTime? _ate = fim;
     if (_ate == null) _ate = DateTime.now().endOfMonth();
     var qry = "select data, sum(total) total, count(*) itens " +
         "from sigcauth " +
         "          where vendedor eq '$vendedor' and data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
         "group by data ";
-    return API.openJson(qry).then((rsp) {
+    return API!.openJson(qry).then((rsp) {
       return rsp['result'];
     });
   }

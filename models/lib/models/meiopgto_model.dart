@@ -3,11 +3,11 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class MeiopgtoItem extends DataItem {
-  int idMeioPagto;
-  String sgMeioPagto;
-  String dsMeioPagto;
-  String idGrupoWba;
-  String inLiqDuvidosa;
+  int? idMeioPagto;
+  String? sgMeioPagto;
+  String? dsMeioPagto;
+  String? idGrupoWba;
+  String? inLiqDuvidosa;
 
   MeiopgtoItem({
     this.idMeioPagto,

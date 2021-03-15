@@ -4,20 +4,20 @@ import 'package:controls_data/odata_firestore.dart';
 //import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class Sigcaut1Item extends DataItem {
-  String codigo;
-  DateTime data;
-  String dcto;
-  double preco;
-  double filial;
-  double qtde;
-  String baixado;
-  double clifor;
-  String operacao;
-  String compl;
-  String mesa;
-  double dctoid;
-  double sigcauthlote;
-  String vendedor;
+  String? codigo;
+  DateTime? data;
+  String? dcto;
+  double? preco;
+  double? filial;
+  double? qtde;
+  String? baixado;
+  double? clifor;
+  String? operacao;
+  String? compl;
+  String? mesa;
+  double? dctoid;
+  double? sigcauthlote;
+  String? vendedor;
   // double empresa;
   // double formapgto;
   // String hora;
@@ -25,27 +25,27 @@ class Sigcaut1Item extends DataItem {
   // double ipi;
   // double irf;
   // double iss;
-  String nome;
+  String? nome;
   // String operacao;
   // double percDesc;
   // double precobase;
   // double precoBase;
-  double qtdebaixa;
-  double qtdeOrigi;
-  String registrado;
-  double ordem;
-  String localarmazenamento;
+  double? qtdebaixa;
+  double? qtdeOrigi;
+  String? registrado;
+  double? ordem;
+  String? localarmazenamento;
   // double estado;
   // double filialprod;
-  double estprod;
+  double? estprod;
   // String hrestado;
-  double total;
-  String unidade;
+  double? total;
+  String? unidade;
   // String aplServico;
   // String imprimeimediato;
   // String cancelado;
   // double qtdecanc;
-  DateTime dtEntRet;
+  DateTime? dtEntRet;
 
   static test() {
     return Sigcaut1Item.fromJson({
@@ -89,8 +89,8 @@ class Sigcaut1Item extends DataItem {
     });
   }
 
-  double get lote => sigcauthlote;
-  set lote(double x) => sigcauthlote = x;
+  double? get lote => sigcauthlote;
+  set lote(double? x) => sigcauthlote = x;
   Sigcaut1Item({
     this.codigo,
     this.data,
@@ -191,7 +191,7 @@ class Sigcaut1Item extends DataItem {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['codigo'] = this.codigo;
-    data['data'] = toDateSql(toDate(this.data));
+    data['data'] = toDateSql(toDate(this.data)!);
     data['dcto'] = this.dcto;
     data['id'] = this.id.toString();
     data['preco'] = this.preco;
@@ -270,11 +270,12 @@ class Sigcaut1ItemModel extends ODataModelClass<Sigcaut1Item> {
   }
 
   mudarEstadoPara(id, estado) {
-    return API.execute("update sigcaut1 set estprod = $estado where id = $id ");
+    return API!
+        .execute("update sigcaut1 set estprod = $estado where id = $id ");
   }
 
   mudarQtdePara(id, double qtde, localArmazenamento) {
-    return API.execute(
+    return API!.execute(
         "update sigcaut1 set qtde=$qtde, localarmazenamento = '$localArmazenamento' where id = $id ");
   }
 
@@ -284,13 +285,13 @@ class Sigcaut1ItemModel extends ODataModelClass<Sigcaut1Item> {
     String qry =
         """SELECT p.TX_MSG, p.NR_PEDIDO, p.NR_LOTE, p.NR_LINHAS_AFETADAS 
             FROM WEB_REG_OS_ITEM(0, ${item.filial}, 
-        '${toDateSql(item.data)}', 
+        '${toDateSql(item.data!)}', 
         '${item.dcto}', ${item.clifor}, '${item.codigo}', 
         '${item.compl ?? ''}', 
         ${item.qtde}, 
         ${item.preco}, 
         ${item.ordem}, $vend, 
         ${item.lote}, null, null, 1,'N','${item.operacao}') p """;
-    return API.openJson(qry);
+    return API!.openJson(qry);
   }
 }

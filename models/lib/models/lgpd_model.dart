@@ -10,11 +10,11 @@ class LgpdItem extends HistoricoItem {}
 
 class LgpdItemModel extends HistoricoItemModel {
   static register(
-      {double codigo,
-      DateTime data,
-      String origem,
-      String info,
-      String usuario}) async {
+      {double? codigo,
+      DateTime? data,
+      String? origem,
+      String? info,
+      String? usuario}) async {
     return HistoricoItemModel.registerLGPD(
       codigoPessoa: codigo,
       info: info,

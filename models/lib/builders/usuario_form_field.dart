@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:models/models/usuarios_model.dart';
 
 class UsuarioFormField extends StatefulWidget {
-  final String codigo;
-  final String label;
-  final void Function(String) onChanged;
-  final void Function(String) onSaved;
-  final bool readOnly;
-  final bool required;
-  final String Function(String) validator;
+  final String? codigo;
+  final String? label;
+  final void Function(String)? onChanged;
+  final void Function(String)? onSaved;
+  final bool? readOnly;
+  final bool? required;
+  final String Function(String)? validator;
   //final bool inPagamento;
   //final bool inRecebimento;
   //final String filter;
   UsuarioFormField({
-    Key key,
+    Key? key,
     this.codigo,
     this.label,
     this.onChanged,
@@ -35,13 +35,13 @@ class UsuarioFormField extends StatefulWidget {
 
 class _UsuarioFormFieldState extends State<UsuarioFormField> {
   buscar(cd) {
-    notifier.value = {};
+    notifier!.value = {};
     UsuarioItemModel().buscarByCodigo(cd).then((rsp) {
-      if (rsp.length > 0) notifier.value = rsp;
+      if (rsp.length > 0) notifier!.value = rsp;
     });
   }
 
-  ValueNotifier<Map<String, dynamic>> notifier;
+  ValueNotifier<Map<String, dynamic>>? notifier;
   String nomeUsuario = '';
   @override
   void initState() {
@@ -69,39 +69,39 @@ class _UsuarioFormFieldState extends State<UsuarioFormField> {
               //required: widget.required,
               initialValue: widget.codigo,
               onChanged: (x) {
-                widget.onChanged(x);
+                widget.onChanged!(x);
               },
               validator: (x) {
-                if (!widget.required && x == '') return null;
+                if (!widget.required! && x == '') return null;
                 if (nomeUsuario == '') return 'Inválido';
-                return (widget.validator != null) ? widget.validator(x) : null;
+                return (widget.validator != null) ? widget.validator!(x) : null;
               },
               onSaved: (x) {
-                if (widget.onSaved != null) return widget.onSaved(x);
+                if (widget.onSaved != null) return widget.onSaved!(x);
               },
               onFocusChange: (b, x) {
                 if (x.length > 0) buscar(x);
               },
               onSearch: () async {
-                if (widget.readOnly) return null;
+                if (widget.readOnly!) return null;
                 return Dialogs.showPage(context,
                     child: Scaffold(
                         appBar: AppBar(title: Text('Usuários')),
                         body: UsuarioPage(
-                            required: widget.required,
+                            required: widget.required!,
                             onSelected: (x) async {
-                              notifier.value = x;
+                              notifier!.value = x;
                               Navigator.pop(context);
                               //if (widget.onChanged != null)
                               //  widget.onChanged(x['codigo']);
                               return x['codigo'];
-                            }))).then((rsp) => notifier.value['codigo']);
+                            }))).then((rsp) => notifier!.value['codigo']);
               },
             ),
           ),
           Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: notifier,
+            child: ValueListenableBuilder<dynamic>(
+              valueListenable: notifier!,
               builder: (ctx, row, wg) {
                 nomeUsuario = row['nome'] ?? '';
                 //codigoController.text = row['codigo'];
@@ -120,12 +120,12 @@ class _UsuarioFormFieldState extends State<UsuarioFormField> {
 }
 
 class UsuarioPage extends StatelessWidget {
-  final Function(dynamic) onSelected;
-  final bool required;
-  final bool canEdit;
-  final bool canInsert;
+  final Function(dynamic)? onSelected;
+  final bool? required;
+  final bool? canEdit;
+  final bool? canInsert;
   const UsuarioPage(
-      {Key key,
+      {Key? key,
       this.onSelected,
       this.canEdit = false,
       this.canInsert = false,
@@ -141,7 +141,7 @@ class UsuarioPage extends StatelessWidget {
       controller: DataViewerController(
         keyName: 'codigo',
         future: () => UsuarioItemModel().listNoCached().then((rsp) {
-          if (!required) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
+          if (!required!) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
           return rsp;
         }),
         dataSource: UsuarioItemModel(),

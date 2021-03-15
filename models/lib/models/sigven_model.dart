@@ -3,10 +3,10 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class SigvenItem extends DataItem {
-  String codigo;
-  num comissao;
-  String nome;
-  String usuario;
+  String? codigo;
+  num? comissao;
+  String? nome;
+  String? usuario;
   //int tpModlancto;
   //int tpDatarefer;
   //int tpBasecalc;

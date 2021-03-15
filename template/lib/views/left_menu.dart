@@ -8,21 +8,21 @@ class LeftMenuVisibleNotifier extends BlocModel<bool> {
 }
 
 class LeftMenuItem {
-  Widget icon;
-  String title;
-  Function onPressed;
+  Widget? icon;
+  String? title;
+  Function? onPressed;
   LeftMenuItem({this.title, this.icon, this.onPressed});
 }
 
 class LeftMenuContainer extends StatefulWidget {
-  final Function(bool) onChange;
-  final bool expanded;
-  final double expandedWidth;
-  final double colapsedWidth;
-  final bool visible;
-  final List<LeftMenuItem> children;
+  final Function(bool)? onChange;
+  final bool? expanded;
+  final double? expandedWidth;
+  final double? colapsedWidth;
+  final bool? visible;
+  final List<LeftMenuItem>? children;
   const LeftMenuContainer(
-      {Key key,
+      {Key? key,
       this.visible = true,
       this.children,
       this.expandedWidth = 200,
@@ -44,12 +44,13 @@ class _LeftMenuContainerState extends State<LeftMenuContainer> {
         stream: LeftMenuVisibleNotifier().stream,
         initialData: widget.visible,
         builder: (x, y) {
-          _visible = y.data;
+          _visible = y.data!;
           if (!_visible) return Container();
           var p = Theme.of(context).primaryColor;
           return Container(
-            width:
-                (widget.expanded ? widget.expandedWidth : widget.colapsedWidth),
+            width: (widget.expanded!
+                ? widget.expandedWidth
+                : widget.colapsedWidth),
             child: Padding(
               padding: const EdgeInsets.all(5.0),
               child: ListView(
@@ -63,17 +64,17 @@ class _LeftMenuContainerState extends State<LeftMenuContainer> {
                         InkWell(
                           //iconSize: 20,
                           //padding: EdgeInsets.all(0),
-                          child: Icon((widget.expanded
+                          child: Icon((widget.expanded!
                               ? Icons.arrow_left
                               : Icons.arrow_right)),
                           onTap: () {
                             if (widget.onChange != null)
-                              widget.onChange(!widget.expanded);
+                              widget.onChange!(!widget.expanded!);
                           },
                           splashColor: Colors.indigo,
                         ),
                         Text(
-                          widget.expanded ? 'Menu' : '..',
+                          widget.expanded! ? 'Menu' : '..',
                           style: TextStyle(color: Colors.white),
                         ),
                       ],
@@ -90,26 +91,26 @@ class _LeftMenuContainerState extends State<LeftMenuContainer> {
   _createItems(context) {
     return [
       for (var i = 0; i < (widget.children ?? []).length; i++)
-        _createItem(widget.children[i])
+        _createItem(widget.children![i])
     ];
   }
 
   _createItem(LeftMenuItem item) {
-    if (widget.expanded)
+    if (widget.expanded!)
       return ListTile(
         leading: item.icon,
         dense: false,
         contentPadding: EdgeInsets.only(left: 8),
-        title: Text(item.title),
+        title: Text(item.title!),
         onTap: () {
-          if (item.onPressed != null) item.onPressed();
+          if (item.onPressed != null) item.onPressed!();
         },
       );
     return InkWell(
       child: item.icon,
       splashColor: Colors.indigo,
       onTap: () {
-        if (item.onPressed != null) item.onPressed();
+        if (item.onPressed != null) item.onPressed!();
       },
     );
   }

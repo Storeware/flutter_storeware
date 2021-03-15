@@ -4,12 +4,12 @@ import 'package:controls_data/odata_firestore.dart';
 
 class Sigcaut1estItem extends DataItem {
   //int id;
-  int codigo;
-  String nome;
-  String estconcluido;
-  int pdvpodefechar;
-  double qtdeestadopara;
-  String cor;
+  int? codigo;
+  String? nome;
+  String? estconcluido;
+  int? pdvpodefechar;
+  double? qtdeestadopara;
+  String? cor;
 
   Sigcaut1estItem(
       {this.codigo, this.nome, this.estconcluido, this.pdvpodefechar});
@@ -60,7 +60,7 @@ class Sigcaut1estItemModel extends ODataModelClass<Sigcaut1estItem> {
     items.clear();
   }
 
-  static Sigcaut1estItem find(estado) {
+  static Sigcaut1estItem? find(estado) {
     var idx = indexOf(estado);
     if (idx > -1) return Sigcaut1estItem.fromJson(_singleton.items[idx]);
     return null;

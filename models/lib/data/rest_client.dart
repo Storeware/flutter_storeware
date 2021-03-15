@@ -23,17 +23,18 @@ class RestClientBloC<T> {
 }
 
 class RestClientProvider<T> extends StatelessWidget {
-  final RestClientBloC<T> bloc;
-  final AsyncWidgetBuilder builder;
-  final Widget noDataChild;
-  const RestClientProvider({Key key, this.bloc, this.builder, this.noDataChild})
+  final RestClientBloC<T>? bloc;
+  final AsyncWidgetBuilder? builder;
+  final Widget? noDataChild;
+  const RestClientProvider(
+      {Key? key, this.bloc, this.builder, this.noDataChild})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: bloc.stream,
+      stream: bloc!.stream,
       builder: (a, b) {
-        return (b.hasData ? builder(a, b) : noDataChild ?? Container());
+        return (b.hasData ? builder!(a, b) : noDataChild ?? Container());
       },
     );
   }
@@ -129,7 +130,7 @@ class RestClient {
 
   int statusCode = 0;
   _decodeResp(Response resp) {
-    statusCode = resp.statusCode;
+    statusCode = resp.statusCode!;
     if (resp.data != null) {
       jsonResponse = resp.data;
     }
@@ -143,7 +144,7 @@ class RestClient {
 
   Future<String> openUrl(String url, {String? method, body}) async {
     _setHeader();
-    Response resp;
+    Response? resp;
     //print('OpenUrl $method:$url');
     Dio dio = Dio();
     if (method == 'GET') resp = await dio.get(url);
@@ -151,7 +152,7 @@ class RestClient {
     if (method == 'PUT') resp = await dio.put(url, data: body);
     if (method == 'PATCH') resp = await dio.patch(url, data: body);
     if (method == 'DELETE') resp = await dio.delete(url);
-    _decodeResp(resp);
+    _decodeResp(resp!);
     if (statusCode == 200) {
       var rsp = jsonEncode(resp.data);
       notify.send(rsp);

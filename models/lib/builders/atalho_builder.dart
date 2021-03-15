@@ -1,14 +1,16 @@
 import 'package:controls_data/odata_client.dart';
-import 'package:console/comum/controls.dart';
+//import 'package:console/comum/controls.dart';
 import 'package:flutter/material.dart';
 
+import 'controls.dart';
+
 class AtalhoBuilder extends StatelessWidget {
-  final Widget Function(BuildContext, List<dynamic>) builder;
-  const AtalhoBuilder({Key key, @required this.builder}) : super(key: key);
+  final Widget Function(BuildContext, List<dynamic>)? builder;
+  const AtalhoBuilder({Key? key, @required this.builder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return FutureBuilder<dynamic>(
       future: ODataInst().send(
           ODataQuery(
             resource: 'ctprod_atalho_titulo',
@@ -17,7 +19,7 @@ class AtalhoBuilder extends StatelessWidget {
           cacheControl: 'no-cache'),
       builder: (ctx, snap) {
         if (snap.hasData) {
-          List<dynamic> items = snap.data['result'];
+          List<dynamic> items = snap.data['result']!;
           try {
             items.sort((a, b) => (a['nome'] ?? '')
                 .toString()
@@ -25,15 +27,15 @@ class AtalhoBuilder extends StatelessWidget {
                 .compareTo((b['nome'] ?? '').toString().toUpperCase()));
             items.insert(0, {'codigo': 0, 'nome': ''});
           } catch (e) {}
-          return builder(ctx, items);
+          return builder!(ctx, items);
         }
         return Container();
       },
     );
   }
 
-  static createDropDownFormField(context, int codtitulo,
-      {Function(int value) onChanged}) {
+  static createDropDownFormField(context, int? codtitulo,
+      {Function(int value)? onChanged}) {
     return AtalhoBuilder(builder: (ctx, List<dynamic> items) {
       // print('ietms $items');
       var corrente =
@@ -53,7 +55,7 @@ class AtalhoBuilder extends StatelessWidget {
             var item = items.firstWhere((it) => it['nome'] == newValue);
             if (item != null) {
               codtitulo = item['codigo'];
-              onChanged(codtitulo);
+              onChanged!(codtitulo!);
             }
           },
           value: (corrente ?? {})['nome'] ?? '');

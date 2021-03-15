@@ -10,14 +10,14 @@ import 'package:controls_data/odata_firestore.dart';
  */
 
 class Sigcaut2HoraItem extends DataItem {
-  String codigo;
-  DateTime data;
-  String hora;
-  double qtde;
-  String grupo;
-  double filial;
-  double total;
-  int itens;
+  String? codigo;
+  DateTime? data;
+  String? hora;
+  double? qtde;
+  String? grupo;
+  double? filial;
+  double? total;
+  int? itens;
 
   Sigcaut2HoraItem(
       {this.codigo,
@@ -67,29 +67,29 @@ class Sigcaut2HoraItemModel extends ODataModelClass<Sigcaut2HoraItem> {
   }
   Sigcaut2HoraItem newItem() => Sigcaut2HoraItem();
 
-  Future<ODataResult> resumoDiaHora({DateTime data, filial}) {
+  Future<ODataResult> resumoDiaHora({DateTime? data, filial}) {
     String dt = ((data ?? DateTime.now())).toIso8601String().substring(0, 10);
     String qry =
         "select data,hora, sum(qtde) qtde,sum(total) total, count(*) itens from Sigcaut2_hora " +
             "where data = '$dt' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data,hora ";
-    return API.openJson(qry).then((rsp) {
+    return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });
   }
 
-  Future<ODataResult> resumoDia({DateTime inicio, DateTime fim, filial}) {
-    DateTime _de = inicio;
+  Future<ODataResult> resumoDia({DateTime? inicio, DateTime? fim, filial}) {
+    DateTime? _de = inicio;
     if (_de == null) {
       _de = DateTime.now().startOfMonth();
     }
-    DateTime _ate = fim;
+    DateTime? _ate = fim;
     if (_ate == null) _ate = DateTime.now().endOfMonth();
     String qry =
         "select data, sum(qtde) qtde,sum(total) total, count(*) itens from Sigcaut2_hora " +
             "where data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data ";
-    return API.openJson(qry).then((rsp) {
+    return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });
   }

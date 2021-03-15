@@ -6,7 +6,7 @@ class RestServer extends RestserverService {
   static final _singleton = RestServer._create();
   RestServer._create() : super(defaultServerHost);
   factory RestServer() => _singleton;
-  get baseUrl => super.host;
+  String get baseUrl => super.host;
   set baseUrl(String x) {
     host = x;
   }
@@ -19,11 +19,11 @@ class RestServer extends RestserverService {
     return openUrl('GET', servico);
   }
 
-  Map<String, dynamic> result({Map<String, dynamic> data, key = 'result'}) {
+  Map<String, dynamic>? result({Map<String, dynamic>? data, key = 'result'}) {
     return value(data: data, key: key);
   }
 
-  int rows({key = 'rows'}) {
+  int? rows({key = 'rows'}) {
     return int.tryParse(value(key: key).toString());
   }
 }

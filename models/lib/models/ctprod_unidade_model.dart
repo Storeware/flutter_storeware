@@ -4,10 +4,10 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart';
 
 class CtprodUnidadeItem extends DataItem {
-  String codigo;
-  String descricao;
-  String permitefracao;
-  String abreviacao;
+  String? codigo;
+  String? descricao;
+  String? permitefracao;
+  String? abreviacao;
 
   CtprodUnidadeItem(
       {this.codigo, this.descricao, this.permitefracao, this.abreviacao});

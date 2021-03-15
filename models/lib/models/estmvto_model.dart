@@ -2,41 +2,41 @@ import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 
 class EstmvtoItem extends DataItem {
-  String numserie;
-  String setor;
-  String vendedor;
-  double frete;
-  String olddcto;
-  int frag;
-  double ipi;
-  double icms;
-  double precobase;
-  int numlote;
-  double precoAq;
-  double bruto;
-  double iss;
-  String compl;
-  String prtserie;
-  String dcto;
-  double clifor;
-  double filial;
-  double percDesc;
-  double qtde;
-  double valor;
-  double pmedio;
-  double control;
-  DateTime emissao;
-  DateTime data;
-  double precoliq = 0;
-  String nome;
+  String? numserie;
+  String? setor;
+  String? vendedor;
+  double? frete;
+  String? olddcto;
+  int? frag;
+  double? ipi;
+  double? icms;
+  double? precobase;
+  int? numlote;
+  double? precoAq;
+  double? bruto;
+  double? iss;
+  String? compl;
+  String? prtserie;
+  String? dcto;
+  double? clifor;
+  double? filial;
+  double? percDesc;
+  double? qtde;
+  double? valor;
+  double? pmedio;
+  double? control;
+  DateTime? emissao;
+  DateTime? data;
+  double? precoliq = 0;
+  String? nome;
   //int id;
-  String operacao;
-  String codigo;
-  double icmssubst;
-  String bdregestoque;
-  double ordem;
+  String? operacao;
+  String? codigo;
+  double? icmssubst;
+  String? bdregestoque;
+  double? ordem;
 
-  double qestant;
+  double? qestant;
 
   EstmvtoItem(
       {this.numserie,
@@ -82,7 +82,7 @@ class EstmvtoItem extends DataItem {
     this.qtde ??= 0;
     this.precobase ??= this.precoliq;
     this.bruto ??= this.precoliq;
-    this.valor = (this.precoliq * this.qtde);
+    this.valor = (this.precoliq! * this.qtde!);
   }
 
   @override

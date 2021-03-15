@@ -15,21 +15,21 @@ class HistoricoItemModel extends EventosItemItemModel {
   HistoricoItem newItem() => HistoricoItem();
 
   static register({
-    String dcto,
-    String autor,
-    String titulo,
-    String tabela,
-    double tabelaId,
-    String tabelaGid,
-    String texto,
-    String arquivado,
-    double idmaster,
-    double cliente,
-    double valor,
-    double ordem,
-    String master,
-    String masterGid,
-    DateTime dataLimite,
+    String? dcto,
+    String? autor,
+    String? titulo,
+    String? tabela,
+    double? tabelaId,
+    String? tabelaGid,
+    String? texto,
+    String? arquivado,
+    double? idmaster,
+    double? cliente,
+    double? valor,
+    double? ordem,
+    String? master,
+    String? masterGid,
+    DateTime? dataLimite,
   }) {
     final item = HistoricoItem();
     item.dcto = dcto;
@@ -54,15 +54,15 @@ class HistoricoItemModel extends EventosItemItemModel {
   }
 
   static registerLGPD(
-      {double codigoPessoa,
-      String titulo,
-      String info,
-      String origem,
-      String usuario,
-      String origemGid,
-      double origemId,
-      String dcto,
-      int dias}) {
+      {double? codigoPessoa,
+      String? titulo,
+      String? info,
+      String? origem,
+      String? usuario,
+      String? origemGid,
+      double? origemId,
+      String? dcto,
+      int? dias}) {
     return HistoricoItemModel.register(
       arquivado: 'S',
       autor: usuario,

@@ -4,11 +4,11 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:uuid/uuid.dart';
 
 class CnEstadoMensagemItem extends DataItem {
-  String gidEstado;
-  String nome;
-  String inativo;
-  String concluido;
-  DateTime data;
+  String? gidEstado;
+  String? nome;
+  String? inativo;
+  String? concluido;
+  DateTime? data;
 
   CnEstadoMensagemItem(
       {this.gidEstado, this.nome, this.inativo, this.concluido, this.data});

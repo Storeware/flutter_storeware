@@ -5,12 +5,12 @@ import 'package:controls_data/odata_client.dart';
 import 'package:dio/dio.dart';
 
 class PixParams {
-  DateTime data = DateTime.now();
-  String conta;
-  String ref;
-  double valor;
-  String nome;
-  String local;
+  DateTime? data = DateTime.now();
+  String? conta;
+  String? ref;
+  double? valor;
+  String? nome;
+  String? local;
 
   toUrlParams({String sep = '&'}) {
     String r = '';
@@ -30,7 +30,7 @@ class PixParams {
 
   Map<String, dynamic> toJson() {
     return {
-      "data": data.toIso8601String(),
+      "data": data!.toIso8601String(),
       "conta": conta,
       "valor": valor,
       "ref": ref,
@@ -55,7 +55,7 @@ class PixParams {
 }
 
 class PixItem extends DataItem {
-  bool inativo;
+  bool? inativo;
 
   PixItem({this.inativo});
 

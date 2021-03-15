@@ -3,25 +3,25 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class FormpgtoItem extends DataItem {
-  String codigo;
-  DateTime dtaprov;
-  DateTime dtfim;
-  DateTime dtinicio;
-  double filial;
-  int halterar;
+  String? codigo;
+  DateTime? dtaprov;
+  DateTime? dtfim;
+  DateTime? dtinicio;
+  double? filial;
+  int? halterar;
   //int id;
-  int nivel;
-  int nmaxparc;
-  String nome;
-  int npzoinic;
-  int npzointe;
-  String operacao;
-  int percentr;
-  int tarifa;
-  int taxajuros;
-  int idCond;
-  String aplicaPdv;
-  bool inativo = false;
+  int? nivel;
+  int? nmaxparc;
+  String? nome;
+  int? npzoinic;
+  int? npzointe;
+  String? operacao;
+  int? percentr;
+  int? tarifa;
+  int? taxajuros;
+  int? idCond;
+  String? aplicaPdv;
+  bool? inativo = false;
 
   FormpgtoItem(
       {this.codigo,
@@ -76,9 +76,9 @@ class FormpgtoItem extends DataItem {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['codigo'] = this.codigo;
-    data['dtaprov'] = fromDateTime(this.dtaprov);
-    data['dtfim'] = fromDateTime(this.dtfim);
-    data['dtinicio'] = fromDateTime(this.dtinicio);
+    data['dtaprov'] = fromDateTime(this.dtaprov!);
+    data['dtfim'] = fromDateTime(this.dtfim!);
+    data['dtinicio'] = fromDateTime(this.dtinicio!);
     data['filial'] = this.filial;
     data['halterar'] = this.halterar;
     data['id'] = this.id;
@@ -93,7 +93,7 @@ class FormpgtoItem extends DataItem {
     data['taxajuros'] = this.taxajuros;
     data['id_cond'] = this.idCond;
     data['aplica_pdv'] = this.aplicaPdv;
-    data['inativo'] = this.inativo ? 'S' : 'N';
+    data['inativo'] = this.inativo! ? 'S' : 'N';
     data['id'] = '$codigo';
     return data;
   }

@@ -4,50 +4,50 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class FilialItem extends DataItem {
-  String cgc;
-  double codigo;
-  String ender;
+  String? cgc;
+  double? codigo;
+  String? ender;
   //int id;
-  String ie;
-  String nome;
-  String inativa;
-  String cep;
-  String fone;
-  String cidade;
-  String estado;
-  String web;
-  String razao;
-  String fatender;
-  String fatcidade;
-  String fatestado;
-  String fatcnpj;
-  String fatie;
-  String fatfone;
-  String fatcep;
-  String geraencautom;
-  String loja;
-  String sigla;
-  int sigcad;
-  String fax;
-  String bairro;
-  String contato;
-  String numero;
-  String complemento;
-  String bancoTesouraria;
-  String simplesnacional;
-  String im;
-  String indicadorTipoAtividade;
-  String email;
-  String indicadorPropriedade;
-  int cnae;
-  double fgrupo;
-  String alteraprecovenda;
-  String permitecreditoicmssn;
-  String horariodeabertura;
-  String horariodefechamento;
-  int ffiscal;
-  double idcontabilista;
-  int fpisCofins;
+  String? ie;
+  String? nome;
+  String? inativa;
+  String? cep;
+  String? fone;
+  String? cidade;
+  String? estado;
+  String? web;
+  String? razao;
+  String? fatender;
+  String? fatcidade;
+  String? fatestado;
+  String? fatcnpj;
+  String? fatie;
+  String? fatfone;
+  String? fatcep;
+  String? geraencautom;
+  String? loja;
+  String? sigla;
+  int? sigcad;
+  String? fax;
+  String? bairro;
+  String? contato;
+  String? numero;
+  String? complemento;
+  String? bancoTesouraria;
+  String? simplesnacional;
+  String? im;
+  String? indicadorTipoAtividade;
+  String? email;
+  String? indicadorPropriedade;
+  int? cnae;
+  double? fgrupo;
+  String? alteraprecovenda;
+  String? permitecreditoicmssn;
+  String? horariodeabertura;
+  String? horariodefechamento;
+  int? ffiscal;
+  double? idcontabilista;
+  int? fpisCofins;
 
   String get cnpj => this.cgc ?? '';
   String get fullEnder =>
@@ -231,12 +231,12 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
     return Cached.value('exists_filial_$codigo', builder: (v) {
       return super.getOne(filter: 'codigo=$codigo').then((rsp) {
         //print(rsp);
-        return rsp['codigo'] ?? 0 == codigo;
+        return rsp!['codigo'] ?? 0 == codigo;
       });
     });
   }
 
-  Future<Map<String, dynamic>> buscarByCodigo(codigo, {String select}) async {
+  Future<Map<String, dynamic>> buscarByCodigo(codigo, {String? select}) async {
     return listCached(
             filter: "codigo eq $codigo ", select: select ?? 'codigo, nome')
         .then((rsp) {

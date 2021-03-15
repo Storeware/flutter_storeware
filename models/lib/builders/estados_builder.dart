@@ -1,4 +1,4 @@
-import 'package:console/models/estados_model.dart';
+import '../models/estados_model.dart';
 import 'package:controls_web/controls/data_viewer.dart';
 import 'package:flutter/material.dart' hide FormFieldBuilder;
 
@@ -6,9 +6,9 @@ import 'dropdown_builder.dart';
 import 'form_field_search_builder.dart';
 
 class EstadosDropdownBuilder extends StatelessWidget {
-  final String value;
-  final Function(String) onChanged;
-  const EstadosDropdownBuilder({Key key, this.value, @required this.onChanged})
+  final String? value;
+  final Function(String)? onChanged;
+  const EstadosDropdownBuilder({Key? key, this.value, @required this.onChanged})
       : super(
           key: key,
         );
@@ -27,16 +27,16 @@ class EstadosDropdownBuilder extends StatelessWidget {
 }
 
 class EstadosFormField extends StatelessWidget {
-  final String value;
-  final Function(String) onChanged;
-  const EstadosFormField({Key key, this.value, this.onChanged})
+  final String? value;
+  final Function(String)? onChanged;
+  const EstadosFormField({Key? key, this.value, this.onChanged})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FormFieldSearchBuilder(
         label: 'Estado',
-        value: value,
+        value: value!,
         onDialogBuild: (v, callback) =>
             EstadosPage(onSelected: (x) => callback(x)),
         onSearch: (sigla, callback) {
@@ -46,7 +46,7 @@ class EstadosFormField extends StatelessWidget {
         },
         keyField: 'sigla',
         onChanged: (x) {
-          onChanged(x);
+          onChanged!(x);
         },
         nameField: 'nome');
   }
@@ -54,8 +54,8 @@ class EstadosFormField extends StatelessWidget {
 
 /// [class]
 class EstadosPage extends StatelessWidget {
-  final Function(dynamic) onSelected;
-  const EstadosPage({Key key, this.onSelected}) : super(key: key);
+  final Function(dynamic)? onSelected;
+  const EstadosPage({Key? key, this.onSelected}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class EstadosPage extends StatelessWidget {
           canInsert: false,
           showPageNavigatorButtons: false,
           onSelected: (x) {
-            onSelected(x);
+            onSelected!(x);
             Navigator.pop(context, x);
           },
           controller: DataViewerController(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProdutoGridView extends StatefulWidget {
-  ProdutoGridView({Key key}) : super(key: key);
+  ProdutoGridView({Key? key}) : super(key: key);
 
   @override
   _ProdutoGridViewState createState() => _ProdutoGridViewState();

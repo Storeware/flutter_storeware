@@ -10,9 +10,9 @@ class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
 class HtmlDivImpls extends StatelessWidget {
-  final Widget child;
+  final Widget? child;
   const HtmlDivImpls({
-    Key key,
+    Key? key,
     this.child,
   }) : super(key: key);
 
@@ -23,14 +23,14 @@ class HtmlDivImpls extends StatelessWidget {
 }
 
 class HtmlIFrameViewImpls extends StatelessWidget {
-  final String src;
-  final String width;
-  final String height;
-  final String allow;
-  final String scrolling;
-  final String style;
-  final String srcdoc;
-  final int border;
+  final String? src;
+  final String? width;
+  final String? height;
+  final String? allow;
+  final String? scrolling;
+  final String? style;
+  final String? srcdoc;
+  final int? border;
 
   HtmlIFrameViewImpls({
     this.src,
@@ -50,7 +50,7 @@ class HtmlIFrameViewImpls extends StatelessWidget {
     String _allow = (allow != null) ? ' allow="$allow" ' : '';
     String _scrolling = (scrolling != null) ? ' scrolling="$scrolling" ' : '';
     String _style = (style != null) ? ' style="$style" ' : '';
-    String _srcdoc = (srcdoc != null) ? srcdoc : '';
+    String _srcdoc = (srcdoc != null) ? srcdoc! : '';
     String _border =
         (border != null) ? ' border="$border" frameBorder="$border" ' : '';
     return Container(
@@ -65,14 +65,14 @@ class HtmlIFrameViewImpls extends StatelessWidget {
 }
 
 class HtmlElementContainerImpls<T> extends StatelessWidget {
-  final String viewType;
-  final HtmlElementContainerControllerImpls controller;
-  final double width;
-  final double height;
-  final Function(T) onComplete;
-  final T Function(String) builder;
+  final String? viewType;
+  final HtmlElementContainerControllerImpls? controller;
+  final double? width;
+  final double? height;
+  final Function(T)? onComplete;
+  final T Function(String)? builder;
   const HtmlElementContainerImpls(
-      {Key key,
+      {Key? key,
       @required this.viewType,
       this.onComplete,
       this.width,
@@ -83,16 +83,16 @@ class HtmlElementContainerImpls<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    T elem = builder(viewType);
-    if (controller != null) controller.value = elem;
-    if (onComplete != null) onComplete(elem);
+    T elem = builder!(viewType!);
+    if (controller != null) controller!.value = elem;
+    if (onComplete != null) onComplete!(elem);
     return Container(
         child: FutureBuilder(
             future: getViewType(viewType, elem),
             builder: (context, snapshot) {
               if (!snapshot.hasData) return Container();
               return HtmlElementView(
-                viewType: viewType,
+                viewType: viewType!,
               );
             }));
   }

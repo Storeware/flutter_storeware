@@ -21,22 +21,22 @@ class WebProdutosAtalhosItem extends DataItem {
       this.qtvarejo,
       this.precovda2});
 
-  double codtitulo;
-  String titulo;
-  int prioridade;
-  String inativo;
-  double filial;
-  double peso;
-  String imagem;
-  String codigo;
-  String nome;
-  String unidade;
-  String marca;
-  double precovenda;
-  double estoquedisponivel;
-  double precoweb;
-  double qtvarejo;
-  double precovda2;
+  double? codtitulo;
+  String? titulo;
+  int? prioridade;
+  String? inativo;
+  double? filial;
+  double? peso;
+  String? imagem;
+  String? codigo;
+  String? nome;
+  String? unidade;
+  String? marca;
+  double? precovenda;
+  double? estoquedisponivel;
+  double? precoweb;
+  double? qtvarejo;
+  double? precovda2;
 
   WebProdutosAtalhosItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);

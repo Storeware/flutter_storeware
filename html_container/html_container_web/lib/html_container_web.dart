@@ -10,14 +10,14 @@ class HtmlElementContainerControllerImpls<T>
     extends HtmlElementContainerControllerInterfaced<T> {}
 
 class HtmlIFrameViewImpls extends StatefulWidget {
-  final String width;
-  final String height;
-  final String src;
-  final String allow;
-  final String scrolling;
-  final String style;
-  final int border;
-  final String srcdoc;
+  final String? width;
+  final String? height;
+  final String? src;
+  final String? allow;
+  final String? scrolling;
+  final String? style;
+  final int? border;
+  final String? srcdoc;
   HtmlIFrameViewImpls({
     this.src,
     this.width,
@@ -34,9 +34,9 @@ class HtmlIFrameViewImpls extends StatefulWidget {
 }
 
 class _HtmlIFrameViewImplsState extends State<HtmlIFrameViewImpls> {
-  IFrameElement _iframeElement;
+  IFrameElement? _iframeElement;
 
-  DivElement div;
+  DivElement? div;
 
   @override
   void initState() {
@@ -53,36 +53,36 @@ class _HtmlIFrameViewImplsState extends State<HtmlIFrameViewImpls> {
     return HtmlElementContainerImpls<DivElement>(
         viewType: 'iframeElement',
         builder: (typ) {
-          if (widget.src != null) _iframeElement.src = widget.src;
-          _iframeElement.width = widget.width ?? '100%';
-          _iframeElement.height = widget.height ?? '100%';
-          _iframeElement.setAttribute('border', "${widget.border ?? 0}");
-          _iframeElement.setAttribute('frameBorder', "${widget.border ?? 0}");
+          if (widget.src != null) _iframeElement!.src = widget.src;
+          _iframeElement!.width = widget.width ?? '100%';
+          _iframeElement!.height = widget.height ?? '100%';
+          _iframeElement!.setAttribute('border', "${widget.border ?? 0}");
+          _iframeElement!.setAttribute('frameBorder', "${widget.border ?? 0}");
           if (widget.scrolling != null)
-            _iframeElement.setAttribute('scrolling', widget.scrolling);
+            _iframeElement!.setAttribute('scrolling', widget.scrolling!);
           if (widget.style != null)
-            _iframeElement.setAttribute('style', widget.style);
+            _iframeElement!.setAttribute('style', widget.style!);
           if (widget.allow != null)
-            _iframeElement.setAttribute(
+            _iframeElement!.setAttribute(
                 'allow',
                 widget.allow ??
                     "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture");
-          if (widget.srcdoc != null) _iframeElement.srcdoc = widget.srcdoc;
-          div.children.add(_iframeElement);
-          return div;
+          if (widget.srcdoc != null) _iframeElement!.srcdoc = widget.srcdoc;
+          div!.children.add(_iframeElement!);
+          return div!;
         });
   }
 }
 
 class HtmlElementContainerImpls<T> extends StatelessWidget {
-  final String viewType;
-  final HtmlElementContainerControllerImpls controller;
-  final double width;
-  final double height;
-  final Function(T) onComplete;
-  final T Function(String) builder;
+  final String? viewType;
+  final HtmlElementContainerControllerImpls? controller;
+  final double? width;
+  final double? height;
+  final Function(T)? onComplete;
+  final T Function(String)? builder;
   const HtmlElementContainerImpls(
-      {Key key,
+      {Key? key,
       @required this.viewType,
       this.onComplete,
       this.width,
@@ -93,9 +93,9 @@ class HtmlElementContainerImpls<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    T elem = builder(viewType);
-    if (controller != null) controller.value = elem;
-    if (onComplete != null) onComplete(elem);
+    T elem = builder!(viewType!);
+    if (controller != null) controller!.value = elem;
+    if (onComplete != null) onComplete!(elem);
     return Directionality(
         textDirection: TextDirection.ltr,
         child: Container(
@@ -106,7 +106,7 @@ class HtmlElementContainerImpls<T> extends StatelessWidget {
                 builder: (context, snapshot) {
                   if (!snapshot.hasData) return Container();
                   return HtmlElementView(
-                    viewType: viewType,
+                    viewType: viewType!,
                   );
                 })));
   }

@@ -5,22 +5,22 @@ import 'ctrl_id_model.dart';
 //import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 
 class SigcadItem extends DataItem {
-  double codigo;
-  String nome;
-  String cnpj;
-  String cidade;
-  String bairro;
-  String numero;
-  String compl;
-  String ender;
-  String estado;
-  String cep;
-  String celular;
-  String cpfnaNota;
-  String email;
-  String tipo;
-  String terminal;
-  double filial;
+  double? codigo;
+  String? nome;
+  String? cnpj;
+  String? cidade;
+  String? bairro;
+  String? numero;
+  String? compl;
+  String? ender;
+  String? estado;
+  String? cep;
+  String? celular;
+  String? cpfnaNota;
+  String? email;
+  String? tipo;
+  String? terminal;
+  double? filial;
 
   SigcadItem(
       {this.codigo,
@@ -120,7 +120,7 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
   }
 
   Future<num> indicadorAquisicaoClientes(
-      {dias = 7, String tipo, String filtro}) async {
+      {dias = 7, String? tipo, String? filtro}) async {
     final d = DateTime.now().add(Duration(days: -dias));
     final sDe = toDateSql(d);
     var s = '';
@@ -129,13 +129,13 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
 
     final qry = "select count(*) conta from sigcad where data ge '$sDe' $s ";
     //print(qry);
-    return API.openJson(qry).then(
+    return API!.openJson(qry).then(
         (rsp) => ((rsp['rows'] ?? 0) == 0) ? 0 : rsp['result'][0]['conta']);
   }
 
   Future<double> proximoCodigo(double filial) async {
     return CtrlIdItemModel.proximo('CLIFOR').then((rsp) {
-      return (rsp.numero * 1000) + filial;
+      return (rsp.numero! * 1000) + filial;
     });
   }
 }

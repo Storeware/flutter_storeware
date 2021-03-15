@@ -3,23 +3,23 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class EstoperItem extends DataItem {
-  String codigo;
-  String nome;
-  String codfinanc;
+  String? codigo;
+  String? nome;
+  String? codfinanc;
 
-  bool icmsiscustos = false;
-  bool ipiiscustos = false;
-  bool isentrada = false;
+  bool? icmsiscustos = false;
+  bool? ipiiscustos = false;
+  bool? isentrada = false;
 
-  bool mudafinanc = true;
-  bool mudapmedio = true;
-  bool naoatualpreco = false;
+  bool? mudafinanc = true;
+  bool? mudapmedio = true;
+  bool? naoatualpreco = false;
 
-  bool somacompras = false;
-  bool somavendas = false;
-  bool somaconsig = false;
-  bool somademanda = true;
-  bool mudaestoq = true;
+  bool? somacompras = false;
+  bool? somavendas = false;
+  bool? somaconsig = false;
+  bool? somademanda = true;
+  bool? mudaestoq = true;
 
   EstoperItem(
       {this.codfinanc,

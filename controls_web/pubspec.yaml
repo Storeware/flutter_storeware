@@ -19,7 +19,7 @@ dependencies:
   url_launcher: ^6.0.2
   meta:
   universal_io:
-  universal_platform:
+  universal_platform: ^1.0.0-nullsafety
   font_awesome_flutter:
   flutter_slidable:
   share:

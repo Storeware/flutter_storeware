@@ -5,11 +5,11 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class CategoriaItem extends DataItem {
-  int codigo = 0;
-  String nome;
-  int codigoPai = 0;
-  int prioridade = 0;
-  int conta = 0;
+  int? codigo = 0;
+  String? nome;
+  int? codigoPai = 0;
+  int? prioridade = 0;
+  int? conta = 0;
 
   CategoriaItem({this.codigo, this.nome, this.codigoPai, this.prioridade});
 
@@ -63,7 +63,7 @@ class CategoriaModel extends ODataModelClass<CategoriaItem> {
         .then((rsp) => jsonDecode(rsp));
   }
 
-  buscar([String queryStr]) async {
+  buscar([String? queryStr]) async {
     String filter = '';
     if (queryStr != null) {
       String query = queryStr;

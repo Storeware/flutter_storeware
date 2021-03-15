@@ -4,11 +4,11 @@ import 'package:controls_data/odata_firestore.dart';
 
 class WbaSigcaut1armItem extends DataItem {
 //  int id;
-  int de;
-  int ate;
-  double filial;
-  int estado;
-  String bloqrepet;
+  int? de;
+  int? ate;
+  double? filial;
+  int? estado;
+  String? bloqrepet;
 
   WbaSigcaut1armItem(
       {this.de, this.ate, this.filial, this.estado, this.bloqrepet});

@@ -3,16 +3,16 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_extensions/extensions.dart';
 
 class EstadosItem extends DataItem {
-  double aliqicms;
-  String nome;
-  String sigla;
-  double redbaseicms;
-  double aliqicmsinterna;
-  String regiao;
-  double codigoibgeUf;
-  double partilhaPfcpufdest;
-  double partilhaPicmsufdest;
-  double partilhaPicmsinterpart;
+  double? aliqicms;
+  String? nome;
+  String? sigla;
+  double? redbaseicms;
+  double? aliqicmsinterna;
+  String? regiao;
+  double? codigoibgeUf;
+  double? partilhaPfcpufdest;
+  double? partilhaPicmsufdest;
+  double? partilhaPicmsinterpart;
 
   EstadosItem(
       {this.aliqicms,

@@ -10,7 +10,7 @@ import 'main_drawer.dart';
 import 'left_menu.dart';
 
 class MainView extends StatefulWidget {
-  MainView({Key key}) : super(key: key);
+  MainView({Key? key}) : super(key: key);
 
   @override
   _MainViewState createState() => _MainViewState();
@@ -90,13 +90,13 @@ class _MainViewState extends State<MainView> {
     return item.builder(context);
   }
 
-  List<Widget> _createWidgets(context) {
+  List<Widget>? _createWidgets(context) {
     List<Widget> rt = [];
 
     print('create items');
     for (var item in WidgetData().items) {
       print(item.title);
-      if (item.active)
+      if (item.active!)
         rt.add(
           Container(
               constraints: BoxConstraints(

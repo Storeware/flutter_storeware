@@ -3,10 +3,10 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class CnProtocoloItem extends DataItem {
-  String protocolo;
-  String nome;
-  String inativo;
-  DateTime data;
+  String? protocolo;
+  String? nome;
+  String? inativo;
+  DateTime? data;
 
   CnProtocoloItem({this.protocolo, this.nome, this.inativo, this.data});
 

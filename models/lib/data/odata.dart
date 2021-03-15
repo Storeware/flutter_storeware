@@ -187,7 +187,7 @@ class OData extends _ODataBuilder {
       [Map<String, dynamic>? body]) async {
     String _url = '${host}${url}';
     Map<String, String> headers = _setHeader();
-    Response resp;
+    Response? resp;
     Dio dio = Dio(BaseOptions(headers: headers));
     if (method == 'GET')
       resp =
@@ -199,7 +199,7 @@ class OData extends _ODataBuilder {
     if (method == 'PATCH')
       resp = await dio.patch(_url, data: encode(body)); //, headers: headers);
     if (method == 'DELETE') resp = await dio.delete(_url); // headers: headers);
-    statusCode = resp.statusCode;
+    statusCode = resp!.statusCode!;
     if (statusCode == 200) {
       try {
         this.responseBody = {}; // json.decode(resp.data);

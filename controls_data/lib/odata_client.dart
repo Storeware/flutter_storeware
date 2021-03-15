@@ -433,7 +433,8 @@ class ODataClient {
     }
   }
 
-  Future<Map> openJson(String command, {String? cacheControl}) async {
+  Future<Map<String, dynamic>> openJson(String command,
+      {String? cacheControl}) async {
     try {
       //    print(command);
       var url = client.formatUrl(path: 'open');

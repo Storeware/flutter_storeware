@@ -3,16 +3,16 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class FpMeioItem extends DataItem {
-  int idCond;
-  String sgCond;
-  String dsCond;
-  int idMeioPagto;
-  String sgMeioPagto;
-  String dsMeioPagto;
-  String checkdata;
-  int qtdeParc;
-  String inAplicSinal;
-  String inAplicParc;
+  int? idCond;
+  String? sgCond;
+  String? dsCond;
+  int? idMeioPagto;
+  String? sgMeioPagto;
+  String? dsMeioPagto;
+  String? checkdata;
+  int? qtdeParc;
+  String? inAplicSinal;
+  String? inAplicParc;
 
   FpMeioItem(
       {this.idCond,

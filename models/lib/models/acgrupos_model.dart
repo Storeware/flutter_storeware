@@ -3,8 +3,8 @@ import 'package:controls_data/odata_client.dart';
 
 class AcgruposItem extends DataItem {
   // int id;
-  String nome;
-  int prioridade;
+  String? nome;
+  int? prioridade;
 
   AcgruposItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);

@@ -122,26 +122,27 @@ class _VerticalTabViewState extends State<VerticalTabView> {
   @override
   Widget build(BuildContext context) {
     //ThemeData theme = Theme.of(context);
+    var appBar = AppBar(
+        leading: widget.leading,
+        elevation: widget.elevation,
+        title: TopAppBar(
+          controller: _controller!,
+          title: widget.title!,
+          elevation: widget.elevation!,
+          actions: widget.actions!,
+          height: widget.height!,
+          indicatorColor: widget.indicatorColor!,
+          choices: widget.choices!,
+          selected: _index.value,
+          titleColor: widget.titleColor!,
+        ));
     return Scaffold(
       drawer: widget.drawer,
       floatingActionButton: widget.floatingActionButton,
       bottomNavigationBar: widget.bottomNavigationBar,
       bottomSheet: widget.bottomSheet,
       backgroundColor: widget.backgroundColor,
-      appBar: AppBar(
-          leading: widget.leading,
-          elevation: widget.elevation,
-          title: TopAppBar(
-            controller: _controller!,
-            title: widget.title!,
-            elevation: widget.elevation!,
-            actions: widget.actions!,
-            height: widget.height!,
-            indicatorColor: widget.indicatorColor!,
-            choices: widget.choices!,
-            selected: _index.value,
-            titleColor: widget.titleColor!,
-          )),
+      appBar: appBar,
       body: Column(
         children: [
           Expanded(child: _child ?? Container()),

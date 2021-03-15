@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
 }
 
 class TesteView extends StatefulWidget {
-  TesteView({Key key}) : super(key: key);
+  TesteView({Key? key}) : super(key: key);
 
   @override
   _TesteViewState createState() => _TesteViewState();

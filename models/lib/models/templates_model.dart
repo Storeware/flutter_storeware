@@ -5,8 +5,8 @@ import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart';
 
 class TemplatesItem extends DataItem {
-  String nome;
-  String texto;
+  String? nome;
+  String? texto;
 
   TemplatesItem({this.nome, this.texto});
 
@@ -54,22 +54,22 @@ class TemplatesItemModel extends ODataModelClass<TemplatesItem> {
   }
 
   Future<String> procurarETraduzir(String key, String texto,
-      {String titulo,
-      Map<String, dynamic> values,
-      DateTime data,
-      String ctprodCodigo,
-      double sigcadCodigo,
-      double filial}) async {
+      {String? titulo,
+      Map<String, dynamic>? values,
+      DateTime? data,
+      String? ctprodCodigo,
+      double? sigcadCodigo,
+      double? filial}) async {
     return procurarOuInserir(key, texto).then((rsp) {
       if (rsp.length == 0) return '';
       var txt = rsp[0]['texto'];
       return traduzirTags(txt,
-          titulo: titulo,
-          values: values,
-          data: data,
-          ctprodCodigo: ctprodCodigo,
-          sigcadCodigo: sigcadCodigo,
-          filial: filial);
+          titulo: titulo!,
+          values: values!,
+          data: data!,
+          ctprodCodigo: ctprodCodigo!,
+          sigcadCodigo: sigcadCodigo!,
+          filial: filial!);
     });
   }
 
@@ -108,12 +108,12 @@ class TemplatesItemModel extends ODataModelClass<TemplatesItem> {
   ];
 
   Future<String> traduzirTags(String texto,
-      {String titulo,
-      Map<String, dynamic> values,
-      DateTime data,
-      String ctprodCodigo,
-      double sigcadCodigo,
-      double filial}) async {
+      {String? titulo,
+      Map<String, dynamic>? values,
+      DateTime? data,
+      String? ctprodCodigo,
+      double? sigcadCodigo,
+      double? filial}) async {
     /// dados customizados
     Map<String, dynamic> dados = configInstance?.dadosLoja ?? {};
     if (configInstance != null) {

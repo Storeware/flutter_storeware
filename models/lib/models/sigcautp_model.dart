@@ -2,25 +2,25 @@ import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 
 class SigcautpItem extends DataItem {
-  String codigo;
-  DateTime data;
-  String dcto;
-  double desctotal;
-  double filial;
+  String? codigo;
+  DateTime? data;
+  String? dcto;
+  double? desctotal;
+  double? filial;
   //int id;
-  double idrefer;
-  double oldfilial;
-  double operadora;
-  int parcela;
-  String registrado;
-  String tipo;
-  double valor;
-  DateTime vcto;
-  double valorpago;
-  double sigcauthlote;
-  int ordem;
-  String pgtoOnline;
-  String codtrans;
+  double? idrefer;
+  double? oldfilial;
+  double? operadora;
+  int? parcela;
+  String? registrado;
+  String? tipo;
+  double? valor;
+  DateTime? vcto;
+  double? valorpago;
+  double? sigcauthlote;
+  int? ordem;
+  String? pgtoOnline;
+  String? codtrans;
 
   SigcautpItem(
       {this.codigo,

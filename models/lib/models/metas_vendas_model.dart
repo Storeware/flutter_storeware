@@ -3,11 +3,11 @@ import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 
 class MetasVendasItem extends DataItem {
-  int ano;
-  int mes;
-  double filial;
-  double valor;
-  double realizado;
+  int? ano;
+  int? mes;
+  double? filial;
+  double? valor;
+  double? realizado;
 
   MetasVendasItem(
       {this.ano, this.mes, this.filial, this.valor, this.realizado});
@@ -52,7 +52,7 @@ class MetasVendasItemModel extends ODataModelClass<MetasVendasItem> {
   }
   MetasVendasItem newItem() => MetasVendasItem();
 
-  Future<dynamic> metaMes({DateTime data}) {
+  Future<dynamic> metaMes({DateTime? data}) {
     data = data ?? DateTime.now();
     var mes = data.month;
     var ano = data.year;

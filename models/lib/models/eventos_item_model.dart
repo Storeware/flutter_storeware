@@ -7,31 +7,31 @@ import 'package:uuid/uuid.dart';
 
 class EventosItemItem extends DataItem {
   //int id;
-  DateTime data;
-  String obs;
-  String link;
-  String inativo;
-  String titulo;
-  String autor;
-  String pessoa;
-  String arquivado;
-  DateTime datalimite;
-  double idestado;
-  double idgrupoEstado;
-  double cliente;
-  String dcto;
-  double idmaster;
-  String master;
-  String masterGid;
-  String tabela;
-  double idtabela;
-  String tabelaGid;
-  String eventosAutoNome;
-  double ordemtabela;
-  double valor;
-  String usuario;
-  String gid;
-  String leu;
+  DateTime? data;
+  String? obs;
+  String? link;
+  String? inativo;
+  String? titulo;
+  String? autor;
+  String? pessoa;
+  String? arquivado;
+  DateTime? datalimite;
+  double? idestado;
+  double? idgrupoEstado;
+  double? cliente;
+  String? dcto;
+  double? idmaster;
+  String? master;
+  String? masterGid;
+  String? tabela;
+  double? idtabela;
+  String? tabelaGid;
+  String? eventosAutoNome;
+  double? ordemtabela;
+  double? valor;
+  String? usuario;
+  String? gid;
+  String? leu;
 
   EventosItemItem(
       { //this.id,
@@ -148,7 +148,7 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
   EventosItemItem newItem() => EventosItemItem();
 
   arquivar({gid, String flag = 'S'}) async {
-    return API
+    return API!
         .execute("update eventos_item set arquivado='$flag' where gid ='$gid'");
   }
 
@@ -165,8 +165,8 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
     });
   }
 
-  marcarLeu({String gid, String flag = 'S'}) {
-    return API
+  marcarLeu({String? gid, String flag = 'S'}) {
+    return API!
         .execute("update eventos_item set leu='$flag' where gid = '$gid' ");
   }
 

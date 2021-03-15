@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'dropdown_builder.dart';
 
 class AcgruposDropdownBuilder extends StatelessWidget {
-  final String value;
-  final Function(String) onChanged;
-  const AcgruposDropdownBuilder({Key key, this.value, this.onChanged})
+  final String? value;
+  final Function(String)? onChanged;
+  const AcgruposDropdownBuilder({Key? key, this.value, this.onChanged})
       : super(
           key: key,
         );

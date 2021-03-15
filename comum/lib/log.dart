@@ -1,0 +1,3 @@
+log(texto) {
+  log(texto);
+}

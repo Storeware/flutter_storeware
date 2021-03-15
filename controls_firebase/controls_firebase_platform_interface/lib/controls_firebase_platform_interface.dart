@@ -1,7 +1,7 @@
 library controls_firebase_platform_interface;
 //import 'dart:typed_data';
 
-enum FirebasePlatform { android, windows, webbrowser, linux }
+enum FirebasePlatform { android, windows, webbrowser, linux, macos }
 
 abstract class FirebaseAppDriverInterface {
   FirebasePlatform platform = FirebasePlatform.webbrowser;
@@ -30,9 +30,9 @@ abstract class FirestoreDriverInterface {
 abstract class FirebaseStorageDriverInterface {
   FirebaseStorageDriverInterface();
   init() {}
-  Future<int> uploadFileImage(String path, bytes,
-      {Map<String, String> metadata});
-  Future<String> getDownloadURL(String path);
+  Future<int?>? uploadFileImage(String path, bytes,
+      {Map<String, String>? metadata});
+  Future<String>? getDownloadURL(String path);
 }
 
 abstract class FirebaseAuthDriverInterface {

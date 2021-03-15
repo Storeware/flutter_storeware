@@ -63,29 +63,23 @@ packages:
   html_container_interface:
     dependency: transitive
     description:
-      path: "html_container/html_container_interface"
-      ref: HEAD
-      resolved-ref: "33feb6193b3e62b25295baf99abac844238a61e8"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
+      path: html_container_interface
+      relative: true
+    source: path
     version: "0.0.1"
   html_container_io:
     dependency: "direct main"
     description:
-      path: "html_container/html_container_io"
-      ref: HEAD
-      resolved-ref: "33feb6193b3e62b25295baf99abac844238a61e8"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
+      path: html_container_io
+      relative: true
+    source: path
     version: "0.0.1"
   html_container_web:
     dependency: "direct main"
     description:
-      path: "html_container/html_container_web"
-      ref: HEAD
-      resolved-ref: "33feb6193b3e62b25295baf99abac844238a61e8"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
+      path: html_container_web
+      relative: true
+    source: path
     version: "0.0.1"
   matcher:
     dependency: transitive
@@ -177,5 +171,5 @@ packages:
     source: hosted
     version: "0.3.22+1"
 sdks:
-  dart: ">=2.12.0-0.0 <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.12.13+hotfix.5"

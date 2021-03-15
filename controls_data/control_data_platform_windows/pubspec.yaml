@@ -1,19 +1,20 @@
 name: control_data_platform_windows
 description: A new Flutter package project.
-version: 0.0.1
+version: 2021.03.14
 author: Amarildo Lacerda
 homepage: https://tireideletra.com.br
+publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   control_data_platform_interface:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_data/control_data_platform_interface
+    #git:
+      #url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ../control_data_platform_interface
 
 dev_dependencies:
   flutter_test:

@@ -7,7 +7,7 @@ import 'package:controls_web/controls/vertical_toptab_navigator.dart';
 import 'package:flutter/material.dart';
 
 class EntradaView extends StatefulWidget {
-  EntradaView({Key key}) : super(key: key);
+  EntradaView({Key? key}) : super(key: key);
   @override
   _EntradaViewState createState() => _EntradaViewState();
 }

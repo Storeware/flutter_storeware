@@ -736,10 +736,10 @@ class MaskedDropDownFormField extends StatelessWidget {
                     items: _items.map((String label) {
                       return DropdownMenuItem(
                         key: UniqueKey(),
-                        value: label ?? '',
+                        value: label,
                         child: Container(
                           child: Text(
-                            label ?? '',
+                            label,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

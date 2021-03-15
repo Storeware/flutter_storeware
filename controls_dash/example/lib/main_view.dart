@@ -2,7 +2,7 @@ import 'package:controls_dash/controls_dash.dart';
 import 'package:flutter/material.dart';
 
 class MainView extends StatefulWidget {
-  MainView({Key key}) : super(key: key);
+  MainView({Key? key}) : super(key: key);
 
   @override
   _MainViewState createState() => _MainViewState();

@@ -21,23 +21,23 @@ class DataViewerHelper {
 
   static _simnaoFn(p) {
     var t = p['t'];
-    var v = p['v'];
+    dynamic? v = p['v'];
     var f = p['f'];
     if ((t == null) && (v != null)) {
       if (v is bool) {
         t = true;
         f = false;
-        v ??= false;
+        //v ??= false;
       }
       if (v is int) {
         t = 1;
         f = 0;
-        v ??= 0;
+        //v ??= 0;
       }
       if (v is double) {
         t = 1.0;
         f = 0.0;
-        v ??= 0.0;
+        //v ??= 0.0;
       }
     }
     t ??= 'S';

@@ -7,15 +7,15 @@ import 'local_notifications.dart';
 class FBMessaging extends FBMessagingInterface {
   FBMessaging();
 
-  FirebaseMessaging _mc;
-  String token;
+  FirebaseMessaging? _mc;
+  String? token;
 
   final _controller = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get stream => _controller.stream;
 
   //@override
   void close() {
-    _controller?.close();
+    _controller.close();
   }
 
   //@override
@@ -24,25 +24,41 @@ class FBMessaging extends FBMessagingInterface {
     this.localNotification = LocalNotifications();
 
     // no android o keyPair vem do arquivo de configuração google-services.json
-    _mc = FirebaseMessaging();
+    _mc = FirebaseMessaging.instance;
     if (Platform.isIOS) iOSPermission();
 
-    _mc.setAutoInitEnabled(true);
-    _mc.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        //_controller.sink.add(message);
-        goMessage(message);
-      },
-      onBackgroundMessage: myBackgroundMessageHandler,
-      onResume: (Map<String, dynamic> message) async {
-        print('onResumo $message');
-        _controller.sink.add(message);
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print('onLaunch $message');
-        _controller.sink.add(message);
-      },
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
     );
+
+    _mc!.setAutoInitEnabled(true);
+    FirebaseMessaging.onMessage.listen((message) {
+      var notification = message.notification;
+      goMessage(notification);
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      RemoteNotification? n = message.notification;
+      _controller.sink.add({
+        "notification": {"body": n!.body, "title": n.title}
+      });
+    });
+
+    //getInitialMessage().then((RemoteMessage message) async {
+    //_controller.sink.add(message);
+    //goMessage(message);
+    //});
+    //onBackgroundMessage: myBackgroundMessageHandler,
+    //onResume: (Map<String, dynamic> message) async {
+    //  print('onResumo $message');
+    // _controller.sink.add(message);
+    //},
+    //onLaunch: (Map<String, dynamic> message) async {
+    //  print('onLaunch $message');
+    //  _controller.sink.add(message);
+    //},
   }
 
   var localNotification;
@@ -62,11 +78,11 @@ class FBMessaging extends FBMessagingInterface {
       print('$err');
     }
   }
+
   @override
-  notification(title,body){
-      if (this.localNotification != null)
-        this.localNotification.showNotification(title: title, body: body);
-    
+  notification(title, body) {
+    if (this.localNotification != null)
+      this.localNotification.showNotification(title: title, body: body);
   }
 
   Future<dynamic> myBackgroundMessageHandler(
@@ -88,24 +104,24 @@ class FBMessaging extends FBMessagingInterface {
 
   @override
   Future requestPermission() {
-    return null;
+    return Future.value(false);
   }
 
   /// para android
 
   void iOSPermission() {
-    _mc.requestNotificationPermissions(
+    /* _mc.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _mc.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
       print("Settings registered: $settings");
-    });
+    });*/
   }
 
   @override
   Future<String> getToken([bool force = false]) async {
-    return _mc.getToken().then((tkn) {
+    return _mc!.getToken().then((tkn) {
       token = tkn;
-      return tkn;
+      return tkn ?? '';
     });
   }
 }

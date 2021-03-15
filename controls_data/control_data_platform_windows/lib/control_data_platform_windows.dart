@@ -8,13 +8,13 @@ import 'package:control_data_platform_interface/control_data_platform_interface.
 class PlatformLocalStorage extends LocalStorageInterface {
   Map<String, dynamic> items = {};
   String appFileName = 'storage.json';
-  File _file;
+  File? _file;
 
   init() async {
     _file = File(appFileName);
     try {
-      String s = _file.readAsStringSync();
-      items = jsonDecode(s ?? {});
+      String? s = _file!.readAsStringSync();
+      items = jsonDecode(s) ?? {};
     } catch (e) {
       // nao existe o arquivo;
     }
@@ -22,7 +22,7 @@ class PlatformLocalStorage extends LocalStorageInterface {
 
   setKey(String key, String value) {
     items[key] = value;
-    _file.writeAsString(jsonEncode(items));
+    _file!.writeAsString(jsonEncode(items));
   }
 
   String getKey(String key) {

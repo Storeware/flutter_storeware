@@ -6,8 +6,8 @@ import 'models/constantes.dart';
 import 'package:controls_web/services/routes.dart';
 
 class MainView extends StatefulWidget {
-  MainView({Key key, this.title}) : super(key: key);
-  final String title;
+  MainView({Key? key, this.title}) : super(key: key);
+  final String? title;
   @override
   _MainViewState createState() => _MainViewState();
 }
@@ -30,7 +30,7 @@ class _MainViewState extends State<MainView> {
           SizedBox(
             height: 40,
           ),
-          Text(widget.title),
+          Text(widget.title!),
           SizedBox(
             height: 30,
           ),

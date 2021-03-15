@@ -46,12 +46,10 @@ packages:
   controls_image_interface:
     dependency: "direct main"
     description:
-      path: "controls_image/controls_image_interface"
-      ref: HEAD
-      resolved-ref: "20ac388594507a3c56cdb855cca89bea5cff62c9"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "0.0.1"
+      path: "../controls_image_interface"
+      relative: true
+    source: path
+    version: "2021.03.06"
   crypto:
     dependency: transitive
     description:

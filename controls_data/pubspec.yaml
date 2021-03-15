@@ -1,12 +1,12 @@
 name: controls_data
 description: A new Flutter package project.
-version: 21.03.05
+version: 2021.03.05
 author:
 homepage: https://tireideletra.com.br
 publish_to: none
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 flutter:
   plugin:
@@ -29,38 +29,39 @@ dependencies:
   intl:
   #universal_html:
   #http:
-  dio: ^4.0.0-beta5
-  connectivity:
-  uuid:
-  universal_platform: ^1.0.0-nullsafety
-  flutter_cache_manager:
-  pdf: ^3.0.1
-  printing: ^5.0.1 
-  date_format:
+  dio: #^4.0.0-beta7
+  connectivity: #^3.0.2
+  uuid: #^3.0.1
+  universal_platform: #^1.0.0-nullsafety
+  universal_io:
+  flutter_cache_manager: #^3.0.0-nullsafety.1
+  pdf: #^3.0.1
+  printing: #^5.0.3
+  date_format: #^2.0.2
 
   control_data_platform_web:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_data/control_data_platform_web
+    #git:
+      #url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ./control_data_platform_web
 
   control_data_platform_android:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_data/control_data_platform_android
+    #git:
+      #url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ./control_data_platform_android
 
   control_data_platform_windows:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_data/control_data_platform_windows
+    #git:
+     # url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ./control_data_platform_windows
 
   controls_extensions:
-   git:
-     url: https://github.com/amarildolacerda/flutter_dart.git
-     path: controls_extensions
-  controls_web:
-   git:
-     url: https://github.com/amarildolacerda/flutter_dart.git
-     path: controls_web
+   #git:
+     #url: https://github.com/amarildolacerda/flutter_dart.git
+     path: ../controls_extensions
+  #controls_web:
+   #git:
+     #url: https://github.com/amarildolacerda/flutter_dart.git
+  #   path: ../controls_web
 
 dev_dependencies:
   flutter_test:

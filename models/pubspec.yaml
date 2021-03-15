@@ -1,12 +1,12 @@
 name: models
 description: A new Flutter package project.
-version: 21.03.05
+version: 2021.03.05
 author:
 publish_to: none
 #homepage:
 
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -22,18 +22,18 @@ dependencies:
       #path: controls_web
 
   controls_web:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_web
+    #git:
+    #  url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ../controls_web
   controls_data:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_data
+    #git:
+      #url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ../controls_data
 
   controls_extensions:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_extensions
+    #git:
+      #url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ../controls_extensions
 
 
 dev_dependencies:

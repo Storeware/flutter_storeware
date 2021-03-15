@@ -63,11 +63,9 @@ packages:
   html_container_interface:
     dependency: "direct main"
     description:
-      path: "html_container/html_container_interface"
-      ref: HEAD
-      resolved-ref: a4e6ba715caf6cb092ad4a82cef4e4968e13ff11
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
+      path: "../html_container_interface"
+      relative: true
+    source: path
     version: "0.0.1"
   matcher:
     dependency: transitive
@@ -152,4 +150,4 @@ packages:
     source: hosted
     version: "2.1.0"
 sdks:
-  dart: ">=2.12.0-0.0 <3.0.0"
+  dart: ">=2.12.0 <3.0.0"

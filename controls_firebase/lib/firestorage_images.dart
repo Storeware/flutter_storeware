@@ -2,21 +2,21 @@ import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_firebase/firebase_driver.dart';
 import 'package:flutter/material.dart';
-import 'package:universal_html/html.dart' hide Text;
+import 'dart:html' hide Text;
 
 class FirestorageDownloadImage extends StatefulWidget {
-  final String img;
-  final double width;
-  final double height;
-  final BoxFit fit;
-  final String clientId;
-  final double radius;
-  final double padding;
-  final String alias;
-  final FilterQuality filterQuality;
-  final Function onLoaded;
+  final String? img;
+  final double? width;
+  final double? height;
+  final BoxFit? fit;
+  final String? clientId;
+  final double? radius;
+  final double? padding;
+  final String? alias;
+  final FilterQuality? filterQuality;
+  final Function? onLoaded;
   FirestorageDownloadImage(
-      {Key key,
+      {Key? key,
       @required this.clientId,
       @required this.img,
       this.width,
@@ -46,15 +46,15 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
   }
 
   String formatStoragePath(String path) {
-    if (path.startsWith(widget.clientId)) return path;
+    if (path.startsWith(widget.clientId!)) return path;
     if (!path.startsWith('/')) path = '/$path';
     return '${widget.clientId}$path';
   }
 
-  Image _image;
+  Image? _image;
 
   ImageProvider imageProvider() {
-    return _image.image;
+    return _image!.image;
   }
 
   loadImagem(s) {
@@ -62,7 +62,7 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
       return Image.network(
         s,
         fit: widget.fit ?? BoxFit.cover,
-        filterQuality: widget.filterQuality,
+        filterQuality: widget.filterQuality!,
       );
     });
   }
@@ -74,12 +74,12 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
         height: widget.height,
         width: widget.width,
       );
-    if (widget.img.startsWith('http')) {
+    if (widget.img!.startsWith('http')) {
       return loadImagem(widget.img);
     }
 
     return FutureBuilder<String>(
-        future: _get(formatStoragePath(widget.img)),
+        future: _get(formatStoragePath(widget.img!)),
         builder: (context, snapshot) {
           if (!snapshot.hasData)
             return Align(
@@ -92,21 +92,21 @@ class _FirestorageDownloadImageState extends State<FirestorageDownloadImage> {
 }
 
 class FirestorageUploadImage extends StatefulWidget {
-  final double width;
-  final double height;
-  final String img;
-  final String maskTo;
-  final String buttonTitle;
-  final int maxBytes;
-  final Function(String) onChange;
+  final double? width;
+  final double? height;
+  final String? img;
+  final String? maskTo;
+  final String? buttonTitle;
+  final int? maxBytes;
+  final Function(String)? onChange;
   //final String path;
-  final String clientId;
-  final BoxFit fit;
-  final double elevation;
-  final Map<String, String> metadata;
-  final Function(bool) onProgress;
+  final String? clientId;
+  final BoxFit? fit;
+  final double? elevation;
+  final Map<String, String>? metadata;
+  final Function(bool)? onProgress;
   FirestorageUploadImage(
-      {Key key,
+      {Key? key,
       this.img,
       this.width,
       this.height,
@@ -126,7 +126,7 @@ class FirestorageUploadImage extends StatefulWidget {
 }
 
 class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
-  String img;
+  String? img;
   _load(src) {
     img = src;
   }
@@ -134,7 +134,7 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
   FileReader fileReader = FileReader();
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<String> img = ValueNotifier<String>(widget.img);
+    ValueNotifier<String> img = ValueNotifier<String>(widget.img!);
     return ValueListenableBuilder<String>(
         valueListenable: img,
         builder: (a, _img, w) {
@@ -144,7 +144,7 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
           return Center(
             child: Container(
                 width: widget.width,
-                height: (widget.height != null) ? widget.height + 30 : null,
+                height: (widget.height != null) ? widget.height! + 30 : null,
                 child: Card(
                   elevation: widget.elevation,
                   child: Stack(children: [
@@ -169,29 +169,28 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
                     ),
                     Positioned(
                       bottom: 0,
-                      child: FlatButton(
+                      child: TextButton(
                         child:
                             Text(widget.buttonTitle ?? 'Procurar uma imagem'),
                         onPressed: () {
                           ImageToUpload().load((f) async {
-                            if (f != null) {
-                              var size = f.size;
-                              print(size);
-                              if (size > widget.maxBytes)
-                                ErrorNotify().notify(
-                                    'Imagem com $size bytes (max: ${widget.maxBytes} bytes)');
-                              else {
+                            //if (f != null) {
+                            var size = f.size;
+                            print(size);
+                            if (size > widget.maxBytes!)
+                              ErrorNotify().notify(
+                                  'Imagem com $size bytes (max: ${widget.maxBytes} bytes)');
+                            else {
+                              if (widget.onProgress != null)
+                                widget.onProgress!(true);
+                              urlDownload(f, (x) {
                                 if (widget.onProgress != null)
-                                  widget.onProgress(true);
-                                urlDownload(f, (x) {
-                                  if (widget.onProgress != null)
-                                    widget.onProgress(false);
+                                  widget.onProgress!(false);
 
-                                  widget.onChange(x);
-                                  print('nova imagem $x');
-                                  img.value = x;
-                                }, maskTo: widget.maskTo);
-                              }
+                                widget.onChange!(x);
+                                print('nova imagem $x');
+                                img.value = x;
+                              }, maskTo: widget.maskTo!);
                             }
                           });
                         },
@@ -203,12 +202,12 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
         });
   }
 
-  Future<String> urlDownload(File file, callback, {String maskTo}) async {
+  Future<String> urlDownload(File file, callback, {String? maskTo}) async {
     String sFile = formatStoragePath(file.name);
     if ((maskTo != null) && (maskTo.indexOf('.') < 0)) {
       var lst = sFile.split('/');
       sFile = maskTo + lst.last;
-    } else if (maskTo.indexOf('.') > 0) sFile = maskTo;
+    } else if (maskTo!.indexOf('.') > 0) sFile = maskTo;
 
     FileReader fileReader = FileReader();
     fileReader.onLoad.listen((data) async {
@@ -232,7 +231,7 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
   }
 
   String formatStoragePath(String path) {
-    if (path.startsWith(widget.clientId)) return path;
+    if (path.startsWith(widget.clientId!)) return path;
     return '${widget.clientId}/$path';
   }
 
@@ -252,7 +251,7 @@ class ImageToUpload {
     element.name = "upload_image";
     element.onChange.listen((e) {
       final files = element.files;
-      if (files.length == 1) {
+      if (files!.length == 1) {
         final File file = files[0];
         callback(file);
       }

@@ -7,12 +7,12 @@ abstract class FBMessagingInterface {
   final _controller = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get stream => _controller.stream;
   void close() {
-    _controller?.close();
+    _controller.close();
   }
 
   Future<void> init(String keyPair);
   Future requestPermission();
   Future<String> getToken([bool force = false]);
-  notification(title,body){}
+  notification(title, body) {}
   //Function(String) onTokenRefresh;
 }

@@ -36,17 +36,18 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {}
 
 class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   @override
-  Future<String> getDownloadURL(String path) {
+  Future<String>? getDownloadURL(String path) {
     // TODO: implement getDownloadURL
     //throw UnimplementedError();
   }
 
   @override
   // ignore: missing_return
-  Future<int> uploadFileImage(String path, bytes,
-      {Map<String, String> metadata}) async {
+  Future<int?>? uploadFileImage(String path, bytes,
+      {Map<String, String>? metadata}) async {
     // TODO: implement uploadFileImage
     //throw UnimplementedError();
+    return null;
   }
 }
 

@@ -86,10 +86,10 @@ class ActivityPanel extends StatelessWidget {
       decoration: BoxDecoration(
           color: color,
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(rightRadius! ?? topRadius!),
-            topLeft: Radius.circular(leftRadius! ?? topRadius!),
-            bottomLeft: Radius.circular(leftRadius! ?? bottomRadius!),
-            bottomRight: Radius.circular(rightRadius! ?? bottomRadius!),
+            topRight: Radius.circular(rightRadius ?? topRadius!),
+            topLeft: Radius.circular(leftRadius ?? topRadius!),
+            bottomLeft: Radius.circular(leftRadius ?? bottomRadius!),
+            bottomRight: Radius.circular(rightRadius ?? bottomRadius!),
           )),
       child: child,
       // ),

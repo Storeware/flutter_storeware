@@ -9,17 +9,17 @@ class AssetsConfig {
   AssetsConfig._create();
   factory AssetsConfig() => _config;
 
-  Map<String, dynamic> config;
-  get cfg => config['firebase'];
-  get webhook => config['webhook'];
+  Map<String, dynamic>? config;
+  get cfg => config!['firebase'];
+  get webhook => config!['webhook'];
 
-  static get projectId => _config.cfg['projectId'];
-  static get apiKey => _config.cfg['apiKey'];
-  static get authDomain => _config.cfg['authDomain'];
-  static get databaseURL => _config.cfg['databaseURL'];
-  static get storageBucket => _config.cfg['storageBucket'];
-  static get messagingSenderId => _config.cfg['messagingSenderId'];
-  static get appId => _config.cfg['appId'];
+  static String? get projectId => _config.cfg['projectId'];
+  static String? get apiKey => _config.cfg['apiKey'];
+  static String? get authDomain => _config.cfg['authDomain'];
+  static String? get databaseURL => _config.cfg['databaseURL'];
+  static String? get storageBucket => _config.cfg['storageBucket'];
+  static String? get messagingSenderId => _config.cfg['messagingSenderId'];
+  static String? get appId => _config.cfg['appId'];
 
   load() async {
     if (config != null) return config;
@@ -42,7 +42,7 @@ class FirebaseConfig {
   factory FirebaseConfig() => _singleton;
   static AssetsConfig get config => AssetsConfig();
   static get functionUrl {
-    String id = AssetsConfig.projectId;
+    String id = AssetsConfig.projectId!;
     return 'https://us-central1-$id.cloudfunctions.net';
   }
 

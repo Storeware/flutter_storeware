@@ -46,12 +46,10 @@ packages:
   controls_firebase_platform_interface:
     dependency: "direct main"
     description:
-      path: "controls_firebase/controls_firebase_platform_interface"
-      ref: HEAD
-      resolved-ref: "62c53802624b4886dde0ee951fab83fddc1424f8"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "0.0.5"
+      path: "../controls_firebase_platform_interface"
+      relative: true
+    source: path
+    version: "2021.03.14"
   fake_async:
     dependency: transitive
     description:
@@ -152,5 +150,5 @@ packages:
     source: hosted
     version: "2.1.0"
 sdks:
-  dart: ">=2.12.0-0.0 <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0"

@@ -217,9 +217,9 @@ class _SliverScaffoldState extends State<SliverScaffold> {
                     controller: widget.controller,
                     reverse: widget.reverse!,
                     headerSliverBuilder: (context, inner) {
-                      return _builder() ?? [Container()];
+                      return _builder();
                     },
-                    body: _createBody(_body) ?? Container(),
+                    body: _createBody(_body),
                   )),
             )));
 

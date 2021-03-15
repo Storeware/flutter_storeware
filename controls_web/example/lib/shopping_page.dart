@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:controls_web/controls/shopping.dart';
 
 class ShoppingViewDemo extends StatefulWidget {
-  ShoppingViewDemo({Key key, this.title = ''}) : super(key: key);
-  final String title;
+  ShoppingViewDemo({Key? key, this.title = ''}) : super(key: key);
+  final String? title;
 
   @override
   _ShoppingViewDemoState createState() => _ShoppingViewDemoState();
@@ -23,7 +23,7 @@ class _ShoppingViewDemoState extends State<ShoppingViewDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(widget.title!),
       ),
       body: ShoppingScrollView(
         body: Container(

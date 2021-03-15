@@ -3,30 +3,31 @@ description: A new Flutter package project.
 version: 0.0.7
 author: Amarildo Lacerda
 homepage: https://tireideletra.com.br
+publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  universal_html:
-  js:
   html:
+  js:
+  #html:
 
 
-  firebase:
-  firebase_auth:
-  google_sign_in:
-  firebase_core: ^0.5.0
+  firebase: ^9.0.0
+  firebase_auth: ^1.0.1
+  google_sign_in: ^5.0.0
+  firebase_core: ^1.0.1
   #firebase_web:
-  firebase_storage: ^4.0.1
-  cloud_firestore: ^0.14.1+2
-  flutter_cache_manager:
+  firebase_storage: ^8.0.0
+  cloud_firestore: ^1.0.1
+  flutter_cache_manager: ^3.0.0-nullsafety.1
   controls_firebase_platform_interface:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_firebase/controls_firebase_platform_interface
+    #git:
+      #url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ../controls_firebase_platform_interface
 
 dev_dependencies:
   flutter_test:

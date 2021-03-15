@@ -10,7 +10,7 @@ import 'paginated_data_table_ext.dart';
 import 'dialogs_widgets.dart';
 
 class PaginatedGridSample extends StatefulWidget {
-  const PaginatedGridSample({Key key}) : super(key: key);
+  const PaginatedGridSample({Key? key}) : super(key: key);
 
   @override
   _PaginatedGridSampleState createState() => _PaginatedGridSampleState();
@@ -71,40 +71,40 @@ class _PaginatedGridSampleState extends State<PaginatedGridSample> {
 }
 
 class PaginatedGridColumn {
-  final String name;
-  String label;
-  String editInfo;
-  String defaultValue;
-  TextStyle style;
-  Alignment align;
-  bool sort;
-  bool required;
-  bool readOnly;
-  bool isPrimaryKey;
-  DataColumnSortCallback onSort;
-  bool visible;
-  double width;
-  double editWidth;
-  double editHeight;
-  Function(dynamic) onFocusChanged;
-  String Function(dynamic) onGetValue;
-  dynamic Function(dynamic) onSetValue;
-  Function(dynamic) onChanged;
-  String Function(dynamic) onValidate;
-  Widget Function(int, Map<String, dynamic>) builder;
-  String tooltip;
+  final String? name;
+  String? label;
+  String? editInfo;
+  String? defaultValue;
+  TextStyle? style;
+  Alignment? align;
+  bool? sort;
+  bool? required;
+  bool? readOnly;
+  bool? isPrimaryKey;
+  DataColumnSortCallback? onSort;
+  bool? visible;
+  double? width;
+  double? editWidth;
+  double? editHeight;
+  Function(dynamic)? onFocusChanged;
+  String Function(dynamic)? onGetValue;
+  dynamic Function(dynamic)? onSetValue;
+  Function(dynamic)? onChanged;
+  String Function(dynamic)? onValidate;
+  Widget Function(int, Map<String, dynamic>)? builder;
+  String? tooltip;
   Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
-      Map<String, dynamic>) editBuilder;
+      Map<String, dynamic>)? editBuilder;
 
-  Function(PaginatedGridController) onEditIconPressed;
-  bool autofocus;
-  int maxLines;
-  int maxLength;
-  int minLength;
-  bool placeHolder;
-  bool folded;
-  Color color;
-  int order;
+  Function(PaginatedGridController)? onEditIconPressed;
+  bool? autofocus;
+  int? maxLines;
+  int? maxLength;
+  int? minLength;
+  bool? placeHolder;
+  bool? folded;
+  Color? color;
+  int? order;
   PaginatedGridColumn({
     this.defaultValue,
     this.onEditIconPressed,
@@ -140,106 +140,107 @@ class PaginatedGridColumn {
     this.onValidate,
     this.folded,
   });
-  bool numeric;
-  bool isVirtual;
-  int index;
+  bool? numeric;
+  bool? isVirtual;
+  int? index;
 }
 
 enum PaginatedGridChangeEvent { insert, update, delete }
 
 class PaginatedGrid extends StatefulWidget {
-  final Future<dynamic> futureSource;
-  final int Function(dynamic, dynamic) onSort;
+  final Future<dynamic>? futureSource;
+  final int Function(dynamic, dynamic)? onSort;
 
   /// dados a serem apresentados
-  final List<dynamic> source;
-  final bool oneRowAutoEdit;
-  final Widget Function() placeHolder;
+  final List<dynamic>? source;
+  final bool? oneRowAutoEdit;
+  final Widget Function()? placeHolder;
 
   /// colunas de apresentação dos dados
-  final List<PaginatedGridColumn> columns;
+  final List<PaginatedGridColumn>? columns;
 
   /// controle de navegação dos dados
-  final PaginatedGridController controller;
+  final PaginatedGridController? controller;
 
-  final Widget header;
-  final double headerHeight;
+  final Widget? header;
+  final double? headerHeight;
 
-  final List<Widget> actions;
-  final int currentPage;
-  final double elevation;
-  final double dividerThickness;
-  final bool canSort;
+  final List<Widget>? actions;
+  final int? currentPage;
+  final double? elevation;
+  final double? dividerThickness;
+  final bool? canSort;
 
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
-  final Function(int) onPageSelected;
-  final Function(bool) onSelectAll;
-  final int sortColumnIndex;
-  final bool sortAscending;
-  final TextStyle columnStyle;
+  final Function(int)? onPageSelected;
+  final Function(bool)? onSelectAll;
+  final int? sortColumnIndex;
+  final bool? sortAscending;
+  final TextStyle? columnStyle;
 
   /// [beforeShow] evento beforeShow é chamado antes de apresentar os dados
-  final Function(PaginatedGridController) beforeShow;
-  final bool showCheckboxColumn;
+  final Function(PaginatedGridController)? beforeShow;
+  final bool? showCheckboxColumn;
 
   /// eventos de edição - permite criar novas janelas de edição para
   /// edição de dados -
-  final Future<dynamic> Function(PaginatedGridController) onEditItem;
-  final Future<dynamic> Function(PaginatedGridController) onInsertItem;
-  final Future<dynamic> Function(PaginatedGridController) onDeleteItem;
+  final Future<dynamic> Function(PaginatedGridController)? onEditItem;
+  final Future<dynamic> Function(PaginatedGridController)? onInsertItem;
+  final Future<dynamic> Function(PaginatedGridController)? onDeleteItem;
 
-  final Function(PaginatedGridController) onRefresh;
+  final Function(PaginatedGridController)? onRefresh;
 
   /// mudou a linha de edição
-  final Future<dynamic> Function(bool, PaginatedGridController) onSelectChanged;
+  final Future<dynamic> Function(bool, PaginatedGridController)?
+      onSelectChanged;
 
   ///[onPostEvent] evento que os dados foram editados e podem ser persistidos
   final Future<dynamic> Function(
-      PaginatedGridController, dynamic, PaginatedGridChangeEvent) onPostEvent;
+      PaginatedGridController, dynamic, PaginatedGridChangeEvent)? onPostEvent;
 
   /// indica se é para apresentar um barra de filtro dos dados de memoria
-  final bool canFilter;
+  final bool? canFilter;
 
   /// [canEdit] flag indicando que o registro pode ser alterado
-  final bool canEdit;
-  final bool canDelete;
-  final bool canInsert;
+  final bool? canEdit;
+  final bool? canDelete;
+  final bool? canInsert;
 
-  final double columnSpacing;
-  final CrossAxisAlignment crossAxisAlignment;
+  final double? columnSpacing;
+  final CrossAxisAlignment? crossAxisAlignment;
   //final Color backgroundColor;
 
   /// mudou a pagina de navegação em memoria
-  final Function(int) onPageChanged;
+  final Function(int)? onPageChanged;
 
   /// [rowsPerPage] numero de linhas por pagina
-  final int rowsPerPage;
-  final List<int> availableRowsPerPage;
-  final Function(int) onRowsPerPageChanged;
-  final AppBar appBar;
-  final Widget footerLeading;
-  final Widget footerTrailing;
-  final double footerHeight;
-  final Color backgroundColor;
+  final int? rowsPerPage;
+  final List<int>? availableRowsPerPage;
+  final Function(int)? onRowsPerPageChanged;
+  final AppBar? appBar;
+  final Widget? footerLeading;
+  final Widget? footerTrailing;
+  final double? footerHeight;
+  final Color? backgroundColor;
 
-  final double dataRowHeight;
-  final double headingRowHeight;
-  final TextStyle headingTextStyle;
-  final Color headingRowColor;
-  final double horizontalMargin;
-  final DragStartBehavior dragStartBehavior;
+  final double? dataRowHeight;
+  final double? headingRowHeight;
+  final TextStyle? headingTextStyle;
+  final Color? headingRowColor;
+  final double? horizontalMargin;
+  final DragStartBehavior? dragStartBehavior;
 
   /// [editSize] indica tamanho da janela de edição
-  final Size editSize;
-  final Color oddRowColor;
-  final Color evenRowColor;
-  final bool editFullPage;
+  final Size? editSize;
+  final Color? oddRowColor;
+  final Color? evenRowColor;
+  final bool? editFullPage;
 
   /// envento onClick na celula
-  final Function(PaginatedGridController) onCellTap;
+  final Function(PaginatedGridController)? onCellTap;
   PaginatedGrid({
-    Key key,
+    Key? key,
     this.controller,
     this.dataRowHeight = kMinInteractiveDimension * .80,
     this.headingRowHeight = kMinInteractiveDimension,
@@ -293,22 +294,22 @@ class PaginatedGrid extends StatefulWidget {
     this.beforeShow,
     this.canDelete = false,
     this.canInsert = false,
-  })  : assert(
-            (!(canInsert || canDelete || canEdit) && (onPostEvent == null)) ||
-                ((canInsert || canDelete || canEdit) && (onPostEvent != null))),
+  })  : assert((!(canInsert! || canDelete! || canEdit!) &&
+                (onPostEvent == null)) ||
+            ((canInsert || canDelete! || canEdit!) && (onPostEvent != null))),
         super(key: key);
 
   @override
   _PaginatedGridState createState() => _PaginatedGridState();
 
   static show(context,
-      {Widget child,
-      String title,
-      double width,
-      double height,
-      Alignment alignment,
+      {Widget? child,
+      String? title,
+      double? width,
+      double? height,
+      Alignment? alignment,
       bool fullPage = false,
-      String label = ''}) async {
+      String? label = ''}) async {
     Size size = MediaQuery.of(context).size;
     return showGeneralDialog(
       context: context,
@@ -345,8 +346,8 @@ class PaginatedGrid extends StatefulWidget {
     );
   }
 
-  static dialogWidth({Size maxSize}) => maxSize?.width ?? 450.0;
-  static dialogHeight({Size maxSize}) => maxSize?.height ?? 650.0;
+  static dialogWidth({Size? maxSize}) => maxSize?.width ?? 450.0;
+  static dialogHeight({Size? maxSize}) => maxSize?.height ?? 650.0;
 }
 
 extension StringExtGrid on String {
@@ -356,94 +357,96 @@ extension StringExtGrid on String {
 }
 
 class _PaginatedGridState extends State<PaginatedGrid> {
-  PaginatedGridController controller;
+  PaginatedGridController? controller;
 
   StreamController<bool> refreshEvent = StreamController<bool>.broadcast();
 
-  int _sortColumnIndex;
-  bool _sortAscending;
+  int? _sortColumnIndex;
+  bool? _sortAscending;
 
-  String _filter;
-  StreamSubscription postEvent;
+  String? _filter;
+  StreamSubscription? postEvent;
 
   @override
   void initState() {
     controller = widget.controller ?? PaginatedGridController();
-    controller.statePage = this;
+    controller!.statePage = this;
     _filter = '';
-    postEvent = controller.postEvent.stream.listen((x) {
+    postEvent = controller!.postEvent.stream.listen((x) {
       if (widget.onPostEvent != null) {
-        widget.onPostEvent(controller, x.data, x.event).then((b) {
+        widget.onPostEvent!(controller!, x.data, x.event).then((b) {
           if (b != null) {
             if (x.event == PaginatedGridChangeEvent.delete)
-              controller.source.removeAt(controller.currentRow);
+              controller!.source!.removeAt(controller!.currentRow);
             else if (x.event == PaginatedGridChangeEvent.insert)
-              controller.source.add(x.data);
+              controller!.source!.add(x.data);
             else
-              controller.source[x.currentRow] = x.data;
+              controller!.source![x.currentRow!] = x.data;
 
-            controller.changed(true);
+            controller!.changed(true);
           }
           return b;
         });
         return;
       }
-      controller.source[x.currentRow] = x.data;
-      controller.changed(true);
+      controller!.source![x.currentRow!] = x.data;
+      controller!.changed(true);
     });
     super.initState();
     _sortAscending = widget.sortAscending;
     _sortColumnIndex = widget.sortColumnIndex;
-    controller.columns = widget.columns;
+    controller!.columns = widget.columns!;
   }
 
   @override
   void dispose() {
     refreshEvent.close();
-    postEvent.cancel();
+    postEvent!.cancel();
     super.dispose();
   }
 
   createColumns(List<dynamic> source) {
-    controller.createColumns(source);
+    controller!.createColumns(source);
   }
 
   _sort(int columnIndex, int idxColumn, bool ascending) {
     setState(() {
       _sortColumnIndex = columnIndex;
       _sortAscending = ascending;
-      controller.source.sort((a, b) {
-        if (controller.columns[idxColumn].numeric || a is double || a is int) {
-          return a[controller.columns[idxColumn].name]
-                  .compareTo(b[controller.columns[idxColumn].name]) *
+      controller!.source!.sort((a, b) {
+        if (controller!.columns![idxColumn].numeric! ||
+            a is double ||
+            a is int) {
+          return a[controller!.columns![idxColumn].name]
+                  .compareTo(b[controller!.columns![idxColumn].name]) *
               (ascending ? 1 : -1);
         }
         final va =
-            a[controller.columns[idxColumn].name].toString().toLowerCase();
+            a[controller!.columns![idxColumn].name].toString().toLowerCase();
         final vb =
-            b[controller.columns[idxColumn].name].toString().toLowerCase();
+            b[controller!.columns![idxColumn].name].toString().toLowerCase();
         return va.compareTo(vb) * (ascending ? 1 : -1);
       });
     });
   }
 
   addVirtualColumn() {
-    for (var i = 0; i < controller.columns.length; i++) {
-      controller.columns[i].index = i;
+    for (var i = 0; i < controller!.columns!.length; i++) {
+      controller!.columns![i].index = i;
     }
   }
 
   doRefresh() {
     setState(() {
-      widget.onRefresh(controller);
+      widget.onRefresh!(controller!);
     });
   }
 
-  ThemeData theme;
+  ThemeData? theme;
   @override
   Widget build(BuildContext context) {
     theme = Theme.of(context);
-    controller.context = context;
+    controller!.context = context;
     return StreamBuilder<bool>(
         stream: refreshEvent.stream,
         builder: (context, snapshot) {
@@ -453,50 +456,51 @@ class _PaginatedGridState extends State<PaginatedGrid> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   if (widget.placeHolder != null)
-                    return widget.placeHolder();
+                    return widget.placeHolder!();
                   else
                     return Align(child: CircularProgressIndicator());
                 }
-                controller.originalSource = snapshot.data;
-                controller.widget = widget;
+                controller!.originalSource = snapshot.data as List<dynamic>;
+                controller!.widget = widget;
                 if (widget.onSort != null)
-                  controller.originalSource.sort((a, b) {
-                    return widget.onSort(a, b);
+                  controller!.originalSource!.sort((a, b) {
+                    return widget.onSort!(a, b);
                   });
-                if ((controller.columns ?? []).length == 0)
-                  createColumns(snapshot.data);
+                if ((controller!.columns ?? []).length == 0)
+                  createColumns(snapshot.data as List<dynamic>);
                 addVirtualColumn();
-                if (widget.beforeShow != null) widget.beforeShow(controller);
+                if (widget.beforeShow != null) widget.beforeShow!(controller!);
 
-                if (widget.oneRowAutoEdit &&
-                    (controller.originalSource.length == 1)) {
+                if (widget.oneRowAutoEdit! &&
+                    (controller!.originalSource!.length == 1)) {
                   /// entra em edição automatico.
                   Timer.run(() {
-                    controller.edit(context, controller.originalSource[0],
+                    controller!.edit(context, controller!.originalSource![0],
                         title: 'Alteração');
                   });
                 }
                 return Scaffold(
                   appBar: widget.appBar,
                   floatingActionButton: buildAddButton(),
-                  backgroundColor: theme.scaffoldBackgroundColor,
+                  backgroundColor: theme!.scaffoldBackgroundColor,
                   body: SingleChildScrollView(
                     child: StreamBuilder<bool>(
                         initialData: true,
-                        stream: controller.changedEvent.stream,
+                        stream: controller!.changedEvent.stream,
                         builder: (context, snapshot) {
-                          controller.tableSource = PaginatedGridDataTableSource(
-                              context, controller, _filter);
+                          controller!.tableSource =
+                              PaginatedGridDataTableSource(
+                                  context, controller!, _filter!);
                           //debugPrint('init paginated extended');
                           return PaginatedDataTableExtended(
-                            dividerThickness: widget.dividerThickness,
-                            elevation: widget.elevation,
+                            dividerThickness: widget.dividerThickness!,
+                            elevation: widget.elevation!,
                             headingRowHeight: widget.headingRowHeight,
                             headingRowColor: widget.headingRowColor ??
-                                theme.primaryColor.withAlpha(100),
+                                theme!.primaryColor.withAlpha(100),
                             headerHeight: (widget.header == null)
                                 ? 0
-                                : widget.headerHeight,
+                                : widget.headerHeight!,
                             //headingTextStyle: widget.headingTextStyle,
                             dataRowHeight: widget.dataRowHeight,
                             columnSpacing: 0, //widget.columnSpacing,
@@ -504,13 +508,13 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             footerLeading:
                                 widget.footerLeading ?? createPageNavigator(),
                             header: Column(
-                                crossAxisAlignment: widget.crossAxisAlignment,
+                                crossAxisAlignment: widget.crossAxisAlignment!,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 mainAxisSize: MainAxisSize.min,
                                 //
                                 children: [
                                   widget.header ?? Container(),
-                                  if (widget.canFilter)
+                                  if (widget.canFilter!)
                                     Container(
                                       height: 60,
                                       width: 200,
@@ -526,7 +530,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                           ),
                                           onChanged: (x) {
                                             _filter = x;
-                                            controller.changedEvent.sink
+                                            controller!.changedEvent.sink
                                                 .add(true);
                                           }),
                                     ),
@@ -549,42 +553,43 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             dragStartBehavior: widget.dragStartBehavior,
                             onRowsPerPageChanged: widget.onRowsPerPageChanged,
                             color: widget.backgroundColor ??
-                                theme.scaffoldBackgroundColor,
+                                theme!.scaffoldBackgroundColor,
                             rowsPerPage: widget.rowsPerPage,
                             onPageChanged: widget.onPageChanged,
                             //alignment: Alignment.center,
-                            crossAxisAlignment: widget.crossAxisAlignment,
+                            crossAxisAlignment: widget.crossAxisAlignment!,
                             columns: [
                               for (var i = 0;
-                                  i < controller.columns.length;
+                                  i < controller!.columns!.length;
                                   i++)
-                                if (controller.columns[i].visible)
+                                if (controller!.columns![i].visible!)
                                   DataColumn(
-                                    onSort: (widget.canSort)
-                                        ? controller.columns[i].onSort ??
-                                                (controller.columns[i].sort)
-                                            ? (columnIndex, bool ascending) =>
-                                                _sort(columnIndex, i, ascending)
-                                            : (a, b) => null
-                                        : null,
-                                    numeric: controller.columns[i].numeric,
-                                    tooltip: controller.columns[i].tooltip,
+                                    onSort: (columnIndex, bool ascending) {
+                                      if (widget.canSort! &&
+                                          (controller!.columns![i].sort!)) if (controller!
+                                              .columns![i].onSort !=
+                                          null) {
+                                        _sort(columnIndex, i, ascending);
+                                      }
+                                    },
+                                    numeric: controller!.columns![i].numeric!,
+                                    tooltip: controller!.columns![i].tooltip,
                                     label: Align(
                                       alignment:
-                                          (controller.columns[i].numeric ??
+                                          (controller!.columns![i].numeric ??
                                                   false)
                                               ? Alignment.centerRight
-                                              : controller.columns[i].align ??
+                                              : controller!.columns![i].align ??
                                                   Alignment.centerLeft,
                                       child: Container(
                                         padding:
                                             EdgeInsets.symmetric(horizontal: 2),
-                                        width: controller.columns[i].width,
+                                        width: controller!.columns![i].width,
                                         height: widget.headingRowHeight,
                                         child: Builder(builder: (ctx) {
-                                          var labels = (controller
-                                                      .columns[i].label ??
-                                                  '${controller.columns[i].name}'
+                                          var labels = (controller!
+                                                      .columns![i].label ??
+                                                  '${controller!.columns![i].name}'
                                                       .toCapital())
                                               .split('|');
                                           return Column(
@@ -610,8 +615,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                                                   .columnStyle ??
                                                               widget
                                                                   .headingTextStyle ??
-                                                              theme.textTheme
-                                                                  .caption
+                                                              theme!.textTheme
+                                                                  .caption!
                                                                   .copyWith(
                                                                 fontWeight:
                                                                     FontWeight
@@ -627,7 +632,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                     ),
                                   )
                             ],
-                            source: controller.tableSource,
+                            source: controller!.tableSource,
                             onSelectAll: widget.onSelectAll,
                             showCheckboxColumn: widget.showCheckboxColumn,
                           );
@@ -648,8 +653,8 @@ class _PaginatedGridState extends State<PaginatedGrid> {
           alignment: Alignment.centerLeft,
           child: Row(children: [
             createNavButton(1),
-            for (var i = widget.currentPage - 1;
-                i < widget.currentPage + 4;
+            for (var i = widget.currentPage! - 1;
+                i < widget.currentPage! + 4;
                 i++)
               if (i > 1)
                 if ((n++) < 4) createNavButton(i)
@@ -669,38 +674,38 @@ class _PaginatedGridState extends State<PaginatedGrid> {
         : IconButton(
             icon: Text('$i'),
             onPressed: () {
-              widget.onPageSelected(i);
+              widget.onPageSelected!(i);
             },
           );
   }
 
   buildAddButton() {
-    if (widget.canInsert &&
+    if (widget.canInsert! &&
         ((widget.onInsertItem != null) || (widget.onPostEvent != null))) {
       return FloatingActionButton(
         //    child: IconButton(
         child: Icon(Icons.add),
         onPressed: () {
-          controller.data = {};
-          if (controller.beforeChange != null)
-            controller.beforeChange(
-                controller.data, PaginatedGridChangeEvent.insert);
+          controller!.data = {};
+          if (controller!.beforeChange != null)
+            controller!.beforeChange!(
+                controller!.data, PaginatedGridChangeEvent.insert);
 
           if (widget.onInsertItem != null)
-            widget.onInsertItem(controller)?.then((rsp) {
-              controller.changed(rsp);
+            widget.onInsertItem!(controller!).then((rsp) {
+              controller!.changed(rsp);
             });
           else if (widget.onPostEvent != null) {
             PaginatedGrid.show(context,
                 title: 'Novo registro',
                 width: widget.editSize?.width ?? PaginatedGrid.dialogWidth(),
                 height: widget.editSize?.height ?? PaginatedGrid.dialogHeight(),
-                fullPage: controller.widget.editFullPage,
+                fullPage: controller!.widget!.editFullPage!,
                 child: PaginatedGridEditRow(
-                  index: 0, // TODO: parece que isto � dinamico, avaliar.
+                  index: 0, // TODO: parece que isto � dinamico, avaliar.
                   width: widget.editSize?.width,
                   height: widget.editSize?.height,
-                  fullPage: controller.widget.editFullPage,
+                  fullPage: controller!.widget!.editFullPage,
                   controller: controller,
                   event: PaginatedGridChangeEvent.insert,
                 ));
@@ -716,20 +721,20 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 class PaginatedGridController {
   var parent;
 
-  BuildContext context;
-  _PaginatedGridState statePage;
+  BuildContext? context;
+  _PaginatedGridState? statePage;
   StreamController<bool> changedEvent = StreamController<bool>.broadcast();
   ValueNotifier<bool> changedValues = ValueNotifier<bool>(false);
 
-  List<dynamic> source;
-  List<PaginatedGridColumn> columns;
-  PaginatedGrid widget;
-  PaginatedGridDataTableSource tableSource;
+  List<dynamic>? source;
+  List<PaginatedGridColumn>? columns;
+  PaginatedGrid? widget;
+  PaginatedGridDataTableSource? tableSource;
   int currentRow = 0;
   int currentColumn = 0;
-  Map<String, dynamic> data;
-  List<dynamic> originalSource;
-  Function(dynamic, PaginatedGridChangeEvent) beforeChange;
+  Map<String, dynamic>? data;
+  List<dynamic>? originalSource;
+  Function(dynamic, PaginatedGridChangeEvent)? beforeChange;
 
   dispose() {
     changedEvent.close();
@@ -737,12 +742,12 @@ class PaginatedGridController {
   }
 
   get self => this;
-  PaginatedGridColumn findColumn(name) {
+  PaginatedGridColumn? findColumn(name) {
     var index = -1;
     if (columns != null) {
-      for (int i = 0; i < columns.length; i++)
-        if (columns[i].name == name) index = i;
-      if (index > -1) return columns[index];
+      for (int i = 0; i < columns!.length; i++)
+        if (columns![i].name == name) index = i;
+      if (index > -1) return columns![index];
     }
     return null;
   }
@@ -750,18 +755,18 @@ class PaginatedGridController {
   editPage(
     context,
     data, {
-    String title,
-    double width,
-    double height,
+    String? title,
+    double? width,
+    double? height,
     bool inScaffold = true,
     PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update,
   }) {
-    if (beforeChange != null) beforeChange(this.data, event);
+    if (beforeChange != null) beforeChange!(this.data, event);
 
     return PaginatedGridEditRow(
-      index: 0, // TODO: checar se � dinamico.
+      index: 0, // TODO: checar se � dinamico.
       data: data,
-      title: title,
+      title: title!,
       width: width ?? PaginatedGrid.dialogWidth(),
       height: height ?? PaginatedGrid.dialogHeight(),
       fullPage: false,
@@ -769,15 +774,15 @@ class PaginatedGridController {
       inScaffold: inScaffold,
       event: event,
       actions: [
-        if (widget.canDelete)
+        if (widget!.canDelete!)
           Tooltip(
               message: 'Excluir o item',
               child: IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {
                   this.data = data;
-                  widget
-                      .onPostEvent(this, data, PaginatedGridChangeEvent.delete)
+                  widget!.onPostEvent!
+                          (this, data, PaginatedGridChangeEvent.delete)
                       .then((rsp) {
                     Navigator.pop(context);
                   });
@@ -788,14 +793,14 @@ class PaginatedGridController {
   }
 
   edit(BuildContext context, Map<String, dynamic> data,
-      {String title,
-      double width,
-      double height,
+      {String? title,
+      double? width,
+      double? height,
       PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
     return PaginatedGrid.show(context,
         title: title,
-        width: widget.editSize?.width ?? PaginatedGrid.dialogWidth(),
-        height: widget.editSize?.height ?? PaginatedGrid.dialogHeight(),
+        width: widget!.editSize?.width ?? PaginatedGrid.dialogWidth(),
+        height: widget!.editSize?.height ?? PaginatedGrid.dialogHeight(),
         child: editPage(context, data,
             title: title, width: width, height: height, event: event));
   }
@@ -807,7 +812,7 @@ class PaginatedGridController {
       row.forEach((k, v) {
         var numeric = false;
         if (v is double) numeric = true;
-        columns.add(
+        columns!.add(
           PaginatedGridColumn(
             name: k,
             label: '${k.replaceAll('_', ' ')}'.toCapital(),
@@ -819,8 +824,8 @@ class PaginatedGridController {
   }
 
   clear() {
-    originalSource.clear();
-    source.clear();
+    originalSource!.clear();
+    source!.clear();
     changed(true);
     _updating = 0;
   }
@@ -847,10 +852,10 @@ class PaginatedGridController {
     begin();
     try {
       if (source != null)
-        for (var i = 0; i < source.length; i++)
-          if (source[i][key] == valueSearch) {
+        for (var i = 0; i < source!.length; i++)
+          if (source![i][key] == valueSearch) {
             //print([source[i], dadosTo]);
-            source[i] = dadosTo;
+            source![i] = dadosTo;
           }
     } finally {
       end();
@@ -867,12 +872,12 @@ class PaginatedGridController {
   }
 
   removeAt(int rowIndex) {
-    source.removeAt(rowIndex);
+    source!.removeAt(rowIndex);
     changed(true);
   }
 
   remove(item) {
-    source.remove(item);
+    source!.remove(item);
     changed(true);
   }
 
@@ -883,24 +888,24 @@ class PaginatedGridController {
 
   indexOf(key, row) {
     var v = row[key];
-    for (var i = 0; i < source.length; i++) {
-      if (source[i][key] == v) return i;
+    for (var i = 0; i < source!.length; i++) {
+      if (source![i][key] == v) return i;
     }
     return -1;
   }
 
   add(item) {
     if (source != null) {
-      source.add(item);
+      source!.add(item);
       changed(true);
     }
   }
 }
 
 class PaginatedGridEventData {
-  var event;
-  var data;
-  int currentRow;
+  dynamic? event;
+  dynamic? data;
+  int? currentRow;
   PaginatedGridEventData({this.currentRow, this.event, this.data});
 }
 
@@ -911,9 +916,9 @@ class PaginatedGridDataTableSource extends DataTableSource {
   PaginatedGridDataTableSource(this.context, this.controller, this.filter) {
     controller.source = [];
     if (filter != '')
-      controller.originalSource.forEach((x) {
+      controller.originalSource!.forEach((x) {
         var v = jsonEncode(x).toLowerCase();
-        if (v.contains(filter.toLowerCase())) controller.source.add(x);
+        if (v.contains(filter.toLowerCase())) controller.source!.add(x);
       });
     else {
       controller.source = controller.originalSource;
@@ -922,66 +927,63 @@ class PaginatedGridDataTableSource extends DataTableSource {
   setData(rowIndex, colIndex) {
     controller.currentRow = rowIndex;
     controller.currentColumn = colIndex;
-    controller.data = controller.source[rowIndex];
+    controller.data = controller.source![rowIndex];
   }
 
   @override
   DataRow getRow(int index) {
     ThemeData theme = Theme.of(context);
     Color rowColor = ((index % 2) == 0)
-        ? controller.widget.evenRowColor ?? theme.primaryColor.withAlpha(10)
-        : controller.widget.oddRowColor ?? theme.primaryColor.withAlpha(3);
-    Map<String, dynamic> row = controller.source[index];
+        ? controller.widget!.evenRowColor ?? theme.primaryColor.withAlpha(10)
+        : controller.widget!.oddRowColor ?? theme.primaryColor.withAlpha(3);
+    Map<String, dynamic> row = controller.source![index];
     DataRow r = DataRow(
         key: UniqueKey(),
-        onSelectChanged: (controller.widget.onSelectChanged != null)
-            ? (bool b) {
-                setData(index, 0);
-                controller.widget.onSelectChanged(b, controller);
-                return b;
-              }
-            : (controller.widget.canEdit)
-                ? (b) {
-                    setData(index, 0);
-                    return (controller.widget.onEditItem != null)
-                        ? controller.widget.onEditItem(controller)
-                        : doEditItem(index, b);
-                  }
-                : null,
+        onSelectChanged: (bool? b) {
+          if (controller.widget!.onSelectChanged != null) {
+            setData(index, 0);
+            controller.widget!.onSelectChanged!(b ?? false, controller);
+            return;
+          } else if (controller.widget!.canEdit!) {
+            setData(index, 0);
+            return (controller.widget!.onEditItem != null)
+                ? controller.widget!.onEditItem!(controller)
+                : doEditItem(index, b ?? true);
+          }
+        },
         color: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) {
           return rowColor;
         }),
         cells: [
-          for (PaginatedGridColumn col in controller.columns)
-            if (col.visible)
-              (col.isVirtual)
+          for (PaginatedGridColumn col in controller.columns!)
+            if (col.visible!)
+              (col.isVirtual!)
                   ? DataCell(Row(children: [
-                      if (col.builder != null) col.builder(index, row),
+                      if (col.builder != null) col.builder!(index, row),
                       if (col.builder == null)
-                        if (controller.widget.canEdit)
-                          if (controller.widget.onEditItem != null)
+                        if (controller.widget!.canEdit!)
+                          if (controller.widget!.onEditItem != null)
                             Tooltip(
                                 message: 'Alterar o item',
                                 child: InkWell(
                                   child: Icon(Icons.edit),
                                   onTap: () {
                                     setData(index, col.index);
-                                    controller.changed(controller.widget
-                                        .onEditItem(controller));
+                                    controller.changed(controller
+                                        .widget!.onEditItem!(controller));
                                   },
                                 )),
                       if (col.builder == null)
-                        if (controller.widget.canDelete)
-                          if (controller.widget.onDeleteItem != null)
+                        if (controller.widget!.canDelete!)
+                          if (controller.widget!.onDeleteItem != null)
                             Tooltip(
                                 message: 'Excluir o item',
                                 child: InkWell(
                                   child: Icon(Icons.delete),
                                   onTap: () {
                                     setData(index, col.index);
-                                    controller.widget
-                                        .onDeleteItem(controller)
+                                    controller.widget!.onDeleteItem!(controller)
                                         .then((x) {
                                       if (x) controller.removeAt(index);
                                       Navigator.of(context).pop();
@@ -997,33 +999,33 @@ class PaginatedGridDataTableSource extends DataTableSource {
                           ),
                           child: Container(
                               padding: EdgeInsets.only(
-                                left: controller.widget.columnSpacing / 2,
-                                right: controller.widget.columnSpacing / 2,
+                                left: controller.widget!.columnSpacing! / 2,
+                                right: controller.widget!.columnSpacing! / 2,
                               ),
                               color: col.color ?? rowColor,
                               child: Align(
                                 alignment: col.align ??
-                                    ((col.numeric)
+                                    ((col.numeric!)
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft),
                                 child: (col.builder != null)
-                                    ? col.builder(index, row)
+                                    ? col.builder!(index, row)
                                     : Text(doGetValue(col, row[col.name]) ?? '',
                                         style: col.style ??
                                             theme.textTheme.bodyText2),
                               ))),
-                      onTap: ((controller.widget.onCellTap != null) ||
+                      onTap: ((controller.widget!.onCellTap != null) ||
                               (col.onEditIconPressed != null))
                           ? () {
                               setData(index, col.index);
-                              if (controller.widget.onCellTap != null)
-                                controller.widget.onCellTap(controller);
+                              if (controller.widget!.onCellTap != null)
+                                controller.widget!.onCellTap!(controller);
                               if (col.onEditIconPressed != null)
-                                col.onEditIconPressed(controller);
+                                col.onEditIconPressed!(controller);
                             }
                           : null,
                       showEditIcon: (col.onEditIconPressed != null),
-                      placeholder: col.placeHolder,
+                      placeholder: col.placeHolder!,
                     ),
         ]);
 
@@ -1032,19 +1034,20 @@ class PaginatedGridDataTableSource extends DataTableSource {
 
   doEditItem(index, bool b) {
     if (controller.beforeChange != null)
-      controller.beforeChange(controller.data, PaginatedGridChangeEvent.update);
+      controller.beforeChange!(
+          controller.data, PaginatedGridChangeEvent.update);
     var h = PaginatedGrid.dialogHeight();
     var w = PaginatedGrid.dialogWidth();
     return Dialogs.showPage(
       controller.context,
-      width: controller.widget.editSize?.width ?? w,
-      height: controller.widget.editSize?.height ?? h,
-      fullPage: controller.widget.editFullPage,
+      width: controller.widget!.editSize?.width ?? w,
+      height: controller.widget!.editSize?.height ?? h,
+      fullPage: controller.widget!.editFullPage!,
       child: PaginatedGridEditRow(
         index: index,
-        fullPage: controller.widget.editFullPage,
-        width: controller.widget.editSize?.width ?? w,
-        height: controller.widget.editSize?.height ?? h,
+        fullPage: controller.widget!.editFullPage!,
+        width: controller.widget!.editSize?.width ?? w,
+        height: controller.widget!.editSize?.height ?? h,
         controller: controller,
         event: PaginatedGridChangeEvent.update,
         title: 'Alteração',
@@ -1055,32 +1058,32 @@ class PaginatedGridDataTableSource extends DataTableSource {
 
   doGetValue(PaginatedGridColumn col, dynamic v) {
     if (col.onGetValue == null) return (v ?? '').toString();
-    return col.onGetValue(v);
+    return col.onGetValue!(v);
   }
 
   @override
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => controller.source.length;
+  int get rowCount => controller.source!.length;
 
   @override
   int get selectedRowCount => 0;
 }
 
 class PaginatedGridEditRow extends StatefulWidget {
-  final Map<String, dynamic> data;
-  final int index;
-  final double width;
-  final double height;
-  final PaginatedGridController controller;
-  final PaginatedGridChangeEvent event;
-  final String title;
-  final List<Widget> actions;
-  final bool fullPage;
-  final bool inScaffold;
+  final Map<String, dynamic>? data;
+  final int? index;
+  final double? width;
+  final double? height;
+  final PaginatedGridController? controller;
+  final PaginatedGridChangeEvent? event;
+  final String? title;
+  final List<Widget>? actions;
+  final bool? fullPage;
+  final bool? inScaffold;
   const PaginatedGridEditRow({
-    Key key,
+    Key? key,
     this.event,
     this.controller,
     this.data,
@@ -1098,23 +1101,23 @@ class PaginatedGridEditRow extends StatefulWidget {
 }
 
 class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
-  Map<String, dynamic> p;
-  PaginatedGridChangeEvent _event;
+  Map<String, dynamic>? p;
+  PaginatedGridChangeEvent? _event;
   @override
   void initState() {
     super.initState();
     _event = widget.event ??
-        ((widget.controller.data == null)
+        ((widget.controller!.data == null)
             ? PaginatedGridChangeEvent.insert
             : PaginatedGridChangeEvent.update);
-    p = widget.data ?? widget.controller.data ?? {};
-    widget.controller.changedValues.value = false;
+    p = widget.data ?? widget.controller!.data ?? {};
+    widget.controller!.changedValues.value = false;
   }
 
   final _formKey = GlobalKey<FormState>();
   bool canEdit(PaginatedGridColumn col) {
-    if (col.readOnly) return false;
-    if (col.isPrimaryKey) {
+    if (col.readOnly!) return false;
+    if (col.isPrimaryKey!) {
       if (_event == PaginatedGridChangeEvent.update) return false;
     }
     return true;
@@ -1124,8 +1127,8 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   int _first = 0;
   bool canFocus(PaginatedGridColumn col) {
     if (_focused) return false;
-    if (col.readOnly) return false;
-    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey)
+    if (col.readOnly!) return false;
+    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey!)
       return false;
 
     if (widget.event == PaginatedGridChangeEvent.insert) {
@@ -1143,27 +1146,27 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
 
     double mh = widget.height ?? size.height * 0.95;
     double alvo =
-        ((widget.controller.columns.length + 2) * kToolbarHeight) + 32.0;
+        ((widget.controller!.columns!.length + 2) * kToolbarHeight) + 32.0;
     if (alvo < mh) mh = widget.height ?? alvo;
     double mw = widget.width ?? 400;
 
-    return (!widget.inScaffold)
+    return (!widget.inScaffold!)
         ? buildPage(context)
         : Container(
-            height: (widget.fullPage) ? size.height * 0.95 : mh,
+            height: (widget.fullPage!) ? size.height * 0.95 : mh,
             constraints: BoxConstraints(
-              maxWidth: (widget.fullPage)
+              maxWidth: (widget.fullPage!)
                   ? size.width * 0.95
                   : mw, //  widget.width ?? size.width * 0.95,
             ),
             child: EditScaffold(
-              title: widget.title,
-              index: widget.index,
+              title: widget.title!,
+              index: widget.index!,
               controller: widget.controller,
-              canDelete: widget.controller.widget.canDelete,
-              canEdit: widget.controller.widget.canEdit ||
-                  widget.controller.widget.canInsert,
-              onReset: (ctx) => _formKey.currentState.reset(),
+              canDelete: widget.controller!.widget!.canDelete!,
+              canEdit: widget.controller!.widget!.canEdit! ||
+                  widget.controller!.widget!.canInsert!,
+              onReset: (ctx) => _formKey.currentState!.reset(),
               onSaved: (ctx) => _save(ctx),
               body: SingleChildScrollView(child: buildPage(context)),
             ),
@@ -1172,10 +1175,10 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
           );
   }
 
-  Widget _page;
+  Widget? _page;
   Widget buildPage(BuildContext context) {
     int col = 0;
-    final int mxCol = widget.controller.columns.length;
+    final int mxCol = widget.controller!.columns!.length;
     return _page ??= Padding(
       padding: EdgeInsets.only(left: 20.0, right: 20, top: 20, bottom: 20),
       child: Center(
@@ -1185,11 +1188,11 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              for (var item in widget.controller.columns)
-                if (!item.isVirtual)
+              for (var item in widget.controller!.columns!)
+                if (!item.isVirtual!)
                   (item.editBuilder != null)
-                      ? item.editBuilder(
-                          widget.controller, item, p[item.name], p)
+                      ? item.editBuilder!(
+                          widget.controller!, item, p![item.name], p!)
                       : Container(
                           alignment: Alignment.center,
                           width: 300,
@@ -1228,14 +1231,14 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
       {bool isLast = false}) {
     final TextEditingController _valueController = TextEditingController(
         text: (item.onGetValue != null)
-            ? item.onGetValue(p[item.name])
-            : (p[item.name] ?? '').toString());
+            ? item.onGetValue!(p![item.name])
+            : (p![item.name] ?? '').toString());
     var focusNode = FocusNode();
     return Focus(
         canRequestFocus: false,
         onFocusChange: (b) {
           if (!b) if (item.onFocusChanged != null)
-            item.onFocusChanged(_valueController.text);
+            item.onFocusChanged!(_valueController.text);
         },
         child: TextFormField(
             textInputAction:
@@ -1247,7 +1250,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               else
                 focusNode.nextFocus();
             },
-            autofocus: item.autofocus && canFocus(item),
+            autofocus: item.autofocus! && canFocus(item),
             maxLines: item.maxLines,
             maxLength: item.maxLength,
             enabled: canEdit(item),
@@ -1257,39 +1260,38 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               labelText: item.label ?? item.name,
             ),
             validator: (value) {
-              if (item.onValidate != null) return item.onValidate(value);
-              if (item.required) if (value.isEmpty) {
-                return (item.editInfo
-                    .replaceAll('{label}', item.label ?? item.name));
+              if (item.onValidate != null) return item.onValidate!(value);
+              if (item.required!) if (value!.isEmpty) {
+                return (item.editInfo!
+                    .replaceAll('{label}', item.label ?? item.name!));
               }
 
               return null;
             },
             onChanged: (x) {
-              widget.controller.changedValues.value = true;
-              if (item.onChanged != null) item.onChanged(x);
+              widget.controller!.changedValues.value = true;
+              if (item.onChanged != null) item.onChanged!(x);
             },
             onSaved: (x) {
               if (item.onSetValue != null) {
-                p[item.name] = item.onSetValue(x);
+                p![item.name!] = item.onSetValue!(x);
                 return;
               }
-              if (p[item.name] is int)
-                p[item.name] = int.tryParse(x);
-              else if (p[item.name] is double)
-                p[item.name] = double.tryParse(x);
-              else if (p[item.name] is bool)
-                p[item.name] = x;
+              if (p![item.name] is int)
+                p![item.name!] = int.tryParse(x!);
+              else if (p![item.name] is double)
+                p![item.name!] = double.tryParse(x!);
+              else if (p![item.name] is bool)
+                p![item.name!] = x;
               else
-                p[item.name] = x;
+                p![item.name!] = x;
             }));
   }
 
   _save(context) {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      widget.controller.widget
-          .onPostEvent(widget.controller, p, _event)
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      widget.controller!.widget!.onPostEvent!(widget.controller!, p, _event!)
           .then((rsp) {
         Navigator.pop(context);
       });
@@ -1298,17 +1300,17 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
 }
 
 class EditScaffold extends StatelessWidget {
-  final int index;
-  final bool canDelete;
-  final bool canEdit;
-  final Widget body;
-  final String title;
+  final int? index;
+  final bool? canDelete;
+  final bool? canEdit;
+  final Widget? body;
+  final String? title;
   final controller;
-  final List<Widget> actions;
-  final Function(BuildContext context) onSaved;
-  final Function(BuildContext context) onReset;
+  final List<Widget>? actions;
+  final Function(BuildContext context)? onSaved;
+  final Function(BuildContext context)? onReset;
   const EditScaffold(
-      {Key key,
+      {Key? key,
       @required this.index,
       @required this.controller,
       @required this.onSaved,
@@ -1329,10 +1331,10 @@ class EditScaffold extends StatelessWidget {
           //expandedHeight: kToolbarHeight,
           flexibleSpace: ValueListenableBuilder(
               valueListenable: controller.changedValues,
-              builder: (BuildContext context, dynamic changed, Widget child) {
+              builder: (BuildContext context, dynamic changed, Widget? child) {
                 return AppBar(title: Text(title ?? ''), actions: [
                   ...actions ?? [],
-                  if (canDelete && (!changed))
+                  if (canDelete! && (!changed))
                     Tooltip(
                         message: 'Excluir o item',
                         child: IconButton(
@@ -1368,14 +1370,14 @@ class EditScaffold extends StatelessWidget {
                     InkWell(
                         child: Icon(Icons.settings_backup_restore),
                         onTap: () {
-                          onReset(context);
+                          onReset!(context);
                           controller.changedValues.value = false;
                         }),
                     SizedBox(width: 8),
                     InkWell(
                         child: Icon(Icons.check),
                         onTap: () {
-                          onSaved(context);
+                          onSaved!(context);
                         })
                   ],
                 ]);

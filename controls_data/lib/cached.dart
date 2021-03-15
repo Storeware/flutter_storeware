@@ -19,14 +19,14 @@ class Cached {
     _imageCached.remove(key);
   }
 
-  static Image? image(BuildContext context, String url,
+  static Image image(BuildContext context, String url,
       {Image Function(String)? builder}) {
     Image? item = _imageCached[url];
     //print(['Cache image:', url, (item != null)]);
     if (item != null) return item;
     if (builder != null) item = builder(url);
     if (item != null) _imageCached[url] = item;
-    return item;
+    return item!;
   }
 
   static add(key, value) {

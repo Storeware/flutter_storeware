@@ -801,8 +801,8 @@ class _CarouselSliderState extends State<CarouselSlider>
           builder: (BuildContext context, child) {
             // on the first render, the pageController.page is null,
             // this is a dirty hack
-            if (widget.pageController?.position?.minScrollExtent == null ||
-                widget.pageController?.position?.maxScrollExtent == null) {
+            if (widget.pageController?.position.minScrollExtent == null ||
+                widget.pageController?.position.maxScrollExtent == null) {
               Future.delayed(Duration(microseconds: 1), () {
                 setState(() {});
               });

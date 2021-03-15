@@ -131,7 +131,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
                 builder: (a, widget, Widget? c) => AnimatedSwitcher(
                     duration: Duration(milliseconds: 500),
                     child: SwipeDetector(
-                      child: _child!.value ?? Container(),
+                      child: _child!.value,
                       onSwipeRight: () {
                         print(['right', position, maxIndex]);
                         if (position! > 0) controller!.animateTo(position! - 1);
@@ -257,7 +257,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
           for (var index = 0; index < widget.choices!.length; index++)
             Builder(builder: (x) {
               bool completed = (widget.choices![index].completed != null)
-                  ? (widget.choices![index].completed!(activeIndex) ?? false)
+                  ? (widget.choices![index].completed!(activeIndex))
                   : false;
 
               return Container(

@@ -84,7 +84,8 @@ class DataViewerStorage<T> extends StatelessWidget {
       var p = key.split('.');
       Iterable<dynamic>? column =
           columns.where((element) => p[0] == element.name);
-      if (column != null) column.first.visible = j[key];
+      //if (column != null)
+      column.first.visible = j[key];
     }
 
     return columns;

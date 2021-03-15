@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:control_data_platform_interface/control_data_platform_interface.dart';
 
 class Testar extends LocalStorageInterface {
-  String chave;
+  String? chave;
   dynamic valor;
   @override
   String getKey(String key) {

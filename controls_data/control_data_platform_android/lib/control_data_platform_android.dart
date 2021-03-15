@@ -27,9 +27,9 @@ class PlatformLocalStorage extends LocalStorageInterface {
   }
 
   @override
-  String getKey(String key) {
+  String? getKey(String key) {
     init();
-    return _prefs?.getString(key) ?? '';
+    return _prefs?.getString(key);
   }
 
   @override

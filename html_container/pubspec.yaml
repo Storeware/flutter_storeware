@@ -2,9 +2,10 @@ name: html_container
 description: A new Flutter package project.
 version: 0.0.1
 homepage: http://tireideletra.com.br
+publish_to: none
 
 environment:
-  sdk: ">=2.5.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 flutter:
   plugin:
@@ -23,14 +24,14 @@ dependencies:
     sdk: flutter
 
   html_container_web:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: html_container/html_container_web
+    #git:
+    #  url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ./html_container_web
 
   html_container_io:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: html_container/html_container_io
+    #git:
+     # url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ./html_container_io
 
 dev_dependencies:
   flutter_test:

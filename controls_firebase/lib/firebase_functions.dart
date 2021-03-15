@@ -12,12 +12,12 @@ class FireFunctionsApp extends RestClient {
     }
   }
 
-  Future<String> getToken(
-      {String user,
-      String pass,
-      String email,
+  Future<String> fireGetToken(
+      {String user = '',
+      String pass = '',
+      String? email,
       String service = '/token',
-      String conta}) async {
+      String? conta}) async {
     tokenId = '';
     var b64 = 'Basic ' + base64.encode(utf8.encode(user + ':' + pass));
     LocalStorage().setKey('usuarioBase', b64);
@@ -30,6 +30,6 @@ class FireFunctionsApp extends RestClient {
     print(jsonResponse);
     tokenId = d['authorization'];
     setToken(tokenId);
-    return tokenId;
+    return tokenId!;
   }
 }

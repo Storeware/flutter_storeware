@@ -210,8 +210,8 @@ class PaginatedDataTableExtendedState
   @override
   void initState() {
     super.initState();
-    _firstRowIndex = (PageStorage.of(context)?.readState(context) as int) ??
-        (widget.initialFirstRowIndex ?? 0);
+    _firstRowIndex = widget.initialFirstRowIndex ??
+        (PageStorage.of(context)?.readState(context) as int);
     widget.source!.addListener(_handleDataSourceChanged);
     _handleDataSourceChanged();
   }
@@ -289,10 +289,10 @@ class PaginatedDataTableExtendedState
       DataRow? row;
       if ((index < (_rowCount ?? 0)) || (_rowCountApproximate ?? false)) {
         row = _rows.putIfAbsent(index, () => widget.source!.getRow(index)!);
-        if ((row == null) && !haveProgressIndicator) {
-          row ??= _getProgressIndicatorRowFor(index);
+        /*if ((row == null) && !haveProgressIndicator) {
+          row = _getProgressIndicatorRowFor(index);
           haveProgressIndicator = true;
-        }
+        }*/
       }
       row ??= _getBlankRowFor(index);
       result.add(row);

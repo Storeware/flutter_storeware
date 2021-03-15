@@ -34,7 +34,7 @@ class DataFields {
   }
 }
 
-DateTime toDate(d) {
+DateTime? toDate(d) {
   if (d is DateTime) {
     return dateTimeCombine(d, '00:00');
   }
@@ -42,15 +42,15 @@ DateTime toDate(d) {
   if (s.contains('/')) {
     var v =
         s.substring(6, 4) + '-' + s.substring(3, 2) + '-' + s.substring(0, 1);
-    return DateTime.tryParse(s);
+    return DateTime.tryParse(v);
   }
   var dt = DateTime.tryParse((d ?? DateTime.now()).toString());
   return dateTimeCombine(dt, '00:00');
 }
 
-DateTime dateTimeCombine(DateTime date, String time) {
+DateTime dateTimeCombine(DateTime? date, String? time) {
   var dt = date ?? DateTime.now();
-  var t = DateTime.tryParse('0000-00-00 ' + time ?? '00:00');
+  var t = DateTime.tryParse('0000-00-00 ' + (time ?? '00:00'));
   return DateTime(dt.year, dt.month, dt.day, t?.hour ?? 0, t?.minute ?? 0);
 }
 
@@ -80,7 +80,7 @@ String getDataExtensoAmigavel(DateTime data) {
   return r;
 }
 
-String formatTime(d) {
+String? formatTime(d) {
   var s = d.toString();
   var t = DateTime.tryParse(s);
   if (t == null) return null;
@@ -88,7 +88,7 @@ String formatTime(d) {
   return "${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}";
 }
 
-DateTime stringToDateTime(String d) {
+DateTime? stringToDateTime(String d) {
   return DateTime.tryParse(d);
 }
 
@@ -102,10 +102,10 @@ DateTime today() {
   return date;
 }
 
-double toDouble(v, {int dec}) {
+double? toDouble(v, {int? dec}) {
   if (v == null) return 0;
-  String d = v.toString();
-  double r = double.tryParse((d ?? '0.0').replaceAll(',', '.'));
+  String? d = v.toString();
+  double r = double.tryParse((d).replaceAll(',', '.'))!;
   if (dec != null) return double.parse(r.toStringAsFixed(dec));
   return r;
 }
@@ -118,7 +118,7 @@ String formatMoeda(double v, dec, {simbol = '\$'}) {
   return simbol + ' ' + formatDouble(v, dec).replaceAll('.', ',');
 }
 
-String formatDate(DateTime d) {
+String? formatDate(DateTime? d) {
   debug('data_model.formatDate-> $d');
   if (d == null) return null;
   return "${d.day.toString().padLeft(2, '0')}-${d.month.toString().padLeft(2, '0')}-${d.year.toString()} ";

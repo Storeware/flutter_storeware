@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:controls_data/local_storage.dart';
 import 'package:controls_web/controls/defaults.dart';
 import 'package:flutter/material.dart';
-import 'package:controls_data/data.dart';
 
 typedef ThemedWidgetBuilder = Widget Function(
     BuildContext context, ThemeData data);
@@ -33,41 +33,41 @@ ThemeData changedTheme(brightness) {
 }
 
 class DynamicTheme extends StatefulWidget {
-  const DynamicTheme({Key key, this.onData, this.builder, this.initial})
+  const DynamicTheme({Key? key, this.onData, this.builder, this.initial})
       : super(key: key);
 
-  final ThemedWidgetBuilder builder;
-  final ThemeDataWithBrightnessBuilder onData;
-  final Brightness initial;
+  final ThemedWidgetBuilder? builder;
+  final ThemeDataWithBrightnessBuilder? onData;
+  final Brightness? initial;
 
   @override
   DynamicThemeState createState() => DynamicThemeState();
 
-  static DynamicThemeState of(BuildContext context) {
+  static DynamicThemeState? of(BuildContext context) {
     return context
         .findAncestorStateOfType(); //const TypeMatcher<DynamicThemeState>());
   }
 }
 
 class DynamicThemeState extends State<DynamicTheme> {
-  ThemeData _data;
+  ThemeData? _data;
 
-  Brightness _brightness;
+  Brightness? _brightness;
 
   static const String _sharedPreferencesKey = 'isDark';
 
-  ThemeData get data => _data;
+  ThemeData get data => _data!;
 
-  Brightness get brightness => _brightness;
+  Brightness get brightness => _brightness!;
 
-  Color get backColor => (brightness == Brightness.light)
+  Color? get backColor => (brightness == Brightness.light)
       ? defaultScaffoldBackgroudColor
       : Colors.black;
   Color get color =>
       (brightness == Brightness.light) ? Colors.black : Colors.white;
 
   onData(b) {
-    return (widget.onData != null) ? widget.onData(b) : changedTheme(b);
+    return (widget.onData != null) ? widget.onData!(b) : changedTheme(b);
   }
 
   @override
@@ -124,12 +124,14 @@ class DynamicThemeState extends State<DynamicTheme> {
   }
 
   Future<bool> loadBrightness() async {
-    return LocalStorage().getBool(_sharedPreferencesKey) ??
-        widget.initial == Brightness.dark;
+    return LocalStorage().getBool(
+            _sharedPreferencesKey) /* ??
+        widget.initial == Brightness.dark*/
+        ;
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.builder(context, _data);
+    return widget.builder!(context, _data!);
   }
 }

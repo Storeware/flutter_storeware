@@ -28,7 +28,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
     if (options != null) this.options = options;
     try {
       /// a configuração é feita no ambiente
-      if ((api.Firebase.apps != null) || api.Firebase.apps.isNotEmpty) {
+      if (api.Firebase.apps.isNotEmpty) {
         app = api.Firebase.apps[0];
       } else
         app = api.Firebase.initializeApp(
@@ -38,7 +38,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
               messagingSenderId: options['858174338114'],
               databaseURL: options['databaseURL'],
               apiKey: options['apiKey'],
-              //googleAppID: options['appId'],
+              appId: options['appId'],
               projectId: options['projectId'],
               storageBucket: options['storageBucket'],
             ));
@@ -78,14 +78,14 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   }
 
   @override
-  Future<Map<String, dynamic>> getDoc(collection, doc) {
+  Future<Map<String, dynamic>?> getDoc(collection, doc) {
     return store
         .collection(collection)
         .doc(doc)
         .get()
         .then((DocumentSnapshot x) {
       if (!x.exists) return null;
-      return {"id": x.id, ...x.data()};
+      return {"id": x.id, ...x.data()!};
     });
   }
 
@@ -101,26 +101,26 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     d['dtatualiz'] = DateTime.now().toIso8601String();
     d.remove('id');
     var ref = store.collection(collection);
-    if (doc == null) return ref.add(d);
+    //if (doc == null) return ref.add(d);
     var refx = ref.doc(doc);
     // print(['enviando', data]);
     return refx.set(d, SetOptions(merge: merge));
   }
 
   @override
-  getWhere(collection, Function(CollectionReference) where) {
+  getWhere(collection, Function(CollectionReference)? where) {
     CollectionReference ref = store.collection(collection);
     Query rst = (where != null) ? where(ref) : ref;
     return rst.get().then((QuerySnapshot doc) {
       return doc.docs.map((f) {
-        return {"id": f.id, ...f.data()};
+        return {"id": f.id, ...f.data()!};
       }).toList();
     });
   }
 
   @override
   Stream<QuerySnapshot> getonSnapshot(
-      collection, Function(CollectionReference) where) {
+      collection, Function(CollectionReference)? where) {
     CollectionReference ref = store.collection(collection);
     Query rst = (where != null) ? where(ref) : ref;
     return rst.snapshots();
@@ -139,27 +139,30 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     return p;
   }
 
-  fs.FirebaseStorage storage = fs.FirebaseStorage.instance;
+  fs.FirebaseStorage get storage => fs.FirebaseStorage.instance;
 
   @override
   Future<int> uploadFileImage(String path, rawPath, {metadata}) async {
     String _fileName = buildPath(path);
-    fs.StorageReference firebaseStorageRef =
-        await storage.getReferenceFromUrl(_fileName);
-    fs.StorageMetadata md;
-    md = fs.StorageMetadata(
+    fs.Reference firebaseStorageRef = storage.ref().child(_fileName);
+    print('$_fileName:$rawPath');
+    final Directory systemTempDir = Directory.systemTemp;
+    final File file = await new File('${systemTempDir.path}/temp.jpg').create();
+    file.writeAsBytes(rawPath);
+    final md;
+    md = fs.SettableMetadata(
         cacheControl: "Public, max-age=12345", customMetadata: metadata ?? {});
-    fs.StorageUploadTask uploadTask = firebaseStorageRef.putData(rawPath, md);
-    return uploadTask.onComplete.then((resp) {
-      return resp.bytesTransferred;
-    });
+
+    fs.UploadTask uploadTask = firebaseStorageRef.putFile(file, md);
+
+    fs.TaskSnapshot taskSnapshot = await uploadTask.snapshot;
+    return taskSnapshot.bytesTransferred;
   }
 
   @override
   Future<String> getDownloadURL(String path) async {
     String _fileName = buildPath(path);
-    fs.StorageReference firebaseStorageRef =
-        await storage.getReferenceFromUrl(_fileName);
+    fs.Reference firebaseStorageRef = storage.ref().child(_fileName);
     try {
       return firebaseStorageRef.getDownloadURL().then((x) {
         return x.toString();
@@ -194,11 +197,11 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   }
 
   Widget download(BuildContext context,
-      {String path,
-      double width,
-      double height,
-      Widget Function(File) builder,
-      Function(Uint8List) onComplete}) {
+      {String? path,
+      double? width,
+      double? height,
+      Widget Function(File?)? builder,
+      Function(Uint8List)? onComplete}) {
     if ((path ?? '') == '') return Container();
     return FutureBuilder<File>(
         future: _getSingleFile(context, path),
@@ -206,14 +209,14 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
           if ((!y.hasData))
             return (builder != null) ? builder(null) : Container();
           if (onComplete != null)
-            y.data.readAsBytes().then((x) {
+            y.data!.readAsBytes().then((x) {
               onComplete(x);
             });
           return ClipRRect(
             borderRadius: new BorderRadius.circular(50),
             child: (builder != null)
-                ? builder(y.data)
-                : Image.file(y.data, width: width, height: height),
+                ? builder(y.data!)
+                : Image.file(y.data!, width: width, height: height),
           );
         });
   }
@@ -234,7 +237,7 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
   get uid => currentUser?.uid;
   @override
   signInAnonymously() {
-    instance.onAuthStateChanged.listen((user) {
+    instance.authStateChanges().listen((user) {
       currentUser = user;
     });
     return instance.signInAnonymously();
@@ -254,27 +257,28 @@ class FirebaseAuthDriver extends FirebaseAuthDriverInterface {
     return await googleSignIn.isSignedIn();
   }
 
-  User currentUser;
+  User? currentUser;
   @override
   Future<String> signInWithGoogle() async {
-    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
-        await googleSignInAccount.authentication;
+        await googleSignInAccount!.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleSignInAuthentication.accessToken,
       idToken: googleSignInAuthentication.idToken,
     );
     final authResult = await _auth.signInWithCredential(credential);
     var user = authResult.user;
     currentUser = await _auth.currentUser;
-    assert(user.uid == currentUser.uid);
+    assert(user!.uid == currentUser!.uid);
     return 'signInWithGoogle succeeded: $user';
   }
 
   @override
   User getCurrentUser() {
-    return currentUser;
+    return currentUser!;
   }
 
   @override

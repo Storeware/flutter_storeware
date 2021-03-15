@@ -1,8 +1,8 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class LocalNotifications {
-  Function(String) _onMessage;
-  Function(Map<String, dynamic>) _onDidNotifier;
+  Function(String)? _onMessage;
+  Function(Map<String, dynamic>)? _onDidNotifier;
 
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -17,7 +17,7 @@ class LocalNotifications {
   message(messageEvent) => _onMessage = messageEvent;
 
   Future<void> showNotification(
-      {String title, String body, String payload}) async {
+      {String? title, String? body, String? payload}) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'console', 'Storeware', 'Storeware - Channel',
         importance: Importance.max, priority: Priority.high, ticker: 'ticker');
@@ -40,9 +40,9 @@ class LocalNotifications {
         requestBadgePermission: false,
         requestSoundPermission: false,
         onDidReceiveLocalNotification:
-            (int id, String title, String body, String payload) async {
+            (int id, String? title, String? body, String? payload) async {
           if (_onDidNotifier != null)
-            _onDidNotifier({
+            _onDidNotifier!({
               "notification": {"title": title, "body": body},
               "data": payload
             });
@@ -50,9 +50,9 @@ class LocalNotifications {
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: (String payload) async {
+        onSelectNotification: (String? payload) async {
       if (payload != null) {
-        if (_onMessage != null) _onMessage(payload);
+        if (_onMessage != null) _onMessage!(payload);
       }
     });
   }

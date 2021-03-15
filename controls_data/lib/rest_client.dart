@@ -333,9 +333,9 @@ class RestClient {
     var msg = '${e?.message}';
     if (inDebug) msg += '$path |';
     if ((e?.response?.statusCode ?? 0) == 403)
-      return 'A solicitação foi recusada pelo servidor - checar permissões de acesso (403) ($msg)';
+      return 'A solicitaï¿½ï¿½o foi recusada pelo servidor - checar permissï¿½es de acesso (403) ($msg)';
     if ((e?.response?.statusCode ?? 0) == 404)
-      return 'A solicitação não foi encontrada - checar se é um objeto válido (404) ($msg)';
+      return 'A solicitaï¿½ï¿½o nï¿½o foi encontrada - checar se ï¿½ um objeto vï¿½lido (404) ($msg)';
 
     String title = '${e?.message}';
     String es =

@@ -33,16 +33,16 @@ Color strapFontColor(StrapButtonType type) {
   switch (type) {
     case StrapButtonType.warning:
       return Colors.black;
-      break;
+    //break;
     case StrapButtonType.light:
       return Colors.black;
-      break;
+    // break;
     case StrapButtonType.link:
       return Colors.blue;
-      break;
+    // break;
     case StrapButtonType.none:
       return Colors.grey;
-      break;
+    //  break;
     default:
       return Colors.white;
   }
@@ -205,8 +205,8 @@ class _StrapButtonState extends State<StrapButton> {
                             stateChanged(StrapButtonState.pressed);
                             if (widget.onPressedAsync != null) {
                               stateChanged(StrapButtonState.waiting);
-                              stateChanged((await widget.onPressedAsync!()) ??
-                                  StrapButtonState.none);
+                              if (widget.onPressedAsync != null)
+                                stateChanged(await widget.onPressedAsync!());
                             } else {
                               widget.onPressed!();
                             }

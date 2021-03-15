@@ -28,7 +28,7 @@ class Money {
 
 class CurrencyInputFormatter extends TextInputFormatter {
   static double toDouble(String v) {
-    String value = v ?? '';
+    String value = v;
     value = value.replaceAll(RegExp(r'[\sR\$]+'), '');
     value = value.replaceAll(RegExp(r'[\.]+'), '');
     value = value.replaceAll(RegExp(r',+'), '.');

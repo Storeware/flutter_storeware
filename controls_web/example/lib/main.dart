@@ -1,4 +1,4 @@
-import 'package:app/models/config_app.dart';
+import './models/config_app.dart';
 import 'package:controls_web/services/routes.dart';
 import 'models/apps_items.dart';
 import 'routing.dart';

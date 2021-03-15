@@ -3,7 +3,7 @@ import 'package:controls_web/controls/sliver_scaffold.dart';
 import 'package:flutter/material.dart';
 
 class DrawerView extends StatefulWidget {
-  DrawerView({Key key}) : super(key: key);
+  DrawerView({Key? key}) : super(key: key);
 
   @override
   _DrawerViewState createState() => _DrawerViewState();

@@ -57,21 +57,21 @@
     },
     {
       "name": "html_container_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-33feb6193b3e62b25295baf99abac844238a61e8/html_container/html_container_interface",
+      "rootUri": "../html_container_interface",
       "packageUri": "lib/",
       "languageVersion": "2.7"
     },
     {
       "name": "html_container_io",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-33feb6193b3e62b25295baf99abac844238a61e8/html_container/html_container_io",
+      "rootUri": "../html_container_io",
       "packageUri": "lib/",
-      "languageVersion": "2.7"
+      "languageVersion": "2.12"
     },
     {
       "name": "html_container_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-33feb6193b3e62b25295baf99abac844238a61e8/html_container/html_container_web",
+      "rootUri": "../html_container_web",
       "packageUri": "lib/",
-      "languageVersion": "2.7"
+      "languageVersion": "2.12"
     },
     {
       "name": "matcher",
@@ -155,10 +155,10 @@
       "name": "html_container",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.5"
+      "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-05T13:31:19.353691Z",
+  "generated": "2021-03-15T00:28:29.415358Z",
   "generator": "pub",
-  "generatorVersion": "2.13.0-77.0.dev"
+  "generatorVersion": "2.13.0-116.0.dev"
 }

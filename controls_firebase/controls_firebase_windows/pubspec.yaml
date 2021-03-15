@@ -1,12 +1,12 @@
 name: controls_firebase_windows
 description: A new Flutter package project.
-version: 0.0.1
+version: 2021.03.14
 author:
 homepage: https://wbagestao.com
 publish_to: none
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
@@ -14,9 +14,9 @@ dependencies:
     sdk: flutter
 
   controls_firebase_platform_interface:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_firebase/controls_firebase_platform_interface
+    #git:
+      #url: https://github.com/amarildolacerda/flutter_dart.git
+      path: ../controls_firebase_platform_interface
 
 dev_dependencies:
   flutter_test:

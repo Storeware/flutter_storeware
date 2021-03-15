@@ -404,5 +404,5 @@ abstract class DataModelClass<T> {
   String? collectionName;
   getById(id);
   enviar(T item);
-  snapshots({bool inativo});
+  snapshots({bool? inativo});
 }

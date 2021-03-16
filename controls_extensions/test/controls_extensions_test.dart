@@ -21,7 +21,7 @@ void main() {
   });
 
   test('DateTime', () {
-    DateTime data;
+    DateTime data = DateTime.now();
     var dt = data.from('2019-10-06');
     expect(DateTime(2019, 10, 6), dt);
     print(dt);
@@ -52,7 +52,7 @@ void main() {
     expect(10.234.simpleRoundTo(-2), 10.23);
     expect(10.234.roundTo(2), 10.23);
 
-    double d;
+    double d = 0;
     var d1 = d.from('0.1');
     print(d1);
     expect(d1, 0.1);

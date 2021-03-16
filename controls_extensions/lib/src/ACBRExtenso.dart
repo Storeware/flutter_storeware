@@ -51,14 +51,14 @@ const cCentenas = [
 enum ACBrExtensoFormato { extPadrao, extDolar }
 
 class ACBrExtenso {
-  String fsMoeda;
-  String fsMoedas;
-  String fsCentavos;
-  String fsCentavo;
-  double fsValor;
-  String fsTexto;
-  bool fsZeroAEsquerda;
-  ACBrExtensoFormato fsFormato;
+  String fsMoeda = 'Real';
+  String fsMoedas = 'Reais';
+  String fsCentavos = 'Centavos';
+  String fsCentavo = 'Centavo';
+  double fsValor = 0.0;
+  String fsTexto = '';
+  bool fsZeroAEsquerda = true;
+  ACBrExtensoFormato? fsFormato;
 
   ACBrExtenso() {
     fsMoeda = 'Real';
@@ -73,9 +73,9 @@ class ACBrExtenso {
 
   dispose() {}
 
-  get valor => fsValor;
-  set valor(double x) {
-    traduzValor(x);
+  double? get valor => fsValor;
+  set valor(double? x) {
+    traduzValor(x ?? 0.0);
   }
 
   extensoAux(String str3) {
@@ -139,7 +139,7 @@ class ACBrExtenso {
     if (Value > 999999999999.99) //then
       throw 'Valor acima do permitido';
 
-    fsValor = roundTo(Value, -2); // { Apenas 2 decimais }
+    fsValor = roundTo(Value, -2) + 0.0; // { Apenas 2 decimais }
     fsTexto = '';
     Inteiros = fsValor.truncate();
     Decimais = round(frac(fsValor) * 100).truncate();

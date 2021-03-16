@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  charts_flutter:
+  charts_flutter: ^0.10.0
   #   git:
   #    url: https://github.com/simpleclub-extended/charts
   #    path: charts_flutter

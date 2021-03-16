@@ -7,12 +7,12 @@ class TimeAgo {
   static const int MONTH_MILLIS = 30 * DAY_MILLIS;
   static const int YEAR_MILLIS = 12 * MONTH_MILLIS;
 
-  static String getTimeAgo(int timeStamp, {Language language}) {
+  static String getTimeAgo(int? timeStamp, {Language? language}) {
     assert(timeStamp != null,
         "Parameter timeStamp must not be null: TimeAgo.getTimeAgo(YOUR_TIME_STAMP)");
     language = language ?? Language.ENGLISH;
 
-    if (timeStamp < 1000000000000) {
+    if (timeStamp! < 1000000000000) {
       timeStamp *= 1000;
     }
 

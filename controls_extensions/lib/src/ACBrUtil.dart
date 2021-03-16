@@ -1,9 +1,9 @@
 import 'dart:math' as math;
 
-int strToIntDef(String value, int def) {
+int strToIntDef(String? value, [int def = 0]) {
   value = value ?? '';
   if (value == '') return def;
-  return int.tryParse(value);
+  return int.tryParse(value) ?? def;
 }
 
 intToStrZero(int value, int decs) {
@@ -12,7 +12,7 @@ intToStrZero(int value, int decs) {
 
 num roundTo(double value, int decs) {
   if (decs < 0) decs = -decs;
-  int fac = math.pow(10, decs);
+  num fac = math.pow(10, decs);
   return (value * fac).round() / fac;
 }
 
@@ -46,7 +46,7 @@ double simpleRoundToEX(double avalue, [int ADigit = -2]) {
   double result;
   double lfactor;
 
-  lfactor = intPower(10.0, ADigit);
+  lfactor = intPower(10.0, ADigit) + 0.0;
   if (avalue < 0)
     result = ((avalue / lfactor).truncate() - 0.5) * lfactor;
   else
@@ -63,7 +63,7 @@ double roundABNT(double avalue, [int digits = -2, double delta = 0.00001]) {
   double result = 0;
   negativo = (avalue < 0);
 
-  pow = intPower(10.0, digits.abs());
+  pow = intPower(10.0, digits.abs()) + 0.0;
   powValue = avalue / 10;
   intValue = (powValue.truncate());
   fracValue = frac(powValue);
@@ -76,7 +76,7 @@ double roundABNT(double avalue, [int digits = -2, double delta = 0.00001]) {
   if (fracCalc > 50)
     intCalc++;
   else if (fracCalc == 50) {
-    lastNumber = round(frac(intCalc / 10) * 10);
+    lastNumber = round(frac(intCalc / 10) * 10) + 0.0;
 
     if (odd(lastNumber))
       intCalc++;

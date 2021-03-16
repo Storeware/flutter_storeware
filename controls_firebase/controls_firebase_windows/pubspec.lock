@@ -46,9 +46,11 @@ packages:
   controls_firebase_platform_interface:
     dependency: "direct main"
     description:
-      path: "../controls_firebase_platform_interface"
-      relative: true
-    source: path
+      path: "controls_firebase/controls_firebase_platform_interface"
+      ref: HEAD
+      resolved-ref: "64978f8447731afe16443f501a7cf0cde1f685f4"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   fake_async:
     dependency: transitive

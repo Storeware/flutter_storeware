@@ -3,14 +3,14 @@ import "string_extensions.dart";
 enum ACBrCalcDigFormula { frModulo11, frModulo10, frModulo10PIS }
 
 class ACBrCalcDigito {
-  int fsMultIni;
-  int fsMultFim;
-  int fsMultAtu;
+  int fsMultIni = 2;
+  int fsMultFim = 9;
+  int fsMultAtu = 0;
   ACBrCalcDigFormula fsFormulaDigito = ACBrCalcDigFormula.frModulo11;
-  String fsDocto;
-  int fsDigitoFinal;
-  int fsSomaDigitos;
-  int fsModuloFinal;
+  String fsDocto = '';
+  int fsDigitoFinal = 0;
+  int fsSomaDigitos = 0;
+  int fsModuloFinal = 2;
   ACBrCalcDigito() {
     fsMultAtu = 0;
   }
@@ -19,13 +19,13 @@ class ACBrCalcDigito {
     fsDocto = x;
   }
 
-  get multiplicadorInicial => fsMultIni;
-  set multiplicadorInicial(x) {
+  int get multiplicadorInicial => fsMultIni;
+  set multiplicadorInicial(int x) {
     fsMultIni = x;
   }
 
-  get multiplicadorFinal => fsMultFim;
-  set multiplicadorFinal(x) {
+  int get multiplicadorFinal => fsMultFim;
+  set multiplicadorFinal(int x) {
     fsMultFim = x;
   }
 
@@ -37,7 +37,7 @@ class ACBrCalcDigito {
   }
 
   calcular() {
-    int A, N, Base, Tamanho, ValorCalc;
+    int N, Base, Tamanho, ValorCalc;
     String ValorCalcSTR;
 
     fsSomaDigitos = 0;

@@ -15,7 +15,7 @@ extension NumExtension on num {
 }
 
 extension DoubleExtension on double {
-  String format(String mask, {String lang}) {
+  String format(String mask, {String? lang}) {
     final oCcy = new NumberFormat(mask, lang ?? Intl.defaultLocale);
     return oCcy.format(this);
   }
@@ -42,7 +42,7 @@ extension DoubleExtension on double {
 
   num roundTo(int decs) {
     if (decs < 0) decs = -decs;
-    int fac = math.pow(10, decs);
+    num fac = math.pow(10, decs);
     return (this * fac).round() / fac;
   }
 
@@ -58,7 +58,7 @@ extension DoubleExtension on double {
     double result;
     double lfactor;
     if (digit > 0) digit = -digit;
-    lfactor = math.pow(10.0, digit);
+    lfactor = math.pow(10.0, digit) + 0.0;
     if (this < 0)
       result = ((this / lfactor).truncate() - 0.5) * lfactor;
     else

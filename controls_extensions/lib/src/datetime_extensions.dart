@@ -71,11 +71,11 @@ extension DateTimeExtension on DateTime {
         (t.compareTo(b.toDateTimeSql()) == -1);
   }
 
-  String timeAgo({String lang}) {
+  String timeAgo({String? lang}) {
     int timeStamp = this.millisecondsSinceEpoch;
     lang = lang ?? Intl.defaultLocale;
     Language lg = Language.ENGLISH;
-    if (lang.indexOf('pt') >= 0) lg = Language.PORTUGUESE;
+    if (lang!.indexOf('pt') >= 0) lg = Language.PORTUGUESE;
     return TimeAgo.getTimeAgo(timeStamp, language: lg);
   }
 
@@ -99,11 +99,11 @@ extension DateTimeExtension on DateTime {
     return this.toIso8601String().substring(0, 10);
   }
 
-  DateTime endOfHour([int hour]) {
+  DateTime endOfHour([int? hour]) {
     return DateTime(this.year, this.month, this.day, hour ?? this.hour, 59, 0);
   }
 
-  DateTime startOfHour([int hour]) {
+  DateTime startOfHour([int? hour]) {
     return DateTime(this.year, this.month, this.day, hour ?? this.hour, 0, 0);
   }
 
@@ -116,12 +116,12 @@ extension DateTimeExtension on DateTime {
   }
 
   ///  Obtem o primeiro dia da semana {first indica o primeiro dia da semana}
-  DateTime startOfWeek({first = 1}) {
+  DateTime startOfWeek({int first = 1}) {
     return this.add(Duration(days: -(this.weekday - first)));
   }
 
   /// Obtem o ultimo dia da semana
-  DateTime endOfWeek({first = 1}) {
+  DateTime endOfWeek({int first = 1}) {
     return this.add(Duration(days: (6 + first) - this.weekday));
   }
 

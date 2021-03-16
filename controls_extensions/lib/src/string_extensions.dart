@@ -1,11 +1,11 @@
 extension StringExtensions on String {
-  double toDouble() => double.tryParse(this);
-  DateTime toDateTime() => DateTime.tryParse(this);
-  int toInt() => int.tryParse(this);
+  double toDouble() => double.tryParse(this) ?? 0.0;
+  DateTime? toDateTime() => DateTime.tryParse(this);
+  int toInt() => int.tryParse(this) ?? 0;
 
   int toIntDef(int def) {
     if (this == '') return def;
-    return int.tryParse(this);
+    return int.tryParse(this) ?? def;
   }
 
   String from(value) => '$value';

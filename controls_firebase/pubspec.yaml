@@ -29,23 +29,23 @@ dependencies:
   flutter:
     sdk: flutter
   controls_data:
-    #git:
-    #  url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../controls_data
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data
 
   controls_firebase_platform_web:
-    #git:
-    #  url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ./controls_firebase_platform_web
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_firebase/controls_firebase_platform_web
   controls_firebase_platform_android:
-    #git:
-    #  url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ./controls_firebase_platform_android
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_firebase/controls_firebase_platform_android
 
   controls_firebase_linux:
-    #git:
-      #url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ./controls_firebase_linux
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_firebase/controls_firebase_linux
 
   #controls_firebase_macos:
   #  git:
@@ -53,9 +53,9 @@ dependencies:
   #    path: controls_firebase/controls_firebase_macos
 
   controls_firebase_windows:
-    #git:
-      #url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ./controls_firebase_windows
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_firebase/controls_firebase_windows
 
   uuid:
 

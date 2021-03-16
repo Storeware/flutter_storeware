@@ -1,11 +1,11 @@
 name: controls_extensions
 description: A new Flutter package project.
-version: 20.01.21
+version: 2021.03.16
 author: amarildo lacerda
 homepage: http://tireideletra.com.br
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:

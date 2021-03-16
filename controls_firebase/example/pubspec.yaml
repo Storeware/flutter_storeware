@@ -25,11 +25,13 @@ dependencies:
     sdk: flutter
 
   controls_firebase:
-    path: ../
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_firebase
   controls_data:
-    #git:
-    #  url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../../controls_data
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data
   firebase:
 
 

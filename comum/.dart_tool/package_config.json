@@ -87,49 +87,49 @@
     },
     {
       "name": "control_data_platform_android",
-      "rootUri": "../../controls_data/control_data_platform_android",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_interface",
-      "rootUri": "../../controls_data/control_data_platform_interface",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_web",
-      "rootUri": "../../controls_data/control_data_platform_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_windows",
-      "rootUri": "../../controls_data/control_data_platform_windows",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_windows",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_dash",
-      "rootUri": "../../controls_dash",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_dash",
       "packageUri": "lib/",
-      "languageVersion": "2.7"
+      "languageVersion": "2.3"
     },
     {
       "name": "controls_data",
-      "rootUri": "../../controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_extensions",
-      "rootUri": "../../controls_extensions",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_extensions",
       "packageUri": "lib/",
-      "languageVersion": "2.7"
+      "languageVersion": "2.12"
     },
     {
       "name": "controls_web",
-      "rootUri": "../../controls_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -572,7 +572,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-16T01:11:57.885998Z",
+  "generated": "2021-03-16T13:33:08.444786Z",
   "generator": "pub",
   "generatorVersion": "2.13.0-116.0.dev"
 }

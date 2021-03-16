@@ -102,79 +102,101 @@ packages:
   control_data_platform_android:
     dependency: transitive
     description:
-      path: "../controls_data/control_data_platform_android"
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_android"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   control_data_platform_interface:
     dependency: transitive
     description:
-      path: "../controls_data/control_data_platform_interface"
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_interface"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   control_data_platform_web:
     dependency: transitive
     description:
-      path: "../controls_data/control_data_platform_web"
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_web"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   control_data_platform_windows:
     dependency: transitive
     description:
-      path: "../controls_data/control_data_platform_windows"
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_windows"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   controls_data:
     dependency: "direct main"
     description:
-      path: "../controls_data"
-      relative: true
-    source: path
+      path: controls_data
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.05"
   controls_extensions:
     dependency: transitive
     description:
-      path: "../controls_extensions"
-      relative: true
-    source: path
-    version: "20.01.21"
+      path: controls_extensions
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
+    version: "2021.03.16"
   controls_firebase_linux:
     dependency: "direct main"
     description:
-      path: controls_firebase_linux
-      relative: true
-    source: path
+      path: "controls_firebase/controls_firebase_linux"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   controls_firebase_platform_android:
     dependency: "direct main"
     description:
-      path: controls_firebase_platform_android
-      relative: true
-    source: path
+      path: "controls_firebase/controls_firebase_platform_android"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   controls_firebase_platform_interface:
     dependency: transitive
     description:
-      path: controls_firebase_platform_interface
-      relative: true
-    source: path
+      path: "controls_firebase/controls_firebase_platform_interface"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   controls_firebase_platform_web:
     dependency: "direct main"
     description:
-      path: controls_firebase_platform_web
-      relative: true
-    source: path
+      path: "controls_firebase/controls_firebase_platform_web"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "0.0.7"
   controls_firebase_windows:
     dependency: "direct main"
     description:
-      path: controls_firebase_windows
-      relative: true
-    source: path
+      path: "controls_firebase/controls_firebase_windows"
+      ref: HEAD
+      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   cookie_jar:
     dependency: transitive
@@ -692,7 +714,7 @@ packages:
       name: universal_platform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.3"
+    version: "1.0.0-nullsafety"
   uuid:
     dependency: "direct main"
     description:

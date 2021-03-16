@@ -46,9 +46,11 @@ packages:
   control_data_platform_interface:
     dependency: "direct main"
     description:
-      path: "../control_data_platform_interface"
-      relative: true
-    source: path
+      path: "controls_data/control_data_platform_interface"
+      ref: HEAD
+      resolved-ref: "81249d279da4c126211388863f2fb27e46f43390"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "2021.03.14"
   csslib:
     dependency: transitive

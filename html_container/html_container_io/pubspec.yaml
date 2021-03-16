@@ -1,6 +1,6 @@
 name: html_container_io
 description: A new Flutter package project.
-version: 0.0.1
+version: 2021.03.16
 author:
 homepage: www
 publish_to: none
@@ -13,9 +13,9 @@ dependencies:
     sdk: flutter
   webview_flutter:
   html_container_interface:
-    #git:
-     # url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../html_container_interface
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: html_container/html_container_interface
 
 dev_dependencies:
   flutter_test:

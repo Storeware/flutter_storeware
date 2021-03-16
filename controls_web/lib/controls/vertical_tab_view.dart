@@ -112,7 +112,7 @@ class _VerticalTabViewState extends State<VerticalTabView> {
 
   selectedItem(int index, TabChoice item) {
     _index.value = index;
-    animateChild(item.child!);
+    animateChild(item.child ?? Container());
   }
 
   goHome() {

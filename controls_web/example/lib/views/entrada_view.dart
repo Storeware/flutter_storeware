@@ -50,6 +50,7 @@ class _EntradaViewState extends State<EntradaView> {
       ),
       TabChoice(
           label: 'Outros',
+          // child: Container(child: Text('pagina outros')),
           builder: () {
             return Text('Outros');
           })

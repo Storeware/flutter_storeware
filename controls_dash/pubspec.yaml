@@ -5,7 +5,8 @@ homepage: http://tireideletra.com.br
 publish_to: none
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.3.0 <2.10.0"
+  # aguardando nullsafety para o charts_flutter.
 
 dependencies:
   flutter:

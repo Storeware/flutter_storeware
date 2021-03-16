@@ -22,18 +22,18 @@ dependencies:
       #path: controls_web
 
   controls_web:
-    #git:
-    #  url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../controls_web
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_web
   controls_data:
-    #git:
-      #url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../controls_data
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data
 
   controls_extensions:
-    #git:
-      #url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../controls_extensions
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_extensions
 
 
 dev_dependencies:

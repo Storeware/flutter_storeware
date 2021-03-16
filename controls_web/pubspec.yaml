@@ -27,9 +27,9 @@ dependencies:
   autocomplete_textfield:
 
   controls_data:
-    #git:
-      #url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../controls_data
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data
   #controls_extensions:
     #git:
      # url: https://github.com/amarildolacerda/flutter_dart.git

@@ -26,18 +26,18 @@ dependencies:
 
   universal_io: #^2.0.0  
   controls_image_web:
-    #git:
-      #url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ./controls_image_web
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_image/controls_image_web
   controls_image_android:
-    #git:
-     # url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ./controls_image_android
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_image/controls_image_android
 
   controls_web:
-    #git:
-     # url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../controls_web  
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_web  
 
 dev_dependencies:
   flutter_test:

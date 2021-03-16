@@ -65,7 +65,7 @@ class VerticalTopTabView extends StatefulWidget {
 
 class _VerticalTopTabViewState extends State<VerticalTopTabView> {
   VerticalTopTabNavigatorController? controller;
-  ValueNotifier<Widget>? _child;
+  ValueNotifier<Widget> _child = ValueNotifier<Widget>(Container());
   int? position;
   @override
   void initState() {
@@ -77,7 +77,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
   }
 
   showPage(Widget page) {
-    _child!.value = page;
+    _child.value = page;
   }
 
   get maxIndex => widget.choices!.length - 1;
@@ -96,16 +96,16 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           children: [
 //        if (widget.left != null) SizedBox(width: widget.left),
             VerticalTopTabNavigator(
-              backgroundColor: widget.backgroundColor!,
-              position: widget.position!,
-              left: widget.left!,
-              right: widget.right!,
-              height: widget.height!,
-              actions: widget.actions!,
-              choices: widget.choices!,
-              controller: controller!,
-              leading: widget.leading!,
-              iconColor: widget.iconColor!,
+              backgroundColor: widget.backgroundColor,
+              position: widget.position,
+              left: widget.left,
+              right: widget.right,
+              height: widget.height,
+              actions: widget.actions,
+              choices: widget.choices,
+              controller: controller,
+              leading: widget.leading,
+              iconColor: widget.iconColor,
               initialIndex: widget.initialIndex,
               indicatorColor: widget.indicatorColor ?? theme.indicatorColor,
               selectedColor: widget.selectedColor,
@@ -120,18 +120,19 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
                 if (tab.onPressed != null)
                   tab.onPressed!();
                 else {
-                  tab.child ??= tab.builder!();
-                  _child!.value = tab.child!;
+                  if (tab.child == null && tab.builder != null)
+                    tab.child = tab.builder!();
+                  _child.value = tab.child ?? Container();
                 }
               },
             ),
             Expanded(
               child: ValueListenableBuilder<Widget>(
-                valueListenable: _child!,
-                builder: (a, widget, Widget? c) => AnimatedSwitcher(
+                valueListenable: _child,
+                builder: (a, wg, Widget? c) => AnimatedSwitcher(
                     duration: Duration(milliseconds: 500),
                     child: SwipeDetector(
-                      child: _child!.value,
+                      child: wg,
                       onSwipeRight: () {
                         print(['right', position, maxIndex]);
                         if (position! > 0) controller!.animateTo(position! - 1);

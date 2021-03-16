@@ -126,15 +126,15 @@ class _VerticalTabViewState extends State<VerticalTabView> {
         leading: widget.leading,
         elevation: widget.elevation,
         title: TopAppBar(
-          controller: _controller!,
-          title: widget.title!,
-          elevation: widget.elevation!,
-          actions: widget.actions!,
-          height: widget.height!,
-          indicatorColor: widget.indicatorColor!,
-          choices: widget.choices!,
+          controller: _controller,
+          title: widget.title,
+          elevation: widget.elevation,
+          actions: widget.actions,
+          height: widget.height,
+          indicatorColor: widget.indicatorColor,
+          choices: widget.choices,
           selected: _index.value,
-          titleColor: widget.titleColor!,
+          titleColor: widget.titleColor,
         ));
     return Scaffold(
       drawer: widget.drawer,

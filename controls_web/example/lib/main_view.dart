@@ -2,7 +2,7 @@ import 'package:controls_web/controls/notice_activities.dart';
 import 'package:controls_web/controls/responsive.dart';
 import 'package:controls_web/controls/rounded_button.dart';
 import 'package:flutter/material.dart';
-import 'models/constantes.dart';
+//import 'models/constantes.dart';
 import 'package:controls_web/services/routes.dart';
 
 class MainView extends StatefulWidget {
@@ -27,7 +27,7 @@ class _MainViewState extends State<MainView> {
           ),
           Container(
               child: Center(
-            child: Image.asset('images/entrar.png'),
+            child: Image.asset('assets/images/entrar.png'),
           )),
           SizedBox(
             height: 40,

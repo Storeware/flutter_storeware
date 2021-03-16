@@ -177,9 +177,9 @@
     },
     {
       "name": "flutter_slidable",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/flutter_slidable-0.5.7",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/flutter_slidable-0.6.0-nullsafety.0",
       "packageUri": "lib/",
-      "languageVersion": "1.19"
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_test",
@@ -195,9 +195,9 @@
     },
     {
       "name": "font_awesome_flutter",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/font_awesome_flutter-8.10.0",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/font_awesome_flutter-9.0.0-nullsafety",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.12"
     },
     {
       "name": "html",
@@ -459,15 +459,15 @@
     },
     {
       "name": "universal_html",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_html-1.2.3",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_html-1.2.4",
       "packageUri": "lib/",
-      "languageVersion": "2.6"
+      "languageVersion": "2.8"
     },
     {
       "name": "universal_io",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_io-1.0.1",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_io-2.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.7"
+      "languageVersion": "2.12"
     },
     {
       "name": "universal_platform",
@@ -554,7 +554,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-16T13:35:24.803586Z",
+  "generated": "2021-03-16T19:22:07.315264Z",
   "generator": "pub",
   "generatorVersion": "2.13.0-116.0.dev"
 }

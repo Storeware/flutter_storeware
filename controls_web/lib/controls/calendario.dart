@@ -35,13 +35,13 @@ class _CalendarioState extends State<Calendario> {
   DateTime? selectedDate;
   @override
   void initState() {
-    selectedDate = widget.initialDate.toDate();
+    selectedDate = widget.initialDate!.toDate();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    DateTime inicio = widget.firstDate.startOfWeek();
+    DateTime inicio = widget.firstDate!.startOfWeek();
     Size size = MediaQuery.of(context).size;
     double w = size.width * 0.9;
     if (w > widget.width!) w = widget.width!;
@@ -95,7 +95,7 @@ class _CalendarioState extends State<Calendario> {
   int index = 0;
 
   createDay(DateTime d) {
-    int c = d.compareTo(widget.initialDate.toDate());
+    int c = d.compareTo(widget.initialDate!.toDate());
 
     return Padding(
       padding: const EdgeInsets.all(3.0),

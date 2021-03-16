@@ -2,7 +2,7 @@ import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_firebase/firebase_driver.dart';
 import 'package:flutter/material.dart';
-import 'dart:html' hide Text;
+import 'package:universal_html/html.dart' hide Text;
 
 class FirestorageDownloadImage extends StatefulWidget {
   final String? img;
@@ -251,7 +251,7 @@ class ImageToUpload {
     element.name = "upload_image";
     element.onChange.listen((e) {
       final files = element.files;
-      if (files!.length == 1) {
+      if (files.length == 1) {
         final File file = files[0];
         callback(file);
       }

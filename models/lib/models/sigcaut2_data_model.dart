@@ -50,7 +50,7 @@ class Sigcaut2DataItem extends DataItem {
     data['valor'] = this.valor;
     data['descontos'] = this.descontos;
     data['acrescimos'] = this.acrescimos;
-    data['id'] = '$filial-$codigo-${this.data.format('yyyyMMdd')}';
+    data['id'] = '$filial-$codigo-${this.data?.format('yyyyMMdd') ?? '2021'}';
     return data;
   }
 }

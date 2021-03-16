@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   control_data_platform_interface:
-    #git:
-    #  url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../control_data_platform_interface
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_data/control_data_platform_interface
   shared_preferences:
   #universal_io:
   #universal_platform:  
@@ -25,6 +25,7 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
 
 # The following section is specific to Flutter.
 flutter:

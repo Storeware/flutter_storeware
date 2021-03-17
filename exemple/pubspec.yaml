@@ -31,6 +31,9 @@ dependencies:
   controls:
       path: ../
 
+dependency_overrides:
+  dio: ^4.0.0-prev1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

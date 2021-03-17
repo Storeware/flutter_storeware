@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker: ^0.7.2
-  universal_io: ^2.0.0
+  universal_io: ^2.0.1
   controls_image_interface: 
     #git:
       #url: https://github.com/amarildolacerda/flutter_dart.git

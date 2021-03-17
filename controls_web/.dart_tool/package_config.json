@@ -123,9 +123,9 @@
     },
     {
       "name": "csslib",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/csslib-0.16.1",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/csslib-0.17.0",
       "packageUri": "lib/",
-      "languageVersion": "2.1"
+      "languageVersion": "2.12"
     },
     {
       "name": "date_format",
@@ -201,9 +201,9 @@
     },
     {
       "name": "html",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/html-0.14.0+3",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/html-0.15.0",
       "packageUri": "lib/",
-      "languageVersion": "2.3"
+      "languageVersion": "2.12"
     },
     {
       "name": "http",
@@ -459,9 +459,9 @@
     },
     {
       "name": "universal_html",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_html-1.2.4",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/universal_html-2.0.4",
       "packageUri": "lib/",
-      "languageVersion": "2.8"
+      "languageVersion": "2.12"
     },
     {
       "name": "universal_io",
@@ -542,19 +542,13 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "zone_local",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/zone_local-0.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "2.6"
-    },
-    {
       "name": "controls_web",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-16T19:22:07.315264Z",
+  "generated": "2021-03-17T14:52:10.372390Z",
   "generator": "pub",
   "generatorVersion": "2.13.0-116.0.dev"
 }

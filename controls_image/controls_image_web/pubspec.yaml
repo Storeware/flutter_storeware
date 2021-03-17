@@ -12,8 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   image_picker_web:
-  universal_html: ^1.2.4
-  universal_io: ^2.0.0
+  universal_html: ^2.0.4
+  universal_io: ^2.0.1
 
   controls_image_interface:
     #git:

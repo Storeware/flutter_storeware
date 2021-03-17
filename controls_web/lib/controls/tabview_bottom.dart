@@ -25,7 +25,7 @@ class TabViewBottom extends StatefulWidget {
   final bool? keepPage;
   const TabViewBottom({
     Key? key,
-    this.choices,
+    @required this.choices,
     this.style,
     this.activeIndex = 0,
     this.tabColor = Colors.transparent,
@@ -41,7 +41,8 @@ class TabViewBottom extends StatefulWidget {
     this.appBar,
     this.onChanged,
     this.leading,
-  }) : super(key: key);
+  })  : assert(choices != null, 'missing choices'),
+        super(key: key);
 
   @override
   _TabViewBottomState createState() => _TabViewBottomState();
@@ -155,7 +156,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
         controller: _pageController,
         onPageChanged: (idx) => index!.value = idx,
         itemBuilder: (ctx, idx) => getChild(idx),
-        itemCount: widget.choices!.length,
+        itemCount: (widget.choices != null) ? widget.choices!.length : 0,
       )),
       ValueListenableBuilder<bool>(
         valueListenable: _isVisible!,

@@ -38,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
       TabChoice(
         label: 'Opções',
         child: Container(
-          child: Text('yyyy'),
+          child: TabViewBottom(),
         ),
       ),
     ]);
@@ -73,10 +73,10 @@ class HomeView extends StatelessWidget {
           )),
         ),
         TabChoice(
-          title: Text('Opções2'),
-          child: Container(),
-          image: Icon(Icons.ac_unit_outlined),
-        ),
+            title: Text('Opções2'),
+            child: Container(),
+            image: Icon(Icons.ac_unit_outlined),
+            onPressed: () => Dialogs.info(context, content: Text('OK'))),
         TabChoice(
           title: Text('Opções3'),
           child: Container(),

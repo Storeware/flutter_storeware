@@ -276,14 +276,14 @@ class RestClient {
     DataProcessingNotifier.start();
     try {
       if (method == 'GET') {
-        dio.interceptors.add(
+        /* dio.interceptors.add(
           RetryOnConnectionChangeInterceptor(
             requestRetrier: DioConnectivityRequestRetrier(
               dio: dio,
               connectivity: Connectivity(),
             ),
           ),
-        );
+        );*/
         resp = await dio.get(uri);
       } else if (method == 'POST') {
         resp = await dio.post(uri, data: body); //, headers: headers);
@@ -392,14 +392,14 @@ class RestClient {
     Future<Response> ref;
     try {
       if (method == 'GET') {
-        dio.interceptors.add(
+        /*dio.interceptors.add(
           RetryOnConnectionChangeInterceptor(
             requestRetrier: DioConnectivityRequestRetrier(
               dio: dio,
               connectivity: Connectivity(),
             ),
           ),
-        );
+        );*/
         ref = dio.get(uri);
       } else if (method == 'POST') {
         ref = dio.post(uri, data: body); //, headers: headers);
@@ -543,18 +543,9 @@ class RestClient {
   }
 }
 
-/*
-class ClientTransformer extends DefaultTransformer {
-  @override
-  Future transformResponse(
-      RequestOptions options, ResponseBody response) async {
-    //options.extra["self"] = 'XX';
-    print([response.headers.values.join(','), response.extra.values.join(';')]);
-    return super.transformResponse(options, response);
-  }
-}
-*/
 
+/*
+  TODO: revisar
 class DioConnectivityRequestRetrier {
   final Dio? dio;
   final Connectivity? connectivity;
@@ -602,7 +593,10 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
   });
 
   @override
-  Future onError(DioError err) async {
+  Future onError(
+    DioError err,
+    ErrorInterceptorHandler handler,
+  ) async {
     if (_shouldRetry(err)) {
       try {
         return requestRetrier?.scheduleRequestRetry(err.request!);
@@ -653,3 +647,4 @@ class RestConnectionChanged {
     close();
   }
 }
+*/

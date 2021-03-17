@@ -43,7 +43,7 @@ class TabChoice<T> {
       this.enabled = true,
       this.visible = true})
       : assert(items != null ||
-            (label ?? '') == '-' ||
+            (label != null) ||
             (builder != null || child != null || onPressed != null));
 }
 

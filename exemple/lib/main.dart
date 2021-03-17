@@ -38,7 +38,14 @@ class _MyHomePageState extends State<MyHomePage> {
       TabChoice(
         label: 'Opções',
         child: Container(
-          child: TabViewBottom(),
+          child: TabViewBottom(choices: [
+            TabChoice(
+              label: 'OK',
+            ),
+            TabChoice(
+              label: 'Yes',
+            ),
+          ]),
         ),
       ),
     ]);

@@ -91,10 +91,15 @@ class _VerticalTabViewState extends State<VerticalTabView> {
   @override
   void initState() {
     _index.value = widget.initialIndex!;
+    if (_index.value >= widget.choices!.length)
+      _index.value = widget.choices!.length - 1;
     _controller = widget.controller ?? VerticalTabViewController();
     _controller!.tabView = this;
 
-    _child = widget.home ?? widget.choices![_index.value].child;
+    _child = widget.home ??
+        ((widget.choices!.length > 0)
+            ? widget.choices![_index.value].child
+            : Container());
     super.initState();
   }
 

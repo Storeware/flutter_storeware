@@ -46,7 +46,7 @@ class HorizontalTabView extends StatefulWidget {
   final int? activeIndex;
   HorizontalTabView({
     Key? key,
-    this.choices,
+    @required this.choices,
     this.appBar,
     this.sidebarAppBar,
     this.sidebarDrawer,
@@ -81,7 +81,8 @@ class HorizontalTabView extends StatefulWidget {
     this.sidebarRight,
     this.onChanged,
     this.activeIndex,
-  }) : super(key: key);
+  })  : assert(choices != null, 'Nao passou "choices"'),
+        super(key: key);
 
   @override
   _HorizontalTabViewState createState() => _HorizontalTabViewState();
@@ -97,12 +98,13 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
     jumpTo(index);
   }
 
-  jumpTo(index) {
-    scrollController!.animateTo(
-      index * widget.tabHeight,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.linear,
-    );
+  jumpTo(int? index) {
+    if (index != null)
+      scrollController!.animateTo(
+        (index) * widget.tabHeight!,
+        duration: Duration(milliseconds: 500),
+        curve: Curves.linear,
+      );
   }
 
   Color? _iconColor;
@@ -125,7 +127,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
     _iconColor =
         widget.iconColor ?? theme!.tabBarTheme.labelColor ?? theme!.buttonColor;
 
-    return ValueListenableBuilder(
+    return ValueListenableBuilder<int>(
         valueListenable: _index,
         builder: (a, b, c) {
           return Theme(
@@ -357,7 +359,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
 
   mobileBuild(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    ThemeData theme = Theme.of(context);
+    ThemeData? theme = Theme.of(context);
     int cols = widget.mobileCrossCount ?? size.width ~/ 150;
     if (size.width < (widget.mobileCrossCount ?? 2))
       cols = widget.mobileCrossCount ?? 2;
@@ -399,7 +401,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                     ),
                                 tab.title ??
                                     Text(
-                                      tab.label!,
+                                      tab.label ?? '',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontSize: 18,

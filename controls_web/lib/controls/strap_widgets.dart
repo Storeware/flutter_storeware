@@ -208,7 +208,7 @@ class _StrapButtonState extends State<StrapButton> {
                               if (widget.onPressedAsync != null)
                                 stateChanged(await widget.onPressedAsync!());
                             } else {
-                              widget.onPressed!();
+                              if (widget.onPressed != null) widget.onPressed!();
                             }
                           }
                         : null,

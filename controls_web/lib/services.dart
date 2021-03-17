@@ -1,17 +1,14 @@
-
 library services;
-import 'dart:html';
-import './models/config_model.dart';
-export 'services/routes.dart';
-export 'services/assets_files.dart';
-export 'services/translate.dart';
-export 'system.utils.dart';
 
+//import './models/config_model.dart';
 
-checkRedirect([b=false]){
+export './services/index.dart';
+
+/*checkRedirect([b=false]){
       if (b || configModel==null)
         {
          print('Não incializou configurações iniciais'); 
          window.location.href = "index.html";
         }
 }
+*/

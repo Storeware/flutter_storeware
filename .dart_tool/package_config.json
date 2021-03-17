@@ -75,51 +75,45 @@
     },
     {
       "name": "control_data_platform_android",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/controls_data/control_data_platform_android",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/controls_data/control_data_platform_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/controls_data/control_data_platform_interface",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/controls_data/control_data_platform_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/controls_data/control_data_platform_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/controls_data/control_data_platform_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_windows",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/controls_data/control_data_platform_windows",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/controls_data/control_data_platform_windows",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_data",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_extensions",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/controls_extensions",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/controls_extensions",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/controls_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/controls_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
-    },
-    {
-      "name": "cookie_jar",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/cookie_jar-1.0.1",
-      "packageUri": "lib/",
-      "languageVersion": "1.20"
     },
     {
       "name": "crypto",
@@ -153,9 +147,9 @@
     },
     {
       "name": "dio",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/dio-2.2.2",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/dio-4.0.0-prev1",
       "packageUri": "lib/",
-      "languageVersion": "1.9"
+      "languageVersion": "2.12"
     },
     {
       "name": "fake_async",
@@ -267,7 +261,7 @@
     },
     {
       "name": "models",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-89c28761772a923a887e5d8a772fc35aa29013ba/models",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-e8f94617e600ee653671757d816b8f465dfd381b/models",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -566,7 +560,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-17T15:55:19.359815Z",
+  "generated": "2021-03-17T16:01:16.030957Z",
   "generator": "pub",
   "generatorVersion": "2.13.0-116.0.dev"
 }

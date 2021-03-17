@@ -90,25 +90,25 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.03.17"
   control_data_platform_interface:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.03.17"
   control_data_platform_web:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.14"
@@ -117,25 +117,25 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.03.17"
   controls_data:
     dependency: "direct main"
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "2021.03.05"
+    version: "2021.03.17"
   controls_extensions:
     dependency: "direct main"
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.16"
@@ -144,17 +144,10 @@ packages:
     description:
       path: controls_web
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
-    version: "2021.03.05"
-  cookie_jar:
-    dependency: transitive
-    description:
-      name: cookie_jar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
+    version: "2021.03.17"
   crypto:
     dependency: transitive
     description:
@@ -196,7 +189,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.2"
+    version: "4.0.0-prev1"
   fake_async:
     dependency: transitive
     description:
@@ -322,7 +315,7 @@ packages:
     description:
       path: models
       ref: HEAD
-      resolved-ref: "89c28761772a923a887e5d8a772fc35aa29013ba"
+      resolved-ref: e8f94617e600ee653671757d816b8f465dfd381b
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.18"

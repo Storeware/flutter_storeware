@@ -54,7 +54,7 @@ class Sigcaut1HoraItem extends DataItem {
     data['filial'] = this.filial;
     data['total'] = this.total;
     data['itens'] = this.itens; // é virtual;
-    data['id'] = '$filial-${this.data.format('yyyyMMdd')}$hora';
+    data['id'] = '$filial-${this.data?.format('yyyyMMdd') ?? ''}$hora';
     return data;
   }
 }
@@ -95,7 +95,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
   }
 
   rankDoDia({DateTime? data, top = 10, skip = 0}) {
-    DateTime? dt = data;
+    DateTime dt = data ?? DateTime.now();
     String ini = toDateSql(dt.startOfMonth());
     String hoje = toDateSql(dt.toDate());
     String ontem = toDateSql(dt.toDate().add(Duration(days: -1)));

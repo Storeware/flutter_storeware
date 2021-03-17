@@ -1,6 +1,6 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
-import 'package:controls_extensions/extensions.dart';
+//import 'package:controls_extensions/extensions.dart';
 
 class EstadosItem extends DataItem {
   double? aliqicms;
@@ -31,16 +31,16 @@ class EstadosItem extends DataItem {
   }
   @override
   fromMap(Map<String, dynamic> json) {
-    aliqicms.from(json['aliqicms']);
-    nome.from(json['nome']);
-    sigla.from(json['sigla']);
-    redbaseicms.from(json['redbaseicms']);
-    aliqicmsinterna.from(json['aliqicmsinterna']);
-    regiao.from(json['regiao']);
-    codigoibgeUf.from(json['codigoibge_uf']);
-    partilhaPfcpufdest.from(json['partilha_pfcpufdest']);
-    partilhaPicmsufdest.from(json['partilha_picmsufdest']);
-    partilhaPicmsinterpart.from(json['partilha_picmsinterpart']);
+    aliqicms = toDouble(json['aliqicms']);
+    nome = json['nome'];
+    sigla = json['sigla'];
+    redbaseicms = toDouble(json['redbaseicms']);
+    aliqicmsinterna = toDouble(json['aliqicmsinterna']);
+    regiao = (json['regiao']);
+    codigoibgeUf = (json['codigoibge_uf']);
+    partilhaPfcpufdest = toDouble(json['partilha_pfcpufdest']);
+    partilhaPicmsufdest = toDouble(json['partilha_picmsufdest']);
+    partilhaPicmsinterpart = toDouble(json['partilha_picmsinterpart']);
     return this;
   }
 

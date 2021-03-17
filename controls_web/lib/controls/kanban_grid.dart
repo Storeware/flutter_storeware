@@ -541,7 +541,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
                                 onTap: () => it.onPressed!(item),
                                 color: it.color,
                                 foregroundColor: it.foregroundColor,
-                                closeOnTap: it.closeOnTap,
+                                closeOnTap: it.closeOnTap ?? false,
                               )
                         ],
                   key: ObjectKey(item),

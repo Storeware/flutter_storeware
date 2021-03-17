@@ -16,10 +16,10 @@ class ShareSocial {
   }
 
   static Future<void> shareFile(
-      String name, String text, Uint8List bytes) async {
+      String name, String text, Uint8List? bytes) async {
     if (bytes == null) return shareMessage(name, text);
 
-    final documentDirectory = (await getExternalStorageDirectory()).path;
+    final documentDirectory = (await getExternalStorageDirectory())?.path;
     File imgFile = new File('$documentDirectory/$name.png');
     imgFile.writeAsBytesSync(bytes);
 

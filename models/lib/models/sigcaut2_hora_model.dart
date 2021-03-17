@@ -54,7 +54,7 @@ class Sigcaut2HoraItem extends DataItem {
     data['filial'] = this.filial;
     data['total'] = this.total;
     data['itens'] = this.itens; // é virtual;
-    data['id'] = '$filial-$codigo-${this.data.format('yyyMMdd')}$hora';
+    data['id'] = '$filial-$codigo-${this.data?.format('yyyMMdd') ?? ''}$hora';
     return data;
   }
 }

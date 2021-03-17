@@ -124,9 +124,11 @@ packages:
   controls:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: "8ba160b117d9b514e2fe3b9930d5047d5b95026a"
+      url: "https://github.com/amarildolacerda/flutter_dart.git"
+    source: git
     version: "1.0.0+1"
   controls_data:
     dependency: transitive

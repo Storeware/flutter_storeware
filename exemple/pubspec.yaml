@@ -29,10 +29,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   controls:
-      path: ../
+   git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      
 
 dependency_overrides:
   dio: ^4.0.0-prev1
+
 
 dev_dependencies:
   flutter_test:

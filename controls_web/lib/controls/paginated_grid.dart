@@ -77,12 +77,12 @@ class PaginatedGridColumn {
   String? defaultValue;
   TextStyle? style;
   Alignment? align;
-  bool? sort;
-  bool? required;
-  bool? readOnly;
-  bool? isPrimaryKey;
+  bool sort;
+  bool required;
+  bool readOnly;
+  bool isPrimaryKey;
   DataColumnSortCallback? onSort;
-  bool? visible;
+  bool visible;
   double? width;
   double? editWidth;
   double? editHeight;
@@ -97,12 +97,12 @@ class PaginatedGridColumn {
       Map<String, dynamic>)? editBuilder;
 
   Function(PaginatedGridController)? onEditIconPressed;
-  bool? autofocus;
+  bool autofocus;
   int? maxLines;
   int? maxLength;
   int? minLength;
-  bool? placeHolder;
-  bool? folded;
+  bool placeHolder;
+  bool folded;
   Color? color;
   int? order;
   PaginatedGridColumn({
@@ -138,10 +138,10 @@ class PaginatedGridColumn {
     this.onGetValue,
     this.onSetValue,
     this.onValidate,
-    this.folded,
+    this.folded = false,
   });
-  bool? numeric;
-  bool? isVirtual;
+  bool numeric;
+  bool isVirtual;
   int? index;
 }
 
@@ -169,7 +169,7 @@ class PaginatedGrid extends StatefulWidget {
   final int? currentPage;
   final double? elevation;
   final double? dividerThickness;
-  final bool? canSort;
+  final bool canSort;
 
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
@@ -200,12 +200,12 @@ class PaginatedGrid extends StatefulWidget {
       PaginatedGridController, dynamic, PaginatedGridChangeEvent)? onPostEvent;
 
   /// indica se é para apresentar um barra de filtro dos dados de memoria
-  final bool? canFilter;
+  final bool canFilter;
 
   /// [canEdit] flag indicando que o registro pode ser alterado
-  final bool? canEdit;
-  final bool? canDelete;
-  final bool? canInsert;
+  final bool canEdit;
+  final bool canDelete;
+  final bool canInsert;
 
   final double? columnSpacing;
   final CrossAxisAlignment? crossAxisAlignment;
@@ -294,9 +294,9 @@ class PaginatedGrid extends StatefulWidget {
     this.beforeShow,
     this.canDelete = false,
     this.canInsert = false,
-  })  : assert((!(canInsert! || canDelete! || canEdit!) &&
-                (onPostEvent == null)) ||
-            ((canInsert || canDelete! || canEdit!) && (onPostEvent != null))),
+  }) : /*assert(
+            (!(canInsert || canDelete || canEdit) && (onPostEvent == null)) ||
+                ((canInsert || canDelete || canEdit) && (onPostEvent != null))),*/
         super(key: key);
 
   @override
@@ -414,7 +414,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
       _sortColumnIndex = columnIndex;
       _sortAscending = ascending;
       controller!.source!.sort((a, b) {
-        if (controller!.columns![idxColumn].numeric! ||
+        if (controller!.columns![idxColumn].numeric ||
             a is double ||
             a is int) {
           return a[controller!.columns![idxColumn].name]
@@ -514,7 +514,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                 //
                                 children: [
                                   widget.header ?? Container(),
-                                  if (widget.canFilter!)
+                                  if (widget.canFilter)
                                     Container(
                                       height: 60,
                                       width: 200,
@@ -562,22 +562,21 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                               for (var i = 0;
                                   i < controller!.columns!.length;
                                   i++)
-                                if (controller!.columns![i].visible!)
+                                if (controller!.columns![i].visible)
                                   DataColumn(
                                     onSort: (columnIndex, bool ascending) {
-                                      if (widget.canSort! &&
-                                          (controller!.columns![i].sort!)) if (controller!
+                                      if (widget.canSort &&
+                                          (controller!.columns![i].sort)) if (controller!
                                               .columns![i].onSort !=
                                           null) {
                                         _sort(columnIndex, i, ascending);
                                       }
                                     },
-                                    numeric: controller!.columns![i].numeric!,
+                                    numeric: controller!.columns![i].numeric,
                                     tooltip: controller!.columns![i].tooltip,
                                     label: Align(
                                       alignment:
-                                          (controller!.columns![i].numeric ??
-                                                  false)
+                                          (controller!.columns![i].numeric)
                                               ? Alignment.centerRight
                                               : controller!.columns![i].align ??
                                                   Alignment.centerLeft,
@@ -680,7 +679,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   }
 
   buildAddButton() {
-    if (widget.canInsert! &&
+    if (widget.canInsert &&
         ((widget.onInsertItem != null) || (widget.onPostEvent != null))) {
       return FloatingActionButton(
         //    child: IconButton(
@@ -774,7 +773,7 @@ class PaginatedGridController {
       inScaffold: inScaffold,
       event: event,
       actions: [
-        if (widget!.canDelete!)
+        if (widget!.canDelete)
           Tooltip(
               message: 'Excluir o item',
               child: IconButton(
@@ -944,7 +943,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
             setData(index, 0);
             controller.widget!.onSelectChanged!(b ?? false, controller);
             return;
-          } else if (controller.widget!.canEdit!) {
+          } else if (controller.widget!.canEdit) {
             setData(index, 0);
             return (controller.widget!.onEditItem != null)
                 ? controller.widget!.onEditItem!(controller)
@@ -957,12 +956,12 @@ class PaginatedGridDataTableSource extends DataTableSource {
         }),
         cells: [
           for (PaginatedGridColumn col in controller.columns!)
-            if (col.visible!)
-              (col.isVirtual!)
+            if (col.visible)
+              (col.isVirtual)
                   ? DataCell(Row(children: [
                       if (col.builder != null) col.builder!(index, row),
                       if (col.builder == null)
-                        if (controller.widget!.canEdit!)
+                        if (controller.widget!.canEdit)
                           if (controller.widget!.onEditItem != null)
                             Tooltip(
                                 message: 'Alterar o item',
@@ -975,7 +974,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                   },
                                 )),
                       if (col.builder == null)
-                        if (controller.widget!.canDelete!)
+                        if (controller.widget!.canDelete)
                           if (controller.widget!.onDeleteItem != null)
                             Tooltip(
                                 message: 'Excluir o item',
@@ -1005,7 +1004,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                               color: col.color ?? rowColor,
                               child: Align(
                                 alignment: col.align ??
-                                    ((col.numeric!)
+                                    ((col.numeric)
                                         ? Alignment.centerRight
                                         : Alignment.centerLeft),
                                 child: (col.builder != null)
@@ -1025,7 +1024,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
                             }
                           : null,
                       showEditIcon: (col.onEditIconPressed != null),
-                      placeholder: col.placeHolder!,
+                      placeholder: col.placeHolder,
                     ),
         ]);
 
@@ -1116,8 +1115,8 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
 
   final _formKey = GlobalKey<FormState>();
   bool canEdit(PaginatedGridColumn col) {
-    if (col.readOnly!) return false;
-    if (col.isPrimaryKey!) {
+    if (col.readOnly) return false;
+    if (col.isPrimaryKey) {
       if (_event == PaginatedGridChangeEvent.update) return false;
     }
     return true;
@@ -1127,8 +1126,8 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   int _first = 0;
   bool canFocus(PaginatedGridColumn col) {
     if (_focused) return false;
-    if (col.readOnly!) return false;
-    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey!)
+    if (col.readOnly) return false;
+    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey)
       return false;
 
     if (widget.event == PaginatedGridChangeEvent.insert) {
@@ -1163,9 +1162,9 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               title: widget.title!,
               index: widget.index!,
               controller: widget.controller,
-              canDelete: widget.controller!.widget!.canDelete!,
-              canEdit: widget.controller!.widget!.canEdit! ||
-                  widget.controller!.widget!.canInsert!,
+              canDelete: widget.controller!.widget!.canDelete,
+              canEdit: widget.controller!.widget!.canEdit ||
+                  widget.controller!.widget!.canInsert,
               onReset: (ctx) => _formKey.currentState!.reset(),
               onSaved: (ctx) => _save(ctx),
               body: SingleChildScrollView(child: buildPage(context)),
@@ -1189,7 +1188,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               for (var item in widget.controller!.columns!)
-                if (!item.isVirtual!)
+                if (!item.isVirtual)
                   (item.editBuilder != null)
                       ? item.editBuilder!(
                           widget.controller!, item, p![item.name], p!)
@@ -1250,7 +1249,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               else
                 focusNode.nextFocus();
             },
-            autofocus: item.autofocus! && canFocus(item),
+            autofocus: item.autofocus && canFocus(item),
             maxLines: item.maxLines,
             maxLength: item.maxLength,
             enabled: canEdit(item),
@@ -1261,7 +1260,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             ),
             validator: (value) {
               if (item.onValidate != null) return item.onValidate!(value);
-              if (item.required!) if (value!.isEmpty) {
+              if (item.required) if (value!.isEmpty) {
                 return (item.editInfo!
                     .replaceAll('{label}', item.label ?? item.name!));
               }

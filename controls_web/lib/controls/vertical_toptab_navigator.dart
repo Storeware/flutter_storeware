@@ -265,7 +265,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                 width: widget.choices![index].width,
                 color: (active!.value == index) ? _selectedColor : _tabColor,
                 child: InkWell(
-                  child: (!widget.choices![index].visible!)
+                  child: (!widget.choices![index].visible)
                       ? Container()
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -363,7 +363,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                                 width: widget.spacing,
                               ),
                             ]),
-                  onTap: (!widget.choices![index].enabled!)
+                  onTap: (!widget.choices![index].enabled)
                       ? null
                       : () {
                           var choice = widget.choices![index];
@@ -371,7 +371,9 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                             active!.value = index;
                             //bShowDrownMenu.value = true;
                           } else {
-                            widget.onSelectItem!(index, widget.choices![index]);
+                            if (widget.onSelectItem != null)
+                              widget.onSelectItem!(
+                                  index, widget.choices![index]);
                             active!.value = index;
                           }
                         },
@@ -397,7 +399,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
             Text(widget.choices![index].label!,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: (!widget.choices![index].enabled!)
+                style: (!widget.choices![index].enabled)
                     ? TextStyle(color: theme.dividerColor)
                     : widget.choices![index].style ??
                         widget.style ??
@@ -432,7 +434,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       ],
       onChanged: (index) {
         active!.value = mainIndex;
-        if ((items[index!].enabled!)) if ((items[index].label ?? '') != '-')
+        if ((items[index!].enabled)) if ((items[index].label ?? '') != '-')
           widget.onSelectItem!(index, items[index]);
       },
     ));

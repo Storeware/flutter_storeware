@@ -103,7 +103,7 @@ class DataViewerController {
     this.onValidate,
     this.beforeChange,
     Function(DataViewerController)? futureExtended,
-    this.top,
+    this.top = 10,
     @required this.keyName,
     this.onClearCache,
     this.onInsert,
@@ -146,8 +146,8 @@ class DataViewerController {
 
   /// Lista de dados
   //List<dynamic> source;
-  set source(List<dynamic> data) => paginatedController.source;
-  List<dynamic> get source => paginatedController.source!;
+  set source(List<dynamic>? data) => paginatedController.source;
+  List<dynamic>? get source => paginatedController.source;
 
   /// Observer que notifica mudança dos dados
   BlocModel<int> subscribeChanges = BlocModel<int>();
@@ -292,6 +292,7 @@ class DataViewerController {
 
 /// [DataViewerColumn] cria as propriedade da coluna no grid
 class DataViewerColumn extends PaginatedGridColumn {
+  late final String? name;
   DataViewerColumn({
     /// evento editPressed
     Function(PaginatedGridController)? onEditIconPressed,
@@ -299,24 +300,24 @@ class DataViewerColumn extends PaginatedGridColumn {
     bool numeric = false,
     bool autofocus = false,
     bool visible = true,
-    int? maxLines,
+    int? maxLines = 1,
     Color? color,
     int? maxLength,
     int? minLength,
     double? width,
     String? tooltip,
-    Alignment? align,
+    Alignment? align = Alignment.centerLeft,
     TextStyle? style,
-    int? order,
+    int? order = 0,
 
     /// nome da coluna utilizado para localizar na lista de dados
-    String? name,
+    @required this.name,
     bool required = false,
     bool readOnly = false,
 
     /// [isPrimaryKey] indica se pode ou nao ser editada. True, indica que a coluna nao pode ser editada.
     bool isPrimaryKey = false,
-    onSort,
+    dynamic? onSort,
     bool placeHolder = false,
 
     /// [label] indica o texto a ser mostrado no titulo da coluna
@@ -336,44 +337,44 @@ class DataViewerColumn extends PaginatedGridColumn {
 
     /// obter um valor legivel para o dado
     String Function(dynamic)? onGetValue,
-    final dynamic Function(dynamic)? onSetValue,
+    dynamic Function(dynamic)? onSetValue,
 
     /// valida o dado para a coluna antes de submeter a persistencia
-    final String Function(dynamic)? onValidate,
-    folded,
+    String Function(dynamic)? onValidate,
+    bool folded = false,
   }) : super(
-          defaultValue: defaultValue!,
-          onEditIconPressed: onEditIconPressed!,
+          defaultValue: defaultValue,
+          onEditIconPressed: onEditIconPressed,
           numeric: numeric,
           autofocus: autofocus,
           visible: visible,
-          maxLines: maxLines!,
-          color: color!,
-          maxLength: maxLength!,
-          minLength: minLength!,
-          width: width!,
-          editWidth: editWidth!,
-          editHeight: editHeight!,
-          tooltip: tooltip!,
-          align: align!,
-          style: style!,
-          name: name!,
-          order: order!,
-          onFocusChanged: onFocusChanged!,
+          maxLines: maxLines,
+          color: color,
+          maxLength: maxLength,
+          minLength: minLength,
+          width: width,
+          editWidth: editWidth,
+          editHeight: editHeight,
+          tooltip: tooltip,
+          align: align,
+          style: style,
+          name: name,
+          order: order,
+          onFocusChanged: onFocusChanged,
           required: required,
           readOnly: readOnly,
           isPrimaryKey: isPrimaryKey,
           onSort: onSort,
           placeHolder: placeHolder,
-          label: label!,
+          label: label,
           editInfo: editInfo,
           sort: sort,
-          builder: builder!,
-          editBuilder: editBuilder!,
+          builder: builder,
+          editBuilder: editBuilder,
           isVirtual: isVirtual,
-          onGetValue: onGetValue!,
-          onSetValue: onSetValue!,
-          onValidate: onValidate!,
+          onGetValue: onGetValue,
+          onSetValue: onSetValue,
+          onValidate: onValidate,
           folded: folded,
         );
 }
@@ -391,22 +392,22 @@ class DataViewer extends StatefulWidget {
   final double? width;
   final double? elevation;
   final double? dividerThickness;
-  final bool? canSort;
+  final bool canSort;
   final TextStyle? columnStyle;
   final String? keyStorage;
 
   /// se permite editar um dado - default: true;
-  final bool? canEdit;
+  final bool canEdit;
 
   /// se permite apagar uma linha
-  final bool? canDelete;
+  final bool canDelete;
 
   /// se permite incluir uma linha
-  final bool? canInsert;
+  final bool canInsert;
   final Size? editSize;
 
   /// se o header de filtro esta habilitado - default: true;
-  final bool? canSearch;
+  final bool canSearch;
   final Widget? title;
   final Widget? subtitle;
   final Widget Function()? placeHolder;
@@ -425,7 +426,7 @@ class DataViewer extends StatefulWidget {
   /// altura da linha de header de coluna
   final double? headerHeight;
   final Widget? header;
-  final bool? showPageNavigatorButtons;
+  final bool showPageNavigatorButtons;
   final double? dataRowHeight;
   final double? headingRowHeight;
   final double? footerHeight;
@@ -499,8 +500,9 @@ class _DataViewerState extends State<DataViewer> {
             });
     if (widget.keyName != null) controller!.keyName = widget.keyName;
     controller!.columns ??= widget.columns;
-    controller!.paginatedController.beforeChange = controller!.beforeChange!;
-    if (widget.keyStorage != null)
+    if (controller!.beforeChange != null)
+      controller!.paginatedController.beforeChange = controller!.beforeChange!;
+    if ((widget.keyStorage != null) && (controller!.columns != null))
       DataViewerStorage.load(widget.keyStorage!, controller!.columns!);
     super.initState();
   }
@@ -612,34 +614,34 @@ class _DataViewerState extends State<DataViewer> {
               width: widget.width,
               child: widget.child ??
                   PaginatedGrid(
-                      editSize: widget.editSize!,
-                      placeHolder: widget.placeHolder!,
+                      editSize: widget.editSize,
+                      placeHolder: widget.placeHolder,
                       elevation: widget.elevation!,
-                      canSort: widget.canSort!,
-                      evenRowColor: widget.evenRowColor ?? vt.evenRowColor!,
-                      oddRowColor: widget.oddRowColor ?? vt.oddRowColor!,
-                      headingRowColor: vt.headingRowColor!,
-                      headingTextStyle: vt.headingTextStyle!,
-                      actions: widget.actions!,
+                      canSort: widget.canSort,
+                      evenRowColor: widget.evenRowColor ?? vt.evenRowColor,
+                      oddRowColor: widget.oddRowColor ?? vt.oddRowColor,
+                      headingRowColor: vt.headingRowColor,
+                      headingTextStyle: vt.headingTextStyle,
+                      actions: widget.actions,
                       onSelectChanged: (widget.onSelected != null)
                           ? (b, ctrl) {
                               return widget.onSelected!(ctrl.data);
                             }
                           : (b, ctrl) => Future.value(null),
                       columnSpacing: 10,
-                      columnStyle: widget.columnStyle!,
-                      onEditItem: widget.onEditItem!,
-                      onInsertItem: widget.onInsertItem!,
-                      onDeleteItem: widget.onDeleteItem!,
-                      crossAxisAlignment: widget.crossAxisAlignment!,
-                      dividerThickness: widget.dividerThickness!,
+                      columnStyle: widget.columnStyle,
+                      onEditItem: widget.onEditItem,
+                      onInsertItem: widget.onInsertItem,
+                      onDeleteItem: widget.onDeleteItem,
+                      crossAxisAlignment: widget.crossAxisAlignment,
+                      dividerThickness: widget.dividerThickness,
                       //backgroundColor: widget.backgroundColor,
-                      headerHeight: (widget.canSearch! || widget.header != null)
+                      headerHeight: (widget.canSearch || widget.header != null)
                           ? widget.headerHeight!
                           : 0,
                       header: (widget.header != null)
                           ? widget.header
-                          : (widget.canSearch!)
+                          : (widget.canSearch)
                               ? createHeader()
                               : null,
                       headingRowHeight: _headingRowHeight,
@@ -654,24 +656,24 @@ class _DataViewerState extends State<DataViewer> {
                       source: widget.source ?? controller!.source,
                       rowsPerPage: widget.rowsPerPage ?? _top,
                       currentPage: controller!.page,
-                      canEdit: widget.canEdit!,
-                      canInsert: widget.canInsert!,
-                      canDelete: widget.canDelete!,
+                      canEdit: widget.canEdit,
+                      canInsert: widget.canInsert,
+                      canDelete: widget.canDelete,
                       footerHeight: widget.footerHeight!,
                       oneRowAutoEdit: widget.oneRowAutoEdit!,
                       futureSource: (controller!.future != null)
                           ? controller!.future!()
                           : null,
-                      onPageSelected: (x) => (widget.showPageNavigatorButtons!)
+                      onPageSelected: (x) => (widget.showPageNavigatorButtons)
                           ?
                           //print(x);
                           controller!.goPage(x)
                           : null,
                       onPostEvent: (PaginatedGridController ctrl, dynamic dados,
                           PaginatedGridChangeEvent event) async {
-                        if (widget.canEdit! ||
-                            widget.canInsert! ||
-                            widget.canDelete!) {
+                        if (widget.canEdit ||
+                            widget.canInsert ||
+                            widget.canDelete) {
                           var rt;
                           if (event == PaginatedGridChangeEvent.delete) {
                             rt = controller!.doDelete(dados, manual: false);
@@ -724,12 +726,12 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final Map<String, dynamic>? data;
   final List<DataViewerGroup>? grouped;
   final DataViewerController? controller;
-  final bool? canEdit, canInsert, canDelete;
+  final bool canEdit, canInsert, canDelete;
   final PaginatedGridChangeEvent? event;
   final double? dataRowHeight;
   final Function(dynamic)? onSaved;
   final Function(dynamic)? onClose;
-  final bool? showAppBar;
+  final bool showAppBar;
   final PreferredSizeWidget? appBar;
   final List<Widget>? actions;
   final Widget? leading;
@@ -737,7 +739,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final Widget? floatingActionButton;
   final Widget? headerAction;
   final Widget? bottomAction;
-  final bool? showSaveButton;
+  final bool showSaveButton;
   final DataViewerEditGroupedPageStateController? stateController;
 
   const DataViewerEditGroupedPage({
@@ -809,12 +811,12 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     for (DataViewerGroup row in widget.grouped!)
       itemsCount += row.children!.length;
     return Scaffold(
-      appBar: !widget.showAppBar!
+      appBar: !widget.showAppBar
           ? null
           : widget.appBar ??
               AppBar(
-                  leading: widget.leading!,
-                  actions: widget.actions!,
+                  leading: widget.leading,
+                  actions: widget.actions,
                   flexibleSpace: ValueListenableBuilder<bool>(
                       valueListenable: widget.controller!.changedValues,
                       builder:
@@ -826,7 +828,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                   ? ' - ${widget.subtitle}'
                                   : '')),
                           actions: [
-                            if (widget.canDelete! && (!changed))
+                            if (widget.canDelete && (!changed))
                               IconButton(
                                   icon: Icon(Icons.delete),
                                   onPressed: () {
@@ -836,7 +838,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                       Navigator.pop(context);
                                     });
                                   }),
-                            if (changed || widget.showSaveButton!) ...[
+                            if (changed || widget.showSaveButton) ...[
                               InkWell(
                                   child: Icon(Icons.settings_backup_restore),
                                   onTap: () {
@@ -872,7 +874,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                 SizedBox(
                   height: 15,
                 ),
-                if (widget.canEdit! || widget.canInsert!)
+                if (widget.canEdit || widget.canInsert)
                   Container(
                       alignment: Alignment.center,
                       child: StrapButton(
@@ -959,8 +961,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   int _first = 0;
   bool canFocus(PaginatedGridColumn col) {
     if (_focused) return false;
-    if (col.readOnly!) return false;
-    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey!)
+    if (col.readOnly) return false;
+    if (widget.event == PaginatedGridChangeEvent.update) if (col.isPrimaryKey)
       return false;
 
     if (widget.event == PaginatedGridChangeEvent.insert) {
@@ -1004,7 +1006,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
             (_first == 0 && canFocus(item)),
         maxLines: item.maxLines,
         maxLength: item.maxLength,
-        enabled: (widget.canEdit! || widget.canInsert!) && (!item.readOnly),
+        enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
         controller: txtController,
         style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(

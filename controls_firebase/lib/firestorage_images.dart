@@ -2,7 +2,7 @@ import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_firebase/firebase_driver.dart';
 import 'package:flutter/material.dart';
-import 'package:universal_html/html.dart';
+import 'package:universal_html/html.dart' hide Text;
 //import 'package:universal_html/html.dart' hide Text;
 
 class FirestorageDownloadImage extends StatefulWidget {

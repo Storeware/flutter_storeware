@@ -52,7 +52,9 @@ class _TabViewBottomState extends State<TabViewBottom> {
   Widget getChild(int idx) {
     return widget.choices![idx].child ??= Container(
         key: ValueKey(widget.choices![idx].label ?? '$idx'),
-        child: widget.choices![idx].builder!());
+        child: (widget.choices![idx].builder != null)
+            ? widget.choices![idx].builder!()
+            : Container());
   }
 
   //TabController tabController;

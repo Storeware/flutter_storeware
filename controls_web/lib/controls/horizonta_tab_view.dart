@@ -415,7 +415,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                           ),
                         ),
                         onTap: () {
-                          if (tab.primary!)
+                          if (tab.primary)
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (x) {

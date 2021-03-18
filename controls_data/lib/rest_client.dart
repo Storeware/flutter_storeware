@@ -33,10 +33,11 @@ class LinearDataProgressIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         height: this.height,
-        child: StreamBuilder<Object>(
+        child: StreamBuilder<bool>(
+            initialData: false,
             stream: DataProcessingNotifier().stream,
             builder: (context, snapshot) {
-              return (!snapshot.hasData)
+              return (snapshot.hasData && (snapshot.data ?? false))
                   ? LinearProgressIndicator(
                       backgroundColor: Colors.transparent,
                     )
@@ -172,10 +173,7 @@ class RestClient {
     return this;
   }
 
-  String encodeUrl() {
-    var r = formatUrl();
-    return r;
-  }
+  String encodeUrl() => formatUrl();
 
   String prefix = '';
   formatUrl({path}) {
@@ -186,8 +184,7 @@ class RestClient {
     if (path != null) {
       service = path;
     }
-    String url = (prefix) + (service) + (p);
-    return url;
+    return (prefix) + (service) + (p);
   }
 
   addParameter(String key, value) {
@@ -242,10 +239,11 @@ class RestClient {
   int receiveTimeout = 60000;
   bool followRedirects = true;
 
-  getContentType([String contentType = 'application/json']) {
-    if (contentType.contains('text')) return ContentType.text;
-    if (contentType.contains('json')) return ContentType.json;
-    return ContentType.binary;
+  String? getContentType([String contentType = 'application/json']) {
+    //if (contentType.contains('text')) return ContentType.text;
+    //if (contentType.contains('json')) return ContentType.json;
+    //return ContentType.binary;
+    return contentType;
   }
 
   Future<dynamic> openJson(String url,

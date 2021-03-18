@@ -251,7 +251,7 @@ class ODataBuilder extends StatelessWidget {
               "result": (initialData == null) ? [] : [initialData]
             }
           : null,
-      future: execute(client!, query),
+      future: (client == null) ? null : execute(client!, query),
       builder: (context, response) {
         if (response.hasData) {
           var rst = ODataResult(json: response.data as Map<String, dynamic>);

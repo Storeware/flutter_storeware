@@ -114,8 +114,7 @@ class DrawerTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Color _color =
-        (enabled!) ? theme.popupMenuTheme.color! : theme.dividerColor;
+    Color _color = (enabled!) ? theme.cardColor : theme.dividerColor;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),

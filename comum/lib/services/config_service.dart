@@ -329,7 +329,8 @@ abstract class ConfigAppBase extends ConfigBase {
     ls.LocalStorage().setKey('usuario', encrypt(usuario));
     ls.LocalStorage().setKey('contaid', conta);
     ls.LocalStorage().setBool('lembrarSenha', lembrarSenha /*?? false*/);
-    ls.LocalStorage().setKey('celular', encrypt(_celular));
+    if (_celular != null)
+      ls.LocalStorage().setKey('celular', encrypt(_celular));
     ls.LocalStorage().setKey('usuario1', encrypt(password));
   }
 

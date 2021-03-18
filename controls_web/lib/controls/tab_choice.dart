@@ -6,14 +6,14 @@ class TabChoice<T> {
   Function()? onPressed;
   String? label;
   Widget? title;
-  bool? visible;
-  bool? enabled;
+  bool visible;
+  bool enabled;
   int? index;
   Widget? image;
   Widget? child;
   IconData? icon;
   IconData? selectedIcon;
-  bool? primary;
+  bool primary;
   Widget? trailing;
   int? count;
   String? tooltip;

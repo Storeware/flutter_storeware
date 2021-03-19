@@ -318,7 +318,11 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
                   ? widget.errorText!.replaceFirst('%1', widget.label!)
                   : null;
         },
-        onSaved: (x) => widget.onSaved!(x!),
+        onSaved: (widget.onSaved == null)
+            ? null
+            : (String? x) {
+                if (x != null) widget.onSaved!(x);
+              },
       ),
     );
   }

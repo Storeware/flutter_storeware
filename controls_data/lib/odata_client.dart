@@ -60,7 +60,7 @@ extension DynamicExtension on dynamic {
     if (value is double) return value;
     if (value is int) return value + 0.0;
     if (value is num) return value + 0.0;
-    if (value is String) return double.tryParse(value) ?? def;
+    if (value is String) return double.tryParse(value.replaceAll(',', '.')) ?? def;
     return def;
   }
 
@@ -375,8 +375,9 @@ class ODataClient {
   }
 
   Map<String, dynamic> removeNulls(json) {
-    Map<String, dynamic> data = {};
+    Map<String, dynamic> data = json;
     json.forEach((k, v) {
+      v ??= json[k]; // workaroud para versão 2.12 que não estava carregando
       try {
         if (v != null) data[k] = reviverTo(v);
       } catch (e) {

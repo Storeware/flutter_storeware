@@ -146,7 +146,7 @@ class _StrapButtonState extends State<StrapButton> {
                     Widget? child) {
                   return TextButton(
                     child: Padding(
-                        padding: const EdgeInsets.all(1),
+                        padding: const EdgeInsets.only(left: 1, right: 1),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [

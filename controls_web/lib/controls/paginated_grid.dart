@@ -8,6 +8,7 @@ import 'strap_widgets.dart';
 
 import 'paginated_data_table_ext.dart';
 import 'dialogs_widgets.dart';
+import 'data_viewer_helper.dart';
 
 class PaginatedGridSample extends StatefulWidget {
   const PaginatedGridSample({Key? key}) : super(key: key);
@@ -115,7 +116,7 @@ class PaginatedGridColumn {
     this.color,
     this.maxLength,
     this.minLength,
-    this.width,
+    this.width = 300,
     this.tooltip,
     this.editWidth,
     this.editHeight,
@@ -1233,58 +1234,60 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             ? item.onGetValue!(p![item.name])
             : (p![item.name] ?? '').toString());
     var focusNode = FocusNode();
-    return Focus(
-        canRequestFocus: false,
-        onFocusChange: (b) {
-          if (!b) if (item.onFocusChanged != null)
-            item.onFocusChanged!(_valueController.text);
-        },
-        child: TextFormField(
-            textInputAction:
-                (isLast) ? TextInputAction.done : TextInputAction.next,
-            focusNode: focusNode,
-            onFieldSubmitted: (x) {
-              if (isLast)
-                _save(context);
-              else
-                focusNode.nextFocus();
+    return Container(
+        width: item.width ?? DataViewerHelper.defaultWidth,
+        child: Focus(
+            canRequestFocus: false,
+            onFocusChange: (b) {
+              if (!b) if (item.onFocusChanged != null)
+                item.onFocusChanged!(_valueController.text);
             },
-            autofocus: item.autofocus && canFocus(item),
-            maxLines: item.maxLines,
-            maxLength: item.maxLength,
-            enabled: canEdit(item),
-            controller: _valueController,
-            style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
-            decoration: InputDecoration(
-              labelText: item.label ?? item.name,
-            ),
-            validator: (value) {
-              if (item.onValidate != null) return item.onValidate!(value);
-              if (item.required) if (value!.isEmpty) {
-                return (item.editInfo!
-                    .replaceAll('{label}', item.label ?? item.name!));
-              }
+            child: TextFormField(
+                textInputAction:
+                    (isLast) ? TextInputAction.done : TextInputAction.next,
+                focusNode: focusNode,
+                onFieldSubmitted: (x) {
+                  if (isLast)
+                    _save(context);
+                  else
+                    focusNode.nextFocus();
+                },
+                autofocus: item.autofocus && canFocus(item),
+                maxLines: item.maxLines,
+                maxLength: item.maxLength,
+                enabled: canEdit(item),
+                controller: _valueController,
+                style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+                decoration: InputDecoration(
+                  labelText: item.label ?? item.name,
+                ),
+                validator: (value) {
+                  if (item.onValidate != null) return item.onValidate!(value);
+                  if (item.required) if (value!.isEmpty) {
+                    return (item.editInfo!
+                        .replaceAll('{label}', item.label ?? item.name!));
+                  }
 
-              return null;
-            },
-            onChanged: (x) {
-              widget.controller!.changedValues.value = true;
-              if (item.onChanged != null) item.onChanged!(x);
-            },
-            onSaved: (x) {
-              if (item.onSetValue != null) {
-                p![item.name!] = item.onSetValue!(x);
-                return;
-              }
-              if (p![item.name] is int)
-                p![item.name!] = int.tryParse(x!);
-              else if (p![item.name] is double)
-                p![item.name!] = double.tryParse(x!);
-              else if (p![item.name] is bool)
-                p![item.name!] = x;
-              else
-                p![item.name!] = x;
-            }));
+                  return null;
+                },
+                onChanged: (x) {
+                  widget.controller!.changedValues.value = true;
+                  if (item.onChanged != null) item.onChanged!(x);
+                },
+                onSaved: (x) {
+                  if (item.onSetValue != null) {
+                    p![item.name!] = item.onSetValue!(x);
+                    return;
+                  }
+                  if (p![item.name] is int)
+                    p![item.name!] = int.tryParse(x!);
+                  else if (p![item.name] is double)
+                    p![item.name!] = double.tryParse(x!);
+                  else if (p![item.name] is bool)
+                    p![item.name!] = x;
+                  else
+                    p![item.name!] = x;
+                })));
   }
 
   _save(context) {

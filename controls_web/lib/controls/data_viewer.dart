@@ -235,7 +235,7 @@ class DataViewerController {
   }
 
   /// Update um linha
-  doUpdate(dados, {manual = false}) {
+  doUpdate(dados, {bool manual = false}) {
     if (onValidate != null) dados = onValidate!(dados);
     if (onClearCache != null) onClearCache!();
     var rsp;
@@ -627,7 +627,7 @@ class _DataViewerState extends State<DataViewer> {
                           ? (b, ctrl) {
                               return widget.onSelected!(ctrl.data);
                             }
-                          : (b, ctrl) => Future.value(null),
+                          : null, //(b, ctrl) => Future.value(null),
                       columnSpacing: 10,
                       columnStyle: widget.columnStyle,
                       onEditItem: widget.onEditItem,

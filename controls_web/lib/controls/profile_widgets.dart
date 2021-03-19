@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_web/controls/image_links.dart';
 //import 'package:controls_web/controls/responsive.dart';
 import 'package:flutter/material.dart';
@@ -97,9 +98,10 @@ class DrawerTile extends StatelessWidget {
   final Widget? image;
   final String? title;
   final Widget? subtitle;
-  final bool? enabled;
+  final bool enabled;
   final Function()? onPressed;
   final double? height;
+  final double? fontSize;
 
   DrawerTile(
       {this.image,
@@ -109,12 +111,14 @@ class DrawerTile extends StatelessWidget {
       this.trailing,
       this.height: 40,
       this.enabled = true,
+      this.fontSize = 14,
       this.subtitle});
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Color _color = (enabled!) ? theme.cardColor : theme.dividerColor;
+    Color _color =
+        (enabled) ? theme.textTheme.bodyText2!.color! : theme.dividerColor;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -133,7 +137,7 @@ class DrawerTile extends StatelessWidget {
                       title!,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.caption!.copyWith(
-                        fontSize: 14,
+                        fontSize: fontSize!,
                         color: _color,
                       ),
                     ),
@@ -141,7 +145,7 @@ class DrawerTile extends StatelessWidget {
           ),
           trailing ?? Icon(Icons.chevron_right)
         ]),
-        onTap: (!enabled!)
+        onTap: (!enabled)
             ? null
             : () {
                 if (onPressed != null) onPressed!();

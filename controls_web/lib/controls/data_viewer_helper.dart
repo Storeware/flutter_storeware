@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 //import 'package:controls_data/odata_client.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
+import 'package:flutter/services.dart';
 
 DateTime _toDateTime(value, {DateTime? def, zone = -3}) {
   if (value is String) {
@@ -18,7 +19,7 @@ DateTime _toDateTime(value, {DateTime? def, zone = -3}) {
 ///
 class DataViewerHelper {
   /// [DataViewerHelper.simnaoColumn] Define coluna  S ou N na visualização
-
+  static double get defaultWidth => 300.0;
   static _simnaoFn(p) {
     var t = p['t'];
     dynamic? v = p['v'];
@@ -84,6 +85,70 @@ class DataViewerHelper {
     }
   }
 
+  static intColumn(column, {Widget? suffix, Widget? prefix, int? maxLength}) {
+    return doubleColumn(column,
+        decimais: 0, suffix: suffix, prefix: prefix, maxLength: maxLength);
+  }
+
+  static doubleColumn(column,
+      {int decimais = 2,
+      Widget? suffix,
+      Widget? prefix,
+      Alignment? align,
+      int? maxLength}) {
+    if (column != null) {
+      Widget? Function(int, Map<String, dynamic>)? builder;
+      if (column.builder != null) builder = column.builder;
+      column.align = align ?? column.align ?? Alignment.centerRight;
+      column.builder = (idx, row) {
+        if (builder != null) return builder(idx, row);
+        dynamic v = row[column.name];
+        String txt = '${v}';
+        if (v is double && decimais >= 0) txt = v.toStringAsFixed(decimais);
+
+        txt = txt.replaceAll('.', ',');
+        return Text(
+          txt,
+        );
+      };
+      column.editBuilder = (a, b, c, row) {
+        /// define switch para edição
+        return Container(
+            width: column.width ?? defaultWidth,
+            child: TextFormField(
+              //label: column.label,
+              initialValue: '${row[column.name] ?? ''}'.replaceAll('.', ','),
+              keyboardType: (decimais <= 0)
+                  ? TextInputType.number
+                  : TextInputType.numberWithOptions(decimal: decimais > 0),
+              inputFormatters: <TextInputFormatter>[
+                if (decimais == 0) FilteringTextInputFormatter.digitsOnly,
+              ],
+              maxLength: maxLength ?? column.maxLength,
+              decoration: InputDecoration(
+                  labelText: (column.editInfo != null)
+                      ? (column.editInfo ?? '')
+                          .replaceAll('{label}', column.label ?? '')
+                      : column.label ?? column.name,
+                  suffix: suffix,
+                  prefix: prefix,
+                  helperText: column.tooltip ?? ''
+
+                  //    ? (widget.sample != null)
+                  //        ? 'Ex: ${widget.sample}'20
+                  //        : null
+                  //    : null,
+                  //hintStyle: theme.inputDecorationTheme.hintStyle,
+                  ),
+              onChanged: (x) {
+                row[column.name] = double.tryParse(x.replaceAll(',', '.')) ?? 0;
+              },
+            ));
+      };
+      return column;
+    }
+  }
+
   static stringColumn(column) {
     if (column != null) {
       column.builder = (idx, row) {
@@ -94,13 +159,15 @@ class DataViewerHelper {
       };
       column.editBuilder = (a, b, c, row) {
         /// define switch para edição
-        return MaskedTextField(
-          label: column.label,
-          initialValue: row[column.name] ?? '',
-          onChanged: (x) {
-            row[column.name] = x;
-          },
-        );
+        return Container(
+            width: column.width ?? defaultWidth,
+            child: MaskedTextField(
+              label: column.label,
+              initialValue: row[column.name] ?? '',
+              onChanged: (x) {
+                row[column.name] = x;
+              },
+            ));
       };
       return column;
     }
@@ -157,7 +224,7 @@ class DataViewerHelper {
     if (column != null) {
       column.editBuilder = (a, b, c, row) {
         return Container(
-          width: width ?? column.width,
+          width: width ?? column.width ?? defaultWidth,
           color: color,
           child: MaskedTextField(
             label: column.label,
@@ -183,7 +250,7 @@ class DataViewerHelper {
         /// define  edição
         return Container(
           color: color,
-          width: width ?? column.width,
+          width: width ?? column.width ?? defaultWidth,
           child: MaskedMoneyFormField(
             label: column.label,
             precision: decimais,

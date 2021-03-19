@@ -98,7 +98,7 @@ class DualListViewer extends StatefulWidget {
   final Widget? header;
   final Widget? body;
   final Widget? bottom;
-  final bool? canDrag;
+  final bool canDrag;
   final List<dynamic>? options;
   final List<dynamic>? items;
   //final String keyName;
@@ -173,14 +173,14 @@ class _DualListViewerState extends State<DualListViewer> {
                             index: -1,
                             controller: controller!,
                             side: DragTargetDualListSide.left,
-                            canDrag: widget.canDrag!,
+                            canDrag: widget.canDrag,
                           ),
                           for (var i = 0; i < controller!.options!.length; i++)
                             Padding(
                               padding: EdgeInsets.only(
-                                  right: (widget.canDrag! ? 40 : 8)),
+                                  right: (widget.canDrag ? 40 : 8)),
                               child: DualListItemCard(
-                                  canDrag: widget.canDrag!,
+                                  canDrag: widget.canDrag,
                                   side: DragTargetDualListSide.left,
                                   builder: (a, b) =>
                                       (widget.builderOption != null)
@@ -204,7 +204,7 @@ class _DualListViewerState extends State<DualListViewer> {
                             child: widget.itemsTitle,
                           ),
                         DragTargetDualListItem(
-                          canDrag: widget.canDrag!,
+                          canDrag: widget.canDrag,
                           index: -1,
                           controller: controller!,
                           side: DragTargetDualListSide.right,
@@ -212,9 +212,9 @@ class _DualListViewerState extends State<DualListViewer> {
                         for (var i = 0; i < controller!.items!.length; i++)
                           Padding(
                             padding: EdgeInsets.only(
-                                right: (widget.canDrag!) ? 40.0 : 8),
+                                right: (widget.canDrag) ? 40.0 : 8),
                             child: DualListItemCard(
-                              canDrag: widget.canDrag!,
+                              canDrag: widget.canDrag,
                               side: DragTargetDualListSide.right,
                               builder: widget.builder!,
                               data: DualListItemData(
@@ -250,7 +250,7 @@ class DualListItemData {
 class DraggableDualListItem extends StatelessWidget {
   final DualListItemData? data;
   final DragTargetDualListSide? side;
-  final bool? canDrag;
+  final bool canDrag;
   final Widget Function(DualListItemData, dynamic)? builder;
   const DraggableDualListItem({
     Key? key,
@@ -262,7 +262,7 @@ class DraggableDualListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (!canDrag!)
+    return (!canDrag)
         ? InkWell(
             child: builder!(data!, data!.item),
             onTap: () {
@@ -301,13 +301,13 @@ class DualListItemCard extends StatelessWidget {
   final DragTargetDualListSide? side;
   final Widget Function(DualListItemData, dynamic)? builder;
   final DualListItemData? data;
-  final bool? canDrag;
+  final bool canDrag;
   const DualListItemCard({
     Key? key,
     @required this.data,
     @required this.builder,
     @required this.side,
-    @required this.canDrag,
+    @required this.canDrag = false,
   }) : super(key: key);
 
   @override
@@ -327,7 +327,7 @@ class DualListItemCard extends StatelessWidget {
           controller: data!.controller!,
           index: data!.index!,
           side: side!,
-          canDrag: canDrag!,
+          canDrag: canDrag,
         ),
       ],
     );
@@ -340,13 +340,13 @@ class DragTargetDualListItem extends StatefulWidget {
   final DragTargetDualListSide? side;
   final int? index;
   final DualListViewerController? controller;
-  final bool? canDrag;
+  final bool canDrag;
 
   const DragTargetDualListItem({
     Key? key,
     @required this.side,
     this.index,
-    @required this.canDrag,
+    @required this.canDrag = false,
     @required this.controller,
   }) : super(key: key);
 
@@ -370,7 +370,7 @@ class _DragTargetDualListItemState extends State<DragTargetDualListItem> {
 
   @override
   Widget build(BuildContext context) {
-    return (!widget.canDrag!)
+    return (!widget.canDrag)
         ? Container()
         : DragTarget<DualListItemData>(
             onWillAccept: (value) {

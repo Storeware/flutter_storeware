@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'dart:async';
 import 'dart:async';
 
@@ -17,8 +18,8 @@ class Dialogs {
     double _height = 40;
     return showPage(context,
         label: title ?? '',
-        width: width!,
-        height: height!,
+        width: width,
+        height: height,
         child: Scaffold(
           appBar: (title == null)
               ? null

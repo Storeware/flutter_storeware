@@ -395,7 +395,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
     super.initState();
     _sortAscending = widget.sortAscending;
     _sortColumnIndex = widget.sortColumnIndex;
-    controller!.columns = widget.columns!;
+    controller!.columns = widget.columns;
   }
 
   @override
@@ -1159,7 +1159,7 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
                   : mw, //  widget.width ?? size.width * 0.95,
             ),
             child: EditScaffold(
-              title: widget.title!,
+              title: widget.title ?? 'Edição',
               index: widget.index!,
               controller: widget.controller,
               canDelete: widget.controller!.widget!.canDelete,

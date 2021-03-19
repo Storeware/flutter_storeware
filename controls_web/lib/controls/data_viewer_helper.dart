@@ -69,7 +69,7 @@ class DataViewerHelper {
 
         /// define switch para edição
         return MaskedSwitchFormField(
-          activeColor: color!,
+          activeColor: color,
           activeTrackColor: (color != null) ? color.lighten(50) : Colors.blue,
           inactiveTrackColor: inactiveTrackColor ??
               ((color != null) ? color.lighten(80) : Colors.blue),
@@ -122,8 +122,8 @@ class DataViewerHelper {
         dynamic v = row[column.name];
         DateTime d = _toDateTime(v);
         return MaskedDatePicker(
-          firstDate: firstDate!,
-          lastDate: lastDate!,
+          firstDate: firstDate,
+          lastDate: lastDate,
           readOnly: column.readOnly,
           format: mask,
           labelText: column.label,

@@ -66,8 +66,8 @@ class StrapButton extends StatefulWidget {
   final Widget? leading;
   final Widget? trailing;
   final Widget? image;
-  final bool? enabled;
-  final bool? visible;
+  final bool enabled;
+  final bool visible;
   final StrapButtonState Function(
       StrapButtonState, ValueNotifier<StrapButtonState>)? onStateChanged;
   final ValueNotifier<StrapButtonState>? stateNotifier;
@@ -121,11 +121,14 @@ class _StrapButtonState extends State<StrapButton> {
     stateChanged(StrapButtonState.none);
     var theme = Theme.of(context);
     primaryColor = theme.primaryColor;
-    return (!widget.visible!)
+    return (!widget.visible)
         ? Container()
         : Container(
-            height: widget.height,
-            width: widget.width,
+            constraints: BoxConstraints(
+                maxWidth: widget.width!,
+                maxHeight: widget.height!,
+                minHeight: 20,
+                minWidth: 60),
             decoration: widget.type == StrapButtonType.none
                 ? null
                 : BoxDecoration(
@@ -166,7 +169,7 @@ class _StrapButtonState extends State<StrapButton> {
                                         maxLines: widget.maxLines,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          color: (widget.enabled!)
+                                          color: (widget.enabled)
                                               ? strapFontColor(widget.type!)
                                               : theme.dividerColor,
                                           fontSize: 16,
@@ -199,7 +202,7 @@ class _StrapButtonState extends State<StrapButton> {
                               Flexible(flex: 1, child: widget.trailing!),
                           ],
                         )),
-                    onPressed: (widget.enabled! &&
+                    onPressed: (widget.enabled &&
                             (stateValue != StrapButtonState.waiting))
                         ? () async {
                             stateChanged(StrapButtonState.pressed);

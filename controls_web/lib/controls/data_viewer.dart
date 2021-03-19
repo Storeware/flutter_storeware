@@ -561,7 +561,7 @@ class _DataViewerState extends State<DataViewer> {
                             width: responsive!.isMobile ? 80 : 90,
                             child: StrapButton(
                                 text: 'filtrar',
-                                height: 30,
+                                height: 45,
                                 onPressed: () {
                                   controller!.page = 1;
                                   controller!.filter = _filtroController.text;

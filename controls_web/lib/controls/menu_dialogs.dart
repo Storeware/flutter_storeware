@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart';
@@ -7,7 +8,7 @@ class MenuChoice {
   final String? title;
   final int? index;
   final Function(BuildContext)? builder;
-  final bool? enabled;
+  final bool enabled;
   final double? width;
   final double? height;
   MenuChoice({
@@ -62,13 +63,13 @@ class _MenuDialogState extends State<MenuDialog> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         for (var item in widget.choices!)
-          _tiles(item, item.title!, item.icon!, item.index!, () {
+          _tiles(item, item.title, item.icon, item.index, () {
             Navigator.pop(context);
             Dialogs.showPage(
               context,
               width: (item.width ?? maxWidth * 0.8).min(maxWidth),
               height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
-              child: item.builder!(context),
+              child: (item.builder == null) ? null : item.builder!(context),
             );
           }),
       ],
@@ -76,18 +77,18 @@ class _MenuDialogState extends State<MenuDialog> {
   }
 
 //cria cada item do menu
-  Widget _tiles(
-      MenuChoice choice, String text, IconData icon, int item, Function onTap) {
+  Widget _tiles(MenuChoice choice, String? text, IconData? icon, int? item,
+      Function onTap) {
     Color? _color =
-        choice.enabled! ? theme!.popupMenuTheme.color : theme!.dividerColor;
+        choice.enabled ? theme!.popupMenuTheme.color : theme!.dividerColor;
     return ListTile(
-        leading: Icon(icon),
-        onTap: () => (choice.enabled! ? onTap : null),
+        leading: (icon == null) ? null : Icon(icon),
+        onTap: () => (choice.enabled ? onTap() : null),
         selected: item == itemSelect,
         title: Align(
             alignment: Alignment.centerLeft,
             child: Material(
-                child: Text(text,
+                child: Text(text ?? '',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                         color: _color,

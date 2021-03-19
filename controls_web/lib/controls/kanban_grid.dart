@@ -784,7 +784,9 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
   dynamic item;
   @override
   Widget build(BuildContext context) {
-    if (widget.itemIndex != null) item = widget.data![widget.itemIndex!];
+    if (widget.itemIndex != null &&
+        widget.data != null &&
+        widget.data!.length > 0) item = widget.data![widget.itemIndex!];
     KanbanGrid kanban = DefaultKanbanGrid.of(context)!.kanbanGrid!;
     return Column(
       children: [

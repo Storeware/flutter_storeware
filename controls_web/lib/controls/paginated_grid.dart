@@ -116,7 +116,7 @@ class PaginatedGridColumn {
     this.color,
     this.maxLength,
     this.minLength,
-    this.width = 300,
+    this.width,
     this.tooltip,
     this.editWidth,
     this.editHeight,
@@ -310,41 +310,75 @@ class PaginatedGrid extends StatefulWidget {
       double? height,
       Alignment? alignment,
       bool fullPage = false,
-      String? label = ''}) async {
+      String? label = '',
+      DialogsTransition transition = DialogsTransition.scale}) async {
     Size size = MediaQuery.of(context).size;
     return showGeneralDialog(
-      context: context,
-      barrierLabel: label,
-      barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: const Duration(milliseconds: 500),
-      barrierDismissible: true,
-      pageBuilder: (BuildContext context, Animation animation,
-          Animation secondaryAnimation) {
-        return Align(
-          alignment: alignment ?? Alignment.center,
-          child: Material(
-              child: Container(
-            width: (fullPage)
-                ? size.width
-                : width ??
-                    PaginatedGrid.dialogWidth(
-                        maxSize: size), //?? size.width * 0.90,
-            height: (fullPage)
-                ? size.height
-                : height ??
-                    PaginatedGrid.dialogHeight(
-                        maxSize: size), // ?? size.height * 0.90,
-            child: child,
-          )),
-        );
-      },
-      transitionBuilder: (_, anim, __, child) {
+        context: context,
+        barrierLabel: label,
+        barrierColor: Colors.black.withOpacity(0.5),
+        transitionDuration: const Duration(milliseconds: 500),
+        barrierDismissible: true,
+        pageBuilder: (BuildContext context, Animation animation,
+            Animation secondaryAnimation) {
+          return Align(
+            alignment: alignment ?? Alignment.center,
+            child: Material(
+                child: Container(
+              width: (fullPage)
+                  ? size.width
+                  : width ??
+                      PaginatedGrid.dialogWidth(
+                          maxSize: size), //?? size.width * 0.90,
+              height: (fullPage)
+                  ? size.height
+                  : height ??
+                      PaginatedGrid.dialogHeight(
+                          maxSize: size), // ?? size.height * 0.90,
+              child: child,
+            )),
+          );
+        },
+        /*transitionBuilder: (_, anim, __, child) {
         return ScaleTransition(
           scale: anim,
           child: child,
         );
-      },
-    );
+      },*/
+        transitionBuilder: (_, animation, __, child) {
+          //if (transitionBuilder != null)
+          //  return transitionBuilder(_, animation, __, child);
+          if (transition == DialogsTransition.fade)
+            return FadeTransition(opacity: animation, child: child);
+          if (transition == DialogsTransition.slide)
+            return SlideTransition(
+              position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                  .animate(animation),
+              child: child,
+            );
+          if (transition == DialogsTransition.slideUp)
+            return SlideTransition(
+              position: Tween(begin: Offset(1.0, 1.0), end: Offset(0.0, 0.0))
+                  .animate(animation),
+              child: child,
+            );
+          if (transition == DialogsTransition.curve) {
+            var cAnimation =
+                CurvedAnimation(curve: Curves.easeIn, parent: animation);
+            return Align(
+              child: SizeTransition(
+                sizeFactor: cAnimation,
+                child: child,
+                axisAlignment: -1.0,
+              ),
+            );
+          }
+          return ScaleTransition(
+            alignment: Alignment.center,
+            scale: animation,
+            child: child,
+          );
+        });
   }
 
   static dialogWidth({Size? maxSize}) => maxSize?.width ?? 450.0;
@@ -693,7 +727,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
 
           if (widget.onInsertItem != null)
             widget.onInsertItem!(controller!).then((rsp) {
-              controller!.changed(rsp);
+              if (rsp != null) controller!.changed(rsp);
             });
           else if (widget.onPostEvent != null) {
             PaginatedGrid.show(context,
@@ -1040,6 +1074,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
     var w = PaginatedGrid.dialogWidth();
     return Dialogs.showPage(
       controller.context,
+      //transition: DialogsTransition.slide,
       width: controller.widget!.editSize?.width ?? w,
       height: controller.widget!.editSize?.height ?? h,
       fullPage: controller.widget!.editFullPage!,

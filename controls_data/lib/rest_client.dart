@@ -219,7 +219,7 @@ class RestClient {
 
   String? cacheControl;
   _setHeader() {
-    if ((contentType) != '') addHeader('content-type', contentType);
+    //if ((contentType) != '') addHeader('content-type', contentType);
     if (cacheControl != null) addHeader('Cache-Control', cacheControl);
   }
 

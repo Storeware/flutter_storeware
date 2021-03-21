@@ -7,19 +7,25 @@ import 'package:controls_web/controls.dart';
 import 'package:controls_web/controls/notice_activities.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 
+enum DialogsTransition { scale, fade, slide, slideUp, curve }
+
 class Dialogs {
-  static showModal(context,
-      {String? title,
-      Widget? child,
-      double? width,
-      double? height,
-      Color? color,
-      Widget? bottom}) async {
+  static showModal(
+    context, {
+    String? title,
+    Widget? child,
+    double? width,
+    double? height,
+    Color? color,
+    Widget? bottom,
+    DialogsTransition? transition = DialogsTransition.scale,
+  }) async {
     double _height = 40;
     return showPage(context,
         label: title ?? '',
         width: width,
         height: height,
+        transition: transition,
         child: Scaffold(
           appBar: (title == null)
               ? null
@@ -33,16 +39,21 @@ class Dialogs {
         ));
   }
 
-  static Future showPage<T>(context,
-      {Widget? child,
-      double? width,
-      double? height,
-      Alignment? alignment,
-      bool fullPage = false,
-      Widget Function(BuildContext)? builder,
-      RouteTransitionsBuilder? transitionBuilder,
-      int? transitionDuration,
-      String label = ''}) async {
+  static Future showPage<T>(
+    context, {
+    Widget? child,
+    double? width,
+    double? height,
+    Alignment? alignment,
+    bool fullPage = false,
+    Widget Function(BuildContext)? builder,
+    RouteTransitionsBuilder? transitionBuilder,
+    int? transitionDuration,
+    String label = '',
+    DialogsTransition? transition = DialogsTransition.scale,
+    Alignment? transitionAlign = Alignment.center,
+    Curve transitionCurve = Curves.elasticOut,
+  }) async {
     Size size = MediaQuery.of(context).size;
     double plus = 0.0;
     if (size.width < 400) plus = 0.07;
@@ -50,7 +61,9 @@ class Dialogs {
       context: context,
       barrierLabel: label,
       barrierColor: Colors.black.withOpacity(0.5),
-      transitionDuration: Duration(milliseconds: transitionDuration ?? 500),
+      transitionDuration: Duration(
+          milliseconds: transitionDuration ??
+              ((transition == DialogsTransition.curve) ? 1500 : 500)),
       barrierDismissible: true,
       pageBuilder: (BuildContext context, Animation animation,
           Animation secondaryAnimation) {
@@ -64,11 +77,37 @@ class Dialogs {
           )),
         );
       },
-      transitionBuilder: (_, anim, __, child) {
+      transitionBuilder: (_, animation, __, child) {
         if (transitionBuilder != null)
-          return transitionBuilder(_, anim, __, child);
+          return transitionBuilder(_, animation, __, child);
+        if (transition == DialogsTransition.fade)
+          return FadeTransition(opacity: animation, child: child);
+        if (transition == DialogsTransition.slide)
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        if (transition == DialogsTransition.slideUp)
+          return SlideTransition(
+            position: Tween(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
+        if (transition == DialogsTransition.curve) {
+          var cAnimation =
+              CurvedAnimation(curve: transitionCurve, parent: animation);
+          return Align(
+            child: SizeTransition(
+              sizeFactor: cAnimation,
+              child: child,
+              axisAlignment: -1.0,
+            ),
+          );
+        }
         return ScaleTransition(
-          scale: anim,
+          alignment: transitionAlign!,
+          scale: animation,
           child: child,
         );
       },

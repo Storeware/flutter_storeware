@@ -266,7 +266,8 @@ class DataViewerController {
   /// mostra uma janela filha
   show(String texto, {Widget? child}) {
     if (context != null)
-      Dialogs.showModal(context, title: texto, child: child!);
+      Dialogs.showModal(context,
+          transition: DialogsTransition.slide, title: texto, child: child!);
   }
 
   /// [DataViewerController.onValidate] permite  transformar um dados antes de enviar para a API

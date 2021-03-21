@@ -29,23 +29,32 @@ class MenuDialog extends StatefulWidget {
   @override
   _MenuDialogState createState() => _MenuDialogState();
 
-  static show(context,
-      {List<MenuChoice>? choices,
-      String? title,
-      double width = 300,
-      double? height,
-      Color? color}) async {
+  static show(
+    context, {
+    List<MenuChoice>? choices,
+    String? title,
+    double width = 300,
+    double? height,
+    Color? color,
+    Alignment? transitionAlign = Alignment.topCenter,
+  }) async {
     var h = height ?? (kToolbarHeight * (choices!.length + 1));
     if (Platform.isIOS || Platform.isAndroid || Platform.isFuchsia)
       h += kToolbarHeight;
-    return Dialogs.showModal(context,
-        title: title ?? 'Menu',
-        width: width,
-        height: h + 0.0,
-        child: MenuDialog(
-          choices: choices,
-        ),
-        color: color);
+    return Dialogs.showPage(
+      context,
+      width: width,
+      alignment: Alignment.topRight,
+      transition: DialogsTransition.slide,
+      height: h + 0.0,
+      transitionAlign: transitionAlign,
+      child: Scaffold(
+          appBar: AppBar(title: Text(title ?? 'Menu')),
+          body: MenuDialog(
+            choices: choices,
+          )),
+      //color: color
+    );
   }
 }
 
@@ -67,6 +76,7 @@ class _MenuDialogState extends State<MenuDialog> {
             Navigator.pop(context);
             Dialogs.showPage(
               context,
+              transition: DialogsTransition.slide,
               width: (item.width ?? maxWidth * 0.8).min(maxWidth),
               height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
               child: (item.builder == null) ? null : item.builder!(context),

@@ -141,7 +141,7 @@ class _CardGridState extends State<CardGrid> {
                                   width: 400,
                                   height: 500,
                                   child: CardGridEditRow(
-                                    title: 'Alteração do item',
+                                    title: 'Alteração',
                                     controller: controller!,
                                     event: CardGridChangeEvent.update,
                                   ));
@@ -250,7 +250,17 @@ class _CardGridEditRowState extends State<CardGridEditRow> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.title!)),
+        appBar: AppBar(
+          title: Text(widget.title!),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.save),
+              onPressed: () {
+                _save(context);
+              },
+            )
+          ],
+        ),
         body: SingleChildScrollView(
           child: Container(
             child: Padding(

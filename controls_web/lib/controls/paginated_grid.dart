@@ -91,7 +91,7 @@ class PaginatedGridColumn {
   String Function(dynamic)? onGetValue;
   dynamic Function(dynamic)? onSetValue;
   Function(dynamic)? onChanged;
-  String Function(dynamic)? onValidate;
+  String? Function(dynamic)? onValidate;
   Widget Function(int, Map<String, dynamic>)? builder;
   String? tooltip;
   Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,

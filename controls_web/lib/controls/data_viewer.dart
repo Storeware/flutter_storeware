@@ -271,7 +271,7 @@ class DataViewerController {
   }
 
   /// [DataViewerController.onValidate] permite  transformar um dados antes de enviar para a API
-  Map<String, dynamic> Function(dynamic)? onValidate;
+  Map<String, dynamic>? Function(dynamic)? onValidate;
 
   /// [PaginatedGridController] controller para paginação dos dados.
   PaginatedGridController paginatedController = PaginatedGridController();
@@ -341,7 +341,7 @@ class DataViewerColumn extends PaginatedGridColumn {
     dynamic Function(dynamic)? onSetValue,
 
     /// valida o dado para a coluna antes de submeter a persistencia
-    String Function(dynamic)? onValidate,
+    String? Function(dynamic)? onValidate,
     bool folded = false,
   }) : super(
           defaultValue: defaultValue,

@@ -966,7 +966,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   final Function(T)? onSaved;
   final bool? autofocus;
   final TextStyle? style;
-  final Future<T> Function()? onSearch;
+  final Future<T?>? Function()? onSearch;
   final IconData? iconSearch;
   final bool? readOnly;
   final String? labelText;
@@ -999,7 +999,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
       this.controller})
       : super(key: key);
 
-  String getValue(T v) {
+  String getValue(T? v) {
     if (onGetValue != null)
       return onGetValue!(v ?? initialValue!);
     else
@@ -1056,12 +1056,14 @@ class MaskedSearchFormField<T> extends StatelessWidget {
                             //focusNode: FocusNode(
                             //    canRequestFocus: false, onKey: (a, b) => false),
                             child: Icon(iconSearch),
-                            onTap: () {
-                              if (!readOnly!)
-                                onSearch!().then((item) {
+                            onTap: () async {
+                              if (onSearch != null) if (!readOnly!) {
+                                var item = await onSearch!();
+                                if (item != null) {
                                   _controller.text = getValue(item);
                                   if (onChanged != null) onChanged!(item);
-                                });
+                                }
+                              }
                             })),
             enableSuggestions: true,
             expands: maxLines! > 1,

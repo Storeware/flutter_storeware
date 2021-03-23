@@ -1,0 +1,6 @@
+[submodule "flip_card"]
+	path = flip_card
+	url = https://github.com/amarildolacerda/flip_card.git
+[submodule "Flutter-Credit-Card-Input-Form"]
+	path = Flutter-Credit-Card-Input-Form
+	url = https://github.com/amarildolacerda/Flutter-Credit-Card-Input-Form.git

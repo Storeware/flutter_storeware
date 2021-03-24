@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_web/controls/sliver_apps.dart';
 import 'package:app/models/apps_items.dart';
 import 'package:app/views/drawer_view.dart';

@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:app/models/menu_items.dart';
 import 'package:controls_web/controls/sliver_scaffold.dart';
 import 'package:flutter/material.dart';

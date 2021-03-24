@@ -7,7 +7,7 @@ import 'package:controls_web/controls.dart';
 import 'package:controls_web/controls/notice_activities.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 
-enum DialogsTransition { scale, fade, slide, slideUp, curve }
+enum DialogsTransition { scale, fade, slide, slideUp, slideDown, curve }
 
 class Dialogs {
   static showModal(
@@ -39,21 +39,19 @@ class Dialogs {
         ));
   }
 
-  static Future showPage<T>(
-    context, {
-    Widget? child,
-    double? width,
-    double? height,
-    Alignment? alignment,
-    bool fullPage = false,
-    Widget Function(BuildContext)? builder,
-    RouteTransitionsBuilder? transitionBuilder,
-    int? transitionDuration,
-    String label = '',
-    DialogsTransition? transition = DialogsTransition.scale,
-    Alignment? transitionAlign = Alignment.center,
-    Curve transitionCurve = Curves.elasticOut,
-  }) async {
+  static Future showPage<T>(context,
+      {Widget? child,
+      double? width,
+      double? height,
+      Alignment? alignment,
+      bool fullPage = false,
+      Widget Function(BuildContext)? builder,
+      RouteTransitionsBuilder? transitionBuilder,
+      int? transitionDuration,
+      String label = '',
+      DialogsTransition? transition = DialogsTransition.scale,
+      Alignment? transitionAlign = Alignment.center,
+      Curve transitionCurve = Curves.bounceOut}) async {
     Size size = MediaQuery.of(context).size;
     double plus = 0.0;
     if (size.width < 400) plus = 0.07;
@@ -90,10 +88,18 @@ class Dialogs {
           );
         if (transition == DialogsTransition.slideUp)
           return SlideTransition(
-            position: Tween(begin: Offset(0.0, 1.0), end: Offset(0.0, 0.0))
+            position: Tween(begin: Offset(0.0, 1.0), end: Offset.zero)
                 .animate(animation),
             child: child,
           );
+
+        if (transition == DialogsTransition.slideDown)
+          return SlideTransition(
+            position: Tween(begin: Offset(0.0, -1.0), end: Offset.zero)
+                .animate(animation),
+            child: child,
+          );
+
         if (transition == DialogsTransition.curve) {
           var cAnimation =
               CurvedAnimation(curve: transitionCurve, parent: animation);

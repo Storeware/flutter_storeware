@@ -15,25 +15,24 @@ version: 2021.03.16
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.9.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   controls_web:
-    #path: ../
+    path: ../
+    #git:
+    #  url: https://github.com/amarildolacerda/flutter_dart.git
+    #  path: controls_web
+  controls_data:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_web
-  controls_data:
-   git:
-    url: https://github.com/amarildolacerda/flutter_dart.git
-    path: controls_data
+      path: controls_data
   #path: ../../controls_data
 
-
-#dependencies_override:
+  #dependencies_override:
   printing: ^5.0.3
 
 dev_dependencies:

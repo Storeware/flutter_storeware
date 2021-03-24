@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:app/widget/button_double.dart';
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls/shopping.dart';

@@ -151,7 +151,7 @@ packages:
   controls_image_interface:
     dependency: transitive
     description:
-      path: "../../../../Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_image/controls_image_interface"
+      path: "../../../snap/flutter/common/flutter/.pub-cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_image/controls_image_interface"
       relative: true
     source: path
     version: "2021.03.06"

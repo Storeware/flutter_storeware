@@ -76,7 +76,7 @@ class _MenuDialogState extends State<MenuDialog> {
             Navigator.pop(context);
             Dialogs.showPage(
               context,
-              transition: DialogsTransition.slide,
+              transition: DialogsTransition.curve,
               width: (item.width ?? maxWidth * 0.8).min(maxWidth),
               height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
               child: (item.builder == null) ? null : item.builder!(context),

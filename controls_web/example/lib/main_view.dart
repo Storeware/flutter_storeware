@@ -26,7 +26,8 @@ class _MainViewState extends State<MainView> {
                 MenuChoice(
                     title: 'teste',
                     builder: (a) {
-                      return Scaffold(body: Text('x'));
+                      return Scaffold(
+                          appBar: AppBar(title: Text('xxx')), body: Text('x'));
                     }),
               ]);
             },

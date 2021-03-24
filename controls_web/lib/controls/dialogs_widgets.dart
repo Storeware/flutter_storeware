@@ -7,7 +7,16 @@ import 'package:controls_web/controls.dart';
 import 'package:controls_web/controls/notice_activities.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 
-enum DialogsTransition { scale, fade, slide, slideUp, slideDown, curve }
+enum DialogsTransition {
+  scale,
+  fade,
+  slide,
+  slideUp,
+  slideDown,
+  curve,
+  menuTop,
+  menuDown,
+}
 
 class Dialogs {
   static showModal(
@@ -75,11 +84,22 @@ class Dialogs {
           )),
         );
       },
-      transitionBuilder: (_, animation, __, child) {
+      transitionBuilder: (_, animation, secondaryAnimation, child) {
         if (transitionBuilder != null)
-          return transitionBuilder(_, animation, __, child);
+          return transitionBuilder(_, animation, secondaryAnimation, child);
+
         if (transition == DialogsTransition.fade)
-          return FadeTransition(opacity: animation, child: child);
+          return FadeTransition(
+            opacity: animation,
+            child: child,
+          );
+
+        if (transition == DialogsTransition.menuTop)
+          return SlideTransition(
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(animation),
+            child: child,
+          );
         if (transition == DialogsTransition.slide)
           return SlideTransition(
             position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
@@ -93,13 +113,28 @@ class Dialogs {
             child: child,
           );
 
-        if (transition == DialogsTransition.slideDown)
+        if (transition == DialogsTransition.menuDown)
           return SlideTransition(
-            position: Tween(begin: Offset(0.0, -1.0), end: Offset.zero)
-                .animate(animation),
-            child: child,
+            position: CurvedAnimation(
+              parent: animation,
+              curve: Curves.bounceOut,
+            ).drive(Tween<Offset>(begin: Offset(0, -1.0), end: Offset.zero)),
+            child: SlideTransition(
+                position:
+                    Tween<Offset>(begin: Offset.zero, end: Offset(-1.0, 0))
+                        .animate(secondaryAnimation),
+                child: child),
           );
 
+        if (transition == DialogsTransition.slideDown)
+          return SlideTransition(
+            position: CurvedAnimation(
+              parent: animation,
+              curve: Curves.bounceOut,
+              reverseCurve: Curves.ease,
+            ).drive(Tween<Offset>(begin: Offset(0, -1.0), end: Offset.zero)),
+            child: child,
+          );
         if (transition == DialogsTransition.curve) {
           var cAnimation =
               CurvedAnimation(curve: transitionCurve, parent: animation);

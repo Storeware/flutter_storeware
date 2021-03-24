@@ -24,7 +24,12 @@ class MenuChoice {
 
 class MenuDialog extends StatefulWidget {
   final List<MenuChoice>? choices;
-  const MenuDialog({Key? key, @required this.choices}) : super(key: key);
+  final DialogsTransition? transition;
+  const MenuDialog(
+      {Key? key,
+      @required this.choices,
+      this.transition = DialogsTransition.menuDown})
+      : super(key: key);
 
   @override
   _MenuDialogState createState() => _MenuDialogState();
@@ -36,7 +41,8 @@ class MenuDialog extends StatefulWidget {
     double width = 300,
     double? height,
     Color? color,
-    Alignment? transitionAlign = Alignment.topCenter,
+    Alignment? transitionAlign = Alignment.topRight,
+    DialogsTransition? transitionItem = DialogsTransition.menuDown,
   }) async {
     var h = height ?? (kToolbarHeight * (choices!.length + 1));
     if (Platform.isIOS || Platform.isAndroid || Platform.isFuchsia)
@@ -45,12 +51,13 @@ class MenuDialog extends StatefulWidget {
       context,
       width: width,
       alignment: Alignment.topRight,
-      transition: DialogsTransition.slide,
+      transition: DialogsTransition.menuTop,
       height: h + 0.0,
       transitionAlign: transitionAlign,
       child: Scaffold(
           appBar: AppBar(title: Text(title ?? 'Menu')),
           body: MenuDialog(
+            transition: transitionItem,
             choices: choices,
           )),
       //color: color
@@ -76,7 +83,8 @@ class _MenuDialogState extends State<MenuDialog> {
             Navigator.pop(context);
             Dialogs.showPage(
               context,
-              transition: DialogsTransition.curve,
+              transition: widget.transition!,
+              transitionDuration: 1000,
               width: (item.width ?? maxWidth * 0.8).min(maxWidth),
               height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
               child: (item.builder == null) ? null : item.builder!(context),

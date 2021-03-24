@@ -279,8 +279,8 @@ class DataViewerController {
   /// [edit] abre uma janela de edicao dos dados
   edit(BuildContext context, Map<String, dynamic> data,
       {String? title,
-      double? width,
-      double? height,
+      double? width = 650,
+      double? height = 720,
       PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
     return paginatedController.edit(context, data,
         title: title!, width: width!, height: height!, event: event);

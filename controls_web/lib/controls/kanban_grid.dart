@@ -377,6 +377,7 @@ class KanbanController {
 
   _addData(item) {
     var value = item[columnKeyName];
+    if (value == null) return;
     if (data![value] == null) data![value] = [];
     data![value!]!.add(item);
   }

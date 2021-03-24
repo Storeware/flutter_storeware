@@ -808,6 +808,15 @@ class PaginatedGridController {
       inScaffold: inScaffold,
       event: event,
       actions: [
+        IconButton(
+          icon: Icon(Icons.save),
+          onPressed: () {
+            this.data = data;
+            widget!.onPostEvent!(this, data, event).then((rsp) {
+              Navigator.pop(context);
+            });
+          },
+        ),
         if (widget!.canDelete)
           Tooltip(
               message: 'Excluir o item',

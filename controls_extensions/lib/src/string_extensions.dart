@@ -8,6 +8,13 @@ extension StringExtensions on String {
     return int.tryParse(this) ?? def;
   }
 
+  String truncate(int value) {
+    if (this.length > value)
+      return this.padRight(value);
+    else
+      return this;
+  }
+
   String from(value) => '$value';
 
   bool charIsNum(c) {

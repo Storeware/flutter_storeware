@@ -60,7 +60,8 @@ extension DynamicExtension on dynamic {
     if (value is double) return value;
     if (value is int) return value + 0.0;
     if (value is num) return value + 0.0;
-    if (value is String) return double.tryParse(value.replaceAll(',', '.')) ?? def;
+    if (value is String)
+      return double.tryParse(value.replaceAll(',', '.')) ?? def;
     return def;
   }
 
@@ -251,7 +252,7 @@ class ODataBuilder extends StatelessWidget {
               "result": (initialData == null) ? [] : [initialData]
             }
           : null,
-      future: (client == null) ? null : execute(client!, query),
+      future: execute(client, query!),
       builder: (context, response) {
         if (response.hasData) {
           var rst = ODataResult(json: response.data as Map<String, dynamic>);
@@ -262,7 +263,7 @@ class ODataBuilder extends StatelessWidget {
     );
   }
 
-  Future execute(ODataClient? odata, query) async {
+  Future execute(ODataClient? odata, ODataQuery query) async {
     debug(['execute', odata]);
     var odt = odata ?? ODataInst();
     return odt.send(query, cacheControl: cacheControl!);

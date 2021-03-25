@@ -16,6 +16,8 @@ enum DialogsTransition {
   curve,
   menuTop,
   menuDown,
+  menuRightDown,
+  menuRightUp,
 }
 
 class Dialogs {
@@ -48,29 +50,32 @@ class Dialogs {
         ));
   }
 
-  static Future showPage<T>(context,
-      {Widget? child,
-      double? width,
-      double? height,
-      Alignment? alignment,
-      bool fullPage = false,
-      Widget Function(BuildContext)? builder,
-      RouteTransitionsBuilder? transitionBuilder,
-      int? transitionDuration,
-      String label = '',
-      DialogsTransition? transition = DialogsTransition.scale,
-      Alignment? transitionAlign = Alignment.center,
-      Curve transitionCurve = Curves.bounceOut}) async {
+  static Future showPage<T>(
+    context, {
+    Widget? child,
+    double? width,
+    double? height,
+    Alignment? alignment,
+    bool fullPage = false,
+    Widget Function(BuildContext)? builder,
+    RouteTransitionsBuilder? transitionBuilder,
+    int? transitionDuration,
+    String label = '',
+    DialogsTransition? transition = DialogsTransition.scale,
+    Alignment? transitionAlign = Alignment.center,
+    Curve transitionCurve = Curves.ease,
+    Color? barrierColor,
+  }) async {
     Size size = MediaQuery.of(context).size;
     double plus = 0.0;
     if (size.width < 400) plus = 0.07;
     return showGeneralDialog(
       context: context,
       barrierLabel: label,
-      barrierColor: Colors.black.withOpacity(0.5),
+      barrierColor: barrierColor ?? Colors.black.withOpacity(0.2),
       transitionDuration: Duration(
           milliseconds: transitionDuration ??
-              ((transition == DialogsTransition.curve) ? 1500 : 500)),
+              (/*(transition == DialogsTransition.curve) ? 1500 :*/ 500)),
       barrierDismissible: true,
       pageBuilder: (BuildContext context, Animation animation,
           Animation secondaryAnimation) {
@@ -117,12 +122,40 @@ class Dialogs {
           return SlideTransition(
             position: CurvedAnimation(
               parent: animation,
-              curve: Curves.bounceOut,
-            ).drive(Tween<Offset>(begin: Offset(0, -1.0), end: Offset.zero)),
+              reverseCurve: Curves.ease,
+              curve: transitionCurve,
+            ).drive(Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset.zero)),
+            child: SlideTransition(
+                position:
+                    Tween<Offset>(begin: Offset.zero, end: Offset(-1.0, 0.0))
+                        .animate(secondaryAnimation),
+                child: child),
+          );
+
+        if (transition == DialogsTransition.menuRightDown)
+          return SlideTransition(
+            position: CurvedAnimation(
+              parent: animation,
+              reverseCurve: Curves.ease,
+              curve: transitionCurve,
+            ).drive(Tween<Offset>(begin: Offset(1, -1.0), end: Offset.zero)),
             child: SlideTransition(
                 position:
                     Tween<Offset>(begin: Offset.zero, end: Offset(-1.0, 0))
                         .animate(secondaryAnimation),
+                child: child),
+          );
+
+        if (transition == DialogsTransition.menuRightUp)
+          return SlideTransition(
+            position: CurvedAnimation(
+              parent: animation,
+              reverseCurve: Curves.ease,
+              curve: transitionCurve,
+            ).drive(Tween<Offset>(begin: Offset(1, 1.0), end: Offset.zero)),
+            child: SlideTransition(
+                position: Tween<Offset>(begin: Offset.zero, end: Offset(1.0, 0))
+                    .animate(secondaryAnimation),
                 child: child),
           );
 

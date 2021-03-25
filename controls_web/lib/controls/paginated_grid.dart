@@ -303,82 +303,47 @@ class PaginatedGrid extends StatefulWidget {
   @override
   _PaginatedGridState createState() => _PaginatedGridState();
 
-  static show(context,
-      {Widget? child,
-      String? title,
-      double? width,
-      double? height,
-      Alignment? alignment,
-      bool fullPage = false,
-      String? label = '',
-      DialogsTransition transition = DialogsTransition.scale}) async {
+  static show(
+    context, {
+    Widget? child,
+    String? title,
+    double? width,
+    double? height,
+    Alignment? alignment,
+    bool fullPage = false,
+    String? label = '',
+    DialogsTransition transition = DialogsTransition.scale,
+    Curve transitionCurve = Curves.ease,
+  }) async {
     Size size = MediaQuery.of(context).size;
-    return showGeneralDialog(
-        context: context,
-        barrierLabel: label,
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionDuration: const Duration(milliseconds: 500),
-        barrierDismissible: true,
-        pageBuilder: (BuildContext context, Animation animation,
-            Animation secondaryAnimation) {
-          return Align(
-            alignment: alignment ?? Alignment.center,
-            child: Material(
-                child: Container(
-              width: (fullPage)
-                  ? size.width
-                  : width ??
-                      PaginatedGrid.dialogWidth(
-                          maxSize: size), //?? size.width * 0.90,
-              height: (fullPage)
-                  ? size.height
-                  : height ??
-                      PaginatedGrid.dialogHeight(
-                          maxSize: size), // ?? size.height * 0.90,
-              child: child,
-            )),
-          );
-        },
-        /*transitionBuilder: (_, anim, __, child) {
-        return ScaleTransition(
-          scale: anim,
+    return Dialogs.showPage(
+      context,
+      width: width,
+      height: height,
+      fullPage: fullPage,
+      transition: transition,
+      alignment: alignment,
+      transitionCurve: transitionCurve,
+      child: Align(
+        alignment: alignment ?? Alignment.center,
+        child: Material(
+            child: Container(
+          width: (fullPage)
+              ? size.width
+              : width ??
+                  PaginatedGrid.dialogWidth(
+                      maxSize: size), //?? size.width * 0.90,
+          height: (fullPage)
+              ? size.height
+              : height ??
+                  PaginatedGrid.dialogHeight(
+                      maxSize: size), // ?? size.height * 0.90,
           child: child,
-        );
-      },*/
-        transitionBuilder: (_, animation, __, child) {
-          //if (transitionBuilder != null)
-          //  return transitionBuilder(_, animation, __, child);
-          if (transition == DialogsTransition.fade)
-            return FadeTransition(opacity: animation, child: child);
-          if (transition == DialogsTransition.slide)
-            return SlideTransition(
-              position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
-                  .animate(animation),
-              child: child,
-            );
-          if (transition == DialogsTransition.slideUp)
-            return SlideTransition(
-              position: Tween(begin: Offset(1.0, 1.0), end: Offset(0.0, 0.0))
-                  .animate(animation),
-              child: child,
-            );
-          if (transition == DialogsTransition.curve) {
-            var cAnimation =
-                CurvedAnimation(curve: Curves.easeIn, parent: animation);
-            return Align(
-              child: SizeTransition(
-                sizeFactor: cAnimation,
-                child: child,
-                axisAlignment: -1.0,
-              ),
-            );
-          }
-          return ScaleTransition(
-            alignment: Alignment.center,
-            scale: animation,
-            child: child,
-          );
-        });
+        )),
+      ),
+      label: title!,
+      transitionDuration: 500,
+    );
   }
 
   static dialogWidth({Size? maxSize}) => maxSize?.width ?? 450.0;
@@ -731,6 +696,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
             });
           else if (widget.onPostEvent != null) {
             PaginatedGrid.show(context,
+                //transition: DialogsTransition.menuRightUp,
                 title: 'Novo registro',
                 width: widget.editSize?.width ?? PaginatedGrid.dialogWidth(),
                 height: widget.editSize?.height ?? PaginatedGrid.dialogHeight(),

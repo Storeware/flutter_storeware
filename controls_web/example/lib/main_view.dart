@@ -1,8 +1,10 @@
 // @dart=2.12
+import 'package:controls_web/controls.dart';
 import 'package:controls_web/controls/menu_dialogs.dart';
 import 'package:controls_web/controls/notice_activities.dart';
 import 'package:controls_web/controls/responsive.dart';
 import 'package:controls_web/controls/rounded_button.dart';
+import 'package:controls_web/controls/staggered_animation.dart';
 import 'package:flutter/material.dart';
 //import 'models/constantes.dart';
 import 'package:controls_web/services/routes.dart';
@@ -23,13 +25,31 @@ class _MainViewState extends State<MainView> {
             icon: Icon(Icons.menu),
             onPressed: () {
               MenuDialog.show(context, choices: [
-                MenuChoice(
-                    title: 'teste',
-                    builder: (a) {
-                      return Scaffold(
-                          appBar: AppBar(title: Text('xxx')), body: Text('x'));
-                    }),
+                for (var i = 0; i < 10; i++)
+                  MenuChoice(
+                      title: 'teste $i',
+                      builder: (a) {
+                        return Scaffold(
+                            appBar: AppBar(title: Text('xxx $i')),
+                            body: Text('x'));
+                      }),
               ]);
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.menu_book),
+            onPressed: () {
+              Dialogs.showPage(context,
+                  width: 200,
+                  height: 450,
+                  child: ListView(children: [
+                    for (var i = 0; i < 10; i++)
+                      StaggeredAnimation(
+                          itemIndex: i,
+                          child: ListTile(
+                            title: Text('item $i'),
+                          ))
+                  ]));
             },
           )
         ]),

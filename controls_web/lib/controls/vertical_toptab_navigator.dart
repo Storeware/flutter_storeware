@@ -144,7 +144,9 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
                       },
                     ),
                     switchInCurve: Curves.ease,
-                    transitionBuilder: (widget, animation) => ScaleTransition(
+                    transitionBuilder: (widget, animation) =>
+                        //genAnimation(widget, animation) ??
+                        ScaleTransition(
                           scale: animation,
                           child: widget,
                         )),
@@ -154,6 +156,18 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
           ],
         ));
   }
+
+  genAnimation(child, animation) => SlideTransition(
+        position: CurvedAnimation(
+          parent: animation,
+          reverseCurve: Curves.ease,
+          curve: Curves.bounceOut,
+        ).drive(Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset.zero)),
+        child: SlideTransition(
+            position: Tween<Offset>(begin: Offset.zero, end: Offset(-1.0, 0.0))
+                .animate(animation),
+            child: child),
+      );
 }
 
 enum VerticalTopTabPosition { left, right }

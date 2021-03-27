@@ -42,7 +42,7 @@ class MenuDialog extends StatefulWidget {
     double? height,
     Color? color,
     Alignment? transitionAlign = Alignment.topRight,
-    DialogsTransition? transitionItem = DialogsTransition.menuDown,
+    DialogsTransition? transitionItem = DialogsTransition.menuRightDown,
   }) async {
     var h = height ?? (kToolbarHeight * (choices!.length + 1));
     if (Platform.isIOS || Platform.isAndroid || Platform.isFuchsia)
@@ -54,6 +54,7 @@ class MenuDialog extends StatefulWidget {
       transition: DialogsTransition.menuTop,
       height: h + 0.0,
       transitionAlign: transitionAlign,
+      barrierColor: Colors.black.withOpacity(0.05),
       child: Scaffold(
           appBar: AppBar(title: Text(title ?? 'Menu')),
           body: MenuDialog(

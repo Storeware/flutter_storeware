@@ -564,7 +564,7 @@ class ActionText extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () => onPressed!(),
+      onTap: () => (onPressed != null) ? onPressed!() : null,
     );
   }
 }

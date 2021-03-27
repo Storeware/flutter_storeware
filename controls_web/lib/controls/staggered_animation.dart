@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 class StaggeredAnimation extends StatefulWidget {
   final Widget child;
   final int itemIndex;
+  final int initialDelay;
   const StaggeredAnimation({
     Key? key,
     required this.itemIndex,
     required this.child,
+    this.initialDelay = 500,
   }) : super(key: key);
 
   @override
@@ -17,7 +19,7 @@ class StaggeredAnimation extends StatefulWidget {
 class _StaggeredAnimationState extends State<StaggeredAnimation>
     with SingleTickerProviderStateMixin {
   late AnimationController _staggeredController;
-  static const _initialDelayTime = Duration(milliseconds: 50);
+  late Duration _initialDelayTime;
   static const _itemSlideTime = Duration(milliseconds: 250);
   static const _staggerTime = Duration(milliseconds: 50);
   static const _buttonDelayTime = Duration(milliseconds: 150);
@@ -29,6 +31,7 @@ class _StaggeredAnimationState extends State<StaggeredAnimation>
   @override
   void initState() {
     super.initState();
+    _initialDelayTime = Duration(milliseconds: widget.initialDelay);
     _animationDuration = _initialDelayTime +
         (_staggerTime * (length)) +
         _buttonDelayTime +

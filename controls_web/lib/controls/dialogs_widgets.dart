@@ -67,6 +67,7 @@ class Dialogs {
     Alignment? transitionAlign = Alignment.center,
     Curve transitionCurve = Curves.ease,
     Color? barrierColor,
+    List<Widget>? actions,
   }) async {
     Size size = MediaQuery.of(context).size;
     double plus = 0.0;
@@ -94,6 +95,7 @@ class Dialogs {
                       title: Text('$title'),
                       automaticallyImplyLeading: false,
                       actions: [
+                        if (actions != null) ...actions,
                         IconButton(
                           icon: Icon(Icons.arrow_forward),
                           onPressed: () => Navigator.pop(context),

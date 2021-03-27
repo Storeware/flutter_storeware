@@ -12,6 +12,7 @@ class MenuChoice {
   final bool enabled;
   final double? width;
   final double? height;
+  final List<Widget>? actions;
   MenuChoice({
     this.icon,
     this.title,
@@ -20,6 +21,7 @@ class MenuChoice {
     this.builder,
     this.width,
     this.height,
+    this.actions,
   });
 }
 
@@ -101,6 +103,7 @@ class _MenuDialogState extends State<MenuDialog> {
                   iconRight: true,
                   title: item.title!,
                   transitionDuration: 1000,
+                  actions: item.actions,
                   width: (item.width ?? maxWidth * 0.8).min(maxWidth),
                   height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
                   child: (item.builder == null) ? null : item.builder!(context),

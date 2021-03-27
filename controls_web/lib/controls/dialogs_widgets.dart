@@ -91,7 +91,7 @@ class Dialogs {
               appBar: (!iconRight! || (title == null))
                   ? null
                   : AppBar(
-                      title: Text('x $title'),
+                      title: Text('$title'),
                       automaticallyImplyLeading: false,
                       actions: [
                         IconButton(

@@ -56,11 +56,13 @@ class Dialogs {
     double? width,
     double? height,
     Alignment? alignment,
+    bool? iconRight = false,
     bool fullPage = false,
     Widget Function(BuildContext)? builder,
     RouteTransitionsBuilder? transitionBuilder,
     int? transitionDuration,
     String label = '',
+    String? title,
     DialogsTransition? transition = DialogsTransition.scale,
     Alignment? transitionAlign = Alignment.center,
     Curve transitionCurve = Curves.ease,
@@ -85,7 +87,21 @@ class Dialogs {
               child: Container(
             width: (fullPage) ? size.width : width ?? size.width * 0.90 + plus,
             height: (fullPage) ? size.height : height ?? size.height * 0.90,
-            child: (builder != null) ? builder(context) : child,
+            child: Scaffold(
+              appBar: (!iconRight! || (title == null))
+                  ? null
+                  : AppBar(
+                      title: Text('x $title'),
+                      automaticallyImplyLeading: false,
+                      actions: [
+                        IconButton(
+                          icon: Icon(Icons.arrow_forward),
+                          onPressed: () => Navigator.pop(context),
+                        )
+                      ],
+                    ),
+              body: (builder != null) ? builder(context) : child,
+            ),
           )),
         );
       },

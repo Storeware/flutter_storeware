@@ -1,5 +1,6 @@
 // @dart=2.12
 import 'package:controls_web/controls/dialogs_widgets.dart';
+import 'package:controls_web/controls/staggered_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:universal_io/io.dart';
 
@@ -56,7 +57,16 @@ class MenuDialog extends StatefulWidget {
       transitionAlign: transitionAlign,
       barrierColor: Colors.black.withOpacity(0.05),
       child: Scaffold(
-          appBar: AppBar(title: Text(title ?? 'Menu')),
+          appBar: AppBar(
+            title: Text(title ?? 'Menu'),
+            automaticallyImplyLeading: false,
+            actions: [
+              IconButton(
+                icon: Icon(Icons.arrow_forward),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            ],
+          ),
           body: MenuDialog(
             transition: transitionItem,
             choices: choices,
@@ -76,21 +86,26 @@ class _MenuDialogState extends State<MenuDialog> {
   Widget _listMenu() {
     final double maxWidth = size!.width;
     final double maxHeigth = size!.height;
+    int i = 0;
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         for (var item in widget.choices!)
-          _tiles(item, item.title, item.icon, item.index, () {
-            Navigator.pop(context);
-            Dialogs.showPage(
-              context,
-              transition: widget.transition!,
-              transitionDuration: 1000,
-              width: (item.width ?? maxWidth * 0.8).min(maxWidth),
-              height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
-              child: (item.builder == null) ? null : item.builder!(context),
-            );
-          }),
+          StaggeredAnimation(
+              itemIndex: i++,
+              child: _tiles(item, item.title, item.icon, item.index, () {
+                Navigator.pop(context);
+                Dialogs.showPage(
+                  context,
+                  transition: widget.transition!,
+                  iconRight: true,
+                  title: item.title!,
+                  transitionDuration: 1000,
+                  width: (item.width ?? maxWidth * 0.8).min(maxWidth),
+                  height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
+                  child: (item.builder == null) ? null : item.builder!(context),
+                );
+              })),
       ],
     );
   }

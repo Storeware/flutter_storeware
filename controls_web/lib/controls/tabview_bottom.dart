@@ -243,7 +243,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
                   child: Container(
                       //width: bw+8,
                       padding: const EdgeInsets.only(
-                          left: 2.0, bottom: 2, right: 2.0, top: 2.0),
+                          left: 2.0, bottom: 1, right: 2.0, top: 2.0),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
                         color: (idx == i) ? _indicatorColor : _tabColor,
@@ -255,13 +255,19 @@ class _TabViewBottomState extends State<TabViewBottom> {
                           if (choice.image != null)
                             Flexible(
                                 flex: 2,
-                                child: Center(
-                                  child: Padding(
-                                      padding: EdgeInsets.all(2),
-                                      child: (choice.icon != null)
-                                          ? Icon(choice.icon)
-                                          : choice.image),
-                                )),
+                                child: (idx == i)
+                                    ? SelectedItemAvatar(
+                                        child: (choice.icon != null)
+                                            ? Icon(choice.icon)
+                                            : choice.image,
+                                      )
+                                    : Center(
+                                        child: Padding(
+                                            padding: EdgeInsets.all(2),
+                                            child: (choice.icon != null)
+                                                ? Icon(choice.icon)
+                                                : choice.image),
+                                      )),
                           if (choice.label != null || choice.title != null)
                             Flexible(
                               flex: 1,
@@ -276,7 +282,8 @@ class _TabViewBottomState extends State<TabViewBottom> {
                                               overflow: TextOverflow.ellipsis,
                                               style: widget.style ??
                                                   TextStyle(
-                                                    fontSize: 11,
+                                                    fontSize:
+                                                        (idx == i) ? 12 : 11,
                                                     color:
                                                         (theme!.scaffoldBackgroundColor)
                                                                 .isDark
@@ -304,4 +311,17 @@ class _TabViewBottomState extends State<TabViewBottom> {
         },
       );
   //    });
+
+}
+
+class SelectedItemAvatar extends StatelessWidget {
+  final Widget? child;
+  const SelectedItemAvatar({Key? key, this.child}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      child: child,
+    );
+  }
 }

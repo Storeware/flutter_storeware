@@ -112,7 +112,7 @@ class LoginTokenChanged extends BlocModelX<bool> {
 class ODataQuery {
   final String? resource;
   String? select;
-  String? filter;
+  dynamic? filter;
   int? top;
   int? skip;
   String? groupby;
@@ -339,7 +339,7 @@ class ODataClient {
     }
   }
 
-  Future<dynamic> getOne(String resource) async {
+  Future<dynamic> getOne(String resource, {String? id}) async {
     try {
       return client.send(resource).then((res) {
         return client.decode(res);
@@ -601,7 +601,7 @@ abstract class ODataModelClass<T extends DataItem> {
             orderBy: orderBy,
             cacheControl: cacheControl ?? 'no-cache')
         .then((ODataResult r) {
-      return r.asMap();
+      return (r.rows == 0) ? [] : r.asMap();
     });
   }
 
@@ -723,7 +723,7 @@ abstract class ODataModelClass<T extends DataItem> {
   Future<ODataResult> search(
       {String? resource,
       String? select,
-      String? filter,
+      dynamic? filter,
       String? orderBy,
       String? groupBy,
       int? top,

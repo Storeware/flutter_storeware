@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'dart:typed_data';
 
 import 'package:date_format/date_format.dart';
@@ -13,7 +14,7 @@ import 'package:universal_platform/universal_platform.dart';
 /// [PdvReportController] controller para PdfDataPreview
 class PdfReportController {
   pw.Document? document;
-  PdfPageFormat? pageFormat;
+  PdfPageFormat pageFormat;
   String? fileName;
   PdfReportController(
       {this.fileName,
@@ -22,15 +23,15 @@ class PdfReportController {
       this.build}) {
     this.document ??= pw.Document();
   }
-  Future<Uint8List> save({PdfPageFormat? format}) {
+  Future<Uint8List> save({PdfPageFormat? format}) async {
     if (format != null) this.pageFormat = format;
     if (!inited) callBuild();
     return document!.save();
   }
 
-  final Function(pw.Document document)? build;
+  final Function(pw.Document? document)? build;
   callBuild() {
-    if (build != null) build!(this.document!);
+    if (build != null) build!(this.document);
     this.inited = true;
   }
 
@@ -64,13 +65,14 @@ class PdfReportController {
       _path = '${output.path}/${fileName ?? 'examplo.pdf'}';
     }
     final file = File('$_path');
-    return await file.writeAsBytes(await document!.save());
+    return await document!.save().then((rsp) {
+      return file.writeAsBytes(rsp);
+    });
   }
 
   Future<bool> sharePdf({String? name}) async {
-    return await Printing.sharePdf(
-        bytes: await document!.save(),
-        filename: name ?? fileName ?? 'exemplo.pdf');
+    return await document!.save().then((bytes) => Printing.sharePdf(
+        bytes: bytes, filename: name ?? fileName ?? 'exemplo.pdf'));
   }
 
   Future<List<Uint8List>> pagesAsByte(
@@ -90,17 +92,17 @@ class PdfReportController {
 
 /// [PdfReportView] - Visualziador de PDF
 class PdfReportView extends StatefulWidget {
-  final bool? canPrint;
-  final bool? canShare;
+  final bool canPrint;
+  final bool canShare;
   final String? title;
   final List<Widget>? actions;
   final PdfReportController? controller;
   final List<PdfPreviewAction>? pageActions;
   final AppBar? appBar;
-  final void Function(pw.Document document)? builder;
+  final void Function(pw.Document? document)? builder;
   const PdfReportView(
       {Key? key,
-      @required this.controller,
+      required this.controller,
       this.actions,
       this.builder,
       this.title,
@@ -119,50 +121,57 @@ class _PdfReportViewState extends State<PdfReportView> {
   void initState() {
     super.initState();
     //widget.controller.callBuild();
-    if (widget.builder != null) widget.builder!(widget.controller!.document!);
+    if (widget.builder != null) widget.builder!(widget.controller!.document);
   }
+
+  PdfPreview? pdfPreview;
 
   @override
   Widget build(BuildContext context) {
+    pdfPreview ??= PdfPreview(
+      allowPrinting: widget.canPrint,
+      allowSharing: widget.canShare,
+      //canChangePageFormat: false,
+      onError: (BuildContext context) {
+        return Container(child: Text('Não há dados no documento'));
+      },
+      //actions: widget.pageActions,
+      initialPageFormat: widget.controller!.pageFormat,
+      //onPrinted: (context) => widget.controller!.print(),
+      //onShared: (context) => widget.controller!.sharePdf(),
+      build: (format) => widget.controller!.save(format: format),
+    );
     return Scaffold(
       appBar: widget.appBar ??
           AppBar(
-            title: (widget.title == null) ? null : Text(widget.title!),
-            /*leading: IconButton(
+              title: Text(widget.title ?? ''),
+              /*leading: IconButton(
           icon: Icon(Icons.print),
           onPressed: () {
             widget.controller.print();
           },
         ),*/
-            actions: [
+              actions: widget
+                  .actions /* [
               ...widget.actions ?? [],
-              if (widget.canPrint!)
+              if (widget.canPrint)
                 IconButton(
                     icon: Icon(Icons.print),
                     onPressed: () {
                       widget.controller!.print();
                     }),
-              if (widget.canShare!)
+              
+              if (widget.canShare)
                 IconButton(
-                    icon: Icon(Icons.share),
+                    icon: Icon(UniversalPlatform.isWeb
+                        ? Icons.file_download
+                        : Icons.share),
                     onPressed: () {
                       widget.controller!.sharePdf();
                     }),
-            ],
-          ),
-      body: PdfPreview(
-        allowPrinting: false,
-        allowSharing: false,
-        canChangePageFormat: false,
-        onError: (BuildContext context) {
-          return Container(child: Text('Não há dados no documento'));
-        },
-        actions: widget.pageActions,
-        initialPageFormat: widget.controller!.pageFormat,
-        onPrinted: (context) => widget.controller!.print(),
-        onShared: (context) => widget.controller!.sharePdf(),
-        build: (format) => widget.controller!.save(format: format),
-      ),
+            ],*/
+              ),
+      body: pdfPreview,
     );
   }
 }
@@ -171,16 +180,15 @@ class PdfReportColumn {
   final String? name;
   final String? label;
   final double? width;
-  final bool? numeric;
-  final pw.Alignment? alignment;
-  final int? maxLines;
+  final bool numeric;
+  final pw.Alignment alignment;
+  final int maxLines;
   final String Function(dynamic)? getValue;
   final PdfColor? color;
-  final pw.Widget Function(
-          pw.Context context, PdfReportColumn column, Map<String, dynamic> row)?
-      builder;
+  final pw.Widget Function(pw.Context? context, PdfReportColumn column,
+      Map<String, dynamic> row)? builder;
   PdfReportColumn(
-      {@required this.name,
+      {required this.name,
       this.numeric = false,
       this.alignment = pw.Alignment.centerLeft,
       this.getValue,
@@ -202,7 +210,7 @@ enum PdfBandType {
 }
 
 class PdfBand {
-  PdfBandType? type;
+  final PdfBandType? type;
   int? pageNumber;
   PdfBand({this.type, this.pageNumber});
   pw.Widget doBuilder(pw.Context? context) {
@@ -212,13 +220,13 @@ class PdfBand {
 
 class PdfTitleBand extends PdfBand {
   final String? title;
-  final double? height;
-  final pw.Widget Function(pw.Context context)? builder;
+  final double height;
+  final pw.Widget Function(pw.Context? context)? builder;
   PdfTitleBand({this.title, this.builder, this.height = kToolbarHeight})
       : super(type: PdfBandType.header);
   @override
-  pw.Widget doBuilder(context) {
-    if (builder != null) return builder!(context!);
+  pw.Widget doBuilder(pw.Context? context) {
+    if (builder != null) return builder!(context);
     return pw.Container(
         height: this.height,
         child: pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
@@ -239,60 +247,64 @@ class PdfTitleBand extends PdfBand {
 }
 
 class PdfPageHeaderBand extends PdfBand {
-  final double? height;
+  final double height;
   final PdfColor? color;
-  PdfPageHeaderBand({this.color, @required this.builder, this.height = 35})
+  PdfPageHeaderBand({this.color, this.builder, this.height = 35})
       : super(type: PdfBandType.headerDetail);
-  final pw.Widget Function(pw.Context context, PdfPageHeaderBand band)? builder;
+  final pw.Widget Function(pw.Context? context, PdfPageHeaderBand band)?
+      builder;
 
   @override
-  pw.Widget doBuilder(context) {
+  pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height, color: color, child: builder!(context!, this));
+        height: this.height,
+        color: color,
+        child: (builder == null) ? null : builder!(context, this));
   }
 }
 
 class PdfPageFooterBand extends PdfBand {
-  final double? height;
+  final double height;
   final PdfColor? color;
   PdfPageFooterBand({this.color, this.builder, this.height = 35})
       : super(type: PdfBandType.headerDetail);
-  final pw.Widget Function(pw.Context context, PdfPageFooterBand band)? builder;
+  final pw.Widget Function(pw.Context? context, PdfPageFooterBand band)?
+      builder;
 
   @override
-  pw.Widget doBuilder(context) {
+  pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height, color: color, child: builder!(context!, this));
+        height: this.height, color: color, child: builder!(context, this));
   }
 }
 
 class PdfHeaderDetailBand extends PdfBand {
-  final double? height;
+  final double height;
   final PdfColor? color;
   PdfHeaderDetailBand({this.color, this.builder, this.height = 35})
       : super(type: PdfBandType.headerDetail);
-  final pw.Widget Function(pw.Context context, PdfHeaderDetailBand band)?
+  final pw.Widget Function(pw.Context? context, PdfHeaderDetailBand band)?
       builder;
 
   @override
-  pw.Widget doBuilder(context) {
+  pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height, color: color, child: builder!(context!, this));
+        height: this.height, color: color, child: builder!(context, this));
   }
 }
 
 class PdfFooterDetailBand extends PdfBand {
-  final double? height;
+  final double height;
   final PdfColor? color;
   PdfFooterDetailBand({this.color, this.builder, this.height = 35})
       : super(type: PdfBandType.footerDetail);
-  final pw.Widget Function(pw.Context context, PdfFooterDetailBand band)?
+  final pw.Widget Function(pw.Context? context, PdfFooterDetailBand band)?
       builder;
 
   @override
-  pw.Widget doBuilder(context) {
+  pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height, color: color, child: builder!(context!, this));
+        height: this.height, color: color, child: builder!(context, this));
   }
 }
 
@@ -301,8 +313,8 @@ class PdfDetailBand extends PdfBand {
   int? index;
   Map<String, dynamic>? data;
   final double? height;
-  final pw.Widget Function(pw.Context context, int index,
-      Map<String, dynamic> row, PdfDetailBand band)? builder;
+  final pw.Widget Function(pw.Context? context, int? index,
+      Map<String, dynamic>? row, PdfDetailBand band)? builder;
   PdfDetailBand(
       {this.data,
       this.index,
@@ -311,24 +323,24 @@ class PdfDetailBand extends PdfBand {
       this.height,
       this.builder})
       : super(type: PdfBandType.detail);
-  final void Function(Map<String, dynamic> data)? afterPrint;
-  final void Function(Map<String, dynamic> data)? beforePrint;
+  final void Function(Map<String, dynamic>? data)? afterPrint;
+  final void Function(Map<String, dynamic>? data)? beforePrint;
   @override
-  doBuilder(context) {
-    if (beforePrint != null) beforePrint!(data!);
-    var r = builder!(context!, index!, data!, this);
-    if (afterPrint != null) afterPrint!(data!);
+  doBuilder(pw.Context? context) {
+    if (beforePrint != null) beforePrint!(data);
+    var r = builder!(context, index, data, this);
+    if (afterPrint != null) afterPrint!(data);
     return r;
   }
 }
 
 class PdfDetailTotalBand extends PdfBand {
-  final pw.Widget Function(pw.Context context)? builder;
+  final pw.Widget Function(pw.Context? context)? builder;
   final List<String>? keys;
-  PdfDetailTotalBand({this.keys, @required this.builder}) : super();
+  PdfDetailTotalBand({this.keys, this.builder}) : super();
   @override
-  doBuilder(context) {
-    return builder!(context!);
+  doBuilder(pw.Context? context) {
+    return builder!(context);
   }
 
   eval(Map<String, dynamic> data) {
@@ -343,20 +355,20 @@ class PdfDetailTotalBand extends PdfBand {
 }
 
 class PdfFooterBand extends PdfBand {
-  final pw.Widget Function(pw.Context context)? builder;
-  PdfFooterBand({@required this.builder});
+  final pw.Widget Function(pw.Context? context) builder;
+  PdfFooterBand({required this.builder});
   @override
-  doBuilder(context) {
-    return builder!(context!);
+  doBuilder(pw.Context? context) {
+    return builder(context);
   }
 }
 
 class PdfSummaryBand extends PdfBand {
-  final pw.Widget Function(pw.Context context)? builder;
-  PdfSummaryBand({@required this.builder});
+  final pw.Widget Function(pw.Context? context) builder;
+  PdfSummaryBand({required this.builder});
   @override
-  doBuilder(context) {
-    return builder!(context!);
+  doBuilder(pw.Context? context) {
+    return builder(context);
   }
 }
 
@@ -394,13 +406,13 @@ class PdfDataPreview extends StatefulWidget {
   final AppBar? appBar;
   final String? appBarTitle;
   final String? reportTitle;
-  final List<Map<String, dynamic>>? source;
-  final List<PdfReportColumn>? columns;
-  final double? dataRowHeight;
-  final double? dataHeaderHeight;
-  final double? headerHeight;
+  final List<Map<String, dynamic>> source;
+  final List<PdfReportColumn> columns;
+  final double dataRowHeight;
+  final double dataHeaderHeight;
+  final double headerHeight;
   final PdfColor? headerColor;
-  final double? footerHeight;
+  final double footerHeight;
   final pw.EdgeInsets? padding;
   final PdfReportController? controller;
   //final pw.Widget Function(
@@ -409,9 +421,9 @@ class PdfDataPreview extends StatefulWidget {
   final pw.Widget Function(pw.Context context, int page)? footer;
   final int? rowsPerPage;
 
-  final bool? canPrint;
+  final bool canPrint;
 
-  final bool? canShare;
+  final bool canShare;
   const PdfDataPreview({
     Key? key,
     this.reportTitle,
@@ -419,8 +431,8 @@ class PdfDataPreview extends StatefulWidget {
     this.padding,
     this.bands,
     this.controller,
-    @required this.source,
-    @required this.columns,
+    required this.source,
+    required this.columns,
     //this.controller,
     //this.detailBuilder,
     this.header,
@@ -446,8 +458,8 @@ class PdfDataPreview extends StatefulWidget {
         for (var i = 1; i < 50; i++) {"codigo": '$i', "nome": "teste$i"},
       ],
       columns: [
-        PdfReportColumn(name: 'codigo', label: 'C�digo'),
-        PdfReportColumn(name: 'nome', label: 'Descri��o'),
+        PdfReportColumn(name: 'codigo', label: 'Código'),
+        PdfReportColumn(name: 'nome', label: 'Descrição'),
       ],
       bands: PdfBands(
           title: PdfTitleBand(height: 100, title: "Movimento suspeito")),
@@ -457,8 +469,8 @@ class PdfDataPreview extends StatefulWidget {
 
 class _PdfDataPreviewState extends State<PdfDataPreview> {
   PdfReportController? _controller;
-  int get length => widget.source!.length;
-  int get columnCount => widget.columns!.length;
+  int get length => widget.source.length;
+  int get columnCount => widget.columns.length;
   int? rowIndex;
   int? _rowsPerPage;
   int get pageCount => pages.length;
@@ -474,32 +486,35 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
     _bands = widget.bands ??
         PdfBands(
           pageFooter: PdfPageFooterBand(
-              builder: (ctx, band) => buildFooter(ctx, band.pageNumber)),
+              builder: (pw.Context? ctx, band) =>
+                  buildFooter(ctx, band.pageNumber)),
         );
 
     if (widget.columns != null) {
-      _bands!.detail ??= PdfDetailBand(
+      _bands.detail ??= PdfDetailBand(
           height: widget.dataRowHeight,
-          builder: (ctx, index, data, band) => buildRow(context, index, data));
-      _bands!.pageHeader ??= PdfPageHeaderBand(
-          builder: (ctx, band) => buildHeader(ctx, band.pageNumber));
+          builder: (pw.Context? ctx, index, data, band) =>
+              buildRow(ctx, index, data));
+      _bands.pageHeader ??= PdfPageHeaderBand(
+          builder: (pw.Context? ctx, band) =>
+              buildHeader(ctx, band.pageNumber));
     }
 
     if (widget.reportTitle != null)
-      _bands!.title ??=
+      _bands.title ??=
           PdfTitleBand(title: widget.reportTitle, height: widget.headerHeight);
     //_bands.totalDetail ??= PdfDetailTotalBand(keys: [], builder: (ctx) => null);
 
-    double h = _controller!.pageFormat!.availableHeight / widget.dataRowHeight!;
-    double resta = _controller!.pageFormat!.availableHeight -
-        widget.dataHeaderHeight! -
-        widget.headerHeight! -
-        widget.footerHeight!;
+    double h = _controller!.pageFormat.availableHeight / widget.dataRowHeight;
+    double resta = _controller!.pageFormat.availableHeight -
+        widget.dataHeaderHeight -
+        widget.headerHeight -
+        widget.footerHeight;
     _rowsPerPage = widget.rowsPerPage ?? (resta ~/ h) + 1;
-    buildPdf();
+    buildPdf(null);
   }
 
-  PdfBands? _bands;
+  late PdfBands _bands;
   List<PdfBand>? rows;
 
   final Map<int, List<PdfBand>> pages = {};
@@ -507,7 +522,7 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
   add(int pag, PdfBand obj) {
     pages[pag] ??= [];
     obj.pageNumber = pag;
-    return pages[pag]?.add(obj);
+    return pages[pag]!.add(obj);
   }
 
   addLast(PdfBand obj) {
@@ -518,30 +533,30 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
   insert(int pos, int pag, PdfBand obj) {
     pages[pag] ??= [];
     obj.pageNumber = pag;
-    return pages[pag]?.insert(pos, obj);
+    return pages[pag]!.insert(pos, obj);
   }
 
-  buildPdf() {
+  buildPdf(pw.Context? context) {
     //if (inited) return null;
     inited = true;
 
     //rows.add(PdfHeaderDetailBand(builder: (ctx) => buildHeader(ctx, 1)));
 
-    if (_bands?.detail! != null)
-      for (var i = 0; i < widget.source!.length; i++)
+    if (_bands.detail != null)
+      for (var i = 0; i < widget.source.length; i++)
         add(
           ((i ~/ _rowsPerPage!) + 1),
           PdfDetailBand(
-              data: widget.source![i],
+              data: widget.source[i],
               index: i,
-              height: _bands?.detail!.height,
-              afterPrint: (_bands?.detail?.afterPrint == null)
+              height: _bands.detail!.height,
+              afterPrint: (_bands.detail!.afterPrint == null)
                   ? null
-                  : (a) => _bands?.detail?.afterPrint!(a),
-              beforePrint: (_bands?.detail?.beforePrint == null)
+                  : (a) => _bands.detail!.afterPrint!(a),
+              beforePrint: (_bands.detail!.beforePrint == null)
                   ? null
-                  : (a) => _bands?.detail?.beforePrint!(a),
-              builder: (a, b, c, d) => _bands!.detail!.builder!(a, b, c, d)),
+                  : (a) => _bands.detail!.beforePrint!(a),
+              builder: (a, b, c, d) => _bands.detail!.builder!(a, b, c, d)),
         );
 
     /// inserir sub-totais
@@ -549,16 +564,16 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
 
     /// inserir os header e rodapes
     pages.forEach((key, value) {
-      if (_bands!.pageHeader != null) insert(0, key, _bands!.pageHeader!);
-      if (_bands!.pageFooter != null) add(key, _bands!.pageFooter!);
+      if (_bands.pageHeader != null) insert(0, key, _bands.pageHeader!);
+      if (_bands.pageFooter != null) add(key, _bands.pageFooter!);
     });
 
     /// titulo
-    if (_bands!.title != null) insert(0, 1, _bands!.title!);
+    if (_bands.title != null) insert(0, 1, _bands.title!);
 
     /// summary
-    if (_bands!.summary != null) addLast(_bands!.summary!);
-    if (_bands!.footer != null) addLast(_bands!.footer!);
+    if (_bands.summary != null) addLast(_bands.summary!);
+    if (_bands.footer != null) addLast(_bands.footer!);
 
     /// Construindo o PDF
     _controller!.document!.document.pdfPageList.pages.clear();
@@ -568,7 +583,7 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
       //  print([key, item, if (item is PdfDetailBand) item.data]);
       //});
       var items = pw.ListView(children: [
-        for (var item in lst) item.doBuilder(null),
+        for (var item in lst) item.doBuilder(context),
       ]);
       var _page = pw.Page(
           pageFormat: _controller!.pageFormat,
@@ -592,7 +607,7 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
     return item;
   }
 
-  buildFooter(ctx, page) {
+  buildFooter(pw.Context? ctx, page) {
     return pw.Container(
         padding: pw.EdgeInsets.only(left: 8, right: 8),
         color: PdfColor.fromHex('#d0d0d0'),
@@ -603,16 +618,16 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
         ]));
   }
 
-  pw.Widget buildHeader(ctx, page) {
+  pw.Widget buildHeader(pw.Context? ctx, page) {
     List<pw.Widget> r = [];
     for (var i = 0; i < columnCount; i++) {
-      var column = widget.columns![i];
-      var t = column.label ?? column.name;
+      var column = widget.columns[i];
+      var t = column.label ?? column.name!;
       r.add(pw.Container(
           width: column.width,
           alignment:
-              column.numeric! ? pw.Alignment.centerRight : column.alignment,
-          child: pw.Text(t!,
+              column.numeric ? pw.Alignment.centerRight : column.alignment,
+          child: pw.Text(t,
               style: pw.TextStyle(
                 fontSize: 14,
                 fontWeight: pw.FontWeight.bold,
@@ -626,9 +641,9 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
         child: pw.Row(children: r));
   }
 
-  column(int index) => widget.columns![index];
+  column(int index) => widget.columns[index];
 
-  buildRow(context, index, data) {
+  buildRow(pw.Context? context, index, data) {
     var r = pw.Container(
         padding: pw.EdgeInsets.only(left: 8, right: 8),
         alignment: pw.Alignment.centerLeft,
@@ -638,25 +653,25 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
           mainAxisAlignment: pw.MainAxisAlignment.start,
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            for (int col = 0; col < widget.columns!.length; col++)
-              buildCell(context, col, widget.columns![col], data),
+            for (int col = 0; col < widget.columns.length; col++)
+              buildCell(context, col, widget.columns[col], data),
           ],
         ));
     return r;
   }
 
-  buildCell(
-      context, int col, PdfReportColumn column, Map<String, dynamic> data) {
-    var v = data[column.name];
+  buildCell(pw.Context? context, int col, PdfReportColumn column,
+      Map<String, dynamic> data) {
+    var v = data[column.name!];
     return pw.Container(
-      alignment: column.numeric! ? pw.Alignment.centerRight : column.alignment,
+      alignment: column.numeric ? pw.Alignment.centerRight : column.alignment,
       color: column.color,
       width: column.width,
       child: (column.builder != null)
           ? column.builder!(context, column, data)
           : pw.Text(
               (column.getValue != null) ? column.getValue!(v) : '$v',
-              maxLines: column.maxLines ?? 2,
+              maxLines: column.maxLines,
             ),
     );
   }

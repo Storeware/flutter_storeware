@@ -849,9 +849,9 @@ class PaginatedGridController {
     changed(true);
   }
 
-  changed([b = false]) {
+  changed([bool b = false]) {
     if (_updating <= 0) {
-      if ((b ?? false)) changedEvent.sink.add(true);
+      if ((b)) changedEvent.sink.add(true);
       _updating = 0;
     }
   }
@@ -980,7 +980,8 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                   onTap: () {
                                     setData(index, col.index);
                                     controller.changed(controller
-                                        .widget!.onEditItem!(controller));
+                                            .widget!.onEditItem!(controller) !=
+                                        null);
                                   },
                                 )),
                       if (col.builder == null)
@@ -1362,7 +1363,8 @@ class EditScaffold extends StatelessWidget {
                                 Timer.run(() {
                                   Navigator.pop(controller.context);
                                 });
-                                controller.changed(controller.data); //b);
+                                controller
+                                    .changed(rsp); //controller.data); //b);
                               });
                             else
                               controller.widget

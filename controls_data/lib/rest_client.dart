@@ -80,6 +80,7 @@ class RestClientProvider<T> extends StatelessWidget {
 }
 
 class RestClient {
+  bool isLocalApi = false;
   RestClientBloC<String> notify = RestClientBloC<String>();
   RestClientBloC<String> notifyLog = RestClientBloC<String>();
   RestClientBloC<String> notifyError = RestClientBloC<String>();

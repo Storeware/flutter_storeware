@@ -9,7 +9,7 @@ class BlocModel<T> {
     sink.add(value);
   }
 
-  listen(Function(T) event) {
+  StreamSubscription<T> listen(Function(T) event) {
     return stream.listen(event);
   }
 

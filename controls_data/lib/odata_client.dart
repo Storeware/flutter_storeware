@@ -271,10 +271,10 @@ class ODataBuilder extends StatelessWidget {
 }
 
 class ODataClient {
-  RestClient client = RestClient();
+  late RestClient client = RestClient();
   String get prefix => client.prefix;
   set prefix(String p) {
-    client.prefix = p;
+    if (client != null) client.prefix = p;
   }
 
   get notifier => client.notify;
@@ -666,11 +666,13 @@ abstract class ODataModelClass<T extends DataItem> {
     if (validate(d)) {
       try {
         d = removeExternalKeys(d);
+        if (API!.client.isLocalApi)
+          return API!.put(collectionName!, d).then((x) => jsonDecode(x));
         return API!.client
             .openJsonAsync(API!.client.formatUrl(path: collectionName),
                 method: "PUT", body: API!.removeNulls(d))
             .then((x) {
-          API!.client.notifyLog.notify(x.toString());
+          //API!.client.notifyLog.notify(x.toString());
           if (CC != null) CC!.put(makeCollection(d), d);
           afterChangeEvent(d);
           return x;
@@ -703,7 +705,8 @@ abstract class ODataModelClass<T extends DataItem> {
     else
       d = API!.removeNulls(item);
     try {
-      //return API.delete(collectionName, d).then((x) => jsonDecode(x));
+      if (API!.client.isLocalApi)
+        return API!.delete(collectionName!, d).then((x) => jsonDecode(x));
       return API!.client
           .openJsonAsync(
               API!.client.formatUrl(path: 'delete/${makeCollection(d)}'),

@@ -8,7 +8,7 @@ class MenuChoice {
   final IconData? icon;
   final String? title;
   final int? index;
-  final Function(BuildContext)? builder;
+  final Widget Function(BuildContext)? builder;
   final bool enabled;
   final double? width;
   final double? height;
@@ -28,9 +28,11 @@ class MenuChoice {
 class MenuDialog extends StatefulWidget {
   final List<MenuChoice>? choices;
   final DialogsTransition? transition;
+  final bool? closeMainDialog;
   const MenuDialog(
       {Key? key,
       @required this.choices,
+      this.closeMainDialog = true,
       this.transition = DialogsTransition.menuDown})
       : super(key: key);
 
@@ -44,6 +46,7 @@ class MenuDialog extends StatefulWidget {
     double width = 300,
     double? height,
     Color? color,
+    bool? closeMainDialog = true,
     Alignment? transitionAlign = Alignment.topRight,
     DialogsTransition? transitionItem = DialogsTransition.menuRightDown,
   }) async {
@@ -71,6 +74,7 @@ class MenuDialog extends StatefulWidget {
           ),
           body: MenuDialog(
             transition: transitionItem,
+            closeMainDialog: closeMainDialog,
             choices: choices,
           )),
       //color: color
@@ -96,7 +100,7 @@ class _MenuDialogState extends State<MenuDialog> {
           StaggeredAnimation(
               itemIndex: i++,
               child: _tiles(item, item.title, item.icon, item.index, () {
-                Navigator.pop(context);
+                if (widget.closeMainDialog!) Navigator.pop(context);
                 Dialogs.showPage(
                   context,
                   transition: widget.transition!,
@@ -125,6 +129,7 @@ class _MenuDialogState extends State<MenuDialog> {
         title: Align(
             alignment: Alignment.centerLeft,
             child: Material(
+                color: Colors.transparent,
                 child: Text(text ?? '',
                     textAlign: TextAlign.left,
                     style: TextStyle(

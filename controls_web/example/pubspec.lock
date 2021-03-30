@@ -97,7 +97,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: cd482fc1e58f910beab6a4e74129fccb34a39729
+      resolved-ref: fc326c296c06e37632aea82a99eacfc4bb098dad
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.17"
@@ -106,7 +106,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: cd482fc1e58f910beab6a4e74129fccb34a39729
+      resolved-ref: fc326c296c06e37632aea82a99eacfc4bb098dad
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.17"
@@ -115,7 +115,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: cd482fc1e58f910beab6a4e74129fccb34a39729
+      resolved-ref: fc326c296c06e37632aea82a99eacfc4bb098dad
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.14"
@@ -124,7 +124,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: cd482fc1e58f910beab6a4e74129fccb34a39729
+      resolved-ref: fc326c296c06e37632aea82a99eacfc4bb098dad
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.17"
@@ -133,7 +133,7 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: cd482fc1e58f910beab6a4e74129fccb34a39729
+      resolved-ref: fc326c296c06e37632aea82a99eacfc4bb098dad
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.17"
@@ -142,7 +142,7 @@ packages:
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: cd482fc1e58f910beab6a4e74129fccb34a39729
+      resolved-ref: fc326c296c06e37632aea82a99eacfc4bb098dad
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.16"
@@ -152,7 +152,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2021.03.23"
+    version: "2021.03.26"
   crypto:
     dependency: transitive
     description:
@@ -187,7 +187,7 @@ packages:
       name: dio
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.0-prev3"
+    version: "4.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -220,7 +220,7 @@ packages:
       name: flutter_cache_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0-nullsafety.2"
+    version: "3.0.1"
   flutter_slidable:
     dependency: transitive
     description:
@@ -405,7 +405,7 @@ packages:
       name: process
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.0"
+    version: "4.2.1"
   qr:
     dependency: transitive
     description:
@@ -480,7 +480,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   sqflite:
     dependency: transitive
     description:
@@ -550,14 +550,14 @@ packages:
       name: universal_html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.7"
   universal_io:
     dependency: transitive
     description:
       name: universal_io
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.3"
   universal_platform:
     dependency: transitive
     description:
@@ -571,7 +571,7 @@ packages:
       name: url_launcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.2"
+    version: "6.0.3"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -613,7 +613,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.3"
   vector_math:
     dependency: transitive
     description:
@@ -627,7 +627,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "2.0.5"
   xdg_directories:
     dependency: transitive
     description:

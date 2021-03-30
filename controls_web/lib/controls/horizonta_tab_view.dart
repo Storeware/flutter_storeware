@@ -1,3 +1,4 @@
+//}{} @dart=2.12
 import 'dart:async';
 
 import 'package:controls_web/controls/responsive.dart';
@@ -44,6 +45,8 @@ class HorizontalTabView extends StatefulWidget {
   final Widget? sidebarRight;
   final Function(int)? onChanged;
   final int? activeIndex;
+  final Color? selectedColor;
+  final double? leftRadius;
   HorizontalTabView({
     Key? key,
     @required this.choices,
@@ -57,6 +60,8 @@ class HorizontalTabView extends StatefulWidget {
     this.top = 0,
     this.bottom = 0,
     this.left = 0,
+    this.selectedColor,
+    this.leftRadius = 30,
     this.right = 0,
     this.topBar,
     this.bottomBar,
@@ -64,7 +69,7 @@ class HorizontalTabView extends StatefulWidget {
     this.sidebarBackgroundColor,
     this.sidebarType,
     this.controller,
-    this.tagColor,
+    this.tagColor = Colors.amber,
     this.mobileCrossCount,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
@@ -110,6 +115,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
   Color? _iconColor;
   HorizontalTabViewSiderBarType? _sidebarType;
   ThemeData? theme;
+  late Color _selectedColor;
   @override
   Widget build(BuildContext context) {
     if (_index.value < 0) _index.value = widget.activeIndex ?? 0;
@@ -126,7 +132,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
     theme = Theme.of(context);
     _iconColor =
         widget.iconColor ?? theme!.tabBarTheme.labelColor ?? theme!.buttonColor;
-
+    _selectedColor = widget.selectedColor ?? widget.indicatorColor!;
     return ValueListenableBuilder<int>(
         valueListenable: _index,
         builder: (a, b, c) {
@@ -287,9 +293,11 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                       child: InkWell(
                           child: Container(
                               constraints: BoxConstraints(minHeight: 35),
-                              color: (_index.value == index)
-                                  ? widget.indicatorColor
-                                  : null,
+                              decoration: BoxDecoration(
+                                color: (_index.value == index)
+                                    ? widget.indicatorColor
+                                    : null,
+                              ),
                               padding: EdgeInsets.zero,
                               child: Column(
                                 children: [
@@ -328,32 +336,40 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                         ? widget.tagColor ?? theme!.indicatorColor
                         : widget.tabColor),
                 Expanded(
-                    child: Container(
-                        height: widget.tabHeight,
-                        child: ListTile(
-                          leading: (widget.choices![index].image != null)
-                              ? widget.choices![index].image
-                              : (widget.choices![index].icon != null)
-                                  ? Icon(
-                                      widget.choices![index].icon,
-                                      color: _iconColor,
-                                    )
-                                  : null,
-                          title: widget.choices![index].title ??
-                              Text(widget.choices![index].label!,
-                                  style: widget.tabStyle ??
-                                      theme!.textTheme.bodyText1!.copyWith(
-                                          fontWeight: FontWeight.w500,
-                                          color: (widget.sidebarBackgroundColor ??
-                                                      theme!
-                                                          .scaffoldBackgroundColor)
-                                                  .isDark
-                                              ? Colors.white70
-                                              : Colors.black87)),
-                          onTap: () {
-                            _index.value = index;
-                          },
-                        ))),
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 1.0, bottom: 1.0),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        color: (_index.value == index) ? _selectedColor : null,
+                        borderRadius: BorderRadius.horizontal(
+                            left: Radius.circular(widget.leftRadius!)),
+                      ),
+                      height: widget.tabHeight,
+                      child: ListTile(
+                        leading: (widget.choices![index].image != null)
+                            ? widget.choices![index].image
+                            : (widget.choices![index].icon != null)
+                                ? Icon(
+                                    widget.choices![index].icon,
+                                    color: _iconColor,
+                                  )
+                                : null,
+                        title: widget.choices![index].title ??
+                            Text(widget.choices![index].label!,
+                                style: widget.tabStyle ??
+                                    theme!.textTheme.bodyText1!.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                        color: (widget.sidebarBackgroundColor ??
+                                                    theme!
+                                                        .scaffoldBackgroundColor)
+                                                .isDark
+                                            ? Colors.white70
+                                            : Colors.black87)),
+                        onTap: () {
+                          _index.value = index;
+                        },
+                      )),
+                )),
               ]),
       );
 

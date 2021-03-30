@@ -1,4 +1,5 @@
 // @dart=2.12
+import 'package:controls_web/controls/index.dart';
 import 'package:controls_web/controls/sliver_apps.dart';
 import 'package:app/models/apps_items.dart';
 import 'package:app/views/drawer_view.dart';
@@ -15,6 +16,7 @@ class EntradaView extends StatefulWidget {
 }
 
 class _EntradaViewState extends State<EntradaView> {
+  ValueNotifier<int> tipo = ValueNotifier<int>(0);
   @override
   Widget build(BuildContext context) {
     var tabB = TabViewBottom(
@@ -34,47 +36,72 @@ class _EntradaViewState extends State<EntradaView> {
         ),
       ],
     );
-    return VerticalTabView(
-        /*bottomNavigationBar: ,*/
-        choices: [
-          TabChoice(
-            label: 'Principal',
-            enabled: true,
-            child: VerticalTopTabView(
-              completedColor: Colors.green,
-              //timeline: (x) {
-              // return Icon(Icons.check, size: 10);
-              //},
+    return ValueListenableBuilder<int>(
+        valueListenable: tipo,
+        builder: (_, v, __) {
+          if (v == 1)
+            return Scaffold(
+              appBar: AppBar(title: Text('asss')),
+              body: HorizontalTabView(
+                //indicatorColor: Colors.amber,
+                //tagColor: Colors.amber,
+                color: Colors.lightBlue,
+                selectedColor: Colors.green,
+                indicatorColor: Colors.lightBlue,
+                tagColor: Colors.lightBlue,
+                choices: [
+                  for (var i = 0; i < 5; i++)
+                    TabChoice(label: 'opcao $i ', builder: () => Text('$i')),
+                ],
+              ),
+            );
+          return VerticalTabView(
+              /*bottomNavigationBar: ,*/
+              leading: IconButton(
+                  icon: Icon(Icons.leak_remove_rounded),
+                  onPressed: () {
+                    tipo.value = 1;
+                  }),
               choices: [
                 TabChoice(
-                  label: 'Opções',
-                  completed: (index) {
-                    return true;
-                  },
-                  builder: () => Scaffold(
-                    drawer: Drawer(child: DrawerView()),
-                    //appBar: appBarLight(
-                    //  title: Text(Constantes.appName),
-                    //),
-                    body: SliverApps(
-                        appBar: SliverAppBar(title: Text('AppBar')),
-                        topBars: AppsItems.topBars(context),
-                        topBarsHeight: 120,
-                        body: AppsItems.body(context),
-                        grid: AppsItems.builder(context),
-                        bottomBars: AppsItems.bottom(context)),
+                  label: 'Principal',
+                  enabled: true,
+                  child: VerticalTopTabView(
+                    completedColor: Colors.green,
+                    //timeline: (x) {
+                    // return Icon(Icons.check, size: 10);
+                    //},
+                    choices: [
+                      TabChoice(
+                        label: 'Opções',
+                        completed: (index) {
+                          return true;
+                        },
+                        builder: () => Scaffold(
+                          drawer: Drawer(child: DrawerView()),
+                          //appBar: appBarLight(
+                          //  title: Text(Constantes.appName),
+                          //),
+                          body: SliverApps(
+                              appBar: SliverAppBar(title: Text('AppBar')),
+                              topBars: AppsItems.topBars(context),
+                              topBarsHeight: 120,
+                              body: AppsItems.body(context),
+                              grid: AppsItems.builder(context),
+                              bottomBars: AppsItems.bottom(context)),
+                        ),
+                      ),
+                      TabChoice(label: 'Opção 2', builder: () => Text('2')),
+                    ],
                   ),
                 ),
-                TabChoice(label: 'Opção 2', builder: () => Text('2')),
-              ],
-            ),
-          ),
-          TabChoice(
-              label: 'Outros',
-              // child: Container(child: Text('pagina outros')),
-              builder: () {
-                return Text('Outros');
-              })
-        ]);
+                TabChoice(
+                    label: 'Outros',
+                    // child: Container(child: Text('pagina outros')),
+                    builder: () {
+                      return Text('Outros');
+                    })
+              ]);
+        });
   }
 }

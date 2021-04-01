@@ -206,41 +206,52 @@ class _TabBarViewState extends State<PageTabView>
                               scrollDirection: Axis.horizontal,
                               children: [
                                 for (int i = 0; i < widget.choices!.length; i++)
-                                  Container(
-                                      width: widget.choices![i].width ?? w,
-                                      child: Column(
-                                        children: <Widget>[
-                                          (widget.tabBuilder == null)
-                                              ? Expanded(
-                                                  child: createTab(
-                                                      context,
-                                                      _tabController,
-                                                      widget.choices![i],
-                                                      i,
-                                                      w))
-                                              : Expanded(
-                                                  child: widget.tabBuilder!(
-                                                      _tabController!,
-                                                      widget.choices![i],
-                                                      i),
-                                                ),
-                                          StreamBuilder<int>(
-                                              stream: tabChangeEvent.stream,
-                                              initialData: indexSelected,
-                                              builder: (context, snapshot) {
-                                                //print(snapshot.data);
-                                                return Container(
-                                                  height: 3,
-                                                  constraints: BoxConstraints(
-                                                      maxWidth: 2000),
-                                                  color: (snapshot.data != i)
-                                                      ? _tabColor
-                                                      : _indicatorColor,
-                                                  //child:
-                                                );
-                                              })
-                                        ],
-                                      )),
+                                  Builder(builder: (_) {
+                                    TabChoice choice = widget.choices![i];
+                                    return (choice.builder != null)
+                                        ? choice.builder!()
+                                        : Container(
+                                            width:
+                                                widget.choices![i].width ?? w,
+                                            child: Column(
+                                              children: <Widget>[
+                                                (widget.tabBuilder == null)
+                                                    ? Expanded(
+                                                        child: createTab(
+                                                            context,
+                                                            _tabController,
+                                                            widget.choices![i],
+                                                            i,
+                                                            w))
+                                                    : Expanded(
+                                                        child: widget
+                                                                .tabBuilder!(
+                                                            _tabController!,
+                                                            widget.choices![i],
+                                                            i),
+                                                      ),
+                                                StreamBuilder<int>(
+                                                    stream:
+                                                        tabChangeEvent.stream,
+                                                    initialData: indexSelected,
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      //print(snapshot.data);
+                                                      return Container(
+                                                        height: 3,
+                                                        constraints:
+                                                            BoxConstraints(
+                                                                maxWidth: 2000),
+                                                        color: (snapshot.data !=
+                                                                i)
+                                                            ? _tabColor
+                                                            : _indicatorColor,
+                                                        //child:
+                                                      );
+                                                    })
+                                              ],
+                                            ));
+                                  }),
                                 if (widget.tabTitle != null) widget.tabTitle!,
                               ])),
                     ),

@@ -206,7 +206,7 @@ class ODataResult {
         rows = json['rows'] ?? 0;
         debug('rows: $rows');
         _data.docs = [];
-        var it = json['result'] ?? [];
+        var it = json['result'] ?? json['value'] ?? [];
         debug(['result', it]);
         for (var item in it) {
           var doc = ODataDocument();
@@ -218,6 +218,9 @@ class ODataResult {
           // print(item);
           _data.docs.add(doc);
         }
+        if (rows == 0)
+          rows =
+              _data.docs.length; // workaroud para resposta que não vem o rows.
       }
     } catch (e) {
       print(e);
@@ -601,7 +604,7 @@ abstract class ODataModelClass<T extends DataItem> {
             orderBy: orderBy,
             cacheControl: cacheControl ?? 'no-cache')
         .then((ODataResult r) {
-      return (r.rows == 0) ? [] : r.asMap();
+      return (r.docs.length == 0) ? [] : r.asMap();
     });
   }
 
@@ -612,7 +615,7 @@ abstract class ODataModelClass<T extends DataItem> {
             filter: filter,
             top: 1)
         .then((ODataResult r) {
-      return (r.rows > 0) ? r.first.doc : null;
+      return (r.docs.length > 0) ? r.first.doc : null;
     });
   }
 

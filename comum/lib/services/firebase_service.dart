@@ -82,12 +82,12 @@ class FirebaseService {
     try {
       var rsp =
           await cli.openJson(cli.formatUrl(path: '/v3/login'), method: 'GET');
-      token = rsp['token'];
+      String tkn = rsp['token'];
       CloudV3().client.client
-        ..authorization = 'Bearer ' + token!
+        ..authorization = 'Bearer ' + tkn
         ..addHeader('contaid', loja);
 
-      return token;
+      return tkn;
     } catch (e) {
       // notify error;
       return null;

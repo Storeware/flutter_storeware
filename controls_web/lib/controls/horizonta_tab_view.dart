@@ -132,7 +132,8 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
     theme = Theme.of(context);
     _iconColor =
         widget.iconColor ?? theme!.tabBarTheme.labelColor ?? theme!.buttonColor;
-    _selectedColor = widget.selectedColor ?? widget.indicatorColor!;
+    _selectedColor =
+        widget.selectedColor ?? widget.indicatorColor ?? Colors.amber;
     return ValueListenableBuilder<int>(
         valueListenable: _index,
         builder: (a, b, c) {

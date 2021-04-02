@@ -724,7 +724,7 @@ class DataViewerEditGroupedPageStateController {
 class DataViewerEditGroupedPage extends StatefulWidget {
   final String? title;
   final String? subtitle;
-  final Map<String, dynamic>? data;
+  final dynamic? data;
   final List<DataViewerGroup>? grouped;
   final DataViewerController? controller;
   final bool canEdit, canInsert, canDelete;
@@ -791,7 +791,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   int itemsCount = 0;
 
   var oldData = {};
-  clone(Map<String, dynamic> item) {
+  clone(item) {
     oldData = {};
     item.forEach((key, value) {
       oldData[key] = value;
@@ -892,7 +892,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
 
   int col = 0;
 
-  createRow(context, DataViewerGroup rows, Map<String, dynamic> data) {
+  createRow(context, DataViewerGroup rows, dynamic data) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,4 +1,5 @@
-import 'package:controls_web/controls/paginated_data_table_ext.dart';
+// @dart=2.12
+//import 'package:controls_web/controls/paginated_data_table_ext.dart';
 import 'package:flutter/material.dart';
 
 /// [ReportControler] um Controller para os dados a serem processados no relátorio
@@ -274,54 +275,55 @@ class _ReportViewState extends State<ReportView> {
           if ((widget.controller!.columns ?? []).length == 0) createColumns();
 
           return Scaffold(
-            body: Card(
-              elevation: 0,
-              semanticContainer: false,
-              color: widget.backgroundColor,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Column(
-                  crossAxisAlignment:
-                      widget.crossAxisAlignment ?? CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (widget.title != null)
-                      ListTile(
-                        title: Text(
-                          widget.title!,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(
-                          widget.subtitle ?? '',
-                          textAlign: TextAlign.center,
-                        ),
-                        trailing: (widget.actions == null)
-                            ? null
-                            : Row(children: widget.actions!),
-                        leading: widget.leading,
+              body: Container(
+            //elevation: 0,
+            //semanticContainer: false,
+            color: widget.backgroundColor,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Column(
+                crossAxisAlignment:
+                    widget.crossAxisAlignment ?? CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (widget.title != null)
+                    ListTile(
+                      title: Text(
+                        widget.title!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
                       ),
-                    if (widget.header != null) widget.header!,
-                    Divider(),
-                    Expanded(
-                        child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        columnSpacing: 0,
-                        horizontalMargin: 0,
-                        dataRowHeight: widget.dataRowHeight,
-                        rows: getRows(),
-                        columns: genColumns(),
-                        showCheckboxColumn: false,
+                      subtitle: Text(
+                        widget.subtitle ?? '',
+                        textAlign: TextAlign.center,
                       ),
-                    )),
-                    if (widget.bottom != null) widget.bottom!,
-                  ],
-                ),
+                      trailing: (widget.actions == null)
+                          ? null
+                          : Row(children: widget.actions!),
+                      leading: widget.leading,
+                    ),
+                  if (widget.header != null) widget.header!,
+                  Divider(),
+                  Expanded(
+                      child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              columnSpacing: 0,
+                              horizontalMargin: 0,
+                              dataRowHeight: widget.dataRowHeight,
+                              rows: getRows(),
+                              columns: genColumns(),
+                              showCheckboxColumn: false,
+                            ),
+                          ))),
+                  if (widget.bottom != null) widget.bottom!,
+                ],
               ),
             ),
-          );
+          ));
         });
   }
 }

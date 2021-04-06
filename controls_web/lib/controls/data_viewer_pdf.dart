@@ -1,11 +1,12 @@
 // @dart=2.12
 
-import '../controls.dart';
+import 'data_viewer.dart';
+import 'dialogs_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'pdf_report.dart';
 import 'package:pdf/widgets.dart' as pw;
-//import 'package:controls_extensions/extensions.dart';
+import 'package:controls_extensions/extensions.dart';
 
 class DataViewerPdfReportController {
   final DataViewerController controller;

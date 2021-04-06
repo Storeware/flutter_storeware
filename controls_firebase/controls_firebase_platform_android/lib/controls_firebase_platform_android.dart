@@ -128,7 +128,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     fb.Query rst = (where != null) ? where(ref) : ref;
     return rst.get().then((fb.QuerySnapshot doc) {
       return doc.docs.map((f) {
-        return {"id": f.id, ...f.data()!};
+        return {"id": f.id, ...f.data()};
       }).toList();
     });
   }

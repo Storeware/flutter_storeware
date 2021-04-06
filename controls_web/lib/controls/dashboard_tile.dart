@@ -47,7 +47,7 @@ class DashboardTile extends StatelessWidget {
       this.title,
       this.titleStyle,
       this.color,
-      this.borderRadius = 15,
+      this.borderRadius = 5,
       this.avatarMargin = 00,
       this.image,
       this.icon,

@@ -39,6 +39,7 @@ class BadgeText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      alignment: Alignment.center,
       padding: EdgeInsets.all(1),
       decoration: BoxDecoration(
         color: Theme.of(context).accentColor,

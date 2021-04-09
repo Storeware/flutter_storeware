@@ -88,7 +88,7 @@ class RestClient {
   String accessControlAllowOrigin = '*';
   Map<String, String> _headers = {};
   Map<String, dynamic>? jsonResponse;
-  RestClient({this.baseUrl});
+  RestClient({this.baseUrl = ''});
   String? tokenId;
   String? _authorization;
   String? get authorization => _authorization;
@@ -165,7 +165,7 @@ class RestClient {
   }
 
   /*  RestClient Interface */
-  String? baseUrl;
+  String baseUrl = '';
   Map<String, dynamic> params = {};
   String contentType = 'application/json';
   Map<String, String> get headers => _headers;
@@ -260,7 +260,7 @@ class RestClient {
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
         receiveTimeout: receiveTimeout,
-        baseUrl: this.baseUrl!,
+        baseUrl: this.baseUrl,
         headers: _h,
         queryParameters: params,
         contentType: getContentType(
@@ -373,7 +373,7 @@ class RestClient {
       connectTimeout: connectionTimeout,
       followRedirects: followRedirects,
       receiveTimeout: receiveTimeout,
-      baseUrl: this.baseUrl!,
+      baseUrl: this.baseUrl,
       headers: _h,
 
       /// The request Content-Type. The default value is "application/json; charset=utf-8".
@@ -496,7 +496,7 @@ class RestClient {
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
         receiveTimeout: receiveTimeout,
-        baseUrl: this.baseUrl!,
+        baseUrl: this.baseUrl,
         headers: _h,
         queryParameters: params,
         contentType: getContentType(

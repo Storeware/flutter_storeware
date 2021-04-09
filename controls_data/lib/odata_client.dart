@@ -285,7 +285,7 @@ class ODataClient {
   get processing => DataProcessingNotifier();
   get driver => client.headers['db-driver'] ?? 'fb';
 
-  String get baseUrl => client.baseUrl!;
+  String get baseUrl => client.baseUrl;
   set baseUrl(x) {
     client.baseUrl = x;
   }

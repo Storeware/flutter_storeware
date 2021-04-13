@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 //import 'package:controls_data/cached.dart';
-import 'package:controls_data/cached.dart';
 import 'package:controls_data/odata_firestore.dart';
 import 'package:flutter/services.dart';
 //import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class StorageApi {
     instance = CacheManager(Config(
       'firestorage_image_cache_manager',
       stalePeriod: Duration(days: 7),
-      maxNrOfCacheObjects: 100,
+      maxNrOfCacheObjects: 500,
     ));
     inited = instance != null;
   }
@@ -44,44 +43,56 @@ class StorageApi {
     init();
   }
   //Future<Uint8List>
-  download(String path, {bool cached = true}) async {
+  Future<Uint8List?> download(String path, {bool cached = true}) async {
     init();
     if (path.startsWith('http'))
       return instance!.getSingleFile(path).then((f) => f.readAsBytes());
     if (path.startsWith('assets'))
       return rootBundle.load(path).then((f) => f.buffer.asUint8List());
 
-    var _img = 'image_$path';
     var client = CloudV3().client.clone();
     client.prefix = '';
     var url = client.client.formatUrl(path: '/storage/download64?path=' + path);
-    var cache = () => client.client
-            .rawData(
-          url,
-          contentType: 'text/plain',
-          method: 'GET',
-          cacheControl: (cached) ? 'public; max-age:3600' : null,
-        )
-            .then((rsp) {
-          var img64 = rsp.data.split('base64,').last;
-          Uint8List decoded = base64Decode(img64);
 
-          if (UniversalPlatform.isWeb) {
-            Cached.add('image_$path', decoded);
-          } else {
-            instance!.putFile(_img, decoded);
-          }
-          return decoded;
-        }).catchError((err) {
-          return null;
-        });
-    if (!cached) return cache();
-    if (UniversalPlatform.isWeb)
-      return Cached.value('image_$path', builder: (k) => cache());
-    var file = await instance!.getFileFromCache(_img);
-    if (file != null) return await file.file.readAsBytes();
-    return cache();
+    try {
+      if (canCacheManger) {
+        var _img = 'image_$url';
+        init();
+        var file = await instance!.getFileFromCache(_img);
+        if (file != null) return file.file.readAsBytes();
+      }
+      return getImage(url, client.client, cached);
+    } catch (e) {
+      return null;
+    }
   }
+
+  Future<Uint8List?> getImage(String url, client, bool cached) async {
+    return await client
+        .rawData(
+      url,
+      contentType: 'text/plain',
+      method: 'GET',
+      cacheControl: (cached) ? 'public; max-age:3600' : null,
+    )
+        .then((rsp) {
+      if (rsp.statusCode != 200) return null;
+      var img64 = rsp.data.split('base64,').last;
+      Uint8List decoded = base64Decode(img64);
+
+      if (canCacheManger) {
+        init();
+        var _img = 'image_$url';
+        instance!.putFile(_img, decoded);
+      }
+      return decoded;
+    }).catchError((err) {
+      return null;
+    });
+  }
+
+  bool get canCacheManger => true;
+  //    ((!UniversalPlatform.isWeb) /*&& (!UniversalPlatform.isWindows)*/);
 
   clear() {
     init();

@@ -549,32 +549,32 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
   Widget build(BuildContext context) {
     bool? value = widget.value ?? false;
     ThemeData theme = Theme.of(context);
-    return FittedBox(
-      fit: BoxFit.cover,
-      child: Wrap(crossAxisAlignment: WrapCrossAlignment.center, children: [
-        if (widget.leading != null) widget.leading!,
-        StatefulBuilder(builder: (context, _setState) {
-          return Checkbox(
-            activeColor: widget.activeColor,
-            checkColor: widget.checkColor,
-            hoverColor: widget.hoverColor,
-            focusColor: widget.focusColor,
-            tristate: widget.tristate!,
-            value: (widget.tristate ?? false) ? value : value ?? false,
-            onChanged: (x) {
-              if (widget.onChanged != null) widget.onChanged!(x!);
-              if (mounted)
-                _setState(() {
-                  value = x;
-                });
-            },
-          );
-        }),
-        if (widget.label != null)
-          Text(widget.label!, style: theme.inputDecorationTheme.hintStyle),
-        if (widget.trailing != null) widget.trailing!
-      ]),
-    );
+    return Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
+        direction: Axis.horizontal,
+        children: [
+          if (widget.leading != null) widget.leading!,
+          StatefulBuilder(builder: (context, _setState) {
+            return Checkbox(
+              activeColor: widget.activeColor,
+              checkColor: widget.checkColor,
+              hoverColor: widget.hoverColor,
+              focusColor: widget.focusColor,
+              tristate: widget.tristate!,
+              value: (widget.tristate ?? false) ? value : value ?? false,
+              onChanged: (x) {
+                if (widget.onChanged != null) widget.onChanged!(x!);
+                if (mounted)
+                  _setState(() {
+                    value = x;
+                  });
+              },
+            );
+          }),
+          if (widget.label != null)
+            Text(widget.label!, style: theme.inputDecorationTheme.hintStyle),
+          if (widget.trailing != null) widget.trailing!
+        ]);
   }
 }
 

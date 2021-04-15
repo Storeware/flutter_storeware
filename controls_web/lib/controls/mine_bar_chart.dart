@@ -126,13 +126,14 @@ class _MiniBarChartState extends State<MiniBarChart> {
                     alignment: Alignment.bottomCenter,
                     color: widget.barColor,
                     width: w + 0.0,
-                    height: ((maxValue > 0) ? (value / maxValue) : 0) *
-                        (widget.height! -
-                            (widget.showX! ? widget.heightX! - 2 : 0)),
+                    height: validaHeight(
+                        ((maxValue > 0) ? (value / maxValue) : 0) *
+                            (widget.height! -
+                                (widget.showX! ? widget.heightX! - 2 : 0))),
                   ),
                   if (widget.showX!)
                     Container(
-                        height: widget.heightX! + 2,
+                        height: validaHeight(widget.heightX!) + 2,
                         //    show: true,
                         //    position: OverlayContainerPosition(0, 0),
                         child: (((index % widget.interval!) != 0) &&
@@ -151,5 +152,10 @@ class _MiniBarChartState extends State<MiniBarChart> {
             if (widget.onBarPressed != null) widget.onBarPressed!(index, key);
           }),
     );
+  }
+
+  validaHeight(double v) {
+    if (v < 0) return 0;
+    return v;
   }
 }

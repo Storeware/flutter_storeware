@@ -565,7 +565,7 @@ abstract class ODataModelClass<T extends DataItem> {
       skip,
       orderBy,
       select}) async {
-    String cached = (cacheControl ?? 'max-age=3600');
+    String cached = (cacheControl ?? 'max-age=60');
     String tempo = '1';
     String res = resource ?? makeCollection(null);
     if (cached.contains('=')) tempo = cached.split('=')[1];

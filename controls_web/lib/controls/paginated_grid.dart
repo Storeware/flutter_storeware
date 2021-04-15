@@ -175,6 +175,7 @@ class PaginatedGrid extends StatefulWidget {
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
   final Function(int)? onPageSelected;
+  final bool showPageNavigatorButtons;
   final Function(bool)? onSelectAll;
   final int? sortColumnIndex;
   final bool? sortAscending;
@@ -281,6 +282,7 @@ class PaginatedGrid extends StatefulWidget {
     this.onSelectChanged,
     this.currentPage = 1,
     this.onPageSelected,
+    this.showPageNavigatorButtons = true,
     this.onRefresh,
     this.onCellTap,
     this.onSelectAll,
@@ -645,6 +647,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
   createPageNavigator() {
     if (widget.onPageSelected == null) return null;
     int n = 0;
+    if (!(widget.showPageNavigatorButtons)) return Container();
     return Padding(
       padding: const EdgeInsets.only(left: 14, right: 60),
       child: Container(

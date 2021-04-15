@@ -665,6 +665,7 @@ class _DataViewerState extends State<DataViewer> {
                       futureSource: (controller!.future != null)
                           ? controller!.future!()
                           : null,
+                      showPageNavigatorButtons: widget.showPageNavigatorButtons,
                       onPageSelected: (x) => (widget.showPageNavigatorButtons)
                           ?
                           //print(x);

@@ -99,12 +99,13 @@ class _MiniBarChartState extends State<MiniBarChart> {
   createBar(int index, double width, int n) {
     //print({'index': index, "n": n, 'width': width});
     String key = widget.data!.keys.toList()[index];
-    num value = widget.data![key]!;
-    num w = (width -
-            ((n + 2) * widget.gap!) -
-            (widget.left ?? 0.0) -
-            (widget.right ?? 0.0)) /
-        (n + 2);
+    num value = (widget.data![key] ?? 0) + 0.0;
+    num w = ((width -
+                ((n + 2) * widget.gap!) -
+                (widget.left ?? 0.0) -
+                (widget.right ?? 0.0)) /
+            (n + 2)) +
+        0.0;
     if (w < 1) w = 1;
     if (widget.barWidth != null) w = widget.barWidth!;
     if (widget.onGetBarWidth != null) w = widget.onGetBarWidth!(w + 0.0);
@@ -154,8 +155,8 @@ class _MiniBarChartState extends State<MiniBarChart> {
     );
   }
 
-  validaHeight(double v) {
-    if (v < 0) return 0;
-    return v;
+  validaHeight(num v) {
+    if (v < 0) return 0.0;
+    return v + 0.0;
   }
 }

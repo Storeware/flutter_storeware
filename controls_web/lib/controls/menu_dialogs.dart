@@ -13,6 +13,7 @@ class MenuChoice {
   final double? width;
   final double? height;
   final List<Widget>? actions;
+  final String? tooltip;
   MenuChoice({
     this.icon,
     this.title,
@@ -22,6 +23,7 @@ class MenuChoice {
     this.width,
     this.height,
     this.actions,
+    this.tooltip,
   });
 }
 
@@ -123,19 +125,29 @@ class _MenuDialogState extends State<MenuDialog> {
     Color? _color =
         choice.enabled ? theme!.popupMenuTheme.color : theme!.dividerColor;
     return ListTile(
-        leading: (icon == null) ? null : Icon(icon),
-        onTap: () => (choice.enabled ? onTap() : null),
-        selected: item == itemSelect,
-        title: Align(
-            alignment: Alignment.centerLeft,
-            child: Material(
-                color: Colors.transparent,
-                child: Text(text ?? '',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: _color,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16)))));
+      leading: (icon == null) ? null : Icon(icon),
+      onTap: () => (choice.enabled ? onTap() : null),
+      selected: item == itemSelect,
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: (choice.tooltip == null)
+            ? _tilesLabel(text, _color)
+            : Tooltip(
+                message: choice.tooltip!,
+                child: _tilesLabel(text, _color),
+              ),
+      ),
+    );
+  }
+
+  _tilesLabel(text, _color) {
+    return Material(
+      color: Colors.transparent,
+      child: Text(text ?? '',
+          textAlign: TextAlign.left,
+          style: TextStyle(
+              color: _color, fontWeight: FontWeight.bold, fontSize: 16)),
+    );
   }
 
   ThemeData? theme;

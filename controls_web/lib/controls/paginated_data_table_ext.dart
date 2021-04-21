@@ -12,6 +12,8 @@ import 'package:flutter/gestures.dart' show DragStartBehavior;
 class PaginatedDataTableExtended extends StatefulWidget {
   final Widget? footerLeading;
   final Widget? footerTrailing;
+  final Widget? footer;
+  final Widget? footerSecondary;
   PaginatedDataTableExtended({
     Key? key,
     @required this.header,
@@ -38,6 +40,8 @@ class PaginatedDataTableExtended extends StatefulWidget {
     this.footerLeading,
     this.footerTrailing,
     this.footerHeight = 56,
+    this.footer,
+    this.footerSecondary,
     this.rowsPerPage = defaultRowsPerPage,
     this.availableRowsPerPage = const <int>[
       defaultRowsPerPage,
@@ -349,73 +353,78 @@ class PaginatedDataTableExtendedState
     // FOOTER
     final TextStyle footerTextStyle = themeData.textTheme.caption!;
     final List<Widget> footerWidgets = <Widget>[];
-    if (widget.footerLeading != null) footerWidgets.add(widget.footerLeading!);
+    if (widget.footer != null) {
+      footerWidgets.add(widget.footer!);
+    } else {
+      if (widget.footerLeading != null)
+        footerWidgets.add(widget.footerLeading!);
 
-    if (widget.onRowsPerPageChanged != null) {
-      final List<Widget> availableRowsPerPage = widget.availableRowsPerPage!
-          .where(
-              (int value) => value <= _rowCount! || value == widget.rowsPerPage)
-          .map<DropdownMenuItem<int>>((int value) {
-        return DropdownMenuItem<int>(
-          value: value,
-          child: Text('$value'),
-        );
-      }).toList();
-      footerWidgets.addAll(<Widget>[
-        Container(
-            width:
-                14.0), // to match trailing padding in case we overflow and end up scrolling
-        Text(localizations.rowsPerPageTitle),
-        ConstrainedBox(
-          constraints: const BoxConstraints(
-              minWidth: 64.0), // 40.0 for the text, 24.0 for the icon
-          child: Align(
-            alignment: AlignmentDirectional.centerEnd,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<int>(
-                items: availableRowsPerPage.cast<DropdownMenuItem<int>>(),
-                value: widget.rowsPerPage,
-                onChanged: (i) => widget.onRowsPerPageChanged!(i!),
-                style: footerTextStyle,
-                iconSize: 24.0,
+      if (widget.onRowsPerPageChanged != null) {
+        final List<Widget> availableRowsPerPage = widget.availableRowsPerPage!
+            .where((int value) =>
+                value <= _rowCount! || value == widget.rowsPerPage)
+            .map<DropdownMenuItem<int>>((int value) {
+          return DropdownMenuItem<int>(
+            value: value,
+            child: Text('$value'),
+          );
+        }).toList();
+        footerWidgets.addAll(<Widget>[
+          Container(
+              width:
+                  14.0), // to match trailing padding in case we overflow and end up scrolling
+          Text(localizations.rowsPerPageTitle),
+          ConstrainedBox(
+            constraints: const BoxConstraints(
+                minWidth: 64.0), // 40.0 for the text, 24.0 for the icon
+            child: Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<int>(
+                  items: availableRowsPerPage.cast<DropdownMenuItem<int>>(),
+                  value: widget.rowsPerPage,
+                  onChanged: (i) => widget.onRowsPerPageChanged!(i!),
+                  style: footerTextStyle,
+                  iconSize: 24.0,
+                ),
               ),
             ),
           ),
-        ),
-      ]);
-    }
-    //print('perPage ${widget.rowsPerPage} rows: ${widget.source.rowCount} ');
-    if (widget.rowsPerPage! < widget.source!.rowCount)
-      footerWidgets.addAll(<Widget>[
-        Container(width: 32.0),
-        Text(
-          localizations.pageRowsInfoTitle(
-            _firstRowIndex! + 1,
-            _firstRowIndex! + widget.rowsPerPage!,
-            _rowCount!,
-            _rowCountApproximate!,
-          ),
-        ),
-        Container(width: 32.0),
-        IconButton(
-          icon: const Icon(Icons.chevron_left),
-          padding: EdgeInsets.zero,
-          tooltip: localizations.previousPageTooltip,
-          onPressed: _firstRowIndex! <= 0 ? null : _handlePrevious,
-        ),
-        Container(width: 24.0),
-        IconButton(
-          icon: const Icon(Icons.chevron_right),
-          padding: EdgeInsets.zero,
-          tooltip: localizations.nextPageTooltip,
-          onPressed: (!_rowCountApproximate! &&
-                  (_firstRowIndex! + widget.rowsPerPage! >= _rowCount!))
-              ? null
-              : _handleNext,
-        ),
-        Container(width: 65.0),
-      ]);
+        ]);
+      }
 
+      //print('perPage ${widget.rowsPerPage} rows: ${widget.source.rowCount} ');
+      if (widget.rowsPerPage! < widget.source!.rowCount)
+        footerWidgets.addAll(<Widget>[
+          Container(width: 32.0),
+          Text(
+            localizations.pageRowsInfoTitle(
+              _firstRowIndex! + 1,
+              _firstRowIndex! + widget.rowsPerPage!,
+              _rowCount!,
+              _rowCountApproximate!,
+            ),
+          ),
+          Container(width: 32.0),
+          IconButton(
+            icon: const Icon(Icons.chevron_left),
+            padding: EdgeInsets.zero,
+            tooltip: localizations.previousPageTooltip,
+            onPressed: _firstRowIndex! <= 0 ? null : _handlePrevious,
+          ),
+          Container(width: 24.0),
+          IconButton(
+            icon: const Icon(Icons.chevron_right),
+            padding: EdgeInsets.zero,
+            tooltip: localizations.nextPageTooltip,
+            onPressed: (!_rowCountApproximate! &&
+                    (_firstRowIndex! + widget.rowsPerPage! >= _rowCount!))
+                ? null
+                : _handleNext,
+          ),
+          Container(width: 65.0),
+        ]);
+    }
     // CARD
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
@@ -507,17 +516,20 @@ class PaginatedDataTableExtendedState
                             //width: double.maxFinite,
                             //alignment: Alignment.center,
                             child: SingleChildScrollView(
-                              dragStartBehavior: widget.dragStartBehavior!,
-                              scrollDirection: Axis.horizontal,
-                              reverse: true,
-                              child: Row(
-                                children: [
-                                  ...footerWidgets,
-                                  if (widget.footerTrailing != null)
-                                    widget.footerTrailing!
-                                ],
-                              ),
-                            ),
+                                dragStartBehavior: widget.dragStartBehavior!,
+                                scrollDirection: Axis.horizontal,
+                                reverse: true,
+                                child: Column(children: [
+                                  Row(
+                                    children: [
+                                      ...footerWidgets,
+                                      if (widget.footerTrailing != null)
+                                        widget.footerTrailing!
+                                    ],
+                                  ),
+                                  if (widget.footerSecondary != null)
+                                    widget.footerSecondary!,
+                                ])),
                           ),
                         ),
                       ),

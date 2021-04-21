@@ -115,16 +115,18 @@ class DashboardTile extends StatelessWidget {
                                       if (value != null)
                                         Container(
                                           alignment: Alignment.center,
-                                          child: Text(
-                                            value!,
-                                            style: valueStyle ??
-                                                TextStyle(
-                                                    fontSize: 32,
-                                                    color: theme
-                                                        .primaryTextTheme
-                                                        .bodyText1!
-                                                        .color),
-                                          ),
+                                          child: FittedBox(
+                                              fit: BoxFit.contain,
+                                              child: Text(
+                                                value!,
+                                                style: valueStyle ??
+                                                    TextStyle(
+                                                        fontSize: 32,
+                                                        color: theme
+                                                            .primaryTextTheme
+                                                            .bodyText1!
+                                                            .color),
+                                              )),
                                         ),
                                       if (left != null)
                                         Row(

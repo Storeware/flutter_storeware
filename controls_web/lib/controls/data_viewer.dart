@@ -132,6 +132,10 @@ class DataViewerController {
   ValueNotifier filterValue = ValueNotifier<String>('');
   ValueNotifier<bool> changedValues = ValueNotifier<bool>(false);
 
+  invalidate([bool value = true]) {
+    changedValues.value = value;
+  }
+
   /// Eventos para customização de registro
   final Future<dynamic> Function(dynamic)? onInsert;
   final Future<dynamic> Function(dynamic)? onUpdate;
@@ -418,6 +422,9 @@ class DataViewer extends StatefulWidget {
   final List<Widget>? actions;
   final Widget? leading;
   final Widget? trailling;
+  final Widget? navigatorLeading;
+  final List<Widget>? navigatorActions;
+  final Widget Function(BuildContext context)? navigatorBuilder;
 
   /// pressionou o botam abrir da barra de filtro
   final Function()? onSearchPressed;
@@ -431,6 +438,8 @@ class DataViewer extends StatefulWidget {
   final double? dataRowHeight;
   final double? headingRowHeight;
   final double? footerHeight;
+  final Widget? footer;
+  final Widget? footerSecondary;
   final Function(dynamic)? onSelected;
   final Color? evenRowColor; //: widget.evenRowColor,
   final Color? oddRowColor; //: widget.oddRowColor,
@@ -456,6 +465,8 @@ class DataViewer extends StatefulWidget {
     this.canSort = true,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
+    this.footer,
+    this.footerSecondary,
     this.dataRowHeight,
     this.beforeShow,
     this.columns,
@@ -477,6 +488,9 @@ class DataViewer extends StatefulWidget {
     this.actions,
     this.leading,
     this.trailling,
+    this.navigatorLeading,
+    this.navigatorActions,
+    this.navigatorBuilder,
     this.height,
     this.width,
     this.onSaved,
@@ -560,18 +574,20 @@ class _DataViewerState extends State<DataViewer> {
                             padding:
                                 EdgeInsets.symmetric(vertical: 5), // ios usa 5
                             width: responsive!.isMobile ? 80 : 90,
-                            child: StrapButton(
-                                text: 'filtrar',
-                                height: 45,
-                                onPressed: () {
-                                  controller!.page = 1;
-                                  controller!.filter = _filtroController.text;
-                                  if (controller!.onClearCache != null)
-                                    controller!.onClearCache!();
-                                  if (widget.onSearchPressed != null)
-                                    widget.onSearchPressed!();
-                                  controller!.goPage(1);
-                                }),
+                            child: FittedBox(
+                                child: StrapButton(
+                                    text: 'filtrar',
+                                    height: 45,
+                                    onPressed: () {
+                                      controller!.page = 1;
+                                      controller!.filter =
+                                          _filtroController.text;
+                                      if (controller!.onClearCache != null)
+                                        controller!.onClearCache!();
+                                      if (widget.onSearchPressed != null)
+                                        widget.onSearchPressed!();
+                                      controller!.goPage(1);
+                                    })),
                           ),
                           if (widget.trailling != null) widget.trailling!,
                         ],
@@ -624,6 +640,9 @@ class _DataViewerState extends State<DataViewer> {
                       headingRowColor: vt.headingRowColor,
                       headingTextStyle: vt.headingTextStyle,
                       actions: widget.actions,
+                      navigatorLeading: widget.navigatorLeading,
+                      navigatorActions: widget.navigatorActions,
+                      navigatorBuilder: widget.navigatorBuilder,
                       onSelectChanged: (widget.onSelected != null)
                           ? (b, ctrl) {
                               return widget.onSelected!(ctrl.data);
@@ -661,6 +680,8 @@ class _DataViewerState extends State<DataViewer> {
                       canInsert: widget.canInsert,
                       canDelete: widget.canDelete,
                       footerHeight: widget.footerHeight!,
+                      footer: widget.footer,
+                      footerSecondary: widget.footerSecondary,
                       oneRowAutoEdit: widget.oneRowAutoEdit!,
                       futureSource: (controller!.future != null)
                           ? controller!.future!()

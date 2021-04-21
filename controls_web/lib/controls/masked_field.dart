@@ -32,6 +32,7 @@ class MaskedTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final Widget? suffix;
   final Widget? prefix;
+  final Function(bool)? onFocusChange;
   MaskedTextField({
     Key? key,
     this.validator,
@@ -49,6 +50,7 @@ class MaskedTextField extends StatefulWidget {
     this.sample,
     this.suffix,
     this.prefix,
+    this.onFocusChange,
     this.errorText = 'Falta informar %1',
     this.fontSize = 16,
     this.readOnly = false,
@@ -283,47 +285,52 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Container(
-      child: TextFormField(
-        textAlign: widget.textAlign ?? TextAlign.start,
-        maxLength: widget.maxLength,
-        readOnly: widget.readOnly!,
-        autofocus: widget.autofocus!,
-        initialValue: (_controller == null) ? widget.initialValue ?? '' : null,
-        controller: _controller,
-        style: widget.style ??
-            theme.textTheme.bodyText1!.copyWith(fontSize: widget.fontSize),
-        decoration: InputDecoration(
-            labelText: '${widget.label}',
-            suffix: widget.suffix,
-            prefix: widget.prefix,
-            helperText: !_showHelperText
-                ? (widget.sample != null)
-                    ? 'Ex: ${widget.sample}'
-                    : null
-                : null,
-            hintStyle: theme.inputDecorationTheme.hintStyle),
-        keyboardType: widget.keyboardType ?? TextInputType.text,
-        onChanged: widget.onChanged,
-        validator: (value) {
-          if (widget.match != null) {
-            var r = RegExp(widget.match!);
-            if ((!r.hasMatch(value!)) || (r.stringMatch(value) != value))
-              return (widget.sample != null)
-                  ? 'Inválido (ex: ${widget.sample}) Resp: ${r.stringMatch(value)}'
-                  : 'Inválido';
-          }
-          return (widget.validator != null)
-              ? widget.validator!(value!)
-              : (value!.isEmpty)
-                  ? widget.errorText!.replaceFirst('%1', widget.label!)
-                  : null;
-        },
-        onSaved: (widget.onSaved == null)
-            ? null
-            : (String? x) {
-                if (x != null) widget.onSaved!(x);
-              },
-      ),
+      child: Focus(
+          onFocusChange: (x) {
+            if (widget.onFocusChange != null) widget.onFocusChange!(x);
+          },
+          child: TextFormField(
+            textAlign: widget.textAlign ?? TextAlign.start,
+            maxLength: widget.maxLength,
+            readOnly: widget.readOnly!,
+            autofocus: widget.autofocus!,
+            initialValue:
+                (_controller == null) ? widget.initialValue ?? '' : null,
+            controller: _controller,
+            style: widget.style ??
+                theme.textTheme.bodyText1!.copyWith(fontSize: widget.fontSize),
+            decoration: InputDecoration(
+                labelText: '${widget.label}',
+                suffix: widget.suffix,
+                prefix: widget.prefix,
+                helperText: !_showHelperText
+                    ? (widget.sample != null)
+                        ? 'Ex: ${widget.sample}'
+                        : null
+                    : null,
+                hintStyle: theme.inputDecorationTheme.hintStyle),
+            keyboardType: widget.keyboardType ?? TextInputType.text,
+            onChanged: widget.onChanged,
+            validator: (value) {
+              if (widget.match != null) {
+                var r = RegExp(widget.match!);
+                if ((!r.hasMatch(value!)) || (r.stringMatch(value) != value))
+                  return (widget.sample != null)
+                      ? 'Inválido (ex: ${widget.sample}) Resp: ${r.stringMatch(value)}'
+                      : 'Inválido';
+              }
+              return (widget.validator != null)
+                  ? widget.validator!(value!)
+                  : (value!.isEmpty)
+                      ? widget.errorText!.replaceFirst('%1', widget.label!)
+                      : null;
+            },
+            onSaved: (widget.onSaved == null)
+                ? null
+                : (String? x) {
+                    if (x != null) widget.onSaved!(x);
+                  },
+          )),
     );
   }
 }

@@ -167,6 +167,9 @@ class PaginatedGrid extends StatefulWidget {
   final double? headerHeight;
 
   final List<Widget>? actions;
+  final Widget? navigatorLeading;
+  final List<Widget>? navigatorActions;
+  final Widget Function(BuildContext context)? navigatorBuilder;
   final int? currentPage;
   final double? elevation;
   final double? dividerThickness;
@@ -174,9 +177,9 @@ class PaginatedGrid extends StatefulWidget {
 
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
-  final Function(int)? onPageSelected;
+  final Function(int page)? onPageSelected;
   final bool showPageNavigatorButtons;
-  final Function(bool)? onSelectAll;
+  final Function(bool selected)? onSelectAll;
   final int? sortColumnIndex;
   final bool? sortAscending;
   final TextStyle? columnStyle;
@@ -224,6 +227,8 @@ class PaginatedGrid extends StatefulWidget {
   final Widget? footerLeading;
   final Widget? footerTrailing;
   final double? footerHeight;
+  final Widget? footer;
+  final Widget? footerSecondary;
   final Color? backgroundColor;
 
   final double? dataRowHeight;
@@ -260,7 +265,12 @@ class PaginatedGrid extends StatefulWidget {
     this.onRowsPerPageChanged,
     this.oneRowAutoEdit = false,
     this.footerLeading,
+    this.footer,
+    this.footerSecondary,
     this.footerHeight = kToolbarHeight,
+    this.navigatorLeading,
+    this.navigatorActions,
+    this.navigatorBuilder,
     this.placeHolder,
     this.canSort = true,
     this.backgroundColor,
@@ -507,8 +517,10 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                             dataRowHeight: widget.dataRowHeight,
                             columnSpacing: 0, //widget.columnSpacing,
                             footerTrailing: widget.footerTrailing,
-                            footerLeading:
-                                widget.footerLeading ?? createPageNavigator(),
+                            footerLeading: widget.footerLeading ??
+                                createPageNavigator(context),
+                            footer: widget.footer,
+                            footerSecondary: widget.footerSecondary,
                             header: Column(
                                 crossAxisAlignment: widget.crossAxisAlignment!,
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -644,22 +656,26 @@ class _PaginatedGridState extends State<PaginatedGrid> {
         });
   }
 
-  createPageNavigator() {
+  createPageNavigator(BuildContext context) {
     if (widget.onPageSelected == null) return null;
     int n = 0;
     if (!(widget.showPageNavigatorButtons)) return Container();
+    if (widget.navigatorBuilder != null)
+      return widget.navigatorBuilder!(context);
     return Padding(
       padding: const EdgeInsets.only(left: 14, right: 60),
       child: Container(
         child: Align(
           alignment: Alignment.centerLeft,
           child: Row(children: [
+            if (widget.navigatorLeading != null) widget.navigatorLeading!,
             createNavButton(1),
             for (var i = widget.currentPage! - 1;
                 i < widget.currentPage! + 4;
                 i++)
               if (i > 1)
-                if ((n++) < 4) createNavButton(i)
+                if ((n++) < 4) createNavButton(i),
+            if (widget.navigatorActions != null) ...widget.navigatorActions!,
           ]),
         ),
       ),

@@ -562,20 +562,24 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
         children: [
           if (widget.leading != null) widget.leading!,
           StatefulBuilder(builder: (context, _setState) {
-            return Checkbox(
-              activeColor: widget.activeColor,
-              checkColor: widget.checkColor,
-              hoverColor: widget.hoverColor,
-              focusColor: widget.focusColor,
-              tristate: widget.tristate!,
-              value: (widget.tristate ?? false) ? value : value ?? false,
-              onChanged: (x) {
-                if (widget.onChanged != null) widget.onChanged!(x!);
-                if (mounted)
-                  _setState(() {
-                    value = x;
-                  });
-              },
+            return SizedBox(
+              height: 24.0,
+              width: 24.0,
+              child: Checkbox(
+                activeColor: widget.activeColor,
+                checkColor: widget.checkColor,
+                hoverColor: widget.hoverColor,
+                focusColor: widget.focusColor,
+                tristate: widget.tristate!,
+                value: (widget.tristate ?? false) ? value : value ?? false,
+                onChanged: (x) {
+                  if (widget.onChanged != null) widget.onChanged!(x!);
+                  if (mounted)
+                    _setState(() {
+                      value = x;
+                    });
+                },
+              ),
             );
           }),
           if (widget.label != null)

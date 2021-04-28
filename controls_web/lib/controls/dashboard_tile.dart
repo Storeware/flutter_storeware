@@ -146,7 +146,7 @@ class DashboardTile extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                if (title != null || action != null)
+                                if (title != null || actions != null)
                                   Container(
                                     alignment: Alignment.center,
                                     height: titleHeight,
@@ -165,6 +165,7 @@ class DashboardTile extends StatelessWidget {
                                       Expanded(
                                           child: Text(
                                         title ?? '',
+                                        textAlign: TextAlign.center,
                                         style: titleStyle ??
                                             theme.primaryTextTheme.caption!
                                                 .copyWith(fontSize: 18),

@@ -39,6 +39,8 @@ class DashboardTile extends StatelessWidget {
   final Color? indicatorColor;
   final double? avatarSize;
   final Widget? topBar;
+  final List<Widget>? actions;
+  final Widget? leading;
   const DashboardTile(
       {Key? key,
       this.value,
@@ -47,6 +49,8 @@ class DashboardTile extends StatelessWidget {
       this.title,
       this.titleStyle,
       this.color,
+      this.actions,
+      this.leading,
       this.borderRadius = 5,
       this.avatarMargin = 00,
       this.image,
@@ -142,7 +146,7 @@ class DashboardTile extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                if (title != null)
+                                if (title != null || action != null)
                                   Container(
                                     alignment: Alignment.center,
                                     height: titleHeight,
@@ -156,12 +160,17 @@ class DashboardTile extends StatelessWidget {
                                             Radius.circular(borderRadius!),
                                       ),
                                     ),
-                                    child: Text(
-                                      title ?? '',
-                                      style: titleStyle ??
-                                          theme.primaryTextTheme.caption!
-                                              .copyWith(fontSize: 18),
-                                    ),
+                                    child: Row(children: [
+                                      if (leading != null) leading!,
+                                      Expanded(
+                                          child: Text(
+                                        title ?? '',
+                                        style: titleStyle ??
+                                            theme.primaryTextTheme.caption!
+                                                .copyWith(fontSize: 18),
+                                      )),
+                                      if (actions != null) ...actions!,
+                                    ]),
                                   ),
                               ]),
                         ),

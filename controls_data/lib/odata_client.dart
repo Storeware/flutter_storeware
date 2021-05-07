@@ -524,7 +524,7 @@ abstract class ODataModelClass<T extends DataItem> {
   String externalKeys = '';
   ODataClient? API;
   ODataModelClass({this.API});
-  get driver => API!.client.headers['db-driver'] ?? 'fb';
+  String get driver => API!.client.headers['db-driver'] ?? 'fb';
   makeCollection(Map<String, dynamic>? item) {
     return collectionName;
   }

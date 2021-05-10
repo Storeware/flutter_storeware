@@ -60,6 +60,10 @@ class ReportView extends StatefulWidget {
   final double? columnSpacing;
   final Function(int, dynamic)? onSelectChanged;
   final Function(int, dynamic)? onCellTap;
+  final String Function(Map<String, dynamic> row)? grouped;
+  final Map<String, dynamic> Function(dynamic)? onGroupHeader;
+  final Map<String, dynamic> Function(int n, dynamic)? onGroupFooter;
+  final Map<String, dynamic> Function(dynamic)? onGroupBody;
 
   /// rowCurrent, rowBefore -> return [true] if has aditional row
   //final bool Function(ReportRowType, dynamic, dynamic) onHasAditionalRow;
@@ -69,7 +73,8 @@ class ReportView extends StatefulWidget {
       onAditionalBuilder;
 
   /// chamado antes de montar as linhas
-  final dynamic Function(ReportRowType, List<DataRow>)? onHeaderBuilder;
+  final Map<String, dynamic> Function(ReportRowType, List<DataRow>)?
+      onHeaderBuilder;
 
   /// chamado ao final das linhas
   final dynamic Function(ReportRowType, List<DataRow>)? onFooterBuilder;
@@ -82,7 +87,11 @@ class ReportView extends StatefulWidget {
     this.backgroundColor,
     this.onSelectChanged,
     this.onCellTap,
+    this.grouped,
     this.columnSpacing = 40,
+    this.onGroupHeader,
+    this.onGroupBody,
+    this.onGroupFooter,
     this.onHeaderBuilder,
     this.onFooterBuilder,
     this.dataRowHeight = 35,
@@ -101,6 +110,8 @@ class ReportView extends StatefulWidget {
 }
 
 class _ReportViewState extends State<ReportView> {
+  bool groupChanged = false;
+
   /// gerador das linhas
   List<DataCell> genCells(index, row) {
     List<DataCell> cells = [];
@@ -147,6 +158,13 @@ class _ReportViewState extends State<ReportView> {
     );
   }
 
+  DataRow genRowData(index, row) {
+    return DataRow(
+      onSelectChanged: (b) => widget.onSelectChanged!(index, row),
+      cells: genCells(index, row),
+    );
+  }
+
   List<ReportColumn> get columns => widget.controller!.columns!;
   ReportController get controller => widget.controller!;
   List<dynamic> get source => widget.controller!.source!;
@@ -183,16 +201,18 @@ class _ReportViewState extends State<ReportView> {
   }
 
   dynamic oldRow;
-  generateRow(rows, row) {
+  int groupCount = 0;
+  String groupKey = '';
+  generateRow(rows, row, {Color? color}) {
     if (row == null) return;
     if (row is List) {
       for (var i = 0; i < row.length; i++)
         createAditionalRow(rows, row[i],
             color: (i == 0)
-                ? Colors.grey.withOpacity(0.1)
-                : Colors.grey.withOpacity(0.4));
+                ? color ?? Colors.grey.withOpacity(0.1)
+                : color ?? Colors.grey.withOpacity(0.4));
     } else
-      createAditionalRow(rows, row);
+      createAditionalRow(rows, row, color: color);
   }
 
   /// motor de geração das linhas - global
@@ -205,6 +225,28 @@ class _ReportViewState extends State<ReportView> {
       generateRow(rows, widget.onHeaderBuilder!(ReportRowType.header, rows));
     }
     for (var i = 0; i < source.length; i++) {
+      if (widget.grouped != null) {
+        String k = widget.grouped!(source[i]);
+        groupChanged = (k != groupKey);
+        groupKey = k;
+      }
+
+      if (i > 0 && groupChanged && widget.onGroupFooter != null) {
+        generateRow(rows, widget.onGroupFooter!(groupCount, source[i - 1]));
+        groupCount = 0;
+      }
+
+      if (groupCount == 0 && widget.onGroupHeader != null)
+        generateRow(
+          rows,
+          widget.onGroupHeader!(source[i]),
+          color: Colors.grey.withOpacity(0.1),
+        );
+      if (widget.onGroupBody != null)
+        rows.add(genRowData(
+          i,
+          widget.onGroupBody!(source[i]),
+        ));
       if (widget.onAditionalBuilder != null) {
         generateRow(
             rows,
@@ -217,9 +259,14 @@ class _ReportViewState extends State<ReportView> {
                 source[i],
                 rows));
       }
-
-      rows.add(genRow(i));
+      if (widget.onGroupBody == null) rows.add(genRow(i));
       oldRow = source[i];
+      groupChanged = false;
+      groupCount++;
+    }
+    if (groupCount > 0 && widget.onGroupFooter != null) {
+      generateRow(rows, widget.onGroupFooter!(groupCount, source.last));
+      groupCount = 0;
     }
     if (widget.onFooterBuilder != null) {
       generateRow(rows, widget.onFooterBuilder!(ReportRowType.footer, rows));

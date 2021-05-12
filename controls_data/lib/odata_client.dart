@@ -507,7 +507,7 @@ class ODataInst extends ODataClient {
       loginNotifier.notify(rsp);
       LoginTokenChanged().notify(true);
       return token;
-    });
+    }).onError((error, stackTrace) => null);
   }
 
   String formatUrl(String s) {

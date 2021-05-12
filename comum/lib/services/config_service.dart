@@ -283,11 +283,14 @@ abstract class ConfigAppBase extends ConfigBase {
     queryParameters['q'] = value;
 
     ODataInst().baseUrl = restServer;
-    return ODataInst().login(loja, usuario, password ?? loja).then((x) {
+    final rsp =
+        await ODataInst().login(loja, usuario, password ?? loja).then((x) {
       _authorization = x;
       save();
       loginChanged.notify(this);
+      return x;
     });
+    return rsp;
   }
 
   loginSignInByEmail(String loja, email) {

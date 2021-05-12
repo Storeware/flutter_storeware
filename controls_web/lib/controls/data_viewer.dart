@@ -752,6 +752,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final bool canEdit, canInsert, canDelete;
   final PaginatedGridChangeEvent? event;
   final double? dataRowHeight;
+  final double? margin;
   final Function(dynamic)? onSaved;
   final Function(dynamic)? onClose;
   final bool showAppBar;
@@ -786,6 +787,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.leading,
     //this.onLog,
     this.actions,
+    this.margin = 8,
     this.headerAction,
     this.bottomAction,
     this.stateController,
@@ -927,7 +929,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               child: Row(children: [
                 if (rows.leadding != null) rows.leadding!,
                 Text(rows.title!,
-                    style: rows.titleStyle ?? theme!.textTheme.caption),
+                    style: rows.titleStyle ??
+                        theme!.textTheme.caption?.copyWith(fontSize: 18)),
                 if (rows.trailling != null) rows.trailling!,
               ])),
         Wrap(
@@ -972,7 +975,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
       edit = createFormField(context, col, order, isLast: isLast!);
     }
     return Container(
-        padding: EdgeInsets.only(right: 8),
+        padding: EdgeInsets.only(left: widget.margin!, right: widget.margin!),
         height: widget.dataRowHeight ??
             (col.editHeight ??
                 kToolbarHeight + (((col.maxLength ?? 0) > 0) ? 24.0 : 8)),

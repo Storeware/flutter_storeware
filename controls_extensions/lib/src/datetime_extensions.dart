@@ -15,7 +15,7 @@ extension DateTimeExtension on DateTime {
         this.format(f ?? '');
   }
 
-  DateTime from(dynamic value) => ''.toDateTime(value);
+  DateTime from(dynamic value) => toDateTime(value);
 
   dateFormat(String mask, [lang = 'pt-BR']) => DateFormat(mask, lang);
 

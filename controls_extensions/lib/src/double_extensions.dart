@@ -5,16 +5,39 @@ import 'dynamic_extensions.dart';
 
 /// https://api.flutter.dev/flutter/intl/NumberFormat-class.html
 /// [NumberFormat]
-extension NumExtension on num {
+/*extension NumExtension on num {
   num between(num de, num ate) {
     num valor = this;
     if (valor > ate) valor = ate;
     if (valor < de) valor = de;
     return valor;
   }
-}
+  //double get asDouble { final r= this; return (r+0.0);}
+
+ // int get asInt { final r = this; return (r / ~1); }
+
+}*/
 
 extension DoubleExtension on double {
+  bool get isZero {
+    //final r = this;
+    return this.compareTo(0.0) == 0;
+  }
+
+  bool get isNotZero => !isZero;
+  bool get isNegative {
+    //final r = this;
+    return this.compareTo(0.0) < 0;
+  }
+
+  bool get isPositive {
+    //final r = this;
+    return this.compareTo(0.0) >= 0;
+  }
+
+  bool get isNotNegative => !isNegative;
+  bool get isNotPositive => !isPositive;
+
   String format(String mask, {String? lang}) {
     final oCcy = new NumberFormat(mask, lang ?? Intl.defaultLocale);
     return oCcy.format(this);
@@ -24,8 +47,15 @@ extension DoubleExtension on double {
     return this.toStringAsFixed(frac).replaceAll(',', '.');
   }
 
+  double between(double de, double ate) {
+    double valor = this;
+    if (valor > ate) valor = ate;
+    if (valor < de) valor = de;
+    return valor;
+  }
+
   double from(value) {
-    return ''.toDouble(value);
+    return toDouble(value);
   }
 
   num min(num value) {
@@ -81,4 +111,27 @@ extension IntExtensions on int {
   int max(int value) {
     return (this < value) ? value : this;
   }
+
+  int between(int de, int ate) {
+    int valor = this;
+    if (valor > ate) valor = ate;
+    if (valor < de) valor = de;
+    return valor;
+  }
+
+  bool get isZero {
+    return this.compareTo(0) == 0;
+  }
+
+  bool get isNotZero => !isZero;
+  bool get isNegative {
+    return this.compareTo(0) < 0;
+  }
+
+  bool get isPositive {
+    return this.compareTo(0) >= 0;
+  }
+
+  bool get isNotNegative => !isNegative;
+  bool get isNotPositive => !isPositive;
 }

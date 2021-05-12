@@ -6,7 +6,7 @@ extension IntegerExtension on int {
     return this.toString().padLeft(count, '0');
   }
 
-  int from(value) => ''.toInt(value);
+  int from(value) => toInt(value);
 
   /// min valor
   int min(int value) {

@@ -38,6 +38,8 @@ class HorizontalTabView extends StatefulWidget {
   final Color? tagColor;
   final bool? isMobile;
   final double? tabHeight;
+  final Widget Function(TabChoice choice)? tabBuilder;
+  final double? tabPadding;
   final TextStyle? tabStyle;
   //final double tabHeightCompact;
   final AppBar? sidebarAppBar;
@@ -60,8 +62,9 @@ class HorizontalTabView extends StatefulWidget {
     this.top = 0,
     this.bottom = 0,
     this.left = 0,
+    this.tabPadding = 4,
     this.selectedColor,
-    this.leftRadius = 30,
+    this.leftRadius = 0,
     this.right = 0,
     this.topBar,
     this.bottomBar,
@@ -73,6 +76,7 @@ class HorizontalTabView extends StatefulWidget {
     this.mobileCrossCount,
     this.indicatorColor = Colors.blue,
     this.backgroundColor,
+    this.tabBuilder,
     this.iconColor, //= Colors.white,
     this.tabColor = Colors.lightBlue,
     this.pageBottom,
@@ -99,12 +103,14 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
   animateTo(int index) {
     if (index < 0) index = 0;
     if (index >= widget.choices!.length) index = widget.choices!.length - 1;
-    if (mounted) _index.value = index;
-    jumpTo(index);
+    if (mounted) {
+      _index.value = index;
+      jumpTo(index);
+    }
   }
 
   jumpTo(int? index) {
-    if (index != null)
+    if (mounted && index != null && scrollController!.positions.isNotEmpty)
       scrollController!.animateTo(
         (index) * widget.tabHeight!,
         duration: Duration(milliseconds: 500),
@@ -273,15 +279,12 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
   buildItem(int index) => Container(
         key: ValueKey(widget.choices![index].label ?? '$index'),
         alignment: Alignment.centerLeft,
-        color:
-            (_index.value == index) ? widget.indicatorColor : widget.tabColor,
+        color: (_index.value == index)
+            ? widget.indicatorColor
+            : widget.sidebarBackgroundColor ?? widget.tabColor,
         child: (_sidebarType != HorizontalTabViewSiderBarType.show)
             ? Container(
-                padding: EdgeInsets.symmetric(vertical: 4),
-                /* height: (_index.value == index)
-                                                ? null
-                                                : tabHeightCompact ?? 40,
-                                           */
+                padding: EdgeInsets.symmetric(vertical: widget.tabPadding!),
                 child: Row(children: [
                   if (_index.value == index)
                     Container(
@@ -297,79 +300,92 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                               decoration: BoxDecoration(
                                 color: (_index.value == index)
                                     ? widget.indicatorColor
-                                    : null,
+                                    : widget.tabColor,
                               ),
                               padding: EdgeInsets.zero,
-                              child: Column(
-                                children: [
-                                  if (widget.choices![index].image != null)
-                                    widget.choices![index].image!,
-                                  if (widget.choices![index].icon != null)
-                                    Icon(widget.choices![index].icon,
-                                        color: _iconColor),
-                                  if (_index.value == index) ...[
-                                    SizedBox(height: 2),
-                                    widget.choices![index].title ??
-                                        Text(widget.choices![index].label!,
-                                            style: (widget.tabStyle ??
-                                                TextStyle(
-                                                  fontSize: 14,
-                                                  color: (widget.sidebarBackgroundColor ??
-                                                              theme!
-                                                                  .scaffoldBackgroundColor)
-                                                          .isDark
-                                                      ? Colors.white70
-                                                      : Colors.black87,
-                                                  fontWeight: FontWeight.w500,
-                                                ))),
-                                  ],
-                                ],
-                              )),
+                              child: (widget.tabBuilder != null)
+                                  ? widget.tabBuilder!(widget.choices![index])
+                                  : Column(
+                                      children: [
+                                        if (widget.choices![index].image !=
+                                            null)
+                                          widget.choices![index].image!,
+                                        if (widget.choices![index].icon != null)
+                                          Icon(widget.choices![index].icon,
+                                              color: _iconColor),
+                                        ...[
+                                          SizedBox(height: 2),
+                                          widget.choices![index].title ??
+                                              Text(
+                                                  '${widget.choices![index].label!}',
+                                                  style: (widget.tabStyle ??
+                                                      TextStyle(
+                                                        fontSize: 14,
+                                                        color: (widget.sidebarBackgroundColor ??
+                                                                    theme!
+                                                                        .scaffoldBackgroundColor)
+                                                                .isDark
+                                                            ? Colors.white70
+                                                            : Colors.black87,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ))),
+                                        ],
+                                      ],
+                                    )),
                           onTap: () {
                             _index.value = index;
                           }))
                 ]))
             : Row(children: [
-                Container(
-                    height: widget.tabHeight ?? kToolbarHeight,
-                    width: 5,
-                    color: (_index.value == index)
-                        ? widget.tagColor ?? theme!.indicatorColor
-                        : widget.tabColor),
+                if (widget.leftRadius! == 0)
+                  Container(
+                      height: widget.tabHeight ?? kToolbarHeight,
+                      width: 5,
+                      color: (_index.value == index)
+                          ? widget.tagColor ?? theme!.indicatorColor
+                          : null),
                 Expanded(
                     child: Padding(
                   padding: const EdgeInsets.only(left: 1.0, bottom: 1.0),
                   child: Container(
-                      decoration: BoxDecoration(
-                        color: (_index.value == index) ? _selectedColor : null,
-                        borderRadius: BorderRadius.horizontal(
-                            left: Radius.circular(widget.leftRadius!)),
-                      ),
-                      height: widget.tabHeight,
-                      child: ListTile(
-                        leading: (widget.choices![index].image != null)
-                            ? widget.choices![index].image
-                            : (widget.choices![index].icon != null)
-                                ? Icon(
-                                    widget.choices![index].icon,
-                                    color: _iconColor,
-                                  )
-                                : null,
-                        title: widget.choices![index].title ??
-                            Text(widget.choices![index].label!,
-                                style: widget.tabStyle ??
-                                    theme!.textTheme.bodyText1!.copyWith(
-                                        fontWeight: FontWeight.w500,
-                                        color: (widget.sidebarBackgroundColor ??
-                                                    theme!
-                                                        .scaffoldBackgroundColor)
-                                                .isDark
-                                            ? Colors.white70
-                                            : Colors.black87)),
-                        onTap: () {
-                          _index.value = index;
-                        },
-                      )),
+                    decoration: BoxDecoration(
+                      color: (_index.value == index)
+                          ? _selectedColor
+                          : widget.tabColor!,
+                      borderRadius: BorderRadius.horizontal(
+                          left: Radius.circular(widget.leftRadius!)),
+                    ),
+                    height: widget.tabHeight,
+                    child: InkWell(
+                      child: (widget.tabBuilder != null)
+                          ? widget.tabBuilder!(widget.choices![index])
+                          : ListTile(
+                              leading: (widget.choices![index].image != null)
+                                  ? widget.choices![index].image
+                                  : (widget.choices![index].icon != null)
+                                      ? Icon(
+                                          widget.choices![index].icon,
+                                          color: _iconColor,
+                                        )
+                                      : null,
+                              title: widget.choices![index].title ??
+                                  Text('${widget.choices![index].label!}',
+                                      style: widget.tabStyle ??
+                                          theme!.textTheme.bodyText1!.copyWith(
+                                              fontWeight: FontWeight.w500,
+                                              color: (widget.sidebarBackgroundColor ??
+                                                          theme!
+                                                              .scaffoldBackgroundColor)
+                                                      .isDark
+                                                  ? Colors.white70
+                                                  : Colors.black87)),
+                            ),
+                      onTap: () {
+                        _index.value = index;
+                      },
+                    ),
+                  ),
                 )),
               ]),
       );
@@ -396,42 +412,48 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                 (index) {
                   TabChoice tab = widget.choices![index];
                   return Padding(
-                      padding: widget.padding ?? EdgeInsets.all(8),
+                      padding:
+                          widget.padding ?? EdgeInsets.all(widget.tabPadding!),
                       child: InkWell(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                tab.image ??
-                                    Icon(
-                                      tab.icon,
-                                      size: 80,
-                                      color: _iconColor ??
-                                          theme.primaryTextTheme.bodyText1!
-                                              .color,
-                                    ),
-                                tab.title ??
-                                    Text(
-                                      tab.label ?? '',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w500,
-                                        color: _iconColor ??
-                                            theme.textTheme.button!.color,
-                                      ),
-                                    ),
-                              ],
-                            ),
-                          ),
-                        ),
+                        child: widget.tabBuilder != null
+                            ? widget.tabBuilder!(tab)
+                            : Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      tab.image ??
+                                          Icon(
+                                            tab.icon,
+                                            size: 80,
+                                            color: _iconColor ??
+                                                theme.primaryTextTheme
+                                                    .bodyText1!.color,
+                                          ),
+                                      tab.title ??
+                                          Text(
+                                            tab.label ?? '',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w500,
+                                              color: _iconColor ??
+                                                  theme.textTheme.button!.color,
+                                            ),
+                                          ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                         onTap: () {
+                          if (widget.onChanged != null)
+                            widget.onChanged!(index);
                           if (tab.primary)
                             Navigator.push(
                               context,

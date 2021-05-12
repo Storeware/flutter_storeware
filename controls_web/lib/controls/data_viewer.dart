@@ -181,7 +181,7 @@ class DataViewerController {
   }
 
   /// executa  delete de um linha
-  doDelete(dados, {manual = false}) {
+  doDelete(dados, {manual = false}) async {
     if (onClearCache != null) onClearCache!();
 
     var rsp;
@@ -239,7 +239,7 @@ class DataViewerController {
   }
 
   /// Update um linha
-  doUpdate(dados, {bool manual = false}) {
+  Future<bool> doUpdate(dados, {bool manual = false}) async {
     if (onValidate != null) dados = onValidate!(dados);
     if (onClearCache != null) onClearCache!();
     var rsp;

@@ -23,6 +23,12 @@ class LoginChanged extends ChangeNotifier {
   }
 }
 
+class ConfigFilialChanged extends BlocModel<double> {
+  static final _singleton = ConfigFilialChanged._create();
+  ConfigFilialChanged._create();
+  factory ConfigFilialChanged() => _singleton;
+}
+
 abstract class ConfigBase {
   String restServer = 'https://estouentregando.com';
   ConfigBase();
@@ -60,13 +66,15 @@ abstract class ConfigAppBase extends ConfigBase {
   var queryParameters = {};
   double? _filial;
   double? get filial {
-    double r =
-        toDouble(ls.LocalStorage().getNum('filialCorrente') ?? _filial ?? 1.0);
-    return r;
+    final String? r = ls.LocalStorage().getString('filialCorrente');
+    if (r == null) return null;
+    return double.tryParse(r);
   }
 
   set filial(double? x) {
-    ls.LocalStorage().setNum('filialCorrente', x ?? _filial ?? 1.0);
+    final v = x ?? _filial ?? 1.0;
+    ConfigFilialChanged().notify(v);
+    ls.LocalStorage().setString('filialCorrente', '$v');
   } // mudar depois que inicializou os dados;
 
   var _backgroundColor = 'azure';
@@ -209,7 +217,13 @@ abstract class ConfigAppBase extends ConfigBase {
     restServer = queryParameters['h'] ?? xConfig['restserver'];
     ODataInst().baseUrl = restServer;
     ODataInst().prefix = xConfig['restserverPrefix'];
-    filial = toDouble(xConfig['filial'] ?? 1);
+
+    final double r = toDouble(xConfig['filial'] ?? 0);
+
+    /// [Filial] se a filial foi indicada na configuração, então a filial é fixa com base no configurado
+    /// caso não seja configurado no servidor, pega a ultima logada.
+    if (r > 0) filial = toDouble(xConfig['filial'] ?? 1);
+
     afterConfig();
     setLoja(loja).then((fsp) {
       afterLoaded(xConfig, fsp);

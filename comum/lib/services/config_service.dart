@@ -58,7 +58,17 @@ abstract class ConfigAppBase extends ConfigBase {
   int instanceCount = 0;
   bool inited = false;
   var queryParameters = {};
-  double? filial; // mudar depois que inicializou os dados;
+  double? _filial;
+  double? get filial {
+    double r =
+        toDouble(ls.LocalStorage().getNum('filialCorrente') ?? _filial ?? 1.0);
+    return r;
+  }
+
+  set filial(double? x) {
+    ls.LocalStorage().setNum('filialCorrente', x ?? _filial ?? 1.0);
+  } // mudar depois que inicializou os dados;
+
   var _backgroundColor = 'azure';
   get backgroudColor => _backgroundColor;
   set backgroundColor(x) {

@@ -132,7 +132,7 @@ class _PdfReportViewState extends State<PdfReportView> {
       allowPrinting: widget.canPrint,
       allowSharing: widget.canShare,
       //canChangePageFormat: false,
-      onError: (BuildContext context) {
+      onError: (BuildContext context, sender) {
         return Container(child: Text('Não há dados no documento'));
       },
       //actions: widget.pageActions,

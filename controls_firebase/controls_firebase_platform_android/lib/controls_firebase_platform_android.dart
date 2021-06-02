@@ -1,6 +1,6 @@
 library controls_firebase_platform_android;
 
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'dart:typed_data';
 
@@ -161,8 +161,9 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     String _fileName = buildPath(path);
     fs.Reference firebaseStorageRef = storage.ref().child(_fileName);
     print('$_fileName:$rawPath');
-    final Directory systemTempDir = Directory.systemTemp;
-    final File file = await new File('${systemTempDir.path}/temp.jpg').create();
+    final io.Directory systemTempDir = io.Directory.systemTemp;
+    final io.File file =
+        await io.File('${systemTempDir.path}/temp.jpg').create();
     file.writeAsBytes(rawPath);
     final md;
     md = fs.SettableMetadata(

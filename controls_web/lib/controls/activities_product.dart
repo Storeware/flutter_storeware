@@ -1,5 +1,8 @@
-import 'activities.dart';
+// @dart=2.12
+import 'package:controls_web/controls/activities.dart';
 import 'package:flutter/material.dart';
+import 'package:controls_web/controls.dart';
+//import 'package:controls_extensions/extensions.dart';
 
 class ActivityProductDetail extends StatefulWidget {
   final Widget? image;
@@ -24,9 +27,11 @@ class ActivityProductDetail extends StatefulWidget {
   final TextStyle? style;
 
   final double? initialQty;
+  final double descmaximo;
 
   final List<Widget>? items;
-  final Function(String, double)? onBuyPressed;
+  final Function(String codigo, double preco, double percDesconto,
+      double valorDesconto, double liquido)? onBuyPressed;
   final List<Widget>? children;
   const ActivityProductDetail({
     Key? key,
@@ -44,6 +49,7 @@ class ActivityProductDetail extends StatefulWidget {
     this.style,
     this.child,
     this.price = 0,
+    this.descmaximo = 0,
     this.color,
     this.priceFrom = 0,
     this.qtyFrom = 0,
@@ -63,24 +69,31 @@ class ActivityProductDetail extends StatefulWidget {
 
 class _ActivityProductDetailState extends State<ActivityProductDetail> {
   TextEditingController _qtde = TextEditingController();
+  late double percDesconto;
+  late double desconto;
+  late double liquido;
 
   @override
   void initState() {
+    percDesconto = 0;
+    desconto = 0;
+    liquido = widget.price!;
     _qtde.text = widget.initialQty.toString();
     super.initState();
   }
 
+  get preco => widget.price!;
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Column(
+    return Form(
+        child: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         if (widget.imageTop != null) widget.imageTop!,
-
         if (widget.image != null) widget.image!,
         if (widget.imageBottom != null) widget.imageBottom!,
-
         (widget.title != null)
             ? Text(widget.title ?? '',
                 maxLines: widget.maxLines,
@@ -110,27 +123,42 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
                 ),
               ...(widget.actions ?? []),
               Expanded(child: Container(child: widget.child)),
-              if (widget.priceFrom! > 0)
-                ActivityButton(
-                  image: Text(
-                      'de ${widget.priceFrom.toString().replaceAll('.', ',')}',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontStyle: FontStyle.italic,
-                      )),
-                  title: 'por',
-                ),
-              if ((widget.price ?? 0) > 0)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: ShowPriceWidget(
-                    precovenda: widget.price!,
-                    //showDescript: false,
+              Row(children: [
+                if (widget.priceFrom! > 0)
+                  ActivityButton(
+                    image: Text(
+                        'de ${widget.priceFrom.toString().replaceAll('.', ',')}',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontStyle: FontStyle.italic,
+                        )),
+                    title: 'por',
                   ),
-                )
+                if ((widget.price ?? 0) > 0) Text('Preço unitário:  '),
+                if ((widget.price ?? 0) > 0)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: ShowPriceWidget(
+                      precovenda: widget.price!,
+                      //showDescript: false,
+                    ),
+                  ),
+              ]),
             ],
           ),
         ),
+        if (widget.descmaximo > 0)
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: ShowDescontoMaximo(
+                preco: widget.price!,
+                descmaximo: widget.descmaximo,
+                onChanged: (percentual, desconto) {
+                  percDesconto = percentual;
+                  this.desconto = desconto;
+                  liquido = preco - desconto;
+                }),
+          ),
         if (widget.children != null) ...widget.children!,
         if (widget.showBuyButton!)
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
@@ -141,16 +169,14 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
               textColor: Colors.white,
               initialValue: widget.initialQty!,
               onQtdePressed: (qtde) {
-                widget.onBuyPressed!(widget.id!, qtde);
+                widget.onBuyPressed!(widget.id!, qtde, percDesconto, desconto,
+                    liquido); //toDouble(_percDescController.text));
               },
             )
           ]),
-        //SizedBox(
-        //  height: 20,
-        //),
         ...widget.items ?? []
       ],
-    );
+    ));
   }
 
   buildFavorities() => widget.favorite;
@@ -321,6 +347,7 @@ class ShowPriceWidget extends StatelessWidget {
     this.simbol = 'R\$',
     this.fontSize = 18,
     @required this.precovenda,
+    this.color,
     this.decimais = 2,
     //@required this.showDescript,
   }) : super(key: key);
@@ -330,6 +357,7 @@ class ShowPriceWidget extends StatelessWidget {
   final String? simbol;
   final double? fontSize;
   final int? decimais;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -353,6 +381,7 @@ class ShowPriceWidget extends StatelessWidget {
                 '$simbol',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
+                  color: color,
                 ),
               ),
               SizedBox(
@@ -360,6 +389,7 @@ class ShowPriceWidget extends StatelessWidget {
               )
             ],
           ),
+          SizedBox(width: 6),
           Container(
             alignment: Alignment.bottomCenter,
             child: Text(
@@ -367,6 +397,8 @@ class ShowPriceWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: fontSize,
                 fontWeight: FontWeight.bold,
+                color: color,
+
                 //color: Colors.black54,
               ),
             ),
@@ -376,11 +408,95 @@ class ShowPriceWidget extends StatelessWidget {
             padding: EdgeInsets.only(top: 2),
             child: Text(
               ',${partes[1]}',
-              style: TextStyle(fontSize: minFontSize),
+              style: TextStyle(
+                fontSize: minFontSize,
+                color: color,
+              ),
             ),
           )
         ],
       ),
     );
+  }
+}
+
+class ShowDescontoMaximo extends StatefulWidget {
+  final double descmaximo;
+  final double preco;
+  final Function(double value, double desconto) onChanged;
+  final Function(double value)? validate;
+  const ShowDescontoMaximo(
+      {Key? key,
+      required this.preco,
+      required this.descmaximo,
+      required this.onChanged,
+      this.validate})
+      : super(key: key);
+
+  @override
+  _ShowDescontoMaximoState createState() => _ShowDescontoMaximoState();
+}
+
+class _ShowDescontoMaximoState extends State<ShowDescontoMaximo> {
+  final MoneyMaskedTextController _percDescController =
+      MoneyMaskedTextController(rightSymbol: '%');
+
+  late ValueNotifier<double> liquido;
+  late double desconto;
+  @override
+  void initState() {
+    super.initState();
+    desconto = 0;
+    liquido = ValueNotifier<double>(widget.preco);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder(
+        valueListenable: liquido,
+        builder: (a, b, c) => Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      //10padding: EdgeInsets.only(top: 40),
+                      height: kToolbarHeight + 3,
+                      width: 90,
+                      child: MaskedMoneyFormField(
+                        controller: _percDescController,
+                        label: '% desconto',
+                        onChanged: (x) {
+                          if (x > widget.descmaximo)
+                            _percDescController.numberValue = widget.descmaximo;
+                          desconto = _percDescController.numberValue /
+                              100 *
+                              widget.preco;
+                          widget.onChanged(
+                              _percDescController.numberValue, desconto);
+                          liquido.value = widget.preco - desconto;
+                        },
+                        validator: (x) {
+                          if (widget.validate != null) widget.validate!(x);
+                        },
+                        //onChanged: (x){
+
+                        //},
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    ShowPriceWidget(
+                        simbol: '', precovenda: desconto, color: Colors.red),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text('Líquido:  '),
+                    ShowPriceWidget(precovenda: liquido.value),
+                  ],
+                ),
+              ],
+            ));
   }
 }

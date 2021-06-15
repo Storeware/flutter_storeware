@@ -194,7 +194,7 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     naoTem.clear();
   }
 
-  Future<File> _getSingleFile(context, path) async {
+  Future<io.File> _getSingleFile(context, path) async {
     var url;
     if (naoTem.indexOf(path) < 0) {
       try {
@@ -216,10 +216,10 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
       {String? path,
       double? width,
       double? height,
-      Widget Function(File?)? builder,
+      Widget Function(io.File?)? builder,
       Function(Uint8List)? onComplete}) {
     if ((path ?? '') == '') return Container();
-    return FutureBuilder<File>(
+    return FutureBuilder<io.File>(
         future: _getSingleFile(context, path),
         builder: (x, y) {
           if ((!y.hasData))

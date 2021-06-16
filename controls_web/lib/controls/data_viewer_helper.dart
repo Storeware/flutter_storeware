@@ -81,7 +81,7 @@ class DataViewerHelper {
           onChanged: (x) {
             row[column.name] = x ? r['t'] : r['f'];
             if (onChanged != null)
-              onChanged!(column.name, row[column.name] ?? r['f']);
+              onChanged(column.name, row[column.name] ?? r['f']);
           },
         );
       };
@@ -147,7 +147,7 @@ class DataViewerHelper {
                   ),
               onChanged: (x) {
                 row[column.name] = double.tryParse(x.replaceAll(',', '.')) ?? 0;
-                if (onChanged != null) onChanged!(row[column.name] ?? 0);
+                if (onChanged != null) onChanged(row[column.name] ?? 0);
               },
             ));
       };

@@ -925,6 +925,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   int col = 0;
 
   createRow(context, DataViewerGroup rows, dynamic data) {
+    if ((rows.title ?? '').length == 0) return createRow2(context, rows, data);
     var color = theme!.primaryColor.withAlpha(50);
     return ExpansionTile(
       initiallyExpanded: rows.initiallyExpanded ?? widget.initiallyExpanded,

@@ -1,6 +1,10 @@
 import 'package:url_launcher/url_launcher.dart';
 
 class GoTo {
+  googleSearch(String texto) {
+    go('https://google.com?q=$texto');
+  }
+
   go(String path) async {
     var s = path.split(':');
     if (path.startsWith('whats')) return goWhats(s[1]);

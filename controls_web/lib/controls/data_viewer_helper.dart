@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_web/controls/masked_field.dart';
 //import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +52,7 @@ class DataViewerHelper {
       {dynamic trueValue,
       dynamic falseValue,
       Color? color,
+      Function(String key, bool value)? onChanged,
       Color? inactiveTrackColor}) {
     if (column != null) {
       column.builder = (idx, row) {
@@ -78,6 +80,8 @@ class DataViewerHelper {
           value: (row[column.name] ?? r['v']) == r['t'],
           onChanged: (x) {
             row[column.name] = x ? r['t'] : r['f'];
+            if (onChanged != null)
+              onChanged!(column.name, row[column.name] ?? r['f']);
           },
         );
       };
@@ -95,6 +99,7 @@ class DataViewerHelper {
       Widget? suffix,
       Widget? prefix,
       Alignment? align,
+      Function(double)? onChanged,
       int? maxLength}) {
     if (column != null) {
       Widget? Function(int, Map<String, dynamic>)? builder;
@@ -142,6 +147,7 @@ class DataViewerHelper {
                   ),
               onChanged: (x) {
                 row[column.name] = double.tryParse(x.replaceAll(',', '.')) ?? 0;
+                if (onChanged != null) onChanged!(row[column.name] ?? 0);
               },
             ));
       };

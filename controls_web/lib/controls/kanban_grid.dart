@@ -562,6 +562,14 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
         child: widget.controller!.widget.builder(widget.column, index, item));
   }
 
+  bool canAccept(DraggableKanbanItem item) {
+    /// faz validação se o  estado pode aceitar o item;
+    /// aqui vai regras de validação de movimentação dos itens
+    if (widget.controller!.widget.onWillAccept != null)
+      return widget.controller!.widget.onWillAccept(item);
+    return true;
+  }
+
   Widget buildSlidable(index, item) {
     var draggable = DraggableKanbanItem(
         itemIndex: index,
@@ -635,9 +643,9 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
         Padding(
           padding: const EdgeInsets.only(top: 2, left: 6.0, right: 6.0),
           child: DragTarget<DraggableKanbanItem>(
-            onWillAccept: (v) {
-              accepted = true;
-              return true;
+            onWillAccept: (value) {
+              accepted = canAccept(value!);
+              return accepted;
             },
             onAccept: (DraggableKanbanItem value) {
               try {
@@ -794,9 +802,11 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
         DragTarget<DraggableKanbanItem>(
           onWillAccept: (value) {
             itemAccept = widget.itemIndex!;
-            return accepted = canAccept(value!);
+            accepted = canAccept(value!);
+            return accepted;
           },
           onAccept: (value) {
+            if (!accepted) return;
             value.controller!._remove(value.column!, value.data);
             widget.controller!
                 ._insert(

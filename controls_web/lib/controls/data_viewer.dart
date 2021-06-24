@@ -725,6 +725,8 @@ class DataViewerGroup {
   final Widget? header;
   final Widget? bottom;
   final bool? initiallyExpanded;
+  final double? height;
+  final Color? color;
   DataViewerGroup({
     this.title,
     this.children,
@@ -732,7 +734,9 @@ class DataViewerGroup {
     this.trailling,
     this.titleStyle,
     this.header,
+    this.height,
     this.bottom,
+    this.color,
     this.initiallyExpanded,
   });
 }
@@ -948,20 +952,23 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               ])),
       children: [
         if (rows.header != null) rows.header!,
-        Wrap(
-          direction: Axis.horizontal,
-          children: [
-            if (rows.header != null) rows.header!,
-            for (var column in rows.children!)
-              createColumn(
-                context,
-                column,
-                col,
-                isLast: (itemsCount == ++col),
-              ),
-            if (rows.bottom != null) rows.bottom!,
-          ],
-        ),
+        Container(
+            height: rows.height,
+            color: rows.color,
+            child: Wrap(
+              direction: Axis.horizontal,
+              children: [
+                if (rows.header != null) rows.header!,
+                for (var column in rows.children!)
+                  createColumn(
+                    context,
+                    column,
+                    col,
+                    isLast: (itemsCount == ++col),
+                  ),
+                if (rows.bottom != null) rows.bottom!,
+              ],
+            )),
         if (rows.bottom != null) rows.bottom!,
       ],
     );
@@ -984,20 +991,23 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                         theme!.textTheme.caption?.copyWith(fontSize: 18)),
                 if (rows.trailling != null) rows.trailling!,
               ])),
-        Wrap(
-          direction: Axis.horizontal,
-          children: [
-            if (rows.header != null) rows.header!,
-            for (var column in rows.children!)
-              createColumn(
-                context,
-                column,
-                col,
-                isLast: (itemsCount == ++col),
-              ),
-            if (rows.bottom != null) rows.bottom!,
-          ],
-        ),
+        Container(
+            height: rows.height,
+            color: rows.color,
+            child: Wrap(
+              direction: Axis.horizontal,
+              children: [
+                if (rows.header != null) rows.header!,
+                for (var column in rows.children!)
+                  createColumn(
+                    context,
+                    column,
+                    col,
+                    isLast: (itemsCount == ++col),
+                  ),
+                if (rows.bottom != null) rows.bottom!,
+              ],
+            )),
       ],
     );
   }

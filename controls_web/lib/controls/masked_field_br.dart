@@ -2,6 +2,29 @@ import 'package:controls_web/controls/masked_field.dart';
 import 'package:flutter/material.dart';
 
 extension MaskedTextFieldBr on MaskedTextField {
+  static cnpj(
+          {Key? key,
+          String label = 'CNPJ',
+          String? initialValue,
+          onChanged,
+          onSave,
+          String mask = '00.000.000/0000-00',
+          String? match, // = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
+          Function(String)? validator,
+          TextStyle? style}) =>
+      MaskedTextField(
+          key: key,
+          label: label,
+          mask: mask,
+          initialValue: initialValue ?? '',
+          onSaved: onSave,
+          validator: validator,
+          sample: '00.000.000/0000-00',
+          match: match,
+          onChanged: onChanged,
+          keyboardType: TextInputType.phone,
+          style: style);
+
   static cpf(
           {Key? key,
           String label = 'CPF',
@@ -13,14 +36,14 @@ extension MaskedTextFieldBr on MaskedTextField {
           Function(String)? validator,
           TextStyle? style}) =>
       MaskedTextField(
-          key: key!,
+          key: key,
           label: label,
           mask: mask,
           initialValue: initialValue ?? '',
           onSaved: onSave,
-          validator: validator!,
+          validator: validator,
           sample: '000.000.000-00',
-          match: match!,
+          match: match,
           onChanged: onChanged,
           keyboardType: TextInputType.phone,
           style: style);

@@ -5,7 +5,8 @@ String validarCPF(String fsDocto,
     {bool fsAjustarTamanho = true, fsExibeDigitoCorreto = false}) {
   String dv1, dv2;
   ACBrCalcDigito modulo = ACBrCalcDigito();
-  if (fsAjustarTamanho) fsDocto = fsDocto.padLeft(11, '0');
+  if (fsAjustarTamanho)
+    fsDocto = fsDocto.replaceAll('.', '').replaceAll('-', '').padLeft(11, '0');
 
   if ((fsDocto.length != 11) || (!fsDocto.strIsNumber())) {
     return 'CPF deve ter 11 dígitos. (Apenas números)';

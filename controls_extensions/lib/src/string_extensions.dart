@@ -34,6 +34,19 @@ extension StringExtensions on String {
     return result;
   }
 
+  String cleanString([String charsValid = '1234567890']) {
+    int A, lenStr;
+    String result = '';
+    lenStr = this.length;
+
+    A = 0;
+    while (A < lenStr) {
+      if (charsValid.contains(this[A])) result += this[A];
+      A++;
+    }
+    return result;
+  }
+
   String copy(int start, int count) {
     return this.substring(start, start + count);
   }

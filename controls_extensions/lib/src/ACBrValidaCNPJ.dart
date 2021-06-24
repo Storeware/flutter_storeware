@@ -6,7 +6,12 @@ String validarCNPJ(String fsDocto,
     {bool fsAjustarTamanho = true, fsExibeDigitoCorreto = false}) {
   String dv1, dv2;
   ACBrCalcDigito modulo = ACBrCalcDigito();
-  if (fsAjustarTamanho) fsDocto = fsDocto.padLeft(14, '0');
+  if (fsAjustarTamanho)
+    fsDocto = fsDocto
+        .replaceAll('.', '')
+        .replaceAll('/', '')
+        .replaceAll('-', '')
+        .padLeft(14, '0');
 
   if ((fsDocto.length != 14) || (!fsDocto.strIsNumber())) {
     return 'CNPJ deve ter 14 dígitos. (Apenas números)';

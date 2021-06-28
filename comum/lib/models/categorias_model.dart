@@ -44,4 +44,16 @@ class CategoriasItemModel extends ODataModelClass<CategoriasItem> {
   Future<ODataResult> listBy() async {
     return search(filter: "codigo_pai is null ", orderBy: 'prioridade');
   }
+
+  Future<List<dynamic>> listCodigoPai(double codigoPai) async {
+    return listNoCached(
+      resource: 'web_ctprod_atalho_titulo_comb',
+      filter: ' codigo_pai eq $codigoPai',
+      orderBy: 'prioridade',
+      select: '*',
+    ).then((rsp) {
+      print(rsp);
+      return rsp;
+    });
+  }
 }

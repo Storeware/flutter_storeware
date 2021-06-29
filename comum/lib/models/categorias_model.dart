@@ -45,10 +45,10 @@ class CategoriasItemModel extends ODataModelClass<CategoriasItem> {
     return search(filter: "codigo_pai is null ", orderBy: 'prioridade');
   }
 
-  Future<List<dynamic>> listCodigoPai(double codigoPai) async {
+  Future<List<dynamic>> listByCodigoPai(double codigoPai) async {
     return listNoCached(
       resource: 'web_ctprod_atalho_titulo_comb',
-      filter: ' codigo_pai eq $codigoPai',
+      filter: ' codigo_pai eq $codigoPai and codigo<>$codigoPai',
       orderBy: 'prioridade',
       select: '*',
     ).then((rsp) {

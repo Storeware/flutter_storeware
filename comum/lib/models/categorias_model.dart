@@ -7,6 +7,7 @@ class CategoriasItem extends DataItem {
   int? prioridade;
   double? qtdeSelecionavel;
   String? codigoPai;
+  String? bmp;
   CategoriasItem({this.codigo, this.nome, this.prioridade});
 
   CategoriasItem.fromJson(Map<String, dynamic> json) {
@@ -19,6 +20,7 @@ class CategoriasItem extends DataItem {
     prioridade = json['prioridade'];
     qtdeSelecionavel = json['qtde_selecionavel'] ?? 0;
     codigoPai = json['codigo_pai'];
+    bmp = json['bmp'];
     return this;
   }
 
@@ -29,6 +31,7 @@ class CategoriasItem extends DataItem {
     data['prioridade'] = this.prioridade;
     data['codigo_pai'] = this.codigoPai;
     data['qtde_selecionavel'] = this.qtdeSelecionavel;
+    data['bmp'] = this.bmp;
     return data;
   }
 }
@@ -37,7 +40,7 @@ class CategoriasItemModel extends ODataModelClass<CategoriasItem> {
   CategoriasItemModel() {
     collectionName = 'ctprod_atalho_titulo';
     API = ODataInst();
-    columns = 'codigo,nome,codigo_pai,prioridade,qtde_selecionavel';
+    columns = 'codigo,nome,codigo_pai,prioridade,qtde_selecionavel,bmp';
   }
   CategoriasItem newItem() => CategoriasItem();
 

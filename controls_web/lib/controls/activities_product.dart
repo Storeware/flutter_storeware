@@ -123,27 +123,29 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
                 ),
               ...(widget.actions ?? []),
               Expanded(child: Container(child: widget.child)),
-              Row(children: [
-                if (widget.priceFrom! > 0)
-                  ActivityButton(
-                    image: Text(
-                        'de ${widget.priceFrom.toString().replaceAll('.', ',')}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontStyle: FontStyle.italic,
-                        )),
-                    title: 'por',
-                  ),
-                if ((widget.price ?? 0) > 0) Text('Preço unitário:  '),
-                if ((widget.price ?? 0) > 0)
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: ShowPriceWidget(
-                      precovenda: widget.price!,
-                      //showDescript: false,
-                    ),
-                  ),
-              ]),
+              FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Row(children: [
+                    if (widget.priceFrom! > 0)
+                      ActivityButton(
+                        image: Text(
+                            'de ${widget.priceFrom.toString().replaceAll('.', ',')}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontStyle: FontStyle.italic,
+                            )),
+                        title: 'por',
+                      ),
+                    if ((widget.price ?? 0) > 0) Text('Preço unit:  '),
+                    if ((widget.price ?? 0) > 0)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: ShowPriceWidget(
+                          precovenda: widget.price!,
+                          //showDescript: false,
+                        ),
+                      ),
+                  ])),
             ],
           ),
         ),

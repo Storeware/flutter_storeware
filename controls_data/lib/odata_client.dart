@@ -532,6 +532,10 @@ abstract class ODataModelClass<T extends DataItem> {
   @deprecated //"sera desabilitado no em julho2021 - substituir por listNoChaced(..)"
   list({filter}) => listCached(filter: filter);
 
+  get isMsSql => driver == 'mssql';
+  get isFirebird => driver == 'fb';
+  //get isMySql => driver == 'mysql';
+
   bool validate(Map<String, dynamic> value) {
     return true;
   }

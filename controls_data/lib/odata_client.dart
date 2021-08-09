@@ -72,10 +72,31 @@ bool toBool(value, {def: false}) {
   return def;
 }
 
-DateTime? toDateTime(value, {DateTime? def, zone = 0}) {
+int strTimeToMinutes(String time) {
+  try {
+    var sp = time.split(':');
+    int h = 0, m = 0;
+    h = int.tryParse(sp[0]) ?? 0;
+    if (sp.length > 1) m = int.tryParse(sp[1]) ?? 0;
+    if (h < 0) h = h * -1;
+    num f = (time.startsWith('-')) ? -1 : 1;
+    return ((f * (h * 60) + m) ~/ 1);
+  } catch (e) {
+    return 0;
+  }
+}
+
+DateTime toDateTime(value, {DateTime? def, num zone = -3}) {
   if (value is String) {
-    int dif = (value.endsWith('Z') ? zone : 0);
-    return DateTime.tryParse(value)?.add(Duration(hours: dif)) ?? def;
+    DateTime? v = DateTime.tryParse(value);
+    num dif = zone * 60;
+    if (v != null) {
+      dif = (value.endsWith('Z')) ? dif : 0;
+      if (!value.endsWith('Z')) if ('$value'.length > 24)
+        dif = strTimeToMinutes('$value'.substring(23));
+      // quando termado Z  formatar fuso horario.
+      return v.add(Duration(minutes: ((dif)) ~/ 1));
+    }
   }
   if (value is DateTime) return value;
   return def ?? DateTime.now();

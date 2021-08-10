@@ -200,6 +200,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         floatingActionButton: widget.floatingActionButton,
         appBar: widget.appBar,
+        extendBody: true,
         body: Container(
             height: double.maxFinite,
             color: widget.backgroundColor ?? theme.primaryColor,

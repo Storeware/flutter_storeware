@@ -54,10 +54,12 @@ class ColorPickerDialog extends StatelessWidget {
   final String? title;
   final Function(Color)? onChanged;
   final bool? extended;
+  final bool showTitle;
   const ColorPickerDialog(
       {Key? key,
       this.colors,
       this.title,
+      this.showTitle = true,
       this.color,
       this.extended = true,
       this.onChanged})
@@ -71,7 +73,8 @@ class ColorPickerDialog extends StatelessWidget {
       if (extended!) _colors.addAll(pastelColors);
     }
     return Scaffold(
-      appBar: AppBar(title: Text(title ?? 'Selecionar uma cor')),
+      appBar:
+          showTitle ? AppBar(title: Text(title ?? 'Selecionar uma cor')) : null,
       body: LayoutBuilder(
         builder: (ctx, constraints) {
           int x = constraints.maxWidth ~/ 60;

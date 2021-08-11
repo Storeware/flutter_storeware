@@ -212,7 +212,7 @@ abstract class ConfigAppBase extends ConfigBase {
 
   initConfigDados(xConfig) {
     if (xConfig == null) return false;
-    print(xConfig);
+    //print(xConfig);
     configDados.addAll(xConfig);
     restServer = queryParameters['h'] ?? xConfig['restserver'];
     ODataInst().baseUrl = restServer;

@@ -41,6 +41,8 @@ class DashboardTile extends StatelessWidget {
   final Widget? topBar;
   final List<Widget>? actions;
   final Widget? leading;
+  final double? maxWidth;
+  final double? maxHeight;
   const DashboardTile(
       {Key? key,
       this.value,
@@ -64,6 +66,8 @@ class DashboardTile extends StatelessWidget {
       this.indicatorColor,
       this.width = 180,
       this.height = 80,
+      this.maxWidth,
+      this.maxHeight,
       this.left,
       this.topBar,
       this.body})
@@ -103,7 +107,9 @@ class DashboardTile extends StatelessWidget {
                   child: Container(
                     width: w,
                     height: height,
-                    //constraints: BoxConstraints(minHeight: 80),
+                    constraints: BoxConstraints(
+                        maxHeight: maxHeight ?? height!,
+                        maxWidth: maxWidth ?? w),
                     child: Stack(
                       children: [
                         Positioned(

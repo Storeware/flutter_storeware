@@ -191,6 +191,10 @@ class MoneyMaskedTextController extends TextEditingController {
     return double.parse(parts.join());
   }
 
+  set numberValue(double value) {
+    updateValue(value);
+  }
+
   _validateConfig() {
     bool rightSymbolHasNumbers = _getOnlyNumbers(this.rightSymbol).length > 0;
 

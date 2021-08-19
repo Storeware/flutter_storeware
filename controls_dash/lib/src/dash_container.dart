@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
 class DashContainer extends StatelessWidget {
-  final String title;
-  final String subTitle;
-  final Color color;
-  final Widget child;
-  final Widget body;
-  final double width;
-  final double height;
-  final double elevation;
+  final String? title;
+  final String? subTitle;
+  final Color? color;
+  final Widget? child;
+  final Widget? body;
+  final double? width;
+  final double? height;
+  final double? elevation;
   const DashContainer(
       {this.title,
       this.color,
@@ -16,7 +16,7 @@ class DashContainer extends StatelessWidget {
       this.subTitle,
       this.width, //= 200,
       this.height, // = 150,
-      Key key,
+      Key? key,
       this.body,
       this.child})
       : super(key: key);
@@ -34,10 +34,10 @@ class DashContainer extends StatelessWidget {
           if (title != null)
             Column(
               children: <Widget>[
-                Text(title,
+                Text(title!,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                if (body != null) body,
+                if (body != null) body!,
               ],
             ),
           Expanded(
@@ -47,7 +47,7 @@ class DashContainer extends StatelessWidget {
                   height: height,
                   child: child)),
           if (subTitle != null)
-            Text(subTitle,
+            Text(subTitle!,
                 style: TextStyle(
                   fontSize: 12,
                 )),

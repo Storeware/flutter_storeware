@@ -1,8 +1,8 @@
 library controls_firebase_platform_web;
 
 import 'dart:async';
-import 'dart:io';
-
+import 'dart:io' as io;
+//import 'package:universal_io/io.dart' as io;
 import 'dart:typed_data';
 // ignore_for_file:
 import 'package:controls_firebase_platform_interface/controls_firebase_platform_interface.dart';
@@ -145,9 +145,10 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
   Future<int> uploadFileImage(String path, rawPath, {metadata}) async {
     String _fileName = buildPath(path);
     fs.Reference firebaseStorageRef = storage.ref().child(_fileName);
-    print('$_fileName:$rawPath');
-    final Directory systemTempDir = Directory.systemTemp;
-    final File file = await new File('${systemTempDir.path}/temp.jpg').create();
+    //print('$_fileName:$rawPath');
+    final io.Directory systemTempDir = io.Directory.systemTemp;
+    final io.File file =
+        await io.File('${systemTempDir.path}/temp.jpg').create();
     file.writeAsBytes(rawPath);
     final md;
     md = fs.SettableMetadata(
@@ -178,7 +179,7 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
     naoTem.clear();
   }
 
-  Future<File> _getSingleFile(context, path) async {
+  Future<io.File> _getSingleFile(context, path) async {
     var url;
     if (naoTem.indexOf(path) < 0) {
       try {
@@ -200,10 +201,10 @@ class FirebaseStorageDriver extends FirebaseStorageDriverInterface {
       {String? path,
       double? width,
       double? height,
-      Widget Function(File?)? builder,
+      Widget Function(io.File?)? builder,
       Function(Uint8List)? onComplete}) {
     if ((path ?? '') == '') return Container();
-    return FutureBuilder<File>(
+    return FutureBuilder<io.File>(
         future: _getSingleFile(context, path),
         builder: (x, y) {
           if ((!y.hasData))

@@ -22,6 +22,7 @@ class SliverScaffold extends StatefulWidget {
   final List<Widget>? grid;
   final List<Widget>? bottomSlivers;
   final Widget? body;
+  final bool extendBody;
   final Widget? drawer;
   final Widget? endDrawer;
   final double? radius;
@@ -56,6 +57,7 @@ class SliverScaffold extends StatefulWidget {
       this.gridCrossAxisCount = 1,
       this.resizeToAvoidBottomPadding = false,
       this.body,
+      this.extendBody = false,
       this.isScrollView = false,
       this.controller,
       this.reverse = false,
@@ -200,6 +202,7 @@ class _SliverScaffoldState extends State<SliverScaffold> {
         floatingActionButtonLocation: widget.floatingActionButtonLocation,
         floatingActionButton: widget.floatingActionButton,
         appBar: widget.appBar,
+        extendBody: widget.extendBody,
         body: Container(
             height: double.maxFinite,
             color: widget.backgroundColor ?? theme.primaryColor,

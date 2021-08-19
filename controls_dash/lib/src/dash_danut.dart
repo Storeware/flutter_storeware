@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:charts_common/src/common/color.dart' as gcolor;
 
 class DashDanutChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
+  final List<charts.Series<dynamic, String>> seriesList;
   final int arcWidth;
-  final bool animate;
+  final bool? animate;
   final bool showLabels;
-  final Function(int, ChartPair) onPressed;
+  final Function(int, ChartPair)? onPressed;
 
   DashDanutChart(
     this.seriesList, {
@@ -24,7 +24,7 @@ class DashDanutChart extends StatelessWidget {
       createSerie(id: 'Vendas', data: [
         ChartPair('jan', 10),
         ChartPair('fev', 12),
-        ChartPair('mar', 100),
+        ChartPair('mar', 80),
         ChartPair('abr', 50),
         ChartPair('mai', 40),
       ]),
@@ -35,8 +35,8 @@ class DashDanutChart extends StatelessWidget {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<ChartPair, String>> createSerie(
-      {String id,
-      List<ChartPair> data,
+      {required String id,
+      required List<ChartPair> data,
       Color color = Colors.blue,
       bool showLabel = true}) {
     var r = color.red;
@@ -49,7 +49,7 @@ class DashDanutChart extends StatelessWidget {
         domainFn: (ChartPair sales, _) => sales.title,
         measureFn: (ChartPair sales, _) => sales.value,
         data: data,
-        colorFn: (p, i) => gcolor.Color(r: r, g: g, b: g, a: 255 - (i * x)),
+        colorFn: (p, i) => gcolor.Color(r: r, g: g, b: g, a: 255 - (i! * x)),
         labelAccessorFn: (ChartPair row, _) =>
             '${(showLabel) ? row.title : row.value}',
       )
@@ -60,49 +60,51 @@ class DashDanutChart extends StatelessWidget {
     final selectedDatum = model.selectedDatum;
     if (selectedDatum.isEmpty) return;
     if (onPressed != null)
-      onPressed(selectedDatum.first.index, selectedDatum.first.datum);
+      onPressed!(selectedDatum.first.index!, selectedDatum.first.datum);
   }
 
   @override
   Widget build(BuildContext context) {
-    return new charts.PieChart(seriesList,
-        animate: animate,
-        selectionModels: [
-          new charts.SelectionModelConfig(
-            type: charts.SelectionModelType.info,
-            changedListener: _onSelectionChanged,
-          )
-        ],
-        behaviors: [
-          if (showLabels)
-            new charts.DatumLegend(
-              // Positions for "start" and "end" will be left and right respectively
-              // for widgets with a build context that has directionality ltr.
-              // For rtl, "start" and "end" will be right and left respectively.
-              // Since this example has directionality of ltr, the legend is
-              // positioned on the right side of the chart.
-              position: charts.BehaviorPosition.end,
-              // By default, if the position of the chart is on the left or right of
-              // the chart, [horizontalFirst] is set to false. This means that the
-              // legend entries will grow as new rows first instead of a new column.
-              horizontalFirst: false,
-              // This defines the padding around each legend entry.
-              cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
-              // Set [showMeasures] to true to display measures in series legend.
-              showMeasures: false,
-              // Configure the measure value to be shown by default in the legend.
-              legendDefaultMeasure: charts.LegendDefaultMeasure.firstValue,
-              // Optionally provide a measure formatter to format the measure value.
-              // If none is specified the value is formatted as a decimal.
-              measureFormatter: (num value) {
-                return value == null ? '-' : '$value';
-              },
-            ),
-        ],
-        defaultRenderer: new charts.ArcRendererConfig(
-            arcWidth: arcWidth,
-            arcRendererDecorators: [
-              new charts.ArcLabelDecorator(),
-            ]));
+    return new charts.PieChart<Object>(
+      seriesList,
+      animate: animate,
+      selectionModels: [
+        new charts.SelectionModelConfig(
+          type: charts.SelectionModelType.info,
+          changedListener: _onSelectionChanged,
+        )
+      ],
+      behaviors: [
+        if (showLabels)
+          new charts.DatumLegend(
+            // Positions for "start" and "end" will be left and right respectively
+            // for widgets with a build context that has directionality ltr.
+            // For rtl, "start" and "end" will be right and left respectively.
+            // Since this example has directionality of ltr, the legend is
+            // positioned on the right side of the chart.
+            position: charts.BehaviorPosition.end,
+            // By default, if the position of the chart is on the left or right of
+            // the chart, [horizontalFirst] is set to false. This means that the
+            // legend entries will grow as new rows first instead of a new column.
+            horizontalFirst: false,
+            // This defines the padding around each legend entry.
+            cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
+            // Set [showMeasures] to true to display measures in series legend.
+            showMeasures: false,
+            // Configure the measure value to be shown by default in the legend.
+            legendDefaultMeasure: charts.LegendDefaultMeasure.firstValue,
+            // Optionally provide a measure formatter to format the measure value.
+            // If none is specified the value is formatted as a decimal.
+            measureFormatter: (num? value) {
+              return value == null ? '-' : '$value';
+            },
+          ),
+      ],
+      defaultRenderer: new charts.ArcRendererConfig<Object>(
+          arcWidth: arcWidth,
+          arcRendererDecorators: [
+            new charts.ArcLabelDecorator(),
+          ]),
+    );
   }
 }

@@ -45,7 +45,8 @@ DateTime toDateTime(value, {DateTime? def, num zone = -3}) {
     num dif = zone * 60;
     if (v != null) {
       dif = (value.endsWith('Z')) ? dif : 0;
-      if ('$value'.length > 20) dif = strTimeToMinutes('$value'.substring(19));
+      if (!value.endsWith('Z')) if ('$value'.length > 24)
+        dif = strTimeToMinutes('$value'.substring(23));
       // quando termado Z  formatar fuso horario.
       return v.add(Duration(minutes: ((dif)) ~/ 1));
     }

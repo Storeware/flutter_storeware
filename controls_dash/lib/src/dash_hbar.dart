@@ -12,16 +12,16 @@ import 'package:flutter/material.dart';
 //import 'package:charts_flutter/src/text_element.dart' as te;
 
 class DashHorizontalBarChart extends StatefulWidget {
-  final List<charts.Series> seriesList;
+  final List<charts.Series<dynamic, String>> seriesList;
   final bool vertical;
-  final bool animate;
+  final bool? animate;
   final bool showValues, showDomainAxis;
   final int barRadius;
   final bool showAxisLine;
   final bool showSeriesNames;
-  final List<charts.SeriesRendererConfig<String>> customSeriesRenderers;
-  final Function(ChartPair) onSelected;
-  final String Function(ChartPair) onGetValue;
+  final List<charts.SeriesRendererConfig<String>>? customSeriesRenderers;
+  final Function(ChartPair)? onSelected;
+  final String Function(ChartPair)? onGetValue;
 
   DashHorizontalBarChart(this.seriesList,
       {this.vertical = false,
@@ -57,7 +57,7 @@ class DashHorizontalBarChart extends StatefulWidget {
   }
 
   static List<charts.Series<ChartPair, String>> createSerie(
-      {String id, List<ChartPair> data}) {
+      {required String id, required List<ChartPair> data}) {
     return [
       charts.Series<ChartPair, String>(
         id: id,
@@ -70,17 +70,17 @@ class DashHorizontalBarChart extends StatefulWidget {
 }
 
 class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
-  String textSelected;
-  ChartPair dados;
+  String? textSelected;
+  ChartPair? dados;
 
   _onSelectionChanged(charts.SelectionModel model) {
     if (widget.onSelected == null) return;
     final selectedDatum = model.selectedDatum;
     if (selectedDatum.isNotEmpty) {
       dados = selectedDatum.first.datum;
-      textSelected = '${dados.value.toInt()}';
+      textSelected = '${dados!.value.toInt()}';
       if (widget.onSelected != null)
-        widget.onSelected(dados);
+        widget.onSelected!(dados!);
       else
         setState(() {});
     }
@@ -110,7 +110,7 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
                         size: size,
                         onGetValue: () {
                           if (widget.onGetValue != null)
-                            return widget.onGetValue(dados);
+                            return widget.onGetValue!(dados!);
                           return textSelected ?? '?';
                         })),
                 new charts.SelectNearest(
@@ -162,18 +162,18 @@ class _DashHorizontalBarChartState extends State<DashHorizontalBarChart> {
 
 //---
 class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
-  final Size size;
+  final Size? size;
   final String Function() onGetValue;
 
-  CustomCircleSymbolRenderer({@required this.onGetValue, this.size});
+  CustomCircleSymbolRenderer({required this.onGetValue, this.size});
 
   @override
-  void paint(charts.ChartCanvas canvas, Rectangle bounds,
-      {List dashPattern,
-      charts.Color fillColor,
-      charts.FillPatternType fillPattern,
-      charts.Color strokeColor,
-      double strokeWidthPx}) {
+  void paint(ChartCanvas canvas, Rectangle<num> bounds,
+      {List<int>? dashPattern,
+      Color? fillColor,
+      FillPatternType? fillPattern,
+      Color? strokeColor,
+      double? strokeWidthPx}) {
     super.paint(canvas, bounds,
         dashPattern: dashPattern,
         fillColor: fillColor,

@@ -10,7 +10,7 @@ intToStrZero(int value, int decs) {
   return value.toString().padLeft(decs, '0');
 }
 
-num roundTo(double value, int decs) {
+num roundTo(double value, [int decs = 2]) {
   if (decs < 0) decs = -decs;
   num fac = math.pow(10, decs);
   return (value * fac).round() / fac;

@@ -800,6 +800,7 @@ class MaskedMoneyFormField extends StatelessWidget {
   final double? initialValue; //,
   final Function(double)? onSaved;
   final String? leftSymbol; // = '';
+  final String? rightSymbol;
   final int? precision; // = 2
   final MoneyMaskedTextController? controller;
   final String? errorText;
@@ -808,8 +809,10 @@ class MaskedMoneyFormField extends StatelessWidget {
   final Function(double)? onFocusChanged;
   final bool? readOnly;
   final Function(double)? onChanged;
+  final double? width;
   const MaskedMoneyFormField({
     Key? key,
+    this.width,
     this.label,
     this.initialValue,
     this.onChanged,
@@ -822,6 +825,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.errorText,
     this.validator,
     this.maxLength,
+    this.rightSymbol,
   }) : super(key: key);
 
   @override
@@ -833,6 +837,7 @@ class MaskedMoneyFormField extends StatelessWidget {
             decimalSeparator: ',',
             thousandSeparator: '.',
             leftSymbol: leftSymbol! + '  ',
+            rightSymbol: rightSymbol ?? '',
             precision: precision ?? 2);
     _controller.selection = TextSelection.fromPosition(
         TextPosition(offset: _controller.text.length));
@@ -852,39 +857,46 @@ class MaskedMoneyFormField extends StatelessWidget {
           Container(
             constraints: BoxConstraints(minWidth: 100),
             height: kToolbarHeight + 3,
+            width: width,
             child: Focus(
-                canRequestFocus: false,
-                onFocusChange: (b) {
-                  if (!b && (onFocusChanged != null))
-                    onFocusChanged!(_controller.numberValue);
-                },
-                child: TextFormField(
-                    key: key,
-                    controller: _controller,
-                    readOnly: readOnly!,
-                    keyboardType: TextInputType.number,
-                    autofocus: true,
-                    textAlign: TextAlign.right,
-                    decoration: InputDecoration(
-                      //hintText: label,
-                      labelText: label,
-                    ),
-                    validator: (x) {
-                      if (validator != null)
-                        return validator!(_controller.numberValue);
-                      if ((errorText != null) && (x == '')) {
-                        return errorText;
-                      }
-                      return null;
-                    },
-                    maxLength: maxLength,
-                    onChanged: (x) {
-                      if (onChanged != null)
-                        onChanged!(_controller.numberValue);
-                    },
-                    onSaved: (x) {
-                      if (onSaved != null) onSaved!(_controller.numberValue);
-                    })),
+              canRequestFocus: false,
+              onFocusChange: (b) {
+                if (!b && (onFocusChanged != null))
+                  onFocusChanged!(_controller.numberValue);
+              },
+              child: Row(children: [
+                Expanded(
+                    child: TextFormField(
+                        key: key,
+                        controller: _controller,
+                        readOnly: readOnly!,
+                        keyboardType: TextInputType.number,
+                        autofocus: true,
+                        textAlign: TextAlign.right,
+                        decoration: InputDecoration(
+                          //hintText: label,
+                          labelText: label,
+                        ),
+                        validator: (x) {
+                          if (validator != null)
+                            return validator!(_controller.numberValue);
+                          if ((errorText != null) && (x == '')) {
+                            return errorText;
+                          }
+                          return null;
+                        },
+                        maxLength: maxLength,
+                        onChanged: (x) {
+                          if (onChanged != null)
+                            onChanged!(_controller.numberValue);
+                        },
+                        onSaved: (x) {
+                          if (onSaved != null)
+                            onSaved!(_controller.numberValue);
+                        })),
+                if (rightSymbol != null) Text(rightSymbol!),
+              ]),
+            ),
           )
         ]);
   }

@@ -724,6 +724,9 @@ class DataViewerGroup {
   final TextStyle? titleStyle;
   final Widget? header;
   final Widget? bottom;
+  final bool? initiallyExpanded;
+  final double? height;
+  final Color? color;
   DataViewerGroup({
     this.title,
     this.children,
@@ -731,7 +734,10 @@ class DataViewerGroup {
     this.trailling,
     this.titleStyle,
     this.header,
+    this.height,
     this.bottom,
+    this.color,
+    this.initiallyExpanded,
   });
 }
 
@@ -765,6 +771,8 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final Widget? bottomAction;
   final bool showSaveButton;
   final DataViewerEditGroupedPageStateController? stateController;
+  final bool initiallyExpanded;
+  final Function(String key, String? value)? onChangedNotifier;
 
   const DataViewerEditGroupedPage({
     Key? key,
@@ -779,10 +787,11 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.canInsert = false,
     this.canDelete = false,
     this.showAppBar = true,
+    this.initiallyExpanded = true,
     this.onClose,
     this.appBar,
     this.onSaved,
-    this.showSaveButton = false,
+    this.showSaveButton = true,
     this.floatingActionButton,
     this.leading,
     //this.onLog,
@@ -790,6 +799,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.margin = 8,
     this.headerAction,
     this.bottomAction,
+    this.onChangedNotifier,
     this.stateController,
     @required this.event,
   }) : super(key: key);
@@ -863,18 +873,19 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                       Navigator.pop(context);
                                     });
                                   }),
-                            if (changed || widget.showSaveButton) ...[
+                            if (changed && widget.showSaveButton) ...[
                               InkWell(
                                   child: Icon(Icons.settings_backup_restore),
                                   onTap: () {
                                     _reset();
                                   }),
                               SizedBox(width: 8),
-                              InkWell(
-                                  child: Icon(Icons.check),
-                                  onTap: () {
-                                    _save(context);
-                                  })
+                              if (widget.showSaveButton)
+                                InkWell(
+                                    child: Icon(Icons.check),
+                                    onTap: () {
+                                      _save(context);
+                                    })
                             ],
                           ],
                         );
@@ -899,7 +910,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                 SizedBox(
                   height: 15,
                 ),
-                if (widget.canEdit || widget.canInsert)
+                if ((widget.canEdit || widget.canInsert) &&
+                    (widget.showSaveButton))
                   Container(
                       alignment: Alignment.center,
                       child: StrapButton(
@@ -917,6 +929,52 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   int col = 0;
 
   createRow(context, DataViewerGroup rows, dynamic data) {
+    if ((rows.title ?? '').length == 0) return createRow2(context, rows, data);
+    var color = theme!.primaryColor.withAlpha(50);
+    return ExpansionTile(
+      initiallyExpanded: rows.initiallyExpanded ?? widget.initiallyExpanded,
+      collapsedBackgroundColor: color,
+      leading: rows.leadding,
+      trailing: rows.trailling,
+      //collapsedIconColor: Colors.red,
+      title: (rows.title == null)
+          ? Container()
+          : Container(
+              //color: color,
+              alignment: Alignment.centerLeft,
+              height: kMinInteractiveDimension * 0.6,
+              child: Row(children: [
+                // if (rows.leadding != null) rows.leadding!,
+                Text(rows.title!,
+                    style: rows.titleStyle ??
+                        theme!.textTheme.caption?.copyWith(fontSize: 18)),
+                //if (rows.trailling != null) rows.trailling!,
+              ])),
+      children: [
+        if (rows.header != null) rows.header!,
+        Container(
+            height: rows.height,
+            color: rows.color,
+            child: Wrap(
+              direction: Axis.horizontal,
+              children: [
+                if (rows.header != null) rows.header!,
+                for (var column in rows.children!)
+                  createColumn(
+                    context,
+                    column,
+                    col,
+                    isLast: (itemsCount == ++col),
+                  ),
+                if (rows.bottom != null) rows.bottom!,
+              ],
+            )),
+        if (rows.bottom != null) rows.bottom!,
+      ],
+    );
+  }
+
+  createRow2(context, DataViewerGroup rows, dynamic data) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -933,20 +991,23 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                         theme!.textTheme.caption?.copyWith(fontSize: 18)),
                 if (rows.trailling != null) rows.trailling!,
               ])),
-        Wrap(
-          direction: Axis.horizontal,
-          children: [
-            if (rows.header != null) rows.header!,
-            for (var column in rows.children!)
-              createColumn(
-                context,
-                column,
-                col,
-                isLast: (itemsCount == ++col),
-              ),
-            if (rows.bottom != null) rows.bottom!,
-          ],
-        ),
+        Container(
+            height: rows.height,
+            color: rows.color,
+            child: Wrap(
+              direction: Axis.horizontal,
+              children: [
+                if (rows.header != null) rows.header!,
+                for (var column in rows.children!)
+                  createColumn(
+                    context,
+                    column,
+                    col,
+                    isLast: (itemsCount == ++col),
+                  ),
+                if (rows.bottom != null) rows.bottom!,
+              ],
+            )),
       ],
     );
   }
@@ -1026,6 +1087,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         onChanged: (x) {
           widget.controller!.changedValues.value = true;
           if (item.onChanged != null) item.onChanged(x);
+          if (widget.onChangedNotifier != null)
+            widget.onChangedNotifier!(item.name, x);
         },
         readOnly: (item.isPrimaryKey || item.readOnly),
         autofocus: (item.autofocus && canFocus(item)) ||

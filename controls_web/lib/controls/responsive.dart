@@ -60,23 +60,9 @@ class Responsive extends InheritedWidget {
     return false;
   }
 
-  static of(BuildContext context) {
-    Responsive? r = context.dependOnInheritedWidgetOfExactType<Responsive>();
-    r!.info = ResponsiveInfo(context);
-    return r;
+  static ResponsiveInfo of(BuildContext context) {
+    return ResponsiveInfo(context);
   }
-
-  ResponsiveInfo? info;
-
-  get isTablet => info!.isTablet;
-  get isDesktop => info!.isDesktop;
-  get isMobile => info!.isMobile;
-  get isSmall => info!.isSmall;
-  get isLargest => info!.isLargest;
-  get isMedium => info!.isMedium;
-  get theme => info!.theme;
-  get size => info!.size;
-  get orientation => info!.orientation;
 }
 
 class ResponsiveBuilder extends StatelessWidget {

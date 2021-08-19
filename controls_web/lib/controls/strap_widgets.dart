@@ -60,6 +60,8 @@ class StrapButton extends StatefulWidget {
   final StrapButtonType? type;
   final double? height;
   final double? width;
+  final double minHeight;
+  final double minWidth;
   final double? margin;
   final double? radius;
   final double? borderWidth;
@@ -79,6 +81,8 @@ class StrapButton extends StatefulWidget {
     this.type = StrapButtonType.primary,
     this.height = kMinInteractiveDimension,
     this.width = kMinInteractiveDimension * 3,
+    this.minHeight = 30,
+    this.minWidth = 60,
     this.borderWidth = 1,
     this.radius = 5,
     this.title,
@@ -127,8 +131,8 @@ class _StrapButtonState extends State<StrapButton> {
             constraints: BoxConstraints(
                 maxWidth: widget.width!,
                 maxHeight: widget.height!,
-                minHeight: 20,
-                minWidth: 60),
+                minHeight: widget.minHeight,
+                minWidth: widget.minWidth),
             decoration: widget.type == StrapButtonType.none
                 ? null
                 : BoxDecoration(

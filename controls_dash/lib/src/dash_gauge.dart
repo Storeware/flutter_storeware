@@ -10,14 +10,14 @@ import 'chart_pair.dart';
 
 class DashGaugeChart extends StatelessWidget {
   final pi = 3.1415926535;
-  final List<charts.Series> seriesList;
-  final bool animate;
+  final List<charts.Series<dynamic, String>> seriesList;
+  final bool? animate;
   final int arcWidth;
   final double arcLenght;
   final double startAngle;
-  final String label;
+  final String? label;
   final bool enableLabel;
-  final Widget bottom;
+  final Widget? bottom;
   DashGaugeChart(this.seriesList,
       {this.label,
       this.enableLabel = true,
@@ -44,7 +44,7 @@ class DashGaugeChart extends StatelessWidget {
   }
 
   static odometro(
-      {String title, String label, @required double percent, Widget bottom}) {
+      {String? title, String? label, required double percent, Widget? bottom}) {
     return DashGaugeChart(
       createSerie(id: title ?? '', data: [
         ChartPair(label ?? '', percent),
@@ -68,7 +68,7 @@ class DashGaugeChart extends StatelessWidget {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<ChartPair, String>> createSerie(
-      {String id, List<ChartPair> data}) {
+      {required String id, required List<ChartPair> data}) {
     return [
       new charts.Series<ChartPair, String>(
         id: id,
@@ -88,23 +88,22 @@ class DashGaugeChart extends StatelessWidget {
     var b = size.height / 2;
 
     return Stack(children: [
-      charts.PieChart(seriesList,
-          animate: animate,
-          // Configure the width of the pie slices to 30px. The remaining space in
-          // the chart will be left as a hole in the center. Adjust the start
-          // angle and the arc length of the pie so it resembles a gauge.
-          //defaultRenderer: new charts.ArcRendererConfig(
-          //    arcWidth: 30, startAngle: 4 / 5 * pi, arcLength: 7 / 5 * pi));
-
-          defaultRenderer: new charts.ArcRendererConfig(
-              arcWidth: arcWidth,
-              startAngle: startAngle,
-              arcLength: arcLenght,
-              arcRendererDecorators: [
-                if (enableLabel)
-                  charts.ArcLabelDecorator(
-                      labelPosition: charts.ArcLabelPosition.auto)
-              ])),
+      charts.PieChart(
+        seriesList,
+        animate: animate,
+        // Configure the width of the pie slices to 30px. The remaining space in
+        // the chart will be left as a hole in the center. Adjust the start
+        // angle and the arc length of the pie so it resembles a gauge.
+        defaultRenderer: new charts.ArcRendererConfig<Object>(
+            arcWidth: arcWidth,
+            startAngle: startAngle,
+            arcLength: arcLenght,
+            arcRendererDecorators: [
+              if (enableLabel)
+                charts.ArcLabelDecorator(
+                    labelPosition: charts.ArcLabelPosition.auto)
+            ]),
+      ),
       Positioned(
           left: 20,
           right: 20,

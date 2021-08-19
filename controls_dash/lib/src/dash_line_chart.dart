@@ -3,20 +3,20 @@ import 'package:controls_dash/controls_dash.dart';
 import 'package:flutter/material.dart';
 //import 'package:charts_common/src/common/color.dart' as gcolor;
 
-class PointsLineChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
-  final List<charts.SeriesRendererConfig> customSeriesRenderers;
+class DashLineChart extends StatelessWidget {
+  final List<charts.Series<dynamic, num>> seriesList;
+  final bool? animate;
+  final List<charts.SeriesRendererConfig<num>>? customSeriesRenderers;
 
-  PointsLineChart(
+  DashLineChart(
     this.seriesList, {
     this.animate,
     this.customSeriesRenderers,
   });
 
   /// Creates a [LineChart] with sample data and no transition.
-  factory PointsLineChart.withSampleData() {
-    return new PointsLineChart(
+  factory DashLineChart.withSampleData() {
+    return new DashLineChart(
       _createSampleData(),
       // Disable animations for image tests.
       animate: false,
@@ -56,8 +56,8 @@ class PointsLineChart extends StatelessWidget {
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<ChartPairDouble, double>> createSerie({
-    String id,
-    List<ChartPairDouble> data,
+    required String id,
+    required List<ChartPairDouble> data,
   }) {
     return [
       new charts.Series<ChartPairDouble, double>(

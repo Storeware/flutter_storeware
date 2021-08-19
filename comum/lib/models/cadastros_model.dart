@@ -5,6 +5,7 @@ class CadastroItem extends DataItem {
   double? codigo;
   String? nome;
   String? cnpj;
+  String? ie;
   String? cep;
   String? ender;
   String? estado;
@@ -32,6 +33,7 @@ class CadastroItem extends DataItem {
       {this.codigo,
       this.nome,
       this.cnpj,
+      this.ie,
       this.cep,
       this.cidade,
       this.ender,
@@ -55,6 +57,7 @@ class CadastroItem extends DataItem {
     codigo = double.tryParse((json['codigo'] ?? 0.0).toString());
     nome = json['nome'] ?? '';
     cnpj = json['cnpj'];
+    ie = json['ie'];
     cep = json['cep'];
     ender = json['ender'];
     estado = json['estado'];
@@ -91,6 +94,7 @@ class CadastroItem extends DataItem {
     data['codigo'] = this.codigo ?? 0;
     data['nome'] = this.nome ?? '';
     data['cnpj'] = this.cnpj ?? '';
+    data['ie'] = this.ie;
     data['cep'] = this.cep ?? '';
     data['ender'] = this.ender ?? '';
     data['estado'] = this.estado ?? '';
@@ -109,7 +113,7 @@ class CadastroItem extends DataItem {
   }
 
   static String get columns =>
-      'codigo,nome,cnpj,cidade,bairro,numero,compl,ender,estado,cidade,cep,celular,cpfna_nota,email, terminal,tipo,filial';
+      'codigo,nome,cnpj,ie,cidade,bairro,numero,compl,ender,estado,cidade,cep,celular,cpfna_nota,email, terminal,tipo,filial';
 }
 
 class CadastroItemModel extends ODataModelClass<CadastroItem> {

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 class TimeSeriesSales {
   final DateTime time;
   final num sales;
-  final charts.Color color;
+  final charts.Color? color;
 
   TimeSeriesSales(this.time, this.sales, {this.color});
 }
@@ -16,7 +16,7 @@ enum DashTimeSeriesType { bar, line }
 
 class DashTimeSeries extends StatelessWidget {
   final List<charts.Series<TimeSeriesSales, DateTime>> seriesList;
-  final bool animate;
+  final bool? animate;
   final bool showSeriesNames;
   final DashTimeSeriesType rendererType;
   final List<charts.SeriesRendererConfig<DateTime>> customSeriesRenderers = [];
@@ -33,18 +33,37 @@ class DashTimeSeries extends StatelessWidget {
       this.dateFormat = 'dd/MMM',
       this.labelRotation = 0,
       this.includeLine = true,
-      List<charts.SeriesRendererConfig<DateTime>> customSeriesRenderers,
+      List<charts.SeriesRendererConfig<DateTime>>? customSeriesRenderers,
       this.showSeriesNames = false}) {
     if (customSeriesRenderers != null)
       this.customSeriesRenderers.addAll(customSeriesRenderers);
   }
 
+  static withSampleData() {
+    return DashTimeSeries(
+      createSerie(id: 'Vendas', data: [
+        TimeSeriesSales(DateTime.now().add(Duration(days: -10)), 10),
+        TimeSeriesSales(DateTime.now().add(Duration(days: -9)), 20),
+        TimeSeriesSales(DateTime.now().add(Duration(days: -8)), 5),
+        TimeSeriesSales(DateTime.now().add(Duration(days: -7)), 12),
+        TimeSeriesSales(DateTime.now().add(Duration(days: 0)), 7),
+        //ChartPair('fev', 12),
+        //ChartPair('mar', 100),
+        //ChartPair('abr', 50),
+        //ChartPair('mai', 40),
+      ]),
+
+      // Disable animations for image tests.
+      animate: false,
+    );
+  }
+
   addSerie({
-    String id,
-    List<TimeSeriesSales> data,
-    String rendererId,
+    required String id,
+    required List<TimeSeriesSales> data,
+    String? rendererId,
     num strokeWidth = 1,
-    DashTimeSeriesType rendererType,
+    DashTimeSeriesType? rendererType,
     bool includeArea = false,
   }) {
     final s = createSerie(
@@ -87,11 +106,13 @@ class DashTimeSeries extends StatelessWidget {
               stacked: stacked,
               includeLine: includeLine,
             )
-          : charts.BarRendererConfig<DateTime>(),
+          : null, // charts.BarRendererConfig<DateTime>(),
+
       customSeriesRenderers: customSeriesRenderers,
       // It is recommended that default interactions be turned off if using bar
       // renderer, because the line point highlighter is the default for time
       // series chart.
+
       defaultInteractions: false,
       // If default interactions were removed, optionally add select nearest
       // and the domain highlighter that are typical for bar charts.
@@ -103,33 +124,39 @@ class DashTimeSeries extends StatelessWidget {
             position: charts.BehaviorPosition.bottom,
           ),
       ],
+
       dateTimeFactory:
           LocalizedDateTimeFactory(Localizations.localeOf(context)),
+
       primaryMeasureAxis: charts.NumericAxisSpec(
           tickProviderSpec:
               charts.BasicNumericTickProviderSpec(zeroBound: false)),
       domainAxis: charts.DateTimeAxisSpec(
-          renderSpec: charts.SmallTickRendererSpec(
-              minimumPaddingBetweenLabelsPx: 4,
-              labelAnchor: charts.TickLabelAnchor.centered,
-              labelStyle: charts.TextStyleSpec(
-                fontSize: 10,
-                color: charts.MaterialPalette.black,
-              ),
-              labelRotation: labelRotation,
-              // Change the line colors to match text color.
-              lineStyle:
-                  charts.LineStyleSpec(color: charts.MaterialPalette.white)),
-          tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
-              day: charts.TimeFormatterSpec(
+        renderSpec: charts.SmallTickRendererSpec(
+            minimumPaddingBetweenLabelsPx: 4,
+            labelAnchor: charts.TickLabelAnchor.centered,
+            labelStyle: charts.TextStyleSpec(
+              fontSize: 10,
+              color: charts.MaterialPalette.black,
+            ),
+            labelRotation: labelRotation,
+            // Change the line colors to match text color.
+            lineStyle:
+                charts.LineStyleSpec(color: charts.MaterialPalette.white)),
+        tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+          day: charts.TimeFormatterSpec(
             format: dateFormat,
             transitionFormat: dateFormat,
-          ))),
+          ),
+        ),
+      ),
     );
   }
 
   static List<charts.Series<TimeSeriesSales, DateTime>> createSerie(
-      {String id, List<TimeSeriesSales> data, num strokeWidth = 1}) {
+      {required String id,
+      required List<TimeSeriesSales> data,
+      num strokeWidth = 1}) {
     return [
       new charts.Series<TimeSeriesSales, DateTime>(
         id: id,
@@ -148,7 +175,7 @@ class LocalizedDateTimeFactory extends charts.LocalDateTimeFactory {
   final Locale locale;
 
   @override
-  DateFormat createDateFormat(String pattern) {
+  DateFormat createDateFormat(String? pattern) {
     return DateFormat(pattern, locale.languageCode);
   }
 

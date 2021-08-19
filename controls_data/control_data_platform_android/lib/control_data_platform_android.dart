@@ -2,21 +2,22 @@ library control_data_platform_android;
 
 //import 'package:universal_io/io.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-//import 'package:control_data_platform_windows/control_data_platform_windows.dart'
-//    as win;
+import 'package:control_data_platform_windows/control_data_platform_windows.dart'
+    as win;
 import 'package:control_data_platform_interface/control_data_platform_interface.dart';
-//import 'package:universal_platform/universal_platform.dart';
+import 'package:universal_platform/universal_platform.dart';
 
 class PlatformLocalStorage extends LocalStorageInterface {
   var _prefs;
   init() async {
     if (_prefs == null) {
-      /*if (UniversalPlatform.isWindows) {
+      if (UniversalPlatform.isWindows) {
         _prefs = win.PlatformLocalStorage();
         _prefs.init();
-      } else {*/
-      _prefs = await SharedPreferences.getInstance();
-      //}
+      } else {
+        _prefs = await SharedPreferences.getInstance();
+        //}
+      }
     }
   }
 

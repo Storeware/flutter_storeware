@@ -18,6 +18,7 @@ class TabChoice<T> {
   int? count;
   String? tooltip;
   List<TabChoice>? items;
+  Color? color;
   double? width;
   bool Function(int)? completed;
   TextStyle? style;
@@ -36,6 +37,7 @@ class TabChoice<T> {
       this.label,
       this.child,
       this.icon,
+      this.color,
       this.count,
       this.trailing,
       this.selectedIcon,

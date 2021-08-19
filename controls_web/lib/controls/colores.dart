@@ -82,7 +82,7 @@ const pastelColors = [
 
 List<List<Color>> _colores = [
   [
-    pastelColors[0],
+    pastelColors[19],
     pastelColors[1],
     pastelColors[2],
     pastelColors[3],

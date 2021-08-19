@@ -8,12 +8,14 @@ class RadioGrouped extends StatelessWidget {
   final Widget? title;
   final double? itemWidth;
   final Color? activeColor;
+  final CrossAxisAlignment? crossAxisAlignment;
   const RadioGrouped(
       {Key? key,
       @required this.children,
       //  this.groupValue = 0,
       this.onChanged,
       this.direction,
+      this.crossAxisAlignment,
       this.selected = 0,
       this.title,
       this.itemWidth,
@@ -26,32 +28,36 @@ class RadioGrouped extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: notifier,
       builder: (a, _selected, w) {
-        print('selected $selected');
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: crossAxisAlignment ?? CrossAxisAlignment.start,
           children: [
             if (title != null) title!,
             Wrap(
+              runAlignment: WrapAlignment.start,
               direction: direction ?? Axis.vertical,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                for (var index = 0; index < children!.length; index++)
+                for (var index = 0; index < children!.length; index++) ...[
                   Container(
                     width: itemWidth,
                     alignment: Alignment.centerLeft,
-                    child: RadioListTile(
-                        value: index,
-                        selected: index == _selected,
-                        groupValue: _selected,
-                        title: Text(children![index]),
-                        activeColor: activeColor,
-                        dense: true,
-                        toggleable: true,
-                        onChanged: (b) {
-                          if (onChanged != null) onChanged!(index);
-
-                          notifier.value = index;
-                        }),
+                    child: Row(
+                      children: [
+                        Radio(
+                            value: index,
+                            groupValue: _selected,
+                            activeColor: activeColor,
+                            toggleable: true,
+                            onChanged: (b) {
+                              if (onChanged != null) onChanged!(index);
+                              notifier.value = index;
+                            }),
+                        Text(children![index]),
+                      ],
+                    ),
                   ),
+                ],
               ],
             ),
           ],

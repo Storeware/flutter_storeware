@@ -24,13 +24,8 @@ file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/archive
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/archive-3.1.2/lib/
 async
 2.12
-<<<<<<< HEAD
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/async-2.6.1/
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/async-2.6.1/lib/
-=======
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2/lib/
->>>>>>> 7f1cde5224b2e156463c560dca6f969dd4501957
 autocomplete_textfield
 1.19
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/autocomplete_textfield-1.7.3/
@@ -49,13 +44,8 @@ file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charact
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/characters-1.1.0/lib/
 charcode
 2.12
-<<<<<<< HEAD
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charcode-1.2.0/
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charcode-1.2.0/lib/
-=======
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1/lib/
->>>>>>> 7f1cde5224b2e156463c560dca6f969dd4501957
 clock
 2.12
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/clock-1.1.0/
@@ -154,21 +144,12 @@ file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/js-0.6.
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/js-0.6.3/lib/
 matcher
 2.12
-<<<<<<< HEAD
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/matcher-0.12.10/
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/matcher-0.12.10/lib/
-meta
-2.12
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/meta-1.3.0/
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/meta-1.3.0/lib/
-=======
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11/
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11/lib/
 meta
 2.12
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0/lib/
->>>>>>> 7f1cde5224b2e156463c560dca6f969dd4501957
 mime
 2.12
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/mime-1.0.0/
@@ -299,13 +280,8 @@ file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/term_gl
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib/
 test_api
 2.12
-<<<<<<< HEAD
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/test_api-0.3.0/
-file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/test_api-0.3.0/lib/
-=======
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.3/
 file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.3/lib/
->>>>>>> 7f1cde5224b2e156463c560dca6f969dd4501957
 typed_data
 2.12
 file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/typed_data-1.3.0/

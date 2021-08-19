@@ -4,6 +4,7 @@ version: 2021.08.18
 homepage: http://tireideletra.com.br
 publish_to: none
 
+
 environment:
   sdk: ">=2.12.0 <3.0.0"
   # aguardando nullsafety para o charts_flutter.

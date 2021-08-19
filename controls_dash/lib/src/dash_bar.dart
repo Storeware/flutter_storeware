@@ -4,23 +4,23 @@ import 'chart_pair.dart';
 import 'package:flutter/material.dart';
 
 class DashBarChart extends StatelessWidget {
-  final List<charts.Series> seriesList;
-  final bool animate;
+  final List<charts.Series<dynamic, String>> seriesList;
+  final bool? animate;
   final bool vertical;
   final bool showSeriesNames;
   final DashSeriesType rendererType;
 
-  final List<charts.SeriesRendererConfig<String>> customSeriesRenderers = [];
+  final List<charts.SeriesRendererConfig<String>>? customSeriesRenderers = [];
   DashBarChart(
     this.seriesList, {
     this.showSeriesNames = false,
     this.vertical = true,
     this.animate,
     this.rendererType = DashSeriesType.bar,
-    List<charts.SeriesRendererConfig<String>> customSeriesRenderers,
+    List<charts.SeriesRendererConfig<String>>? customSeriesRenderers,
   }) {
     if (customSeriesRenderers != null)
-      this.customSeriesRenderers.addAll(customSeriesRenderers);
+      this.customSeriesRenderers!.addAll(customSeriesRenderers);
   }
 
   /// Creates a [BarChart] with sample data and no transition.
@@ -33,11 +33,11 @@ class DashBarChart extends StatelessWidget {
   }
 
   addSerie({
-    String id,
-    List<ChartPair> data,
-    String rendererId,
+    required String id,
+    required List<ChartPair> data,
+    String? rendererId,
     int strokeWidth = 1,
-    DashSeriesType rendererType,
+    DashSeriesType? rendererType,
     bool includeArea = false,
   }) {
     final s = createSerie(
@@ -49,15 +49,15 @@ class DashBarChart extends StatelessWidget {
     seriesList.add(s);
     if (rendererType != null) {
       addSerieRenderer(createRenderer(rendererType,
-          rendererId: rendererId, includeArea: includeArea));
+          rendererId: rendererId!, includeArea: includeArea));
     }
     return s;
   }
 
   addSerieRenderer(charts.SeriesRendererConfig<String> renderer) =>
-      customSeriesRenderers.add(renderer);
+      customSeriesRenderers!.add(renderer);
 
-  createRenderer(type, {String rendererId, bool includeArea = false}) {
+  createRenderer(type, {String? rendererId, bool includeArea = false}) {
     var r;
     switch (type) {
       case DashSeriesType.bar:
@@ -106,8 +106,8 @@ class DashBarChart extends StatelessWidget {
   }
 
   static List<charts.Series<ChartPair, String>> createSerie({
-    String id,
-    List<ChartPair> data,
+    required String id,
+    required List<ChartPair> data,
     int strokeWidth = 1,
   }) {
     return [

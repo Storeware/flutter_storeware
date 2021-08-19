@@ -9,7 +9,7 @@
     },
     {
       "name": "async",
-      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.5.0",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -39,7 +39,7 @@
     },
     {
       "name": "charcode",
-      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.2.0",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.3.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -249,13 +249,13 @@
     },
     {
       "name": "matcher",
-      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.10",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "meta",
-      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.3.0",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/meta-1.7.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -465,7 +465,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.19",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -566,7 +566,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-03-30T01:44:09.008359Z",
+  "generated": "2021-08-19T00:21:17.242897Z",
   "generator": "pub",
-  "generatorVersion": "2.13.0-149.0.dev"
+  "generatorVersion": "2.15.0-26.0.dev"
 }

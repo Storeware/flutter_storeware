@@ -1,18 +1,18 @@
 name: controls_dash
 description: Adds for charts_flutter
-version: 2021.03.16
+version: 2021.08.18
 homepage: http://tireideletra.com.br
 publish_to: none
 
 environment:
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.12.0 <3.0.0"
   # aguardando nullsafety para o charts_flutter.
 
 dependencies:
   flutter:
     sdk: flutter
 
-  charts_flutter: 
+  charts_flutter: ^0.11.0 
   #   git:
   #    url: https://github.com/simpleclub-extended/charts
   #    path: charts_flutter

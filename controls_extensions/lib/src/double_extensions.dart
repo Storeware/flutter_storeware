@@ -101,6 +101,24 @@ extension CurrencyExtension on double {
   static get currencyName => NumberFormat().currencyName;
   static get currencySymbol => NumberFormat().currencySymbol;
   String formatCurrency() => NumberFormat.simpleCurrency().format(this);
+  String toStringAsMaxFixed([int dec = 2]) {
+    for (int i = 0; i < dec; i++) {
+      if ((this - this ~/ 1) == 0) dec = i;
+    }
+    var loc = NumberFormat.decimalPattern(Intl.defaultLocale);
+    loc.maximumFractionDigits = dec;
+    return loc.format(this);
+  }
+
+  String toStringAsLocalFixed([int dec = 2]) {
+    var loc = NumberFormat.decimalPattern(Intl.defaultLocale);
+    loc.maximumFractionDigits = dec;
+    return loc.format(this);
+  }
+
+  String toStringAsCurrencyFixed([int dec = 2]) {
+    return NumberFormat.simpleCurrency(locale: Intl.defaultLocale).format(this);
+  }
 }
 
 extension IntExtensions on int {

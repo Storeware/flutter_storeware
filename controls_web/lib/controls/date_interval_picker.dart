@@ -1,9 +1,15 @@
 // @dart=2.12
 import 'package:flutter/material.dart';
-import 'package:controls_web/controls.dart';
 import 'package:controls_extensions/extensions.dart';
+import 'package:controls_web/controls/responsive.dart';
+import 'package:controls_web/controls/group_buttons.dart';
+import 'package:controls_web/controls/masked_field.dart';
 
-import 'group_buttons.dart';
+class DateIntervalPickerValues {
+  DateTime de;
+  DateTime ate;
+  DateIntervalPickerValues({required this.de, required this.ate});
+}
 
 class DateIntervalPicker extends StatefulWidget {
   const DateIntervalPicker(
@@ -13,6 +19,8 @@ class DateIntervalPicker extends StatefulWidget {
       this.onChanged,
       this.onSaved,
       this.color,
+      this.options,
+      this.onChangeValues,
       this.extendedOptions = false,
       this.width})
       : super(key: key);
@@ -23,6 +31,9 @@ class DateIntervalPicker extends StatefulWidget {
   final double? width;
   final bool extendedOptions;
   final Color? color;
+  final List<String>? options;
+  final DateIntervalPickerValues Function(
+      int index, DateIntervalPickerValues values)? onChangeValues;
   @override
   _DateIntervalPickerState createState() => _DateIntervalPickerState();
 }
@@ -33,12 +44,13 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
   @override
   void initState() {
     super.initState();
+    options = widget.options ?? ['hoje', 'na semana', 'no mês', 'mês anterior'];
     de = widget.startDate;
     ate = widget.endDate;
     formatar();
   }
 
-  final options = ['hoje', 'na semana', 'no mês', 'mês anterior'];
+  late List<String> options;
 
   final TextEditingController _deController = TextEditingController();
   final TextEditingController _ateController = TextEditingController();
@@ -101,6 +113,13 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
                     color: widget.color,
                     options: options,
                     onChanged: (i) {
+                      if (widget.onChangeValues != null) {
+                        var values = DateIntervalPickerValues(de: de, ate: ate);
+                        var rt = widget.onChangeValues!(i, values);
+                        de = rt.de;
+                        ate = rt.ate;
+                        return;
+                      }
                       switch (i) {
                         case 1:
                           de = DateTime.now().startOfWeek();
@@ -143,7 +162,7 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
 extension StringMofi on String {
   String removeLeftChar(String char) {
     String r = '';
-    this.forEach((x) {
+    forEach((x) {
       if (!(x == char && r == '')) {
         r += x;
       }

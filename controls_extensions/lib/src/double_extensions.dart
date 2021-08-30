@@ -117,7 +117,9 @@ extension CurrencyExtension on double {
   }
 
   String toStringAsCurrencyFixed([int dec = 2]) {
-    return NumberFormat.simpleCurrency(locale: Intl.defaultLocale).format(this);
+    return NumberFormat.simpleCurrency(
+            locale: Intl.defaultLocale, decimalDigits: dec)
+        .format(this);
   }
 }
 

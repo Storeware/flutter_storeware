@@ -21,6 +21,7 @@ class VerticalTopTabView extends StatefulWidget {
   final double? left;
   final List<Widget>? actions;
   final List<TabChoice>? choices;
+  final Function(BuildContext context, TabChoice item, bool selected)? builder;
   final double? height;
   final VerticalTopTabNavigatorController? controller;
   final int? initialIndex;
@@ -35,11 +36,16 @@ class VerticalTopTabView extends StatefulWidget {
   final Widget Function(TabChoice)? timelineBuild;
   final Function(int)? onSelectedItem;
   final Color? backgroundColor;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
 
   const VerticalTopTabView(
       {Key? key,
       this.position = VerticalTopTabPosition.right,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
       this.initialIndex = 0,
+      this.builder,
       this.indicatorColor,
       this.selectedColor,
       this.spacing = 4,
@@ -98,8 +104,11 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
             VerticalTopTabNavigator(
               backgroundColor: widget.backgroundColor,
               position: widget.position,
+              builder: widget.builder,
               left: widget.left,
               right: widget.right,
+              crossAxisAlignment: widget.crossAxisAlignment,
+              mainAxisAlignment: widget.mainAxisAlignment,
               height: widget.height,
               actions: widget.actions,
               choices: widget.choices,
@@ -170,7 +179,7 @@ class _VerticalTopTabViewState extends State<VerticalTopTabView> {
       );
 }
 
-enum VerticalTopTabPosition { left, right }
+enum VerticalTopTabPosition { none, left, right }
 
 class VerticalTopTabNavigator extends StatefulWidget {
   final List<TabChoice>? choices;
@@ -191,12 +200,17 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final Color? completedColor;
   final Widget Function(TabChoice)? timelineBuild;
   final VerticalTopTabNavigatorController? controller;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
+  final Function(BuildContext context, TabChoice item, bool selected)? builder;
+
   VerticalTopTabNavigator(
       {Key? key,
       @required this.choices,
       this.onSelectItem,
       this.initialIndex = 0,
       this.selectedColor,
+      this.builder,
       this.left,
       this.right,
       this.completedColor = Colors.green,
@@ -204,6 +218,8 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.height = kMinInteractiveDimension,
       this.actions,
       this.position = VerticalTopTabPosition.right,
+      this.mainAxisAlignment = MainAxisAlignment.start,
+      this.crossAxisAlignment = CrossAxisAlignment.center,
       this.spacing = 4,
       this.controller,
       this.indicatorColor,
@@ -260,145 +276,124 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       width: double.maxFinite,
       child: ValueListenableBuilder<int>(
         valueListenable: active!,
-        builder: (a, b, w) => Row(children: [
-          /// objetos a esquerda
-          if (widget.left != null) SizedBox(width: widget.left),
-          if (widget.leading != null) widget.leading!,
+        builder: (a, b, w) => Row(
+          mainAxisAlignment: widget.mainAxisAlignment,
+          crossAxisAlignment: widget.crossAxisAlignment,
+          children: [
+            /// objetos a esquerda
+            if (widget.left != null) SizedBox(width: widget.left),
+            if (widget.leading != null) widget.leading!,
 
-          /// space em branco a esquerda do menu
-          if (widget.position == VerticalTopTabPosition.right) Spacer(),
+            /// space em branco a esquerda do menu
+            if (widget.position == VerticalTopTabPosition.right) Spacer(),
 
-          /// lista itens do menu
-          for (var index = 0; index < widget.choices!.length; index++)
-            Builder(builder: (x) {
-              bool completed = (widget.choices![index].completed != null)
-                  ? (widget.choices![index].completed!(activeIndex))
-                  : false;
+            /// lista itens do menu
+            for (var index = 0; index < widget.choices!.length; index++)
+              Builder(builder: (x) {
+                bool completed = (widget.choices![index].completed != null)
+                    ? (widget.choices![index].completed!(activeIndex))
+                    : false;
 
-              return Container(
-                width: widget.choices![index].width,
-                color: (active!.value == index) ? _selectedColor : _tabColor,
-                child: InkWell(
-                  child: (!widget.choices![index].visible)
-                      ? Container()
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                      decoration: new BoxDecoration(
-                                          border: Border(
-                                              /* top: BorderSide(
-                                                  width: 1.0,
-                                                  color: Colors.grey),
-                                              left: BorderSide(
-                                                  width: 1.0,
-                                                  color: Colors.grey),
-                                              right: BorderSide(
-                                                  width: 1.0,
-                                                  color: Colors.grey),
-                                             */
-                                              bottom: BorderSide(
-                                        width: 2.0,
-                                        color: (active!.value == index)
-                                            ? widget.indicatorColor ??
-                                                theme!.indicatorColor
-                                            : (completed)
-                                                ? widget.completedColor!
-                                                : Colors.transparent,
-                                      ))),
-                                      //width: widget.choices[index].width,
-                                      child: (widget.choices![index].items !=
-                                              null)
-                                          ? Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 8),
-                                              child: showDrownMenu(
-                                                  context,
-                                                  index,
-                                                  widget
-                                                      .choices![index].items!),
-                                            )
-                                          : Align(
-                                              alignment: Alignment.center,
-                                              child:
-                                                  buildLabel(context, index))),
-                                  /*SizedBox(
-                                    height: 2,
-                                  ),
-                                  Container(
-                                    height: 2,
+                return Container(
+                  width: widget.choices![index].width,
+                  color: (active!.value == index) ? _selectedColor : _tabColor,
+                  child: InkWell(
+                    child: (!widget.choices![index].visible)
+                        ? Container()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                                (widget.builder != null)
+                                    ? widget.builder!(
+                                        context,
+                                        widget.choices![index],
+                                        active!.value == index)
+                                    : Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                              decoration: new BoxDecoration(
+                                                  border: Border(
+                                                      bottom: BorderSide(
+                                                width: 2.0,
+                                                color: (active!.value == index)
+                                                    ? widget.indicatorColor ??
+                                                        theme!.indicatorColor
+                                                    : (completed)
+                                                        ? widget.completedColor!
+                                                        : Colors.transparent,
+                                              ))),
+                                              //width: widget.choices[index].width,
+                                              child: (widget.choices![index]
+                                                          .items !=
+                                                      null)
+                                                  ? Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 8),
+                                                      child: showDrownMenu(
+                                                          context,
+                                                          index,
+                                                          widget.choices![index]
+                                                              .items!),
+                                                    )
+                                                  : Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: buildLabel(
+                                                        context,
+                                                        index,
+                                                      ))),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                        ],
+                                      ),
+                                if (existIndicator(index) &&
+                                    active!.value != index)
+                                  (widget.timelineBuild != null)
+                                      ? widget.timelineBuild!(
+                                          widget.choices![index])
+                                      : Container(
+                                          width: widget.spacing,
+                                          height: widget.spacing,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: completed
+                                                  ? widget.completedColor
+                                                  : Colors.transparent)),
+                                SizedBox(
+                                  width: widget.spacing,
+                                ),
+                              ]),
+                    onTap: (!widget.choices![index].enabled)
+                        ? null
+                        : () {
+                            var choice = widget.choices![index];
+                            if ((choice.items ?? []).length > 0) {
+                              active!.value = index;
+                              //bShowDrownMenu.value = true;
+                            } else {
+                              if (widget.onSelectItem != null)
+                                widget.onSelectItem!(
+                                    index, widget.choices![index]);
+                              active!.value = index;
+                            }
+                          },
+                  ),
+                );
+              }),
+            if (widget.position == VerticalTopTabPosition.left) Spacer(),
 
-                                    //margin: new EdgeInsetsDirectional.only(
-                                    //    start: 1.0, end: 1.0),
-                                    width: widget.choices[index].width ??
-                                        (widget.choices[index].label.length *
-                                                8.0) +
-                                            ((widget.choices[index].items !=
-                                                    null)
-                                                ? 30
-                                                : 0),
-
-                                    color: (active.value == index)
-                                        ? widget.indicatorColor ??
-                                            theme.indicatorColor
-                                        : (completed)
-                                            ? widget.completedColor
-                                            : null,
-                                  ),*/
-                                  SizedBox(
-                                    height: 2,
-                                  ),
-                                ],
-                              ),
-                              // SizedBox(
-                              //   width: widget.spacing,
-                              // ),
-                              if (existIndicator(index) &&
-                                  active!.value != index)
-                                (widget.timelineBuild != null)
-                                    ? widget
-                                        .timelineBuild!(widget.choices![index])
-                                    : Container(
-                                        width: widget.spacing,
-                                        height: widget.spacing,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(50),
-                                            color: completed
-                                                ? widget.completedColor
-                                                : Colors.transparent)),
-                              SizedBox(
-                                width: widget.spacing,
-                              ),
-                            ]),
-                  onTap: (!widget.choices![index].enabled)
-                      ? null
-                      : () {
-                          var choice = widget.choices![index];
-                          if ((choice.items ?? []).length > 0) {
-                            active!.value = index;
-                            //bShowDrownMenu.value = true;
-                          } else {
-                            if (widget.onSelectItem != null)
-                              widget.onSelectItem!(
-                                  index, widget.choices![index]);
-                            active!.value = index;
-                          }
-                        },
-                ),
-              );
-            }),
-          if (widget.position == VerticalTopTabPosition.left) Spacer(),
-
-          if (widget.actions != null) ...widget.actions!,
-          if (widget.right != null) SizedBox(width: widget.right),
-        ]),
+            if (widget.actions != null) ...widget.actions!,
+            if (widget.right != null) SizedBox(width: widget.right),
+          ],
+        ),
       ),
     );
   }

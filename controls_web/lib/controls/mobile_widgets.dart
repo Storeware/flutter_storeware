@@ -36,7 +36,7 @@ class MobileMenuBox extends StatelessWidget {
 
     return MobileScaffold(
       appBar: appBar,
-      extendBody: extendBody,
+      //extendBody: extendBody,
       drawer: drawer,
       body: Padding(
         padding: const EdgeInsets.all(8.0),

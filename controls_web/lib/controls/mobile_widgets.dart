@@ -110,20 +110,20 @@ class MobileMenuBox extends StatelessWidget {
 }
 
 class MobileScaffold extends StatelessWidget {
-  const MobileScaffold(
-      {Key? key,
-      this.bottomNavigationBar,
-      this.appBar,
-      required this.body,
-      this.drawer,
-      this.extendedBar,
-      this.extendBody = false})
-      : super(key: key);
+  const MobileScaffold({
+    Key? key,
+    this.bottomNavigationBar,
+    this.appBar,
+    required this.body,
+    this.drawer,
+    this.extendedBar,
+    //this.extendBody = false,
+  }) : super(key: key);
 
   final Widget body;
   final SliverAppBar? appBar;
   final Widget? bottomNavigationBar;
-  final bool extendBody;
+  //final bool extendBody;
   final Widget? drawer;
   final Widget? extendedBar;
 

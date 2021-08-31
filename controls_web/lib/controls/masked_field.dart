@@ -32,6 +32,11 @@ class MaskedTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final Widget? suffix;
   final Widget? prefix;
+  final Color? fillColor;
+  final Color? focusColor;
+  final Color? hoverColor;
+  final InputDecoration? decoration;
+
   final Function(bool)? onFocusChange;
   MaskedTextField({
     Key? key,
@@ -39,6 +44,10 @@ class MaskedTextField extends StatefulWidget {
     this.initialValue,
     this.textAlign = TextAlign.start,
     this.onSaved,
+    this.decoration,
+    this.fillColor,
+    this.focusColor,
+    this.hoverColor,
     @required this.label,
     this.mask,
     this.keyboardType,
@@ -299,16 +308,21 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
             controller: _controller,
             style: widget.style ??
                 theme.textTheme.bodyText1!.copyWith(fontSize: widget.fontSize),
-            decoration: InputDecoration(
-                labelText: '${widget.label}',
-                suffix: widget.suffix,
-                prefix: widget.prefix,
-                helperText: !_showHelperText
-                    ? (widget.sample != null)
-                        ? 'Ex: ${widget.sample}'
-                        : null
-                    : null,
-                hintStyle: theme.inputDecorationTheme.hintStyle),
+            decoration: widget.decoration ??
+                InputDecoration(
+                  fillColor: widget.fillColor,
+                  focusColor: widget.focusColor,
+                  hoverColor: widget.hoverColor,
+                  labelText: '${widget.label}',
+                  suffix: widget.suffix,
+                  prefix: widget.prefix,
+                  helperText: !_showHelperText
+                      ? (widget.sample != null)
+                          ? 'Ex: ${widget.sample}'
+                          : null
+                      : null,
+                  hintStyle: theme.inputDecorationTheme.hintStyle,
+                ),
             keyboardType: widget.keyboardType ?? TextInputType.text,
             onChanged: widget.onChanged,
             validator: (value) {

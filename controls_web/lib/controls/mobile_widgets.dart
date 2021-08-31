@@ -14,6 +14,7 @@ class MobileMenuBox extends StatelessWidget {
       this.appBar,
       this.buttonWidth = 200,
       this.childBottomNavigatorBar,
+      this.automaticallyImplyLeading = true,
       this.drawer})
       : super(key: key);
   final SliverAppBar? appBar;
@@ -24,6 +25,7 @@ class MobileMenuBox extends StatelessWidget {
   final bool extendBody;
   final Widget? drawer;
   final double buttonWidth;
+  final bool automaticallyImplyLeading;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +58,8 @@ class MobileMenuBox extends StatelessWidget {
                               appBar: (item.primary)
                                   ? null
                                   : SliverAppBar(
-                                      automaticallyImplyLeading: false,
+                                      automaticallyImplyLeading:
+                                          automaticallyImplyLeading,
                                       title: Text(item.label!),
                                       actions: (item.items != null)
                                           ? [

@@ -101,6 +101,7 @@ export 'tabview_bottom.dart';
 export 'tabview_widget.dart';
 export 'tab_choice.dart';
 export 'tab_view_rail.dart';
+export 'title_search_field.dart';
 //export 'texts.dart';
 //export 'text_info.dart';
 export 'total_widget.dart';

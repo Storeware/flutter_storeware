@@ -167,6 +167,7 @@ class MobileScaffold extends StatelessWidget {
                                     }),
                                 width: responsive.size.width - 0, //120,
                                 height: 2),
+                            if (extendedBar != null) extendedBar!,
                             Expanded(child: body),
                           ],
                         )),

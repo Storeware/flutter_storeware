@@ -11,6 +11,7 @@ class DataViewerCards extends StatelessWidget {
   final Widget? header;
   final Widget? footer;
   final double padding;
+  final int? rowsPerPage;
   final Widget Function()? noDataBuilder;
   DataViewerCards({
     Key? key,
@@ -19,6 +20,7 @@ class DataViewerCards extends StatelessWidget {
     required this.controller,
     this.header,
     this.footer,
+    this.rowsPerPage,
     this.noDataBuilder,
     this.padding = 2.0,
   }) : super(key: key);
@@ -28,6 +30,7 @@ class DataViewerCards extends StatelessWidget {
     ResponsiveInfo responsive = ResponsiveInfo(context);
     int nCols = responsive.size.width ~/ itemWidth;
     if (nCols < 1) nCols = 1;
+    int _rowsPerPage = rowsPerPage ?? controller.top ?? 0;
 
     return Padding(
       padding: EdgeInsets.all(padding),
@@ -47,8 +50,10 @@ class DataViewerCards extends StatelessWidget {
                               : noDataBuilder!(),
                         for (var item in snapshot.data ?? [])
                           itemBuilder(context, item),
-                        if (snapshot.data!.length >= controller.top!)
-                          paginarWidget(context),
+                        paginarWidget(
+                            context,
+                            ((controller.page > 1) ||
+                                (snapshot.data!.length >= _rowsPerPage))),
                       ]),
                       if (footer != null) footer!,
                     ],
@@ -57,15 +62,12 @@ class DataViewerCards extends StatelessWidget {
     );
   }
 
-  paginarWidget(context) {
+  paginarWidget(context, show) {
     return Column(
       children: [
         Container(
           width: double.infinity,
-
-          //color: Colors.grey,
-          //height: kMinInteractiveDimension * 2,
-          child: createPageNavigator(context),
+          child: (show) ? createPageNavigator(context) : null,
         ),
         SizedBox(height: 10),
       ],
@@ -73,24 +75,17 @@ class DataViewerCards extends StatelessWidget {
   }
 
   createPageNavigator(BuildContext context) {
-    //if (widget.onPageSelected == null) return null;
     int n = 0;
-    //if (!(widget.showPageNavigatorButtons)) return Container();
-    //if (widget.navigatorBuilder != null)
-    //  return widget.navigatorBuilder!(context);
     return Padding(
       padding: const EdgeInsets.only(left: 14, right: 14, bottom: 40),
       child: Align(
-        //alignment: Alignment.centerLeft,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            //if (widget.navigatorLeading != null) widget.navigatorLeading!,
             createNavButton(1),
             for (var i = controller.page - 1; i < controller.page + 4; i++)
               if (i > 1)
                 if ((n++) < 4) createNavButton(i),
-            //if (widget.navigatorActions != null) ...widget.navigatorActions!,
           ],
         ),
       ),

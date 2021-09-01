@@ -17,7 +17,7 @@ class MobileMenuBox extends StatelessWidget {
       this.automaticallyImplyLeading = true,
       this.drawer})
       : super(key: key);
-  final SliverAppBar? appBar;
+  final AppBar? appBar;
   final List<TabChoice> choices;
   final List<Widget>? actions;
   final Widget? bottomNavigationBar;
@@ -57,7 +57,8 @@ class MobileMenuBox extends StatelessWidget {
                           : MobileScaffold(
                               appBar: (item.primary)
                                   ? null
-                                  : SliverAppBar(
+                                  : AppBar(
+                                      elevation: 0,
                                       automaticallyImplyLeading:
                                           automaticallyImplyLeading,
                                       title: Text(item.label!),
@@ -117,11 +118,14 @@ class MobileScaffold extends StatelessWidget {
     required this.body,
     this.drawer,
     this.extendedBar,
+    this.scrolling = false,
+
     //this.extendBody = false,
   }) : super(key: key);
 
+  final bool scrolling;
   final Widget body;
-  final SliverAppBar? appBar;
+  final AppBar? appBar;
   final Widget? bottomNavigationBar;
   //final bool extendBody;
   final Widget? drawer;
@@ -131,53 +135,69 @@ class MobileScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     ResponsiveInfo responsive = ResponsiveInfo(context);
-    return SliverScaffold(
+    return Scaffold(
       drawer: drawer,
-      sliverAppBar: appBar,
+      appBar: appBar,
+      resizeToAvoidBottomInset: true,
+      //isScrollView: false,
       //extendedBody: extendedBody,
-      body: Column(
-        children: [
-          Expanded(
-              child: Container(
-                  //height: 10,
-                  width: double.infinity,
-                  color: theme.primaryColor,
-                  child: ClipRRect(
-                    child: Container(
-                        // height: double.infinity,
-                        width: double.infinity,
-                        color: theme.scaffoldBackgroundColor,
-                        child: Column(
-                          children: [
-                            Container(
-                                child: StreamBuilder<bool>(
-                                    initialData: false,
-                                    stream: DataProcessingNotifier().stream,
-                                    builder: (context, snapshot) {
-                                      return snapshot.data!
-                                          ? LinearProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                      Colors.red),
-                                            )
-                                          : Container(
-                                              width: double.infinity,
-                                              color: theme
-                                                  .scaffoldBackgroundColor);
-                                    }),
-                                width: responsive.size.width - 0, //120,
-                                height: 2),
-                            if (extendedBar != null) extendedBar!,
-                            Expanded(child: body),
-                          ],
-                        )),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    ),
-                  ))),
-          //Expanded(child: body),
-        ],
+      body: SingleChildScrollView(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            Container(
+                //      height: kMinInteractiveDimension,
+                //width: double.infinity,
+                color: theme.primaryColor,
+                child: ClipRRect(
+                  child: Container(
+                      // height: double.infinity,
+                      width: double.infinity,
+                      color: theme.scaffoldBackgroundColor,
+                      child: Column(
+                        children: [
+                          Container(
+                              child: StreamBuilder<bool>(
+                                  initialData: false,
+                                  stream: DataProcessingNotifier().stream,
+                                  builder: (context, snapshot) {
+                                    return snapshot.data!
+                                        ? LinearProgressIndicator(
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    Colors.red),
+                                          )
+                                        : Container(
+                                            width: double.infinity,
+                                            color:
+                                                theme.scaffoldBackgroundColor);
+                                  }),
+                              width: responsive.size.width - 0, //120,
+                              height: 2),
+                          if (extendedBar != null) extendedBar!,
+                          Container(
+                              height: responsive.size.height -
+                                  (bottomNavigationBar != null
+                                      ? kBottomNavigationBarHeight
+                                      : 0.0) -
+                                  (appBar != null ? kToolbarHeight : 0.0),
+                              child: body),
+                          /* Expanded(
+                            child:
+                                /* (scrolling)
+                                ? SingleChildScrollView(child: body)
+                                :*/
+                                body),*/
+                        ],
+                      )),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(25),
+                    topRight: Radius.circular(25),
+                  ),
+                )),
+            //Expanded(child: body),
+          ],
+        ),
       ),
       bottomNavigationBar: bottomNavigationBar,
     );

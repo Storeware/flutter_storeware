@@ -13,6 +13,7 @@ class DataViewerCards extends StatelessWidget {
   final double padding;
   final int? rowsPerPage;
   final Widget Function()? noDataBuilder;
+  final Widget? placeHolder;
   DataViewerCards({
     Key? key,
     this.itemWidth = 200,
@@ -22,6 +23,7 @@ class DataViewerCards extends StatelessWidget {
     this.footer,
     this.rowsPerPage,
     this.noDataBuilder,
+    this.placeHolder,
     this.padding = 2.0,
   }) : super(key: key);
 
@@ -38,7 +40,7 @@ class DataViewerCards extends StatelessWidget {
           future: controller.future!(),
           builder: (context, snapshot) {
             return (!snapshot.hasData)
-                ? Center(child: CircularProgressIndicator())
+                ? Center(child: placeHolder ?? CircularProgressIndicator())
                 : Container(
                     child: ListView(
                     children: [

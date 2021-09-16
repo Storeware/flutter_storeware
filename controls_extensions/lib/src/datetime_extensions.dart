@@ -112,7 +112,7 @@ extension DateTimeExtension on DateTime {
   }
 
   DateTime endOfDay() {
-    return DateTime(this.year, this.month, this.day, 23, 59, 00);
+    return DateTime(this.year, this.month, this.day, 23, 59, 59);
   }
 
   ///  Obtem o primeiro dia da semana {first indica o primeiro dia da semana}

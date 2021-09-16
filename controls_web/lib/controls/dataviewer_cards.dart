@@ -34,34 +34,41 @@ class DataViewerCards extends StatelessWidget {
     if (nCols < 1) nCols = 1;
     int _rowsPerPage = rowsPerPage ?? controller.top ?? 0;
 
-    return Padding(
-      padding: EdgeInsets.all(padding),
-      child: FutureBuilder<List>(
-          future: controller.future!(),
-          builder: (context, snapshot) {
-            return (!snapshot.hasData)
-                ? Center(child: placeHolder ?? CircularProgressIndicator())
-                : Container(
-                    child: ListView(
-                    children: [
-                      Wrap(children: [
-                        if (header != null) header!,
-                        if (snapshot.hasData && snapshot.data!.length == 0)
-                          (noDataBuilder == null)
-                              ? Align(child: Text('Sem dados para mostrar'))
-                              : noDataBuilder!(),
-                        for (var item in snapshot.data ?? [])
-                          itemBuilder(context, item),
-                        paginarWidget(
-                            context,
-                            ((controller.page > 1) ||
-                                (snapshot.data!.length >= _rowsPerPage))),
-                      ]),
-                      if (footer != null) footer!,
-                    ],
-                  ));
-          }),
-    );
+    return StreamBuilder<int>(
+        initialData: 0,
+        stream: controller.subscribeChanges.stream,
+        builder: (a, b) => Padding(
+              padding: EdgeInsets.all(padding),
+              child: FutureBuilder<List>(
+                  future: controller.future!(),
+                  builder: (context, snapshot) {
+                    return (!snapshot.hasData)
+                        ? Center(
+                            child: placeHolder ?? CircularProgressIndicator())
+                        : Container(
+                            child: ListView(
+                            children: [
+                              Wrap(children: [
+                                if (header != null) header!,
+                                if (snapshot.hasData &&
+                                    snapshot.data!.length == 0)
+                                  (noDataBuilder == null)
+                                      ? Align(
+                                          child: Text('Sem dados para mostrar'))
+                                      : noDataBuilder!(),
+                                for (var item in snapshot.data ?? [])
+                                  itemBuilder(context, item),
+                                paginarWidget(
+                                    context,
+                                    ((controller.page > 1) ||
+                                        (snapshot.data!.length >=
+                                            _rowsPerPage))),
+                              ]),
+                              if (footer != null) footer!,
+                            ],
+                          ));
+                  }),
+            ));
   }
 
   paginarWidget(context, show) {

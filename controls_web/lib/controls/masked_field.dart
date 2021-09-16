@@ -443,8 +443,8 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
                     onTap: (widget.readOnly!)
                         ? null
                         : () {
-                            _dataController!.text =
-                                formatter!.format(widget.initialValue!);
+                            _dataController!.text = formatter!
+                                .format(widget.initialValue ?? DateTime.now());
                           })),
             validator: (x) {
               DateTime d = formatter!.parse(x!);

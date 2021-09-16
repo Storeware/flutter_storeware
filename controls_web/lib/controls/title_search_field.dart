@@ -82,6 +82,8 @@ class _TitleSearchFieldState extends State<TitleSearchField> {
                         editing.value = x;
                       },
                       child: TextFormField(
+                        enableSuggestions: true,
+                        textInputAction: TextInputAction.done,
                         controller: _textoController,
                         decoration: InputDecoration(
                             filled: b && widget.fillColor != null,
@@ -128,6 +130,10 @@ class _TitleSearchFieldState extends State<TitleSearchField> {
                         //focusNode: focusNode,
                         onChanged: (x) {
                           if (widget.onChanged != null) widget.onChanged!(x);
+                        },
+                        onFieldSubmitted:(x){
+                          if (widget.onSearchPressed != null)
+                            widget.onSearchPressed!(x);
                         },
                         onSaved: (x) {
                           if (widget.onSearchPressed != null)

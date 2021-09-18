@@ -6,7 +6,7 @@ import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:universal_io/io.dart';
-import 'config/config.dart';
+import 'settings/config.dart';
 import 'login_background.dart';
 
 class LoggedView extends StatefulWidget {

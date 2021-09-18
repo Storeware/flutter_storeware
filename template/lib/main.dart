@@ -1,4 +1,4 @@
-// @ dart=2.12
+// @dart=2.9
 import 'package:comum/services/config_service.dart';
 import 'package:controls_web/controls/injects.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'main_view.dart';
 import 'package:universal_io/io.dart';
-import 'config/config.dart';
+import 'settings/config.dart';
 import 'main_js.dart' if (dart.library.io) 'main_io.dart';
 
 void main() {

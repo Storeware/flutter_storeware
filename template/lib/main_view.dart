@@ -1,10 +1,10 @@
 // @dart=2.12
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:gestor/config/config.dart';
-import 'package:gestor/injects_build.dart';
-import 'package:gestor/routing.dart';
-import 'package:gestor/theming.dart';
+import 'settings/config.dart';
+import 'injects_build.dart';
+import 'routing.dart';
+import 'theming.dart';
 import 'package:get/get.dart';
 import 'package:console/config/config.dart' as cc;
 import 'package:controls_web/themes/themes.dart';

@@ -3,7 +3,7 @@ import 'package:controls_web/services/routes.dart';
 import 'package:flutter/material.dart';
 import './views/home/home_view.dart';
 import 'logged_view.dart';
-import 'config/config.dart';
+import 'settings/config.dart';
 
 class RoutesApp {
   static final _singleton = RoutesApp._create();

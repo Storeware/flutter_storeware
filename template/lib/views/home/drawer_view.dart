@@ -1,9 +1,9 @@
 // @dart=2.12
 import 'package:controls_web/controls.dart';
 import 'package:flutter/material.dart';
-import 'package:gestor/views/home/home_navigator.dart' as hm;
+import '/views/home/home_navigator.dart' as hm;
 import 'package:get/get.dart';
-import '../../config/config.dart';
+import '/settings/config.dart';
 import 'package:console/views/opcoes/opcoes_choices.dart';
 
 class DrawerView extends StatelessWidget {

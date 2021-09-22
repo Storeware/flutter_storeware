@@ -4,20 +4,25 @@ import 'package:controls_web/controls.dart';
 import 'package:get/get.dart';
 import 'package:controls_data/data.dart';
 
+extension ColorGreyScale on Color {
+  isLigth() => (red * 0.299 + green * 0.587 + blue * 0.114) > 186.0;
+}
+
 class MobileMenuBox extends StatelessWidget {
-  const MobileMenuBox(
-      {Key? key,
-      this.bottomNavigationBar,
-      this.actions,
-      required this.choices,
-      this.extendBody = false,
-      this.appBar,
-      this.elevation = 0,
-      this.buttonWidth = 200,
-      this.childBottomNavigatorBar,
-      this.automaticallyImplyLeading = true,
-      this.drawer})
-      : super(key: key);
+  const MobileMenuBox({
+    Key? key,
+    this.bottomNavigationBar,
+    this.actions,
+    required this.choices,
+    this.extendBody = false,
+    this.appBar,
+    this.elevation = 0,
+    this.buttonWidth = 200,
+    this.childBottomNavigatorBar,
+    this.automaticallyImplyLeading = true,
+    this.drawer,
+    this.style,
+  }) : super(key: key);
   final AppBar? appBar;
   final List<TabChoice> choices;
   final List<Widget>? actions;
@@ -28,6 +33,7 @@ class MobileMenuBox extends StatelessWidget {
   final double elevation;
   final double buttonWidth;
   final bool automaticallyImplyLeading;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +41,7 @@ class MobileMenuBox extends StatelessWidget {
     ResponsiveInfo responsive = ResponsiveInfo(context);
     int nCols = responsive.size.width ~/ buttonWidth;
     if (nCols < 2) nCols = 2;
+    int index = 0;
 
     return MobileScaffold(
       appBar: appBar,
@@ -44,67 +51,76 @@ class MobileMenuBox extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: GridView.count(crossAxisCount: nCols, children: [
           for (var item in choices)
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Card(
-                color: item.color,
-                child: InkButton(
-                  onTap: () {
-                    Get.to(
-                      () => (item.primary)
-                          ? Scaffold(
-                              body: item.builder!(),
-                              bottomNavigationBar: childBottomNavigatorBar,
-                            )
-                          : MobileScaffold(
-                              appBar: (item.primary)
-                                  ? null
-                                  : AppBar(
-                                      elevation: elevation,
-                                      automaticallyImplyLeading:
-                                          automaticallyImplyLeading,
-                                      title: Text(item.label!),
-                                      actions: (item.items != null)
-                                          ? [
-                                              for (var sb in item.items ?? [])
-                                                InkWell(
-                                                    child: sb.image,
-                                                    onTap: () {
-                                                      sb.onPressed!();
-                                                    })
-                                            ]
-                                          : null,
-                                    ),
-                              body: item.builder!(),
-                              bottomNavigationBar: childBottomNavigatorBar,
-                            ),
-                    );
-                  },
-                  child: Container(
-                      color: item.color,
-                      child: Column(children: [
-                        SizedBox(height: 10),
-                        Expanded(
-                            child: (item.image != null)
-                                ? FittedBox(
-                                    child: Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: item.image,
-                                  ))
-                                : Container()),
-                        FittedBox(
-                            child: Text(item.label ?? '',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18))),
-                        SizedBox(
-                          height: 20,
-                        ),
-                      ])),
+            Builder(builder: (x) {
+              index++;
+              Color? color = item.color ?? genColor(index);
+
+              TextStyle? textStyle = style ??
+                  item.style ??
+                  TextStyle(
+                      color: color.isDark ? Colors.white : Colors.black87,
+                      fontSize: 18);
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Card(
+                  color: color,
+                  child: InkButton(
+                    onTap: () {
+                      Get.to(
+                        () => (item.primary)
+                            ? Scaffold(
+                                body: item.builder!(),
+                                bottomNavigationBar: childBottomNavigatorBar,
+                              )
+                            : MobileScaffold(
+                                appBar: (item.primary)
+                                    ? null
+                                    : AppBar(
+                                        elevation: elevation,
+                                        automaticallyImplyLeading:
+                                            automaticallyImplyLeading,
+                                        title: Text(item.label!),
+                                        actions: (item.items != null)
+                                            ? [
+                                                for (var sb in item.items ?? [])
+                                                  InkWell(
+                                                      child: sb.image,
+                                                      onTap: () {
+                                                        sb.onPressed!();
+                                                      })
+                                              ]
+                                            : null,
+                                      ),
+                                body: item.builder!(),
+                                bottomNavigationBar: childBottomNavigatorBar,
+                              ),
+                      );
+                    },
+                    child: Container(
+                        color: color,
+                        child: Column(children: [
+                          SizedBox(height: 10),
+                          Expanded(
+                              child: (item.image != null)
+                                  ? FittedBox(
+                                      child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: item.image,
+                                    ))
+                                  : Container()),
+                          FittedBox(
+                              child: Text(item.label ?? '',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: textStyle)),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ])),
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
         ]),
       ),
       bottomNavigationBar: bottomNavigationBar,

@@ -12,6 +12,7 @@ class MobileMenuBox extends StatelessWidget {
       required this.choices,
       this.extendBody = false,
       this.appBar,
+      this.elevation = 0,
       this.buttonWidth = 200,
       this.childBottomNavigatorBar,
       this.automaticallyImplyLeading = true,
@@ -24,6 +25,7 @@ class MobileMenuBox extends StatelessWidget {
   final Widget? childBottomNavigatorBar;
   final bool extendBody;
   final Widget? drawer;
+  final double elevation;
   final double buttonWidth;
   final bool automaticallyImplyLeading;
 
@@ -58,7 +60,7 @@ class MobileMenuBox extends StatelessWidget {
                               appBar: (item.primary)
                                   ? null
                                   : AppBar(
-                                      elevation: 0,
+                                      elevation: elevation,
                                       automaticallyImplyLeading:
                                           automaticallyImplyLeading,
                                       title: Text(item.label!),

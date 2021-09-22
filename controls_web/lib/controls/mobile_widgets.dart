@@ -8,6 +8,27 @@ extension ColorGreyScale on Color {
   isLigth() => (red * 0.299 + green * 0.587 + blue * 0.114) > 186.0;
 }
 
+class MobileToolbar extends StatelessWidget {
+  final Widget toolbar;
+  final Widget Function(BuildContext context, Widget toolbar) builder;
+
+  MobileToolbar({Key? key, required this.toolbar, required this.builder})
+      : super(key: key);
+
+  static MobileToolbar? of(BuildContext context) =>
+      context.findAncestorWidgetOfExactType<MobileToolbar>();
+  static Widget? consumer(BuildContext context) {
+    var rt = MobileToolbar.of(context);
+    if (rt != null) return rt.toolbar;
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return builder(context, toolbar);
+  }
+}
+
 class MobileMenuBox extends StatelessWidget {
   const MobileMenuBox({
     Key? key,
@@ -70,7 +91,8 @@ class MobileMenuBox extends StatelessWidget {
                         () => (item.primary)
                             ? Scaffold(
                                 body: item.builder!(),
-                                bottomNavigationBar: childBottomNavigatorBar,
+                                bottomNavigationBar: childBottomNavigatorBar ??
+                                    MobileToolbar.consumer(context),
                               )
                             : MobileScaffold(
                                 appBar: (item.primary)
@@ -92,7 +114,8 @@ class MobileMenuBox extends StatelessWidget {
                                             : null,
                                       ),
                                 body: item.builder!(),
-                                bottomNavigationBar: childBottomNavigatorBar,
+                                bottomNavigationBar: childBottomNavigatorBar ??
+                                    MobileToolbar.consumer(context),
                               ),
                       );
                     },
@@ -217,7 +240,8 @@ class MobileScaffold extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: bottomNavigationBar,
+      bottomNavigationBar:
+          bottomNavigationBar ?? MobileToolbar.consumer(context),
     );
   }
 }
@@ -228,10 +252,16 @@ class MobileBottonNavigatorButton extends StatefulWidget {
     required this.choices,
     this.selected = 0,
     this.hideSelected = false,
+    this.borderRadius,
+    this.radius = 30,
+    this.height = kToolbarHeight,
   }) : super(key: key);
   final List<TabChoice> choices;
   final int selected;
   final bool hideSelected;
+  final BorderRadius? borderRadius;
+  final double radius;
+  final double height;
 
   @override
   _MobileBottonNavigatorButtonState createState() =>
@@ -253,29 +283,35 @@ class _MobileBottonNavigatorButtonState
     var theme = Theme.of(context);
     return Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(30), topLeft: Radius.circular(30)),
+          borderRadius: widget.borderRadius ??
+              BorderRadius.only(
+                  topRight: Radius.circular(widget.radius),
+                  topLeft: Radius.circular(widget.radius)),
           boxShadow: [
-            BoxShadow(color: Colors.black38, spreadRadius: 0, blurRadius: 10),
+            BoxShadow(
+                color: Colors.black38,
+                spreadRadius: 0,
+                blurRadius: widget.radius / 3),
           ],
         ),
         child: ClipRRect(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
+            borderRadius: widget.borderRadius ??
+                BorderRadius.only(
+                  topLeft: Radius.circular(widget.radius),
+                  topRight: Radius.circular(widget.radius),
+                ),
             child: ValueListenableBuilder<int>(
               valueListenable: index!,
               builder: (a, b, c) => Container(
                   color: Colors.white,
-                  height: 55,
+                  height: widget.height,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       for (int i = 0; i < widget.choices.length; i++)
                         Container(
-                          height: 55,
-                          width: 55,
+                          height: widget.height,
+                          width: widget.height,
                           child: InkWell(
                               child: Column(
                                   mainAxisSize: MainAxisSize.min,

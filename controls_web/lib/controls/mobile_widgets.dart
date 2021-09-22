@@ -43,6 +43,7 @@ class MobileMenuBox extends StatelessWidget {
     this.automaticallyImplyLeading = true,
     this.drawer,
     this.style,
+    this.shape,
   }) : super(key: key);
   final AppBar? appBar;
   final List<TabChoice> choices;
@@ -55,6 +56,7 @@ class MobileMenuBox extends StatelessWidget {
   final double buttonWidth;
   final bool automaticallyImplyLeading;
   final TextStyle? style;
+  final ShapeBorder? shape;
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +86,7 @@ class MobileMenuBox extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
+                  shape: shape,
                   color: color,
                   child: InkButton(
                     onTap: () {
@@ -119,8 +122,11 @@ class MobileMenuBox extends StatelessWidget {
                               ),
                       );
                     },
-                    child: Container(
+                    child: Card(
                         color: color,
+                        shape: shape,
+                        semanticContainer: true,
+                        elevation: 0.0,
                         child: Column(children: [
                           SizedBox(height: 10),
                           Expanded(

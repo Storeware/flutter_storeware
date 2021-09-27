@@ -5,12 +5,19 @@ version: 2021.09.27
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
+
+
 dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.2
   controls_image:
      path: ../
+  image_editor: 
+  extended_image: ^5.1.0 
+  photofilters: 
+  #  git:
+  #    url: https://github.com/zeeshux7860/ImageEditorPro.git   
 
 dev_dependencies:
   flutter_test:

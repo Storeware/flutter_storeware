@@ -88,36 +88,36 @@ packages:
   control_data_platform_android:
     dependency: transitive
     description:
-      path: "controls_data\\control_data_platform_android"
+      path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: bae3125d58233b7bba7e05eb629c7db5e107abec
+      resolved-ref: b2c12090857041ed2ff33153c96f2391fdb77e49
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.06.22"
   control_data_platform_interface:
     dependency: transitive
     description:
-      path: "controls_data\\control_data_platform_interface"
+      path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: bae3125d58233b7bba7e05eb629c7db5e107abec
+      resolved-ref: b2c12090857041ed2ff33153c96f2391fdb77e49
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.17"
   control_data_platform_web:
     dependency: transitive
     description:
-      path: "controls_data\\control_data_platform_web"
+      path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: bae3125d58233b7bba7e05eb629c7db5e107abec
+      resolved-ref: b2c12090857041ed2ff33153c96f2391fdb77e49
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.06.16"
   control_data_platform_windows:
     dependency: transitive
     description:
-      path: "controls_data\\control_data_platform_windows"
+      path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: bae3125d58233b7bba7e05eb629c7db5e107abec
+      resolved-ref: b2c12090857041ed2ff33153c96f2391fdb77e49
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.17"

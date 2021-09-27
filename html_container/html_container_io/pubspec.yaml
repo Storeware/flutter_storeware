@@ -1,8 +1,6 @@
 name: html_container_io
 description: A new Flutter package project.
-version: 2021.03.16
-author:
-homepage: www
+version: 2021.09.27
 publish_to: none
 
 environment:

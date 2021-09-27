@@ -1,7 +1,6 @@
 name: controls_image
 description: A new Flutter package project.
-version: 2021.03.14
-author:
+version: 2021.09.27
 homepage: https://tireideletra.com.br
 publish_to: none
 
@@ -24,7 +23,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  universal_io: ^2.0.1  
+  universal_io: any 
+  image_picker: any 
   controls_image_web:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

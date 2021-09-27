@@ -1,8 +1,6 @@
 name: controls_firebase_platform_web
 description: A new Flutter package project.
-version: 2021.06.16
-author: Amarildo Lacerda
-homepage: https://tireideletra.com.br
+version: 2021.09.27
 publish_to: none
 
 environment:
@@ -16,14 +14,14 @@ dependencies:
   #html:
 
 
-  firebase: ^9.0.0
-  firebase_auth: ^1.0.1
-  google_sign_in: ^5.0.0
-  firebase_core: ^1.0.1
+  firebase: any
+  firebase_auth: any
+  google_sign_in: any
+  firebase_core: any
   #firebase_web:
-  firebase_storage: ^8.0.0
-  cloud_firestore: ^1.0.1
-  flutter_cache_manager: ^3.0.0-nullsafety.1
+  firebase_storage: any
+  cloud_firestore: any
+  flutter_cache_manager: any
   controls_firebase_platform_interface:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

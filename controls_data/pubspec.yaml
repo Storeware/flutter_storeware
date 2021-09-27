@@ -1,8 +1,6 @@
 name: controls_data
 description: A new Flutter package project.
-version: 2021.08.09
-author:
-homepage: https://tireideletra.com.br
+version: 2021.09.27
 publish_to: none
 
 environment:
@@ -30,14 +28,14 @@ dependencies:
   #universal_html:
   #http:
   
-  dio: ^4.0.0-prev1
+  dio: any
   connectivity: #^3.0.2
   uuid: #^3.0.1
-  universal_platform: ^1.0.0-nullsafety
-  universal_io: ^2.0.1
-  flutter_cache_manager: ^3.0.0-nullsafety.1
-  pdf: ^3.0.1
-  printing: ^5.0.3
+  universal_platform: any
+  universal_io: any
+  flutter_cache_manager: any
+  pdf: any
+  printing: any
   date_format: #^2.0.2
 
   control_data_platform_web:

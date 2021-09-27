@@ -1,8 +1,6 @@
 name: control_data_platform_windows
 description: A new Flutter package project.
-version: 2021.03.17
-author: Amarildo Lacerda
-homepage: https://tireideletra.com.br
+version: 2021.09.27
 publish_to: none
 
 environment:

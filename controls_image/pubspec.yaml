@@ -25,6 +25,9 @@ dependencies:
 
   universal_io: any 
   image_picker: any 
+  extended_image: any
+  photofilters: any
+  image_editor: any
   controls_image_web:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

@@ -15,9 +15,9 @@ dependencies:
   universal_io: any
 
   controls_image_interface:
-    #git:
-      #url: https://github.com/amarildolacerda/flutter_dart.git
-      path: ../controls_image_interface
+    git:
+      url: https://github.com/amarildolacerda/flutter_dart.git
+      path: controls_image/controls_image_interface
 
 dev_dependencies:
   flutter_test:

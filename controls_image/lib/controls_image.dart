@@ -20,7 +20,7 @@ class ImagePicker extends ControlsImage {
   }
 
   /// [crop] corta a image dentro do retangula indicado
-  static Future<Uint8List?> crop(context, Uint8List image,
+  static Future<Uint8List?> crop(Uint8List image,
       {double rotateAngle = 0.0,
       required Rect rect,
       EditActionDetails? action,

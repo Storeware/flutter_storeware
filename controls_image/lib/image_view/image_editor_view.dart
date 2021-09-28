@@ -140,11 +140,11 @@ class _ImageEditorViewState extends State<ImageEditorView> {
                       valueListenable: imageSize,
                       builder:
                           (BuildContext context, Size value, Widget? child) {
-                        return Row(children: [
-                          Text('${value.width}'),
-                          Text(' x '),
-                          Text('${value.height}'),
-                        ]);
+                        return Text('${value.width} x ${value.height}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w200,
+                            ));
                       }),
                 ])),
               ],
@@ -600,25 +600,3 @@ class _ImageFiltersWidgetState extends State<ImageFiltersWidget> {
     );
   }
 }
-/*
-class AspectRatioItem {
-  final String text;
-  final double value;
-  AspectRatioItem({this.text, this.value});
-}
-
-class AspectRatioWidget extends StatelessWidget {
-  final double aspectRatio; //: item.value,
-  final String aspectRatioS; //: item.text,
-  final bool isSelected; //: item == _aspectRatio,
-
-  const AspectRatioWidget(
-      {Key key, this.aspectRatio, this.aspectRatioS, this.isSelected})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(child: Text(aspectRatioS));
-  }
-}
-*/

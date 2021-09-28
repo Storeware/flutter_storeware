@@ -19,11 +19,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ImageEditorView(
-        onSelected:(bytes){
+      home: ImageEditorView(
+        onSelected: (Uint8List bytes) {
+          // ignore: avoid_print
           print(bytes);
-        }
-
+        },
         useFilter: true,
       ),
     );

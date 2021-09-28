@@ -7,7 +7,7 @@ import 'dart:typed_data';
 class ControlsImage extends ControlsImageInterface {
   @override
   Future<Uint8List?> pickFromGallary({int? imageQuality}) async {
-    var f = await ImagePicker().getImage(
+    PickedFile? f = await ImagePicker().getImage(
       source: ImageSource.gallery,
       imageQuality: imageQuality ?? 60,
     );
@@ -17,7 +17,7 @@ class ControlsImage extends ControlsImageInterface {
 
   @override
   Future<Uint8List?> pickFromCamera({int? imageQuality}) async {
-    var f = await ImagePicker().getImage(
+    PickedFile? f = await ImagePicker().getImage(
       source: ImageSource.camera,
       imageQuality: imageQuality ?? 60,
     );

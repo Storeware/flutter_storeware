@@ -25,6 +25,7 @@ class ImageEditorView extends StatefulWidget {
   final String? filename;
   final Uint8List? rawPath;
   final bool useFilter;
+  final bool canResize;
   const ImageEditorView(
       {Key? key,
       this.titulo,
@@ -32,6 +33,7 @@ class ImageEditorView extends StatefulWidget {
       this.height = 300,
       this.rawPath,
       this.useFilter = false,
+      this.canResize = false,
       this.filename,
       this.onSelected})
       : super(key: key);
@@ -114,38 +116,40 @@ class _ImageEditorViewState extends State<ImageEditorView> {
                 ),
                 Expanded(
                     child: Column(children: [
-                  ValueListenableBuilder<double>(
-                    valueListenable: sliderValue,
-                    builder:
-                        (BuildContext context, double value, Widget? child) {
-                      return Container(
-                        height: 20,
-                        child: Slider(
-                            min: 1,
-                            max: 9,
-                            label: '${percentagem()}%',
-                            activeColor: Colors.blue,
-                            inactiveColor: Colors.blue,
-                            value: value,
-                            divisions: 8,
-                            onChangeEnd: (x) {
-                              resize(x);
-                            },
-                            onChanged: (x) {}),
-                      );
-                    },
-                  ),
-                  buildAspectRatios(),
-                  ValueListenableBuilder<Size>(
-                      valueListenable: imageSize,
+                  if (widget.canResize)
+                    ValueListenableBuilder<double>(
+                      valueListenable: sliderValue,
                       builder:
-                          (BuildContext context, Size value, Widget? child) {
-                        return Text('${value.width} x ${value.height}',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.w200,
-                            ));
-                      }),
+                          (BuildContext context, double value, Widget? child) {
+                        return Container(
+                          height: 20,
+                          child: Slider(
+                              min: 1,
+                              max: 9,
+                              label: '${percentagem()}%',
+                              activeColor: Colors.blue,
+                              inactiveColor: Colors.blue,
+                              value: value,
+                              divisions: 8,
+                              onChangeEnd: (x) {
+                                resize(x);
+                              },
+                              onChanged: (x) {}),
+                        );
+                      },
+                    ),
+                  buildAspectRatios(),
+                  if (widget.canResize)
+                    ValueListenableBuilder<Size>(
+                        valueListenable: imageSize,
+                        builder:
+                            (BuildContext context, Size value, Widget? child) {
+                          return Text('${value.width} x ${value.height}',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w200,
+                              ));
+                        }),
                 ])),
               ],
             ),

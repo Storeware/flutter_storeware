@@ -10,9 +10,10 @@ import 'package:image/image.dart' as imageLib;
 import 'package:image_editor/image_editor.dart';
 
 class ImagePicker extends ControlsImage {
-  static Future<Uint8List?> resize(imageLib.Image image, width, height) async {
+  static Future<Uint8List?> resize(Uint8List image, width, height) async {
+    imageLib.Image? img = imageLib.decodeImage(image);
     final imageLib.Image _xmg =
-        imageLib.copyResize(image, height: height, width: width);
+        imageLib.copyResize(img!, height: height, width: width);
     return Uint8List.fromList(imageLib.encodePng(_xmg));
   }
 

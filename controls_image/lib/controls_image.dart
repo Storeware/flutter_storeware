@@ -10,13 +10,16 @@ import 'package:image/image.dart' as imageLib;
 import 'package:image_editor/image_editor.dart';
 
 class ImagePicker extends ControlsImage {
-  static Future<Uint8List?> resize(Uint8List image, width, height) async {
+  /// [resize] redimensiona uma imagem
+  static Future<Uint8List?> resize(
+      Uint8List image, int width, int height) async {
     imageLib.Image? img = imageLib.decodeImage(image);
     final imageLib.Image _xmg =
         imageLib.copyResize(img!, height: height, width: width);
     return Uint8List.fromList(imageLib.encodePng(_xmg));
   }
 
+  /// [crop] corta a image dentro do retangula indicado
   static Future<Uint8List?> crop(context, Uint8List image,
       {double rotateAngle = 0.0,
       required Rect rect,
@@ -43,19 +46,20 @@ class ImagePicker extends ControlsImage {
     return result;
   }
 
+  /// [factorResize] calcula fator de resize da imagem
   static Future<ImageFactorResize> factorResize(
-      Uint8List image, double widthTo) async {
+      Uint8List image, int widthTo) async {
     return decodeImageFromList(image).then((_img) {
-      double w = (_img.width) + 0.0;
+      int w = (_img.width);
       double p = widthTo / w;
-      return ImageFactorResize(factor: p, x: w, y: _img.height + 0.0);
+      return ImageFactorResize(factor: p, x: w, y: _img.height);
     });
   }
 }
 
 class ImageFactorResize {
-  double? x;
-  double? y;
+  int? x;
+  int? y;
   double? factor;
   ImageFactorResize({this.x, this.y, this.factor});
 }

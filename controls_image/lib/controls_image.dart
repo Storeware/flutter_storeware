@@ -43,10 +43,19 @@ class ImagePicker extends ControlsImage {
     return result;
   }
 
-  static double factorResize(Uint8List image, double widthTo) {
-    imageLib.Image? _img = imageLib.decodeImage(image);
-    var w = _img?.width ?? widthTo;
-    var p = widthTo / w;
-    return p;
+  static Future<ImageFactorResize> factorResize(
+      Uint8List image, double widthTo) async {
+    return decodeImageFromList(image).then((_img) {
+      double w = (_img.width) + 0.0;
+      double p = widthTo / w;
+      return ImageFactorResize(factor: p, x: w, y: _img.height + 0.0);
+    });
   }
+}
+
+class ImageFactorResize {
+  double? x;
+  double? y;
+  double? factor;
+  ImageFactorResize({this.x, this.y, this.factor});
 }

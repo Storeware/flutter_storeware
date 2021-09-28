@@ -20,6 +20,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: const ImageEditorView(
+        onSelected:(bytes){
+          print(bytes);
+        }
+
         useFilter: true,
       ),
     );

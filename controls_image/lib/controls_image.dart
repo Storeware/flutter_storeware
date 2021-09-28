@@ -42,4 +42,11 @@ class ImagePicker extends ControlsImage {
     );
     return result;
   }
+
+  double factorResize(Uint8List image, double widthTo) {
+    imageLib.Image? _img = imageLib.decodeImage(image);
+    var w = _img?.width ?? widthTo;
+    var p = widthTo / w;
+    return p;
+  }
 }

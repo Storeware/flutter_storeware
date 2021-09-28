@@ -6,8 +6,6 @@ import 'package:controls_image/image_view/image_editor_view.dart';
 
 void main() {
   runApp(const MyApp());
-  runApp(const MyApp());
-  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-         primarySwatch: Colors.blue,
+        primarySwatch: Colors.blue,
       ),
       home: const ImageEditorView(
         useFilter: true,

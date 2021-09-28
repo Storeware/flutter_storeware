@@ -2,6 +2,7 @@ import 'dart:async';
 //import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:controls_web/controls.dart';
 import 'package:controls_image/controls_image.dart';
 import 'package:extended_image/extended_image.dart';
@@ -53,8 +54,8 @@ class _ImageEditorViewState extends State<ImageEditorView> {
     super.initState();
     if (widget.rawPath != null) {
       //print(['passou a imagem']);
-      _file = widget.rawPath!;
-      File file = File.fromRawPath(_file!);
+      _fileOriginal = widget.rawPath!;
+      File file = File.fromRawPath(_fileOriginal!);
       provider = ExtendedFileImageProvider(file);
     }
     getPath(name: 'filters').then((x) {
@@ -63,10 +64,12 @@ class _ImageEditorViewState extends State<ImageEditorView> {
   }
 
   final sz = 28.0;
-  Uint8List? _file;
+  Uint8List? _fileOriginal;
   bool originalFile = false;
+  Size? size;
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     return ScaffoldLight(
       appBar: appBarLight(title: const Text('Imagem'), actions: [
         IconButton(
@@ -105,32 +108,45 @@ class _ImageEditorViewState extends State<ImageEditorView> {
               children: <Widget>[
                 Text(widget.titulo ?? '',
                     style: const TextStyle(color: Colors.black87)),
-                const SizedBox(
-                  height: 5,
-                ),
-                /*Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [],
-                ),*/
                 AspectRatio(
                   aspectRatio: 1,
                   child: buildImage(),
                 ),
-                const Expanded(
-                  child: SizedBox(
-                    height: 10,
+                Expanded(
+                    child: Column(children: [
+                  ValueListenableBuilder<double>(
+                    valueListenable: sliderValue,
+                    builder:
+                        (BuildContext context, double value, Widget? child) {
+                      return Container(
+                        height: 20,
+                        child: Slider(
+                            min: 1,
+                            max: 9,
+                            label: '${percentagem()}%',
+                            activeColor: Colors.blue,
+                            inactiveColor: Colors.blue,
+                            value: value,
+                            divisions: 8,
+                            onChangeEnd: (x) {
+                              resize(x);
+                            },
+                            onChanged: (x) {}),
+                      );
+                    },
                   ),
-                ),
-                //if (selected)
-                //  FlatButton(
-                //    child: Text('OK, ficou bom'),
-                //    onPressed: () {
-                //      if (widget.onSelected != null) widget.onSelected(_file);
-                //     Navigator.pop(context);
-                //   },
-                // ),
-                Expanded(child: buildAspectRatios()),
+                  buildAspectRatios(),
+                  ValueListenableBuilder<Size>(
+                      valueListenable: imageSize,
+                      builder:
+                          (BuildContext context, Size value, Widget? child) {
+                        return Row(children: [
+                          Text('${value.width}'),
+                          Text(' x '),
+                          Text('${value.height}'),
+                        ]);
+                      }),
+                ])),
               ],
             ),
           ),
@@ -140,6 +156,26 @@ class _ImageEditorViewState extends State<ImageEditorView> {
       bottomNavigationBar: _buildFunctions(),
     );
   }
+
+  double percentagem() {
+    return [
+      -100.0,
+      -80.0,
+      -60.0,
+      -40.0,
+      -20.0,
+      00.0,
+      20.0,
+      40.0,
+      60.0,
+      80.0,
+      100.0
+    ][(sliderValue.value) ~/ 1];
+  }
+
+  ValueNotifier<double> sliderValue = ValueNotifier(5);
+  double get width => 400.0; //(size?.width ?? 550) / 5 * 4;
+  double get height => 300.0; // (size?.height ?? 850) / 5 * 3;
 
   Widget buildImage() {
     if (provider == null) {
@@ -156,37 +192,40 @@ class _ImageEditorViewState extends State<ImageEditorView> {
     }
 
     if (originalFile) {
-      return ExtendedImage.memory(widget.rawPath!,
-          width: 400,
-          height: 300,
+      var img = ExtendedImage.memory(widget.rawPath!,
+          width: width,
+          height: height,
           extendedImageEditorKey: editorKey,
           mode: ExtendedImageMode.editor,
           fit: BoxFit.contain, initEditorConfigHandler: (state) {
         return EditorConfig(
           maxScale: 8.0,
-          cropRectPadding: const EdgeInsets.all(20.0),
+          cropRectPadding: const EdgeInsets.all(10.0),
           initCropRectType: InitCropRectType.imageRect,
           cropAspectRatio: _aspectRatio!.value,
         );
       });
+      return img;
     }
 
-    return ExtendedImage(
+    var img = ExtendedImage(
       image: provider!,
-      width: 400,
-      height: 300,
+      width: width,
+      height: height,
       extendedImageEditorKey: editorKey,
       mode: ExtendedImageMode.editor,
       fit: BoxFit.contain,
       initEditorConfigHandler: (state) {
         return EditorConfig(
           maxScale: 8.0,
-          cropRectPadding: const EdgeInsets.all(20.0),
+          cropRectPadding: const EdgeInsets.all(10.0),
           initCropRectType: InitCropRectType.imageRect,
           cropAspectRatio: _aspectRatio!.value,
         );
       },
     );
+
+    return img;
   }
 
   final List<AspectRatioItem> _aspectRatios = [
@@ -198,6 +237,30 @@ class _ImageEditorViewState extends State<ImageEditorView> {
     AspectRatioItem(text: "16*9", value: CropAspectRatios.ratio16_9),
     AspectRatioItem(text: "9*16", value: CropAspectRatios.ratio9_16)
   ];
+
+  resize(x) async {
+    sliderValue.value = x;
+
+    imageLib.Image? _img = imageLib.decodeImage(_fileOriginal!);
+
+    var h = _img!.height;
+    var w = _img.width;
+    var p = percentagem();
+    var f = 1 + (p / 100);
+
+    imageLib.Image _xmg =
+        imageLib.copyResize(_img, height: (h * f) ~/ 1, width: (w * f) ~/ 1);
+
+    imageSize.value = Size(_xmg.width + 0.0, _xmg.height + 0.0);
+
+    provider = ExtendedMemoryImageProvider(
+        Uint8List.fromList(imageLib.encodePng(_xmg)));
+    setState(() {
+      originalFile = false;
+    });
+  }
+
+  ValueNotifier<Size> imageSize = ValueNotifier(Size(0, 0));
 
   AspectRatioItem? _aspectRatio;
   Widget _buildFunctions() {
@@ -256,7 +319,7 @@ class _ImageEditorViewState extends State<ImageEditorView> {
   int _aspectRatioSelected = 0;
   buildAspectRatios() {
     return SizedBox(
-      height: 200.0,
+      height: 60.0,
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
@@ -345,7 +408,7 @@ class _ImageEditorViewState extends State<ImageEditorView> {
         Navigator.pop(context);
       }
     } else {
-      _file = result;
+      _fileOriginal = result;
       showPreviewDialog(result!, okPressed: (bytes) {
         if (widget.onSelected != null) {
           widget.onSelected!(bytes);
@@ -396,7 +459,7 @@ class _ImageEditorViewState extends State<ImageEditorView> {
   void _pick() async {
     final result = await ImagePicker().pickFromCamera(imageQuality: 75);
     if (result != null) {
-      //print(result!.absolute.path);
+      _fileOriginal = result;
       provider = ExtendedMemoryImageProvider(result);
       setState(() {
         originalFile = false;
@@ -407,8 +470,9 @@ class _ImageEditorViewState extends State<ImageEditorView> {
   void _gallery() async {
     final result = await ImagePicker().pickFromGallary(imageQuality: 75);
     if (result != null) {
-      //print(result.absolute.path);
+      _fileOriginal = result;
       provider = ExtendedMemoryImageProvider(result);
+
       setState(() {
         originalFile = false;
       });

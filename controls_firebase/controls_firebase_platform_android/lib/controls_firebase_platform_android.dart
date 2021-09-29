@@ -102,7 +102,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
       if (!x.exists) return null;
       //Map<String, dynamic> r = x.data();
       //r['id'] = x.documentID;
-      return {"id": x.id, ...x.data()!};
+      return {"id": x.id, ...x.data()! as Map<String, dynamic>};
     });
   }
 
@@ -128,7 +128,7 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     fb.Query rst = (where != null) ? where(ref) : ref;
     return rst.get().then((fb.QuerySnapshot doc) {
       return doc.docs.map((f) {
-        return {"id": f.id, if (f.exists) ...f.data()};
+        return {"id": f.id, if (f.exists) ...f.data() as Map<String, dynamic>};
       }).toList();
     });
   }

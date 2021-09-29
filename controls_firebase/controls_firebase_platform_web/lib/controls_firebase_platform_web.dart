@@ -83,9 +83,10 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
         .collection(collection)
         .doc(doc)
         .get()
-        .then((DocumentSnapshot x) {
+        .then((DocumentSnapshot<Map<String, dynamic>?> x) {
       if (!x.exists) return null;
-      return {"id": x.id, ...x.data()!};
+      var data = x.data()! as Map<String, dynamic>;
+      return {"id": x.id, if (x.exists) ...data};
     });
   }
 
@@ -111,9 +112,10 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
   getWhere(collection, Function(CollectionReference)? where) {
     CollectionReference ref = store.collection(collection);
     Query rst = (where != null) ? where(ref) : ref;
-    return rst.get().then((QuerySnapshot doc) {
+    return rst.get().then((doc) {
       return doc.docs.map((f) {
-        return {"id": f.id, if (f.exists) ...f.data()};
+        var data = f.data() as Map<String, dynamic>;
+        return {"id": f.id, if (f.exists) ...data};
       }).toList();
     });
   }

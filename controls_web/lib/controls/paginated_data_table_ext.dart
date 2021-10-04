@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -314,6 +315,8 @@ class PaginatedDataTableExtendedState
 
   final GlobalKey _tableKey = GlobalKey();
 
+  //final _scrollContoller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     // TODO(ianh): This whole build function doesn't handle RTL yet.
@@ -429,114 +432,132 @@ class PaginatedDataTableExtendedState
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Card(
-            elevation: widget.elevation,
-            semanticContainer: false,
-            color: widget.color,
-            child: Container(
-              padding: EdgeInsets.only(
-                  left: widget.horizontalMargin! / 2,
-                  right: widget.horizontalMargin! / 2),
-              child: Align(
-                  alignment: widget.alignment,
-                  child: Column(
-                    crossAxisAlignment: widget.crossAxisAlignment,
-                    children: <Widget>[
-                      Semantics(
-                        container: true,
-                        child: DefaultTextStyle(
-                          // These typographic styles aren't quite the regular ones. We pick the closest ones from the regular
-                          // list and then tweak them appropriately.
-                          // See https://material.io/design/components/data-tables.html#tables-within-cards
-                          style: _selectedRowCount! > 0
-                              ? themeData.textTheme.subtitle1!
-                                  .copyWith(color: themeData.accentColor)
-                              : themeData.textTheme.headline6!
-                                  .copyWith(fontWeight: FontWeight.w400),
-                          child: IconTheme.merge(
-                            data: const IconThemeData(opacity: 0.54),
-                            child: Ink(
-                              height: widget.headerHeight,
-                              color: _selectedRowCount! > 0
-                                  ? themeData.secondaryHeaderColor
-                                  : null,
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.only(
-                                    start: startPadding, end: 14.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: headerWidgets,
-                                ),
-                              ),
+          elevation: widget.elevation,
+          semanticContainer: false,
+          color: widget.color,
+          child: Container(
+            padding: EdgeInsets.only(
+                left: widget.horizontalMargin! / 2,
+                right: widget.horizontalMargin! / 2),
+            child: Align(
+              alignment: widget.alignment,
+              child: Column(
+                crossAxisAlignment: widget.crossAxisAlignment,
+                children: <Widget>[
+                  Semantics(
+                    container: true,
+                    child: DefaultTextStyle(
+                      // These typographic styles aren't quite the regular ones. We pick the closest ones from the regular
+                      // list and then tweak them appropriately.
+                      // See https://material.io/design/components/data-tables.html#tables-within-cards
+                      style: _selectedRowCount! > 0
+                          ? themeData.textTheme.subtitle1!
+                              .copyWith(color: themeData.accentColor)
+                          : themeData.textTheme.headline6!
+                              .copyWith(fontWeight: FontWeight.w400),
+                      child: IconTheme.merge(
+                        data: const IconThemeData(opacity: 0.54),
+                        child: Ink(
+                          height: widget.headerHeight,
+                          color: _selectedRowCount! > 0
+                              ? themeData.secondaryHeaderColor
+                              : null,
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.only(
+                                start: startPadding, end: 14.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: headerWidgets,
                             ),
                           ),
                         ),
                       ),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        dragStartBehavior: widget.dragStartBehavior!,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(
-                            minWidth: constraints.minWidth,
-                            maxWidth: double.maxFinite,
-                          ),
-                          child: DataTable(
-                            key: _tableKey,
-                            dividerThickness: widget.dividerThickness,
-                            columns: widget.columns!,
-                            /*dataTextStyle: widget.dataTextStyle,
-                            //decoration: BoxDecoration(
-                            //    color: widget.color ?? Colors.transparent),
-                            headingRowColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                              return widget.headingRowColor ??
-                                  Colors.transparent;
-                            }),
-                            */
-                            sortColumnIndex: widget.sortColumnIndex,
-                            sortAscending: widget.sortAscending!,
-                            onSelectAll: (a) => widget.onSelectAll!(a!),
-                            dataRowHeight: widget.dataRowHeight,
-                            headingRowHeight: widget.headingRowHeight,
-                            horizontalMargin: 0,
-                            columnSpacing: widget.columnSpacing,
-                            showCheckboxColumn: widget.showCheckboxColumn!,
-                            rows:
-                                _getRows(_firstRowIndex!, widget.rowsPerPage!),
-                          ),
-                        ),
+                    ),
+                  ),
+                  ConstrainedBox(
+                      constraints: BoxConstraints(
+                        minWidth: constraints.minWidth,
+                        maxWidth: double.maxFinite,
                       ),
-                      DefaultTextStyle(
-                        style: footerTextStyle,
-                        child: IconTheme.merge(
-                          data: const IconThemeData(opacity: 0.54),
-                          child: Container(
-                            // TODO(bkonyi): this won't handle text zoom correctly, https://github.com/flutter/flutter/issues/48522
-                            height: widget.footerHeight,
-                            //width: double.maxFinite,
-                            //alignment: Alignment.center,
-                            child: SingleChildScrollView(
-                                dragStartBehavior: widget.dragStartBehavior!,
-                                scrollDirection: Axis.horizontal,
-                                reverse: true,
-                                child: Column(children: [
-                                  Row(
-                                    children: [
-                                      ...footerWidgets,
-                                      if (widget.footerTrailing != null)
-                                        widget.footerTrailing!
-                                    ],
-                                  ),
-                                  if (widget.footerSecondary != null)
-                                    widget.footerSecondary!,
-                                ])),
-                          ),
-                        ),
+                      child: createDataTable(context)),
+                  DefaultTextStyle(
+                    style: footerTextStyle,
+                    child: IconTheme.merge(
+                      data: const IconThemeData(opacity: 0.54),
+                      child: Container(
+                        // TODO(bkonyi): this won't handle text zoom correctly, https://github.com/flutter/flutter/issues/48522
+                        height: widget.footerHeight,
+                        //width: double.maxFinite,
+                        //alignment: Alignment.center,
+                        child: SingleChildScrollView(
+                            dragStartBehavior: widget.dragStartBehavior!,
+                            scrollDirection: Axis.horizontal,
+                            reverse: true,
+                            child: Column(children: [
+                              Row(
+                                children: [
+                                  ...footerWidgets,
+                                  if (widget.footerTrailing != null)
+                                    widget.footerTrailing!
+                                ],
+                              ),
+                              if (widget.footerSecondary != null)
+                                widget.footerSecondary!,
+                            ])),
                       ),
-                    ],
-                  )),
-            ));
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
       },
+    );
+  }
+
+  Widget createDataTable(context) {
+    return SingleScroller(
+        child: DataTable(
+      key: _tableKey,
+      dividerThickness: widget.dividerThickness,
+      columns: widget.columns!,
+      sortColumnIndex: widget.sortColumnIndex,
+      sortAscending: widget.sortAscending!,
+      onSelectAll: (a) => widget.onSelectAll!(a!),
+      dataRowHeight: widget.dataRowHeight,
+      headingRowHeight: widget.headingRowHeight,
+      horizontalMargin: 0,
+      columnSpacing: widget.columnSpacing,
+      showCheckboxColumn: widget.showCheckboxColumn!,
+      rows: _getRows(_firstRowIndex!, widget.rowsPerPage!),
+    ));
+  }
+}
+
+class SingleScroller extends StatelessWidget {
+  final Widget child;
+  final Axis scrollDirection;
+  SingleScroller(
+      {Key? key, required this.child, this.scrollDirection = Axis.horizontal})
+      : super(key: key);
+  final ScrollController _controller = ScrollController();
+
+  @override
+  Widget build(BuildContext context) {
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(
+        dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+        },
+      ),
+      child: SingleChildScrollView(
+        controller: _controller,
+        physics: const AlwaysScrollableScrollPhysics(),
+        scrollDirection: scrollDirection,
+        child: child,
+      ),
     );
   }
 }

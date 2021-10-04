@@ -570,14 +570,15 @@ class _DataViewerState extends State<DataViewer> {
                                       }),
                                 ),
                               )),
-                          Container(
-                            padding:
-                                EdgeInsets.symmetric(vertical: 5), // ios usa 5
-                            width: responsive!.isMobile ? 70 : 90,
-                            child: FittedBox(
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5, right: 5),
+                            child: Container(
+                                constraints:
+                                    BoxConstraints(maxWidth: 90, maxHeight: 55),
                                 child: StrapButton(
                                     text: 'filtrar',
-                                    height: 45,
+                                    //height: 55,
+                                    //width: 80,
                                     onPressed: () {
                                       controller!.page = 1;
                                       controller!.filter =
@@ -589,6 +590,7 @@ class _DataViewerState extends State<DataViewer> {
                                       controller!.goPage(1);
                                     })),
                           ),
+
                           if (widget.trailling != null) widget.trailling!,
                         ],
                       )),

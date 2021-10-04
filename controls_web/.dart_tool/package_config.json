@@ -122,6 +122,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "data_table_2",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/data_table_2-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "date_format",
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/date_format-2.0.4",
       "packageUri": "lib/",
@@ -554,7 +560,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-10-04T12:42:00.987447Z",
+  "generated": "2021-10-04T19:59:21.885317Z",
   "generator": "pub",
-  "generatorVersion": "2.14.2"
+  "generatorVersion": "2.14.3"
 }

@@ -1,13 +1,9 @@
 // @dart=2.12
-import 'package:controls_web/controls/index.dart';
-import 'package:controls_web/controls/sliver_apps.dart';
 import 'package:app/models/apps_items.dart';
 import 'package:app/views/drawer_view.dart';
-import 'package:controls_web/controls/tab_choice.dart';
-import 'package:controls_web/controls/tabview_bottom.dart';
-import 'package:controls_web/controls/vertical_tab_view.dart';
-import 'package:controls_web/controls/vertical_toptab_navigator.dart';
+import 'package:controls_web/controls.dart';
 import 'package:flutter/material.dart';
+import 'package:controls_web/controls/data_viewer.dart';
 
 class EntradaView extends StatefulWidget {
   EntradaView({Key? key}) : super(key: key);
@@ -96,12 +92,37 @@ class _EntradaViewState extends State<EntradaView> {
                   ),
                 ),
                 TabChoice(
-                    label: 'Outros',
-                    // child: Container(child: Text('pagina outros')),
-                    builder: () {
-                      return Text('Outros');
-                    })
+                  label: 'DataViewer',
+                  // child: Container(child: Text('pagina outros')),
+                  child: DataViewer(
+                    rowsPerPage: 100,
+                    showPageNavigatorButtons: false,
+                    controller: DataViewerController(
+                        keyName: 'id',
+                        future: () => Future.value(createData()),
+                        columns: [
+                          DataViewerColumn(name: 'id'),
+                          DataViewerColumn(name: 'nome', width: 180),
+                          DataViewerColumn(name: 'unidade'),
+                          DataViewerColumn(name: 'preco'),
+                          DataViewerColumn(name: 'outro', width: 180),
+                          DataViewerColumn(name: 'mais', width: 180),
+                        ]),
+                  ),
+                ),
               ]);
         });
   }
+
+  createData() => [
+        for (var i = 0; i < 30; i++)
+          {
+            "id": i,
+            "nome": 'asdfasdfs nome aldflj $i',
+            "unidade": ['KG', 'PC'][i % 2],
+            "preco": i * 0.25,
+            "outro": "$i outro teste de coluna",
+            "mais": '$i mais uma coluna para navegar lateral'
+          }
+      ];
 }

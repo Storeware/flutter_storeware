@@ -495,162 +495,174 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                   appBar: widget.appBar,
                   floatingActionButton: buildAddButton(),
                   backgroundColor: theme!.scaffoldBackgroundColor,
-                  body: SingleChildScrollView(
-                    child: StreamBuilder<bool>(
-                        initialData: true,
-                        stream: controller!.changedEvent.stream,
-                        builder: (context, snapshot) {
-                          controller!.tableSource =
-                              PaginatedGridDataTableSource(
-                                  context, controller!, _filter!);
-                          //debugPrint('init paginated extended');
-                          return PaginatedDataTableExtended(
-                            dividerThickness: widget.dividerThickness!,
-                            elevation: widget.elevation!,
-                            headingRowHeight: widget.headingRowHeight,
-                            headingRowColor: widget.headingRowColor ??
-                                theme!.primaryColor.withAlpha(100),
-                            headerHeight: (widget.header == null)
-                                ? 0
-                                : widget.headerHeight!,
-                            //headingTextStyle: widget.headingTextStyle,
-                            dataRowHeight: widget.dataRowHeight,
-                            columnSpacing: 0, //widget.columnSpacing,
-                            footerTrailing: widget.footerTrailing,
-                            footerLeading: widget.footerLeading ??
-                                createPageNavigator(context),
-                            footer: widget.footer,
-                            footerSecondary: widget.footerSecondary,
-                            header: Column(
+                  body: ListView(
+                      //scrollDirection: Axis.vertical,
+                      children: [
+                        StreamBuilder<bool>(
+                            initialData: true,
+                            stream: controller!.changedEvent.stream,
+                            builder: (context, snapshot) {
+                              controller!.tableSource =
+                                  PaginatedGridDataTableSource(
+                                      context, controller!, _filter!);
+                              //debugPrint('init paginated extended');
+                              return PaginatedDataTableExtended(
+                                dividerThickness: widget.dividerThickness!,
+                                elevation: widget.elevation!,
+                                headingRowHeight: widget.headingRowHeight,
+                                headingRowColor: widget.headingRowColor ??
+                                    theme!.primaryColor.withAlpha(100),
+                                headerHeight: (widget.header == null)
+                                    ? 0
+                                    : widget.headerHeight!,
+                                //headingTextStyle: widget.headingTextStyle,
+                                dataRowHeight: widget.dataRowHeight,
+                                columnSpacing: 0, //widget.columnSpacing,
+                                footerTrailing: widget.footerTrailing,
+                                footerLeading: widget.footerLeading ??
+                                    createPageNavigator(context),
+                                footer: widget.footer,
+                                footerSecondary: widget.footerSecondary,
+                                header: Column(
+                                    crossAxisAlignment:
+                                        widget.crossAxisAlignment!,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisSize: MainAxisSize.min,
+                                    //
+                                    children: [
+                                      widget.header ?? Container(),
+                                      if (widget.canFilter)
+                                        Container(
+                                          height: 60,
+                                          width: 200,
+                                          child: TextFormField(
+                                              initialValue: _filter,
+                                              //controller: __filterController,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontStyle: FontStyle.normal),
+                                              decoration: InputDecoration(
+                                                //border: InputBorder.none,
+                                                labelText: 'filtro',
+                                              ),
+                                              onChanged: (x) {
+                                                _filter = x;
+                                                controller!.changedEvent.sink
+                                                    .add(true);
+                                              }),
+                                        ),
+                                    ]),
+                                actions: [
+                                  ...widget.actions ?? [],
+                                  if (widget.onRefresh != null)
+                                    Tooltip(
+                                        message: 'Recarregar',
+                                        child: InkWell(
+                                          child: Icon(Icons.refresh),
+                                          onTap: () {
+                                            doRefresh();
+                                          },
+                                        )),
+                                ],
+                                sortColumnIndex: _sortColumnIndex,
+                                sortAscending: _sortAscending,
+                                horizontalMargin: widget.horizontalMargin,
+                                dragStartBehavior: widget.dragStartBehavior,
+                                onRowsPerPageChanged:
+                                    widget.onRowsPerPageChanged,
+                                color: widget.backgroundColor ??
+                                    theme!.scaffoldBackgroundColor,
+                                rowsPerPage: widget.rowsPerPage,
+                                onPageChanged: widget.onPageChanged,
+                                //alignment: Alignment.center,
                                 crossAxisAlignment: widget.crossAxisAlignment!,
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                //
-                                children: [
-                                  widget.header ?? Container(),
-                                  if (widget.canFilter)
-                                    Container(
-                                      height: 60,
-                                      width: 200,
-                                      child: TextFormField(
-                                          initialValue: _filter,
-                                          //controller: __filterController,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontStyle: FontStyle.normal),
-                                          decoration: InputDecoration(
-                                            //border: InputBorder.none,
-                                            labelText: 'filtro',
-                                          ),
-                                          onChanged: (x) {
-                                            _filter = x;
-                                            controller!.changedEvent.sink
-                                                .add(true);
-                                          }),
-                                    ),
-                                ]),
-                            actions: [
-                              ...widget.actions ?? [],
-                              if (widget.onRefresh != null)
-                                Tooltip(
-                                    message: 'Recarregar',
-                                    child: InkWell(
-                                      child: Icon(Icons.refresh),
-                                      onTap: () {
-                                        doRefresh();
-                                      },
-                                    )),
-                            ],
-                            sortColumnIndex: _sortColumnIndex,
-                            sortAscending: _sortAscending,
-                            horizontalMargin: widget.horizontalMargin,
-                            dragStartBehavior: widget.dragStartBehavior,
-                            onRowsPerPageChanged: widget.onRowsPerPageChanged,
-                            color: widget.backgroundColor ??
-                                theme!.scaffoldBackgroundColor,
-                            rowsPerPage: widget.rowsPerPage,
-                            onPageChanged: widget.onPageChanged,
-                            //alignment: Alignment.center,
-                            crossAxisAlignment: widget.crossAxisAlignment!,
-                            columns: [
-                              for (var i = 0;
-                                  i < controller!.columns!.length;
-                                  i++)
-                                if (controller!.columns![i].visible)
-                                  DataColumn(
-                                    onSort: (columnIndex, bool ascending) {
-                                      if (widget.canSort &&
-                                          (controller!.columns![i].sort)) if (controller!
-                                              .columns![i].onSort !=
-                                          null) {
-                                        _sort(columnIndex, i, ascending);
-                                      }
-                                    },
-                                    numeric: controller!.columns![i].numeric,
-                                    tooltip: controller!.columns![i].tooltip,
-                                    label: Align(
-                                      alignment:
-                                          (controller!.columns![i].numeric)
+                                columns: [
+                                  for (var i = 0;
+                                      i < controller!.columns!.length;
+                                      i++)
+                                    if (controller!.columns![i].visible)
+                                      DataColumn(
+                                        onSort: (columnIndex, bool ascending) {
+                                          if (widget.canSort &&
+                                              (controller!.columns![i].sort)) if (controller!
+                                                  .columns![i].onSort !=
+                                              null) {
+                                            _sort(columnIndex, i, ascending);
+                                          }
+                                        },
+                                        numeric:
+                                            controller!.columns![i].numeric,
+                                        tooltip:
+                                            controller!.columns![i].tooltip,
+                                        label: Align(
+                                          alignment: (controller!
+                                                  .columns![i].numeric)
                                               ? Alignment.centerRight
                                               : controller!.columns![i].align ??
                                                   Alignment.centerLeft,
-                                      child: Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 2),
-                                        width: controller!.columns![i].width,
-                                        height: widget.headingRowHeight,
-                                        child: Builder(builder: (ctx) {
-                                          var labels = (controller!
-                                                      .columns![i].label ??
-                                                  '${controller!.columns![i].name}'
-                                                      .toCapital())
-                                              .split('|');
-                                          return Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                //if (labels.length == 1)
-                                                //  Spacer(),
-                                                for (var l in labels)
-                                                  //Expanded(
-                                                  //  flex: 1,
-                                                  // child:
-                                                  Container(
-                                                      child: Text(l,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: widget
-                                                                  .columnStyle ??
-                                                              widget
-                                                                  .headingTextStyle ??
-                                                              theme!.textTheme
-                                                                  .caption!
-                                                                  .copyWith(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 14,
-                                                              ))),
-                                                //),
-                                                //if (labels.length == 1)
-                                                //  Spacer(),
-                                              ]);
-                                        }),
-                                      ),
-                                    ),
-                                  )
-                            ],
-                            source: controller!.tableSource,
-                            onSelectAll: widget.onSelectAll,
-                            showCheckboxColumn: widget.showCheckboxColumn,
-                          );
-                        }),
-                  ),
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 2),
+                                            width:
+                                                controller!.columns![i].width,
+                                            height: widget.headingRowHeight,
+                                            child: Builder(builder: (ctx) {
+                                              var labels = (controller!
+                                                          .columns![i].label ??
+                                                      '${controller!.columns![i].name}'
+                                                          .toCapital())
+                                                  .split('|');
+                                              return Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    //if (labels.length == 1)
+                                                    //  Spacer(),
+                                                    for (var l in labels)
+                                                      //Expanded(
+                                                      //  flex: 1,
+                                                      // child:
+                                                      Container(
+                                                          child: Text(l,
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style: widget
+                                                                      .columnStyle ??
+                                                                  widget
+                                                                      .headingTextStyle ??
+                                                                  theme!
+                                                                      .textTheme
+                                                                      .caption!
+                                                                      .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontSize:
+                                                                        14,
+                                                                  ))),
+                                                    //),
+                                                    //if (labels.length == 1)
+                                                    //  Spacer(),
+                                                  ]);
+                                            }),
+                                          ),
+                                        ),
+                                      )
+                                ],
+                                source: controller!.tableSource,
+                                onSelectAll: widget.onSelectAll,
+                                showCheckboxColumn: widget.showCheckboxColumn,
+                              );
+                            }),
+                      ]),
                 );
               });
         });

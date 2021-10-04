@@ -28,6 +28,8 @@ dependencies:
   #autocomplete_textfield:
   pdf: ^3.6.0
   printing: ^5.6.0  
+  data_table_2: ^2.1.1
+
   controls_data:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

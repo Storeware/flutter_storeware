@@ -153,15 +153,6 @@ packages:
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.03.16"
-  controls_firebase_linux:
-    dependency: "direct main"
-    description:
-      path: "controls_firebase/controls_firebase_linux"
-      ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "2021.03.14"
   controls_firebase_platform_android:
     dependency: "direct main"
     description:
@@ -189,15 +180,6 @@ packages:
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "0.0.7"
-  controls_firebase_windows:
-    dependency: "direct main"
-    description:
-      path: "controls_firebase/controls_firebase_windows"
-      ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "2021.03.14"
   cookie_jar:
     dependency: transitive
     description:

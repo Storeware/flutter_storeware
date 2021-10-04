@@ -59,4 +59,43 @@ extension WidgetMorphism on Widget {
       child: this,
     );
   }
+
+  rounded(
+      {BoxDecoration? decoration,
+      BoxBorder? border,
+      double radius = 15.0,
+      Color? color}) {
+    return Container(
+      decoration: decoration ??
+          BoxDecoration(
+            color: color,
+            border: border,
+            borderRadius: BorderRadius.circular(radius),
+          ),
+      child: this,
+    );
+  }
+
+  box(
+      {Color? color,
+      double borderWidth = 2.0,
+      BoxBorder? border,
+      BoxDecoration? decoration,
+      double? width,
+      double? height,
+      BorderRadiusGeometry? borderRadius,
+      Color borderColor = Colors.black54}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: decoration ??
+          BoxDecoration(
+            color: color,
+            borderRadius: borderRadius,
+            border:
+                border ?? Border.all(width: borderWidth, color: borderColor),
+          ),
+      child: this,
+    );
+  }
 }

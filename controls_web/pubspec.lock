@@ -351,7 +351,7 @@ packages:
     source: hosted
     version: "2.0.3"
   pdf:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: pdf
       url: "https://pub.dartlang.org"
@@ -386,7 +386,7 @@ packages:
     source: hosted
     version: "2.0.1"
   printing:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: printing
       url: "https://pub.dartlang.org"

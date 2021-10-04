@@ -24,6 +24,7 @@ dependencies:
   share:
   path_provider: 
   get:
+  shimmer:
   #autocomplete_textfield:
 
   controls_data:

@@ -76,7 +76,7 @@ export 'page_navigator_row.dart';
 export 'page_tab_view.dart';
 export 'paginated_data_table_ext.dart';
 export 'paginated_grid.dart';
-export 'panel.dart';
+//export 'panel.dart';
 export 'panel_gradient.dart';
 //export 'panel_widget.dart';
 export 'pdf_report.dart';

@@ -1,6 +1,6 @@
 name: controls_image_android
 description: A new Flutter package project.
-version: 2021.09.27
+version: 2021.10.04
 homepage: https://tireideletra.com.br
 publish_to: none
 
@@ -10,8 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  image_picker: any
-  universal_io: any
+  image_picker: ^0.8.4+2
+  universal_io: 
   controls_image_interface:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

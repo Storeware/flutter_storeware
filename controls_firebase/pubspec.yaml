@@ -1,7 +1,6 @@
 name: controls_firebase
 description: A new Flutter package project.
-version: 2021.07.06
-author:
+version: 2021.10.04
 homepage: http://tireideletra.com.br
 publish_to: none
 
@@ -13,15 +12,8 @@ flutter:
     platforms:
       web:
         default_package: controls_firebase_platform_web
-      linux:
-        default_package: controls_firebase_linux
       android:
         default_package: controls_firebase_platform_android
-      windows:
-        default_package: controls_firebase_windows
-      macos:
-        default_package: controls_firebase_linux
-
       ios:
         default_package: controls_firebase_platform_android
 
@@ -43,21 +35,7 @@ dependencies:
       url: https://github.com/amarildolacerda/flutter_dart.git
       path: controls_firebase/controls_firebase_platform_android
 
-  controls_firebase_linux:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_firebase/controls_firebase_linux
-
-  #controls_firebase_macos:
-  #  git:
-  #    url: https://github.com/amarildolacerda/flutter_dart.git
-  #    path: controls_firebase/controls_firebase_macos
-
-  controls_firebase_windows:
-    git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
-      path: controls_firebase/controls_firebase_windows
-
+  
   uuid:
 
 dev_dependencies:

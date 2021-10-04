@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:controls/index.dart';
+import 'package:controls_web/controls.dart';
 
 void main() {
   runApp(MyApp());

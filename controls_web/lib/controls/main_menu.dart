@@ -1,5 +1,5 @@
 import 'package:controls_data/data_model.dart';
-import 'panel.dart';
+import 'panel_widget.dart';
 import 'package:flutter/material.dart';
 import '../services/routes.dart';
 //import '../models/login.model.dart';

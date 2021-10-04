@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../controls/panel.dart';
+import '../controls/panel_widget.dart';
 
 class ModalScaffold extends StatelessWidget {
   final Widget? body;

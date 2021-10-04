@@ -14,14 +14,14 @@ dependencies:
   #html:
 
 
-  firebase: any
-  firebase_auth: any
-  google_sign_in: any
-  firebase_core: any
+  firebase: 
+  firebase_auth: 
+  google_sign_in: 
+  firebase_core: 
   #firebase_web:
-  firebase_storage: any
-  cloud_firestore: any
-  flutter_cache_manager: any
+  firebase_storage: 
+  cloud_firestore: 
+  flutter_cache_manager: 
   controls_firebase_platform_interface:
     git:
       url: https://github.com/amarildolacerda/flutter_dart.git

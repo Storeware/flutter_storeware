@@ -38,8 +38,6 @@ class _PanelGradientState extends State<PanelGradient> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    //var theme = Theme.of(context);
-    //var primaryColor = widget.color?? theme.primaryColor;
     return Padding(
         padding:
             const EdgeInsets.only(bottom: 0, right: 6.0, left: 6.0, top: 0.0),
@@ -47,11 +45,11 @@ class _PanelGradientState extends State<PanelGradient> {
           onTap: () {
             widget.onPressed();
           },
-          child: Container(
+          child: SizedBox(
             child: Stack(
               children: <Widget>[
                 Column(children: [
-                  Container(
+                  SizedBox(
                     height: 30.0,
                   ),
                   ClipRRect(
@@ -97,39 +95,11 @@ class _PanelGradientState extends State<PanelGradient> {
                                 child: widget.image,
                               ),
                             )),
-                        //Container(
-                        //  height: widget.height / 10,
-                        //),
                         if (widget.child != null)
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: widget.child,
                           ),
-                        /* Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Text(
-                            widget.title.toUpperCase(),
-                            style: TextStyle(color: widget.titleColor),
-                            maxLines: 3,
-                            softWrap: true,
-                          ),
-                        ),*/
-                        /* widget.subTitle != null
-                            ? Divider(
-                                height: 10.0,
-                                color: Colors.white,
-                              )
-                            : Container(),*/
-/*                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                          child: Text(
-                            widget.subTitle ?? '',
-                            softWrap: true,
-                            maxLines: 2,
-                            style: TextStyle(
-                                fontSize: 10, color: widget.subTitleColor),
-                          ),
-                        )*/
                       ],
                     )),
               ],

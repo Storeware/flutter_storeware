@@ -201,4 +201,11 @@ extension WidgetMorphism on Widget {
   Widget shrink() {
     return SizedBox.shrink(child: this);
   }
+
+  Widget textStyle({Color? color, FontWeight? fontWeight, double? fontSize}) {
+    return DefaultTextStyle(
+        child: this,
+        style: TextStyle(
+            color: color, fontSize: fontSize, fontWeight: fontWeight));
+  }
 }

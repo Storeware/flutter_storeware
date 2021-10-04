@@ -79,12 +79,9 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
 
   @override
   Future<Map<String, dynamic>?> getDoc(collection, doc) {
-    return store
-        .collection(collection)
-        .doc(doc)
-        .get()
-        .then((DocumentSnapshot<Map<String, dynamic>?> x) {
+    return store.collection(collection).doc(doc).get().then((x) {
       if (!x.exists) return null;
+      // ignore: unnecessary_cast
       var data = x.data()! as Map<String, dynamic>;
       return {"id": x.id, if (x.exists) ...data};
     });

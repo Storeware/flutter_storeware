@@ -33,10 +33,7 @@ dependencies:
   #path: ../../controls_data
 
   #dependencies_override:
-  printing: 
-  pdf:  
-  get:
-
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

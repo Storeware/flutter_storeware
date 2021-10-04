@@ -62,11 +62,11 @@ class _MainViewState extends State<MainView> {
               Container(
                   child: Center(
                 child: Image.asset('assets/images/entrar.png'),
-              )),
+              )).sizedBox(width: 100, height: 100).shadow(),
               SizedBox(
                 height: 40,
               ),
-              Text(widget.title!),
+              Text(widget.title!).paddingAll().box(),
               SizedBox(
                 height: 30,
               ),

@@ -78,13 +78,13 @@ extension WidgetMorphism on Widget {
 
   Widget box(
       {Color? color,
-      double borderWidth = 2.0,
+      double borderWidth = 1.0,
       BoxBorder? border,
       BoxDecoration? decoration,
       double? width,
       double? height,
       BorderRadiusGeometry? borderRadius,
-      Color borderColor = Colors.black54}) {
+      Color borderColor = Colors.black26}) {
     return Container(
       width: width,
       height: height,

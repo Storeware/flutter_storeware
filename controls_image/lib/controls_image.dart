@@ -62,4 +62,5 @@ class ImageFactorResize {
   int? y;
   double? factor;
   ImageFactorResize({this.x, this.y, this.factor});
+  toJson() => {"x": x, "y": y, "factor": factor};
 }

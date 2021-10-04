@@ -556,7 +556,7 @@ class _DataViewerState extends State<DataViewer> {
                           Spacer(),
                           Container(
                               constraints: BoxConstraints(
-                                maxWidth: responsive!.isMobile ? 180 : 250,
+                                maxWidth: responsive!.isMobile ? 150 : 250,
                               ),
                               child: TextFormField(
                                 controller: _filtroController,
@@ -573,7 +573,7 @@ class _DataViewerState extends State<DataViewer> {
                           Container(
                             padding:
                                 EdgeInsets.symmetric(vertical: 5), // ios usa 5
-                            width: responsive!.isMobile ? 80 : 90,
+                            width: responsive!.isMobile ? 70 : 90,
                             child: FittedBox(
                                 child: StrapButton(
                                     text: 'filtrar',

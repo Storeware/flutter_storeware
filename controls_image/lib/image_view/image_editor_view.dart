@@ -26,6 +26,7 @@ class ImageEditorView extends StatefulWidget {
   final Uint8List? rawPath;
   final bool useFilter;
   final bool canResize;
+  final int aspectRatioSelected;
   const ImageEditorView(
       {Key? key,
       this.titulo,
@@ -35,6 +36,7 @@ class ImageEditorView extends StatefulWidget {
       this.useFilter = false,
       this.canResize = false,
       this.filename,
+      this.aspectRatioSelected = 0,
       this.onSelected})
       : super(key: key);
   @override
@@ -48,12 +50,12 @@ class _ImageEditorViewState extends State<ImageEditorView> {
   bool selected = false;
   @override
   void initState() {
+    super.initState();
     originalFile = widget.rawPath != null;
-    _aspectRatioSelected = 5;
+    _aspectRatioSelected = widget.aspectRatioSelected;
     _aspectRatio = _aspectRatios[_aspectRatioSelected];
     filterFileName =
         widget.filename ?? 'resised.jpg'; // corrige bug de carga com NULL;
-    super.initState();
     if (widget.rawPath != null) {
       //print(['passou a imagem']);
       _fileOriginal = widget.rawPath!;
@@ -590,8 +592,10 @@ class _ImageFiltersWidgetState extends State<ImageFiltersWidget> {
         title: const Text(''),
         image: image!,
         filters: filterToList(),
+        names: [for (var f in filters) f.name],
         loader: Container(),
         filename: 'filtered.jpg',
+        showNames: false,
         circleShape: false, //widget.filename,
         okPressed: (bytes) {
           widget.okPressed(bytes);

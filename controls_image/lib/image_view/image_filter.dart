@@ -1,27 +1,27 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:photofilters/filters/filters.dart';
 import 'package:image/image.dart' as imageLib;
 import 'package:path_provider/path_provider.dart';
+import 'package:photofilters/filters/filters.dart';
+import 'dart:typed_data';
 
 class PhotoFilter extends StatelessWidget {
-  final imageLib.Image? image;
-  final String? filename;
-  final Filter? filter;
+  final imageLib.Image image;
+  final String filename;
+  final Filter filter;
   final BoxFit fit;
   final Widget loader;
-  const PhotoFilter({
-    Key? key,
-    @required this.image,
-    @required this.filename,
-    @required this.filter,
+
+  PhotoFilter({
+    required this.image,
+    required this.filename,
+    required this.filter,
     this.fit = BoxFit.fill,
     this.loader = const Center(child: CircularProgressIndicator()),
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,11 +39,10 @@ class PhotoFilter extends StatelessWidget {
           case ConnectionState.waiting:
             return loader;
           case ConnectionState.done:
-            if (snapshot.hasError) {
+            if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
-            }
             return Image.memory(
-              Uint8List.fromList(snapshot.data!),
+              snapshot.data as dynamic,
               fit: fit,
             );
         }
@@ -52,140 +51,155 @@ class PhotoFilter extends StatelessWidget {
   }
 }
 
-///The PhotoFilterSelector Widget for apply filter from a selected set of filters
+///The PhotoFilterEditor Widget for apply filter from a selected set of filters
 class PhotoFilterEditor extends StatefulWidget {
   final Widget title;
-
+  final Color appBarColor;
   final List<Filter> filters;
+  final List<String>? names;
+  final bool showNames;
   final imageLib.Image image;
   final Widget loader;
   final BoxFit fit;
-  final String? filename;
+  final String filename;
   final bool circleShape;
-  final Function(Uint8List)? okPressed;
+  final Function(Uint8List bytes)? okPressed;
+
   const PhotoFilterEditor({
     Key? key,
     required this.title,
     required this.filters,
     required this.image,
     this.okPressed,
+    this.names,
+    this.showNames = true,
+    this.appBarColor = Colors.blue,
     this.loader = const Center(child: CircularProgressIndicator()),
-    this.fit = BoxFit.fitWidth,
-    @required this.filename,
+    this.fit = BoxFit.fill,
+    required this.filename,
     this.circleShape = false,
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _PhotoFilterEditorState();
+  State<StatefulWidget> createState() => new _PhotoFilterSelectorState();
 }
 
-class _PhotoFilterEditorState extends State<PhotoFilterEditor> {
+class _PhotoFilterSelectorState extends State<PhotoFilterEditor> {
   String? filename;
-  Map<String, List<int>> cachedFilters = {};
-  late Filter _filter;
-  late imageLib.Image image;
+  Map<String, List<int>?> cachedFilters = {};
+  Filter? _filter;
+  imageLib.Image? image;
   late bool loading;
-
+  late Uint8List selectedImage;
+  imageLib.Image? thumbImage;
+  late List<String> names;
   @override
   void initState() {
     super.initState();
     loading = false;
     _filter = widget.filters[0];
+
     filename = widget.filename;
     image = widget.image;
+    thumbImage = imageLib.copyResize(image!, width: 200);
+    names = widget.names ??
+        [
+          for (var f in widget.filters) f.name,
+        ];
   }
 
   @override
   void dispose() {
-    cachedFilters = {};
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: widget.title,
-        actions: <Widget>[
-          loading
-              ? Container()
-              : IconButton(
-                  icon: const Icon(Icons.check),
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    var imageFile = await saveFilteredImage();
-                    imageFile.readAsBytes().then((bytes) {
-                      if (widget.okPressed != null) widget.okPressed!(bytes);
-                      Navigator.pop(context);
-                    });
-                    //Navigator.pop(context, {'image_filtered': imageFile});
-                  },
-                )
-        ],
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: loading
-            ? widget.loader
-            : Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Expanded(
-                    flex: 6,
-                    child: Container(
-                      color: Colors.white12,
-                      width: double.infinity,
-                      height: double.infinity,
-                      padding: const EdgeInsets.all(12.0),
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10),
-                          child: _buildFilteredImage(
-                            _filter,
-                            image,
-                            filename!,
-                          )),
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: widget.title,
+          backgroundColor: widget.appBarColor,
+          actions: <Widget>[
+            loading
+                ? Container()
+                : IconButton(
+                    icon: Icon(Icons.check),
+                    onPressed: () async {
+                      setState(() {
+                        loading = true;
+                      });
+                      //var imageFile = await saveFilteredImage();
+                      if (widget.okPressed != null && selectedImage != null)
+                        widget.okPressed!(selectedImage);
+                      Navigator.pop(context, {'image_filtered': filename!});
+                    },
+                  )
+          ],
+        ),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: loading
+              ? widget.loader
+              : Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        padding: EdgeInsets.all(12.0),
+                        child: _buildFilteredImage(
+                          _filter,
+                          image,
+                          filename,
+                        ),
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: widget.filters.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return InkWell(
-                          child: Container(
-                            padding: const EdgeInsets.all(5.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                _buildFilterThumbnail(
-                                    widget.filters[index], image, filename!),
-                                const SizedBox(
-                                  height: 5.0,
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.filters.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              child: Container(
+                                padding: EdgeInsets.all(5.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    _buildFilterThumbnail(widget.filters[index],
+                                        thumbImage, filename),
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    if (widget.showNames)
+                                      Text(
+                                        names[index],
+                                      )
+                                  ],
                                 ),
-                                Text(
-                                  widget.filters[index].name,
-                                )
-                              ],
-                            ),
-                          ),
-                          onTap: () => setState(() {
-                            _filter = widget.filters[index];
-                          }),
-                        );
-                      },
+                              ),
+                              onTap: () => setState(() {
+                                _filter = widget.filters[index];
+                              }),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+        ),
       ),
     );
   }
 
-  _buildFilterThumbnail(Filter filter, imageLib.Image image, String filename) {
+  _buildFilterThumbnail(
+      Filter filter, imageLib.Image? image, String? filename) {
     if (cachedFilters[filter.name] == null) {
       return FutureBuilder<List<int>>(
         future: compute(applyFilter, <String, dynamic>{
@@ -206,25 +220,25 @@ class _PhotoFilterEditorState extends State<PhotoFilterEditor> {
                 backgroundColor: Colors.white,
               );
             case ConnectionState.done:
-              if (snapshot.hasError) {
+              if (snapshot.hasError)
                 return Center(child: Text('Error: ${snapshot.error}'));
-              }
-              cachedFilters[filter.name] = snapshot.data!;
+              cachedFilters[filter.name] = snapshot.data;
               return CircleAvatar(
                 radius: 50.0,
                 backgroundImage: MemoryImage(
-                  Uint8List.fromList(snapshot.data!),
+                  snapshot.data as dynamic,
                 ),
                 backgroundColor: Colors.white,
               );
           }
+          // unreachable
         },
       );
     } else {
       return CircleAvatar(
         radius: 50.0,
         backgroundImage: MemoryImage(
-          Uint8List.fromList(cachedFilters[filter.name]!),
+          cachedFilters[filter.name] as dynamic,
         ),
         backgroundColor: Colors.white,
       );
@@ -237,66 +251,60 @@ class _PhotoFilterEditorState extends State<PhotoFilterEditor> {
     return directory.path;
   }
 
-  Future<File?> get _localFile async {
+  Future<File> get _localFile async {
     final path = await _localPath;
-    return File('$path/filtered_${_filter.name}_$filename');
+    return File('$path/filtered_${_filter?.name ?? "_"}_$filename');
   }
 
-  Future<File> saveFilteredImage() async {
+  /* Future<File> saveFilteredImage() async {
     var imageFile = await _localFile;
-    List<int>? bytes =
-        cachedFilters[_filter.name] ?? cachedFilters[cachedFilters.keys.first];
-    await imageFile!.writeAsBytes(bytes!);
+    await imageFile.writeAsBytes(cachedFilters[_filter?.name ?? "_"]!);
     return imageFile;
-  }
+  }*/
 
   Widget _buildFilteredImage(
-      Filter filter, imageLib.Image image, String filename) {
-    if (cachedFilters[filter.name] == null) {
-      return FutureBuilder<List<int>>(
-        future: compute(applyFilter, <String, dynamic>{
-          "filter": filter,
-          "image": image,
-          "filename": filename,
-        }),
-        builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
-          switch (snapshot.connectionState) {
-            case ConnectionState.none:
-              return const Align(child: CircularProgressIndicator());
-            case ConnectionState.active:
-            case ConnectionState.waiting:
-              return widget.loader;
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
-              cachedFilters[filter.name] = snapshot.data!;
-              return widget.circleShape
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.width / 3,
-                      width: MediaQuery.of(context).size.width / 3,
-                      child: Center(
-                        child: CircleAvatar(
-                          radius: MediaQuery.of(context).size.width / 3,
-                          backgroundImage: MemoryImage(
-                            Uint8List.fromList(snapshot.data!),
-                          ),
+      Filter? filter, imageLib.Image? image, String? filename) {
+    //if (cachedFilters[filter?.name ?? "_"] == null) {
+    return FutureBuilder<List<int>>(
+      future: compute(applyFilter, <String, dynamic>{
+        "filter": filter,
+        "image": image,
+        "filename": filename,
+      }),
+      builder: (BuildContext context, AsyncSnapshot<List<int>> snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+            return widget.loader;
+          case ConnectionState.active:
+          case ConnectionState.waiting:
+            return widget.loader;
+          case ConnectionState.done:
+            if (snapshot.hasError)
+              return Center(child: Text('Error: ${snapshot.error}'));
+            cachedFilters[filter?.name ?? "_"] = snapshot.data;
+            selectedImage = Uint8List.fromList(snapshot.data!);
+            return widget.circleShape
+                ? SizedBox(
+                    height: MediaQuery.of(context).size.width / 3,
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Center(
+                      child: CircleAvatar(
+                        radius: MediaQuery.of(context).size.width / 3,
+                        backgroundImage: MemoryImage(
+                          snapshot.data as dynamic,
                         ),
                       ),
-                    )
-                  : SizedBox(
-                      height: MediaQuery.of(context).size.width / 3,
-                      width: MediaQuery.of(context).size.width / 3,
-                      child: Center(
-                        child: Image.memory(
-                          Uint8List.fromList(snapshot.data!),
-                          //fit: BoxFit.contain,
-                        ),
-                      ));
-          }
-        },
-      );
-    } else {
+                    ),
+                  )
+                : Image.memory(
+                    snapshot.data as dynamic,
+                    fit: BoxFit.contain,
+                  );
+        }
+        // unreachable
+      },
+    );
+    /*} else {
       return widget.circleShape
           ? SizedBox(
               height: MediaQuery.of(context).size.width / 3,
@@ -305,38 +313,38 @@ class _PhotoFilterEditorState extends State<PhotoFilterEditor> {
                 child: CircleAvatar(
                   radius: MediaQuery.of(context).size.width / 3,
                   backgroundImage: MemoryImage(
-                    Uint8List.fromList(cachedFilters[filter.name]!),
+                    cachedFilters[filter?.name ?? "_"] as dynamic,
                   ),
                 ),
               ),
             )
           : Image.memory(
-              Uint8List.fromList(cachedFilters[filter.name]!),
+              cachedFilters[filter?.name ?? "_"] as dynamic,
               fit: widget.fit,
             );
-    }
+    }*/
   }
 }
 
 ///The global applyfilter function
-List<int> applyFilter(Map<String, dynamic> params) {
+FutureOr<List<int>> applyFilter(Map<String, dynamic> params) {
   Filter? filter = params["filter"];
   imageLib.Image image = params["image"];
   String filename = params["filename"];
-  List<int>? _bytes = image.getBytes();
+  List<int> _bytes = image.getBytes();
   if (filter != null) {
-    filter.apply(Uint8List.fromList(_bytes), image.width, image.height);
+    filter.apply(_bytes as dynamic, image.width, image.height);
   }
   imageLib.Image _image =
       imageLib.Image.fromBytes(image.width, image.height, _bytes);
-  _bytes = imageLib.encodeNamedImage(_image, filename);
+  _bytes = imageLib.encodeNamedImage(_image, filename)!;
 
-  return _bytes!;
+  return _bytes;
 }
 
 ///The global buildThumbnail function
-List<int> buildThumbnail(Map<String, dynamic> params) {
-  int width = params["width"];
+FutureOr<List<int>> buildThumbnail(Map<String, dynamic> params) {
+  int? width = params["width"];
   params["image"] = imageLib.copyResize(params["image"], width: width);
   return applyFilter(params);
 }

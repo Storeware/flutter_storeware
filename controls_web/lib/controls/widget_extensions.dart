@@ -193,4 +193,12 @@ extension WidgetMorphism on Widget {
       autofocus: autofocus,
     );
   }
+
+  Widget expanded() {
+    return SizedBox.expand(child: this);
+  }
+
+  Widget shrink() {
+    return SizedBox.shrink(child: this);
+  }
 }

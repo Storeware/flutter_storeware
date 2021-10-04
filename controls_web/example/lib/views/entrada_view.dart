@@ -85,7 +85,7 @@ class _EntradaViewState extends State<EntradaView> {
                           body: SliverApps(
                               appBar: SliverAppBar(title: Text('AppBar')),
                               topBars: AppsItems.topBars(context),
-                              topBarsHeight: 120,
+                              topBarsHeight: 130,
                               body: AppsItems.body(context),
                               grid: AppsItems.builder(context),
                               bottomBars: AppsItems.bottom(context)),

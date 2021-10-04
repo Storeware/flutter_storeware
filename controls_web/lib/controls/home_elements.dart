@@ -508,7 +508,7 @@ class ApplienceStatus extends StatelessWidget {
                         fontFamily: 'HelveticaNeue',
                       ),
                     )),
-              if (bottom != null) Expanded(child: Container()),
+              if (bottom != null) Spacer(),
               if (bottom != null) bottom!,
             ],
           )),

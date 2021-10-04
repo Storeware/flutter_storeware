@@ -1,6 +1,8 @@
 // @dart=2.12
 import 'package:flutter/material.dart';
 
+import 'strap_widgets.dart';
+
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
 
@@ -137,6 +139,58 @@ extension WidgetMorphism on Widget {
         this,
         if (actions != null) ...actions,
       ],
+    );
+  }
+
+  Widget fittedBox({
+    BoxFit fit = BoxFit.scaleDown,
+    Alignment alignment = Alignment.center,
+  }) {
+    return FittedBox(alignment: alignment, fit: fit, child: this);
+  }
+
+  Widget materialButton({
+    double? elevation,
+    required Function() onPressed,
+    Color? color,
+  }) {
+    return MaterialButton(
+      onPressed: onPressed,
+      child: this,
+      color: color,
+      elevation: elevation,
+    );
+  }
+
+  Widget textButton({
+    required onPressed,
+    bool autofocus = false,
+  }) {
+    return OutlinedButton(
+      onPressed: onPressed,
+      child: this,
+      autofocus: autofocus,
+    );
+  }
+
+  Widget strapButton({
+    required onPressed,
+    StrapButtonType? type,
+  }) {
+    return StrapButton(
+      image: this,
+      onPressed: onPressed,
+      type: type,
+    );
+  }
+
+  Widget button(
+      {required onPressed, bool autofocus = false, ButtonStyle? style}) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: this,
+      style: style,
+      autofocus: autofocus,
     );
   }
 }

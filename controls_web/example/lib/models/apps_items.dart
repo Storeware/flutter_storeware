@@ -1,5 +1,6 @@
 import 'package:controls_web/controls/colores.dart';
 import 'package:controls_web/controls/home_elements.dart';
+import 'package:controls_web/controls/widget_extensions.dart';
 import 'package:controls_web/system.utils.dart';
 import 'package:flutter/material.dart';
 
@@ -70,14 +71,15 @@ class AppsItems {
       title: 'Cards',
       bottom: ApplienceCards(children: [Text('x'), Text('y')]),
     ));
-    r.add(ApplienceStatus(
+    r.add(
+      ApplienceStatus(
         width: 150,
-        height: 180,
+        //height: 180,
         title: 'Detalhes',
         color: Colors.amber,
         icon: Icons.adjust,
         valueFontSize: 18,
-        bottom: Row(
+        /*bottom: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
@@ -90,7 +92,9 @@ class AppsItems {
               value: '2',
             )
           ],
-        )));
+        ).fittedBox(),*/
+      ),
+    );
     for (int i in intRange(0, 5)) {
       r.add(ApplienceTicket(
         color: genColor(i),

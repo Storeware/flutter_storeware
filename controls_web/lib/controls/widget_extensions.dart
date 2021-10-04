@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 // We can apply it on any  widget
 
 extension WidgetMorphism on Widget {
-  shadow({
+  Widget shadow({
     double borderRadius = 10.0,
     Offset offset = const Offset(5, 5),
     double blurRadius = 10,
@@ -32,15 +32,15 @@ extension WidgetMorphism on Widget {
     );
   }
 
-  paddingAll({double? all}) {
+  Widget paddingAll({double? all}) {
     return Padding(padding: EdgeInsets.all(all ?? 8.0), child: this);
   }
 
-  padding({EdgeInsets? padding}) {
+  Widget padding({EdgeInsets? padding}) {
     return Padding(padding: padding ?? EdgeInsets.all(8.0), child: this);
   }
 
-  card({Color? color, double elevation = 4.0}) {
+  Widget card({Color? color, double elevation = 4.0}) {
     return Card(
       color: color,
       elevation: elevation,
@@ -48,7 +48,7 @@ extension WidgetMorphism on Widget {
     );
   }
 
-  sizedBox({
+  Widget sizedBox({
     Color? color,
     double? height,
     double? width,
@@ -60,7 +60,7 @@ extension WidgetMorphism on Widget {
     );
   }
 
-  rounded(
+  Widget rounded(
       {BoxDecoration? decoration,
       BoxBorder? border,
       double radius = 15.0,
@@ -76,7 +76,7 @@ extension WidgetMorphism on Widget {
     );
   }
 
-  box(
+  Widget box(
       {Color? color,
       double borderWidth = 2.0,
       BoxBorder? border,
@@ -96,6 +96,47 @@ extension WidgetMorphism on Widget {
                 border ?? Border.all(width: borderWidth, color: borderColor),
           ),
       child: this,
+    );
+  }
+
+  Widget inkWell({required Function() onPressed}) {
+    return InkWell(
+      child: this,
+      onTap: () => onPressed(),
+    );
+  }
+
+  Widget row(
+      {CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.spaceBetween,
+      List<Widget>? ledding,
+      List<Widget>? actions}) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: crossAxisAlignment,
+      mainAxisAlignment: mainAxisAlignment,
+      children: [
+        if (ledding != null) ...ledding,
+        this,
+        if (actions != null) ...actions,
+      ],
+    );
+  }
+
+  Widget column(
+      {CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+      List<Widget>? ledding,
+      List<Widget>? actions}) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: crossAxisAlignment,
+      mainAxisAlignment: mainAxisAlignment,
+      children: [
+        if (ledding != null) ...ledding,
+        this,
+        if (actions != null) ...actions,
+      ],
     );
   }
 }

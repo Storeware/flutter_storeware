@@ -24,7 +24,7 @@ export 'dashboard_web.dart';
 export 'dataviewer_cards.dart';
 //export 'dataviewer_storage.dart';
 export 'data_table_utils.dart';
-//export 'data_viewer.dart';
+export 'data_viewer.dart';
 export 'data_viewer_cards_resize.dart';
 export 'data_viewer_helper.dart';
 export 'data_viewer_pdf.dart';

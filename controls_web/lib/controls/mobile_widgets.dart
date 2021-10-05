@@ -30,7 +30,7 @@ class MobileToolbar extends StatelessWidget {
 }
 
 class MobileMenuBox extends StatelessWidget {
-  const MobileMenuBox({
+  MobileMenuBox({
     Key? key,
     this.bottomNavigationBar,
     this.actions,
@@ -44,6 +44,8 @@ class MobileMenuBox extends StatelessWidget {
     this.drawer,
     this.style,
     this.shape,
+    this.sideLeft,
+    this.flex = 5,
   }) : super(key: key);
   final AppBar? appBar;
   final List<TabChoice> choices;
@@ -57,102 +59,123 @@ class MobileMenuBox extends StatelessWidget {
   final bool automaticallyImplyLeading;
   final TextStyle? style;
   final ShapeBorder? shape;
+  final Widget? sideLeft;
+  final int flex;
 
   @override
   Widget build(BuildContext context) {
     //ThemeData theme = Theme.of(context);
-    ResponsiveInfo responsive = ResponsiveInfo(context);
-    int nCols = responsive.size.width ~/ buttonWidth;
-    if (nCols < 2) nCols = 2;
-    int index = 0;
+    final responsive = ResponsiveInfo(context);
 
     return MobileScaffold(
       appBar: appBar,
       //extendBody: extendBody,
       drawer: drawer,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: GridView.count(crossAxisCount: nCols, children: [
-          for (var item in choices)
-            Builder(builder: (x) {
-              index++;
-              Color? color = item.color ?? genColor(index);
-
-              TextStyle? textStyle = style ??
-                  item.style ??
-                  TextStyle(
-                      color: color.isDark ? Colors.white : Colors.black87,
-                      fontSize: 18);
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Card(
-                  shape: shape,
-                  color: color,
-                  child: InkButton(
-                    onTap: () {
-                      Get.to(
-                        () => (item.primary)
-                            ? Scaffold(
-                                body: item.builder!(),
-                                bottomNavigationBar: childBottomNavigatorBar ??
-                                    MobileToolbar.consumer(context),
-                              )
-                            : MobileScaffold(
-                                appBar: (item.primary)
-                                    ? null
-                                    : AppBar(
-                                        elevation: elevation,
-                                        automaticallyImplyLeading:
-                                            automaticallyImplyLeading,
-                                        title: Text(item.label!),
-                                        actions: (item.items != null)
-                                            ? [
-                                                for (var sb in item.items ?? [])
-                                                  InkWell(
-                                                      child: sb.image,
-                                                      onTap: () {
-                                                        sb.onPressed!();
-                                                      })
-                                              ]
-                                            : null,
-                                      ),
-                                body: item.builder!(),
-                                bottomNavigationBar: childBottomNavigatorBar ??
-                                    MobileToolbar.consumer(context),
-                              ),
-                      );
-                    },
-                    child: Card(
-                        color: color,
-                        shape: shape,
-                        semanticContainer: true,
-                        elevation: 0.0,
-                        child: Column(children: [
-                          SizedBox(height: 10),
-                          Expanded(
-                              child: (item.image != null)
-                                  ? FittedBox(
-                                      child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: item.image,
-                                    ))
-                                  : Container()),
-                          FittedBox(
-                              child: Text(item.label ?? '',
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: textStyle)),
-                          SizedBox(
-                            height: 20,
-                          ),
-                        ])),
-                  ),
-                ),
-              );
-            }),
-        ]),
+      body: Row(
+        children: [
+          if (sideLeft != null)
+            Expanded(
+              flex: 1,
+              child: sideLeft!,
+            ),
+          Expanded(
+            flex: flex,
+            child: createBody(
+              context,
+              responsive,
+            ),
+          ),
+        ],
       ),
       bottomNavigationBar: bottomNavigationBar,
+    );
+  }
+
+  createBody(context, responsive) {
+    int nCols = responsive.size.width ~/ buttonWidth;
+    if (nCols < 2) nCols = 2;
+    int index = 0;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GridView.count(crossAxisCount: nCols, children: [
+        for (var item in choices)
+          Builder(builder: (x) {
+            index++;
+            Color? color = item.color ?? genColor(index);
+
+            TextStyle? textStyle = style ??
+                item.style ??
+                TextStyle(
+                    color: color.isDark ? Colors.white : Colors.black87,
+                    fontSize: 18);
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                shape: shape,
+                color: color,
+                child: InkButton(
+                  onTap: () {
+                    Get.to(
+                      () => (item.primary)
+                          ? Scaffold(
+                              body: item.builder!(),
+                              bottomNavigationBar: childBottomNavigatorBar ??
+                                  MobileToolbar.consumer(context),
+                            )
+                          : MobileScaffold(
+                              appBar: (item.primary)
+                                  ? null
+                                  : AppBar(
+                                      elevation: elevation,
+                                      automaticallyImplyLeading:
+                                          automaticallyImplyLeading,
+                                      title: Text(item.label!),
+                                      actions: (item.items != null)
+                                          ? [
+                                              for (var sb in item.items ?? [])
+                                                InkWell(
+                                                    child: sb.image,
+                                                    onTap: () {
+                                                      sb.onPressed!();
+                                                    })
+                                            ]
+                                          : null,
+                                    ),
+                              body: item.builder!(),
+                              bottomNavigationBar: childBottomNavigatorBar ??
+                                  MobileToolbar.consumer(context),
+                            ),
+                    );
+                  },
+                  child: Card(
+                      color: color,
+                      shape: shape,
+                      semanticContainer: true,
+                      elevation: 0.0,
+                      child: Column(children: [
+                        SizedBox(height: 10),
+                        Expanded(
+                            child: (item.image != null)
+                                ? FittedBox(
+                                    child: Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: item.image,
+                                  ))
+                                : Container()),
+                        FittedBox(
+                            child: Text(item.label ?? '',
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: textStyle)),
+                        SizedBox(
+                          height: 20,
+                        ),
+                      ])),
+                ),
+              ),
+            );
+          }),
+      ]),
     );
   }
 }
@@ -216,8 +239,7 @@ class MobileScaffold extends StatelessWidget {
                                           )
                                         : Container(
                                             width: double.infinity,
-                                            color:
-                                                theme.scaffoldBackgroundColor);
+                                            color: theme.primaryColor);
                                   }),
                               width: responsive.size.width - 0, //120,
                               height: 2),

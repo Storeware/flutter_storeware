@@ -73,11 +73,16 @@ class MobileMenuBox extends StatelessWidget {
       drawer: drawer,
       body: Row(
         children: [
-          if (sideLeft != null)
+          if (sideLeft != null) ...[
             Expanded(
               flex: 1,
               child: sideLeft!,
             ),
+            Container(
+                color: responsive.theme!.dividerColor,
+                width: 1,
+                height: double.infinity),
+          ],
           Expanded(
             flex: flex,
             child: createBody(

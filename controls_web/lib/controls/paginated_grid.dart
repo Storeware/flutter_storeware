@@ -1233,11 +1233,13 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
               for (var item in widget.controller!.columns!)
                 if (!item.isVirtual)
                   (item.editBuilder != null)
-                      ? item.editBuilder!(
-                          widget.controller!, item, p![item.name], p!)
+                      ? Container(
+                          width: item.editWidth ?? 300,
+                          child: item.editBuilder!(
+                              widget.controller!, item, p![item.name], p!))
                       : Container(
                           alignment: Alignment.center,
-                          width: 300,
+                          width: item.editWidth ?? 300,
                           //height: 56,
                           child: createFormField(
                             context,

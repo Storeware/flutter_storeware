@@ -22,8 +22,8 @@ class DataViewerCards extends StatelessWidget {
     required this.controller,
     this.header,
     this.footer,
-    this.canHideNavigator = false,
     this.rowsPerPage,
+    this.canHideNavigator = false,
     this.noDataBuilder,
     this.placeHolder,
     this.padding = 2.0,
@@ -75,12 +75,14 @@ class DataViewerCards extends StatelessWidget {
   }
 
   paginarWidget(context, show) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10, top: 1),
-      child: Container(
-        width: double.infinity,
-        child: (show) ? createPageNavigator(context) : null,
-      ),
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          child: (show) ? createPageNavigator(context) : null,
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 

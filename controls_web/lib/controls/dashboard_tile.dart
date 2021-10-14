@@ -41,7 +41,6 @@ class DashboardTile extends StatelessWidget {
   final Widget? topBar;
   final List<Widget>? actions;
   final Widget? leading;
-  final Widget? trailling;
   final double? maxWidth;
   final double? maxHeight;
   final Widget? counter;
@@ -51,11 +50,11 @@ class DashboardTile extends StatelessWidget {
       this.elevation = 2,
       this.valueStyle,
       this.title,
+      this.counter,
       this.titleStyle,
       this.color,
       this.actions,
       this.leading,
-      this.trailling,
       this.borderRadius = 5,
       this.avatarMargin = 00,
       this.image,
@@ -71,7 +70,6 @@ class DashboardTile extends StatelessWidget {
       this.height = 80,
       this.maxWidth,
       this.maxHeight,
-      this.counter,
       this.left,
       this.topBar,
       this.body})
@@ -116,6 +114,8 @@ class DashboardTile extends StatelessWidget {
                         maxWidth: maxWidth ?? w),
                     child: Stack(
                       children: [
+                        if (counter != null)
+                          Positioned(top: -3, right: -3, child: counter!),
                         Positioned(
                           child: Column(mainAxisSize: MainAxisSize.min,
                               //crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -181,7 +181,6 @@ class DashboardTile extends StatelessWidget {
                                                 .copyWith(fontSize: 18),
                                       )),
                                       if (actions != null) ...actions!,
-                                      if (trailling != null) trailling!,
                                     ]),
                                   ),
                               ]),
@@ -217,8 +216,6 @@ class DashboardTile extends StatelessWidget {
                             top: 10,
                             child: icon!,
                           ),
-                        if (counter != null)
-                          Positioned(top: -3, right: -3, child: counter!),
                       ],
                     ),
                   ));
@@ -244,31 +241,35 @@ Color brighten(Color c, [int percent = 10]) {
 }
 
 class CounterWidget extends StatelessWidget {
-  final String value;
-  final Color? backgroundColor;
-  final double fontSize;
-  final Color? color;
-  final double radius;
-  final TextStyle? style;
   const CounterWidget(
       {Key? key,
-      this.backgroundColor,
-      this.color = Colors.white,
-      this.style,
       this.radius = 15,
-      this.fontSize = 12,
+      this.fontSize = 10,
+      this.style,
+      this.color = Colors.white,
+      this.backgroundColor,
       required this.value})
       : super(key: key);
+  final double radius;
+  final Color? backgroundColor;
+  final String value;
+  final TextStyle? style;
+  final double fontSize;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-        radius: radius,
-        backgroundColor: backgroundColor,
-        child: Text(
-          '$value',
-          overflow: TextOverflow.clip,
-          style: style ?? TextStyle(fontSize: fontSize, color: color),
-        ));
+      radius: radius,
+      backgroundColor: backgroundColor,
+      child: Text(
+        value,
+        style: style ??
+            TextStyle(
+              fontSize: fontSize,
+              color: color,
+            ),
+      ),
+    );
   }
 }

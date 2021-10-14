@@ -30,9 +30,9 @@ class DateIntervalPicker extends StatefulWidget {
   final DateTime startDate;
   final DateTime endDate;
   final double? width;
+  final int itemIndex;
   final bool extendedOptions;
   final Color? color;
-  final int itemIndex;
   final List<String>? options;
   final DateIntervalPickerValues Function(
       int index, DateIntervalPickerValues values)? onChangeValues;
@@ -46,7 +46,13 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
   @override
   void initState() {
     super.initState();
-    options = widget.options ?? ['mês anterior', 'na semana', 'hoje', 'no mês'];
+    options = widget.options ??
+        [
+          'mês anterior',
+          'na semana',
+          'hoje',
+          'no mês',
+        ];
     de = widget.startDate;
     ate = widget.endDate;
     formatar();
@@ -122,7 +128,7 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
                         de = rt.de;
                         ate = rt.ate;
                         return;
-                      } //'mês anterior', 'na semana', 'hoje', 'no mês'
+                      }
                       switch (i) {
                         case 0:
                           de = DateTime.now().addMonths(-1).startOfMonth();
@@ -140,6 +146,7 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
                           de = DateTime.now().startOfMonth();
                           ate = DateTime.now().endOfMonth();
                           break;
+
                         default:
                           de = DateTime.now().startOfDay();
                           ate = DateTime.now().endOfDay();

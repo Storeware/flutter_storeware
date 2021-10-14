@@ -21,6 +21,7 @@ class DateIntervalPicker extends StatefulWidget {
       this.color,
       this.options,
       this.onChangeValues,
+      this.itemIndex = -1,
       this.extendedOptions = false,
       this.width})
       : super(key: key);
@@ -31,6 +32,7 @@ class DateIntervalPicker extends StatefulWidget {
   final double? width;
   final bool extendedOptions;
   final Color? color;
+  final int itemIndex;
   final List<String>? options;
   final DateIntervalPickerValues Function(
       int index, DateIntervalPickerValues values)? onChangeValues;
@@ -44,7 +46,7 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
   @override
   void initState() {
     super.initState();
-    options = widget.options ?? ['hoje', 'na semana', 'no mês', 'mês anterior'];
+    options = widget.options ?? ['mês anterior', 'na semana', 'hoje', 'no mês'];
     de = widget.startDate;
     ate = widget.endDate;
     formatar();
@@ -112,6 +114,7 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
                 child: GroupButtons(
                     color: widget.color,
                     options: options,
+                    itemIndex: widget.itemIndex,
                     onChanged: (i) {
                       if (widget.onChangeValues != null) {
                         var values = DateIntervalPickerValues(de: de, ate: ate);
@@ -119,21 +122,24 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
                         de = rt.de;
                         ate = rt.ate;
                         return;
-                      }
+                      } //'mês anterior', 'na semana', 'hoje', 'no mês'
                       switch (i) {
+                        case 0:
+                          de = DateTime.now().addMonths(-1).startOfMonth();
+                          ate = DateTime.now().addMonths(-1).endOfMonth();
+                          break;
                         case 1:
                           de = DateTime.now().startOfWeek();
                           ate = DateTime.now().endOfWeek();
                           break;
                         case 2:
+                          de = DateTime.now().startOfDay();
+                          ate = DateTime.now().endOfDay();
+                          break;
+                        case 3:
                           de = DateTime.now().startOfMonth();
                           ate = DateTime.now().endOfMonth();
                           break;
-                        case 3:
-                          de = DateTime.now().addMonths(-1).startOfMonth();
-                          ate = DateTime.now().addMonths(-1).endOfMonth();
-                          break;
-
                         default:
                           de = DateTime.now().startOfDay();
                           ate = DateTime.now().endOfDay();

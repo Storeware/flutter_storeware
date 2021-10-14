@@ -4,6 +4,7 @@ import 'package:controls_extensions/extensions.dart';
 
 class GroupButtons extends StatefulWidget {
   final List<String> options;
+  final List<String>? tooltips;
   final Function(int index) onChanged;
   final int itemIndex;
   final Color? color;
@@ -14,6 +15,7 @@ class GroupButtons extends StatefulWidget {
       this.itemIndex = -1,
       this.color,
       this.notifier,
+      this.tooltips,
       required this.onChanged})
       : super(key: key);
 
@@ -46,6 +48,8 @@ class _GroupButtonsState extends State<GroupButtons> {
                 padding: const EdgeInsets.only(right: 2.0),
                 //child: InkWell(
                 child: ChoiceChip(
+                  tooltip:
+                      (widget.tooltips == null) ? null : widget.tooltips![i],
                   selected: value == i,
                   key: ValueKey(i),
                   padding: EdgeInsets.zero,

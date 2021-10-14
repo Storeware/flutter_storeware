@@ -41,8 +41,10 @@ class DashboardTile extends StatelessWidget {
   final Widget? topBar;
   final List<Widget>? actions;
   final Widget? leading;
+  final Widget? trailling;
   final double? maxWidth;
   final double? maxHeight;
+  final Widget? counter;
   const DashboardTile(
       {Key? key,
       this.value,
@@ -53,6 +55,7 @@ class DashboardTile extends StatelessWidget {
       this.color,
       this.actions,
       this.leading,
+      this.trailling,
       this.borderRadius = 5,
       this.avatarMargin = 00,
       this.image,
@@ -68,6 +71,7 @@ class DashboardTile extends StatelessWidget {
       this.height = 80,
       this.maxWidth,
       this.maxHeight,
+      this.counter,
       this.left,
       this.topBar,
       this.body})
@@ -177,6 +181,7 @@ class DashboardTile extends StatelessWidget {
                                                 .copyWith(fontSize: 18),
                                       )),
                                       if (actions != null) ...actions!,
+                                      if (trailling != null) trailling!,
                                     ]),
                                   ),
                               ]),
@@ -212,6 +217,8 @@ class DashboardTile extends StatelessWidget {
                             top: 10,
                             child: icon!,
                           ),
+                        if (counter != null)
+                          Positioned(top: -3, right: -3, child: counter!),
                       ],
                     ),
                   ));
@@ -234,4 +241,34 @@ Color brighten(Color c, [int percent = 10]) {
       c.red + ((255 - c.red) * p).round(),
       c.green + ((255 - c.green) * p).round(),
       c.blue + ((255 - c.blue) * p).round());
+}
+
+class CounterWidget extends StatelessWidget {
+  final String value;
+  final Color? backgroundColor;
+  final double fontSize;
+  final Color? color;
+  final double radius;
+  final TextStyle? style;
+  const CounterWidget(
+      {Key? key,
+      this.backgroundColor,
+      this.color = Colors.white,
+      this.style,
+      this.radius = 15,
+      this.fontSize = 12,
+      required this.value})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+        radius: radius,
+        backgroundColor: backgroundColor,
+        child: Text(
+          '$value',
+          overflow: TextOverflow.clip,
+          style: style ?? TextStyle(fontSize: fontSize, color: color),
+        ));
+  }
 }

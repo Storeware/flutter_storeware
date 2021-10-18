@@ -256,12 +256,6 @@ class MobileScaffold extends StatelessWidget {
                                       : 0.0) -
                                   (appBar != null ? kToolbarHeight : 0.0),
                               child: body),
-                          /* Expanded(
-                            child:
-                                /* (scrolling)
-                                ? SingleChildScrollView(child: body)
-                                :*/
-                                body),*/
                         ],
                       )),
                   borderRadius: BorderRadius.only(
@@ -269,7 +263,6 @@ class MobileScaffold extends StatelessWidget {
                     topRight: Radius.circular(25),
                   ),
                 )),
-            //Expanded(child: body),
           ],
         ),
       ),

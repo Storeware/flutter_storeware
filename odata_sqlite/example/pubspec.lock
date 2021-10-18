@@ -7,7 +7,7 @@ packages:
       name: archive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.5"
+    version: "3.1.6"
   async:
     dependency: transitive
     description:
@@ -90,7 +90,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
+      resolved-ref: dbbbd685a47486eced6069417b8871743b45203a
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.09.27"
@@ -99,7 +99,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
+      resolved-ref: dbbbd685a47486eced6069417b8871743b45203a
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.09.27"
@@ -108,7 +108,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
+      resolved-ref: dbbbd685a47486eced6069417b8871743b45203a
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.09.27"
@@ -117,34 +117,25 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
+      resolved-ref: dbbbd685a47486eced6069417b8871743b45203a
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.09.27"
   controls_data:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
+      resolved-ref: dbbbd685a47486eced6069417b8871743b45203a
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.09.27"
   controls_extensions:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "2021.09.27"
-  controls_web:
-    dependency: "direct main"
-    description:
-      path: controls_web
-      ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
+      resolved-ref: dbbbd685a47486eced6069417b8871743b45203a
       url: "https://github.com/amarildolacerda/flutter_dart.git"
     source: git
     version: "2021.09.27"
@@ -161,7 +152,7 @@ packages:
       name: csslib
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.17.0"
+    version: "0.17.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -176,13 +167,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.4"
-  datetime_picker_formfield:
-    dependency: transitive
-    description:
-      name: datetime_picker_formfield
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   dio:
     dependency: transitive
     description:
@@ -223,13 +207,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.2"
-  flutter_slidable:
-    dependency: transitive
+  flutter_lints:
+    dependency: "direct dev"
     description:
-      name: flutter_slidable
+      name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0"
+    version: "1.0.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -240,20 +224,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  font_awesome_flutter:
-    dependency: transitive
-    description:
-      name: font_awesome_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "9.1.0"
-  get:
-    dependency: transitive
-    description:
-      name: get
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.3.8"
   html:
     dependency: transitive
     description:
@@ -267,7 +237,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.3"
+    version: "0.13.4"
   http_parser:
     dependency: transitive
     description:
@@ -296,6 +266,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.3"
+  lints:
+    dependency: transitive
+    description:
+      name: lints
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   matcher:
     dependency: transitive
     description:
@@ -310,22 +287,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
-  models:
+  odata_sqlite:
     dependency: "direct main"
     description:
-      path: models
-      ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "2021.08.18"
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   path:
     dependency: transitive
     description:
@@ -395,7 +363,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.0"
+    version: "4.4.0"
   platform:
     dependency: transitive
     description:
@@ -423,7 +391,7 @@ packages:
       name: process
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.3"
+    version: "4.2.4"
   qr:
     dependency: transitive
     description:
@@ -438,13 +406,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.27.2"
-  share:
-    dependency: transitive
-    description:
-      name: share
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.4"
   shared_preferences:
     dependency: transitive
     description:
@@ -562,13 +523,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  universal_html:
-    dependency: transitive
-    description:
-      name: universal_html
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.8"
   universal_io:
     dependency: transitive
     description:
@@ -583,55 +537,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0+1"
-  url_launcher:
-    dependency: transitive
-    description:
-      name: url_launcher
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "6.0.12"
-  url_launcher_linux:
-    dependency: transitive
-    description:
-      name: url_launcher_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
-  url_launcher_macos:
-    dependency: transitive
-    description:
-      name: url_launcher_macos
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
-  url_launcher_platform_interface:
-    dependency: transitive
-    description:
-      name: url_launcher_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.4"
-  url_launcher_web:
-    dependency: transitive
-    description:
-      name: url_launcher_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.4"
-  url_launcher_windows:
-    dependency: transitive
-    description:
-      name: url_launcher_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.2"
   uuid:
     dependency: transitive
     description:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.4"
+    version: "3.0.5"
   vector_math:
     dependency: transitive
     description:
@@ -659,7 +571,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.3.0"
+    version: "5.3.1"
 sdks:
-  dart: ">=2.14.0 <3.0.0"
+  dart: ">=2.15.0-226.0.dev <3.0.0"
   flutter: ">=2.5.0"

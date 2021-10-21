@@ -71,7 +71,7 @@ class DefaultDataViewerTheme {
 }
 
 /// [DefaultDataViewer] widget para propagar dependencia pela arvore
-class DefaultDataViewer extends InheritedWidget {
+/*class DefaultDataViewer extends InheritedWidget {
   final DataViewerController? controller;
   DefaultDataViewer({Key? key, @required this.controller, Widget? child})
       : super(key: key, child: child!);
@@ -82,6 +82,22 @@ class DefaultDataViewer extends InheritedWidget {
 
   static of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<DefaultDataViewer>();
+  }
+}*/
+
+class DefaultDataViewerController extends InheritedWidget {
+  final DataViewerController? controller;
+  DefaultDataViewerController(
+      {Key? key, @required this.controller, Widget? child})
+      : super(key: key, child: child!);
+  @override
+  bool updateShouldNotify(DefaultDataViewerController oldWidget) {
+    return false;
+  }
+
+  static DefaultDataViewerController? of(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<DefaultDataViewerController>();
   }
 }
 
@@ -667,7 +683,7 @@ class _DataViewerState extends State<DataViewer> {
     return StreamBuilder<dynamic>(
         stream: controller!.subscribeChanges.stream,
         builder: (context, snapshot) {
-          return DefaultDataViewer(
+          return DefaultDataViewerController(
             controller: widget.controller,
             child: Container(
               height: widget.height,

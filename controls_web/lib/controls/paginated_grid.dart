@@ -814,7 +814,7 @@ class PaginatedGridController {
             });
           },
         ),
-        if (widget!.canDelete)
+        if (widget?.canDelete ?? false)
           Tooltip(
               message: 'Excluir o item',
               child: IconButton(
@@ -836,11 +836,11 @@ class PaginatedGridController {
       {String? title,
       double? width,
       double? height,
-      PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
+      PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) async {
     return PaginatedGrid.show(context,
         title: title,
-        width: widget!.editSize?.width ?? PaginatedGrid.dialogWidth(),
-        height: widget!.editSize?.height ?? PaginatedGrid.dialogHeight(),
+        width: widget?.editSize?.width ?? PaginatedGrid.dialogWidth(),
+        height: widget?.editSize?.height ?? PaginatedGrid.dialogHeight(),
         child: editPage(context, data,
             title: title, width: width, height: height, event: event));
   }
@@ -874,6 +874,8 @@ class PaginatedGridController {
   begin([value = true]) {
     _updating += value ? 1 : -1;
   }
+
+  get updating => _updating;
 
   end() {
     _updating--;
@@ -1203,11 +1205,11 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
             ),
             child: EditScaffold(
               title: widget.title ?? 'Edição',
-              index: widget.index!,
+              index: widget.index ?? 0,
               controller: widget.controller,
-              canDelete: widget.controller!.widget!.canDelete,
-              canEdit: widget.controller!.widget!.canEdit ||
-                  widget.controller!.widget!.canInsert,
+              canDelete: widget.controller!.widget?.canDelete ?? false,
+              canEdit: (widget.controller!.widget?.canEdit ?? true) ||
+                  (widget.controller!.widget?.canInsert ?? false),
               onReset: (ctx) => _formKey.currentState!.reset(),
               onSaved: (ctx) => _save(ctx),
               body: SingleChildScrollView(child: buildPage(context)),
@@ -1337,10 +1339,13 @@ class _PaginatedGridEditRowState extends State<PaginatedGridEditRow> {
   _save(context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      widget.controller!.widget!.onPostEvent!(widget.controller!, p, _event!)
-          .then((rsp) {
-        Navigator.pop(context);
-      });
+      if (widget.controller!.widget == null) {
+        Navigator.pop(context, p);
+      } else
+        widget.controller!.widget!.onPostEvent!(widget.controller!, p, _event!)
+            .then((rsp) {
+          Navigator.pop(context, p);
+        });
     }
   }
 }

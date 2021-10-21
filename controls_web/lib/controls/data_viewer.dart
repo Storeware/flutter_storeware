@@ -262,6 +262,7 @@ class DataViewerController {
         return false;
       });
     }
+    updateStream();
     return rsp;
   }
 
@@ -287,6 +288,7 @@ class DataViewerController {
       paginatedController.source!.add(dados);
       if (onChanged != null) onChanged!(dados);
     }
+    updateStream();
     return rsp!;
   }
 
@@ -321,8 +323,17 @@ class DataViewerController {
       paginatedController.changeTo(keyName, dados[keyName], dados);
       if (onChanged != null) onChanged!(dados);
     }
+    updateStream();
     return false;
   }
+
+  updateStream() {
+    if (paginatedController.updating <= 0) if (_valuesStream != null)
+      _valuesStream!.sink.add(source!);
+  }
+
+  begin() => paginatedController.begin();
+  end() => paginatedController.end();
 
   /// mostra uma janela filha
   show(String texto, {Widget? child}) {
@@ -342,13 +353,28 @@ class DataViewerController {
       {String? title,
       double? width = 650,
       double? height = 720,
-      PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) {
-    return paginatedController.edit(context, data,
-        title: title!, width: width!, height: height!, event: event);
+      PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) async {
+    paginatedController.columns ??= columns;
+    return paginatedController
+        .edit(context, data,
+            title: title, width: width!, height: height!, event: event)
+        .then((r) {
+      if (paginatedController.widget == null) {
+        if (event == PaginatedGridChangeEvent.update)
+          doUpdate(r);
+        else if (event == PaginatedGridChangeEvent.insert)
+          doInsert(r);
+        else if (event == PaginatedGridChangeEvent.delete) doDelete(r);
+      }
+      //updateStream();
+      return r;
+    });
   }
 
   remove(dados) {
-    return paginatedController.remove(dados);
+    var r = paginatedController.remove(dados);
+    updateStream();
+    return r;
   }
 }
 

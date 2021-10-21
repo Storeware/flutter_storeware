@@ -17,6 +17,7 @@ class DataViewerCards extends StatefulWidget {
   final Widget? placeHolder;
   final bool canHideNavigator;
   final bool lazyLoader;
+  final bool showNavigator;
   DataViewerCards({
     Key? key,
     this.itemWidth = 200,
@@ -27,6 +28,7 @@ class DataViewerCards extends StatefulWidget {
     this.rowsPerPage,
     this.lazyLoader = false,
     this.canHideNavigator = false,
+    this.showNavigator = true,
     this.noDataBuilder,
     this.placeHolder,
     this.padding = 2.0,
@@ -109,15 +111,16 @@ class _cards extends State<DataViewerCards> {
                                       : widget.noDataBuilder!(),
                                 for (var item in snapshot.data ?? [])
                                   Container(
-                                      key: ValueKey(
-                                          '${item[widget.controller.keyName] ?? nKey++}'),
+                                      // key: ValueKey(
+                                      //     '${item[widget.controller.keyName] ?? nKey++}'),
                                       child: widget.itemBuilder(context, item)),
-                                paginarWidget(
-                                    context,
-                                    (!widget.canHideNavigator) ||
-                                        ((widget.controller.page > 1) ||
-                                            (snapshot.data!.length >=
-                                                _rowsPerPage))),
+                                if (widget.showNavigator)
+                                  paginarWidget(
+                                      context,
+                                      (!widget.canHideNavigator) ||
+                                          ((widget.controller.page > 1) ||
+                                              (snapshot.data!.length >=
+                                                  _rowsPerPage))),
                               ]),
                               ValueListenableBuilder<bool>(
                                 valueListenable: _loading,

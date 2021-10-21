@@ -1,6 +1,7 @@
 library data_viewer;
-//import 'dart:convert';
 
+//import 'dart:convert';
+import 'dart:async';
 import 'package:controls_data/local_storage.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
@@ -136,6 +137,46 @@ class DataViewerController {
     changedValues.value = value;
   }
 
+  Future<int> open({page = 1}) async {
+    _init();
+    this.page = page;
+    paginatedController.source ??= [];
+    int i = await future!().then((rsp) {
+      source!.clear();
+      source!.addAll(rsp);
+      _valuesStream!.sink.add(source!);
+      return rsp.length;
+    });
+    return i;
+  }
+
+  Future<int> openNext() async {
+    _init();
+    page++;
+    paginatedController.source ??= [];
+    int i = await future!().then((rsp) {
+      source!.addAll(rsp);
+      _valuesStream!.sink.add(source!);
+      return rsp.length;
+    });
+    return i;
+  }
+
+  StreamController<List>? _valuesStream;
+  _init() {
+    if (_valuesStream == null)
+      _valuesStream = StreamController<List>.broadcast();
+  }
+
+  Stream<List> get stream {
+    _init();
+    return _valuesStream!.stream;
+  }
+
+  dispose() {
+    if (_valuesStream != null) _valuesStream!.close();
+  }
+
   /// Eventos para customização de registro
   final Future<dynamic> Function(dynamic)? onInsert;
   final Future<dynamic> Function(dynamic)? onUpdate;
@@ -150,7 +191,7 @@ class DataViewerController {
 
   /// Lista de dados
   //List<dynamic> source;
-  set source(List<dynamic>? data) => paginatedController.source;
+  set source(List<dynamic>? data) => paginatedController.source = data;
   List<dynamic>? get source => paginatedController.source;
 
   /// Observer que notifica mudança dos dados

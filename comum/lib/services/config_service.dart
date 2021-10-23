@@ -345,20 +345,24 @@ abstract class ConfigAppBase extends ConfigBase {
   String decrypt(txt) => txt;
 
   load() async {
-    _celular = decrypt(ls.LocalStorage().getKey('celular'));
-    usuario = decrypt(ls.LocalStorage().getKey('usuario') /*?? '*/);
-    conta = queryParameters['q'] ?? ls.LocalStorage().getKey('contaid') ?? '';
-    lembrarSenha = ls.LocalStorage().getBool('lembrarSenha') /*?? false*/;
-    password = decrypt(ls.LocalStorage().getKey('usuario1'));
+    try {
+      _celular = decrypt(ls.LocalStorage().getKey('celular'));
+      usuario = decrypt(ls.LocalStorage().getKey('usuario') /*?? '*/);
+      conta = queryParameters['q'] ?? ls.LocalStorage().getKey('contaid') ?? '';
+      lembrarSenha = ls.LocalStorage().getBool('lembrarSenha') /*?? false*/;
+      password = decrypt(ls.LocalStorage().getKey('usuario1'));
+    } catch (e) {}
   }
 
   save() async {
-    ls.LocalStorage().setKey('usuario', encrypt(usuario));
-    ls.LocalStorage().setKey('contaid', conta);
-    ls.LocalStorage().setBool('lembrarSenha', lembrarSenha /*?? false*/);
-    if (_celular != null)
-      ls.LocalStorage().setKey('celular', encrypt(_celular));
-    ls.LocalStorage().setKey('usuario1', encrypt(password));
+    try {
+      ls.LocalStorage().setKey('usuario', encrypt(usuario));
+      ls.LocalStorage().setKey('contaid', conta);
+      ls.LocalStorage().setBool('lembrarSenha', lembrarSenha /*?? false*/);
+      if (_celular != null)
+        ls.LocalStorage().setKey('celular', encrypt(_celular));
+      ls.LocalStorage().setKey('usuario1', encrypt(password));
+    } catch (e) {}
   }
 
   /// dados do cliente (comprador) que identifica a sua conta

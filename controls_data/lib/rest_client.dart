@@ -332,11 +332,16 @@ class RestClient {
     var msg = '${e?.message}';
     if (inDebug) msg += '$path |';
     if ((e?.response?.statusCode ?? 0) == 403)
-      return 'A solicita��o foi recusada pelo servidor - checar permiss�es de acesso (403) ($msg)';
+      return 'A solicitação foi recusada pelo servidor - checar permissões de acesso (403) ($msg)';
     if ((e?.response?.statusCode ?? 0) == 404)
-      return 'A solicita��o n�o foi encontrada - checar se � um objeto v�lido (404) ($msg)';
+      return 'A solicitação não foi encontrada - checar se é um objeto válido (404) ($msg)';
 
     String title = '${e?.message}';
+    if (e?.response?.statusCode == 409) {
+      title =
+          'Servidor não processou a requisição (${e?.response?.statusCode})';
+    }
+
     String es =
         (e?.response?.data != null) ? e?.response?.data['error'] ?? '' : '';
     String erro = (title.isNotEmpty ? '${title}|' : '') + es;
@@ -426,15 +431,12 @@ class RestClient {
         } else {
           return throw (resp.data);
         }
-      });
-      /*.catchError((e) {
-        print(['catchError:', '$e']);
+      }, onError: (e) {
         DataProcessingNotifier.stop();
         var error = formataMensagemErro(url, e);
         if (!silent) notifyError.send(error);
-        return e;
-        //return throw e;
-      });*/
+        return throw error;
+      });
     } catch (e) {
       DataProcessingNotifier.stop();
       var error = formataMensagemErro(url, e);

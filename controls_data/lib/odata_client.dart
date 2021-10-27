@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'rest_client.dart';
 import 'package:flutter/material.dart';
 import 'data_model.dart';
@@ -673,7 +672,7 @@ abstract class ODataModelClass<T extends DataItem> {
       try {
         d = removeExternalKeys(d);
         return API!.post(makeCollection(d), d).then((x) {
-          if (CC != null) CC?.post(collectionName!, d);
+          if (CC != null) _computePost(d);
           afterChangeEvent(d);
           return jsonDecode(x);
         });
@@ -683,6 +682,12 @@ abstract class ODataModelClass<T extends DataItem> {
         rethrow;
       }
     }
+  }
+
+  _computePost(d) async {
+    try {
+      return CC?.clone().post(collectionName!, d);
+    } catch (e) {}
   }
 
   Future<Map<String, dynamic>?> put(item) async {
@@ -701,7 +706,9 @@ abstract class ODataModelClass<T extends DataItem> {
                 method: "PUT", body: API!.removeNulls(d))
             .then((x) {
           //API!.client.notifyLog.notify(x.toString());
-          if (CC != null) CC!.put(makeCollection(d), d);
+
+          if (CC != null) _computePut(d);
+
           afterChangeEvent(d);
           return x;
         });
@@ -710,6 +717,12 @@ abstract class ODataModelClass<T extends DataItem> {
         return null;
       }
     }
+  }
+
+  _computePut(d) async {
+    try {
+      return CC?.clone().put(collectionName!, d);
+    } catch (e) {}
   }
 
   Future<Map<String, dynamic>?> send(ODataEventState event, T item) async {
@@ -741,7 +754,7 @@ abstract class ODataModelClass<T extends DataItem> {
               method: 'POST',
               body: d)
           .then((x) {
-        if (CC != null) CC!.post('delete/${makeCollection(d)}', d);
+        if (CC != null) _computeDelete(d);
 
         return x;
       });
@@ -749,6 +762,12 @@ abstract class ODataModelClass<T extends DataItem> {
       ErrorNotify.send('$err');
       throw err;
     }
+  }
+
+  _computeDelete(d) async {
+    try {
+      return CC!.clone().post('delete/${makeCollection(d)}', d);
+    } catch (e) {}
   }
 
   Future<ODataResult> search(

@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 
 import 'strap_widgets.dart';
+import 'dart:ui';
+import 'package:controls_web/controls/dialogs_widgets.dart';
 
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
@@ -208,4 +210,236 @@ extension WidgetMorphism on Widget {
         style: TextStyle(
             color: color, fontSize: fontSize, fontWeight: fontWeight));
   }
+
+  Widget gradient({List<Color>? colors, TileMode tileMode = TileMode.clamp}) {
+    return ShaderMask(
+      child: this,
+      blendMode: BlendMode.srcIn,
+      shaderCallback: (bounds) {
+        return LinearGradient(
+          colors: colors ?? [Colors.blue, Colors.lightBlue],
+          tileMode: tileMode,
+        ).createShader(bounds);
+      },
+    );
+  }
+
+  Widget rotatedBox({int quarterTurns = 2}) => RotatedBox(
+        quarterTurns: quarterTurns,
+        child: this,
+      );
+  Widget flexible({int flex = 1, FlexFit fit = FlexFit.tight}) => Flexible(
+        fit: fit,
+        flex: flex,
+        child: this,
+      );
+  Widget draggable<D extends Object>(
+    D data, {
+    Widget? feedback,
+    Widget? childWhenDragging,
+  }) {
+    return Draggable<D>(
+        data: data,
+        child: this,
+        childWhenDragging: childWhenDragging ?? Container(),
+        feedback: feedback ??
+            Container(
+              width: 80,
+              height: 80,
+              color: Colors.grey[200],
+            ));
+  }
+
+  Widget dragTarget<D extends Object>({
+    bool Function(D? value)? onWillAccept,
+    void Function(D? value)? onAccept,
+    void Function(D? value)? onLeave,
+    Widget Function(BuildContext context, List<D?> value)? onBuilder,
+    Widget? placeHolder,
+  }) {
+    bool accepted = false;
+    return DragTarget<D>(
+      builder: (context, list, value) {
+        return accepted
+            ? (onBuilder != null ? onBuilder(context, list) : this)
+            : (placeHolder ?? Container());
+      },
+      onWillAccept: (data) {
+        if (onWillAccept != null) return accepted = onWillAccept(data);
+        if (data is D)
+          accepted = true;
+        else
+          accepted = false;
+        return accepted;
+      },
+      onAccept: (data) {
+        if (onAccept != null) onAccept(data);
+      },
+      onLeave: (data) {
+        if (onLeave != null) onLeave(data);
+        accepted = false;
+      },
+    );
+  }
+
+  Future showDialog<T>(BuildContext context,
+          {String? title,
+          double? width,
+          double? height,
+          bool fullPage = false}) =>
+      Dialogs.showPage<T>(
+        context,
+        title: title,
+        width: width,
+        height: height,
+        child: this,
+        fullPage: fullPage,
+      );
+
+  /// [willPopScope] pergunta se o APP pode ser encerrado
+  Widget willPopScope(Future<bool> Function() onWillPop) =>
+      WillPopScope(onWillPop: onWillPop, child: this);
+
+  Widget animatedPadding({double padValue = 0}) {
+    return AnimatedPadding(
+      padding: EdgeInsets.all(padValue),
+      child: this,
+      curve: Curves.easeInOut,
+      duration: const Duration(seconds: 1),
+    );
+  }
+
+  Widget aspectRatio({double ratio = 1}) => AspectRatio(
+        aspectRatio: ratio,
+        child: this,
+      );
+  Widget singleChildScrollView({
+    ScrollController? controller,
+    EdgeInsets? padding,
+  }) =>
+      SingleChildScrollView(
+        controller: controller,
+        padding: padding,
+        child: this,
+      );
+  Widget sliverView({
+    required List<Widget> slivers,
+  }) {
+    return CustomScrollView(slivers: [
+      this.sliverContainer(),
+      for (const item in slivers) item.sliverContainer()
+    ]);
+  }
+
+  Widget sliverContainer() => (this is SingleChildRenderObjectWidget)
+      ? this
+      : SliverToBoxAdapter(child: this);
 }
+
+extension ListViewExtension on ListView {
+  Widget whellScroller(context) {
+    return ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+          PointerDeviceKind.touch,
+          PointerDeviceKind.mouse,
+        }),
+        child: this);
+  }
+}
+
+extension ListExtension on List {
+  Widget animatedList<T>({
+    Key? key,
+    ScrollController? scrollController,
+    Axis scrollDirection = Axis.vertical,
+    bool reverse = true,
+    EdgeInsets? padding,
+    required Widget Function(BuildContext context, T item) itemBuilder,
+  }) {
+    final _key = key ?? GlobalKey<AnimatedListState>();
+    final myTween = Tween<Offset>(
+      begin: const Offset(-1.0, 0.0),
+      end: Offset.zero,
+    );
+    return AnimatedList(
+      key: _key,
+      controller: scrollController,
+      scrollDirection: scrollDirection,
+      initialItemCount: this.length,
+      reverse: reverse,
+      padding: padding,
+      itemBuilder: (context, index, Animation<double> animation) {
+        return SlideTransition(
+            position: animation.drive(myTween),
+            child: itemBuilder(context, this[index]));
+      },
+    );
+  }
+
+  Widget listView<T>({
+    required Widget Function(BuildContext context, T data) itemBuilder,
+    Axis scrollDirection = Axis.vertical,
+    bool reverse = true,
+    String? restorationId,
+    EdgeInsets? padding,
+    double? itemExtent,
+  }) =>
+      ListView.builder(
+          itemCount: this.length,
+          scrollDirection: scrollDirection,
+          reverse: reverse,
+          restorationId: restorationId,
+          padding: padding,
+          itemExtent: itemExtent,
+          itemBuilder: (ctx, index) => itemBuilder(ctx, this[index]));
+
+  Widget flex<T>({
+    required Widget Function(T data) itemBuilder,
+    Axis direction = Axis.vertical,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    Clip clipBehavior = Clip.hardEdge,
+  }) =>
+      Flex(
+        direction: direction,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: mainAxisAlignment,
+        crossAxisAlignment: crossAxisAlignment,
+        clipBehavior: clipBehavior,
+        children: [for (var item in this) itemBuilder(item)],
+      );
+  Widget sliverList({
+    required Widget Function(BuildContext context, dynamic data) itemBuilder,
+  }) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => itemBuilder(context, this[index]),
+        childCount: this.length,
+      ),
+    );
+  }
+
+  Widget sliverGrid({
+    double crossAxisCount = 2,
+    required Widget Function(dynamic data) itemBuilder,
+    double mainAxisSpacing = 5, 
+    double crossAxisSpacing = 5,
+    double childAspectRatio = 1,
+  }) {
+    return SliverGrid(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => itemBuilder(context, this[index]),
+        childCount: this.length,
+      ),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          mainAxisSpacing: mainAxisSpacing,
+          crossAxisSpacing: crossAxisSpacing,
+          childAspectRatio: childAspectRatio),
+    );
+  }
+}
+
+//extension TextStyleExtension on TextStyle{
+
+//}

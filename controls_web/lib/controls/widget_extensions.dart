@@ -553,8 +553,90 @@ extension ListExtension on List {
     );
   }*/
 
+  Widget stepper<T>({
+    int currentStep = 0,
+    required Step Function(BuildContext context, T data) itemBuilder,
+    StepperType type = StepperType.vertical,
+    void Function(int index)? onStepTapped,
+    //void Function()? onStepCancel,
+    //void Function()? onStepContinue,
+    double elevation = 2,
+  }) {
+    return StepperWidget(
+      currentStep: currentStep,
+      itemBuilder: (context, index) {
+        return itemBuilder(context, this[index]);
+      },
+      onStepTapped: onStepTapped,
+      itemCount: this.length,
+      type: type,
+      elevation: elevation,
+    );
+  }
 }
 
-//extension TextStyleExtension on TextStyle{
+class StepperWidget extends StatefulWidget {
+  final int currentStep;
+  final int itemCount;
+  final void Function(int index)? onStepTapped;
+  final double elevation;
+  final Step Function(BuildContext context, int index) itemBuilder;
+  final StepperType type;
+  StepperWidget({
+    Key? key,
+    this.currentStep = 0,
+    required this.itemCount,
+    required this.itemBuilder,
+    this.onStepTapped,
+    this.type = StepperType.vertical,
+    this.elevation = 2,
+  }) : super(key: key);
 
-//}
+  @override
+  _StepperViewerState createState() => _StepperViewerState();
+}
+
+class _StepperViewerState extends State<StepperWidget> {
+  late ValueNotifier<int> _currentStep;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentStep = ValueNotifier<int>(widget.currentStep);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<int>(
+        valueListenable: _currentStep,
+        builder: (BuildContext context, int value, Widget? child) {
+          return Stepper(
+            currentStep: value,
+            steps: [
+              for (var i = 0; i < widget.itemCount; i++)
+                widget.itemBuilder(context, i),
+            ],
+            type: widget.type,
+            onStepTapped: (index) {
+              _currentStep.value = index;
+              if (widget.onStepTapped != null) widget.onStepTapped!(index);
+            },
+            elevation: widget.elevation,
+            onStepCancel: () {
+              if (_currentStep.value > 0) {
+                _currentStep.value -= 1;
+              } else {
+                _currentStep.value = 0;
+              }
+            },
+            onStepContinue: () {
+              if (_currentStep.value < widget.itemCount - 1) {
+                _currentStep.value += 1;
+              } else {
+                _currentStep.value = 0;
+              }
+            },
+          );
+        });
+  }
+}

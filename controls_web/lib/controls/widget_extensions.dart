@@ -340,6 +340,21 @@ extension WidgetMorphism on Widget {
   Widget sliverContainer() => (this is SingleChildRenderObjectWidget)
       ? this
       : SliverToBoxAdapter(child: this);
+  Widget dismissible({
+    Key? key,
+    required Function(DismissDirection direction) onDismissed,
+    Widget? background,
+    Widget? secondaryBackground,
+    DismissDirection direction = DismissDirection.endToStart,
+  }) =>
+      Dismissible(
+        key: key ?? UniqueKey(),
+        child: this,
+        onDismissed: onDismissed,
+        background: background,
+        secondaryBackground: secondaryBackground,
+        direction: direction,
+      );
 }
 
 extension ListViewExtension on ListView {
@@ -425,9 +440,9 @@ extension ListExtension on List {
     );
   }
 
-  Widget sliverGrid({
+  Widget sliverGrid<T>({
     int crossAxisCount = 2,
-    required Widget Function(BuildContext context, dynamic data) itemBuilder,
+    required Widget Function(BuildContext context, T data) itemBuilder,
     double mainAxisSpacing = 5,
     double crossAxisSpacing = 5,
     double childAspectRatio = 1,
@@ -445,11 +460,11 @@ extension ListExtension on List {
     );
   }
 
-  Widget expansionList({
+  Widget expansionList<T>({
     double elevation = 2,
     required Widget Function(BuildContext context, dynamic data, bool)
         headerBuilder,
-    required Widget Function(dynamic data) bodyBuilder,
+    required Widget Function(T data) bodyBuilder,
     EdgeInsets? expandedHeaderPadding,
     bool canTapOnHeader = true,
     Map<int, bool>? expanded,
@@ -475,13 +490,27 @@ extension ListExtension on List {
     );
   }
 
-  Widget wheelScrollView({
-    required Widget Function(dynamic data) itemBuilder,
+  Widget wheelScrollView<T>({
+    required Widget Function(T data) itemBuilder,
     double itemExtent = 200,
     double diameterRatio = 1,
     double magnification = 1,
+    Function(T data, int index)? onSelectedItemChanged,
   }) {
-    return ListWheelScrollView(
+    return ListWheelScrollView.useDelegate(
+      itemExtent: itemExtent,
+      diameterRatio: diameterRatio,
+      onSelectedItemChanged: (index) {
+        if (onSelectedItemChanged != null)
+          onSelectedItemChanged(this[index], index);
+      },
+      magnification: magnification,
+      useMagnifier: magnification > 1,
+      childDelegate: ListWheelChildListDelegate(
+        children: [for (var item in this) itemBuilder(item)],
+      ),
+    ); /*(
+      
       itemExtent: itemExtent,
       diameterRatio: diameterRatio,
       useMagnifier: magnification > 1,
@@ -489,8 +518,41 @@ extension ListExtension on List {
       children: [
         for (var item in this) itemBuilder(item),
       ],
+    );*/
+  }
+
+  Widget pageView<T>({
+    Key? key,
+    PageController? controller,
+    Axis scrollDirection = Axis.horizontal,
+    required Widget Function(BuildContext context, T item) itemBuilder,
+    Function(int)? onPageChanged,
+  }) {
+    return PageView.builder(
+      key: key,
+      itemCount: this.length,
+      scrollDirection: scrollDirection,
+      controller: controller,
+      onPageChanged: (page) {
+        if (onPageChanged != null) onPageChanged(page);
+      },
+      itemBuilder: (context, index) => itemBuilder(context, this[index]),
     );
   }
+
+/*
+  Widget interactiveViewer({
+    bool scaleEnabled = false,
+  }) {
+    return InteractiveViewer.builder(
+      scaleEnabled: scaleEnabled,
+
+      builder: (context, viewPort) {
+        return this;
+      },
+    );
+  }*/
+
 }
 
 //extension TextStyleExtension on TextStyle{

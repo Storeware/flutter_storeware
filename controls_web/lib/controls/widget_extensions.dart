@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'strap_widgets.dart';
 import 'dart:ui';
 import 'package:controls_web/controls/dialogs_widgets.dart';
+import 'package:controls_web/controls/tab_choice.dart';
 
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
@@ -540,32 +541,19 @@ extension ListExtension on List {
     );
   }
 
-/*
-  Widget interactiveViewer({
-    bool scaleEnabled = false,
-  }) {
-    return InteractiveViewer.builder(
-      scaleEnabled: scaleEnabled,
-
-      builder: (context, viewPort) {
-        return this;
-      },
-    );
-  }*/
-
   Widget stepper<T>({
+    List<TabChoice>? choices,
     int currentStep = 0,
-    required Step Function(BuildContext context, T data) itemBuilder,
+    Step Function(BuildContext context, T data)? itemBuilder,
     StepperType type = StepperType.vertical,
     void Function(int index)? onStepTapped,
-    //void Function()? onStepCancel,
-    //void Function()? onStepContinue,
     double elevation = 2,
   }) {
     return StepperWidget(
+      choices: choices,
       currentStep: currentStep,
       itemBuilder: (context, index) {
-        return itemBuilder(context, this[index]);
+        return itemBuilder!(context, this[index]);
       },
       onStepTapped: onStepTapped,
       itemCount: this.length,
@@ -580,16 +568,20 @@ class StepperWidget extends StatefulWidget {
   final int itemCount;
   final void Function(int index)? onStepTapped;
   final double elevation;
-  final Step Function(BuildContext context, int index) itemBuilder;
+  final Step Function(BuildContext context, int index)? itemBuilder;
   final StepperType type;
+  final List<TabChoice>? choices;
+  final StepState Function(int selected, int current)? onState;
   StepperWidget({
     Key? key,
     this.currentStep = 0,
-    required this.itemCount,
-    required this.itemBuilder,
+    this.itemCount = 0,
+    this.itemBuilder,
     this.onStepTapped,
     this.type = StepperType.vertical,
     this.elevation = 2,
+    this.choices,
+    this.onState,
   }) : super(key: key);
 
   @override
@@ -598,11 +590,14 @@ class StepperWidget extends StatefulWidget {
 
 class _StepperViewerState extends State<StepperWidget> {
   late ValueNotifier<int> _currentStep;
+  late int count;
 
   @override
   void initState() {
     super.initState();
     _currentStep = ValueNotifier<int>(widget.currentStep);
+    count =
+        (widget.choices != null) ? widget.choices!.length : widget.itemCount;
   }
 
   @override
@@ -613,8 +608,12 @@ class _StepperViewerState extends State<StepperWidget> {
           return Stepper(
             currentStep: value,
             steps: [
-              for (var i = 0; i < widget.itemCount; i++)
-                widget.itemBuilder(context, i),
+              if (widget.choices != null)
+                for (var i = 0; i < widget.choices!.length; i++)
+                  buildStep(value, i),
+              if (widget.choices == null && widget.itemBuilder != null)
+                for (var i = 0; i < widget.itemCount; i++)
+                  widget.itemBuilder!(context, i),
             ],
             type: widget.type,
             onStepTapped: (index) {
@@ -630,7 +629,7 @@ class _StepperViewerState extends State<StepperWidget> {
               }
             },
             onStepContinue: () {
-              if (_currentStep.value < widget.itemCount - 1) {
+              if (_currentStep.value < count - 1) {
                 _currentStep.value += 1;
               } else {
                 _currentStep.value = 0;
@@ -638,5 +637,20 @@ class _StepperViewerState extends State<StepperWidget> {
             },
           );
         });
+  }
+
+  buildStep(value, i) {
+    var item = widget.choices![i];
+    return Step(
+      content: item.child ?? item.builder!(),
+      title: item.title ?? Text(item.label ?? 'Label Indef'),
+      subtitle: item.tooltip == null ? null : Text(item.tooltip!),
+      isActive: value == i,
+      state: (widget.onState != null)
+          ? widget.onState!(value, i)
+          : (value == i)
+              ? StepState.editing
+              : StepState.indexed,
+    );
   }
 }

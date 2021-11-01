@@ -44,10 +44,15 @@ extension WidgetMorphism on Widget {
     return Padding(padding: padding ?? EdgeInsets.all(8.0), child: this);
   }
 
-  Widget card({Color? color, double elevation = 4.0}) {
+  Widget card(
+      {Color? color,
+      double elevation = 4.0,
+      double radius = 5,
+      ShapeBorder? shape}) {
     return Card(
       color: color,
       elevation: elevation,
+      shape: shape,
       child: this,
     );
   }
@@ -319,6 +324,7 @@ extension WidgetMorphism on Widget {
   }) =>
       SingleChildScrollView(
         controller: controller,
+        physics: BouncingScrollPhysics(),
         padding: padding,
         child: this,
       );
@@ -327,7 +333,7 @@ extension WidgetMorphism on Widget {
   }) {
     return CustomScrollView(slivers: [
       this.sliverContainer(),
-      for (const item in slivers) item.sliverContainer()
+      for (var item in slivers) item.sliverContainer()
     ]);
   }
 
@@ -337,7 +343,7 @@ extension WidgetMorphism on Widget {
 }
 
 extension ListViewExtension on ListView {
-  Widget whellScroller(context) {
+  Widget wheelScroller(context) {
     return ScrollConfiguration(
         behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
           PointerDeviceKind.touch,
@@ -420,9 +426,9 @@ extension ListExtension on List {
   }
 
   Widget sliverGrid({
-    double crossAxisCount = 2,
-    required Widget Function(dynamic data) itemBuilder,
-    double mainAxisSpacing = 5, 
+    int crossAxisCount = 2,
+    required Widget Function(BuildContext context, dynamic data) itemBuilder,
+    double mainAxisSpacing = 5,
     double crossAxisSpacing = 5,
     double childAspectRatio = 1,
   }) {
@@ -436,6 +442,53 @@ extension ListExtension on List {
           mainAxisSpacing: mainAxisSpacing,
           crossAxisSpacing: crossAxisSpacing,
           childAspectRatio: childAspectRatio),
+    );
+  }
+
+  Widget expansionList({
+    double elevation = 2,
+    required Widget Function(BuildContext context, dynamic data, bool)
+        headerBuilder,
+    required Widget Function(dynamic data) bodyBuilder,
+    EdgeInsets? expandedHeaderPadding,
+    bool canTapOnHeader = true,
+    Map<int, bool>? expanded,
+  }) {
+    Map<int, bool> opened = expanded ?? {};
+    return ExpansionPanelList(
+      animationDuration: const Duration(seconds: 1),
+      elevation: elevation,
+      expandedHeaderPadding: expandedHeaderPadding ?? EdgeInsets.all(2),
+      children: [
+        for (var i = 0; i < this.length; i++)
+          ExpansionPanel(
+            headerBuilder: (context, open) =>
+                headerBuilder(context, this[i], open),
+            body: bodyBuilder(this[i]),
+            canTapOnHeader: canTapOnHeader,
+            isExpanded: opened[i] ?? false,
+          ),
+      ],
+      expansionCallback: (index, open) {
+        opened[index] = open;
+      },
+    );
+  }
+
+  Widget wheelScrollView({
+    required Widget Function(dynamic data) itemBuilder,
+    double itemExtent = 200,
+    double diameterRatio = 1,
+    double magnification = 1,
+  }) {
+    return ListWheelScrollView(
+      itemExtent: itemExtent,
+      diameterRatio: diameterRatio,
+      useMagnifier: magnification > 1,
+      magnification: magnification,
+      children: [
+        for (var item in this) itemBuilder(item),
+      ],
     );
   }
 }

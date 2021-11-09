@@ -1,3 +1,5 @@
+// @dart=2.12.0
+
 library data_viewer;
 
 //import 'dart:convert';
@@ -29,6 +31,7 @@ class DefaultDataViewerTheme {
   Color? headingRowColor;
   double headingRowHeight = kMinInteractiveDimension;
   double dataRowHeight = kMinInteractiveDimension * 0.75;
+
   TextStyle? headingTextStyle;
   TextStyle? dataTextStyle;
   Color? oddRowColor;
@@ -45,9 +48,12 @@ class DefaultDataViewerTheme {
         ? _singleton._theme!.indicatorColor
         : Colors.black26;
     _singleton.evenRowColor ??=
-        theme.primaryTextTheme.bodyText1!.backgroundColor;
+        theme.primaryTextTheme.bodyText1!.backgroundColor ??
+            theme.primaryColor.withAlpha(10);
     _singleton.oddRowColor ??=
-        theme.primaryTextTheme.bodyText2!.backgroundColor;
+        theme.primaryTextTheme.bodyText2!.backgroundColor ??
+            theme.primaryColor.withAlpha(5);
+
     _singleton.headingTextStyle =
         (_singleton._theme!.brightness == Brightness.light)
             ? TextStyle(
@@ -519,7 +525,11 @@ class DataViewer extends StatefulWidget {
   final Widget? header;
   final bool showPageNavigatorButtons;
   final double? dataRowHeight;
+  final Color? dataRowColor;
+  final TextStyle? dataTextStyle;
+
   final double? headingRowHeight;
+  final Color? headingRowColor;
   final double? footerHeight;
   final Widget? footer;
   final Widget? footerSecondary;
@@ -534,6 +544,7 @@ class DataViewer extends StatefulWidget {
     this.child,
     this.oneRowAutoEdit = false,
     this.keyName,
+    this.headingRowColor,
     this.source,
     this.evenRowColor,
     this.elevation = 0,
@@ -551,6 +562,8 @@ class DataViewer extends StatefulWidget {
     this.footer,
     this.footerSecondary,
     this.dataRowHeight,
+    this.dataRowColor,
+    this.dataTextStyle,
     this.beforeShow,
     this.columns,
     this.columnStyle,
@@ -587,9 +600,11 @@ class DataViewer extends StatefulWidget {
 
 class _DataViewerState extends State<DataViewer> {
   DataViewerController? controller;
+  late int loadingCount;
 
   @override
   void initState() {
+    loadingCount = 0;
     controller = widget.controller ??
         DataViewerController(
             keyName: widget.keyName,
@@ -691,6 +706,10 @@ class _DataViewerState extends State<DataViewer> {
 
   @override
   Widget build(BuildContext context) {
+    //if (loadingCount == 0 && controller!.future != null) {
+    loadingCount++;
+    //  return Container();
+    //}
     responsive = ResponsiveInfo(context);
     var vt = DefaultDataViewerTheme.of(context);
     theme = Theme.of(context);
@@ -722,7 +741,8 @@ class _DataViewerState extends State<DataViewer> {
                       canSort: widget.canSort,
                       evenRowColor: widget.evenRowColor ?? vt.evenRowColor,
                       oddRowColor: widget.oddRowColor ?? vt.oddRowColor,
-                      headingRowColor: vt.headingRowColor,
+                      headingRowColor:
+                          widget.headingRowColor ?? vt.headingRowColor,
                       headingTextStyle: vt.headingTextStyle,
                       actions: widget.actions,
                       navigatorLeading: widget.navigatorLeading,
@@ -751,6 +771,8 @@ class _DataViewerState extends State<DataViewer> {
                               : null,
                       headingRowHeight: _headingRowHeight,
                       dataRowHeight: _dataRowHeight,
+                      dataRowColor: widget.dataRowColor,
+                      dataTextStyle: widget.dataTextStyle,
                       controller: controller!.paginatedController,
                       beforeShow: (p) {
                         if (widget.beforeShow != null)

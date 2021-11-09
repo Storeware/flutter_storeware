@@ -15,6 +15,7 @@ class PaginatedDataTableExtended extends StatefulWidget {
   final Widget? footerTrailing;
   final Widget? footer;
   final Widget? footerSecondary;
+  final TextStyle? headingTextStyle;
   PaginatedDataTableExtended({
     Key? key,
     @required this.header,
@@ -27,12 +28,14 @@ class PaginatedDataTableExtended extends StatefulWidget {
     this.onSelectAll,
     this.color,
     this.dataRowHeight = kMinInteractiveDimension,
+    this.dataTextStyle,
+    this.dataRowColor,
     this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.alignment = Alignment.topLeft,
     this.headingRowHeight = kMinInteractiveDimension,
+    this.headingTextStyle,
     this.headingRowColor,
     this.headerHeight = 64,
-    this.dataTextStyle,
     this.horizontalMargin = 24.0,
     this.columnSpacing = kMinInteractiveDimension,
     this.showCheckboxColumn = true,
@@ -120,6 +123,7 @@ class PaginatedDataTableExtended extends StatefulWidget {
   /// This value is optional and defaults to kMinInteractiveDimension if not
   /// specified.
   final double? dataRowHeight;
+  final Color? dataRowColor;
 
   /// The height of the heading row.
   ///
@@ -526,10 +530,24 @@ class PaginatedDataTableExtendedState
       sortAscending: widget.sortAscending!,
       onSelectAll: (a) => widget.onSelectAll!(a!),
       dataRowHeight: widget.dataRowHeight,
+      dataRowColor: (widget.dataRowColor == null)
+          ? null
+          : MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+              return widget.dataRowColor!;
+            }),
+      dataTextStyle: widget.dataTextStyle,
       headingRowHeight: widget.headingRowHeight,
       horizontalMargin: 0,
       columnSpacing: widget.columnSpacing,
       showCheckboxColumn: widget.showCheckboxColumn!,
+      headingRowColor: (widget.headingRowColor == null)
+          ? null
+          : MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+              return widget.headingRowColor!;
+            }),
+      headingTextStyle: widget.headingTextStyle,
       rows: _getRows(_firstRowIndex!, widget.rowsPerPage!),
     ));
   }

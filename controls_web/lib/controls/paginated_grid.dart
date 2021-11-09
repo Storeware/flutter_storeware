@@ -232,6 +232,8 @@ class PaginatedGrid extends StatefulWidget {
   final Color? backgroundColor;
 
   final double? dataRowHeight;
+  final Color? dataRowColor;
+  final TextStyle? dataTextStyle;
   final double? headingRowHeight;
   final TextStyle? headingTextStyle;
   final Color? headingRowColor;
@@ -250,6 +252,8 @@ class PaginatedGrid extends StatefulWidget {
     Key? key,
     this.controller,
     this.dataRowHeight = kMinInteractiveDimension * .80,
+    this.dataRowColor,
+    this.dataTextStyle,
     this.headingRowHeight = kMinInteractiveDimension,
     this.headingTextStyle,
     this.headingRowColor,
@@ -512,11 +516,14 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                 headingRowHeight: widget.headingRowHeight,
                                 headingRowColor: widget.headingRowColor ??
                                     theme!.primaryColor.withAlpha(100),
+                                headingTextStyle: widget.headingTextStyle,
                                 headerHeight: (widget.header == null)
                                     ? 0
                                     : widget.headerHeight!,
                                 //headingTextStyle: widget.headingTextStyle,
                                 dataRowHeight: widget.dataRowHeight,
+                                dataRowColor: widget.dataRowColor,
+                                dataTextStyle: widget.dataTextStyle,
                                 columnSpacing: 0, //widget.columnSpacing,
                                 footerTrailing: widget.footerTrailing,
                                 footerLeading: widget.footerLeading ??

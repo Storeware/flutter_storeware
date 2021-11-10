@@ -15,13 +15,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.8.1"
-  autocomplete_textfield:
-    dependency: transitive
-    description:
-      name: autocomplete_textfield
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.7.3"
   barcode:
     dependency: transitive
     description:
@@ -90,89 +83,91 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.10.11"
   control_data_platform_interface:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.09.27"
   control_data_platform_web:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.11.10"
   control_data_platform_windows:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.11.10"
   controls_data:
     dependency: transitive
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.05"
+    version: "2021.10.11"
   controls_extensions:
     dependency: transitive
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.16"
+    version: "2021.11.10"
   controls_image_android:
     dependency: "direct main"
     description:
       path: "controls_image/controls_image_android"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.11.10"
   controls_image_interface:
     dependency: transitive
     description:
-      path: "../../../../Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_image/controls_image_interface"
-      relative: true
-    source: path
-    version: "2021.03.06"
+      path: "controls_image/controls_image_interface"
+      ref: HEAD
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
+    source: git
+    version: "2021.09.27"
   controls_image_web:
     dependency: "direct main"
     description:
       path: "controls_image/controls_image_web"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.06"
+    version: "2021.11.10"
   controls_web:
     dependency: "direct main"
     description:
       path: controls_web
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.05"
+    version: "2021.11.10"
   cookie_jar:
     dependency: transitive
     description:
@@ -180,6 +175,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   crypto:
     dependency: transitive
     description:
@@ -194,6 +196,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.16.2"
+  data_table_2:
+    dependency: transitive
+    description:
+      name: data_table_2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   date_format:
     dependency: transitive
     description:
@@ -268,7 +277,7 @@ packages:
       name: flutter_plugin_android_lifecycle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.4"
   flutter_slidable:
     dependency: transitive
     description:
@@ -293,6 +302,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.11.0"
+  get:
+    dependency: transitive
+    description:
+      name: get
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.3.8"
   html:
     dependency: transitive
     description:
@@ -341,14 +357,21 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.2"
+    version: "0.8.4+4"
+  image_picker_for_web:
+    dependency: transitive
+    description:
+      name: image_picker_for_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.4"
   image_picker_platform_interface:
     dependency: transitive
     description:
       name: image_picker_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "2.4.1"
   image_picker_web:
     dependency: transitive
     description:
@@ -404,7 +427,7 @@ packages:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0-nullsafety.0"
+    version: "0.2.1"
   path_provider:
     dependency: transitive
     description:
@@ -446,7 +469,7 @@ packages:
       name: pdf
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.1"
+    version: "3.6.2"
   pedantic:
     dependency: transitive
     description:
@@ -460,7 +483,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.2"
+    version: "4.4.0"
   photofilters:
     dependency: "direct main"
     description:
@@ -488,7 +511,7 @@ packages:
       name: printing
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.3"
+    version: "5.6.1"
   process:
     dependency: transitive
     description:
@@ -556,6 +579,13 @@ packages:
     dependency: transitive
     description:
       name: shared_preferences_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
+  shimmer:
+    dependency: transitive
+    description:
+      name: shimmer
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
@@ -731,7 +761,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.2"
+    version: "5.3.1"
   zone_local:
     dependency: transitive
     description:
@@ -740,5 +770,5 @@ packages:
     source: hosted
     version: "0.1.2"
 sdks:
-  dart: ">=2.12.0 <3.0.0"
-  flutter: ">=2.0.0"
+  dart: ">=2.14.0 <3.0.0"
+  flutter: ">=2.5.0"

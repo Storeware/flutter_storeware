@@ -859,11 +859,11 @@ class DataViewerEditGroupedPageStateController {
 class DataViewerEditGroupedPage extends StatefulWidget {
   final String? title;
   final String? subtitle;
-  final dynamic? data;
+  final Map<String, dynamic>? data;
   final List<DataViewerGroup>? grouped;
   final DataViewerController? controller;
   final bool canEdit, canInsert, canDelete;
-  final PaginatedGridChangeEvent? event;
+  final PaginatedGridChangeEvent event;
   final double? dataRowHeight;
   final double? margin;
   final Function(dynamic)? onSaved;
@@ -909,7 +909,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.bottomAction,
     this.onChangedNotifier,
     this.stateController,
-    @required this.event,
+    required this.event,
   }) : super(key: key);
 
   @override
@@ -974,7 +974,9 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                   ? ' - ${widget.subtitle}'
                                   : '')),
                           actions: [
-                            if (widget.canDelete && (!changed))
+                            if (widget.canDelete &&
+                                (!changed) &&
+                                widget.event == PaginatedGridChangeEvent.update)
                               IconButton(
                                   icon: Icon(Icons.delete),
                                   onPressed: () {

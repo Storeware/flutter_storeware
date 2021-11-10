@@ -104,82 +104,82 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.10.11"
   control_data_platform_interface:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.09.27"
   control_data_platform_web:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.11.10"
   control_data_platform_windows:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.11.10"
   controls_data:
     dependency: "direct main"
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.05"
+    version: "2021.10.11"
   controls_extensions:
     dependency: transitive
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.16"
+    version: "2021.11.10"
   controls_firebase_platform_android:
     dependency: "direct main"
     description:
       path: "controls_firebase/controls_firebase_platform_android"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.11.10"
   controls_firebase_platform_interface:
     dependency: transitive
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.09.27"
   controls_firebase_platform_web:
     dependency: "direct main"
     description:
       path: "controls_firebase/controls_firebase_platform_web"
       ref: HEAD
-      resolved-ref: "4e487735c0f52453a5ea374abb46b575a5f61346"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "0.0.7"
+    version: "2021.11.10"
   cookie_jar:
     dependency: transitive
     description:

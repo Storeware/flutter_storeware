@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
-import 'package:controls_web/controls.dart';
+import 'package:controls_web/controls.dart' hide Filter;
 import 'package:controls_image/controls_image.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:flutter/material.dart';

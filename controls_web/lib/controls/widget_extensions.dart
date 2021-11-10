@@ -401,7 +401,7 @@ extension ListExtension on List {
   Widget listView<T>({
     required Widget Function(BuildContext context, T data) itemBuilder,
     Axis scrollDirection = Axis.vertical,
-    bool reverse = true,
+    bool reverse = false,
     String? restorationId,
     EdgeInsets? padding,
     double? itemExtent,

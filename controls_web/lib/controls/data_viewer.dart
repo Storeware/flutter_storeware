@@ -880,7 +880,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   final DataViewerEditGroupedPageStateController? stateController;
   final bool initiallyExpanded;
   final Function(String key, String? value)? onChangedNotifier;
-
+  final bool showCloseButton;
   const DataViewerEditGroupedPage({
     Key? key,
     @required this.data,
@@ -894,6 +894,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
     this.canInsert = false,
     this.canDelete = false,
     this.showAppBar = true,
+    this.showCloseButton = false,
     this.initiallyExpanded = true,
     this.onClose,
     this.appBar,
@@ -959,11 +960,14 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
               AppBar(
                   leading: widget.leading,
                   actions: widget.actions,
+                  automaticallyImplyLeading: false,
                   flexibleSpace: ValueListenableBuilder<bool>(
                       valueListenable: widget.controller!.changedValues,
                       builder:
                           (BuildContext context, bool changed, Widget? child) {
                         return AppBar(
+                          automaticallyImplyLeading:
+                              (widget.showCloseButton == null),
                           elevation: widget.elevation,
                           title: Text((widget.title ?? 'Edição') +
                               ((widget.subtitle != null)
@@ -992,8 +996,15 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                     child: Icon(Icons.check),
                                     onTap: () {
                                       _save(context);
-                                    })
+                                    }),
                             ],
+                            if (widget.showCloseButton)
+                              IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              ),
                           ],
                         );
                       })),

@@ -292,12 +292,16 @@ extension WidgetMorphism on Widget {
           {String? title,
           double? width,
           double? height,
+          bool desktop = false,
+          bool iconRight = false,
           bool fullPage = false}) =>
       Dialogs.showPage<T>(
         context,
         title: title,
         width: width,
         height: height,
+        desktop: desktop,
+        iconRight: iconRight,
         child: this,
         fullPage: fullPage,
       );
@@ -651,6 +655,28 @@ class _StepperViewerState extends State<StepperWidget> {
           : (value == i)
               ? StepState.editing
               : StepState.indexed,
+    );
+  }
+}
+
+extension DesktopAppBar on AppBar {
+  desktop(context) {
+    return AppBar(
+      title: title,
+      automaticallyImplyLeading: false,
+      elevation: elevation ?? 0,
+      leading: leading,
+      backgroundColor: backgroundColor,
+      flexibleSpace: flexibleSpace,
+      shape: shape,
+      actions: [
+        if (actions != null) ...actions!,
+        IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+      ],
     );
   }
 }

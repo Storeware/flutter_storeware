@@ -20,6 +20,45 @@ enum DialogsTransition {
   menuRightUp,
 }
 
+extension ScaffoldBordereExtension on Widget {
+  Widget boxBorder(
+      {Color? color,
+      double borderWidth = 2.0,
+      BoxBorder? border,
+      BoxDecoration? decoration,
+      double? width,
+      double? height,
+      BorderRadiusGeometry? borderRadius,
+      double borderTop = 2.0,
+      Color borderColor = Colors.black26}) {
+    return Container(
+      width: width,
+      height: height,
+      decoration: decoration ??
+          BoxDecoration(
+            color: color,
+            borderRadius: (borderTop == borderWidth) ? borderRadius : null,
+            border: (borderWidth == 0)
+                ? null
+                : border ??
+                    ((borderTop == borderWidth)
+                        ? Border.all(color: borderColor, width: borderWidth)
+                        : Border(
+                            top: BorderSide(
+                                width: borderTop, color: borderColor),
+                            right: BorderSide(
+                                width: borderWidth, color: borderColor),
+                            left: BorderSide(
+                                width: borderWidth, color: borderColor),
+                            bottom: BorderSide(
+                                width: borderWidth, color: borderColor),
+                          )),
+          ),
+      child: this,
+    );
+  }
+}
+
 class Dialogs {
   static showModal(
     context, {
@@ -56,8 +95,9 @@ class Dialogs {
     double? width,
     double? height,
     Alignment? alignment,
-    bool? iconRight = false,
+    bool iconRight = false,
     bool fullPage = false,
+    bool desktop = false,
     Widget Function(BuildContext)? builder,
     RouteTransitionsBuilder? transitionBuilder,
     int? transitionDuration,
@@ -82,30 +122,69 @@ class Dialogs {
       barrierDismissible: true,
       pageBuilder: (BuildContext context, Animation animation,
           Animation secondaryAnimation) {
-        return Align(
-          alignment: alignment ?? Alignment.center,
-          child: Material(
-              child: Container(
-            width: (fullPage) ? size.width : width ?? size.width * 0.90 + plus,
-            height: (fullPage) ? size.height : height ?? size.height * 0.90,
-            child: Scaffold(
-              appBar: (!iconRight! || (title == null))
-                  ? null
-                  : AppBar(
-                      title: Text('$title'),
-                      automaticallyImplyLeading: false,
-                      actions: [
-                        if (actions != null) ...actions,
-                        IconButton(
-                          icon: Icon(Icons.arrow_forward),
-                          onPressed: () => Navigator.pop(context),
-                        )
-                      ],
+        ValueNotifier<bool> maximized = ValueNotifier<bool>(fullPage);
+        var theme = Theme.of(context);
+        return ValueListenableBuilder<bool>(
+            child: child,
+            valueListenable: maximized,
+            builder: (BuildContext context, bool _maximized, Widget? child) =>
+                Align(
+                  alignment: alignment ?? Alignment.center,
+                  child: Material(
+                      child: Container(
+                    width: (_maximized)
+                        ? (desktop)
+                            ? double.infinity
+                            : size.width
+                        : width ?? size.width * 0.90 + plus,
+                    height: (_maximized)
+                        ? (desktop)
+                            ? double.infinity
+                            : size.height
+                        : height ?? size.height * 0.90,
+                    child: Scaffold(
+                      appBar: title ==
+                              null //((!iconRight! || (title == null) && !desktop))
+                          ? null
+                          : AppBar(
+                              title: Text('$title'),
+                              elevation: (desktop) ? 0 : 1,
+                              automaticallyImplyLeading: false,
+                              actions: [
+                                if (actions != null) ...actions,
+                                if (!desktop && iconRight)
+                                  IconButton(
+                                    icon: Icon(Icons.arrow_forward),
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                if (desktop && !iconRight) ...[
+                                  IconButton(
+                                      icon: Icon(_maximized
+                                          ? Icons.minimize
+                                          : Icons.maximize),
+                                      onPressed: () {
+                                        maximized.value = !maximized.value;
+                                      }),
+                                  IconButton(
+                                      icon: const Icon(Icons.close),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }),
+                                ],
+                              ],
+                            ),
+                      body: ((builder != null)
+                              ? builder(context)
+                              : child ?? Container())
+                          .boxBorder(
+                        borderTop: 0,
+                        borderWidth: 1,
+                        //borderRadius: BorderRadius.circular(10),
+                        borderColor: theme.primaryColor.withAlpha(100),
+                      ),
                     ),
-              body: (builder != null) ? builder(context) : child,
-            ),
-          )),
-        );
+                  )),
+                ));
       },
       transitionBuilder: (_, animation, secondaryAnimation, child) {
         if (transitionBuilder != null)

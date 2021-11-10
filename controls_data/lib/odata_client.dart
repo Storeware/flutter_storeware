@@ -341,6 +341,21 @@ class ODataClient extends ODataClientInterface {
     client.baseUrl = x;
   }
 
+  Future<ODataClient> connect(
+      {String? baseUrl,
+      String? conta,
+      String? token,
+      String? authorization,
+      String? service}) async {
+    var o = clone();
+    if (baseUrl != null) o.baseUrl = baseUrl;
+    if (service != null) o.client.service = service;
+    if (conta != null) o.client.headers['contaid'] = conta;
+    if (token != null) o.client.tokenId = token;
+    if (authorization != null) o.client.authorization = authorization;
+    return o;
+  }
+
   ODataClient clone() {
     var o = ODataClient();
     o.client.inDebug = client.inDebug;

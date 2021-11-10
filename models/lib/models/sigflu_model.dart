@@ -3,7 +3,8 @@ import 'package:models/data/sql_builder.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
-import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
+import 'package:controls_extensions/extensions.dart'
+    hide DynamicExtension, toDateTime, toDouble, toInt;
 
 class SigfluItem extends DataItem {
   DateTime? vcto;
@@ -172,7 +173,7 @@ class SigfluItem extends DataItem {
 
   static SigfluItem criarNovo({Map<String, dynamic>? json}) {
     var r = SigfluItem.fromJson(json ?? {});
-    var d = r.toDate(DateTime.now());
+    var d = toDate(DateTime.now());
     r.emissao ??= d;
     r.data ??= d;
     r.dctook ??= 'S';

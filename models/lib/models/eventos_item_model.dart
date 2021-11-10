@@ -1,5 +1,5 @@
 import 'package:controls_data/data_model.dart';
-import 'package:controls_data/odata_client.dart' hide DynamicExtension;
+import 'package:controls_data/odata_client.dart' hide toDouble, toDateTime;
 //import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart';
 import 'package:controls_web/drivers/bloc_model.dart';

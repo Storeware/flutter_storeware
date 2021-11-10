@@ -1,6 +1,7 @@
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
-import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
+import 'package:controls_extensions/extensions.dart'
+    hide DynamicExtension, toDateTime, toDouble, toInt;
 import 'package:controls_data/odata_firestore.dart';
 
 /*

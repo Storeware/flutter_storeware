@@ -76,10 +76,10 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: "81249d279da4c126211388863f2fb27e46f43390"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: fb784dcacee1db52c6826202304d12fc29563f53
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.09.27"
   crypto:
     dependency: transitive
     description:

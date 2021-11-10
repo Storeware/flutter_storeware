@@ -114,9 +114,9 @@ class _VendedorFormFieldState extends State<VendedorFormField> {
 
 class VendedorPage extends StatelessWidget {
   final Function(dynamic)? onSelected;
-  final bool? required;
-  final bool? canEdit;
-  final bool? canInsert;
+  final bool required;
+  final bool canEdit;
+  final bool canInsert;
   const VendedorPage(
       {Key? key,
       this.onSelected,
@@ -134,7 +134,7 @@ class VendedorPage extends StatelessWidget {
       controller: DataViewerController(
         keyName: 'codigo',
         future: () => SigvenItemModel().listNoCached().then((rsp) {
-          if (!required!) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
+          if (!required) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
           return rsp;
         }),
         dataSource: SigvenItemModel(),

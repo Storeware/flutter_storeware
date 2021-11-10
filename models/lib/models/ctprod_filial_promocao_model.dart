@@ -1,5 +1,5 @@
 import 'package:controls_data/data_model.dart';
-import 'package:controls_data/odata_client.dart';
+import 'package:controls_data/odata_client.dart' hide toDateTime, toDouble;
 import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 

@@ -122,8 +122,8 @@ class _UsuarioFormFieldState extends State<UsuarioFormField> {
 class UsuarioPage extends StatelessWidget {
   final Function(dynamic)? onSelected;
   final bool? required;
-  final bool? canEdit;
-  final bool? canInsert;
+  final bool canEdit;
+  final bool canInsert;
   const UsuarioPage(
       {Key? key,
       this.onSelected,

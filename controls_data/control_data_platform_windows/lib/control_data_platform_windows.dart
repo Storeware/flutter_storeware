@@ -7,26 +7,34 @@ import 'package:control_data_platform_interface/control_data_platform_interface.
 
 class PlatformLocalStorage extends LocalStorageInterface {
   Map<String, dynamic> items = {};
-  String appFileName = 'storage.json';
+  String appFileName = 'config.json';
   File? _file;
 
   init() async {
-    _file = File(appFileName);
-    try {
-      String? s = _file!.readAsStringSync();
-      items = jsonDecode(s) ?? {};
-    } catch (e) {
-      // nao existe o arquivo;
+    if (_file == null) {
+      _file = File(appFileName);
+      try {
+        String? s = _file!.readAsStringSync();
+        items = jsonDecode(s) ?? {};
+        return items;
+      } catch (e) {
+        // nao existe o arquivo;
+      }
     }
+    return items;
   }
 
   setKey(String key, String value) {
     items[key] = value;
-    _file!.writeAsString(jsonEncode(items));
+    return init().then((it) {
+      _file!.writeAsString(jsonEncode(it));
+    });
   }
 
-  String getKey(String key) {
-    return items[key];
+  String? getKey(String key) {
+    return init().then((it) {
+      return it[key];
+    });
   }
 
   @override

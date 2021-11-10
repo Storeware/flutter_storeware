@@ -48,8 +48,8 @@ packages:
     description:
       path: "controls_image/controls_image_interface"
       ref: HEAD
-      resolved-ref: d793617b486aae318ec5573e41d5c9daabeefa73
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: fb784dcacee1db52c6826202304d12fc29563f53
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.27"
   crypto:

@@ -10,3 +10,35 @@ class LocalStorage extends PlatformLocalStorage {
   LocalStorage._create();
   factory LocalStorage() => _singleton;
 }
+
+LocalStorageConfig? _localConfig;
+
+class LocalStorageConfig {
+  LocalStorageConfig({required this.key}) {
+    _localConfig = this;
+    _init();
+  }
+
+  static LocalStorageConfig get instance => _localConfig!;
+  _init() async {
+    //return LocalStorage().init().then(() {
+    load();
+    return true;
+    //});
+  }
+
+  final String key;
+
+  LocalStorage get storage => LocalStorage();
+  final Map<String, dynamic> _values = {};
+  Map<String, dynamic> get values => _values;
+  load() {
+    _values.clear();
+    _values.addAll(storage.getJson(key) ?? {});
+  }
+
+  save() {
+    storage.setJson(key, _values);
+    return this;
+  }
+}

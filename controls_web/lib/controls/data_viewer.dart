@@ -966,8 +966,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                       builder:
                           (BuildContext context, bool changed, Widget? child) {
                         return AppBar(
-                          automaticallyImplyLeading:
-                              (widget.showCloseButton == null),
+                          automaticallyImplyLeading: (!widget.showCloseButton),
                           elevation: widget.elevation,
                           title: Text((widget.title ?? 'Edição') +
                               ((widget.subtitle != null)
@@ -1253,7 +1252,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   _save(context) {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
-      doPostEvent(widget.controller!.paginatedController, p, widget.event!)
+      doPostEvent(widget.controller!.paginatedController, p, widget.event)
           .then((rsp) {
         if (widget.onSaved != null) widget.onSaved!(p);
         if (widget.controller!.onLog != null)

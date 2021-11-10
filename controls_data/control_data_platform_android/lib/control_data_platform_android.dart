@@ -9,6 +9,7 @@ class PlatformLocalStorage extends LocalStorageInterface {
     if (_prefs == null) {
       _prefs = await SharedPreferences.getInstance();
     }
+    return this;
   }
 
   @override

@@ -48,10 +48,10 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "81249d279da4c126211388863f2fb27e46f43390"
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: e7cd5826be5ad86a97d366d0c3385b59bdd2cf72
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.03.14"
+    version: "2021.09.27"
   csslib:
     dependency: transitive
     description:

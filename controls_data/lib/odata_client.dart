@@ -350,9 +350,10 @@ class ODataClient extends ODataClientInterface {
     var o = clone();
     if (baseUrl != null) o.baseUrl = baseUrl;
     if (service != null) o.client.service = service;
-    if (conta != null) o.client.headers['contaid'] = conta;
     if (token != null) o.client.tokenId = token;
+    if (conta != null) o.client.addHeader('contaid', conta);
     if (authorization != null) o.client.authorization = authorization;
+    if (conta != null) o.client.addHeader('app', 'monitor');
     return o;
   }
 

@@ -14,12 +14,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "autocomplete_textfield",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/autocomplete_textfield-1.7.3",
-      "packageUri": "lib/",
-      "languageVersion": "1.19"
-    },
-    {
       "name": "barcode",
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/barcode-2.1.0",
       "packageUri": "lib/",
@@ -45,15 +39,15 @@
     },
     {
       "name": "charts_common",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charts_common-0.10.0",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charts_common-0.11.0",
       "packageUri": "lib/",
-      "languageVersion": "2.3"
+      "languageVersion": "2.12"
     },
     {
       "name": "charts_flutter",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charts_flutter-0.10.0",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charts_flutter-0.11.0",
       "packageUri": "lib/",
-      "languageVersion": "1.23"
+      "languageVersion": "2.12"
     },
     {
       "name": "clock",
@@ -87,49 +81,49 @@
     },
     {
       "name": "control_data_platform_android",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_android",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_interface",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_windows",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data/control_data_platform_windows",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_windows",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_dash",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_dash",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_dash",
       "packageUri": "lib/",
-      "languageVersion": "2.3"
+      "languageVersion": "2.12"
     },
     {
       "name": "controls_data",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_extensions",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_extensions",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_extensions",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-4e487735c0f52453a5ea374abb46b575a5f61346/controls_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -146,6 +140,12 @@
       "languageVersion": "2.1"
     },
     {
+      "name": "data_table_2",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/data_table_2-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "date_format",
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/date_format-2.0.2",
       "packageUri": "lib/",
@@ -159,9 +159,9 @@
     },
     {
       "name": "dio",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/dio-3.0.9",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/dio-4.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.4"
+      "languageVersion": "2.12"
     },
     {
       "name": "fake_async",
@@ -231,15 +231,15 @@
     },
     {
       "name": "http",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/http-0.12.2",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/http-0.13.4",
       "packageUri": "lib/",
-      "languageVersion": "2.4"
+      "languageVersion": "2.14"
     },
     {
       "name": "http_parser",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/http_parser-3.1.4",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/http_parser-4.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.3"
+      "languageVersion": "2.12"
     },
     {
       "name": "image",
@@ -291,7 +291,7 @@
     },
     {
       "name": "path_parsing",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/path_parsing-0.2.0-nullsafety.0",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/path_parsing-0.2.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -327,7 +327,7 @@
     },
     {
       "name": "pdf",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pdf-3.0.1",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/pdf-3.6.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -339,9 +339,9 @@
     },
     {
       "name": "petitparser",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/petitparser-4.0.2",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/petitparser-4.4.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.14"
     },
     {
       "name": "platform",
@@ -357,7 +357,7 @@
     },
     {
       "name": "printing",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/printing-5.0.3",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/printing-5.6.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -408,6 +408,12 @@
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/shared_preferences_web-0.1.2+7",
       "packageUri": "lib/",
       "languageVersion": "2.1"
+    },
+    {
+      "name": "shimmer",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/shimmer-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "sky_engine",
@@ -555,9 +561,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/xml-5.0.2",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/xml-5.3.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.14"
     },
     {
       "name": "zone_local",
@@ -572,7 +578,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-09-27T15:36:46.738910Z",
+  "generated": "2021-11-10T15:40:45.978856Z",
   "generator": "pub",
-  "generatorVersion": "2.14.2"
+  "generatorVersion": "2.14.4"
 }

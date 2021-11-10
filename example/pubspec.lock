@@ -140,7 +140,7 @@ packages:
     source: git
     version: "2021.03.16"
   controls_web:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: controls_web
       ref: HEAD
@@ -230,6 +230,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.0-nullsafety.0"
+  flutter_storeware:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
+    source: git
+    version: "1.0.0+3"
   flutter_test:
     dependency: "direct dev"
     description: flutter

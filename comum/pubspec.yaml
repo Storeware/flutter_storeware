@@ -26,7 +26,7 @@ dependencies:
       path: controls_extensions
   #controls_firebase:
   #  git:
-  #    url: https://github.com/amarildolacerda/flutter_dart.git
+  #    url: https://github.com/amarildolacerda/flutter_storeware.git
   #    path: controls_firebase
   controls_dash:
     git:

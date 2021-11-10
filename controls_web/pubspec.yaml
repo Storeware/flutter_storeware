@@ -36,12 +36,12 @@ dependencies:
       path: controls_data
   #controls_extensions:
     #git:
-     # url: https://github.com/amarildolacerda/flutter_dart.git
+     # url: https://github.com/amarildolacerda/flutter_storeware.git
   #    path: ../controls_extensions
 
   # controls_firebase:
   #   git:
-  #     url: https://github.com/amarildolacerda/flutter_dart.git
+  #     url: https://github.com/amarildolacerda/flutter_storeware.git
   #     path: controls_firebase
   #test: ^1.9.4
 

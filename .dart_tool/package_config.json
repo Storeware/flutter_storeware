@@ -75,43 +75,43 @@
     },
     {
       "name": "control_data_platform_android",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/controls_data/control_data_platform_android",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/controls_data/control_data_platform_interface",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/controls_data/control_data_platform_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_windows",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/controls_data/control_data_platform_windows",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data/control_data_platform_windows",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_data",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_extensions",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/controls_extensions",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_extensions",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/controls_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-3e9112d47d2583aae5af7a17e57163ff51b15e59/controls_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -130,6 +130,12 @@
     {
       "name": "cupertino_icons",
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/cupertino_icons-1.0.3",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "data_table_2",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/data_table_2-2.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -404,6 +410,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "shimmer",
+      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/shimmer-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///C:/tools/flutter/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -560,7 +572,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-11-10T13:48:10.079425Z",
+  "generated": "2021-11-10T15:40:29.776192Z",
   "generator": "pub",
   "generatorVersion": "2.14.4"
 }

@@ -90,17 +90,17 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.09.27"
+    version: "2021.10.11"
   control_data_platform_interface:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.27"
   control_data_platform_web:
@@ -108,46 +108,46 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.09.27"
+    version: "2021.11.10"
   control_data_platform_windows:
     dependency: transitive
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.09.27"
+    version: "2021.11.10"
   controls_data:
     dependency: "direct main"
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.09.27"
+    version: "2021.10.11"
   controls_extensions:
     dependency: "direct main"
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.09.27"
+    version: "2021.11.10"
   controls_web:
     dependency: "direct main"
     description:
       path: controls_web
       ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
+      resolved-ref: "3e9112d47d2583aae5af7a17e57163ff51b15e59"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2021.09.27"
+    version: "2021.11.10"
   crypto:
     dependency: transitive
     description:
@@ -169,6 +169,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  data_table_2:
+    dependency: transitive
+    description:
+      name: data_table_2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   date_format:
     dependency: transitive
     description:
@@ -478,6 +485,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  shimmer:
+    dependency: transitive
+    description:
+      name: shimmer
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

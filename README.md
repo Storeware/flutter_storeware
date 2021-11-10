@@ -1,4 +1,4 @@
-# flutter_dart
+# flutter_storeware
 
 A new Flutter project.
 

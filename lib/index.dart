@@ -1,4 +1,4 @@
-library flutter_dart;
+library flutter_storeware;
 
 export 'package:controls_web/controls.dart';
 export 'package:controls_data/data.dart';

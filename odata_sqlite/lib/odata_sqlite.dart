@@ -55,7 +55,7 @@ class ODataSqlite extends ODataClientInterface {
   }
 
   @override
-  Future send(ODataQuery query, {String? cacheControl}) {
+  send(ODataQuery query, {String? cacheControl}) async {
     return client.open(
       collection: query.resource!,
       filter: query.filter,

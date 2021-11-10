@@ -132,7 +132,7 @@ class LoginTokenChanged extends BlocModelX<bool> {
 class ODataQuery {
   final String? resource;
   String? select;
-  dynamic? filter;
+  dynamic filter;
   int? top;
   int? skip;
   String? groupby;
@@ -293,7 +293,38 @@ class ODataBuilder extends StatelessWidget {
   }
 }
 
-class ODataClient {
+abstract class ODataClientInterface {
+  void close();
+  createNew();
+  Future<String> delete(String resource, Map<String, dynamic> json);
+  Future<String> execute(String command);
+  Future getOne(String resource, {String? id});
+  Future<String> post(String resource, Map<String, dynamic> json,
+      {bool removeNulls = true});
+  Future<String> put(String resource, Map<String, dynamic> json,
+      {bool removeNulls = true});
+  Future<dynamic> send(ODataQuery query, {String? cacheControl});
+
+  Map<String, dynamic> removeNulls(json) {
+    Map<String, dynamic> data = json;
+    json.forEach((k, v) {
+      v ??= json[k]; // workaroud para versão 2.12 que não estava carregando
+      try {
+        if (v != null) data[k] = reviverTo(v);
+      } catch (e) {
+        print('$e');
+      }
+    });
+    return data;
+  }
+
+  reviverTo(v) {
+    if (v is DateTime) return toDateTimeSql(v);
+    return v;
+  }
+}
+
+class ODataClient extends ODataClientInterface {
   late RestClient client = RestClient();
   String get prefix => client.prefix;
   set prefix(String p) {
@@ -339,6 +370,7 @@ class ODataClient {
     return this;
   }
 
+  @override
   Future<dynamic> send(ODataQuery query, {String? cacheControl}) async {
     try {
       String r = (query.resource ?? '') + '?';
@@ -362,6 +394,7 @@ class ODataClient {
     }
   }
 
+  @override
   Future<dynamic> getOne(String resource, {String? id}) async {
     try {
       return client.send(resource).then((res) {
@@ -373,11 +406,7 @@ class ODataClient {
     }
   }
 
-  reviverTo(v) {
-    if (v is DateTime) return toDateTimeSql(v);
-    return v;
-  }
-
+  @override
   Future<String> post(String resource, Map<String, dynamic> json,
       {bool removeNulls = true}) async {
     Map<String, dynamic> data = {};
@@ -398,19 +427,7 @@ class ODataClient {
     }
   }
 
-  Map<String, dynamic> removeNulls(json) {
-    Map<String, dynamic> data = json;
-    json.forEach((k, v) {
-      v ??= json[k]; // workaroud para versão 2.12 que não estava carregando
-      try {
-        if (v != null) data[k] = reviverTo(v);
-      } catch (e) {
-        print('$e');
-      }
-    });
-    return data;
-  }
-
+  @override
   Future<String> put(String resource, Map<String, dynamic> json,
       {bool removeNulls = true}) async {
     /// remover os null
@@ -434,6 +451,7 @@ class ODataClient {
     }
   }
 
+  @override
   Future<String> delete(String resource, Map<String, dynamic> json) async {
     try {
       return client.delete(resource, body: removeNulls(json)).then((resp) {
@@ -496,6 +514,17 @@ class ODataClient {
       ErrorNotify.send('$e');
       rethrow;
     }
+  }
+
+  @override
+  void close() {
+    // TODO: implement close
+  }
+
+  @override
+  createNew() {
+    // TODO: implement createNew
+    return clone();
   }
 }
 

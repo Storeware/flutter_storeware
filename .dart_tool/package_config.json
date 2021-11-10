@@ -266,12 +266,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "models",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_dart-b7511b4a45ed054296df4e9cb031164eb3f83c9c/models",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "path",
       "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/path-1.8.0",
       "packageUri": "lib/",
@@ -566,7 +560,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2021-11-10T13:42:02.424575Z",
+  "generated": "2021-11-10T13:48:10.079425Z",
   "generator": "pub",
   "generatorVersion": "2.14.4"
 }

@@ -317,15 +317,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  models:
-    dependency: "direct main"
-    description:
-      path: models
-      ref: HEAD
-      resolved-ref: b7511b4a45ed054296df4e9cb031164eb3f83c9c
-      url: "https://github.com/amarildolacerda/flutter_dart.git"
-    source: git
-    version: "2021.08.18"
   path:
     dependency: transitive
     description:

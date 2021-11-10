@@ -1,6 +1,6 @@
 name: controls_web
 description: Visual flutter package.
-version: 2021.11.01
+version: 2021.11.10
 homepage: http://tireideletra.com.br
 publish_to: none
 
@@ -32,7 +32,7 @@ dependencies:
 
   controls_data:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data
   #controls_extensions:
     #git:

@@ -1,6 +1,6 @@
 name: controls_firebase_platform_android
 description: Firebase interface WEB, ANDROID e WINDOWS
-version: 2021.09.27
+version: 2021.11.10
 publish_to: none
 
 environment:
@@ -22,7 +22,7 @@ dependencies:
 
   controls_firebase_platform_interface:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_firebase/controls_firebase_platform_interface
 
 dev_dependencies:

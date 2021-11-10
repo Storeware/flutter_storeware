@@ -1,6 +1,6 @@
 name: comum
 description: A new Flutter package project.
-version: 2021.07.06
+version: 2021.11.10
 
 homepage: http://tireideletra.com.br
 publish_to: none
@@ -14,15 +14,15 @@ dependencies:
     sdk: flutter
   controls_web:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_web
   controls_data:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data
   controls_extensions:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_extensions
   #controls_firebase:
   #  git:
@@ -30,7 +30,7 @@ dependencies:
   #    path: controls_firebase
   controls_dash:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_dash
   get: ^4.0.0-nullsafety.2   
 

@@ -1,6 +1,6 @@
 name: controls_firebase
 description: A new Flutter package project.
-version: 2021.10.04
+version: 2021.11.10
 homepage: http://tireideletra.com.br
 publish_to: none
 
@@ -23,16 +23,16 @@ dependencies:
   universal_html:  ^2.0.8
   controls_data:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data
 
   controls_firebase_platform_web:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_firebase/controls_firebase_platform_web
   controls_firebase_platform_android:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_firebase/controls_firebase_platform_android
 
   

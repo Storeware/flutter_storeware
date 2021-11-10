@@ -1,6 +1,6 @@
 name: models
 description: Model Package.
-version: 2021.08.18
+version: 2021.11.10
 publish_to: none
 
 environment:
@@ -21,16 +21,16 @@ dependencies:
 
   controls_web:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_web
   controls_data:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data
 
   controls_extensions:
     git:
-      url: https://github.com/amarildolacerda/flutter_dart.git
+      url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_extensions
 
 

@@ -8,12 +8,13 @@ import "package:control_data_platform_windows/control_data_platform_windows.dart
     as win;
 import 'package:control_data_platform_interface/control_data_platform_interface.dart';
 import 'package:universal_io/io.dart';
+import 'package:universal_platform/universal_platform.dart';
 import 'dart:convert';
 
 class LocalStorage extends LocalStorageInterface {
   static final _singleton = LocalStorage._create();
   LocalStorage._create() {
-    if (Platform.isWindows)
+    if (UniversalPlatform.isWindows)
       pref = win.PlatformLocalStorage();
     else
       pref = PlatformLocalStorage();

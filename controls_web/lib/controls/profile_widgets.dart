@@ -68,9 +68,11 @@ class ProfileUser extends StatelessWidget {
                   SizedBox(
                     height: 30,
                   ),
-                  Text(usuario!.nome ?? ''),
-                  Text(usuario!.grupo ?? ''),
-                  Text(usuario!.codigo ?? ''),
+                  if (usuario != null) ...[
+                    Text(usuario!.nome ?? ''),
+                    Text(usuario!.grupo ?? ''),
+                    Text(usuario!.codigo ?? ''),
+                  ],
                 ])),
           ),
           Positioned(

@@ -114,7 +114,7 @@ class DataViewerController {
   final ODataModelClass? dataSource;
 
   /// Function de busca dos dados - deve retornar um objeto do timpo List<dynamic>
-  Function()? future;
+  Future<List> Function()? future;
   final Function(dynamic, PaginatedGridChangeEvent)? beforeChange;
 
   /// [DataViewerController.keyName] utilizado para localizar uma linha na pilha - ligado com a chave primaria da tabela no banco de dados
@@ -125,7 +125,7 @@ class DataViewerController {
     this.dataSource,
     this.onValidate,
     this.beforeChange,
-    Function(DataViewerController)? futureExtended,
+    Future<List> Function(DataViewerController)? futureExtended,
     this.top = 10,
     @required this.keyName,
     this.onClearCache,
@@ -163,13 +163,12 @@ class DataViewerController {
     _init();
     this.page = page;
     paginatedController.source ??= [];
-    int i = await future!().then((rsp) {
+    return future!().then((rsp) {
       source!.clear();
       source!.addAll(rsp);
       _valuesStream!.sink.add(source!);
       return rsp.length;
     });
-    return i;
   }
 
   Future<int> openNext() async {
@@ -478,7 +477,7 @@ class DataViewer extends StatefulWidget {
   final String? keyName;
   final DataViewerController? controller;
   final Widget? child;
-  final List<Map<String, dynamic>>? source;
+  final List? source;
   final int? rowsPerPage;
   final Function(dynamic)? beforeShow;
   final List<PaginatedGridColumn>? columns;
@@ -609,7 +608,7 @@ class _DataViewerState extends State<DataViewer> {
         DataViewerController(
             keyName: widget.keyName,
             future: () async {
-              return widget.source;
+              return widget.source as List;
             });
     if (widget.keyName != null) controller!.keyName = widget.keyName;
     controller!.columns ??= widget.columns;

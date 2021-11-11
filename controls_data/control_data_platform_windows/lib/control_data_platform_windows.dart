@@ -10,6 +10,7 @@ class PlatformLocalStorage extends LocalStorageInterface {
   String appFileName = 'config.json';
   File? _file;
 
+  @override
   init() async {
     if (_file == null) {
       _file = File(appFileName);
@@ -24,6 +25,7 @@ class PlatformLocalStorage extends LocalStorageInterface {
     return items;
   }
 
+  @override
   setKey(String key, String value) {
     items[key] = value;
     return init().then((it) {
@@ -31,10 +33,9 @@ class PlatformLocalStorage extends LocalStorageInterface {
     });
   }
 
+  @override
   String? getKey(String key) {
-    return init().then((it) {
-      return it[key];
-    });
+    return items[key];
   }
 
   @override

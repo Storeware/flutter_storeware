@@ -2,10 +2,13 @@ library local_storage;
 
 import "package:control_data_platform_android/control_data_platform_android.dart"
     if (dart.library.js) "package:control_data_platform_web/control_data_platform_web.dart";
+//  if (dart.library.io) "package:control_data_platform_android/control_data_platform_android.dart";
+//if (dart.library.windows)
 import "package:control_data_platform_windows/control_data_platform_windows.dart"
     as win;
 import 'package:control_data_platform_interface/control_data_platform_interface.dart';
 import 'package:universal_io/io.dart';
+import 'dart:convert';
 
 class LocalStorage extends LocalStorageInterface {
   static final _singleton = LocalStorage._create();
@@ -43,10 +46,10 @@ class LocalStorageConfig {
 
   static LocalStorageConfig get instance => _localConfig!;
   _init() async {
-    //return LocalStorage().init().then(() {
-    load();
-    return true;
-    //});
+    return storage.init().then((x) {
+      load();
+      return true;
+    });
   }
 
   final String key;
@@ -56,11 +59,12 @@ class LocalStorageConfig {
   Map<String, dynamic> get values => _values;
   load() {
     _values.clear();
-    _values.addAll(storage.getJson(key) ?? {});
+    String? k = storage.getKey(key);
+    _values.addAll(jsonDecode(k ?? '{}'));
   }
 
   save() {
-    storage.setJson(key, _values);
+    storage.setKey(key, jsonEncode(_values));
     return this;
   }
 }

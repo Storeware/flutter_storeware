@@ -36,14 +36,14 @@ class VerticalTopTabView extends StatefulWidget {
   final Widget Function(TabChoice)? timelineBuild;
   final Function(int)? onSelectedItem;
   final Color? backgroundColor;
-  final MainAxisAlignment mainAxisAlignment;
-  final CrossAxisAlignment crossAxisAlignment;
+  final WrapAlignment mainAxisAlignment;
+  final WrapCrossAlignment crossAxisAlignment;
 
   const VerticalTopTabView(
       {Key? key,
       this.position = VerticalTopTabPosition.right,
-      this.mainAxisAlignment = MainAxisAlignment.start,
-      this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.mainAxisAlignment = WrapAlignment.end,
+      this.crossAxisAlignment = WrapCrossAlignment.center,
       this.initialIndex = 0,
       this.builder,
       this.indicatorColor,
@@ -200,8 +200,8 @@ class VerticalTopTabNavigator extends StatefulWidget {
   final Color? completedColor;
   final Widget Function(TabChoice)? timelineBuild;
   final VerticalTopTabNavigatorController? controller;
-  final MainAxisAlignment mainAxisAlignment;
-  final CrossAxisAlignment crossAxisAlignment;
+  final WrapAlignment mainAxisAlignment;
+  final WrapCrossAlignment crossAxisAlignment;
   final Function(BuildContext context, TabChoice item, bool selected)? builder;
 
   VerticalTopTabNavigator(
@@ -218,8 +218,8 @@ class VerticalTopTabNavigator extends StatefulWidget {
       this.height = kMinInteractiveDimension,
       this.actions,
       this.position = VerticalTopTabPosition.right,
-      this.mainAxisAlignment = MainAxisAlignment.start,
-      this.crossAxisAlignment = CrossAxisAlignment.center,
+      this.mainAxisAlignment = WrapAlignment.start,
+      this.crossAxisAlignment = WrapCrossAlignment.center,
       this.spacing = 4,
       this.controller,
       this.indicatorColor,
@@ -272,12 +272,15 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
     }
     return Container(
       padding: const EdgeInsets.only(left: 3.0, right: 3.0),
-      height: widget.height,
+      //height: widget.height,
+      constraints: BoxConstraints(minHeight: widget.height ?? 40),
       width: double.maxFinite,
       child: ValueListenableBuilder<int>(
         valueListenable: active!,
-        builder: (a, b, w) => Row(
-          mainAxisAlignment: widget.mainAxisAlignment,
+        builder: (a, b, w) => Wrap(
+          alignment: widget.mainAxisAlignment,
+          runAlignment: widget.mainAxisAlignment,
+          //mainAxisAlignment: widget.mainAxisAlignment,
           crossAxisAlignment: widget.crossAxisAlignment,
           children: [
             /// objetos a esquerda

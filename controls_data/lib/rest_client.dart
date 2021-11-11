@@ -24,6 +24,12 @@ class RestClientBloC<T> {
   }
 }
 
+class DataErrorNotifier extends RestClientBloC<String> {
+  static final _singleton = DataErrorNotifier._create();
+  DataErrorNotifier._create();
+  factory DataErrorNotifier() => _singleton;
+}
+
 class LinearDataProgressIndicator extends StatelessWidget {
   final double height;
   const LinearDataProgressIndicator({Key? key, this.height = 3})
@@ -316,7 +322,7 @@ class RestClient {
       try {
         error = formataMensagemErro('$method:$url', e);
         if (!silent)
-          notifyError.send('$error [$resp]');
+          sendError('$error [$resp]');
         else
           print([error, uri, body]);
         return throw error;
@@ -324,6 +330,11 @@ class RestClient {
         return throw '$e';
       }
     }
+  }
+
+  sendError(texto) {
+    notifyError.send(texto);
+    DataErrorNotifier().notify(texto);
   }
 
   bool silent = false;
@@ -434,13 +445,13 @@ class RestClient {
       }, onError: (e) {
         DataProcessingNotifier.stop();
         var error = formataMensagemErro(url, e);
-        if (!silent) notifyError.send(error);
+        if (!silent) sendError(error);
         return throw error;
       });
     } catch (e) {
       DataProcessingNotifier.stop();
       var error = formataMensagemErro(url, e);
-      if (!silent) notifyError.send(error);
+      if (!silent) sendError(error);
       throw error;
     }
   }

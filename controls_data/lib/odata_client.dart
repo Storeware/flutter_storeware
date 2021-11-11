@@ -346,10 +346,10 @@ class ODataClient extends ODataClientInterface {
       String? conta,
       String? token,
       String? authorization,
-      String? service}) async {
+      String? prefix}) async {
     var o = clone();
     if (baseUrl != null) o.baseUrl = baseUrl;
-    if (service != null) o.client.service = service;
+    if (prefix != null) o.client.prefix = prefix;
     if (token != null) o.client.tokenId = token;
     if (conta != null) o.client.addHeader('contaid', conta);
     if (authorization != null) o.client.authorization = authorization;

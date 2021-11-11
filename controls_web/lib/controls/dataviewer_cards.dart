@@ -4,6 +4,28 @@ import 'package:controls_web/controls.dart';
 import 'package:controls_web/controls/data_viewer.dart';
 import 'dart:async';
 
+class DataViewerCard extends StatelessWidget {
+  final Map<String, dynamic> data;
+  const DataViewerCard({Key? key, required this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var names = data.keys;
+    var sources = names.map((e) => {'name': e, 'value': '${data[e]}'}).toList();
+    var size = MediaQuery.of(context).size;
+    var x = size.height - kBottomNavigationBarHeight * 2;
+    return SizedBox(
+        height: x,
+        child: DataViewer(
+          showPageNavigatorButtons: false,
+          rowsPerPage: sources.length,
+          canSearch: false,
+          source: sources,
+          headingRowColor: Colors.amber,
+        ));
+  }
+}
+
 class DataViewerCards extends StatefulWidget {
   final double itemWidth;
   final Widget Function(BuildContext context, Map<String, dynamic> data)
@@ -90,9 +112,11 @@ class _cards extends State<DataViewerCards> {
         stream: widget.controller.subscribeChanges.stream,
         builder: (a, b) => Padding(
               padding: EdgeInsets.all(widget.padding),
-              child: StreamBuilder<List>(
-                  stream: widget.controller.stream,
+              child: FutureBuilder<List>(
+                  initialData: widget.controller.source,
+                  future: widget.controller.future!(),
                   builder: (context, snapshot) {
+                    if (snapshot.hasError) return Container();
                     return (!snapshot.hasData)
                         ? Center(
                             child: widget.placeHolder ??

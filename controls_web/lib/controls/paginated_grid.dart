@@ -470,6 +470,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
               initialData: widget.source,
               future: widget.futureSource,
               builder: (context, snapshot) {
+                if (snapshot.hasError) return Container();
                 if (!snapshot.hasData) {
                   if (widget.placeHolder != null)
                     return widget.placeHolder!();

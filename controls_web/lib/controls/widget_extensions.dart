@@ -419,6 +419,24 @@ extension ListExtension on List {
           itemExtent: itemExtent,
           itemBuilder: (ctx, index) => itemBuilder(ctx, this[index]));
 
+  Widget listViewCount<T>({
+    required Widget Function(BuildContext context, T data, int index)
+        itemBuilder,
+    Axis scrollDirection = Axis.vertical,
+    bool reverse = false,
+    String? restorationId,
+    EdgeInsets? padding,
+    double? itemExtent,
+  }) =>
+      ListView.builder(
+          itemCount: this.length,
+          scrollDirection: scrollDirection,
+          reverse: reverse,
+          restorationId: restorationId,
+          padding: padding,
+          itemExtent: itemExtent,
+          itemBuilder: (ctx, index) => itemBuilder(ctx, this[index], index));
+
   Widget flex<T>({
     required Widget Function(T data) itemBuilder,
     Axis direction = Axis.vertical,

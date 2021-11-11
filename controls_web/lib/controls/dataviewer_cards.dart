@@ -6,7 +6,20 @@ import 'dart:async';
 
 class DataViewerCard extends StatelessWidget {
   final Map<String, dynamic> data;
-  const DataViewerCard({Key? key, required this.data}) : super(key: key);
+  final Widget? header;
+  final BoxConstraints? constraints;
+  final bool showGridHeader;
+  final double? height;
+  final double? width;
+  const DataViewerCard(
+      {Key? key,
+      this.header,
+      this.height,
+      this.width,
+      this.showGridHeader = true,
+      this.constraints,
+      required this.data})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +27,27 @@ class DataViewerCard extends StatelessWidget {
     var sources = names.map((e) => {'name': e, 'value': '${data[e]}'}).toList();
     var size = MediaQuery.of(context).size;
     var x = size.height - kBottomNavigationBarHeight * 2;
-    return SizedBox(
-        height: x,
+    return Container(
+        height: height ?? x,
+        width: width,
+        constraints: constraints,
         child: DataViewer(
+          header: header,
           showPageNavigatorButtons: false,
           rowsPerPage: sources.length,
           canSearch: false,
           source: sources,
+          headingRowHeight: (showGridHeader) ? null : 0.0,
           headingRowColor: Colors.amber,
         ));
   }
+}
+
+class CardSize {
+  double width;
+  double height;
+  int n;
+  CardSize(this.width, this.height, this.n);
 }
 
 class DataViewerCards extends StatefulWidget {
@@ -57,6 +81,24 @@ class DataViewerCards extends StatefulWidget {
   }) : super(key: key);
   @override
   _cards createState() => _cards();
+
+  static CardSize cardSize(context,
+      {double leg = 120,
+      int maxCards = 10,
+      double width = 350,
+      double height = double.infinity}) {
+    var size = MediaQuery.of(context).size;
+    final l = (size.width - leg) - 16;
+    int n = l ~/ width;
+    if (n < 1) n = 1;
+    if (n > maxCards) n = maxCards;
+    double maxWidth = l / n;
+    double maxHeight = height;
+    if (maxHeight != double.infinity && maxHeight > size.height - 120)
+      maxHeight = size.height - 120;
+
+    return CardSize(maxWidth, maxHeight, n);
+  }
 }
 
 class _cards extends State<DataViewerCards> {
@@ -112,7 +154,7 @@ class _cards extends State<DataViewerCards> {
         stream: widget.controller.subscribeChanges.stream,
         builder: (a, b) => Padding(
               padding: EdgeInsets.all(widget.padding),
-              child: FutureBuilder<List>(
+              child: FutureBuilder<dynamic>(
                   initialData: widget.controller.source,
                   future: widget.controller.future!(),
                   builder: (context, snapshot) {

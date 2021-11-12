@@ -853,22 +853,27 @@ class PaginatedGridController {
             title: title, width: width, height: height, event: event));
   }
 
-  createColumns(List<dynamic> source) {
+  createColumns(List<dynamic> source,
+      {Function(PaginatedGridColumn)? onCreate}) {
     columns = [];
     var row = source.first;
-    if (row != null)
-      row.forEach((k, v) {
+    if (row != null) {
+      for (var k in row.keys) {
+        var v = row[k];
         var numeric = false;
         if (v is double) numeric = true;
-        columns!.add(
-          PaginatedGridColumn(
-            name: k,
-            label: '${k.replaceAll('_', ' ')}'.toCapital(),
-            numeric: numeric,
-            //width: 120,
-          ),
+
+        var col = PaginatedGridColumn(
+          name: k,
+          label: '${k.replaceAll('_', ' ')}'.toCapital(),
+          numeric: numeric,
+          //width: 120,
         );
-      });
+        if (onCreate != null) onCreate(col);
+        columns!.add(col);
+      }
+    }
+    return columns;
   }
 
   clear() {

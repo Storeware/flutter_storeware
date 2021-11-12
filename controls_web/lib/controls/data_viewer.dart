@@ -238,8 +238,9 @@ class DataViewerController {
   }
 
   /// crias as colunas, de uso interno
-  createColumns(List<Map<String, dynamic>> source) {
-    paginatedController.createColumns(source);
+  createColumns(List<Map<String, dynamic>> source,
+      {Function(PaginatedGridColumn)? onCreate}) {
+    return paginatedController.createColumns(source, onCreate: onCreate);
   }
 
   /// executa  delete de um linha

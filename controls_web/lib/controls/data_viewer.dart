@@ -387,8 +387,12 @@ class DataViewerController {
 /// [DataViewerColumn] cria as propriedade da coluna no grid
 class DataViewerColumn extends PaginatedGridColumn {
   late final String? name;
+  final TextEditingController? editController;
+  final void Function(dynamic value)? onChanged;
   DataViewerColumn({
     /// evento editPressed
+    this.editController,
+    this.onChanged,
     Function(PaginatedGridController)? onEditIconPressed,
     String? defaultValue,
     bool numeric = false,
@@ -437,6 +441,10 @@ class DataViewerColumn extends PaginatedGridColumn {
     String? Function(dynamic)? onValidate,
     bool folded = false,
   }) : super(
+          onChanged: (x) {
+            if (onChanged != null) onChanged(x);
+          },
+          editController: editController,
           defaultValue: defaultValue,
           onEditIconPressed: onEditIconPressed,
           numeric: numeric,
@@ -1182,10 +1190,11 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   get p => widget.data;
   createFormField(BuildContext context, item, int order,
       {bool isLast = false}) {
-    final TextEditingController txtController = TextEditingController(
-        text: (item.onGetValue != null)
-            ? item.onGetValue(p[item.name])
-            : (p[item.name] ?? item.defaultValue ?? '').toString());
+    final TextEditingController txtController = item.editController ??
+        TextEditingController(
+            text: (item.onGetValue != null)
+                ? item.onGetValue(p[item.name])
+                : (p[item.name] ?? item.defaultValue ?? '').toString());
     var focusNode = FocusNode();
     return Focus(
       //descendantsAreFocusable: canFocus(item),

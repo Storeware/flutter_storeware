@@ -73,6 +73,8 @@ class _PaginatedGridSampleState extends State<PaginatedGridSample> {
 
 class PaginatedGridColumn {
   final String? name;
+  final TextEditingController? editController;
+
   String? label;
   String? editInfo;
   String? defaultValue;
@@ -107,6 +109,8 @@ class PaginatedGridColumn {
   Color? color;
   int? order;
   PaginatedGridColumn({
+    this.editController,
+    this.onChanged,
     this.defaultValue,
     this.onEditIconPressed,
     this.numeric = false,

@@ -278,6 +278,8 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
       child: ValueListenableBuilder<int>(
         valueListenable: active!,
         builder: (a, b, w) => Wrap(
+          //direction: Axis.horizontal,
+
           alignment: widget.mainAxisAlignment,
           runAlignment: widget.mainAxisAlignment,
           //mainAxisAlignment: widget.mainAxisAlignment,
@@ -288,7 +290,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
             if (widget.leading != null) widget.leading!,
 
             /// space em branco a esquerda do menu
-            if (widget.position == VerticalTopTabPosition.right) Spacer(),
+            //if (widget.position == VerticalTopTabPosition.right) Spacer(),
 
             /// lista itens do menu
             for (var index = 0; index < widget.choices!.length; index++)
@@ -391,7 +393,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                   ),
                 );
               }),
-            if (widget.position == VerticalTopTabPosition.left) Spacer(),
+            //if (widget.position == VerticalTopTabPosition.left) Spacer(),
 
             if (widget.actions != null) ...widget.actions!,
             if (widget.right != null) SizedBox(width: widget.right),

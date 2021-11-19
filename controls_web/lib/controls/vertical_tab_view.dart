@@ -97,10 +97,14 @@ class _VerticalTabViewState extends State<VerticalTabView> {
     _controller!.tabView = this;
 
     _child = widget.home ??
-        ((widget.choices!.length > 0)
-            ? widget.choices![_index.value].child
-            : Container());
+        ((widget.choices!.length > 0) ? buildChild(_index.value) : Container());
     super.initState();
+  }
+
+  buildChild(int index) {
+    if (widget.choices![index].builder != null)
+      return widget.choices![index].child ??= widget.choices![index].builder!();
+    return widget.choices![index].child ?? Container();
   }
 
   animateTo(int index) {
@@ -117,7 +121,7 @@ class _VerticalTabViewState extends State<VerticalTabView> {
 
   selectedItem(int index, TabChoice item) {
     _index.value = index;
-    animateChild(item.child ?? Container());
+    animateChild(buildChild(index) ?? Container());
   }
 
   goHome() {
@@ -148,11 +152,7 @@ class _VerticalTabViewState extends State<VerticalTabView> {
       bottomSheet: widget.bottomSheet,
       backgroundColor: widget.backgroundColor,
       appBar: appBar,
-      body: Column(
-        children: [
-          Expanded(child: _child ?? Container()),
-        ],
-      ),
+      body: SizedBox.expand(child: _child ?? Container()),
     );
   }
 }

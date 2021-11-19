@@ -229,7 +229,7 @@ class DataViewerController {
   get skip => (page - 1) * top!;
 
   /// procura o object column na lista de colunas
-  findColumn(name) {
+  PaginatedGridColumn? findColumn(name) {
     var index = -1;
     for (int i = 0; i < columns!.length; i++)
       if (columns![i].name == name) index = i;
@@ -546,6 +546,7 @@ class DataViewer extends StatefulWidget {
   final Color? oddRowColor; //: widget.oddRowColor,
   final bool? oneRowAutoEdit;
   final Function(dynamic)? onSaved;
+  final Color? Function(dynamic row, Color color)? dataRowColorBuilder;
   DataViewer({
     Key? key,
     this.controller,
@@ -553,6 +554,7 @@ class DataViewer extends StatefulWidget {
     this.oneRowAutoEdit = false,
     this.keyName,
     this.headingRowColor,
+    this.dataRowColorBuilder,
     this.source,
     this.evenRowColor,
     this.elevation = 0,
@@ -749,6 +751,7 @@ class _DataViewerState extends State<DataViewer> {
                       canSort: widget.canSort,
                       evenRowColor: widget.evenRowColor ?? vt.evenRowColor,
                       oddRowColor: widget.oddRowColor ?? vt.oddRowColor,
+                      dataRowColorBuilder: widget.dataRowColorBuilder,
                       headingRowColor:
                           widget.headingRowColor ?? vt.headingRowColor,
                       headingTextStyle: vt.headingTextStyle,
@@ -758,6 +761,8 @@ class _DataViewerState extends State<DataViewer> {
                       navigatorBuilder: widget.navigatorBuilder,
                       onSelectChanged: (widget.onSelected != null)
                           ? (b, ctrl) {
+                              if (widget.onSelected == null)
+                                return Future.value(false);
                               return widget.onSelected!(ctrl.data);
                             }
                           : null, //(b, ctrl) => Future.value(null),

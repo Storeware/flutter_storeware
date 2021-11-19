@@ -237,6 +237,7 @@ class PaginatedGrid extends StatefulWidget {
 
   final double? dataRowHeight;
   final Color? dataRowColor;
+  final Color? Function(dynamic row, Color color)? dataRowColorBuilder;
   final TextStyle? dataTextStyle;
   final double? headingRowHeight;
   final TextStyle? headingTextStyle;
@@ -257,6 +258,7 @@ class PaginatedGrid extends StatefulWidget {
     this.controller,
     this.dataRowHeight = kMinInteractiveDimension * .80,
     this.dataRowColor,
+    this.dataRowColorBuilder,
     this.dataTextStyle,
     this.headingRowHeight = kMinInteractiveDimension,
     this.headingTextStyle,
@@ -995,13 +997,22 @@ class PaginatedGridDataTableSource extends DataTableSource {
     Color rowColor = ((index % 2) == 0)
         ? controller.widget!.evenRowColor ?? theme.primaryColor.withAlpha(10)
         : controller.widget!.oddRowColor ?? theme.primaryColor.withAlpha(3);
+
     Map<String, dynamic> row = controller.source![index];
+
+    if (controller.widget!.dataRowColorBuilder != null) {
+      var c = controller.widget!.dataRowColorBuilder!(row, rowColor);
+      if (c != null) rowColor = c;
+    }
+
     DataRow r = DataRow(
         key: UniqueKey(),
         onSelectChanged: (bool? b) {
-          if (controller.widget!.onSelectChanged != null) {
+          if (controller.widget != null &&
+              controller.widget!.onSelectChanged != null) {
             setData(index, 0);
-            controller.widget!.onSelectChanged!(b ?? false, controller);
+            if (controller.widget!.onSelectChanged != null)
+              controller.widget!.onSelectChanged!(b ?? false, controller);
             return;
           } else if (controller.widget!.canEdit) {
             setData(index, 0);

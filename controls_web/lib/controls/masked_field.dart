@@ -75,6 +75,46 @@ class MaskedTextField extends StatefulWidget {
   }
 
   bool get showHelperText => _showHelperText;
+  static password(
+      {String label = 'Senha',
+      required Function(String data) onChanged,
+      onSaved,
+      bool canShow = false,
+      int minLength = 6,
+      controller,
+      decoration,
+      String Function(String?)? validator}) {
+    bool show = false;
+    return StatefulBuilder(
+        builder: (ctx, setState) => TextFormField(
+            obscureText: !show,
+            onChanged: onChanged,
+            onSaved: onSaved,
+            controller: controller,
+            decoration: decoration ??
+                InputDecoration(
+                  labelText: label,
+                  suffixIcon: (canShow)
+                      ? IconButton(
+                          icon: const Icon(Icons.remove_red_eye_sharp),
+                          onPressed: () {
+                            setState(() {
+                              show = !show;
+                            });
+                          })
+                      : null,
+                ),
+            validator: validator ??
+                (String? value) {
+                  if ((value ?? '').trim().isEmpty) {
+                    return 'Falta informar a senha';
+                  }
+                  if (value!.length < minLength) {
+                    return 'senha muito curta ($minLength)';
+                  }
+                }));
+  }
+
   static phone1(
       {Key? key,
       String? label = 'Celular',
@@ -82,6 +122,7 @@ class MaskedTextField extends StatefulWidget {
       TextAlign? textAlign,
       controller,
       onSaved,
+      onChanged,
       String? mask = '(00)00000-0000',
       String? match = r"^\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
       Function(String)? validator,
@@ -96,6 +137,7 @@ class MaskedTextField extends StatefulWidget {
         textAlign: textAlign,
         initialValue: initialValue ?? '',
         onSaved: onSaved,
+        onChanged: onChanged,
         validator: validator,
         sample: '(99)99999-9999',
         match: match,
@@ -110,6 +152,7 @@ class MaskedTextField extends StatefulWidget {
       String? initialValue,
       TextAlign? textAlign,
       onSaved,
+      onChanged,
       String mask = '*00(00)00000-0000',
       String match = r"^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})",
       Function(String)? validator,
@@ -124,6 +167,7 @@ class MaskedTextField extends StatefulWidget {
         textAlign: textAlign,
         initialValue: initialValue ?? '+55(11)',
         onSaved: onSaved,
+        onChanged: onChanged,
         validator: validator,
         sample: '+55(11)99999-9999',
         match: match,
@@ -136,6 +180,7 @@ class MaskedTextField extends StatefulWidget {
           String label = 'Hora',
           String? initialValue,
           onSaved,
+          onChanged,
           Function(String)? validator,
           bool autofocus = false,
           TextStyle? style}) =>
@@ -145,6 +190,7 @@ class MaskedTextField extends StatefulWidget {
           mask: "00:00",
           initialValue: initialValue,
           onSaved: onSaved,
+          onChanged: onChanged,
           autofocus: autofocus,
           validator: validator,
           sample: '12:59',
@@ -157,6 +203,7 @@ class MaskedTextField extends StatefulWidget {
           String label = 'Data',
           String? initialValue,
           onSaved,
+          onChanged,
           String? mask = 'dd/mm/yyyy',
           Function(String)? validator,
           TextStyle? style}) =>
@@ -166,6 +213,7 @@ class MaskedTextField extends StatefulWidget {
           mask: "00/00/0000",
           initialValue: initialValue,
           onSaved: onSaved,
+          onChanged: onChanged,
           validator: validator ??
               (value) {
                 var formatter = DateFormat(mask);
@@ -185,6 +233,7 @@ class MaskedTextField extends StatefulWidget {
           String? initialValue,
           int? maxLength,
           onSaved,
+          onChanged,
           String? mask,
           TextInputType keyboardType = TextInputType.text,
           Function(String)? validator,
@@ -195,6 +244,7 @@ class MaskedTextField extends StatefulWidget {
           mask: mask,
           initialValue: initialValue,
           onSaved: onSaved,
+          onChanged: onChanged,
           maxLength: maxLength,
           validator: validator,
           keyboardType: keyboardType,
@@ -205,6 +255,7 @@ class MaskedTextField extends StatefulWidget {
           String label = 'Email',
           String? initialValue,
           Function(String)? onSaved,
+          onChanged,
           Function(String)? validator,
           controller,
           TextStyle? style}) =>
@@ -215,6 +266,7 @@ class MaskedTextField extends StatefulWidget {
           mask: null,
           initialValue: initialValue,
           onSaved: onSaved,
+          onChanged: onChanged,
           validator: validator,
           match:
               r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$',
@@ -227,6 +279,7 @@ class MaskedTextField extends StatefulWidget {
           String label = 'Host',
           String? initialValue,
           onSaved,
+          onChanged,
           Function(String)? validator,
           TextStyle? style}) =>
       MaskedTextField(
@@ -235,6 +288,7 @@ class MaskedTextField extends StatefulWidget {
           mask: null,
           initialValue: initialValue,
           onSaved: onSaved,
+          onChanged: onChanged,
           validator: validator,
           sample: 'http://servidor.com.br:8886',
           match:
@@ -248,6 +302,7 @@ class MaskedTextField extends StatefulWidget {
       double? initialValue,
       String? errorText,
       Function(double)? onSaved,
+      onChanged,
       leftSymbol = '',
       precision = 2}) {
     return MaskedMoneyFormField(
@@ -255,6 +310,7 @@ class MaskedTextField extends StatefulWidget {
       label: label,
       initialValue: initialValue,
       onSaved: onSaved,
+      onChanged: onChanged,
       errorText: errorText,
       leftSymbol: leftSymbol,
       precision: precision,

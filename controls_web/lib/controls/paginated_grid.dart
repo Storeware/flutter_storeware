@@ -237,7 +237,8 @@ class PaginatedGrid extends StatefulWidget {
 
   final double? dataRowHeight;
   final Color? dataRowColor;
-  final Color? Function(dynamic row, Color color)? dataRowColorBuilder;
+  final Color? Function(dynamic row, Color color, int index)?
+      dataRowColorBuilder;
   final TextStyle? dataTextStyle;
   final double? headingRowHeight;
   final TextStyle? headingTextStyle;
@@ -1001,7 +1002,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
     Map<String, dynamic> row = controller.source![index];
 
     if (controller.widget!.dataRowColorBuilder != null) {
-      var c = controller.widget!.dataRowColorBuilder!(row, rowColor);
+      var c = controller.widget!.dataRowColorBuilder!(row, rowColor, index);
       if (c != null) rowColor = c;
     }
 

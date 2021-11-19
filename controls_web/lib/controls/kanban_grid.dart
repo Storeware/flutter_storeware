@@ -73,7 +73,7 @@ class KanbanSlideAction {
   final IconData? icon;
   final Widget? image;
   final Function(dynamic)? onPressed;
-  final IconSlideAction Function(dynamic)? builder;
+  final SlidableAction Function(dynamic)? builder;
   final Color? color;
   final Color? foregroundColor;
   final bool? closeOnTap;
@@ -512,39 +512,45 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
           controller: widget.controller!,
           child: isSlidable
               ? Slidable(
-                  actionPane: SlidableDrawerActionPane(),
-                  actionExtentRatio: 0.25,
-                  secondaryActions: kanban!.slideTrailing == null
+                  startActionPane: kanban!.slideLeading == null
                       ? null
-                      : [
-                          for (final it in kanban!.slideTrailing!)
-                            if (it.builder != null)
-                              it.builder!(item)
-                            else
-                              IconSlideAction(
-                                  caption: it.label,
+                      : ActionPane(
+                          motion: const DrawerMotion(),
+                          extentRatio: 0.25,
+                          children: [
+                            for (final it in kanban!.slideLeading!)
+                              if (it.builder != null)
+                                it.builder!(item)
+                              else
+                                SlidableAction(
+                                  key: it.key,
+                                  label: it.label,
                                   icon: it.icon,
-                                  iconWidget: it.image,
-                                  onTap: () => it.onPressed!(item))
-                        ],
-                  actions: kanban!.slideLeading == null
+                                  // iconWidget: it.image,
+                                  onPressed: (context) => it.onPressed!(item),
+                                  backgroundColor: it.color!,
+                                  foregroundColor: it.foregroundColor,
+                                  //closeOnTap: it.closeOnTap ?? false,
+                                )
+                          ],
+                        ),
+                  endActionPane: kanban!.slideTrailing == null
                       ? null
-                      : [
-                          for (final it in kanban!.slideLeading!)
-                            if (it.builder != null)
-                              it.builder!(item)
-                            else
-                              IconSlideAction(
-                                key: it.key,
-                                caption: it.label,
-                                icon: it.icon,
-                                iconWidget: it.image,
-                                onTap: () => it.onPressed!(item),
-                                color: it.color,
-                                foregroundColor: it.foregroundColor,
-                                closeOnTap: it.closeOnTap ?? false,
-                              )
-                        ],
+                      : ActionPane(
+                          motion: const DrawerMotion(),
+                          extentRatio: 0.25,
+                          children: [
+                            for (final it in kanban!.slideTrailing!)
+                              if (it.builder != null)
+                                it.builder!(item)
+                              else
+                                SlidableAction(
+                                    label: it.label,
+                                    icon: it.icon,
+                                    //iconWidget: it.image,
+                                    onPressed: (context) => it.onPressed!(item))
+                          ],
+                        ),
                   key: ObjectKey(item),
                   child: buildSlidable(index, item),
                 )

@@ -229,7 +229,7 @@ class DataViewerController {
   get skip => (page - 1) * top!;
 
   /// procura o object column na lista de colunas
-  findColumn(name) {
+  PaginatedGridColumn? findColumn(name) {
     var index = -1;
     for (int i = 0; i < columns!.length; i++)
       if (columns![i].name == name) index = i;
@@ -238,8 +238,9 @@ class DataViewerController {
   }
 
   /// crias as colunas, de uso interno
-  createColumns(List<Map<String, dynamic>> source) {
-    paginatedController.createColumns(source);
+  createColumns(List<Map<String, dynamic>> source,
+      {Function(PaginatedGridColumn)? onCreate}) {
+    return paginatedController.createColumns(source, onCreate: onCreate);
   }
 
   /// executa  delete de um linha
@@ -386,8 +387,12 @@ class DataViewerController {
 /// [DataViewerColumn] cria as propriedade da coluna no grid
 class DataViewerColumn extends PaginatedGridColumn {
   late final String? name;
+  final TextEditingController? editController;
+  final void Function(dynamic value)? onChanged;
   DataViewerColumn({
     /// evento editPressed
+    this.editController,
+    this.onChanged,
     Function(PaginatedGridController)? onEditIconPressed,
     String? defaultValue,
     bool numeric = false,
@@ -436,6 +441,10 @@ class DataViewerColumn extends PaginatedGridColumn {
     String? Function(dynamic)? onValidate,
     bool folded = false,
   }) : super(
+          onChanged: (x) {
+            if (onChanged != null) onChanged(x);
+          },
+          editController: editController,
           defaultValue: defaultValue,
           onEditIconPressed: onEditIconPressed,
           numeric: numeric,
@@ -537,6 +546,7 @@ class DataViewer extends StatefulWidget {
   final Color? oddRowColor; //: widget.oddRowColor,
   final bool? oneRowAutoEdit;
   final Function(dynamic)? onSaved;
+  final Color? Function(dynamic row, Color color)? dataRowColorBuilder;
   DataViewer({
     Key? key,
     this.controller,
@@ -544,6 +554,7 @@ class DataViewer extends StatefulWidget {
     this.oneRowAutoEdit = false,
     this.keyName,
     this.headingRowColor,
+    this.dataRowColorBuilder,
     this.source,
     this.evenRowColor,
     this.elevation = 0,
@@ -740,6 +751,7 @@ class _DataViewerState extends State<DataViewer> {
                       canSort: widget.canSort,
                       evenRowColor: widget.evenRowColor ?? vt.evenRowColor,
                       oddRowColor: widget.oddRowColor ?? vt.oddRowColor,
+                      dataRowColorBuilder: widget.dataRowColorBuilder,
                       headingRowColor:
                           widget.headingRowColor ?? vt.headingRowColor,
                       headingTextStyle: vt.headingTextStyle,
@@ -749,6 +761,8 @@ class _DataViewerState extends State<DataViewer> {
                       navigatorBuilder: widget.navigatorBuilder,
                       onSelectChanged: (widget.onSelected != null)
                           ? (b, ctrl) {
+                              if (widget.onSelected == null)
+                                return Future.value(false);
                               return widget.onSelected!(ctrl.data);
                             }
                           : null, //(b, ctrl) => Future.value(null),
@@ -1181,10 +1195,11 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   get p => widget.data;
   createFormField(BuildContext context, item, int order,
       {bool isLast = false}) {
-    final TextEditingController txtController = TextEditingController(
-        text: (item.onGetValue != null)
-            ? item.onGetValue(p[item.name])
-            : (p[item.name] ?? item.defaultValue ?? '').toString());
+    final TextEditingController txtController = item.editController ??
+        TextEditingController(
+            text: (item.onGetValue != null)
+                ? item.onGetValue(p[item.name])
+                : (p[item.name] ?? item.defaultValue ?? '').toString());
     var focusNode = FocusNode();
     return Focus(
       //descendantsAreFocusable: canFocus(item),

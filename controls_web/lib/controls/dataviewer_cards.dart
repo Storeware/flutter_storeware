@@ -11,11 +11,13 @@ class DataViewerCard extends StatelessWidget {
   final bool showGridHeader;
   final double? height;
   final double? width;
+  final bool readOnly;
   const DataViewerCard(
       {Key? key,
       this.header,
       this.height,
       this.width,
+      this.readOnly = false,
       this.showGridHeader = true,
       this.constraints,
       required this.data})
@@ -33,6 +35,8 @@ class DataViewerCard extends StatelessWidget {
         constraints: constraints,
         child: DataViewer(
           header: header,
+          canEdit: !readOnly,
+          canInsert: !readOnly,
           showPageNavigatorButtons: false,
           rowsPerPage: sources.length,
           canSearch: false,
@@ -48,6 +52,7 @@ class CardSize {
   double height;
   int n;
   CardSize(this.width, this.height, this.n);
+  toJson() => {'width': width, 'height': height, 'n': n};
 }
 
 class DataViewerCards extends StatefulWidget {
@@ -83,19 +88,21 @@ class DataViewerCards extends StatefulWidget {
   _cards createState() => _cards();
 
   static CardSize cardSize(context,
-      {double leg = 120,
+      {double widthLeg = 120,
+      double heightLeg = 160,
       int maxCards = 10,
       double width = 350,
-      double height = double.infinity}) {
+      double? height}) {
     var size = MediaQuery.of(context).size;
-    final l = (size.width - leg) - 16;
+    height ??= size.height - heightLeg;
+    final l = (size.width - widthLeg) - 16;
     int n = l ~/ width;
     if (n < 1) n = 1;
     if (n > maxCards) n = maxCards;
     double maxWidth = l / n;
     double maxHeight = height;
-    if (maxHeight != double.infinity && maxHeight > size.height - 120)
-      maxHeight = size.height - 120;
+    if (maxHeight > size.height - heightLeg)
+      maxHeight = size.height - heightLeg;
 
     return CardSize(maxWidth, maxHeight, n);
   }

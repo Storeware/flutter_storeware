@@ -8,6 +8,7 @@ class DashDanutChart extends StatelessWidget {
   final int arcWidth;
   final bool? animate;
   final bool showLabels;
+  final bool showMeasures;
   final Function(int, ChartPair)? onPressed;
 
   DashDanutChart(
@@ -15,6 +16,7 @@ class DashDanutChart extends StatelessWidget {
     this.arcWidth = 60,
     this.animate,
     this.showLabels = false,
+    this.showMeasures = false,
     this.onPressed,
   });
 
@@ -49,7 +51,13 @@ class DashDanutChart extends StatelessWidget {
         domainFn: (ChartPair sales, _) => sales.title,
         measureFn: (ChartPair sales, _) => sales.value,
         data: data,
-        colorFn: (p, i) => gcolor.Color(r: r, g: g, b: g, a: 255 - (i! * x)),
+        colorFn: (p, i) {
+          // debugPrint('$p $i');
+          return (p.color != null)
+              ? p.color!
+              : gcolor.Color(r: r, g: g, b: g, a: 255 - (i! * x));
+        },
+        // colorFn: (p, i) => gcolor.Color(r: r, g: g, b: g, a: 255 - (i! * x)),
         labelAccessorFn: (ChartPair row, _) =>
             '${(showLabel) ? row.title : row.value}',
       )
@@ -90,7 +98,7 @@ class DashDanutChart extends StatelessWidget {
             // This defines the padding around each legend entry.
             cellPadding: new EdgeInsets.only(right: 4.0, bottom: 4.0),
             // Set [showMeasures] to true to display measures in series legend.
-            showMeasures: false,
+            showMeasures: showMeasures,
             // Configure the measure value to be shown by default in the legend.
             legendDefaultMeasure: charts.LegendDefaultMeasure.firstValue,
             // Optionally provide a measure formatter to format the measure value.

@@ -1,4 +1,5 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:flutter/material.dart' as m show Color;
 
 enum DashSeriesType { bar, line }
 
@@ -19,6 +20,11 @@ class ChartPair {
       "color": color
     };
   }
+
+  static charts.Color fromColor(m.Color color) =>
+      charts.ColorUtil.fromDartColor(color);
+
+  static toColor(charts.Color color) => charts.ColorUtil.toDartColor(color);
 }
 
 class ChartPairInt {

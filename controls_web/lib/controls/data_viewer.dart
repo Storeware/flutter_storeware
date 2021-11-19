@@ -546,7 +546,8 @@ class DataViewer extends StatefulWidget {
   final Color? oddRowColor; //: widget.oddRowColor,
   final bool? oneRowAutoEdit;
   final Function(dynamic)? onSaved;
-  final Color? Function(dynamic row, Color color)? dataRowColorBuilder;
+  final Color? Function(dynamic row, Color color, int index)?
+      dataRowColorBuilder;
   DataViewer({
     Key? key,
     this.controller,

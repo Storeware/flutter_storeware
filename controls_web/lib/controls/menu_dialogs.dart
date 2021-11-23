@@ -48,7 +48,8 @@ class MenuDialog extends StatefulWidget {
     double width = 300,
     double? height,
     Color? color,
-    bool? closeMainDialog = true,
+    bool desktop = false,
+    bool closeMainDialog = true,
     Alignment? transitionAlign = Alignment.topRight,
     DialogsTransition? transitionItem = DialogsTransition.menuRightDown,
   }) async {
@@ -58,6 +59,7 @@ class MenuDialog extends StatefulWidget {
     return Dialogs.showPage(
       context,
       width: width,
+      desktop: desktop,
       alignment: Alignment.topRight,
       transition: DialogsTransition.menuTop,
       height: h + 0.0,

@@ -294,6 +294,7 @@ extension WidgetMorphism on Widget {
           double? height,
           bool desktop = false,
           bool iconRight = false,
+          List<Widget>? actions,
           bool fullPage = false}) =>
       Dialogs.showPage<T>(
         context,
@@ -303,6 +304,7 @@ extension WidgetMorphism on Widget {
         desktop: desktop,
         iconRight: iconRight,
         child: this,
+        actions: actions,
         fullPage: fullPage,
       );
 

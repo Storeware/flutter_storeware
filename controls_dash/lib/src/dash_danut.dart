@@ -111,7 +111,11 @@ class DashDanutChart extends StatelessWidget {
       defaultRenderer: new charts.ArcRendererConfig<Object>(
           arcWidth: arcWidth,
           arcRendererDecorators: [
+            //if (!showMeasures)
             new charts.ArcLabelDecorator(),
+            if (showMeasures)
+              new charts.ArcLabelDecorator(
+                  labelPosition: charts.ArcLabelPosition.inside),
           ]),
     );
   }

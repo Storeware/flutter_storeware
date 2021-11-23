@@ -18,7 +18,7 @@ class RadioGrouped extends StatelessWidget {
       this.crossAxisAlignment,
       this.selected = 0,
       this.title,
-      this.itemWidth,
+      this.itemWidth = double.maxFinite,
       this.activeColor})
       : super(key: key);
 

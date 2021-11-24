@@ -149,7 +149,7 @@ class Dialogs {
                           : AppBar(
                               title: Text('$title'),
                               elevation: (desktop) ? 0 : 1,
-                              automaticallyImplyLeading: false,
+                              automaticallyImplyLeading: !desktop && !iconRight,
                               actions: [
                                 if (actions != null) ...actions,
                                 if (!desktop && iconRight)

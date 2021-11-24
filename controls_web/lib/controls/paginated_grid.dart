@@ -178,6 +178,7 @@ class PaginatedGrid extends StatefulWidget {
   final double? elevation;
   final double? dividerThickness;
   final bool canSort;
+  final bool localSort;
 
   /// [onPageSelected] evento de mudança de pagina para recarregar novos dados
   /// requer recarregar novos dados para a pagina solicitada
@@ -270,6 +271,7 @@ class PaginatedGrid extends StatefulWidget {
     this.futureSource,
     this.editSize,
     this.elevation = 0,
+    this.localSort = false,
     this.dividerThickness = 1,
     this.editFullPage = false,
     this.availableRowsPerPage,
@@ -598,11 +600,22 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                     if (controller!.columns![i].visible)
                                       DataColumn(
                                         onSort: (columnIndex, bool ascending) {
-                                          if (widget.canSort &&
-                                              (controller!.columns![i].sort)) if (controller!
-                                                  .columns![i].onSort !=
-                                              null) {
+                                          if (widget.localSort) {
                                             _sort(columnIndex, i, ascending);
+                                          } else {
+                                            if (widget.canSort &&
+                                                (controller!
+                                                    .columns![i].sort)) {
+                                              if (controller!
+                                                      .columns![i].onSort !=
+                                                  null) {
+                                                controller!.columns![i].onSort!(
+                                                    columnIndex, ascending);
+                                              } else {
+                                                _sort(
+                                                    columnIndex, i, ascending);
+                                              }
+                                            }
                                           }
                                         },
                                         numeric:

@@ -376,6 +376,19 @@ extension ListViewExtension on ListView {
 }
 
 extension ListExtension on List {
+  popupButton(context, {Widget? icon, Function(int index)? onSelected}) {
+    return PopupMenuButton<int>(
+      icon: icon,
+      onSelected: (i) {
+        if (onSelected != null) onSelected(i);
+      },
+      itemBuilder: (context) => [
+        for (var i = 0; i < length; i++)
+          PopupMenuItem(child: this[i], value: i),
+      ],
+    );
+  }
+
   Widget animatedList<T>({
     Key? key,
     ScrollController? scrollController,
@@ -699,4 +712,47 @@ extension DesktopAppBar on AppBar {
       ],
     );
   }
+}
+
+popupDialog(context,
+    {String? title,
+    bool desktop = false,
+    double width = 300,
+    double? left,
+    double? top,
+    double? height,
+    required List<Widget> children,
+    Color? color,
+    Offset? position,
+    Offset Function()? onPosition,
+    required Function(int index) onSelected}) {
+  Offset p = (onPosition != null) ? onPosition() : position ?? Offset.zero;
+  double? _left = left ?? p.dx;
+  double? _top = top ?? p.dy;
+  List<PopupMenuEntry<int>> its = [
+    for (var i = 0; i < children.length; i++)
+      _buildPopupItem(i, children[i], onSelected)
+  ];
+  return showMenu(
+    context: context,
+    color: color,
+    initialValue: 0,
+    semanticLabel: 'xxxx',
+    useRootNavigator: false,
+    position: RelativeRect.fromLTRB(_left, _top, width,
+        height ?? kMinInteractiveDimension * (children.length + 1)),
+    items: its,
+  );
+}
+
+_buildPopupItem(i, element, Function(int index) onSelected) {
+  if (element is PopupMenuDivider) return element as PopupMenuDivider;
+  if (element is PopupMenuItem) return element as PopupMenuItem;
+  return PopupMenuItem<int>(
+    value: i,
+    child: element,
+    onTap: () {
+      onSelected(i);
+    },
+  );
 }

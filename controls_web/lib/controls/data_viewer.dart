@@ -495,6 +495,7 @@ class DataViewer extends StatefulWidget {
   final double? elevation;
   final double? dividerThickness;
   final bool canSort;
+  final bool localSort;
   final TextStyle? columnStyle;
   final String? keyStorage;
 
@@ -568,6 +569,7 @@ class DataViewer extends StatefulWidget {
     this.showPageNavigatorButtons = true,
     this.header,
     this.canSort = true,
+    this.localSort = false,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
     this.footer,
@@ -746,6 +748,7 @@ class _DataViewerState extends State<DataViewer> {
               width: widget.width,
               child: widget.child ??
                   PaginatedGrid(
+                      localSort: widget.localSort,
                       editSize: widget.editSize,
                       placeHolder: widget.placeHolder,
                       elevation: widget.elevation!,

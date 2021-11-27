@@ -307,6 +307,16 @@ extension WidgetMorphism on Widget {
         actions: actions,
         fullPage: fullPage,
       );
+  alertDialog(
+    context, {
+    String? title,
+    Color? color,
+  }) {
+    return Dialogs.alert(context,
+        backgoundColor: color,
+        title: (title == null) ? null : Text(title),
+        content: this);
+  }
 
   /// [willPopScope] pergunta se o APP pode ser encerrado
   Widget willPopScope(Future<bool> Function() onWillPop) =>

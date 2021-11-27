@@ -14,12 +14,14 @@ class MenuChoice {
   final double? height;
   final List<Widget>? actions;
   final String? tooltip;
+  final Function(BuildContext)? onPressed;
   MenuChoice({
     this.icon,
     this.title,
     this.index,
     this.enabled = true,
     this.builder,
+    this.onPressed,
     this.width,
     this.height,
     this.actions,
@@ -105,17 +107,23 @@ class _MenuDialogState extends State<MenuDialog> {
               itemIndex: i++,
               child: _tiles(item, item.title, item.icon, item.index, () {
                 if (widget.closeMainDialog!) Navigator.pop(context);
-                Dialogs.showPage(
-                  context,
-                  transition: widget.transition!,
-                  iconRight: true,
-                  title: item.title!,
-                  transitionDuration: 1000,
-                  actions: item.actions,
-                  width: (item.width ?? maxWidth * 0.8).min(maxWidth),
-                  height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
-                  child: (item.builder == null) ? null : item.builder!(context),
-                );
+
+                if (item.onPressed != null) {
+                  item.onPressed!(context);
+                } else {
+                  Dialogs.showPage(
+                    context,
+                    transition: widget.transition!,
+                    iconRight: true,
+                    title: item.title!,
+                    transitionDuration: 1000,
+                    actions: item.actions,
+                    width: (item.width ?? maxWidth * 0.8).min(maxWidth),
+                    height: (item.height ?? maxHeigth * 0.8).min(maxHeigth),
+                    child:
+                        (item.builder == null) ? null : item.builder!(context),
+                  );
+                }
               })),
       ],
     );

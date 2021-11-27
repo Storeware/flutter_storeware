@@ -499,12 +499,12 @@ class RestClient {
         .then((x) => x);
   }
 
-  rawData(String url,
+  Future<dynamic> rawData(String url,
       {method = 'GET', body, String? contentType, String? cacheControl}) async {
     _setHeader();
     final _h = _headers;
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
-    var ref;
+    dynamic ref;
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
@@ -515,18 +515,24 @@ class RestClient {
         contentType: getContentType(
             contentType ?? this.contentType) // [e automatic no DIO??]
         );
+    var rt = getContentType(contentType ?? this.contentType)!;
+    if (rt.contains('text/plain')) {
+      bo.responseType = ResponseType.plain;
+    }
 
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
 
     String uri = Uri.parse(url).toString();
     Dio dio = Dio(bo);
-    //dio.transformer = ClientTransformer();
+
+    DataProcessingNotifier.start();
 
     try {
       if (method == 'GET') {
-        ref = dio.get(uri);
+        ref = dio.get(uri).onError((error, stackTrace) => throw error!);
       } else if (method == 'POST') {
-        ref = dio.post(uri, data: body); //, headers: headers);
+        ref = dio.post(uri, data: body).onError(
+            (error, stackTrace) => throw error!); //, headers: headers);
       } else if (method == 'PUT')
         ref = dio.put(uri, data: body); //, headers: headers);
       else if (method == 'PATCH')
@@ -537,10 +543,9 @@ class RestClient {
         throw "Method inválido";
 
       return ref.then((resp) {
+        //return resp;
         _decodeResp(resp);
-
         notifyLog.notify(resp.data.toString());
-
         if (statusCode == 200) {
           return resp;
         } else {
@@ -548,9 +553,10 @@ class RestClient {
         }
       });
     } catch (e) {
-      var error = formataMensagemErro('$method:$url', e);
-      //if (!silent) notifyError.send('$error [$resp]');
-      return throw error;
+      DataProcessingNotifier.stop();
+      var error = formataMensagemErro(url, e);
+      if (!silent) sendError(error);
+      throw error;
     }
   }
 }

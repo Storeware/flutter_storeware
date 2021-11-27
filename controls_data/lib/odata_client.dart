@@ -467,6 +467,31 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  Future<dynamic> getRaw(String service) async {
+    try {
+      var url = client.formatUrl(path: service);
+      return client.rawData(url, method: 'GET').then((rsp) {
+        return rsp;
+      }).catchError((e) {
+        ErrorNotify.send(e);
+        throw e;
+      });
+    } catch (e) {
+      ErrorNotify.send(e);
+      throw e;
+    }
+  }
+
+  Future<dynamic> postRaw(String service, {Map<String, dynamic>? body}) async {
+    try {
+      var url = client.formatUrl(path: service);
+      return client.rawData(url, method: 'POST', body: body);
+    } catch (e) {
+      ErrorNotify.send(e);
+      rethrow;
+    }
+  }
+
   @override
   Future<String> delete(String resource, Map<String, dynamic> json) async {
     try {

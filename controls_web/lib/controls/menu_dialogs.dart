@@ -134,6 +134,7 @@ class _MenuDialogState extends State<MenuDialog> {
       Function onTap) {
     Color? _color =
         choice.enabled ? theme!.popupMenuTheme.color : theme!.dividerColor;
+    if (choice.title == '-') return Divider();
     return ListTile(
       leading: (icon == null) ? null : Icon(icon),
       onTap: () => (choice.enabled ? onTap() : null),

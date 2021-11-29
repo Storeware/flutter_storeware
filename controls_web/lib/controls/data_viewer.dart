@@ -238,7 +238,7 @@ class DataViewerController {
   }
 
   /// crias as colunas, de uso interno
-  createColumns(List<Map<String, dynamic>> source,
+  List<PaginatedGridColumn> createColumns(List<dynamic> source,
       {Function(PaginatedGridColumn)? onCreate}) {
     return paginatedController.createColumns(source, onCreate: onCreate);
   }

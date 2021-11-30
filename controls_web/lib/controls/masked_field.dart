@@ -598,9 +598,11 @@ class MaskedCheckbox extends StatefulWidget {
   final Color? checkColor;
   final Color? hoverColor;
   final Color? focusColor;
+  final TextStyle? style;
   MaskedCheckbox({
     Key? key,
     this.label,
+    this.style,
     this.value = true,
     this.activeColor,
     this.checkColor,
@@ -653,7 +655,8 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
             );
           }),
           if (widget.label != null)
-            Text(widget.label!, style: theme.inputDecorationTheme.hintStyle),
+            Text(widget.label!,
+                style: widget.style ?? theme.inputDecorationTheme.hintStyle),
           if (widget.trailing != null) widget.trailing!
         ]);
   }

@@ -32,7 +32,7 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_dash
-  get: ^4.0.0-nullsafety.2   
+  get: 
 
 dev_dependencies:
   flutter_test:

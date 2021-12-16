@@ -238,8 +238,7 @@ class DataViewerController {
   }
 
   /// crias as colunas, de uso interno
-  createColumns(List<Map<String, dynamic>> source,
-      {Function(PaginatedGridColumn)? onCreate}) {
+  createColumns(List source, {Function(PaginatedGridColumn)? onCreate}) {
     return paginatedController.createColumns(source, onCreate: onCreate);
   }
 
@@ -495,6 +494,7 @@ class DataViewer extends StatefulWidget {
   final double? elevation;
   final double? dividerThickness;
   final bool canSort;
+  final bool localSort;
   final TextStyle? columnStyle;
   final String? keyStorage;
 
@@ -567,6 +567,7 @@ class DataViewer extends StatefulWidget {
     this.showPageNavigatorButtons = true,
     this.header,
     this.canSort = true,
+    this.localSort = false,
     this.onSelected,
     this.footerHeight = kToolbarHeight,
     this.footer,
@@ -749,6 +750,7 @@ class _DataViewerState extends State<DataViewer> {
                       placeHolder: widget.placeHolder,
                       elevation: widget.elevation!,
                       canSort: widget.canSort,
+                      localSort: widget.localSort,
                       evenRowColor: widget.evenRowColor ?? vt.evenRowColor,
                       oddRowColor: widget.oddRowColor ?? vt.oddRowColor,
                       dataRowColorBuilder: widget.dataRowColorBuilder,

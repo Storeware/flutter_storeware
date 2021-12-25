@@ -69,4 +69,22 @@ extension StringExtensions on String {
 
   operator <=(value) => ((this.compareTo(value) <= 0));
   operator >=(value) => ((this.compareTo(value) >= 0));
+  firstName({String separator = ' '}) {
+    if (isEmpty) return '';
+    return this.split(separator).first;
+  }
+
+  lastName({String separator = ' '}) {
+    if (isEmpty) return '';
+    return this.split(separator).last;
+  }
+
+  get shortAvatar {
+    if (isEmpty) return '';
+    var rsp = split(' ');
+
+    var rt = this[0];
+    if (rsp.length > 1) rt += rsp[1][0];
+    return rt;
+  }
 }

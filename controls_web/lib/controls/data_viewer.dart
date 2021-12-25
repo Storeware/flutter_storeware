@@ -238,8 +238,7 @@ class DataViewerController {
   }
 
   /// crias as colunas, de uso interno
-  List<PaginatedGridColumn> createColumns(List<dynamic> source,
-      {Function(PaginatedGridColumn)? onCreate}) {
+  createColumns(List source, {Function(PaginatedGridColumn)? onCreate}) {
     return paginatedController.createColumns(source, onCreate: onCreate);
   }
 
@@ -547,8 +546,7 @@ class DataViewer extends StatefulWidget {
   final Color? oddRowColor; //: widget.oddRowColor,
   final bool? oneRowAutoEdit;
   final Function(dynamic)? onSaved;
-  final Color? Function(dynamic row, Color color, int index)?
-      dataRowColorBuilder;
+  final Color? Function(dynamic row, Color color, int)? dataRowColorBuilder;
   DataViewer({
     Key? key,
     this.controller,
@@ -748,11 +746,11 @@ class _DataViewerState extends State<DataViewer> {
               width: widget.width,
               child: widget.child ??
                   PaginatedGrid(
-                      localSort: widget.localSort,
                       editSize: widget.editSize,
                       placeHolder: widget.placeHolder,
                       elevation: widget.elevation!,
                       canSort: widget.canSort,
+                      localSort: widget.localSort,
                       evenRowColor: widget.evenRowColor ?? vt.evenRowColor,
                       oddRowColor: widget.oddRowColor ?? vt.oddRowColor,
                       dataRowColorBuilder: widget.dataRowColorBuilder,

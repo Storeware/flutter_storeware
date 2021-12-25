@@ -302,6 +302,10 @@ class DataViewerController {
     subscribeChanges.notify(-1);
   }
 
+  reflesh() {
+    reopen();
+  }
+
   /// Update um linha
   Future<bool> doUpdate(dados, {bool manual = false}) async {
     if (onValidate != null) dados = onValidate!(dados);

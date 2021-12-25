@@ -77,8 +77,8 @@ class _MiniBarChartState extends State<MiniBarChart> {
           //width: widget.width,
           //height: widget.height,
           constraints: BoxConstraints(
-            maxWidth: widget.width!,
-            maxHeight: widget.height!,
+            maxWidth: widget.width ?? 150,
+            maxHeight: widget.height ?? 60,
           ),
           child: LayoutBuilder(builder: (x, y) {
             return Stack(children: [

@@ -631,8 +631,9 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                           child: Container(
                                             padding: EdgeInsets.symmetric(
                                                 horizontal: 2),
-                                            width: (controller!
-                                                        .columns![i].width >
+                                            width: ((controller!.columns![i]
+                                                            .width ??
+                                                        0) >
                                                     0)
                                                 ? controller!.columns![i].width
                                                 : null,

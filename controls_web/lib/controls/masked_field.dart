@@ -28,6 +28,8 @@ class MaskedTextField extends StatefulWidget {
   final String? match;
   final String? sample;
   final String? errorText;
+  final String? helperText;
+  final String? hintText;
   final bool? autofocus;
   final Function(String)? onChanged;
   final Widget? suffix;
@@ -61,6 +63,8 @@ class MaskedTextField extends StatefulWidget {
     this.prefix,
     this.onFocusChange,
     this.errorText = 'Falta informar %1',
+    this.helperText,
+    this.hintText,
     this.fontSize = 16,
     this.readOnly = false,
     this.onChanged,
@@ -375,8 +379,8 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
                   helperText: !_showHelperText
                       ? (widget.sample != null)
                           ? 'Ex: ${widget.sample}'
-                          : null
-                      : null,
+                          : widget.helperText
+                      : widget.helperText,
                   hintStyle: theme.inputDecorationTheme.hintStyle,
                 ),
             keyboardType: widget.keyboardType ?? TextInputType.text,

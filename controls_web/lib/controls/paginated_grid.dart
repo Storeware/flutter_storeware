@@ -96,6 +96,7 @@ class PaginatedGridColumn {
   String? Function(dynamic)? onValidate;
   Widget Function(int, Map<String, dynamic>)? builder;
   String? tooltip;
+  String? helperText;
   Widget Function(PaginatedGridController, PaginatedGridColumn, dynamic,
       Map<String, dynamic>)? editBuilder;
 
@@ -122,6 +123,7 @@ class PaginatedGridColumn {
     this.minLength,
     this.width,
     this.tooltip,
+    this.helperText,
     this.editWidth,
     this.editHeight,
     this.onFocusChanged,

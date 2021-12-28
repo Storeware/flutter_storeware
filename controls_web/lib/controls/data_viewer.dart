@@ -423,6 +423,7 @@ class DataViewerColumn extends PaginatedGridColumn {
 
     /// [label] indica o texto a ser mostrado no titulo da coluna
     String? label,
+    String? helperText,
     String editInfo = '{label}',
     bool sort = true,
     double? editWidth,
@@ -469,6 +470,7 @@ class DataViewerColumn extends PaginatedGridColumn {
           required: required,
           readOnly: readOnly,
           isPrimaryKey: isPrimaryKey,
+          helperText: helperText,
           onSort: onSort,
           placeHolder: placeHolder,
           label: label,
@@ -1239,6 +1241,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
           labelText: item.label ?? item.name,
+          helperText: item.helperText,
         ),
         validator: (value) {
           if (item.onValidate != null) return item.onValidate(value);

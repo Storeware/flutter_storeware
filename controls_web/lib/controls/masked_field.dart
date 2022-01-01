@@ -87,6 +87,7 @@ class MaskedTextField extends StatefulWidget {
       int minLength = 6,
       controller,
       decoration,
+      String? hintText,
       String Function(String?)? validator}) {
     bool show = false;
     return StatefulBuilder(
@@ -98,6 +99,7 @@ class MaskedTextField extends StatefulWidget {
             decoration: decoration ??
                 InputDecoration(
                   labelText: label,
+                  hintText: hintText,
                   suffixIcon: (canShow)
                       ? IconButton(
                           icon: const Icon(Icons.remove_red_eye_sharp),

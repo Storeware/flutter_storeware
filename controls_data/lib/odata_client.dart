@@ -485,7 +485,7 @@ class ODataClient extends ODataClientInterface {
   Future<dynamic> postRaw(String service, {Map<String, dynamic>? body}) async {
     try {
       var url = client.formatUrl(path: service);
-      return client.rawData(url, method: 'POST', body: body);
+      return client.rawData(url, method: 'POST', body: body ?? {});
     } catch (e) {
       ErrorNotify.send(e);
       rethrow;

@@ -20,15 +20,15 @@ dependencies:
   universal_io: 
   universal_platform: 
   font_awesome_flutter: 
-  flutter_slidable: ^1.1.0
+  flutter_slidable: ^1.2.0
   share:
   path_provider: 
   get:
   shimmer:
   #autocomplete_textfield:
-  pdf: ^3.6.0
-  printing: ^5.6.0  
-  data_table_2: ^2.1.1
+  pdf: ^3.6.5
+  printing: ^5.6.6  
+  data_table_2: ^2.2.0
 
   controls_data:
     git:

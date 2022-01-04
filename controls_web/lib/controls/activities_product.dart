@@ -30,6 +30,8 @@ class ActivityProductDetail extends StatefulWidget {
   final List<Widget>? items;
   final Function(String codigo, double preco, double percDesconto,
       double valorDesconto, double liquido)? onBuyPressed;
+  final Function(String codigo, double preco, double percDesconto,
+      double valorDesconto, double liquido)? onBuy;
   final List<Widget>? children;
   const ActivityProductDetail({
     Key? key,
@@ -54,8 +56,9 @@ class ActivityProductDetail extends StatefulWidget {
     this.items,
     this.initialQty = 1,
     this.children,
-    @required this.onBuyPressed,
-    @required this.id,
+    required this.onBuyPressed,
+    required this.onBuy,
+    required this.id,
     this.unit,
     this.textColor,
     this.height,
@@ -169,7 +172,7 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
               textColor: Colors.white,
               initialValue: widget.initialQty!,
               onComprar: (qtde) {
-                widget.onBuyPressed!(widget.id!, qtde, percDesconto, desconto,
+                widget.onBuy!(widget.id!, qtde, percDesconto, desconto,
                     liquido); //toDouble(_percDescController.text));
               },
               onQtdePressed: (qtde) {
@@ -228,7 +231,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     Color captionColor = widget.color ?? theme.primaryColor;
-    final w = 300.0;
+    const w = 300.0;
     return Column(
       children: [
         ActivityPanel(

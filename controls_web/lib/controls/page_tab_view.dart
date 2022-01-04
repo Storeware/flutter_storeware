@@ -55,6 +55,7 @@ class PageTabView extends StatefulWidget {
   final Size? preferredSize;
   final bool? automaticallyImplyLeading;
   final Color? appBackgroundColor;
+  final void Function(int index)? onChanged;
   PageTabView({
     this.title,
     this.appBar,
@@ -64,6 +65,7 @@ class PageTabView extends StatefulWidget {
     this.iconColor,
     this.indicatorColor,
     this.tabBuilder,
+    this.onChanged,
     this.elevation = 0.0,
     this.leading,
     this.automaticallyImplyLeading = true,
@@ -96,13 +98,13 @@ class _TabBarViewState extends State<PageTabView>
 
   @override
   void initState() {
+    super.initState();
     tabTheme = widget.theme ?? PageTabViewTheme();
     _tabColor = widget.tabColor ?? tabTheme!.tabColor;
     _iconColor = widget.iconColor ?? tabTheme!.iconColor;
     _indicatorColor = widget.indicatorColor ?? tabTheme!.indicatorColor;
     _appBackgroundColor =
         widget.appBackgroundColor ?? tabTheme!.appBackgroundColor;
-    super.initState();
     indexSelected = widget.initialIndex!;
     _tabController = TabController(vsync: this, length: widget.choices!.length);
     _tabController!.addListener(_nextPage);
@@ -120,7 +122,14 @@ class _TabBarViewState extends State<PageTabView>
     super.dispose();
   }
 
-  int? indexSelected;
+  int? _indexSelected;
+  int? get indexSelected => _indexSelected;
+  set indexSelected(int? value) {
+    _indexSelected = value;
+    if (widget.onChanged != null) {
+      widget.onChanged!(_indexSelected!);
+    }
+  }
 
   void _nextPage({int delta = 0, int? to}) {
     int newIndex = _tabController!.index + delta;
@@ -131,14 +140,14 @@ class _TabBarViewState extends State<PageTabView>
     tabChangeEvent.sink.add(newIndex);
   }
 
-  List<Widget> _pages() {
+  /*List<Widget> _pages() {
     List<Widget> rt = [];
     if (widget.choices != null)
       widget.choices!.forEach((c) {
         rt.add(c.child!);
       });
     return rt;
-  }
+  }*/
 
   createTab(BuildContext context, ctrl, TabChoice tc, idx, w) {
     if (tc.title == null)
@@ -264,11 +273,19 @@ class _TabBarViewState extends State<PageTabView>
             )),
         body: TabBarView(
           controller: _tabController, //_pageController,
-          children: _pages(),
+          children: List<Widget>.generate(
+              widget.choices!.length, (index) => createPage(index)),
         ),
         bottomNavigationBar: widget.bottomNavigationBar,
         floatingActionButton: widget.floatingActionButton,
       ),
     );
+  }
+
+  Widget createPage(index) {
+    if (widget.choices![index].builder != null)
+      return widget.choices![index].builder!();
+
+    return widget.choices![index].child!;
   }
 }

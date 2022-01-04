@@ -367,7 +367,9 @@ class Dialogs {
   static Future<void> showLoadingDialog(BuildContext context,
       {Key? key,
       Widget? title,
+      String? text,
       Widget? content,
+      TextStyle? style,
       Color? backgroundColor}) async {
     return showDialog<void>(
         context: context,
@@ -382,13 +384,17 @@ class Dialogs {
                   children: <Widget>[
                     Center(
                       child: Column(children: [
+                        if (text == null || text.isNotEmpty)
+                          Text(
+                            text ?? "Processando....",
+                            style: style ?? TextStyle(color: Colors.blueAccent),
+                          ),
+                        SizedBox(
+                          height: 5,
+                        ),
                         CircularProgressIndicator(),
                         SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "Processando....",
-                          style: TextStyle(color: Colors.blueAccent),
+                          height: 5,
                         ),
                         if (content != null) content,
                       ]),

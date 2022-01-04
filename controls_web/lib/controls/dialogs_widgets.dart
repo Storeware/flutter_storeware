@@ -364,8 +364,11 @@ class Dialogs {
         });
   }
 
-  static Future<void> showLoadingDialog(BuildContext context, GlobalKey key,
-      {Widget? title, Widget? content}) async {
+  static Future<void> showLoadingDialog(BuildContext context,
+      {Key? key,
+      Widget? title,
+      Widget? content,
+      Color? backgroundColor}) async {
     return showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -375,7 +378,7 @@ class Dialogs {
               child: SimpleDialog(
                   title: title,
                   key: key,
-                  backgroundColor: Colors.black54,
+                  backgroundColor: backgroundColor ?? Colors.black87,
                   children: <Widget>[
                     Center(
                       child: Column(children: [

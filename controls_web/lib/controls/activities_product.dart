@@ -1,8 +1,6 @@
 // @dart=2.12
-import 'package:controls_web/controls/activities.dart';
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls.dart';
-//import 'package:controls_extensions/extensions.dart';
 
 class ActivityProductDetail extends StatefulWidget {
   final Widget? image;
@@ -165,11 +163,15 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
         if (widget.showBuyButton!)
           Row(mainAxisAlignment: MainAxisAlignment.end, children: [
             ActivityBuyButton(
-              label: widget.buyLabel!,
-              subLabel: widget.buySubLabel!,
+              label: widget.buyLabel,
+              subLabel: widget.buySubLabel,
               color: widget.color ?? theme.primaryColor,
               textColor: Colors.white,
               initialValue: widget.initialQty!,
+              onComprar: (qtde) {
+                widget.onBuyPressed!(widget.id!, qtde, percDesconto, desconto,
+                    liquido); //toDouble(_percDescController.text));
+              },
               onQtdePressed: (qtde) {
                 widget.onBuyPressed!(widget.id!, qtde, percDesconto, desconto,
                     liquido); //toDouble(_percDescController.text));
@@ -185,7 +187,8 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
 }
 
 class ActivityBuyButton extends StatefulWidget {
-  final Function(double)? onQtdePressed;
+  final Function(double) onQtdePressed;
+  final Function(double) onComprar;
   final double? initialValue;
   final Color? color;
   final Color? textColor;
@@ -195,10 +198,11 @@ class ActivityBuyButton extends StatefulWidget {
     Key? key,
     this.initialValue = 1,
     this.color,
-    @required this.onQtdePressed,
+    required this.onQtdePressed,
     this.textColor,
     this.subLabel,
     this.label,
+    required this.onComprar,
   }) : super(key: key);
 
   @override
@@ -224,111 +228,137 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     Color captionColor = widget.color ?? theme.primaryColor;
-    return ActivityPanel(
-        width: 300,
-        height: 45,
-        color: widget.color ?? theme.primaryColor,
-        child: Row(
-          children: <Widget>[
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 6,
-                  top: 6,
-                  bottom: 6,
-                  right: 1,
+    final w = 300.0;
+    return Column(
+      children: [
+        ActivityPanel(
+          width: w,
+          height: 45,
+          color: widget.color ?? theme.primaryColor,
+          child: Row(
+            children: <Widget>[
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 6,
+                    top: 6,
+                    bottom: 6,
+                    right: 1,
+                  ),
+                  child: Container(
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomLeft: Radius.circular(15),
+                          )),
+                      child: Center(
+                          child: Text('-',
+                              style: TextStyle(
+                                  color: captionColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)))),
                 ),
-                child: Container(
-                    width: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        )),
-                    child: Center(
-                        child: Text('-',
-                            style: TextStyle(
-                                color: captionColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)))),
-              ),
-              onTap: () {
-                somar(-1);
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 0,
-                right: 0,
-                top: 6,
-                bottom: 6,
-              ),
-              child: Container(
-                color: Colors.white,
-                width: 80,
-                alignment: Alignment.center,
-                child: TextField(
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: captionColor, fontWeight: FontWeight.bold),
-                  controller: _qtde,
-                ),
-              ),
-            ),
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 6, bottom: 6, left: 1),
-                child: Container(
-                    width: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                        )),
-                    child: Center(
-                        child: Text('+',
-                            style: TextStyle(
-                                color: captionColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold)))),
-              ),
-              onTap: () {
-                somar(1);
-              },
-            ),
-            Expanded(
-              child: MaterialButton(
-                //visualDensity: VisualDensity.compact,
-                child: Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(widget.label ?? 'comprar',
-                        style: TextStyle(
-                          color: widget.textColor ??
-                              theme.textTheme.caption!.color,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        )),
-                    if (widget.subLabel != null)
-                      Text(widget.subLabel!,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: widget.textColor ??
-                                theme.textTheme.caption!.color,
-                          ))
-                  ],
-                )),
-                onPressed: () {
-                  widget.onQtdePressed!(somar(0));
+                onTap: () {
+                  somar(-1);
                 },
               ),
-            )
-          ],
-        ));
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 0,
+                  right: 0,
+                  top: 6,
+                  bottom: 6,
+                ),
+                child: Container(
+                  color: Colors.white,
+                  width: 70,
+                  //padding: EdgeInsets.only(bottom: 0),
+                  alignment: Alignment.center,
+                  child: TextField(
+                    textAlign: TextAlign.center,
+                    textAlignVertical: TextAlignVertical.center,
+                    style: TextStyle(
+                        color: captionColor, fontWeight: FontWeight.bold),
+                    controller: _qtde,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Qtde',
+                      hintStyle: TextStyle(
+                          color: captionColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 6, bottom: 6, left: 1),
+                  child: Container(
+                      width: 40,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(15),
+                            bottomRight: Radius.circular(15),
+                          )),
+                      child: Center(
+                          child: Text('+',
+                              style: TextStyle(
+                                  color: captionColor,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold)))),
+                ),
+                onTap: () {
+                  somar(1);
+                },
+              ),
+              Expanded(
+                child: MaterialButton(
+                  //visualDensity: VisualDensity.compact,
+                  child: Center(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(widget.label ?? 'comprar',
+                          style: TextStyle(
+                            color: widget.textColor ??
+                                theme.textTheme.caption!.color,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          )),
+                      if (widget.subLabel != null)
+                        Text(widget.subLabel!,
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: widget.textColor ??
+                                  theme.textTheme.caption!.color,
+                            ))
+                    ],
+                  )),
+                  onPressed: () {
+                    widget.onComprar(somar(0));
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 1,
+        ),
+        StrapButton(
+            width: w,
+            radius: 12,
+            text: 'Adicionar ao Carrinho',
+            onPressed: () {
+              widget.onQtdePressed(somar(0));
+            })
+      ],
+    );
   }
 
   double xQtde = 1;

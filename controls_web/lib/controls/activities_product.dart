@@ -57,7 +57,7 @@ class ActivityProductDetail extends StatefulWidget {
     this.initialQty = 1,
     this.children,
     required this.onBuyPressed,
-    required this.onBuy,
+    this.onBuy,
     required this.id,
     this.unit,
     this.textColor,

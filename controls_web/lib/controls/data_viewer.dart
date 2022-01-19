@@ -114,7 +114,7 @@ class DataViewerController {
   final ODataModelClass? dataSource;
 
   /// Function de busca dos dados - deve retornar um objeto do timpo List<dynamic>
-  Future<List> Function()? future;
+  Future Function()? future;
   final Function(dynamic, PaginatedGridChangeEvent)? beforeChange;
 
   /// [DataViewerController.keyName] utilizado para localizar uma linha na pilha - ligado com a chave primaria da tabela no banco de dados
@@ -125,7 +125,7 @@ class DataViewerController {
     this.dataSource,
     this.onValidate,
     this.beforeChange,
-    Future<List> Function(DataViewerController)? futureExtended,
+    Future Function(DataViewerController)? futureExtended,
     this.top = 10,
     @required this.keyName,
     this.onClearCache,

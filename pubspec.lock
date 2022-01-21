@@ -139,8 +139,10 @@ packages:
     dependency: "direct main"
     description:
       path: controls_dash
-      relative: true
-    source: path
+      ref: HEAD
+      resolved-ref: "87d0db2103b0743f154c1f340cf611c27bf2ece4"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
+    source: git
     version: "2021.08.18"
   controls_data:
     dependency: "direct main"
@@ -164,8 +166,10 @@ packages:
     dependency: "direct main"
     description:
       path: controls_image
-      relative: true
-    source: path
+      ref: HEAD
+      resolved-ref: "87d0db2103b0743f154c1f340cf611c27bf2ece4"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
+    source: git
     version: "2021.09.28+1"
   controls_image_android:
     dependency: transitive
@@ -442,13 +446,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.11"
-  material_color_utilities:
-    dependency: transitive
-    description:
-      name: material_color_utilities
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -705,7 +702,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.8"
+    version: "0.4.3"
   typed_data:
     dependency: transitive
     description:

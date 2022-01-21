@@ -18,8 +18,9 @@ class LocalNotifications {
 
   Future<void> showNotification(
       {String? title, String? body, String? payload}) async {
+     // compativel com a versão 9.2.0 - AL - 2022-01-20    
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'console', 'Storeware', 'Storeware channel',
+        'console', 'Storeware', channelDescription: 'Storeware channel',
         importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(

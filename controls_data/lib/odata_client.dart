@@ -341,6 +341,7 @@ class ODataClient extends ODataClientInterface {
     client.baseUrl = x;
   }
 
+  /// [connect] define parametros de conexão para a instancia;
   Future<ODataClient> connect(
       {String? baseUrl,
       String? conta,
@@ -357,6 +358,7 @@ class ODataClient extends ODataClientInterface {
     return o;
   }
 
+  /// [clone] cria uma nova instancia do cliente com os mesmos parametros.
   ODataClient clone() {
     var o = ODataClient();
     o.client.inDebug = client.inDebug;
@@ -371,21 +373,25 @@ class ODataClient extends ODataClientInterface {
     return o;
   }
 
+  /// [error] define o callback para tratamento de erros.
   error(callback) {
     errorNotifier.stream.listen(callback);
     return this;
   }
 
+  /// [log] define o callback para tratamento de log.
   log(callback) {
     client.notifyLog.stream.listen(callback);
     return this;
   }
 
+  /// [data] define o callback para tratamento de dados.
   data(callback) {
     client.notify.stream.listen(callback);
     return this;
   }
 
+  /// [send] monta um requisição para o servidor OData;
   @override
   Future<dynamic> send(ODataQuery query, {String? cacheControl}) async {
     try {
@@ -410,6 +416,32 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [getRows] envia uma requisição para o servidor e retorna as linhas transmitidas pelo servidor.
+  getRows({
+    required String resource,
+    String select = '*',
+    int top = 0,
+    int skip = 0,
+    String? filter,
+    String? groupby,
+    String? join,
+    String? orderby,
+  }) async {
+    return send(ODataQuery(
+      resource: resource,
+      select: select,
+      filter: filter,
+      top: top,
+      skip: skip,
+      groupby: groupby,
+      join: join,
+      orderby: orderby,
+    )).then((rsp) {
+      return rsp['result'];
+    });
+  }
+
+  /// [getOne] envia uma requisição de uma linha para o servidor e retorna a linha transmitida pelo servidor.
   @override
   Future<dynamic> getOne(String resource, {String? id}) async {
     try {
@@ -422,6 +454,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [post] envia uma requisição para o servidor para inserir uma linha.
   @override
   Future<String> post(String resource, Map<String, dynamic> json,
       {bool removeNulls = true}) async {
@@ -443,6 +476,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [put] envia uma requisição para o servidor para atualizar uma linha.
   @override
   Future<String> put(String resource, Map<String, dynamic> json,
       {bool removeNulls = true}) async {
@@ -467,6 +501,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [getRaw] envia uma requisição primaria para o servidor
   Future<dynamic> getRaw(String service) async {
     try {
       var url = client.formatUrl(path: service);
@@ -482,6 +517,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [postRaw] envia uma requisição primaria para o servidor
   Future<dynamic> postRaw(String service, {Map<String, dynamic>? body}) async {
     try {
       var url = client.formatUrl(path: service);
@@ -492,6 +528,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [delete] envia uma requisição de excluir para o servidor
   @override
   Future<String> delete(String resource, Map<String, dynamic> json) async {
     try {
@@ -504,6 +541,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [open] envia uma consulta SQL direta para o banco de dados
   Future<Object> open(String command) async {
     try {
       //    print(command);
@@ -517,6 +555,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [openJson] envia uma consulta SQL direta para o banco de dados
   Future<Map<String, dynamic>> openJson(String command,
       {String? cacheControl}) async {
     try {
@@ -535,6 +574,7 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  /// [execute] envia um comando SQL direta para o banco de dados
   Future<String> execute(String command) async {
     try {
       return client.post('command', body: {"command": command}).then((x) => x);
@@ -567,12 +607,8 @@ class ODataClient extends ODataClientInterface {
     // TODO: implement createNew
     return clone();
   }
-}
 
-class ODataInst extends ODataClient {
-  static final _singleton = ODataInst._create();
-  ODataInst._create();
-  factory ODataInst() => _singleton;
+  /// [loginNotifier] Notifier para receber evento de login alterado
   DataNotifyChange loginNotifier = DataNotifyChange<Map>();
   String? token;
   auth(user, pass) {
@@ -581,19 +617,21 @@ class ODataInst extends ODataClient {
     return b64;
   }
 
-  login(loja, user, pass) async {
+  /// [loginBasic] faz o login no servidor
+  loginBasic(String conta, String usuario, String senha) async {
+    //assert(conta != null, 'conta não pode ser nula');
     RestClient cli = RestClient(baseUrl: baseUrl);
     cli.prefix = prefix;
-    cli.authorization = auth(user, pass);
+    cli.authorization = auth(usuario, senha);
     cli.headers.addAll(client.headers);
-    cli.addHeader('contaid', loja);
+    cli.addHeader('contaid', conta);
     return cli
         .openJson(cli.formatUrl(path: 'login'), method: 'GET')
         .then((rsp) {
       token = rsp['token'];
       client.authorization = 'Bearer $token';
-      if (client.tokenId == null) client.setToken(auth(user, pass));
-      client.addHeader('contaid', loja);
+      if (client.tokenId == null) client.setToken(auth(usuario, senha));
+      client.addHeader('contaid', conta);
       loginNotifier.notify(rsp);
       LoginTokenChanged().notify(true);
       return token;
@@ -605,8 +643,20 @@ class ODataInst extends ODataClient {
   }
 }
 
+class ODataInst extends ODataClient {
+  static final _singleton = ODataInst._create();
+  ODataInst._create();
+  factory ODataInst() => _singleton;
+
+  /// [login] faz o login no servidor
+  login(String contaid, String usuario, String senha) async {
+    return loginBasic(contaid, usuario, senha);
+  }
+}
+
 get ODataClientDefault => ODataInst();
 
+/// [ODataModelClass] classe para modelar os dados de um objeto
 abstract class ODataModelClass<T extends DataItem> {
   ODataClient? CC;
   String? collectionName;

@@ -1,6 +1,6 @@
 name: controls_firebase_platform_android
 description: Firebase interface WEB, ANDROID e WINDOWS
-version: 2021.11.10
+version: 2022.01.20
 publish_to: none
 
 environment:
@@ -17,7 +17,7 @@ dependencies:
   firebase_storage: any #^8.0.0
   firebase_messaging: any #^10.0.7
   cloud_firestore: any #^1.0.1
-  flutter_local_notifications: any #^5.0.0-nullsafety.1
+  flutter_local_notifications: ^9.2.0
   
 
   controls_firebase_platform_interface:

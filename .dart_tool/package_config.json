@@ -9,7 +9,7 @@
     },
     {
       "name": "async",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/async-2.8.2",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.8.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -27,7 +27,7 @@
     },
     {
       "name": "characters",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/characters-1.2.0",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/characters-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -39,13 +39,13 @@
     },
     {
       "name": "charts_common",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charts_common-0.12.0",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/charts_common-0.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "charts_flutter",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/charts_flutter-0.12.0",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/charts_flutter-0.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -111,7 +111,7 @@
     },
     {
       "name": "controls_dash",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-87d0db2103b0743f154c1f340cf611c27bf2ece4/controls_dash",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-87d0db2103b0743f154c1f340cf611c27bf2ece4/controls_dash",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -129,25 +129,25 @@
     },
     {
       "name": "controls_image",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-87d0db2103b0743f154c1f340cf611c27bf2ece4/controls_image",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-87d0db2103b0743f154c1f340cf611c27bf2ece4/controls_image",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_android",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-401dffa2611e5953fadbfecd7e652709d0d2f345/controls_image/controls_image_android",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-401dffa2611e5953fadbfecd7e652709d0d2f345/controls_image/controls_image_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-401dffa2611e5953fadbfecd7e652709d0d2f345/controls_image/controls_image_interface",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-401dffa2611e5953fadbfecd7e652709d0d2f345/controls_image/controls_image_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/git/flutter_storeware-401dffa2611e5953fadbfecd7e652709d0d2f345/controls_image/controls_image_web",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-401dffa2611e5953fadbfecd7e652709d0d2f345/controls_image/controls_image_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -159,7 +159,7 @@
     },
     {
       "name": "cross_file",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/cross_file-0.3.2",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/cross_file-0.3.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -207,13 +207,13 @@
     },
     {
       "name": "extended_image",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/extended_image-6.0.1",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/extended_image-6.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "extended_image_library",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/extended_image_library-3.1.2",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/extended_image_library-3.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -249,7 +249,7 @@
     },
     {
       "name": "flutter_plugin_android_lifecycle",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_plugin_android_lifecycle-2.0.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -297,7 +297,7 @@
     },
     {
       "name": "http_client_helper",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/http_client_helper-2.0.2",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/http_client_helper-2.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -315,31 +315,31 @@
     },
     {
       "name": "image_editor",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/image_editor-1.0.2",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_editor-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "image_picker",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/image_picker-0.8.4+4",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.4+4",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
     {
       "name": "image_picker_for_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/image_picker_for_web-2.1.5",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_for_web-2.1.5",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "image_picker_platform_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.4.1",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_platform_interface-2.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "image_picker_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/image_picker_web-2.1.0",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_web-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -357,13 +357,13 @@
     },
     {
       "name": "logging",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/logging-1.0.2",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/logging-1.0.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "matcher",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/matcher-0.12.11",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/matcher-0.12.11",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -447,7 +447,7 @@
     },
     {
       "name": "photofilters",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/photofilters-3.0.1",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/photofilters-3.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -591,7 +591,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/test_api-0.4.3",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.8",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -663,7 +663,7 @@
     },
     {
       "name": "vector_math",
-      "rootUri": "file:///C:/Users/amari/AppData/Roaming/Pub/Cache/hosted/pub.dartlang.org/vector_math-2.1.1",
+      "rootUri": "file:///home/kzuca/snap/flutter/common/flutter/.pub-cache/hosted/pub.dartlang.org/vector_math-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -692,7 +692,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-01-21T00:32:38.476332Z",
+  "generated": "2022-01-24T01:11:30.253967Z",
   "generator": "pub",
-  "generatorVersion": "2.15.1"
+  "generatorVersion": "2.16.0-134.1.beta"
 }

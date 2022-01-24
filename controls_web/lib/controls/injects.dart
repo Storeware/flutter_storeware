@@ -73,3 +73,18 @@ class InjectBuilder extends InheritedWidget {
     return Container();
   }
 }
+
+class InjectConsumer<T> extends StatelessWidget {
+  final Widget Function(BuildContext, InjectItem<T>?) builder;
+  final String name;
+  const InjectConsumer({Key? key, required this.builder, required this.name})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var injects = InjectBuilder.instance;
+    if (injects == null) return Container();
+    var inject = injects[name];
+    return builder(context, inject as InjectItem<T>);
+  }
+}

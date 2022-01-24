@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 
+InjectBuilder? _injects;
+
 class InjectItem<T> {
   final String? name;
   final Widget Function(BuildContext, dynamic)? builder;
@@ -11,8 +13,11 @@ class InjectBuilder extends InheritedWidget {
   final List<InjectItem> injects = [];
   InjectBuilder({Key? key, Widget? child, List<InjectItem>? items})
       : super(key: key, child: child!) {
+    _injects ??= this;
     if (items != null) items.forEach((item) => injects.add(item));
   }
+
+  static InjectBuilder? get instance => _injects;
 
   @override
   bool updateShouldNotify(InheritedWidget oldWidget) {

@@ -67,6 +67,12 @@ class StorageApi {
     }
   }
 
+  static getDownloadURL(path) {
+    var client = CloudV3().client.clone();
+    client.prefix = '';
+    return client.client.formatUrl(path: '/storage/download64?path=' + path);
+  }
+
   Future<Uint8List?> getImage(String url, client, bool cached) async {
     return await client
         .rawData(

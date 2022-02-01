@@ -508,11 +508,11 @@ class ODataClient extends ODataClientInterface {
       return client.rawData(url, method: 'GET').then((rsp) {
         return rsp;
       }).catchError((e) {
-        ErrorNotify.send(e);
+        ErrorNotify.send('$e');
         throw e;
       });
     } catch (e) {
-      ErrorNotify.send(e);
+      ErrorNotify.send('$e');
       throw e;
     }
   }
@@ -523,7 +523,7 @@ class ODataClient extends ODataClientInterface {
       var url = client.formatUrl(path: service);
       return client.rawData(url, method: 'POST', body: body ?? {});
     } catch (e) {
-      ErrorNotify.send(e);
+      ErrorNotify.send('$e');
       rethrow;
     }
   }

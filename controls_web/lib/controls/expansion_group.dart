@@ -53,7 +53,7 @@ class _ExpansionGroupState extends State<ExpansionGroup> {
               count++;
             }
           }
-          if (count == 0) {
+          if (count == 0 && widget.exclusive) {
             widget.children[widget.initialExpandedIndex].isExpanded = true;
           }
         });

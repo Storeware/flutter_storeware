@@ -146,7 +146,7 @@ class MobileMenuBox extends StatelessWidget {
                                             ]
                                           : null,
                                     ),
-                              body: item.builder!(),
+                              body: item.child ?? item.builder!(),
                               bottomNavigationBar: childBottomNavigatorBar ??
                                   MobileToolbar.consumer(context),
                             ),

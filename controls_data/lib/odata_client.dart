@@ -335,6 +335,7 @@ class ODataClient extends ODataClientInterface {
   get errorNotifier => client.notifyError;
   get processing => DataProcessingNotifier();
   get driver => client.headers['db-driver'] ?? 'fb';
+  get statusCode => client.statusCode;
 
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {

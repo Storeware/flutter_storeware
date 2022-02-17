@@ -130,7 +130,7 @@ class _cards extends State<DataViewerCards> {
     if (widget.lazyLoader) if (conta >
         0) if (_scrollController.position.extentAfter == 0) {
       if (!_loading.value) {
-        print(_scrollController.position.extentAfter);
+        //      print(_scrollController.position.extentAfter);
         _loading.value = true;
         Timer.run(() {
           widget.controller.openNext().then((r) {
@@ -161,9 +161,9 @@ class _cards extends State<DataViewerCards> {
         stream: widget.controller.subscribeChanges.stream,
         builder: (a, b) => Padding(
               padding: EdgeInsets.all(widget.padding),
-              child: FutureBuilder<dynamic>(
+              child: StreamBuilder<dynamic>(
                   initialData: widget.controller.source,
-                  future: widget.controller.future!(),
+                  stream: widget.controller.stream,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) return Container();
                     return (!snapshot.hasData)

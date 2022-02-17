@@ -671,6 +671,8 @@ abstract class ODataModelClass<T extends DataItem> {
     return collectionName;
   }
 
+  get statusCode => API!.statusCode;
+
   @deprecated //"sera desabilitado no em julho2021 - substituir por listNoChaced(..)"
   list({filter}) => listCached(filter: filter);
 

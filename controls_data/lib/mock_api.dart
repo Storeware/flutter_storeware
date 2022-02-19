@@ -1,4 +1,4 @@
-import 'package:flutter_storeware/index.dart';
+import 'odata_client.dart';
 
 class MockODataClientApi extends ODataClient {
   final List<dynamic> Function(ODataQuery query)? onGet;

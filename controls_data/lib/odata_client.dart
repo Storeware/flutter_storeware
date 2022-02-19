@@ -148,6 +148,17 @@ class ODataQuery {
     this.orderby,
     this.join,
   });
+  toString() {
+    String r = (resource ?? '') + '?';
+    if (select != null) r += '\$select=${select}&';
+    if (filter != null) r += '\$filter=${filter}&';
+    if (top != null) r += '\$top=${top}&';
+    if (skip != null) r += '\$skip=${skip}&';
+    if (groupby != null) r += '\$groupby=${groupby}&';
+    if (orderby != null) r += '\$orderby=${orderby}&';
+    if (join != null) r += '\$join=${join}&';
+    return r;
+  }
 }
 
 class ODataDocument {
@@ -336,6 +347,8 @@ class ODataClient extends ODataClientInterface {
   get processing => DataProcessingNotifier();
   get driver => client.headers['db-driver'] ?? 'fb';
 
+  get statusCode => client.statusCode;
+
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {
     client.baseUrl = x;
@@ -395,15 +408,7 @@ class ODataClient extends ODataClientInterface {
   @override
   Future<dynamic> send(ODataQuery query, {String? cacheControl}) async {
     try {
-      String r = (query.resource ?? '') + '?';
-      if (query.select != null) r += '\$select=${query.select}&';
-      if (query.filter != null) r += '\$filter=${query.filter}&';
-      if (query.top != null) r += '\$top=${query.top}&';
-      if (query.skip != null) r += '\$skip=${query.skip}&';
-      if (query.groupby != null) r += '\$groupby=${query.groupby}&';
-      if (query.orderby != null) r += '\$orderby=${query.orderby}&';
-      if (query.join != null) r += '\$join=${query.join}&';
-      client.service = r;
+      client.service = query.toString();
       return client
           .openJsonAsync(client.encodeUrl(), cacheControl: cacheControl)
           .then((res) {
@@ -508,11 +513,11 @@ class ODataClient extends ODataClientInterface {
       return client.rawData(url, method: 'GET').then((rsp) {
         return rsp;
       }).catchError((e) {
-        ErrorNotify.send(e);
+        ErrorNotify.send('$e');
         throw e;
       });
     } catch (e) {
-      ErrorNotify.send(e);
+      ErrorNotify.send('$e');
       throw e;
     }
   }
@@ -523,7 +528,7 @@ class ODataClient extends ODataClientInterface {
       var url = client.formatUrl(path: service);
       return client.rawData(url, method: 'POST', body: body ?? {});
     } catch (e) {
-      ErrorNotify.send(e);
+      ErrorNotify.send('$e');
       rethrow;
     }
   }
@@ -668,6 +673,14 @@ abstract class ODataModelClass<T extends DataItem> {
   makeCollection(Map<String, dynamic>? item) {
     return collectionName;
   }
+
+  mockable({ODataClient? api, ODataClient? cc}) {
+    if (api != null) API = api;
+    if (cc != null) CC = cc;
+    return this;
+  }
+
+  get statusCode => API!.statusCode;
 
   @deprecated //"sera desabilitado no em julho2021 - substituir por listNoChaced(..)"
   list({filter}) => listCached(filter: filter);

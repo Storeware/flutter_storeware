@@ -36,6 +36,7 @@ export 'dialogs_widgets.dart';
 export 'double_button.dart';
 export 'drag_drop_widgets.dart';
 export 'dual_list_viewer.dart';
+export 'expansion_group.dart';
 export 'extensions_size.dart';
 export 'feather_icons_flutter.dart';
 export 'flutter_masked_text.dart';

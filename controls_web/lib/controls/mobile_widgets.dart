@@ -120,6 +120,10 @@ class MobileMenuBox extends StatelessWidget {
                 color: color,
                 child: InkButton(
                   onTap: () {
+                    if (item.onPressed != null) {
+                      item.onPressed!();
+                      return;
+                    }
                     Get.to(
                       () => (item.primary)
                           ? Scaffold(
@@ -141,12 +145,15 @@ class MobileMenuBox extends StatelessWidget {
                                                 InkWell(
                                                     child: sb.image,
                                                     onTap: () {
-                                                      sb.onPressed!();
+                                                      if (sb.onPressed !=
+                                                          null) {
+                                                        sb.onPressed!();
+                                                      }
                                                     })
                                             ]
                                           : null,
                                     ),
-                              body: item.builder!(),
+                              body: item.child ?? item.builder!(),
                               bottomNavigationBar: childBottomNavigatorBar ??
                                   MobileToolbar.consumer(context),
                             ),

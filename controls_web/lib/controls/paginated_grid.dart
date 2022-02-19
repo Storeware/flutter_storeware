@@ -1102,8 +1102,8 @@ class PaginatedGridDataTableSource extends DataTableSource {
                                 child: (col.builder != null)
                                     ? col.builder!(index, row)
                                     : Text(doGetValue(col, row[col.name]) ?? '',
-                                        style: col.style ??
-                                            theme.textTheme.bodyText2),
+                                        style: _doGetCellStyle(
+                                            context, col, row[col.name])),
                               ))),
                       onTap: ((controller.widget!.onCellTap != null) ||
                               (col.onEditIconPressed != null))
@@ -1121,6 +1121,14 @@ class PaginatedGridDataTableSource extends DataTableSource {
         ]);
 
     return r;
+  }
+
+  TextStyle _doGetCellStyle(BuildContext context, col, value) {
+    var theme = Theme.of(context);
+    return col.style ??
+        controller.widget!.dataTextStyle ??
+        theme.dataTableTheme.dataTextStyle ??
+        theme.textTheme.bodyText2;
   }
 
   doEditItem(index, bool b) {

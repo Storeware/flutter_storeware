@@ -353,8 +353,13 @@ class RestClient {
           'Servidor não processou a requisição (${e?.response?.statusCode})';
     }
 
-    String es =
-        (e?.response?.data != null) ? e?.response?.data['error'] ?? '' : '';
+    //print(e?.response?.data);
+    String es = '';
+    if (e?.response?.data is String) {
+      es = '${e?.response?.data}';
+    } else {
+      es = (e?.response?.data != null) ? e?.response?.data['error'] ?? '' : '';
+    }
     String erro = (title.isNotEmpty ? '${title}|' : '') + es;
 
     if (erro.isEmpty) erro += '${e?.message}';

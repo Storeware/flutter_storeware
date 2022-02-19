@@ -26,6 +26,23 @@ enum LoginPageTreinarPosition {
 
 bool isFirebase = false;
 
+class DefaultLoginPage extends StatelessWidget {
+  final Widget Function() homeBuilder;
+  final Widget Function()? loginBuilder;
+  const DefaultLoginPage(
+      {Key? key, this.loginBuilder, required this.homeBuilder})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (configInstance!.logado) {
+      return homeBuilder();
+    } else {
+      return (loginBuilder != null) ? loginBuilder!() : LoginPage();
+    }
+  }
+}
+
 class LoginPage extends StatefulWidget {
   final Color? curveColor;
   final Widget? logo;

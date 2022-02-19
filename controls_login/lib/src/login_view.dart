@@ -30,11 +30,19 @@ class DefaultLoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (configInstance!.logado) {
-      return homeBuilder();
-    } else {
-      return (loginBuilder != null) ? loginBuilder!() : LoginPage();
-    }
+    ConfigX().init();
+    return ChangeNotifierProvider<LoginChanged>(
+        create: (ctx) => LoginChanged(),
+        builder: (ctx, wg) => Consumer<LoginChanged>(
+            builder: (ctx, ch, wg) => Builder(builder: (ctx) {
+                  if (configInstance!.logado) {
+                    return homeBuilder();
+                  } else {
+                    return (loginBuilder != null)
+                        ? loginBuilder!()
+                        : LoginPage();
+                  }
+                })));
   }
 
   static of(BuildContext context) =>

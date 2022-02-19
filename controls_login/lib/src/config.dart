@@ -282,6 +282,7 @@ abstract class ConsoleConfig extends ConfigAppBase {
   /// init é chamada antes de iniciar a estrutura do APP
   @override
   Future<ConsoleConfig> init() async {
+    if (_instance != null) return _instance!;
     _configureLocalTimeZone();
     await super.init();
     _instance ??= this;

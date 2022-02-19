@@ -148,6 +148,17 @@ class ODataQuery {
     this.orderby,
     this.join,
   });
+  toString() {
+    String r = (resource ?? '') + '?';
+    if (select != null) r += '\$select=${select}&';
+    if (filter != null) r += '\$filter=${filter}&';
+    if (top != null) r += '\$top=${top}&';
+    if (skip != null) r += '\$skip=${skip}&';
+    if (groupby != null) r += '\$groupby=${groupby}&';
+    if (orderby != null) r += '\$orderby=${orderby}&';
+    if (join != null) r += '\$join=${join}&';
+    return r;
+  }
 }
 
 class ODataDocument {
@@ -397,15 +408,7 @@ class ODataClient extends ODataClientInterface {
   @override
   Future<dynamic> send(ODataQuery query, {String? cacheControl}) async {
     try {
-      String r = (query.resource ?? '') + '?';
-      if (query.select != null) r += '\$select=${query.select}&';
-      if (query.filter != null) r += '\$filter=${query.filter}&';
-      if (query.top != null) r += '\$top=${query.top}&';
-      if (query.skip != null) r += '\$skip=${query.skip}&';
-      if (query.groupby != null) r += '\$groupby=${query.groupby}&';
-      if (query.orderby != null) r += '\$orderby=${query.orderby}&';
-      if (query.join != null) r += '\$join=${query.join}&';
-      client.service = r;
+      client.service = query.toString();
       return client
           .openJsonAsync(client.encodeUrl(), cacheControl: cacheControl)
           .then((res) {
@@ -669,6 +672,12 @@ abstract class ODataModelClass<T extends DataItem> {
   String get driver => API!.client.headers['db-driver'] ?? 'fb';
   makeCollection(Map<String, dynamic>? item) {
     return collectionName;
+  }
+
+  mockable({ODataClient? api, ODataClient? cc}) {
+    if (api != null) API = api;
+    if (cc != null) CC = cc;
+    return this;
   }
 
   get statusCode => API!.statusCode;

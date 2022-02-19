@@ -1,14 +1,10 @@
 // @dart=2.12
 import 'dart:async';
-//import 'dart:ui';
 import 'package:comum/services/config_service.dart';
 import 'const_colors.dart';
 import 'firebase_adapter.dart';
-//import 'package:controls_data/data.dart';
 import 'package:flutter_storeware/index.dart';
-//import 'package:controls_web/controls/strap_widgets.dart';
 import 'config.dart';
-
 import 'const_colors.dart' as cnt;
 import 'curvas.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:universal_platform/universal_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:get/get.dart';
-
 import 'veja_nossos_produtos_widget.dart';
 
 enum LoginPageTreinarPosition {
@@ -41,6 +36,9 @@ class DefaultLoginPage extends StatelessWidget {
       return (loginBuilder != null) ? loginBuilder!() : LoginPage();
     }
   }
+
+  static of(BuildContext context) =>
+      context.findAncestorWidgetOfExactType<DefaultLoginPage>();
 }
 
 class LoginPage extends StatefulWidget {

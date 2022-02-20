@@ -9,7 +9,9 @@ class LoginBackground extends StatelessWidget {
   final String? backgroundImage;
   final Widget? topBackground;
   final Widget? title;
+  final Widget? appBarChild;
   final List<Widget>? children;
+
   const LoginBackground({
     Key? key,
     this.logoImage,
@@ -17,10 +19,12 @@ class LoginBackground extends StatelessWidget {
     this.appLogoImage,
     this.backgroundImage,
     this.title,
+    this.appBarChild,
     this.children,
+    this.top = 180.0,
     required this.body,
   }) : super(key: key);
-  final top = 180.0;
+  final double top;
 
   @override
   Widget build(BuildContext context) {
@@ -29,67 +33,69 @@ class LoginBackground extends StatelessWidget {
     return BackdoorScaffold(
       preferredSize: const Size.fromHeight(125),
       //appBar: AppBar(title: Text('titulo')),
-      appBarChild: Stack(children: [
-        topBackground ??
-            CurvaOndaHorizontal(
-              height: 180,
-              color: Colors.blue,
-              backgroundColor: theme.scaffoldBackgroundColor,
-            ),
-        Positioned(
-            top: 30,
-            left: 8,
-            child: Image.asset(logoImage ?? 'assets/wba.png',
-                width: 160, color: Colors.blue)),
-        if (title != null)
-          Positioned(
-              top: 10,
-              right: 8,
-              child: DefaultTextStyle(
-                  child: title!,
-                  style: const TextStyle(
-                      color: Colors.black54,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold))),
-        Positioned(
-          left: 30,
-          top: 110,
-          child: SizedBox(
-            height: 70,
-            width: double.maxFinite,
-            child: Row(
-              children: const [
-                Icon(Icons.person, color: Colors.blue),
-                //Image.asset('assets/login_person.png'),
+      appBarChild: appBarChild ??
+          Stack(children: [
+            topBackground ??
+                CurvaOndaHorizontal(
+                  height: top,
+                  color: Colors.blue,
+                  backgroundColor: theme.scaffoldBackgroundColor,
+                ),
+            Positioned(
+                top: 30,
+                left: 8,
+                child: Image.asset(logoImage ?? 'assets/wba.png',
+                    width: 160, color: Colors.blue)),
+            if (title != null)
+              Positioned(
+                  top: 10,
+                  right: 8,
+                  child: DefaultTextStyle(
+                      child: title!,
+                      style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold))),
+            Positioned(
+              left: 30,
+              top: top - 70,
+              child: SizedBox(
+                height: 70,
+                width: double.maxFinite,
+                child: Row(
+                  children: const [
+                    Icon(Icons.person, color: Colors.blue),
+                    //Image.asset('assets/login_person.png'),
 //                Expanded(child: Container()),
-              ],
+                  ],
+                ),
+                //color: Colors.transparent,
+              ),
             ),
-            //color: Colors.transparent,
-          ),
-        ),
-        if (appLogoImage != null)
-          Positioned(
-            right: 50,
-            top: 40,
-            child: Image.asset(
-              appLogoImage!,
-              width: 60,
-            ),
-          )
-      ]),
+            if (appLogoImage != null)
+              Positioned(
+                right: 50,
+                top: 40,
+                child: Image.asset(
+                  appLogoImage!,
+                  width: 60,
+                ),
+              )
+          ]),
       children: [
-        ClipRRect(
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(40)),
-          child: SizedBox(
-              //padding: EdgeInsets.only(left: 10),
-              height: size.height - 180,
-              width: double.maxFinite,
-              child: Image.asset(backgroundImage ?? 'assets/login_fundo.png',
-                  fit: BoxFit.fill)),
-        ),
+        if (backgroundImage != null)
+          ClipRRect(
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(40)),
+            child: SizedBox(
+                //padding: EdgeInsets.only(left: 10),
+                height: size.height - top,
+                width: double.maxFinite,
+                child: Image.asset(backgroundImage ?? 'assets/login_fundo.png',
+                    fit: BoxFit.fill)),
+          ),
         SizedBox(
           width: double.maxFinite,
-          height: size.height - 180,
+          height: size.height - top,
           child: body,
         ),
         if (children != null) ...children!

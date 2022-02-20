@@ -158,7 +158,7 @@ class RestClient {
   }
 
   bool checkError({String? data, String key = 'error'}) {
-    response = data!;
+    if (data != null) response = data;
     if (jsonResponse?[key] != null) {
       throw new StateError(jsonResponse?[key]);
     }
@@ -166,7 +166,7 @@ class RestClient {
   }
 
   result({String? data, key = 'result'}) {
-    response = data!;
+    if (data != null) response = data;
     return fieldByName(key);
   }
 
@@ -310,6 +310,7 @@ class RestClient {
         resp.data['body'] = body;
       }
       if (statusCode == 200) {
+        error = 'OK';
         return resp.data;
       } else {
         return throw (resp.data);
@@ -317,7 +318,6 @@ class RestClient {
       //} on TypeErrorImpl catch (e) {
       //  return throw '$e';
     } catch (e) {
-      var error;
       DataProcessingNotifier.stop();
       try {
         error = formataMensagemErro('$method:$url', e);
@@ -332,6 +332,7 @@ class RestClient {
     }
   }
 
+  var error;
   sendError(texto) {
     notifyError.send(texto);
     DataErrorNotifier().notify(texto);
@@ -442,6 +443,7 @@ class RestClient {
         }
 
         if (statusCode == 200) {
+          error = 'OK';
           notifyLog.notify(resp.data.toString());
           return resp.data;
         } else {
@@ -449,7 +451,7 @@ class RestClient {
         }
       }, onError: (e) {
         DataProcessingNotifier.stop();
-        var error = formataMensagemErro(url, e);
+        error = formataMensagemErro(url, e);
         if (!silent) sendError(error);
         return throw error;
       });
@@ -552,6 +554,7 @@ class RestClient {
         _decodeResp(resp);
         notifyLog.notify(resp.data.toString());
         if (statusCode == 200) {
+          error = 'OK';
           return resp;
         } else {
           return throw (resp);
@@ -559,7 +562,7 @@ class RestClient {
       });
     } catch (e) {
       DataProcessingNotifier.stop();
-      var error = formataMensagemErro(url, e);
+      error = formataMensagemErro(url, e);
       if (!silent) sendError(error);
       throw error;
     }

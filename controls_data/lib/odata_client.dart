@@ -350,8 +350,8 @@ class ODataClient extends ODataClientInterface {
   get statusCode => client.statusCode;
   get rows => client.rows();
   get result => client.result();
-  get rawData => client.jsonResponse;
-  get error => client.error;
+  get getData => client.jsonResponse;
+  get getError => client.error;
 
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {

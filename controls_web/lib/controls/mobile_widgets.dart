@@ -46,8 +46,10 @@ class MobileMenuBox extends StatelessWidget {
     this.shape,
     this.sideLeft,
     this.flex = 5,
+    this.appBarChild,
   }) : super(key: key);
   final AppBar? appBar;
+  final Widget? appBarChild;
   final List<TabChoice> choices;
   final List<Widget>? actions;
   final Widget? bottomNavigationBar;
@@ -83,6 +85,7 @@ class MobileMenuBox extends StatelessWidget {
                 width: 1,
                 height: double.infinity),
           ],
+          if (appBarChild != null) appBarChild!,
           Expanded(
             flex: flex,
             child: createBody(

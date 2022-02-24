@@ -106,9 +106,24 @@ class _LoginViewState extends State<LoginPage> {
   final TextEditingController _usuarioController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
+  late StreamSubscription _loginSubscription;
   @override
   void initState() {
     super.initState();
+    messenger.stream.listen((erro) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(erro),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _loginSubscription.cancel();
+    super.dispose();
   }
 
   final _saveState = ValueNotifier<StrapButtonState>(StrapButtonState.none);

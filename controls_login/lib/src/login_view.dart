@@ -72,6 +72,7 @@ class LoginPage extends StatefulWidget {
   final double radius;
   final Color? backgroundColor;
   final bool? conhecaNossosProdutos;
+  final bool filial;
   final LoginPageTreinarPosition treinarPosition;
   final double gapHeight;
   final StrapButtonType strapButtonType;
@@ -87,6 +88,7 @@ class LoginPage extends StatefulWidget {
       this.inputBorder,
       this.backgroundColor,
       this.spacing = 1,
+      this.filial = false,
       this.radius = 15,
       this.buttonHeight = 30,
       this.strapButtonType = StrapButtonType.primary,

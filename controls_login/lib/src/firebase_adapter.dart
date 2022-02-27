@@ -17,8 +17,8 @@ bool disableFirebase = false;
 
 class Firebase {
   static get isFirebase {
-    if (GetPlatform.isWeb || GetPlatform.isAndroid) return true;
     if (disableFirebase) return false;
+    if (GetPlatform.isWeb || GetPlatform.isAndroid) return true;
     return false;
   }
 

@@ -71,12 +71,13 @@ class LoginPage extends StatefulWidget {
   final double spacing;
   final double radius;
   final Color? backgroundColor;
-  final bool? conhecaNossosProdutos;
+  final bool conhecaNossosProdutos;
   final bool filial;
   final LoginPageTreinarPosition treinarPosition;
   final double gapHeight;
   final StrapButtonType strapButtonType;
   final double buttonHeight;
+  final bool cadastraConta;
   LoginPage(
       {Key? key,
       this.treinarPosition = LoginPageTreinarPosition.normal,
@@ -94,7 +95,8 @@ class LoginPage extends StatefulWidget {
       this.strapButtonType = StrapButtonType.primary,
       this.gapHeight = 1,
       this.conhecaNossosProdutos = true,
-      this.stackedChildren})
+      this.stackedChildren,
+      this.cadastraConta = true})
       : super(key: key);
 
   @override
@@ -434,21 +436,22 @@ class _LoginViewState extends State<LoginPage> {
           ),
           if (widget.treinarPosition == LoginPageTreinarPosition.left)
             Positioned(top: 15, left: 10, child: treinarWidget()),
-          Positioned(
-            right: 20,
-            top: UniversalPlatform.isIOS ? 40 : 15,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: theme.scaffoldBackgroundColor,
-                    onPrimary: theme.primaryColor,
-                    elevation: 0),
-                child: Text('Não tenho uma conta'),
-                onPressed: () {
-                  // Get.to(AbrirContaView());
-                  launch(AppResourcesConst().linkAbrirNovaConta,
-                      enableJavaScript: true);
-                }),
-          ),
+          if (widget.cadastraConta)
+            Positioned(
+              right: 20,
+              top: UniversalPlatform.isIOS ? 40 : 15,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: theme.scaffoldBackgroundColor,
+                      onPrimary: theme.primaryColor,
+                      elevation: 0),
+                  child: Text('Não tenho uma conta'),
+                  onPressed: () {
+                    // Get.to(AbrirContaView());
+                    launch(AppResourcesConst().linkAbrirNovaConta,
+                        enableJavaScript: true);
+                  }),
+            ),
           if (widget.conhecaNossosProdutos ?? true)
             Positioned(
                 child: VejaNossosProdutos(

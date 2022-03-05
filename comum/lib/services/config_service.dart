@@ -309,9 +309,11 @@ abstract class ConfigAppBase extends ConfigBase {
     ODataInst().baseUrl = restServer;
     final rsp =
         await ODataInst().login(loja, usuario, password ?? loja).then((x) {
-      _authorization = x;
-      save();
-      loginChanged.notify(this);
+      if (x != null) {
+        _authorization = x;
+        save();
+        loginChanged.notify(this);
+      }
       return x;
     });
     return rsp;

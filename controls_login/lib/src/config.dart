@@ -58,6 +58,8 @@ final homeRoute =
 
 void Function(String title, String body)? snackbarFunc;
 
+BlocModelX<String> messenger = BlocModelX<String>();
+
 class AppResourcesConst {
   static final _singleton = AppResourcesConst._create();
   static get instance => _singleton;

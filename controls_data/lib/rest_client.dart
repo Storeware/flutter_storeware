@@ -103,7 +103,8 @@ class RestClient {
   }
 
   bool inDebug = false;
-
+  String? _url;
+  String? get url => _url;
   /* decode json string to object */
   Map<String, dynamic> decode(String texto) {
     return json.decode(texto, reviver: (k, v) {
@@ -273,6 +274,7 @@ class RestClient {
             contentType ?? this.contentType) // [e automatic no DIO??]
         );
 
+    this._url = this.baseUrl + url;
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
 
     String uri = Uri.parse(url).toString();
@@ -404,6 +406,7 @@ class RestClient {
       contentType: getContentType(contentType), //formUrlEncodedContentType,
       //contentType: this.contentType
     );
+    this._url = this.baseUrl + url;
     notifyLog.send('$method: ${this.baseUrl}$url - $contentType');
 
     String uri = Uri.parse(url).toString();
@@ -526,6 +529,7 @@ class RestClient {
     if (rt.contains('text/plain')) {
       bo.responseType = ResponseType.plain;
     }
+    this._url = this.baseUrl + url;
 
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
 

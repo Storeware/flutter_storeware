@@ -452,7 +452,7 @@ class _LoginViewState extends State<LoginPage> {
                         enableJavaScript: true);
                   }),
             ),
-          if (widget.conhecaNossosProdutos ?? true)
+          if (widget.conhecaNossosProdutos)
             Positioned(
                 child: VejaNossosProdutos(
                     style: TextStyle(fontSize: 10, color: Colors.black)),

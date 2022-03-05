@@ -48,10 +48,12 @@ class TotalWidget extends StatelessWidget {
 class TotalPainel extends StatelessWidget {
   const TotalPainel({
     Key? key,
-    @required this.total,
+    this.label,
+    required this.total,
   }) : super(key: key);
 
   final double? total;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +68,7 @@ class TotalPainel extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'VALOR TOTAL: ',
+                label ?? 'VALOR TOTAL: ',
                 textAlign: TextAlign.left,
                 style: TextStyle(
                     fontSize: 20, color: theme.textTheme.bodyText1!.color),

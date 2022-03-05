@@ -6,8 +6,15 @@ class LabeledText extends StatelessWidget {
   final double? width;
   final double? height;
   final Color? color;
+  final List<Widget>? children;
   const LabeledText(
-      {Key? key, this.label, this.text, this.color, this.width, this.height})
+      {Key? key,
+      this.label,
+      this.text,
+      this.color,
+      this.width,
+      this.height,
+      this.children})
       : super(key: key);
 
   @override
@@ -22,7 +29,8 @@ class LabeledText extends StatelessWidget {
         children: <Widget>[
           Container(child: label, height: 16, width: double.infinity),
           Divider(),
-          text!
+          if (text != null) text!,
+          if (children != null) ...children!,
         ],
       ),
     );

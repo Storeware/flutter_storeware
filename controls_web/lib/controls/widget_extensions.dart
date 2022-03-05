@@ -372,6 +372,25 @@ extension WidgetMorphism on Widget {
         secondaryBackground: secondaryBackground,
         direction: direction,
       );
+
+  bold({double size = 18.0}) {
+    return DefaultTextStyle(
+        style: TextStyle(
+            fontSize: size, color: Colors.black87, fontWeight: FontWeight.bold),
+        child: this);
+  }
+
+  bold16() => bold(size: 16);
+
+  bold14() => bold(size: 14);
+
+  width(double w) {
+    // ignore: sized_box_for_whitespace
+    return Container(
+      width: w,
+      child: this,
+    );
+  }
 }
 
 extension ListViewExtension on ListView {

@@ -122,36 +122,3 @@ extension CurrencyExtension on double {
         .format(this);
   }
 }
-
-extension IntExtensions on int {
-  int min(int value) {
-    return (this > value) ? value : this;
-  }
-
-  int max(int value) {
-    return (this < value) ? value : this;
-  }
-
-  int between(int de, int ate) {
-    int valor = this;
-    if (valor > ate) valor = ate;
-    if (valor < de) valor = de;
-    return valor;
-  }
-
-  bool get isZero {
-    return this.compareTo(0) == 0;
-  }
-
-  bool get isNotZero => !isZero;
-  bool get isNegative {
-    return this.compareTo(0) < 0;
-  }
-
-  bool get isPositive {
-    return this.compareTo(0) >= 0;
-  }
-
-  bool get isNotNegative => !isNegative;
-  bool get isNotPositive => !isPositive;
-}

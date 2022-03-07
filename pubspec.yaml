@@ -1,7 +1,7 @@
 name: flutter_storeware
 description: Flutter Storeware Packages
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 22.01.20+2
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+version: 22.02.26+3
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -19,7 +18,7 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_web
-  
+
   controls_data:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
@@ -33,12 +32,11 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_dash
- 
+
   controls_image:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_image   
-
+      path: controls_image
 
 dev_dependencies:
   flutter_test:
@@ -46,4 +44,3 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-

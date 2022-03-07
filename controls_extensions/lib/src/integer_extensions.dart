@@ -25,4 +25,29 @@ extension IntegerExtension on int {
       from += skip;
     }
   }
+
+  Iterable<int> rangeTo(int to, {int skip = 1}) => range(this, to, skip: skip);
+
+  int between(int de, int ate) {
+    int valor = this;
+    if (valor > ate) valor = ate;
+    if (valor < de) valor = de;
+    return valor;
+  }
+
+  bool get isZero {
+    return this.compareTo(0) == 0;
+  }
+
+  bool get isNotZero => !isZero;
+  bool get isNegative {
+    return this.compareTo(0) < 0;
+  }
+
+  bool get isPositive {
+    return this.compareTo(0) >= 0;
+  }
+
+  bool get isNotNegative => !isNegative;
+  bool get isNotPositive => !isPositive;
 }

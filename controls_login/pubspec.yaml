@@ -3,7 +3,7 @@ description: Login package.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -30,11 +30,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_storeware:
+    #path: ../flutter_storeware
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
   controls_data:
@@ -51,14 +51,14 @@ dependencies:
       path: controls_firebase
 
   encrypt: ^5.0.1
-  timezone:  ^0.8.0   
+  timezone: ^0.8.0
   #socket_io: ^1.0.1
   web_socket_channel:
-     
+
   provider:
   universal_platform:
   url_launcher:
-  get:    ^4.6.1
+  get: ^4.6.1
 
 dev_dependencies:
   flutter_test:
@@ -76,7 +76,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

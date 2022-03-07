@@ -103,7 +103,8 @@ class RestClient {
   }
 
   bool inDebug = false;
-
+  String? _url;
+  String? get url => _url;
   /* decode json string to object */
   Map<String, dynamic> decode(String texto) {
     return json.decode(texto, reviver: (k, v) {
@@ -158,7 +159,7 @@ class RestClient {
   }
 
   bool checkError({String? data, String key = 'error'}) {
-    response = data!;
+    if (data != null) response = data;
     if (jsonResponse?[key] != null) {
       throw new StateError(jsonResponse?[key]);
     }
@@ -166,7 +167,7 @@ class RestClient {
   }
 
   result({String? data, key = 'result'}) {
-    response = data!;
+    if (data != null) response = data;
     return fieldByName(key);
   }
 
@@ -273,6 +274,7 @@ class RestClient {
             contentType ?? this.contentType) // [e automatic no DIO??]
         );
 
+    this._url = this.baseUrl + url;
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
 
     String uri = Uri.parse(url).toString();
@@ -310,6 +312,7 @@ class RestClient {
         resp.data['body'] = body;
       }
       if (statusCode == 200) {
+        error = 'OK';
         return resp.data;
       } else {
         return throw (resp.data);
@@ -317,7 +320,6 @@ class RestClient {
       //} on TypeErrorImpl catch (e) {
       //  return throw '$e';
     } catch (e) {
-      var error;
       DataProcessingNotifier.stop();
       try {
         error = formataMensagemErro('$method:$url', e);
@@ -332,6 +334,7 @@ class RestClient {
     }
   }
 
+  var error;
   sendError(texto) {
     notifyError.send(texto);
     DataErrorNotifier().notify(texto);
@@ -403,6 +406,7 @@ class RestClient {
       contentType: getContentType(contentType), //formUrlEncodedContentType,
       //contentType: this.contentType
     );
+    this._url = this.baseUrl + url;
     notifyLog.send('$method: ${this.baseUrl}$url - $contentType');
 
     String uri = Uri.parse(url).toString();
@@ -442,6 +446,7 @@ class RestClient {
         }
 
         if (statusCode == 200) {
+          error = 'OK';
           notifyLog.notify(resp.data.toString());
           return resp.data;
         } else {
@@ -449,7 +454,7 @@ class RestClient {
         }
       }, onError: (e) {
         DataProcessingNotifier.stop();
-        var error = formataMensagemErro(url, e);
+        error = formataMensagemErro(url, e);
         if (!silent) sendError(error);
         return throw error;
       });
@@ -524,6 +529,7 @@ class RestClient {
     if (rt.contains('text/plain')) {
       bo.responseType = ResponseType.plain;
     }
+    this._url = this.baseUrl + url;
 
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
 
@@ -552,6 +558,7 @@ class RestClient {
         _decodeResp(resp);
         notifyLog.notify(resp.data.toString());
         if (statusCode == 200) {
+          error = 'OK';
           return resp;
         } else {
           return throw (resp);
@@ -559,7 +566,7 @@ class RestClient {
       });
     } catch (e) {
       DataProcessingNotifier.stop();
-      var error = formataMensagemErro(url, e);
+      error = formataMensagemErro(url, e);
       if (!silent) sendError(error);
       throw error;
     }

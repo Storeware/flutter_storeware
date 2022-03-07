@@ -6,19 +6,18 @@ import 'package:controls_data/odata_firestore.dart';
 import 'dummy_platform.dart'
     if (dart.library.io) 'package:controls_firebase/firebase.dart'
     if (dart.library.js) 'package:controls_firebase/firebase.dart' as fb;
-//import 'package:controls_firebase/firebase.dart'
-//    if (dart.library.macos) 'dummy_platform.dart' as fb;
 import 'package:flutter/material.dart';
-//import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import '../models/eventos_item_model.dart';
 
 ValueNotifier<String?> pushMessageId = ValueNotifier<String?>(null);
 
 bool _initedNotification = false;
+bool disableFirebase = false;
 
 class Firebase {
   static get isFirebase {
+    if (disableFirebase) return false;
     if (GetPlatform.isWeb || GetPlatform.isAndroid) return true;
     return false;
   }
@@ -50,16 +49,6 @@ class Firebase {
         }
       } catch (e) {}
 
-      /* fb.FBPushNotification().onTokenRefresh = (token) {
-        CloudV3().client.put('usuarios', {
-          "id": usuario,
-          "codigo": usuario,
-          "conta_uid": conta,
-          'messageId': token,
-          "uid": userUid
-        });
-      };
-*/
       return fb.FBPushNotification().getToken().then((tkn) {
         pushMessageId.value = tkn;
         CloudV3().client.put('usuarios', {
@@ -82,8 +71,6 @@ class Firebase {
                   icon: const Icon(Icons.alarm),
                   mainButton: TextButton(
                     child: const Text('OK'),
-                    //shape: new RoundedRectangleBorder(
-                    //    borderRadius: new BorderRadius.circular(30.0)),
                     onPressed: () {
                       Navigator.pop(Get.context!);
                     },

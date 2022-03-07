@@ -346,8 +346,13 @@ class ODataClient extends ODataClientInterface {
   get errorNotifier => client.notifyError;
   get processing => DataProcessingNotifier();
   get driver => client.headers['db-driver'] ?? 'fb';
+  get url => client.url;
 
   get statusCode => client.statusCode;
+  get rows => client.rows();
+  get result => client.result();
+  get getData => client.jsonResponse;
+  get getError => client.error;
 
   String get baseUrl => client.baseUrl;
   set baseUrl(x) {
@@ -404,6 +409,8 @@ class ODataClient extends ODataClientInterface {
     return this;
   }
 
+  @Deprecated('Uso interno, trocar por getRows')
+
   /// [send] monta um requisição para o servidor OData;
   @override
   Future<dynamic> send(ODataQuery query, {String? cacheControl}) async {
@@ -431,22 +438,27 @@ class ODataClient extends ODataClientInterface {
     String? groupby,
     String? join,
     String? orderby,
+    String? cacheControl,
   }) async {
-    return send(ODataQuery(
-      resource: resource,
-      select: select,
-      filter: filter,
-      top: top,
-      skip: skip,
-      groupby: groupby,
-      join: join,
-      orderby: orderby,
-    )).then((rsp) {
+    return send(
+      ODataQuery(
+        resource: resource,
+        select: select,
+        filter: filter,
+        top: top,
+        skip: skip,
+        groupby: groupby,
+        join: join,
+        orderby: orderby,
+      ),
+      cacheControl: cacheControl,
+    ).then((rsp) {
       return rsp['result'];
     });
   }
 
   /// [getOne] envia uma requisição de uma linha para o servidor e retorna a linha transmitida pelo servidor.
+  @Deprecated('Use getRows')
   @override
   Future<dynamic> getOne(String resource, {String? id}) async {
     try {
@@ -507,6 +519,7 @@ class ODataClient extends ODataClientInterface {
   }
 
   /// [getRaw] envia uma requisição primaria para o servidor
+  /// retorna rawdata enviado pelo servidor, sem tratamento.
   Future<dynamic> getRaw(String service) async {
     try {
       var url = client.formatUrl(path: service);
@@ -547,6 +560,7 @@ class ODataClient extends ODataClientInterface {
   }
 
   /// [open] envia uma consulta SQL direta para o banco de dados
+  /// prefira utilizar getRows
   Future<Object> open(String command) async {
     try {
       //    print(command);
@@ -561,6 +575,7 @@ class ODataClient extends ODataClientInterface {
   }
 
   /// [openJson] envia uma consulta SQL direta para o banco de dados
+  /// prefira utilizar getRows
   Future<Map<String, dynamic>> openJson(String command,
       {String? cacheControl}) async {
     try {
@@ -589,6 +604,9 @@ class ODataClient extends ODataClientInterface {
     }
   }
 
+  @Deprecated('não usar, prefira usar getRows sempre que possível')
+
+  /// [executeJson] envia um comando SQL direta para o banco de dados
   Future<Map> executeJson(String command) async {
     try {
       //    print(command);

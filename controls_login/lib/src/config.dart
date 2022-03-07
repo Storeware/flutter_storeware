@@ -58,6 +58,8 @@ final homeRoute =
 
 void Function(String title, String body)? snackbarFunc;
 
+BlocModelX<String> messenger = BlocModelX<String>();
+
 class AppResourcesConst {
   static final _singleton = AppResourcesConst._create();
   static get instance => _singleton;
@@ -488,7 +490,7 @@ abstract class ConsoleConfig extends ConfigAppBase {
 
   @override
   String encrypt(txt) {
-    if (txt == null) return txt;
+    if (txt == null) return '';
     try {
       var x = StringEncryption(randomKey: 'console').encrypt(txt);
       //print('encrypt $txt $x');
@@ -500,6 +502,7 @@ abstract class ConsoleConfig extends ConfigAppBase {
 
   @override
   String decrypt(txt) {
+    if (txt == null) return '';
     try {
       var x = StringEncryption(randomKey: 'console').decrypt(txt);
       //print('decrypt $txt $x');

@@ -45,7 +45,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
       print('carregou firebase');
       return app;
     } catch (e) {
-      print('$e');
+      print(['Firebase instance: ', '$e']);
     }
   }
 

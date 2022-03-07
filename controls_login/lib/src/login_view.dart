@@ -21,28 +21,39 @@ enum LoginPageTreinarPosition {
 
 bool isFirebase = false;
 
-class DefaultLoginPage extends StatelessWidget {
-  final Widget Function() homeBuilder;
-  final Widget Function()? loginBuilder;
-  const DefaultLoginPage(
-      {Key? key, this.loginBuilder, required this.homeBuilder})
-      : super(key: key);
+class DefaultLoginPage extends InheritedWidget {
+  DefaultLoginPage(
+      {Key? key,
+      Widget Function()? loginBuilder,
+      required Widget Function() homeBuilder})
+      : super(
+            key: key,
+            child: DefaultLoginPage.doBuilder(
+                homeBuilder: homeBuilder, loginBuilder: loginBuilder));
 
   @override
-  Widget build(BuildContext context) {
+  bool updateShouldNotify(DefaultLoginPage oldWidget) {
+    return true;
+  }
+
+  static Widget doBuilder(
+      {required Widget Function() homeBuilder, loginBuilder}) {
     ConfigX().init();
     return ChangeNotifierProvider<LoginChanged>(
-        create: (ctx) => LoginChanged(),
-        builder: (ctx, wg) => Consumer<LoginChanged>(
-            builder: (ctx, ch, wg) => Builder(builder: (ctx) {
-                  if (configInstance!.logado) {
-                    return homeBuilder();
-                  } else {
-                    return (loginBuilder != null)
-                        ? loginBuilder!()
-                        : LoginPage();
-                  }
-                })));
+      create: (ctx) => LoginChanged(),
+      builder: (ctx, wg) => StreamBuilder(
+        stream: LoginTokenChanged().stream,
+        builder: (context, snapshot) => Consumer<LoginChanged>(
+          builder: (ctx, ch, wg) => Builder(builder: (ctx) {
+            if (configInstance!.logado) {
+              return homeBuilder();
+            } else {
+              return (loginBuilder != null) ? loginBuilder!() : LoginPage();
+            }
+          }),
+        ),
+      ),
+    );
   }
 
   static of(BuildContext context) =>
@@ -60,11 +71,13 @@ class LoginPage extends StatefulWidget {
   final double spacing;
   final double radius;
   final Color? backgroundColor;
-  final bool? conhecaNossosProdutos;
+  final bool conhecaNossosProdutos;
+  final bool filial;
   final LoginPageTreinarPosition treinarPosition;
   final double gapHeight;
   final StrapButtonType strapButtonType;
   final double buttonHeight;
+  final bool cadastraConta;
   LoginPage(
       {Key? key,
       this.treinarPosition = LoginPageTreinarPosition.normal,
@@ -76,12 +89,14 @@ class LoginPage extends StatefulWidget {
       this.inputBorder,
       this.backgroundColor,
       this.spacing = 1,
+      this.filial = false,
       this.radius = 15,
       this.buttonHeight = 30,
       this.strapButtonType = StrapButtonType.primary,
       this.gapHeight = 1,
       this.conhecaNossosProdutos = true,
-      this.stackedChildren})
+      this.stackedChildren,
+      this.cadastraConta = true})
       : super(key: key);
 
   @override
@@ -95,9 +110,24 @@ class _LoginViewState extends State<LoginPage> {
   final TextEditingController _usuarioController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
+  late StreamSubscription _loginSubscription;
   @override
   void initState() {
     super.initState();
+    messenger.stream.listen((erro) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(erro),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _loginSubscription.cancel();
+    super.dispose();
   }
 
   final _saveState = ValueNotifier<StrapButtonState>(StrapButtonState.none);
@@ -222,6 +252,8 @@ class _LoginViewState extends State<LoginPage> {
                                                 child: treinarWidget(),
                                               ),
                                             TextFormField(
+                                                enabled: true,
+                                                readOnly: false,
                                                 textInputAction:
                                                     TextInputAction.next,
                                                 keyboardType: TextInputType
@@ -404,22 +436,23 @@ class _LoginViewState extends State<LoginPage> {
           ),
           if (widget.treinarPosition == LoginPageTreinarPosition.left)
             Positioned(top: 15, left: 10, child: treinarWidget()),
-          Positioned(
-            right: 20,
-            top: UniversalPlatform.isIOS ? 40 : 15,
-            child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    primary: theme.scaffoldBackgroundColor,
-                    onPrimary: theme.primaryColor,
-                    elevation: 0),
-                child: Text('Não tenho uma conta'),
-                onPressed: () {
-                  // Get.to(AbrirContaView());
-                  launch(AppResourcesConst().linkAbrirNovaConta,
-                      enableJavaScript: true);
-                }),
-          ),
-          if (widget.conhecaNossosProdutos ?? true)
+          if (widget.cadastraConta)
+            Positioned(
+              right: 20,
+              top: UniversalPlatform.isIOS ? 40 : 15,
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: theme.scaffoldBackgroundColor,
+                      onPrimary: theme.primaryColor,
+                      elevation: 0),
+                  child: Text('Não tenho uma conta'),
+                  onPressed: () {
+                    // Get.to(AbrirContaView());
+                    launch(AppResourcesConst().linkAbrirNovaConta,
+                        enableJavaScript: true);
+                  }),
+            ),
+          if (widget.conhecaNossosProdutos)
             Positioned(
                 child: VejaNossosProdutos(
                     style: TextStyle(fontSize: 10, color: Colors.black)),

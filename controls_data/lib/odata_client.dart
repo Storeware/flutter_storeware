@@ -458,6 +458,18 @@ class ODataClient extends ODataClientInterface {
     });
   }
 
+  query(
+    String command, {
+    String? cacheControl,
+  }) async {
+    return openJson(
+      command,
+      cacheControl: cacheControl,
+    ).then((rsp) {
+      return rsp['result'] ?? rsp['value'];
+    });
+  }
+
   /// [getOne] envia uma requisição de uma linha para o servidor e retorna a linha transmitida pelo servidor.
   @Deprecated('Use getRows')
   @override

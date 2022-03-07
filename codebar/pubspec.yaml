@@ -10,6 +10,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_barcode_scanner:  
+  font_awesome_flutter:
+  universal_platform:
 
 dev_dependencies:
   flutter_test:

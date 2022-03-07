@@ -83,6 +83,10 @@ class _CodebarCameraFieldState extends State<CodebarCameraField> {
       autofocus: widget.autofocus,
       controller: codigoCtrl,
       keyboardType: widget.keyboardType,
+      textInputAction: TextInputAction.done,
+      onFieldSubmitted: (x) {
+        widget.callback!(codigoCtrl.text);
+      },
       decoration: InputDecoration(
         labelText: widget.labelText,
         hintText: widget.hintText,

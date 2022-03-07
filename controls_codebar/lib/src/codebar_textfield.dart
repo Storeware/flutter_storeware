@@ -118,6 +118,10 @@ class _CodebarTextFieldState extends State<CodebarTextField> {
             suffixIcon: widget.suffixIcon,
           ),
       controller: widget.controller,
+      textInputAction: TextInputAction.done,
+      onFieldSubmitted: (x) {
+        if (widget.onChanged != null) widget.onChanged!(x);
+      },
     );
   }
 }

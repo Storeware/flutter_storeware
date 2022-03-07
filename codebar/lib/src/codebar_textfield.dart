@@ -7,17 +7,27 @@ import 'package:universal_platform/universal_platform.dart';
 import 'codebar_field.dart';
 import 'package:controls_web/drivers.dart';
 
+/// [CodigoBarrasCodigoChange] é chamado quando recebe um código de barras pela camera do dispositivo;
+/// ´´´´dart
+/// ex: CodigoBarrarCodigoChanged.stream.listen((codigo){});
+/// ´´´´
 class CodigoBarrarCodigoChanged extends BlocModel<String> {
   static final _singleton = CodigoBarrarCodigoChanged._create();
   CodigoBarrarCodigoChanged._create();
   factory CodigoBarrarCodigoChanged() => _singleton;
 }
 
+/// [CodebarTextField] seleciona o dispositivo para leitura de código de barras, quando houver camera
+/// * para android, ativa a camera do dispositivo;
+/// * para web, mostra o TextField
 class CodebarTextField extends StatefulWidget {
   final String? initialValue;
   final Function(String)? onChanged;
   final Function(String) onScan;
+
+  /// [onScan] é chamado quando o código de barras é lido
   final bool maybeUseCamera;
+  final bool enabled;
   final String? Function(String)? validator;
   final String? labelText;
   final String? hintText;
@@ -42,6 +52,7 @@ class CodebarTextField extends StatefulWidget {
     this.border,
     this.maybeUseCamera = false,
     this.suffixIcon,
+    this.enabled = true,
   }) : super(key: key);
 
   @override
@@ -73,7 +84,8 @@ class _CodebarTextFieldState extends State<CodebarTextField> {
 
   @override
   Widget build(BuildContext context) {
-    if (UniversalPlatform.isAndroid || widget.maybeUseCamera) {
+    if ((UniversalPlatform.isAndroid || widget.maybeUseCamera) &&
+        (widget.enabled)) {
       return CodebarCameraField(
         initialValue: widget.initialValue,
         autofocus: widget.autofocus,
@@ -93,6 +105,7 @@ class _CodebarTextFieldState extends State<CodebarTextField> {
       );
     }
     return TextFormField(
+      enabled: widget.enabled,
       autofocus: widget.autofocus,
       keyboardType: widget.keyboardType ?? TextInputType.number,
       validator:

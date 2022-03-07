@@ -26,8 +26,8 @@ dependencies:
   get:
   shimmer:
   #autocomplete_textfield:
-   pdf: ^3.7.1
-  printing: ^5.7.2
+  pdf: 
+  printing: 
   #data_table_2: ^2.2.0
 
   controls_data:

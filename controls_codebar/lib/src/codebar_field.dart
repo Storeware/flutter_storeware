@@ -85,7 +85,9 @@ class _CodebarCameraFieldState extends State<CodebarCameraField> {
       keyboardType: widget.keyboardType,
       textInputAction: TextInputAction.done,
       onFieldSubmitted: (x) {
-        widget.callback!(codigoCtrl.text);
+        if (widget.callback != null) {
+          widget.callback!(codigoCtrl.text);
+        }
       },
       decoration: InputDecoration(
         labelText: widget.labelText,

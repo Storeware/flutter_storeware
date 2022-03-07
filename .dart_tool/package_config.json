@@ -56,12 +56,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "codebar",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/codebar",
-      "packageUri": "lib/",
-      "languageVersion": "2.16"
-    },
-    {
       "name": "collection",
       "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/collection-1.15.0",
       "packageUri": "lib/",
@@ -120,6 +114,12 @@
       "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_data/control_data_platform_windows",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "controls_codebar",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-0c237cb82f75a54630c9c4d6ca0bc70c601ff179/controls_codebar",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
     },
     {
       "name": "controls_dash",
@@ -740,7 +740,7 @@
       "languageVersion": "2.12"
     }
   ],
-  "generated": "2022-03-07T10:45:45.546281Z",
+  "generated": "2022-03-07T10:48:54.335760Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

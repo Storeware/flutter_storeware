@@ -64,15 +64,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  codebar:
-    dependency: "direct main"
-    description:
-      path: codebar
-      ref: HEAD
-      resolved-ref: "2b5d629af18c389d9405c7c682f1c54e3446ef60"
-      url: "https://github.com/amarildolacerda/flutter_storeware.git"
-    source: git
-    version: "0.0.1"
   collection:
     dependency: transitive
     description:
@@ -153,6 +144,15 @@ packages:
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
+  controls_codebar:
+    dependency: "direct main"
+    description:
+      path: controls_codebar
+      ref: HEAD
+      resolved-ref: "0c237cb82f75a54630c9c4d6ca0bc70c601ff179"
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
+    source: git
+    version: "0.0.1"
   controls_dash:
     dependency: "direct main"
     description:

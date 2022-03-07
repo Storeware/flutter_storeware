@@ -99,8 +99,8 @@ class _MenuDialogState extends State<MenuDialog> {
     final double maxWidth = size!.width;
     final double maxHeigth = size!.height;
     int i = 0;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    return ListView(
+      //mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         for (var item in widget.choices!)
           StaggeredAnimation(

@@ -40,10 +40,10 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Container(
           child: TabViewBottom(choices: [
             TabChoice(
-              label: 'OK',
+              label: 'Op1',
             ),
             TabChoice(
-              label: 'Yes',
+              label: 'Op2',
             ),
           ]),
         ),
@@ -63,21 +63,38 @@ class HomeView extends StatelessWidget {
       indicatorColor: Colors.blue[200],
       tabColor: Colors.blue[100],
       tagColor: Colors.amber,
+      topBar: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+        InkButton(
+          child: Icon(Icons.menu),
+          onTap: () {
+            MenuDialog.show(context, choices: [
+              for (var i = 0; i < 10; i++)
+                MenuChoice(
+                  title: 'Opção $i',
+                  onPressed: (x) {
+                    print('Opção $i');
+                  },
+                ),
+            ]);
+          },
+        )
+      ]),
       choices: [
         TabChoice(
           title: Text('Opções1'),
           child: Container(
-              //color: Colors.white,
-              child: Column(
-            children: [
-              Spacer(),
-              Container(
-                  width: 200,
-                  height: 60,
-                  child: StrapButton(text: 'Click aqui')),
-              Spacer(),
-            ],
-          )),
+            //color: Colors.white,
+            child: Column(
+              children: [
+                Spacer(),
+                Container(
+                    width: 200,
+                    height: 60,
+                    child: StrapButton(height: 60, text: 'StrapButton')),
+                Spacer(),
+              ],
+            ),
+          ),
         ),
         TabChoice(
             title: Text('Opções2'),
@@ -86,7 +103,8 @@ class HomeView extends StatelessWidget {
             onPressed: () => Dialogs.info(context, content: Text('OK'))),
         TabChoice(
           title: Text('Opções3'),
-          child: Container(),
+//          child: Container(),
+          items: [TabChoice(label: 'Sub1'), TabChoice(label: 'Sub2')],
         ),
         TabChoice(
           title: Text('Opções4'),

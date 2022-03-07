@@ -1,10 +1,7 @@
 // @dart=2.12
 import 'dart:async';
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:controls_web/controls.dart';
-import 'package:controls_web/controls/notice_activities.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 
 enum DialogsTransition {
@@ -424,6 +421,7 @@ class Dialogs {
     Color? color,
     double? tagWidth,
     Widget? content,
+    Color? tagColor,
     double radius = 15,
   }) {
     return showDialog<void>(
@@ -445,7 +443,7 @@ class Dialogs {
                       Container(
                           height: height,
                           width: tagWidth ?? 8,
-                          color: Theme.of(context).primaryColor),
+                          color: tagColor ?? Theme.of(context).primaryColor),
                       Expanded(
                         child: Row(children: [
                           if (icon != null)

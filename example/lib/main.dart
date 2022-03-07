@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:controls_web/controls.dart';
+import 'package:flutter_storeware/index.dart';
 
 void main() {
   runApp(MyApp());
@@ -57,6 +57,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ValueNotifier<double> notifier = ValueNotifier(5);
     return HorizontalTabView(
       //minWidth: 180,
       color: Colors.blue[100],
@@ -81,26 +82,20 @@ class HomeView extends StatelessWidget {
       ]),
       choices: [
         TabChoice(
-          title: Text('Opções1'),
-          child: Container(
-            //color: Colors.white,
-            child: Column(
-              children: [
-                Spacer(),
-                Container(
-                    width: 200,
-                    height: 60,
-                    child: StrapButton(height: 60, text: 'StrapButton')),
-                Spacer(),
-              ],
-            ),
-          ),
+          title: Text('StrapButton'),
+          child: pagina1Builder(notifier, context),
         ),
         TabChoice(
-            title: Text('Opções2'),
-            child: Container(),
+            title: Text('Dialogs.info'),
             image: Icon(Icons.ac_unit_outlined),
-            onPressed: () => Dialogs.info(context, content: Text('OK'))),
+            child: Container(
+                child: StrapButton(
+                    text: 'Button Info',
+                    type: StrapButtonType.warning,
+                    onPressed: () {
+                      Dialogs.info(context,
+                          text: 'Titulo', content: Text('Mensagem'));
+                    }))),
         TabChoice(
           title: Text('Opções3'),
 //          child: Container(),
@@ -117,6 +112,56 @@ class HomeView extends StatelessWidget {
         TabChoice(
           title: Text('Opções6'),
           child: Container(),
+        ),
+      ],
+    );
+  }
+
+  Row pagina1Builder(ValueNotifier<double> notifier, BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: ValueListenableBuilder<double>(
+            valueListenable: notifier,
+            builder: (z, b, d) => Column(
+              children: [
+                Spacer(),
+                Text('Radius'),
+                Container(
+                  alignment: Alignment.center,
+                  child: GroupButtons(
+                    itemIndex: 0,
+                    options: ['5', '10', '15'],
+                    onChanged: (x) {
+                      notifier.value = (x.toDouble() + 1) * 5;
+                    },
+                  ),
+                ).box(width: 150),
+                for (var i = 0; i < StrapButtonType.values.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: StrapButton(
+                      height: 60,
+                      width: 220,
+                      radius: b,
+                      type: StrapButtonType.values[i],
+                      text: StrapButtonType.values[i].toString().split('.')[1],
+                      onPressed: () {
+                        Scaffold(
+                          body: Container(
+                            color: strapColor(StrapButtonType.values[i]),
+                          ),
+                        ).showDialog(context,
+                            title: StrapButtonType.values[i].toString(),
+                            desktop: true);
+                      },
+                    ),
+                  ),
+                SizedBox(height: 5),
+                Spacer(),
+              ],
+            ),
+          ),
         ),
       ],
     );

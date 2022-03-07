@@ -13,6 +13,10 @@ dependencies:
   flutter_barcode_scanner:  
   font_awesome_flutter:
   universal_platform:
+  controls_web:
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
+      path: controls_web
 
 dev_dependencies:
   flutter_test:

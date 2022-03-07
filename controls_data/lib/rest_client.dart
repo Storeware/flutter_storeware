@@ -211,7 +211,9 @@ class RestClient {
     if (authorization != null) {
       _headers['authorization'] = authorization!;
     }
-    if (tokenId != null) _headers['token'] = tokenId!;
+    if (tokenId != null) {
+      _headers['tokenid'] = tokenId!; // nao mudar, usado no restserver
+    }
     return this;
   }
 
@@ -392,7 +394,7 @@ class RestClient {
       {String method = 'GET', Map<String, dynamic>? body, cacheControl}) async {
     _setHeader();
     final _h = _headers;
-    if (cacheControl != null) _h['Cache-Control'] = cacheControl;
+    //if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     BaseOptions bo = BaseOptions(
       connectTimeout: connectionTimeout,
       followRedirects: followRedirects,

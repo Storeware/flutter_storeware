@@ -132,15 +132,15 @@ class LoginTokenChanged extends BlocModelX<bool> {
 class ODataQuery {
   final String? resource;
   String? select;
-  dynamic filter;
+  String? filter;
   int? top;
   int? skip;
   String? groupby;
   String? orderby;
   String? join;
   ODataQuery({
-    @required this.resource,
-    @required this.select,
+    required this.resource,
+    required this.select,
     this.filter,
     this.top,
     this.skip,
@@ -157,6 +157,7 @@ class ODataQuery {
     if (groupby != null) r += '\$groupby=${groupby}&';
     if (orderby != null) r += '\$orderby=${orderby}&';
     if (join != null) r += '\$join=${join}&';
+    if (r.endsWith('&')) r = r.substring(0, r.length - 1);
     return r;
   }
 }
@@ -234,7 +235,7 @@ class ODataResult {
       hasData = json != null;
       debug(json);
       if (hasData) {
-        rows = json['rows'] ?? 0;
+        rows = json['rows'] ?? json['@odata.count'] ?? 0;
         debug('rows: $rows');
         _data.docs = [];
         var it = json['result'] ?? json['value'] ?? [];
@@ -432,8 +433,8 @@ class ODataClient extends ODataClientInterface {
   getRows({
     required String resource,
     String select = '*',
-    int top = 0,
-    int skip = 0,
+    int? top,
+    int? skip,
     String? filter,
     String? groupby,
     String? join,
@@ -453,7 +454,7 @@ class ODataClient extends ODataClientInterface {
       ),
       cacheControl: cacheControl,
     ).then((rsp) {
-      return rsp['result'];
+      return rsp['result'] ?? rsp['value'];
     });
   }
 

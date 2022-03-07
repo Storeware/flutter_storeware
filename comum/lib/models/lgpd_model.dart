@@ -5,7 +5,7 @@
 //import 'package:controls_data/odata_client.dart';
 //import 'package:controls_data/odata_firestore.dart';
 //import 'package:universal_html/html.dart';
-import 'package:console/models/historico_model.dart';
+import 'historico_model.dart';
 
 class LgpdItem extends HistoricoItem {}
 

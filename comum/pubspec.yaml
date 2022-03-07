@@ -5,9 +5,8 @@ version: 2021.11.10
 homepage: http://tireideletra.com.br
 publish_to: none
 
-
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,7 +31,7 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_dash
-  get: 
+  get:
 
 dev_dependencies:
   flutter_test:
@@ -43,4 +42,3 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-  

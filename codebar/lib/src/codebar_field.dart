@@ -8,6 +8,10 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
+/// [CodebarCameraField] de uso para Android e IOS (maybe)
+/// uso interno para [CodebarTextField]
+/// [CodebarTextField] usa [CodebarCameraField]
+///
 class CodebarCameraField extends StatefulWidget {
   final Function(String?)? callback;
   final Function(String?)? validator;

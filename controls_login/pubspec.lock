@@ -84,21 +84,21 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.8"
+    version: "3.1.10"
   cloud_firestore_platform_interface:
     dependency: transitive
     description:
       name: cloud_firestore_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.13"
+    version: "5.5.1"
   cloud_firestore_web:
     dependency: transitive
     description:
       name: cloud_firestore_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.8"
+    version: "2.6.10"
   collection:
     dependency: transitive
     description:
@@ -111,7 +111,7 @@ packages:
     description:
       path: comum
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -148,7 +148,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.10.11"
@@ -157,7 +157,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.27"
@@ -166,7 +166,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -175,7 +175,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -184,7 +184,7 @@ packages:
     description:
       path: controls_dash
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.08.18"
@@ -193,7 +193,7 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.10.11"
@@ -202,7 +202,7 @@ packages:
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -211,7 +211,7 @@ packages:
     description:
       path: controls_firebase
       ref: HEAD
-      resolved-ref: bfbade8edecc0a66c1ff77a113b2285abc2ddb48
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -220,7 +220,7 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_android"
       ref: HEAD
-      resolved-ref: bfbade8edecc0a66c1ff77a113b2285abc2ddb48
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2022.01.20"
@@ -229,7 +229,7 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_interface"
       ref: HEAD
-      resolved-ref: bfbade8edecc0a66c1ff77a113b2285abc2ddb48
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.27"
@@ -238,7 +238,7 @@ packages:
     description:
       path: "controls_firebase/controls_firebase_platform_web"
       ref: HEAD
-      resolved-ref: bfbade8edecc0a66c1ff77a113b2285abc2ddb48
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -247,7 +247,7 @@ packages:
     description:
       path: controls_image
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.28+1"
@@ -256,7 +256,7 @@ packages:
     description:
       path: "controls_image/controls_image_android"
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -265,7 +265,7 @@ packages:
     description:
       path: "controls_image/controls_image_interface"
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.27"
@@ -274,7 +274,7 @@ packages:
     description:
       path: "controls_image/controls_image_web"
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -283,10 +283,10 @@ packages:
     description:
       path: controls_web
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "2022.2.4"
+    version: "2022.3.6"
   convert:
     dependency: transitive
     description:
@@ -322,13 +322,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.4"
-  data_table_2:
-    dependency: transitive
-    description:
-      name: data_table_2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.1"
   date_format:
     dependency: transitive
     description:
@@ -349,7 +342,7 @@ packages:
       name: dbus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.8"
+    version: "0.7.1"
   dio:
     dependency: transitive
     description:
@@ -412,84 +405,84 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.7"
+    version: "3.3.9"
   firebase_auth_platform_interface:
     dependency: transitive
     description:
       name: firebase_auth_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.1.11"
+    version: "6.2.1"
   firebase_auth_web:
     dependency: transitive
     description:
       name: firebase_auth_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.3.7"
+    version: "3.3.9"
   firebase_core:
     dependency: transitive
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.12.0"
+    version: "1.13.1"
   firebase_core_platform_interface:
     dependency: transitive
     description:
       name: firebase_core_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.2.4"
+    version: "4.2.5"
   firebase_core_web:
     dependency: transitive
     description:
       name: firebase_core_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.4"
+    version: "1.6.1"
   firebase_messaging:
     dependency: transitive
     description:
       name: firebase_messaging
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "11.2.6"
+    version: "11.2.8"
   firebase_messaging_platform_interface:
     dependency: transitive
     description:
       name: firebase_messaging_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.1.6"
+    version: "3.2.1"
   firebase_messaging_web:
     dependency: transitive
     description:
       name: firebase_messaging_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.7"
+    version: "2.2.9"
   firebase_storage:
     dependency: transitive
     description:
       name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "10.2.7"
+    version: "10.2.9"
   firebase_storage_platform_interface:
     dependency: transitive
     description:
       name: firebase_storage_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.0.14"
+    version: "4.1.1"
   firebase_storage_web:
     dependency: transitive
     description:
       name: firebase_storage_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.8"
+    version: "3.2.10"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -515,14 +508,14 @@ packages:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "9.3.2"
+    version: "9.4.0"
   flutter_local_notifications_linux:
     dependency: transitive
     description:
       name: flutter_local_notifications_linux
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.1+1"
+    version: "0.4.2"
   flutter_local_notifications_platform_interface:
     dependency: transitive
     description:
@@ -549,10 +542,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "7bb6e4af9648a9250e6737cbb0129b7d3c6552ff"
+      resolved-ref: be2b43abff8447eba48e57a9cec7f4ddafa1c2ed
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
-    version: "22.01.20+2"
+    version: "22.02.26+3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -646,7 +639,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.4+9"
+    version: "0.8.4+10"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -758,14 +751,14 @@ packages:
       name: path_provider_android
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.11"
+    version: "2.0.12"
   path_provider_ios:
     dependency: transitive
     description:
       name: path_provider_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.7"
+    version: "2.0.8"
   path_provider_linux:
     dependency: transitive
     description:
@@ -842,7 +835,7 @@ packages:
       name: pointycastle
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.1"
+    version: "3.5.2"
   printing:
     dependency: transitive
     description:
@@ -1106,7 +1099,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.8"
+    version: "2.0.9"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -1120,7 +1113,7 @@ packages:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.5"
+    version: "3.0.6"
   vector_math:
     dependency: transitive
     description:

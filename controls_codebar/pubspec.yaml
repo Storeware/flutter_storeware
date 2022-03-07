@@ -1,7 +1,8 @@
-name: codebar
+name: controls_codebar
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
+#homepage:
+publish_to: none
 
 environment:
   sdk: ">=2.16.1 <3.0.0"
@@ -10,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_barcode_scanner:  
+  flutter_barcode_scanner:
   font_awesome_flutter:
   universal_platform:
   controls_web:

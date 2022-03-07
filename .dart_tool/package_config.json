@@ -63,7 +63,7 @@
     },
     {
       "name": "comum",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/comum",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/comum",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
@@ -93,79 +93,79 @@
     },
     {
       "name": "control_data_platform_android",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_data/control_data_platform_android",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_data/control_data_platform_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_data/control_data_platform_interface",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_data/control_data_platform_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_data/control_data_platform_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_data/control_data_platform_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_windows",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_data/control_data_platform_windows",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_data/control_data_platform_windows",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_codebar",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-0c237cb82f75a54630c9c4d6ca0bc70c601ff179/controls_codebar",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_codebar",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "controls_dash",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_dash",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_dash",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_data",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_data",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_extensions",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_extensions",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_extensions",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_image",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_image",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_android",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_image/controls_image_android",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_image/controls_image_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_interface",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_image/controls_image_interface",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_image/controls_image_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_image/controls_image_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_image/controls_image_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_web",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-2b5d629af18c389d9405c7c682f1c54e3446ef60/controls_web",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/git/flutter_storeware-4d08f5f129593f0dc1efcfa55d4e9bac181b33ef/controls_web",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
@@ -737,10 +737,10 @@
       "name": "flutter_storeware",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-03-07T10:48:54.335760Z",
+  "generated": "2022-03-07T10:52:31.098259Z",
   "generator": "pub",
   "generatorVersion": "2.16.1"
 }

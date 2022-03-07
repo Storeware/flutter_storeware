@@ -7,6 +7,7 @@ export 'cn_estado_mensagem_model.dart';
 export 'cn_protocolo_model.dart';
 export 'cn_saida_servidor_model.dart';
 export 'cn_saida_titulo_model.dart';
+export 'controller.dart';
 export 'cprnota_model.dart';
 export 'ctgrupo_model.dart';
 export 'ctprodsd_model.dart';

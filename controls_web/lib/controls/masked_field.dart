@@ -889,6 +889,8 @@ class MaskedMoneyFormField extends StatelessWidget {
   final bool? readOnly;
   final Function(double)? onChanged;
   final double? width;
+  final Function(String value)? onFieldSubmitted;
+  final TextInputAction? textInputAction;
   const MaskedMoneyFormField({
     Key? key,
     this.width,
@@ -905,6 +907,8 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.validator,
     this.maxLength,
     this.rightSymbol,
+    this.onFieldSubmitted,
+    this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -950,6 +954,8 @@ class MaskedMoneyFormField extends StatelessWidget {
                         controller: _controller,
                         readOnly: readOnly!,
                         keyboardType: TextInputType.number,
+                        onFieldSubmitted: onFieldSubmitted,
+                        textInputAction: textInputAction,
                         autofocus: true,
                         textAlign: TextAlign.right,
                         decoration: InputDecoration(

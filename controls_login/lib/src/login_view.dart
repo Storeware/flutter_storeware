@@ -470,7 +470,7 @@ class _LoginViewState extends State<LoginPage> {
 
   get pegarConta {
     return widget.pegarConta ||
-        configInstance.resources.contaDemo['conta'] != configInstance.loja;
+        configInstance!.resources.contaDemo['conta'] != configInstance!.loja;
   }
 
   treinar() {

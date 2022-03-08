@@ -1,15 +1,27 @@
 {
-    "[sql]":{
+    "[sql]": {
         "files.encoding": "utf8",
     },
-    "[dart]":{
+    "[dart]": {
         "files.encoding": "utf8",
         "editor.tabSize": 2,
         "editor.insertSpaces": true,
         "editor.detectIndentation": false,
         "editor.suggest.insertMode": "replace"
     },
-
+    "[pascal]": {
+        "files.encoding": "iso88591",
+    },
+    "[py]": {
+        "files.encoding": "iso88591",
+    },
+    "[ts]": {
+        "files.encoding": "utf8",
+        "editor.tabSize": 2,
+        "editor.insertSpaces": true,
+        "editor.detectIndentation": false,
+        "editor.suggest.insertMode": "replace"
+    },
     "MicroPython.executeButton": [
         {
             "text": "▶",

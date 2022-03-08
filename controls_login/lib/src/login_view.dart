@@ -78,26 +78,28 @@ class LoginPage extends StatefulWidget {
   final StrapButtonType strapButtonType;
   final double buttonHeight;
   final bool cadastraConta;
-  LoginPage(
-      {Key? key,
-      this.treinarPosition = LoginPageTreinarPosition.normal,
-      this.logo,
-      this.top,
-      this.left,
-      this.padding,
-      this.curveColor,
-      this.inputBorder,
-      this.backgroundColor,
-      this.spacing = 1,
-      this.filial = false,
-      this.radius = 15,
-      this.buttonHeight = 30,
-      this.strapButtonType = StrapButtonType.primary,
-      this.gapHeight = 1,
-      this.conhecaNossosProdutos = true,
-      this.stackedChildren,
-      this.cadastraConta = true})
-      : super(key: key);
+  final bool pegarConta;
+  LoginPage({
+    Key? key,
+    this.treinarPosition = LoginPageTreinarPosition.normal,
+    this.logo,
+    this.top,
+    this.left,
+    this.padding,
+    this.curveColor,
+    this.inputBorder,
+    this.backgroundColor,
+    this.spacing = 1,
+    this.filial = false,
+    this.radius = 15,
+    this.buttonHeight = 30,
+    this.strapButtonType = StrapButtonType.primary,
+    this.gapHeight = 1,
+    this.conhecaNossosProdutos = true,
+    this.stackedChildren,
+    this.cadastraConta = true,
+    this.pegarConta = true,
+  }) : super(key: key);
 
   @override
   _LoginViewState createState() => _LoginViewState();
@@ -251,38 +253,41 @@ class _LoginViewState extends State<LoginPage> {
                                                 alignment: Alignment.topRight,
                                                 child: treinarWidget(),
                                               ),
-                                            TextFormField(
-                                                enabled: true,
-                                                readOnly: false,
-                                                textInputAction:
-                                                    TextInputAction.next,
-                                                keyboardType: TextInputType
-                                                    .visiblePassword,
-                                                onFieldSubmitted: (x) {
-                                                  focusUsuario.nextFocus();
-                                                },
-                                                focusNode: focusUsuario,
-                                                autofocus: !configInstance!
-                                                    .resources.isMobile,
-                                                controller: _contaController,
-                                                //                        initialValue: contaId,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontStyle:
-                                                        FontStyle.normal),
-                                                decoration: InputDecoration(
-                                                    labelText: 'Conta',
-                                                    border: widget.inputBorder),
-                                                validator: (value) {
-                                                  if (value!.isEmpty) {
-                                                    return 'Falta informar a conta';
-                                                  }
-                                                  return null;
-                                                },
-                                                onSaved: (x) {
-                                                  config.conta = x;
-                                                }),
-                                            SizedBox(height: widget.spacing),
+                                            if (pegarConta) ...[
+                                              TextFormField(
+                                                  enabled: true,
+                                                  readOnly: false,
+                                                  textInputAction:
+                                                      TextInputAction.next,
+                                                  keyboardType: TextInputType
+                                                      .visiblePassword,
+                                                  onFieldSubmitted: (x) {
+                                                    focusUsuario.nextFocus();
+                                                  },
+                                                  focusNode: focusUsuario,
+                                                  autofocus: !configInstance!
+                                                      .resources.isMobile,
+                                                  controller: _contaController,
+                                                  //                        initialValue: contaId,
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontStyle:
+                                                          FontStyle.normal),
+                                                  decoration: InputDecoration(
+                                                      labelText: 'Conta',
+                                                      border:
+                                                          widget.inputBorder),
+                                                  validator: (value) {
+                                                    if (value!.isEmpty) {
+                                                      return 'Falta informar a conta';
+                                                    }
+                                                    return null;
+                                                  },
+                                                  onSaved: (x) {
+                                                    config.conta = x;
+                                                  }),
+                                              SizedBox(height: widget.spacing),
+                                            ],
                                             TextFormField(
                                                 //initialValue: config.usuario,
                                                 keyboardType: TextInputType
@@ -404,7 +409,7 @@ class _LoginViewState extends State<LoginPage> {
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            if (isFirebase)
+                                            if (isFirebase && pegarConta)
                                               StrapButton(
 //                                                type: StrapButtonType.secondary,
                                                   text: 'Entrar com Google',
@@ -463,6 +468,11 @@ class _LoginViewState extends State<LoginPage> {
     );
   }
 
+  get pegarConta {
+    return widget.pegarConta ||
+        configInstance.resources.contaDemo['conta'] != configInstance.loja;
+  }
+
   treinar() {
     var r = configInstance!.resources;
     _contaController.text = r.contaDemo['conta']!;
@@ -472,19 +482,21 @@ class _LoginViewState extends State<LoginPage> {
     // _treinarState.value = StrapButtonState.processing;
   }
 
-  treinarWidget() => StrapButton(
-      radius: widget.radius,
-      type: StrapButtonType.none,
-      stateNotifier: _treinarState,
-      text: 'treinar',
-      //style: TextStyle(
-      //    color: Colors.blue)),
-      onPressed: () {
-        treinar();
-        Timer.run(() {
-          _save(carregando);
-        });
-      });
+  treinarWidget() => (pegarConta)
+      ? StrapButton(
+          radius: widget.radius,
+          type: StrapButtonType.none,
+          stateNotifier: _treinarState,
+          text: 'treinar',
+          //style: TextStyle(
+          //    color: Colors.blue)),
+          onPressed: () {
+            treinar();
+            Timer.run(() {
+              _save(carregando);
+            });
+          })
+      : Container();
 
   _loginGoogle() {
     var config = configInstance;

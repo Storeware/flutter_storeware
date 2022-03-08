@@ -79,6 +79,7 @@ class LoginPage extends StatefulWidget {
   final double buttonHeight;
   final bool cadastraConta;
   final bool pegarConta;
+  final List<Widget>? children;
   LoginPage({
     Key? key,
     this.treinarPosition = LoginPageTreinarPosition.normal,
@@ -99,6 +100,7 @@ class LoginPage extends StatefulWidget {
     this.stackedChildren,
     this.cadastraConta = true,
     this.pegarConta = true,
+    this.children,
   }) : super(key: key);
 
   @override
@@ -354,6 +356,7 @@ class _LoginViewState extends State<LoginPage> {
                                                 onSaved: (x) {
                                                   config.password = x;
                                                 })),
+                                            ...?widget.children,
                                             Padding(
                                                 padding: EdgeInsets.symmetric(
                                                     horizontal: 15),

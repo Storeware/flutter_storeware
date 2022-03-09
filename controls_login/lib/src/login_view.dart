@@ -80,6 +80,8 @@ class LoginPage extends StatefulWidget {
   final bool cadastraConta;
   final bool pegarConta;
   final List<Widget>? children;
+  final String? Function(String conta, String usuario, String password)?
+      validate;
   LoginPage({
     Key? key,
     this.treinarPosition = LoginPageTreinarPosition.normal,
@@ -101,6 +103,7 @@ class LoginPage extends StatefulWidget {
     this.cadastraConta = true,
     this.pegarConta = true,
     this.children,
+    this.validate,
   }) : super(key: key);
 
   @override
@@ -113,6 +116,8 @@ class _LoginViewState extends State<LoginPage> {
   final TextEditingController _contaController = TextEditingController();
   final TextEditingController _usuarioController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+
+  late ValueNotifier<String?> _errorNotifier = ValueNotifier<String?>(null);
 
   late StreamSubscription _loginSubscription;
   @override
@@ -362,6 +367,18 @@ class _LoginViewState extends State<LoginPage> {
                                                     horizontal: 15),
                                                 child:
                                                     LinearDataProgressIndicator()),
+                                            ValueListenableBuilder<String?>(
+                                              valueListenable: _errorNotifier,
+                                              builder: (BuildContext context,
+                                                  String? value,
+                                                  Widget? child) {
+                                                return (value == null)
+                                                    ? Container()
+                                                    : Text(value,
+                                                        style: TextStyle(
+                                                            color: Colors.red));
+                                              },
+                                            ),
                                             SizedBox(
                                               height: 10,
                                             ),
@@ -517,6 +534,13 @@ class _LoginViewState extends State<LoginPage> {
       _formKey.currentState!.save();
       var config = configInstance!;
       carregando.value = true;
+      if (widget.validate != null) {
+        var valid = widget.validate!(conta, usuario, senha);
+        if (valid != null) {
+          _errorNotifier.value = valid;
+          return;
+        }
+      }
       return config
           .firebaseLogin(config.conta, config.usuario, config.password)
           .then((x) {
@@ -529,4 +553,8 @@ class _LoginViewState extends State<LoginPage> {
     } else
       _saveState.value = StrapButtonState.none;
   }
+
+  get senha => _senhaController.text;
+  get usuario => _usuarioController.text;
+  get conta => _contaController.text;
 }

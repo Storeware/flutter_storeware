@@ -123,7 +123,7 @@ class _LoginViewState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    messenger.stream.listen((erro) {
+    _loginSubscription = messenger.stream.listen((erro) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(erro),

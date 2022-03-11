@@ -9,6 +9,7 @@ class TabButton extends StatelessWidget {
   final Widget? footer;
   final double? width;
   final Function()? onPressed;
+  final MainAxisAlignment mainAxisAlignment;
   const TabButton(
       {Key? key,
       this.icon,
@@ -16,6 +17,7 @@ class TabButton extends StatelessWidget {
       this.onPressed,
       this.footer,
       this.child,
+      this.mainAxisAlignment = MainAxisAlignment.center,
       this.width})
       : super(key: key);
 
@@ -33,7 +35,7 @@ class TabButton extends StatelessWidget {
     return Container(
       width: width,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: mainAxisAlignment,
         children: [
           if (icon != null) icon!,
           if (label != null) Text(label ?? ''),
@@ -511,6 +513,7 @@ class ActionText extends StatelessWidget {
   final double? height, width;
   final Widget? child;
   final double? borderWidth;
+  final MainAxisAlignment mainAxisAlignment;
   const ActionText(
       {Key? key,
       this.label,
@@ -522,6 +525,7 @@ class ActionText extends StatelessWidget {
       this.child,
       this.borderWidth = 1,
       this.onPressed,
+      this.mainAxisAlignment = MainAxisAlignment.start,
       this.radius = 5})
       : super(key: key);
 
@@ -547,6 +551,7 @@ class ActionText extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: mainAxisAlignment,
             children: [
               if (child != null) child!,
               if (label != null)

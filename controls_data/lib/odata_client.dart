@@ -378,11 +378,11 @@ class ODataClient extends ODataClientInterface {
   }
 
   /// [clone] cria uma nova instancia do cliente com os mesmos parametros.
-  ODataClient clone() {
+  ODataClient clone({String? baseUrl, String? prefix}) {
     var o = ODataClient();
     o.client.inDebug = client.inDebug;
-    o.baseUrl = client.baseUrl;
-    o.prefix = client.prefix;
+    o.baseUrl = baseUrl ?? client.baseUrl;
+    o.prefix = prefix ?? client.prefix;
     client.headers.forEach((k, v) {
       o.client.addHeader(k, v);
     });
@@ -553,6 +553,17 @@ class ODataClient extends ODataClientInterface {
     try {
       var url = client.formatUrl(path: service);
       return client.rawData(url, method: 'POST', body: body ?? {});
+    } catch (e) {
+      ErrorNotify.send('$e');
+      rethrow;
+    }
+  }
+
+  /// [postRaw] envia uma requisição primaria para o servidor
+  Future<dynamic> putRaw(String service, {Map<String, dynamic>? body}) async {
+    try {
+      var url = client.formatUrl(path: service);
+      return client.rawData(url, method: 'PUT', body: body ?? {});
     } catch (e) {
       ErrorNotify.send('$e');
       rethrow;

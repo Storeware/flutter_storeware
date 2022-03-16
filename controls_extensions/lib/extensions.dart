@@ -7,6 +7,8 @@ export 'src/object_extensions.dart';
 export 'src/color_extensions.dart';
 export 'src/dynamic_extensions.dart';
 export 'src/integer_extensions.dart';
+export 'src/time_ago.dart';
+
 
 // TODO: passar para um unidade de constantes;
 const moneySymbol = 'R\$  ';

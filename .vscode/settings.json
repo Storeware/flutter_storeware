@@ -40,5 +40,6 @@
             "priority": 4
         }
     ],
-    "svn.ignoreMissingSvnWarning": true
+    "svn.ignoreMissingSvnWarning": true,
+    "cmake.configureOnOpen": false
 }

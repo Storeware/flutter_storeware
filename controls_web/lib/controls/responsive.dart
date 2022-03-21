@@ -13,6 +13,9 @@ extension BuildContextExtension on BuildContext {
 
   double get pixelsPerInch =>
       UniversalPlatform.isAndroid || UniversalPlatform.isIOS ? 150 : 96;
+  ThemeData get theme => Theme.of(this);
+  double get pageWidth => size.width;
+  double get pageHeight => size.height;
 }
 
 class ResponsiveInfo {

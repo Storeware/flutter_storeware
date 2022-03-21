@@ -30,6 +30,8 @@ extension DoubleExtension on double {
     return this.compareTo(0.0) < 0;
   }
 
+  bool isEqual(double value) => this.compareTo(value) == 0;
+
   bool get isPositive {
     //final r = this;
     return this.compareTo(0.0) >= 0;
@@ -58,11 +60,11 @@ extension DoubleExtension on double {
     return toDouble(value);
   }
 
-  num min(num value) {
+  double min(double value) {
     return (this > value) ? value : this;
   }
 
-  num max(num value) {
+  double max(double value) {
     return (this < value) ? value : this;
   }
 
@@ -70,9 +72,14 @@ extension DoubleExtension on double {
     return utils.roundABNT(this, decs);
   }
 
-  num roundTo(int decs) {
+  double get p20 => this * .20;
+  double get p40 => this * .40;
+  double get p60 => this * .60;
+  double get p80 => this * .80;
+
+  double roundTo(int decs) {
     if (decs < 0) decs = -decs;
-    num fac = math.pow(10, decs);
+    double fac = math.pow(10, decs);
     return (this * fac).round() / fac;
   }
 

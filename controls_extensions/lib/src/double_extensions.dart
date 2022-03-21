@@ -79,7 +79,7 @@ extension DoubleExtension on double {
 
   double roundTo(int decs) {
     if (decs < 0) decs = -decs;
-    double fac = math.pow(10, decs);
+    num fac = math.pow(10, decs);
     return (this * fac).round() / fac;
   }
 

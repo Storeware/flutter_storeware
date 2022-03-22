@@ -351,10 +351,13 @@ class Dialogs {
                   print(b.connectionState);
                   if (b.connectionState == ConnectionState.waiting)
                     return Align(child: CircularProgressIndicator());
-                  if (onDone != null) onDone(b.data!);
-                  Timer.run(() {
-                    Navigator.pop(context, b.data);
-                  });
+                  if (onDone != null && b.hasData) onDone(b.data!);
+
+                  if (b.hasData) {
+                    Timer.run(() {
+                      Navigator.pop(context, b.data);
+                    });
+                  }
                   return Container();
                 })
           ]);

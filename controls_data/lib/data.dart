@@ -6,3 +6,5 @@ export 'rest_client.dart';
 export 'odata_client.dart';
 export 'cloud_class.dart';
 export 'odata_future.dart';
+export 'cached.dart';
+export 'local_storage.dart';

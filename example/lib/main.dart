@@ -1,11 +1,17 @@
+import 'package:exemple/controls_activities_view.dart';
+import 'package:exemple/controls_clean_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 
+import 'controls_view.dart';
+
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -71,6 +77,7 @@ class HomeView extends StatelessWidget {
                 MenuChoice(
                   title: 'Opção $i',
                   onPressed: (x) {
+                    // ignore: avoid_print
                     print('Opção $i');
                   },
                 ),
@@ -86,30 +93,28 @@ class HomeView extends StatelessWidget {
         TabChoice(
             title: const Text('Dialogs.info'),
             image: const Icon(Icons.ac_unit_outlined),
-            child: Container(
-                child: StrapButton(
-                    text: 'Button Info',
-                    type: StrapButtonType.warning,
-                    onPressed: () {
-                      Dialogs.info(context,
-                          text: 'Titulo', content: const Text('Mensagem'));
-                    }))),
+            child: StrapButton(
+                text: 'Button Info',
+                type: StrapButtonType.warning,
+                onPressed: () {
+                  Dialogs.info(context,
+                      text: 'Titulo', content: const Text('Mensagem'));
+                })),
         TabChoice(
-          title: const Text('Opções3'),
-//          child: Container(),
+          title: const Text('SubMenus'),
           items: [TabChoice(label: 'Sub1'), TabChoice(label: 'Sub2')],
         ),
         TabChoice(
-          title: const Text('Opções4'),
-          child: Container(),
+          title: const Text('Controls-Web'),
+          child: const ControlsView(),
         ),
         TabChoice(
-          title: const Text('Opções5'),
-          child: Container(),
+          title: const Text('Clean'),
+          child: const ControlsCleanView(),
         ),
         TabChoice(
-          title: const Text('Opções6'),
-          child: Container(),
+          title: const Text('Activities'),
+          child: const ControlsActivitiesView(),
         ),
       ],
     );

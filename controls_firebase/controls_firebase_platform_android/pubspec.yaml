@@ -3,8 +3,14 @@ description: Firebase interface WEB, ANDROID e WINDOWS
 version: 2022.01.20
 publish_to: none
 
+platform:
+  android:
+  web:
+  windows:
+  linux:
+
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.16.0 <3.0.0"
 
 dependencies:
   flutter:

@@ -14,13 +14,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -32,21 +32,19 @@ class _MyHomePageState extends State<MyHomePage> {
     return VerticalTabView(choices: [
       TabChoice(
           label: 'Home',
-          child: HomeView(
+          child: const HomeView(
               //child: Text('xxxxx'),
               )),
       TabChoice(
         label: 'Opções',
-        child: Container(
-          child: TabViewBottom(choices: [
-            TabChoice(
-              label: 'Op1',
-            ),
-            TabChoice(
-              label: 'Op2',
-            ),
-          ]),
-        ),
+        child: TabViewBottom(choices: [
+          TabChoice(
+            label: 'Op1',
+          ),
+          TabChoice(
+            label: 'Op2',
+          ),
+        ]),
       ),
     ]);
   }
@@ -66,7 +64,7 @@ class HomeView extends StatelessWidget {
       tagColor: Colors.amber,
       topBar: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
         InkButton(
-          child: Icon(Icons.menu),
+          child: const Icon(Icons.menu),
           onTap: () {
             MenuDialog.show(context, choices: [
               for (var i = 0; i < 10; i++)
@@ -82,35 +80,35 @@ class HomeView extends StatelessWidget {
       ]),
       choices: [
         TabChoice(
-          title: Text('StrapButton'),
+          title: const Text('StrapButton'),
           child: pagina1Builder(notifier, context),
         ),
         TabChoice(
-            title: Text('Dialogs.info'),
-            image: Icon(Icons.ac_unit_outlined),
+            title: const Text('Dialogs.info'),
+            image: const Icon(Icons.ac_unit_outlined),
             child: Container(
                 child: StrapButton(
                     text: 'Button Info',
                     type: StrapButtonType.warning,
                     onPressed: () {
                       Dialogs.info(context,
-                          text: 'Titulo', content: Text('Mensagem'));
+                          text: 'Titulo', content: const Text('Mensagem'));
                     }))),
         TabChoice(
-          title: Text('Opções3'),
+          title: const Text('Opções3'),
 //          child: Container(),
           items: [TabChoice(label: 'Sub1'), TabChoice(label: 'Sub2')],
         ),
         TabChoice(
-          title: Text('Opções4'),
+          title: const Text('Opções4'),
           child: Container(),
         ),
         TabChoice(
-          title: Text('Opções5'),
+          title: const Text('Opções5'),
           child: Container(),
         ),
         TabChoice(
-          title: Text('Opções6'),
+          title: const Text('Opções6'),
           child: Container(),
         ),
       ],
@@ -125,8 +123,8 @@ class HomeView extends StatelessWidget {
             valueListenable: notifier,
             builder: (z, b, d) => Column(
               children: [
-                Spacer(),
-                Text('Radius'),
+                const Spacer(),
+                const Text('Radius'),
                 Container(
                   alignment: Alignment.center,
                   child: GroupButtons(
@@ -157,8 +155,8 @@ class HomeView extends StatelessWidget {
                       },
                     ),
                   ),
-                SizedBox(height: 5),
-                Spacer(),
+                const SizedBox(height: 5),
+                const Spacer(),
               ],
             ),
           ),

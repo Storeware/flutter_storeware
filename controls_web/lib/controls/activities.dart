@@ -222,9 +222,9 @@ class ActivityTextTitle extends StatelessWidget {
 class ActivityAvatar extends StatelessWidget {
   const ActivityAvatar({
     Key? key,
-    @required this.avatarBackgroudColor,
-    @required this.iconColor,
-    @required this.icon,
+    this.avatarBackgroudColor,
+    this.iconColor,
+    this.icon,
   }) : super(key: key);
 
   final Color? avatarBackgroudColor;
@@ -278,9 +278,17 @@ class ActivityButton extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          RoundedButton(
-            buttonName: title,
-            onTap: () => onPressed!(),
+          ElevatedButton(
+            child: Text(title ?? ''),
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  //side: BorderSide(color: Colors.red),
+                ),
+              ),
+            ),
+            onPressed: () => onPressed!(),
           )
         ],
       ),

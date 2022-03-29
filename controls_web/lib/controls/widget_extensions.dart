@@ -86,6 +86,8 @@ extension WidgetMorphism on Widget {
     );
   }
 
+  Widget center() => Center(child: this);
+
   Widget box(
       {Color? color,
       double borderWidth = 1.0,

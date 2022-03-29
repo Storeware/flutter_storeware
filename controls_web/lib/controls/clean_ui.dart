@@ -9,7 +9,6 @@ class TabButton extends StatelessWidget {
   final Widget? footer;
   final double? width;
   final Function()? onPressed;
-  final MainAxisAlignment mainAxisAlignment;
   const TabButton(
       {Key? key,
       this.icon,
@@ -17,7 +16,6 @@ class TabButton extends StatelessWidget {
       this.onPressed,
       this.footer,
       this.child,
-      this.mainAxisAlignment = MainAxisAlignment.center,
       this.width})
       : super(key: key);
 
@@ -35,7 +33,7 @@ class TabButton extends StatelessWidget {
     return Container(
       width: width,
       child: Column(
-        mainAxisAlignment: mainAxisAlignment,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (icon != null) icon!,
           if (label != null) Text(label ?? ''),
@@ -60,14 +58,14 @@ class CleanButton extends StatelessWidget {
   const CleanButton(
       {Key? key,
       this.icon,
-      this.label,
-      this.width,
+      required this.label,
+      this.width = 180.0,
       this.elevation = 1,
-      this.onPressed,
+      required this.onPressed,
       this.subLabel,
       this.color,
       this.labelColor,
-      this.radius})
+      this.radius = 5.0})
       : super(key: key);
 
   @override
@@ -77,7 +75,7 @@ class CleanButton extends StatelessWidget {
       radius: radius!,
       elevation: elevation!,
       width: width!,
-      color: color!, //?? theme.cardColor,
+      color: color ?? Theme.of(context).primaryColor, //?? theme.cardColor,
       child: (onPressed == null)
           ? buildContainer(context)
           : MaterialButton(
@@ -319,7 +317,7 @@ class LabeledColumn extends StatelessWidget {
       this.elevation = 0,
       this.backgroundColor,
       this.label,
-      this.children,
+      required this.children,
       this.title,
       this.spacing = 1})
       : super(key: key);
@@ -380,7 +378,7 @@ class Labeled extends StatelessWidget {
       this.spacing = 1,
       this.alignment = WrapAlignment.start,
       this.crossAxisAlignment = WrapCrossAlignment.start,
-      this.children,
+      required this.children,
       this.direction = Axis.horizontal,
       this.top = 8,
       this.runSpacing = 1,
@@ -513,7 +511,6 @@ class ActionText extends StatelessWidget {
   final double? height, width;
   final Widget? child;
   final double? borderWidth;
-  final MainAxisAlignment mainAxisAlignment;
   const ActionText(
       {Key? key,
       this.label,
@@ -525,7 +522,6 @@ class ActionText extends StatelessWidget {
       this.child,
       this.borderWidth = 1,
       this.onPressed,
-      this.mainAxisAlignment = MainAxisAlignment.start,
       this.radius = 5})
       : super(key: key);
 
@@ -551,7 +547,6 @@ class ActionText extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            mainAxisAlignment: mainAxisAlignment,
             children: [
               if (child != null) child!,
               if (label != null)

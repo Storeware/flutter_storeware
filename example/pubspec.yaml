@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 20212.02.06
+version: 12.03.04
 
 environment:
   sdk: ">=2.16.0 <3.0.0"
@@ -27,9 +27,16 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
+  localization:
+  intl:
   flutter_storeware:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
+  
+  controls_dash:
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
+      path: controls_dash
 
   pdf: ^3.7.1
   printing: ^5.7.2

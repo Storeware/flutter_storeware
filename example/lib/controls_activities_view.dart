@@ -40,7 +40,15 @@ class ControlsActivitiesView extends StatelessWidget {
             height: 60,
             color: Colors.blue,
             child: const Text('ActivityPanel').center(),
-          )
+          ),
+          const ac.ActivityTile(
+            avatarBackgroudColor: Colors.blue,
+            //iconColor: Colors.amber,
+            icon: Icons.access_alarm,
+            title: 'ActivityTile',
+            //subtitle: 'subtitle',
+            //radius: 10,
+          ),
         ],
       ),
     ));

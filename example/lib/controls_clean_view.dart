@@ -14,6 +14,15 @@ class _ControlsCleanViewState extends State<ControlsCleanView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('UI - Clean'),
+        actions: const [
+          TitleSearchField(
+            label: 'TitleSearchField',
+            compactWidth: 180,
+            expanded: false,
+            fillColor: Colors.white,
+            title: Text('procurar'),
+          )
+        ],
       ),
       body: Wrap(runSpacing: 10, spacing: 10, children: [
         TabButton(

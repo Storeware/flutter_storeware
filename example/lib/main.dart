@@ -3,6 +3,7 @@ import 'package:exemple/controls_clean_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 
+import 'charts_view.dart';
 import 'controls_view.dart';
 
 void main() {
@@ -64,6 +65,7 @@ class HomeView extends StatelessWidget {
     ValueNotifier<double> notifier = ValueNotifier(5);
     return HorizontalTabView(
       //minWidth: 180,
+      activeIndex: 4,
       color: Colors.blue[100],
       indicatorColor: Colors.blue[200],
       tabColor: Colors.blue[100],
@@ -115,6 +117,10 @@ class HomeView extends StatelessWidget {
         TabChoice(
           title: const Text('Activities'),
           child: const ControlsActivitiesView(),
+        ),
+        TabChoice(
+          label: 'charts',
+          child: const ChartsView(),
         ),
       ],
     );

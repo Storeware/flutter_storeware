@@ -19,8 +19,9 @@ class _ControlsCleanViewState extends State<ControlsCleanView> {
             label: 'TitleSearchField',
             compactWidth: 180,
             expanded: false,
+
             fillColor: Colors.white,
-            title: Text('procurar'),
+            // title: Text('procurar'),
           )
         ],
       ),

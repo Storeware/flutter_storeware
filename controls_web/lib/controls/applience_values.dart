@@ -102,8 +102,10 @@ class _ApplienceContainerState extends State<ApplienceContainer> {
               ),
             ],
             color: widget.color ?? theme!.dividerColor,
-            borderRadius:
-                BorderRadius.vertical(top: Radius.circular(widget.radius!))),
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(widget.radius!),
+              bottom: Radius.circular(widget.radius!),
+            )),
         child: widget.child);
   }
 }

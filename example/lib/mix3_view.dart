@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 
-import '../../controls_web/lib/controls/list_box.dart';
-
 class Mix3View extends StatelessWidget {
   const Mix3View({Key? key}) : super(key: key);
 
@@ -41,14 +39,14 @@ class Mix3View extends StatelessWidget {
             title: Text('CardPanel.title'),
             bottom: Text('bottom'),
           ),
-          ListBox(
+          /*  ListBox(
               title: const Text('ListBox'),
               children: const ['amarelo', 'verde', 'azul'],
               values: const [true, false, false],
               onChanged: (
                 index,
                 value,
-              ) {})
+              ) {}),*/
         ],
       ).singleChildScrollView(),
     );

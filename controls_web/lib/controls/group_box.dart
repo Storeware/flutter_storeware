@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class GroupBox extends StatelessWidget {
   final Widget? title;
-  final List<Widget>? children;
+  final List<Widget> children;
   final double? height, width;
   final Color? color;
   final Color? titleColor;
@@ -11,7 +11,7 @@ class GroupBox extends StatelessWidget {
   const GroupBox(
       {Key? key,
       this.title,
-      this.children,
+      required this.children,
       this.height = 180,
       this.width = 300,
       this.color,
@@ -43,7 +43,7 @@ class GroupBox extends StatelessWidget {
                 width: double.maxFinite,
               ),
             Expanded(
-              child: Wrap(direction: Axis.vertical, children: children!),
+              child: Wrap(direction: Axis.vertical, children: children),
             ),
           ],
         ),

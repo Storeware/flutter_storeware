@@ -19,7 +19,7 @@ class LightButton extends StatelessWidget {
     this.label,
     this.image,
     this.title,
-    this.onPressed,
+    required this.onPressed,
     this.sublabel,
     this.value,
     this.backgroundColor,

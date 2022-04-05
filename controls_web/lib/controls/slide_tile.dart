@@ -14,19 +14,21 @@ class SlideTile extends StatefulWidget {
   final Color? color;
   final Color? textColor;
   final Widget? trailing;
+  final Widget? child;
   SlideTile(
       {Key? key,
+      this.child,
       this.button,
-      this.color,
+      this.color = Colors.white,
       this.onTap,
       this.onPressed,
       this.textColor = Colors.black,
       this.onRatingPressed,
       this.trailing,
-      @required this.img,
-      @required this.title,
-      @required this.subTitle,
-      @required this.rating,
+      this.img,
+      required this.title,
+      required this.subTitle,
+      required this.rating,
       this.elevation = 3.0,
       this.ratingBG = Colors.blue})
       : super(key: key);
@@ -62,11 +64,13 @@ class _SlideTileState extends State<SlideTile> {
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10),
                         ),
-                        child: Image.asset(
-                          "${widget.img}",
-                          fit: BoxFit.fitHeight,
-                          //height: imgHeigth,
-                        ),
+                        child: (widget.img == null)
+                            ? widget.child ?? Container()
+                            : Image.asset(
+                                "${widget.img}",
+                                fit: BoxFit.fitHeight,
+                                //height: imgHeigth,
+                              ),
                       ),
                     ),
                   ),

@@ -23,7 +23,7 @@ class GradientBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return gradiente(
       height: height!,
-      children: children!,
+      children: children,
     );
   }
 
@@ -48,7 +48,7 @@ class GradientBox extends StatelessWidget {
             ((children == null)
                 ? null
                 : Stack(children: [
-                    ...children,
+                    if (children != null) ...children,
                   ])));
   }
 }

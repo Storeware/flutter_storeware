@@ -8,6 +8,7 @@ import 'controls_view.dart';
 import 'mix2_view.dart';
 import 'mix1_view.dart';
 import 'mix3_view.dart';
+import 'mix4_view.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -85,6 +86,10 @@ class HomeView extends StatelessWidget {
         TabChoice(
           label: 'Mix3',
           child: const Mix3View(),
+        ),
+        TabChoice(
+          label: 'Mix4',
+          child: const Mix4View(),
         ),
       ],
     );

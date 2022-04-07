@@ -605,10 +605,14 @@ class MaskedCheckbox extends StatefulWidget {
   final Color? hoverColor;
   final Color? focusColor;
   final TextStyle? style;
+  final double? height;
+  final WrapCrossAlignment crossAxisAlignment;
   MaskedCheckbox({
     Key? key,
     this.label,
     this.style,
+    this.crossAxisAlignment = WrapCrossAlignment.center,
+    this.height = 32,
     this.value = true,
     this.activeColor,
     this.checkColor,
@@ -634,37 +638,40 @@ class _MaskedCheckboxState extends State<MaskedCheckbox> {
   Widget build(BuildContext context) {
     bool? value = widget.value ?? false;
     ThemeData theme = Theme.of(context);
-    return Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
-        direction: Axis.horizontal,
-        children: [
-          if (widget.leading != null) widget.leading!,
-          StatefulBuilder(builder: (context, _setState) {
-            return SizedBox(
-              height: 24.0,
-              width: 24.0,
-              child: Checkbox(
-                activeColor: widget.activeColor,
-                checkColor: widget.checkColor,
-                hoverColor: widget.hoverColor,
-                focusColor: widget.focusColor,
-                tristate: widget.tristate!,
-                value: (widget.tristate ?? false) ? value : value ?? false,
-                onChanged: (x) {
-                  if (widget.onChanged != null) widget.onChanged!(x!);
-                  if (mounted)
-                    _setState(() {
-                      value = x;
-                    });
-                },
-              ),
-            );
-          }),
-          if (widget.label != null)
-            Text(widget.label!,
-                style: widget.style ?? theme.inputDecorationTheme.hintStyle),
-          if (widget.trailing != null) widget.trailing!
-        ]);
+    return SizedBox(
+        height: widget.height,
+        child: Wrap(
+            crossAxisAlignment: widget.crossAxisAlignment,
+            direction: Axis.horizontal,
+            children: [
+              if (widget.leading != null) widget.leading!,
+              StatefulBuilder(builder: (context, _setState) {
+                return SizedBox(
+                  height: 24,
+                  width: 24.0,
+                  child: Checkbox(
+                    activeColor: widget.activeColor,
+                    checkColor: widget.checkColor,
+                    hoverColor: widget.hoverColor,
+                    focusColor: widget.focusColor,
+                    tristate: widget.tristate!,
+                    value: (widget.tristate ?? false) ? value : value ?? false,
+                    onChanged: (x) {
+                      if (widget.onChanged != null) widget.onChanged!(x!);
+                      if (mounted)
+                        _setState(() {
+                          value = x;
+                        });
+                    },
+                  ),
+                );
+              }),
+              if (widget.label != null)
+                Text(widget.label!,
+                    style:
+                        widget.style ?? theme.inputDecorationTheme.hintStyle),
+              if (widget.trailing != null) widget.trailing!
+            ]));
   }
 }
 
@@ -889,8 +896,6 @@ class MaskedMoneyFormField extends StatelessWidget {
   final bool? readOnly;
   final Function(double)? onChanged;
   final double? width;
-  final Function(String value)? onFieldSubmitted;
-  final TextInputAction? textInputAction;
   const MaskedMoneyFormField({
     Key? key,
     this.width,
@@ -907,8 +912,6 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.validator,
     this.maxLength,
     this.rightSymbol,
-    this.onFieldSubmitted,
-    this.textInputAction,
   }) : super(key: key);
 
   @override
@@ -954,8 +957,6 @@ class MaskedMoneyFormField extends StatelessWidget {
                         controller: _controller,
                         readOnly: readOnly!,
                         keyboardType: TextInputType.number,
-                        onFieldSubmitted: onFieldSubmitted,
-                        textInputAction: textInputAction,
                         autofocus: true,
                         textAlign: TextAlign.right,
                         decoration: InputDecoration(

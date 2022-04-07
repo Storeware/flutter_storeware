@@ -75,6 +75,9 @@ class _ListBoxState extends State<ListBox> {
                   onTap: () {
                     setState(() {
                       values[item] = !_getValue(item);
+                      if (widget.onChanged != null) {
+                        widget.onChanged!(widget.children.indexOf(item), item);
+                      }
                     });
                   },
                   child: Container(

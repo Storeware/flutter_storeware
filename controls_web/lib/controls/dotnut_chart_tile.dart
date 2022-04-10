@@ -13,6 +13,8 @@ class DotnutChartTile extends StatefulWidget {
     this.icon,
     this.color,
     this.onPressed,
+    this.child,
+    this.chart,
   }) : super(key: key);
   final double? height;
   final double? width;
@@ -24,6 +26,8 @@ class DotnutChartTile extends StatefulWidget {
   final IconData? icon;
   final Color? color;
   final Function()? onPressed;
+  final Widget? child;
+  final Widget? chart;
   @override
   _DotnutChartTileState createState() => _DotnutChartTileState();
 }
@@ -69,6 +73,7 @@ class _DotnutChartTileState extends State<DotnutChartTile> {
                         fontSize: 16,
                       ),
                       child: widget.title!),
+                if (widget.child != null) widget.child!,
                 const SizedBox(
                   height: 5,
                 ),
@@ -92,7 +97,9 @@ class _DotnutChartTileState extends State<DotnutChartTile> {
             ),
           )),
           widget.percent == null
-              ? Container()
+              ? widget.chart == null
+                  ? Container()
+                  : widget.chart!
               : SizedBox(
                   height: widget.height! * 0.8,
                   width: widget.height! * 0.8,

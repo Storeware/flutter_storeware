@@ -20,7 +20,13 @@ class Mix4View extends StatelessWidget {
               Dialogs.info(context, text: 'DotnutChartTile.onPressed');
             },
           ),
-          const DotnutChartTile()
+          const DotnutChartTile(
+            percent: 24,
+            title: Text('Faturamento'),
+            value: '\$ 1.002.000',
+            icon: Icons.air_sharp,
+            subtitle: Text('agosto/2021'),
+          )
         ],
       ).singleChildScrollView(),
     );

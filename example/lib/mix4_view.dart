@@ -82,6 +82,13 @@ class Mix4View extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 18,
                     )),
+                topBar: AppBar(
+                    elevation: 0,
+                    toolbarHeight: 15,
+                    title: const Text('DashboardScore.topBar',
+                        style: TextStyle(
+                          fontSize: 12,
+                        ))),
                 child: const Text('Revendas',
                     style: TextStyle(
                       fontSize: 11,

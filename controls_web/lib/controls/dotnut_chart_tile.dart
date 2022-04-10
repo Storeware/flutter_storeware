@@ -15,7 +15,9 @@ class DotnutChartTile extends StatefulWidget {
     this.onPressed,
     this.child,
     this.chart,
+    this.elevation = 10,
   }) : super(key: key);
+  final double? elevation;
   final double? height;
   final double? width;
   final String? value;
@@ -46,6 +48,7 @@ class _DotnutChartTileState extends State<DotnutChartTile> {
 
   Card _builder(ThemeData theme) {
     return Card(
+      elevation: widget.elevation,
       color: widget.color,
       child: SizedBox(
         height: widget.height,

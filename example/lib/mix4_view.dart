@@ -21,11 +21,18 @@ class Mix4View extends StatelessWidget {
             },
           ),
           const DotnutChartTile(
-            percent: 24,
+            //percent: 24,
+            chart: Text('OK    '),
             title: Text('Faturamento'),
             value: '\$ 1.002.000',
             icon: Icons.air_sharp,
             subtitle: Text('agosto/2021'),
+          ),
+          const DotnutChartTile(
+            percent: 52,
+            subtitle: Text('OK    '),
+            title: Text('Faturamento'),
+            value: '10203.2',
           )
         ],
       ).singleChildScrollView(),

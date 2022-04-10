@@ -91,6 +91,28 @@ class Mix4View extends StatelessWidget {
                 },
               )
             ],
+          ),
+          DashboardScore(
+            position: TagPosition.top,
+            color: Colors.amber[50],
+            //icon: const Icon(Icons.table_chart, color: Colors.red),
+            score: '\$ 12',
+            width: 180,
+            tagColor: Colors.blue,
+            title: const Text(
+              'Shows',
+            ),
+            trailing: Column(
+              children: const [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(Icons.assured_workload),
+                ),
+              ],
+            ),
+            onPressed: () {
+              Dialogs.info(context, text: 'DashboardScore.onPressed');
+            },
           )
         ],
       ).singleChildScrollView(),

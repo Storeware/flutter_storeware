@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum TagPosition { left, top, bottom, right }
+enum TagPosition { none, left, top, bottom, right }
 
 class DashboardScore extends StatefulWidget {
   const DashboardScore(

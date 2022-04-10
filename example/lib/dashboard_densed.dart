@@ -13,9 +13,10 @@ class DashboardDensedTile extends StatefulWidget {
   final Widget? child;
   final Widget? title;
   final Widget? subtitle;
-  final String? value;
-  final String? percent;
+  final Widget? value;
+  final Widget? percent;
   final Widget? icon;
+  final Function()? onPressed;
 
   const DashboardDensedTile(
       {Key? key,
@@ -25,6 +26,7 @@ class DashboardDensedTile extends StatefulWidget {
       this.color,
       this.title,
       this.value,
+      this.onPressed,
       this.subtitle,
       this.percent,
       this.child,
@@ -39,6 +41,15 @@ class _DashboardDensedTileState extends State<DashboardDensedTile> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    return (widget.onPressed == null)
+        ? _builder(theme)
+        : InkWell(
+            onTap: widget.onPressed,
+            child: _builder(theme),
+          );
+  }
+
+  Card _builder(ThemeData theme) {
     return Card(
       elevation: widget.elevation,
       color: widget.color,
@@ -81,15 +92,15 @@ class _DashboardDensedTileState extends State<DashboardDensedTile> {
                       style: theme.textTheme.bodyText1!.copyWith(
                         color: theme.colorScheme.onSurface,
                       ),
-                      child: Text(widget.value!),
+                      child: widget.value!,
                     ),
                   const Spacer(),
                   if (widget.percent != null)
                     DefaultTextStyle(
-                      style: theme.textTheme.bodyText1!.copyWith(
-                        color: theme.colorScheme.onSurface,
-                      ),
-                      child: Text(widget.percent!),
+                      style: theme.textTheme.bodyText2!.copyWith(
+                          //color: theme.colorScheme.onSurface,
+                          ),
+                      child: widget.percent!,
                     ),
                 ],
               ),

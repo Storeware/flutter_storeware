@@ -60,21 +60,33 @@ class SalesView extends StatelessWidget {
             elevation: 10,
             title: const Text('BTC'),
             subtitle: const Text('Bitcoin'),
-            value: '\$ 20.788',
-            percent: '+0.25%',
+            value: const Text('\$ 20.788'),
+            percent: const Text('+0.25%',
+                style: TextStyle(
+                  color: Colors.green,
+                )),
             icon: const Icon(Icons.charging_station),
             child: DashLineChart(
               DashLineChart.createSerie(
                 id: 'dashboard',
+                color: Colors.amber,
                 data: [
                   ChartPairDouble(1, 5),
                   ChartPairDouble(2, 15),
                   ChartPairDouble(3, 8),
                   ChartPairDouble(4, 13),
+                  ChartPairDouble(5, 13),
+                  ChartPairDouble(6, 11),
                 ],
               ),
               animate: false,
+              showAxisLine: false,
+              showValues: false,
+              includePoints: false,
             ),
+            onPressed: () {
+              Dialogs.info(context, text: 'DashboardDensedTile.onPressed');
+            },
           ),
         ],
       ).singleChildScrollView(),

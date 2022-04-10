@@ -7,10 +7,15 @@ class DashLineChart extends StatelessWidget {
   final List<charts.Series<dynamic, num>> seriesList;
   final bool? animate;
   final List<charts.SeriesRendererConfig<num>>? customSeriesRenderers;
-
+  final bool showAxisLine;
+  final bool showValues;
+  final bool includePoints;
   DashLineChart(
     this.seriesList, {
     this.animate,
+    this.showAxisLine = true,
+    this.showValues = true,
+    this.includePoints = true,
     this.customSeriesRenderers,
   });
 
@@ -28,8 +33,17 @@ class DashLineChart extends StatelessWidget {
     return new charts.LineChart(
       seriesList,
       animate: animate,
-      defaultRenderer: new charts.LineRendererConfig(includePoints: true),
+      defaultRenderer:
+          new charts.LineRendererConfig(includePoints: includePoints),
       customSeriesRenderers: customSeriesRenderers,
+      primaryMeasureAxis: (showValues)
+          ? null
+          : charts.NumericAxisSpec(renderSpec: charts.NoneRenderSpec()),
+      domainAxis: (showAxisLine)
+          ? null
+          : charts.NumericAxisSpec(
+              showAxisLine: showAxisLine,
+              renderSpec: new charts.NoneRenderSpec()),
     );
   }
 
@@ -58,11 +72,12 @@ class DashLineChart extends StatelessWidget {
   static List<charts.Series<ChartPairDouble, double>> createSerie({
     required String id,
     required List<ChartPairDouble> data,
+    Color? color = Colors.blue,
   }) {
     return [
       new charts.Series<ChartPairDouble, double>(
         id: id,
-        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+        colorFn: (_, __) => charts.ColorUtil.fromDartColor(color!),
         domainFn: (ChartPairDouble sales, idx) => sales.title,
         measureFn: (ChartPairDouble sales, _) => sales.value,
         data: data,

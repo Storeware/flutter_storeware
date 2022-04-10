@@ -1,10 +1,10 @@
-import 'package:exemple/controls_activities_view.dart';
-import 'package:exemple/controls_clean_view.dart';
+//import 'package:exemple/controls_activities_view.dart';
+//import 'package:exemple/controls_clean_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 
-import 'charts_view.dart';
-import 'controls_view.dart';
+//import 'charts_view.dart';
+//import 'controls_view.dart';
 import 'home_view.dart';
 
 void main() {

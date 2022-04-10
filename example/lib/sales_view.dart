@@ -56,7 +56,26 @@ class SalesView extends StatelessWidget {
               title: const Text('DashboardFilter Overview'),
               filter: const ['seg', 'ter', 'qua', 'qui', 'sex'],
               child: DashLineChart.withSampleData()),
-          DashboardDensedTile(),
+          DashboardDensedTile(
+            elevation: 10,
+            title: const Text('BTC'),
+            subtitle: const Text('Bitcoin'),
+            value: '\$ 20.788',
+            percent: '+0.25%',
+            icon: const Icon(Icons.charging_station),
+            child: DashLineChart(
+              DashLineChart.createSerie(
+                id: 'dashboard',
+                data: [
+                  ChartPairDouble(1, 5),
+                  ChartPairDouble(2, 15),
+                  ChartPairDouble(3, 8),
+                  ChartPairDouble(4, 13),
+                ],
+              ),
+              animate: false,
+            ),
+          ),
         ],
       ).singleChildScrollView(),
     );

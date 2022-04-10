@@ -93,7 +93,7 @@
     },
     {
       "name": "comum",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/comum",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/comum",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
@@ -123,109 +123,109 @@
     },
     {
       "name": "control_data_platform_android",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_data/control_data_platform_android",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_data/control_data_platform_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_interface",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_data/control_data_platform_interface",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_data/control_data_platform_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_web",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_data/control_data_platform_web",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_data/control_data_platform_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "control_data_platform_windows",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_data/control_data_platform_windows",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_data/control_data_platform_windows",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_codebar",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_codebar",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_codebar",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "controls_dash",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_dash",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_dash",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_data",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_data",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_data",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_extensions",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_extensions",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_extensions",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_firebase",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_firebase",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_firebase",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_firebase_platform_android",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_firebase/controls_firebase_platform_android",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_firebase/controls_firebase_platform_android",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "controls_firebase_platform_interface",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_firebase/controls_firebase_platform_interface",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_firebase/controls_firebase_platform_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_firebase_platform_web",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_firebase/controls_firebase_platform_web",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_firebase/controls_firebase_platform_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_image",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_image",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_android",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_image/controls_image_android",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_image/controls_image_android",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_interface",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_image/controls_image_interface",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_image/controls_image_interface",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_image_web",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_image/controls_image_web",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_image/controls_image_web",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
     {
       "name": "controls_login",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_login",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_login",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
     {
       "name": "controls_web",
-      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-6508e0726f66340b40fb84a4320ce5748c7d0b61/controls_web",
+      "rootUri": "file:///home/al/snap/flutter/common/flutter/.pub-cache/git/flutter_storeware-442c9d373e0bc5f85879f268d0c1d3d01ba6eb97/controls_web",
       "packageUri": "lib/",
       "languageVersion": "2.16"
     },
@@ -980,7 +980,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-04-10T22:21:35.465693Z",
+  "generated": "2022-04-10T22:30:42.400090Z",
   "generator": "pub",
   "generatorVersion": "2.16.2"
 }

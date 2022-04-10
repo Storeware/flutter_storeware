@@ -21,6 +21,7 @@ export 'css_colors.dart';
 export 'currency.dart';
 export 'dashboard_tile.dart';
 export 'dotnut_chart_tile.dart';
+export 'dashboard_score.dart';
 
 export 'dashboard_web.dart';
 export 'dataviewer_cards.dart';

@@ -6,7 +6,7 @@ class DashboardFilter extends StatefulWidget {
     this.width = 250,
     this.height = 150,
     this.elevation = 10,
-    this.color,
+    this.color = Colors.transparent,
     this.title,
     this.filter,
     this.filterIndex = 0,

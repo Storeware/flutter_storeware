@@ -17,11 +17,13 @@ class DashboardScore extends StatefulWidget {
       this.leading,
       this.elevation = 5,
       this.width = 200,
+      this.scoreStyle,
       this.height = 90})
       : super(key: key);
   final String? score;
   final Widget? title;
   final Widget? icon;
+  final TextStyle? scoreStyle;
   final Color? tagColor;
   final Color? color;
   final double? width;
@@ -92,11 +94,13 @@ class _DashboardScoreState extends State<DashboardScore> {
                       if (widget.child != null) widget.child!,
                       if (widget.score != null)
                         Text(widget.score!,
-                            style: TextStyle(
-                              fontSize:
-                                  theme.textTheme.bodyText1!.fontSize! * 1.2,
-                              fontWeight: FontWeight.bold,
-                            )),
+                            style: widget.scoreStyle ??
+                                TextStyle(
+                                  fontSize:
+                                      theme.textTheme.bodyText1!.fontSize! *
+                                          1.25,
+                                  fontWeight: FontWeight.bold,
+                                )),
                     ],
                   ),
                 ),

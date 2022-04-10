@@ -14,6 +14,7 @@ class DashboardScore extends StatefulWidget {
       this.onPressed,
       this.trailing,
       this.child,
+      this.topBar,
       this.leading,
       this.elevation = 5,
       this.width = 200,
@@ -34,6 +35,7 @@ class DashboardScore extends StatefulWidget {
   final Widget? trailing;
   final Widget? leading;
   final Widget? child;
+  final Widget? topBar;
 
   @override
   _DashboardScoreState createState() => _DashboardScoreState();
@@ -56,9 +58,12 @@ class _DashboardScoreState extends State<DashboardScore> {
       color: widget.color,
       elevation: widget.elevation,
       child: SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: Stack(
+        width: widget.width,
+        height: widget.height,
+        child: Column(children: [
+          if (widget.topBar != null) widget.topBar!,
+          Expanded(
+              child: Stack(
             children: [
               Row(children: [
                 if (widget.position == TagPosition.left)
@@ -130,6 +135,8 @@ class _DashboardScoreState extends State<DashboardScore> {
                     )),
             ],
           )),
+        ]),
+      ),
     );
   }
 }

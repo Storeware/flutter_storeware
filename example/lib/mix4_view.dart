@@ -100,7 +100,13 @@ class Mix4View extends StatelessWidget {
             //width: 180,
             tagColor: Colors.blue,
             title: const Text(
-              'Shows',
+              'Shows Contratados',
+              textAlign: TextAlign.center,
+            ),
+            scoreStyle: const TextStyle(
+              color: Colors.red,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
             ),
             trailing: Column(
               children: const [

@@ -31,6 +31,7 @@ class Mix4View extends StatelessWidget {
           const DotnutChartTile(
             percent: 52,
             elevation: 10,
+            child: Text('child sample'),
             subtitle: Text('OK    '),
             title: Text('Faturamento'),
             value: 'BRL 10203.2',

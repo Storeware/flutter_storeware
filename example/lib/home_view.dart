@@ -76,19 +76,19 @@ class HomeView extends StatelessWidget {
           child: const ChartsView(),
         ),
         TabChoice(
-          label: 'Mix1',
+          label: 'Applience',
           child: const Mix1View(),
         ),
         TabChoice(
-          label: 'Mix2',
+          label: 'Light',
           child: const Mix2View(),
         ),
         TabChoice(
-          label: 'Mix3',
+          label: 'Window',
           child: const Mix3View(),
         ),
         TabChoice(
-          label: 'Mix4',
+          label: 'Dashboard',
           child: const Mix4View(),
         ),
       ],

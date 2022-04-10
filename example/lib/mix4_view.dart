@@ -35,7 +35,29 @@ class Mix4View extends StatelessWidget {
             subtitle: Text('OK    '),
             title: Text('Faturamento'),
             value: 'BRL 10203.2',
-          )
+          ),
+          Row(
+            children: const [
+              DashboardTile(
+                maxWidth: 180,
+                title: 'DashboardTile',
+                counter: Text(' 123 '),
+                avatarColor: Colors.amber,
+                color: Colors.indigo,
+                value: '10',
+                avatarChild: Text('99'),
+                image: Icon(Icons.headphones),
+              ),
+              DashboardTile(
+                maxWidth: 180,
+                title: 'DashboardTile',
+                avatarColor: Colors.amber,
+                color: Colors.amber,
+                value: '\$ 10,34',
+                image: Icon(Icons.headphones),
+              ),
+            ],
+          ),
         ],
       ).singleChildScrollView(),
     );

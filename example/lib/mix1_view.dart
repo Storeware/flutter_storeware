@@ -76,24 +76,6 @@ class _Mix1ViewState extends State<Mix1View> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  const DashboardTile(
-                    maxWidth: 180,
-                    title: 'DashboardTile',
-                    counter: Text(' 123 '),
-                    avatarColor: Colors.amber,
-                    color: Colors.indigo,
-                    value: '10',
-                    avatarChild: Text('99'),
-                    image: Icon(Icons.headphones),
-                  ),
-                  const DashboardTile(
-                    maxWidth: 180,
-                    title: 'DashboardTile',
-                    avatarColor: Colors.amber,
-                    color: Colors.amber,
-                    value: '\$ 10,34',
-                    image: Icon(Icons.headphones),
-                  ),
                   Column(
                     children: [
                       Container(

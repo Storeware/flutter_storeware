@@ -1,11 +1,10 @@
 // ignore_for_file: avoid_print
 
 import 'package:controls_dash/controls_dash.dart';
-import 'package:exemple/dashboard_barchart_date.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 
-import 'dashboard_filter.dart';
+import 'dashboard_densed.dart';
 
 class SalesView extends StatelessWidget {
   const SalesView({Key? key}) : super(key: key);
@@ -57,6 +56,7 @@ class SalesView extends StatelessWidget {
               title: const Text('DashboardFilter Overview'),
               filter: const ['seg', 'ter', 'qua', 'qui', 'sex'],
               child: DashLineChart.withSampleData()),
+          DashboardDensedTile(),
         ],
       ).singleChildScrollView(),
     );

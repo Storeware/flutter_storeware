@@ -12,6 +12,8 @@ class DashLineChart extends StatelessWidget {
   final bool includePoints;
   final bool includeArea;
   final bool stacked;
+  final bool includeLine;
+  final bool roundEndCaps;
   DashLineChart(
     this.seriesList, {
     this.animate,
@@ -20,6 +22,8 @@ class DashLineChart extends StatelessWidget {
     this.includePoints = true,
     this.includeArea = false,
     this.stacked = false,
+    this.includeLine = true,
+    this.roundEndCaps = true,
     this.customSeriesRenderers,
   });
 
@@ -41,6 +45,9 @@ class DashLineChart extends StatelessWidget {
         includePoints: includePoints,
         includeArea: includeArea,
         stacked: stacked,
+        customRendererId: 'lineChartId',
+        includeLine: includeLine,
+        roundEndCaps: roundEndCaps,
       ),
       customSeriesRenderers: customSeriesRenderers,
       primaryMeasureAxis: (showValues)

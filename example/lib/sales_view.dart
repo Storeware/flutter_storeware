@@ -69,7 +69,7 @@ class SalesView extends StatelessWidget {
             child: DashLineChart(
               DashLineChart.createSerie(
                 id: 'dashboard',
-                color: Colors.amber,
+                color: Colors.indigo,
                 data: [
                   ChartPairDouble(1, 5),
                   ChartPairDouble(2, 15),
@@ -79,11 +79,12 @@ class SalesView extends StatelessWidget {
                   ChartPairDouble(6, 11),
                 ],
               ),
-              animate: false,
+              animate: true,
               showAxisLine: false,
               showValues: false,
               includePoints: false,
               includeArea: true,
+              stacked: true,
             ),
             onPressed: () {
               Dialogs.info(context, text: 'DashboardDensedTile.onPressed');

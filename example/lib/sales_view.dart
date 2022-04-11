@@ -54,6 +54,7 @@ class SalesView extends StatelessWidget {
               title: const Text('DashboardFilter Overview'),
               filter: const ['seg', 'ter', 'qua', 'qui', 'sex'],
               child: DashLineChart.withSampleData()),
+          const Text('DashboardDensedTile'),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -94,7 +95,7 @@ class SalesView extends StatelessWidget {
               DashboardDensedTile(
                 icon: const CircleAvatar(
                     child: Text('USD'), backgroundColor: Colors.green),
-                title: const Text('Dolar'),
+                title: const Text('Dólar'),
                 subtitle: const Text('BRL / USD'),
                 value: const Text('\$ 4,65'),
                 percent: const Text('-0.25%',
@@ -115,6 +116,61 @@ class SalesView extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+          Row(
+            children: [
+              DashboardSummary(
+                title: const Text('Views'),
+                actions: [
+                  CircleAvatar(
+                      child:
+                          const Icon(Icons.person, color: Colors.red, size: 20),
+                      backgroundColor: Colors.red[100],
+                      maxRadius: 10),
+                ],
+                value: const Text('1.39K'),
+                percent: const Text('+0.25%'),
+                message: const Text('prev. 28 dias'),
+              ),
+              DashboardSummary(
+                height: 140,
+                width: 220,
+                title: const Text('Views'),
+                actions: [
+                  CircleAvatar(
+                      child:
+                          const Icon(Icons.person, color: Colors.red, size: 20),
+                      backgroundColor: Colors.red[100],
+                      maxRadius: 10),
+                ],
+                value: const Text('1.39K'),
+                percent: const Text('+0.25%'),
+                message: const Text('prev. 28 dias'),
+                child: SizedBox(
+                  //width: 120,
+                  //height: 100,
+                  child: DashLineChart(
+                    DashLineChart.createSerie(
+                      id: 'dashboard',
+                      color: Colors.indigo,
+                      data: [
+                        ChartPairDouble(1, 5),
+                        ChartPairDouble(2, 15),
+                        ChartPairDouble(3, 8),
+                        ChartPairDouble(4, 13),
+                        ChartPairDouble(5, 13),
+                        ChartPairDouble(6, 11),
+                      ],
+                    ),
+                    showAxisLine: false,
+                    showValues: false,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(
+            height: 20,
           ),
         ],
       ).singleChildScrollView(),

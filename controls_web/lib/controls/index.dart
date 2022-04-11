@@ -24,6 +24,7 @@ export 'dotnut_chart_tile.dart';
 export 'dashboard_score.dart';
 export 'dashboard_filter.dart';
 export 'dashboard_densed.dart';
+export 'dashboard_summary.dart';
 
 export 'dashboard_web.dart';
 export 'dataviewer_cards.dart';

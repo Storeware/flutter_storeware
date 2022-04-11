@@ -1,4 +1,3 @@
-import 'package:controls_dash/src/dash_hbar.dart';
 import 'package:flutter/material.dart';
 
 class DashboardDensedTile extends StatefulWidget {

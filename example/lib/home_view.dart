@@ -46,7 +46,7 @@ class HomeView extends StatelessWidget {
           title: const Text('StrapButton'),
           child: pagina1Builder(notifier, context),
         ),
-        TabChoice(
+        /*TabChoice(
             title: const Text('Dialogs.info'),
             image: const Icon(Icons.ac_unit_outlined),
             child: StrapButton(
@@ -56,14 +56,14 @@ class HomeView extends StatelessWidget {
                   Dialogs.info(context,
                       text: 'Titulo', content: const Text('Mensagem'));
                 })),
-        TabChoice(
+        */ /*TabChoice(
           title: const Text('SubMenus'),
           items: [TabChoice(label: 'Sub1'), TabChoice(label: 'Sub2')],
-        ),
-        TabChoice(
+        ),*/
+        /*TabChoice(
           title: const Text('Controls-Web'),
           child: const ControlsView(),
-        ),
+        ),*/
         TabChoice(
           title: const Text('Clean'),
           child: const ControlsCleanView(),

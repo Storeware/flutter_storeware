@@ -56,39 +56,67 @@ class SalesView extends StatelessWidget {
               title: const Text('DashboardFilter Overview'),
               filter: const ['seg', 'ter', 'qua', 'qui', 'sex'],
               child: DashLineChart.withSampleData()),
-          DashboardDensedTile(
-            elevation: 10,
-            title: const Text('BTC'),
-            subtitle: const Text('Bitcoin'),
-            value: const Text('\$ 20.788'),
-            percent: const Text('+0.25%',
-                style: TextStyle(
-                  color: Colors.green,
-                )),
-            icon: const CircleAvatar(child: Icon(Icons.charging_station)),
-            child: DashLineChart(
-              DashLineChart.createSerie(
-                id: 'dashboard',
-                color: Colors.indigo,
-                data: [
-                  ChartPairDouble(1, 5),
-                  ChartPairDouble(2, 15),
-                  ChartPairDouble(3, 8),
-                  ChartPairDouble(4, 13),
-                  ChartPairDouble(5, 13),
-                  ChartPairDouble(6, 11),
-                ],
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              DashboardDensedTile(
+                elevation: 10,
+                title: const Text('BTC'),
+                subtitle: const Text('Bitcoin'),
+                value: const Text('\$ 20.788'),
+                percent: const Text('+0.25%',
+                    style: TextStyle(
+                      color: Colors.green,
+                    )),
+                icon: const CircleAvatar(child: Icon(Icons.charging_station)),
+                child: DashLineChart(
+                  DashLineChart.createSerie(
+                    id: 'dashboard',
+                    color: Colors.indigo,
+                    data: [
+                      ChartPairDouble(1, 5),
+                      ChartPairDouble(2, 15),
+                      ChartPairDouble(3, 8),
+                      ChartPairDouble(4, 13),
+                      ChartPairDouble(5, 13),
+                      ChartPairDouble(6, 11),
+                    ],
+                  ),
+                  animate: true,
+                  showAxisLine: false,
+                  showValues: false,
+                  includePoints: false,
+                  includeArea: true,
+                  stacked: true,
+                ),
+                onPressed: () {
+                  Dialogs.info(context, text: 'DashboardDensedTile.onPressed');
+                },
               ),
-              animate: true,
-              showAxisLine: false,
-              showValues: false,
-              includePoints: false,
-              includeArea: true,
-              stacked: true,
-            ),
-            onPressed: () {
-              Dialogs.info(context, text: 'DashboardDensedTile.onPressed');
-            },
+              DashboardDensedTile(
+                icon: const CircleAvatar(
+                    child: Text('USD'), backgroundColor: Colors.green),
+                title: const Text('Dolar'),
+                subtitle: const Text('BRL / USD'),
+                value: const Text('\$ 4,65'),
+                percent: const Text('-0.25%',
+                    style: TextStyle(
+                      color: Colors.red,
+                    )),
+                child: DashDanutChart(
+                  DashDanutChart.createSerie(
+                    id: 'id',
+                    data: [
+                      ChartPair('Seg', 5),
+                      ChartPair('Ter', 15),
+                      ChartPair('Qua', 8),
+                      ChartPair('Qui', 13),
+                    ],
+                  ),
+                  showMeasures: true,
+                ),
+              ),
+            ],
           ),
         ],
       ).singleChildScrollView(),

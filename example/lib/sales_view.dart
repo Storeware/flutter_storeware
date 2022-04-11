@@ -4,8 +4,6 @@ import 'package:controls_dash/controls_dash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 
-import 'dashboard_densed.dart';
-
 class SalesView extends StatelessWidget {
   const SalesView({Key? key}) : super(key: key);
 

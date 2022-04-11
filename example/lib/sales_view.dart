@@ -62,7 +62,7 @@ class SalesView extends StatelessWidget {
                 elevation: 10,
                 title: const Text('BTC'),
                 subtitle: const Text('Bitcoin'),
-                value: const Text('\$ 20.788'),
+                value: const Text('\$ 35.788'),
                 percent: const Text('+0.25%',
                     style: TextStyle(
                       color: Colors.green,
@@ -94,10 +94,10 @@ class SalesView extends StatelessWidget {
               ),
               DashboardDensedTile(
                 icon: const CircleAvatar(
-                    child: Text('USD'), backgroundColor: Colors.green),
-                title: const Text('Dólar'),
-                subtitle: const Text('BRL / USD'),
-                value: const Text('\$ 4,65'),
+                    child: Text('BRL'), backgroundColor: Colors.green),
+                title: const Text('Bolsa'),
+                subtitle: const Text('volume'),
+                value: const Text('\$ 104.650'),
                 percent: const Text('-0.25%',
                     style: TextStyle(
                       color: Colors.red,
@@ -128,6 +128,7 @@ class SalesView extends StatelessWidget {
                       backgroundColor: Colors.red[100],
                       maxRadius: 10),
                 ],
+                color: Colors.blue[100],
                 value: const Text('1.39K'),
                 percent: const Text('+0.25%'),
                 message: const Text('prev. 28 dias'),
@@ -135,7 +136,7 @@ class SalesView extends StatelessWidget {
               DashboardSummary(
                 height: 140,
                 width: 220,
-                title: const Text('Views'),
+                title: const Text('DashboardSummary'),
                 actions: [
                   CircleAvatar(
                       child:
@@ -146,25 +147,21 @@ class SalesView extends StatelessWidget {
                 value: const Text('1.39K'),
                 percent: const Text('+0.25%'),
                 message: const Text('prev. 28 dias'),
-                child: SizedBox(
-                  //width: 120,
-                  //height: 100,
-                  child: DashLineChart(
-                    DashLineChart.createSerie(
-                      id: 'dashboard',
-                      color: Colors.indigo,
-                      data: [
-                        ChartPairDouble(1, 5),
-                        ChartPairDouble(2, 15),
-                        ChartPairDouble(3, 8),
-                        ChartPairDouble(4, 13),
-                        ChartPairDouble(5, 13),
-                        ChartPairDouble(6, 11),
-                      ],
-                    ),
-                    showAxisLine: false,
-                    showValues: false,
+                child: DashLineChart(
+                  DashLineChart.createSerie(
+                    id: 'dashboard',
+                    color: Colors.indigo,
+                    data: [
+                      ChartPairDouble(1, 5),
+                      ChartPairDouble(2, 15),
+                      ChartPairDouble(3, 8),
+                      ChartPairDouble(4, 13),
+                      ChartPairDouble(5, 13),
+                      ChartPairDouble(6, 11),
+                    ],
                   ),
+                  showAxisLine: false,
+                  showValues: false,
                 ),
               ),
             ],

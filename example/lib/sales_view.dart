@@ -65,7 +65,7 @@ class SalesView extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.green,
                 )),
-            icon: const Icon(Icons.charging_station),
+            icon: const CircleAvatar(child: Icon(Icons.charging_station)),
             child: DashLineChart(
               DashLineChart.createSerie(
                 id: 'dashboard',
@@ -83,6 +83,7 @@ class SalesView extends StatelessWidget {
               showAxisLine: false,
               showValues: false,
               includePoints: false,
+              includeArea: true,
             ),
             onPressed: () {
               Dialogs.info(context, text: 'DashboardDensedTile.onPressed');

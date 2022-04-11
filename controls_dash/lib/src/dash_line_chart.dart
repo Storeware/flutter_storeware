@@ -10,12 +10,16 @@ class DashLineChart extends StatelessWidget {
   final bool showAxisLine;
   final bool showValues;
   final bool includePoints;
+  final bool includeArea;
+  final bool stacked;
   DashLineChart(
     this.seriesList, {
     this.animate,
     this.showAxisLine = true,
     this.showValues = true,
     this.includePoints = true,
+    this.includeArea = false,
+    this.stacked = false,
     this.customSeriesRenderers,
   });
 
@@ -33,8 +37,11 @@ class DashLineChart extends StatelessWidget {
     return new charts.LineChart(
       seriesList,
       animate: animate,
-      defaultRenderer:
-          new charts.LineRendererConfig(includePoints: includePoints),
+      defaultRenderer: new charts.LineRendererConfig(
+        includePoints: includePoints,
+        includeArea: includeArea,
+        stacked: stacked,
+      ),
       customSeriesRenderers: customSeriesRenderers,
       primaryMeasureAxis: (showValues)
           ? null

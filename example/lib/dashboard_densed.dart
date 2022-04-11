@@ -61,13 +61,15 @@ class _DashboardDensedTileState extends State<DashboardDensedTile> {
           child: Column(
             children: [
               Row(children: [
-                if (widget.icon != null)
+                if (widget.icon != null) ...[
                   Container(
                     child: widget.icon!,
                     constraints: const BoxConstraints(
                         minHeight: kMinInteractiveDimension,
                         minWidth: kMinInteractiveDimension),
                   ),
+                  const SizedBox(width: 8),
+                ],
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

@@ -93,7 +93,7 @@ class HomeView extends StatelessWidget {
           child: const Mix4View(),
         ),
         TabChoice(
-          label: 'Sales',
+          label: 'Dashlets',
           child: const SalesView(),
         ),
       ],

@@ -16,6 +16,8 @@ class DotnutChartTile extends StatefulWidget {
     this.child,
     this.chart,
     this.elevation = 10,
+    this.indicatorBackgroundColor,
+    this.indicatorColor = Colors.blue,
   }) : super(key: key);
   final double? elevation;
   final double? height;
@@ -30,6 +32,8 @@ class DotnutChartTile extends StatefulWidget {
   final Function()? onPressed;
   final Widget? child;
   final Widget? chart;
+  final Color? indicatorBackgroundColor;
+  final Color indicatorColor;
   @override
   _DotnutChartTileState createState() => _DotnutChartTileState();
 }
@@ -117,6 +121,11 @@ class _DotnutChartTileState extends State<DotnutChartTile> {
                               semanticsValue: '${widget.value}%',
                               strokeWidth: 15,
                               value: widget.percent! / 100,
+                              backgroundColor:
+                                  widget.indicatorBackgroundColor ??
+                                      widget.indicatorColor.withOpacity(0.2),
+                              color: widget.indicatorColor,
+                              //valueColor: widget.indicatorColor,
                             ),
                           ),
                         ),

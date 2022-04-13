@@ -245,6 +245,9 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                 ),
                             ],
                           ))),
+                  const SizedBox(
+                    height: 30,
+                  ),
                   if (widget.sidebarFooter != null) widget.sidebarFooter!,
                 ],
               ),

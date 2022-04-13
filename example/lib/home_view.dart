@@ -4,12 +4,12 @@ import 'package:flutter_storeware/index.dart';
 import 'charts_view.dart';
 import 'controls_activities_view.dart';
 import 'controls_clean_view.dart';
-import 'controls_view.dart';
 import 'mix2_view.dart';
 import 'mix1_view.dart';
 import 'mix3_view.dart';
 import 'mix4_view.dart';
 import 'sales_view.dart';
+import 'horizontal.dart' as hz;
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ValueNotifier<double> notifier = ValueNotifier(5);
-    return HorizontalTabView(
+    return hz.HorizontalTabView(
       //minWidth: 180,
       activeIndex: 4,
       color: Colors.blue[100],

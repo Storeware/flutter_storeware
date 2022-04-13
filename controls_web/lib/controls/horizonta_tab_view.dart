@@ -49,7 +49,7 @@ class HorizontalTabView extends StatefulWidget {
   final int? activeIndex;
   final Color? selectedColor;
   final double? leftRadius;
-  HorizontalTabView({
+  const HorizontalTabView({
     Key? key,
     @required this.choices,
     this.appBar,
@@ -110,12 +110,13 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
   }
 
   jumpTo(int? index) {
-    if (mounted && index != null && scrollController!.positions.isNotEmpty)
+    if (mounted && index != null && scrollController!.positions.isNotEmpty) {
       scrollController!.animateTo(
         (index) * widget.tabHeight!,
-        duration: Duration(milliseconds: 500),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.linear,
       );
+    }
   }
 
   Color? _iconColor;
@@ -137,7 +138,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
             : HorizontalTabViewSiderBarType.show);
     theme = Theme.of(context);
     _iconColor =
-        widget.iconColor ?? theme!.tabBarTheme.labelColor ?? theme!.buttonColor;
+        widget.iconColor ?? theme!.tabBarTheme.labelColor ?? Colors.blue;
     _selectedColor =
         widget.selectedColor ?? widget.indicatorColor ?? Colors.amber;
     return ValueListenableBuilder<int>(
@@ -206,59 +207,62 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
         child: Scaffold(
             appBar: widget.sidebarAppBar,
             drawer: widget.sidebarDrawer,
-            body: Column(
-              children: [
-                if (widget.sidebarHeader != null) widget.sidebarHeader!,
-                Expanded(
-                    child:
-                        /*SingleChildScrollView(
-                      key: UniqueKey(),
-                      child:*/
-                        Stack(
-                  children: [
-                    ListView(controller: scrollController, children: [
-                      for (var index = 0;
-                          index < widget.choices!.length;
-                          index++)
-                        buildItem(index)
-                    ]),
-                    if (hitBottom)
-                      Positioned(
-                        right: 0,
-                        child: InkWell(
-                            child: Icon(Icons.arrow_drop_up),
-                            onTap: () {
-                              animateTo(0);
-                            }),
-                      ),
-                    if (hitTop)
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: InkWell(
-                            child: Icon(Icons.arrow_drop_down),
-                            onTap: () {
-                              animateTo(99999);
-                            }),
-                      ),
-                  ],
-                )),
-                if (widget.sidebarFooter != null) widget.sidebarFooter!,
-              ],
+            body: SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                children: [
+                  if (widget.sidebarHeader != null) widget.sidebarHeader!,
+                  Expanded(
+                      child: SingleChildScrollView(
+                          key: UniqueKey(),
+                          child: Stack(
+                            children: [
+                              Column(children: [
+                                for (var index = 0;
+                                    index < widget.choices!.length;
+                                    index++)
+                                  buildItem(index)
+                              ]),
+                              if (hitBottom)
+                                Positioned(
+                                  right: 0,
+                                  child: InkWell(
+                                      child: const Icon(Icons.arrow_drop_up),
+                                      onTap: () {
+                                        animateTo(0);
+                                      }),
+                                ),
+                              if (hitTop)
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: InkWell(
+                                      child: const Icon(Icons.arrow_drop_down),
+                                      onTap: () {
+                                        animateTo(99999);
+                                      }),
+                                ),
+                            ],
+                          ))),
+                  if (widget.sidebarFooter != null) widget.sidebarFooter!,
+                ],
+              ),
             )),
       ));
 
-  buildPages() => (widget.choices!.length == 0)
+  buildPages() => (widget.choices!.isEmpty)
       ? Container()
       : Scaffold(
 
           /// paginas
           backgroundColor: Colors.transparent,
           body: Builder(builder: (x) {
-            if (widget.choices![_index.value].child ==
-                null) if (widget.choices![_index.value].builder != null)
+            if (widget.choices![_index.value].child == null &&
+                widget.choices![_index.value].builder != null) {
               widget.choices![_index.value].child =
                   widget.choices![_index.value].builder!();
+            }
             if (widget.onChanged != null) widget.onChanged!(_index.value);
             if (widget.choices![_index.value].child == null) return Container();
             return Stack(children: [
@@ -296,7 +300,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                   Expanded(
                       child: InkWell(
                           child: Container(
-                              constraints: BoxConstraints(minHeight: 35),
+                              constraints: const BoxConstraints(minHeight: 35),
                               decoration: BoxDecoration(
                                 color: (_index.value == index)
                                     ? widget.indicatorColor
@@ -314,10 +318,10 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                           Icon(widget.choices![index].icon,
                                               color: _iconColor),
                                         ...[
-                                          SizedBox(height: 2),
+                                          const SizedBox(height: 2),
                                           widget.choices![index].title ??
                                               Text(
-                                                  '${widget.choices![index].label!}',
+                                                  widget.choices![index].label!,
                                                   style: (widget.tabStyle ??
                                                       TextStyle(
                                                         fontSize: 14,
@@ -370,7 +374,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                         )
                                       : null,
                               title: widget.choices![index].title ??
-                                  Text('${widget.choices![index].label!}',
+                                  Text(widget.choices![index].label!,
                                       style: widget.tabStyle ??
                                           theme!.textTheme.bodyText1!.copyWith(
                                               fontWeight: FontWeight.w500,
@@ -394,8 +398,9 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
     Size size = MediaQuery.of(context).size;
     ThemeData? theme = Theme.of(context);
     int cols = widget.mobileCrossCount ?? size.width ~/ 150;
-    if (size.width < (widget.mobileCrossCount ?? 2))
+    if (size.width < (widget.mobileCrossCount ?? 2)) {
       cols = widget.mobileCrossCount ?? 2;
+    }
 
     return Scaffold(
         backgroundColor: widget.backgroundColor,
@@ -452,23 +457,22 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                 ),
                               ),
                         onTap: () {
-                          if (widget.onChanged != null)
+                          if (widget.onChanged != null) {
                             widget.onChanged!(index);
-                          if (tab.primary)
+                          }
+                          if (tab.primary) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (x) {
-                                if (tab.child == null)
-                                  tab.child = tab.builder!();
+                                tab.child ??= tab.builder!();
                                 return tab.child!;
                               }),
                             );
-                          else
+                          } else {
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (x) {
-                                if (tab.child == null)
-                                  tab.child = tab.builder!();
+                                tab.child ??= tab.builder!();
                                 return Scaffold(
                                   appBar: AppBar(
                                       title: tab.title ??
@@ -479,6 +483,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                 );
                               }),
                             );
+                          }
                         },
                       ));
                 },

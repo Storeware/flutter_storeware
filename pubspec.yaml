@@ -1,7 +1,7 @@
 name: flutter_storeware
 description: Flutter Storeware Packages
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
-version: 22.03.07+4
+version: 22.04.12+4
 
 environment:
   sdk: ">=2.16.0 <3.0.0"

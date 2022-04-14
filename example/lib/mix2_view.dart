@@ -7,7 +7,7 @@ class Mix2View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Wrap(
         children: [
           ExpansionGroup(
             children: [

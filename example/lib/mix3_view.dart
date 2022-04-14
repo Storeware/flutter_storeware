@@ -7,7 +7,7 @@ class Mix3View extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Wrap(
         children: [
           ListBox(
               title: const Text('ListBox'),

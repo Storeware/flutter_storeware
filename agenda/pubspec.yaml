@@ -36,6 +36,8 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data
+  uuid:
+  get:
 
 dev_dependencies:
   flutter_test:

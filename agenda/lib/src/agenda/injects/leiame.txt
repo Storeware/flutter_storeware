@@ -1,0 +1,4 @@
+///
+
+[Injects]
+  Permite inserir novos objetos 

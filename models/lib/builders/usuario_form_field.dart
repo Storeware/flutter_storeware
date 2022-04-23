@@ -1,21 +1,23 @@
+// @dart=2.12
+
 import 'package:controls_web/controls/data_viewer.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:flutter/material.dart';
-import 'package:models/models/usuarios_model.dart';
+import 'package:models/models.dart';
 
 class UsuarioFormField extends StatefulWidget {
   final String? codigo;
   final String? label;
-  final void Function(String)? onChanged;
-  final void Function(String)? onSaved;
-  final bool? readOnly;
-  final bool? required;
-  final String Function(String)? validator;
+  final void Function(String?)? onChanged;
+  final void Function(String?)? onSaved;
+  final bool readOnly;
+  final bool required;
+  final String Function(String?)? validator;
   //final bool inPagamento;
   //final bool inRecebimento;
   //final String filter;
-  UsuarioFormField({
+  const UsuarioFormField({
     Key? key,
     this.codigo,
     this.label,
@@ -35,13 +37,13 @@ class UsuarioFormField extends StatefulWidget {
 
 class _UsuarioFormFieldState extends State<UsuarioFormField> {
   buscar(cd) {
-    notifier!.value = {};
+    notifier.value = {};
     UsuarioItemModel().buscarByCodigo(cd).then((rsp) {
-      if (rsp.length > 0) notifier!.value = rsp;
+      if (rsp.isNotEmpty) notifier.value = rsp;
     });
   }
 
-  ValueNotifier<Map<String, dynamic>>? notifier;
+  late ValueNotifier<Map<String, dynamic>> notifier;
   String nomeUsuario = '';
   @override
   void initState() {
@@ -53,17 +55,17 @@ class _UsuarioFormFieldState extends State<UsuarioFormField> {
   Widget build(BuildContext context) {
     final TextEditingController codigoController =
         TextEditingController(text: widget.codigo);
-    if ((widget.codigo ?? '').length > 0) {
+    if ((widget.codigo ?? '').isNotEmpty) {
       buscar(widget.codigo);
     }
-    return Container(
+    return SizedBox(
         height: kToolbarHeight + 7,
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
+          SizedBox(
             width: 150,
             child: MaskedSearchFormField<dynamic>(
               readOnly: widget.readOnly,
-              autofocus: (widget.codigo ?? '').length == 0,
+              autofocus: (widget.codigo ?? '').isEmpty,
               labelText: widget.label ?? 'Pessoa',
               controller: codigoController,
               //required: widget.required,
@@ -72,7 +74,7 @@ class _UsuarioFormFieldState extends State<UsuarioFormField> {
                 widget.onChanged!(x);
               },
               validator: (x) {
-                if (!widget.required! && x == '') return null;
+                if (!widget.required && x == '') return null;
                 if (nomeUsuario == '') return 'Inválido';
                 return (widget.validator != null) ? widget.validator!(x) : null;
               },
@@ -83,33 +85,33 @@ class _UsuarioFormFieldState extends State<UsuarioFormField> {
                 if (x.length > 0) buscar(x);
               },
               onSearch: () async {
-                if (widget.readOnly!) return null;
+                if (widget.readOnly) return null;
                 return Dialogs.showPage(context,
                     child: Scaffold(
-                        appBar: AppBar(title: Text('Usuários')),
+                        appBar: AppBar(title: const Text('Usuários')),
                         body: UsuarioPage(
-                            required: widget.required!,
+                            required: widget.required,
                             onSelected: (x) async {
-                              notifier!.value = x;
+                              notifier.value = x;
                               Navigator.pop(context);
                               //if (widget.onChanged != null)
                               //  widget.onChanged(x['codigo']);
                               return x['codigo'];
-                            }))).then((rsp) => notifier!.value['codigo']);
+                            }))).then((rsp) => notifier.value['codigo']);
               },
             ),
           ),
           Expanded(
-            child: ValueListenableBuilder<dynamic>(
-              valueListenable: notifier!,
-              builder: (ctx, row, wg) {
+            child: ValueListenableBuilder(
+              valueListenable: notifier,
+              builder: (ctx, dynamic row, wg) {
                 nomeUsuario = row['nome'] ?? '';
                 //codigoController.text = row['codigo'];
 
                 //if (row['codigo'] != null) widget.onChanged(row['codigo']);
 
                 return MaskedLabeled(
-                  padding: EdgeInsets.only(left: 4, bottom: 2),
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
                   value: nomeUsuario,
                 );
               },
@@ -121,7 +123,7 @@ class _UsuarioFormFieldState extends State<UsuarioFormField> {
 
 class UsuarioPage extends StatelessWidget {
   final Function(dynamic)? onSelected;
-  final bool? required;
+  final bool required;
   final bool canEdit;
   final bool canInsert;
   const UsuarioPage(
@@ -141,7 +143,7 @@ class UsuarioPage extends StatelessWidget {
       controller: DataViewerController(
         keyName: 'codigo',
         future: () => UsuarioItemModel().listNoCached().then((rsp) {
-          if (!required!) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
+          if (!required) rsp.insert(0, {'codigo': '', "nome": 'Nenhum'});
           return rsp;
         }),
         dataSource: UsuarioItemModel(),

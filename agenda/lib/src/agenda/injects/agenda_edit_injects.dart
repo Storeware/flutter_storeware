@@ -5,8 +5,10 @@ import 'package:console/config/config.dart';
 import 'package:console/views/agenda/models/agenda_item_model.dart';
 import 'package:controls_web/controls/injects.dart';
 import 'package:flutter/material.dart';
+import 'package:models/builders/index.dart';
 import 'package:models/models.dart';
 
+import '../models/index.dart';
 import 'constantes.dart';
 
 class InjectsAgendaContato {

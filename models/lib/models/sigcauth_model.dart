@@ -7,7 +7,7 @@ import 'package:controls_data/odata_client.dart';
 //import 'package:controls_data/rest_client.dart';
 //import '../widgets/firebird_extensions.dart';
 import 'package:controls_extensions/extensions.dart' as ext;
-import 'sql_builder.dart';
+import 'package:controls_data/sql_builder.dart';
 import 'ctrl_id_model.dart';
 
 /*toDouble(dynamic value) {

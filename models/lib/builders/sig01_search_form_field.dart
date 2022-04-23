@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:console/builders/search_form_field.dart';
+import 'search_form_field.dart';
 import 'package:console/views/financas/cadastros/sig01_page.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';

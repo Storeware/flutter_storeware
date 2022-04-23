@@ -1,6 +1,6 @@
 // @dart=2.12
 
-import 'package:console/widgets/masked_auto_complete_text_field.dart';
+import 'package:controls_web/controls.dart';
 import 'package:flutter/material.dart';
 
 final _suggestionStorage = {};

@@ -1,7 +1,7 @@
 // @dart=2.12
 
 import 'package:controls_data/odata_client.dart';
-import 'package:console/comum/controls.dart';
+import 'controls.dart';
 import 'package:flutter/material.dart';
 
 class UnidadeBuilder extends StatelessWidget {

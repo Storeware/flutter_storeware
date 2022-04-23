@@ -2,8 +2,8 @@
 
 import 'dart:async';
 
-import 'package:console/builders/search_form_field.dart';
-import 'package:console/views/os/cadastros/sigven_view.dart';
+import 'search_form_field.dart';
+//import 'package:console/views/os/cadastros/sigven_view.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +17,11 @@ class SigvenSearchFormField extends StatefulWidget {
   final bool canDelete;
   final String Function(String)? validator;
   final String? label;
+  final Widget Function(Function onSelected) formChild;
   const SigvenSearchFormField({
     Key? key,
     this.onChanged,
+    required this.formChild,
     this.codigo,
     this.label,
     this.validator,
@@ -118,8 +120,11 @@ class _SigbcoSearchFormFieldState extends State<SigvenSearchFormField> {
       },
       onSearch: (a) {
         late dynamic y;
-        return Dialogs.showPage(context,
-            child: SigvenView(
+        return Dialogs.showPage(
+          context,
+          child: widget.formChild((resp) {
+            y = resp;
+          }), /* SigvenView(
                 //title: 'Classificação da Operação',
                 //inPagamento: widget.inPagamento,
                 //inRecebimento: widget.inRecebimento,
@@ -135,7 +140,8 @@ class _SigbcoSearchFormFieldState extends State<SigvenSearchFormField> {
                 onSelected: (x) async {
                   y = x;
                   return x['codigo'];
-                })).then((rsp) {
+                })*/
+        ).then((rsp) {
           return y;
         });
       },

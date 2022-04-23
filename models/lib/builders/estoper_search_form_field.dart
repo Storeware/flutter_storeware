@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:console/builders/search_form_field.dart';
+import 'search_form_field.dart';
 import 'package:console/views/estoque/cadastros/estoper_page.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:flutter/material.dart';

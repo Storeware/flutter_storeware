@@ -1,10 +1,7 @@
-// @dart=2.16
+// @dart=2.12
 
-//import 'usuarios_model.dart';
-
-import 'controller.dart';
-import 'usuarios_model.dart';
-//import 'package:get/get.dart';
+import 'package:console/config/config.dart';
+import 'package:models/models.dart';
 
 enum TipoAcesso { todos, admin, gestor, adminOrGestor, operador, leitura }
 
@@ -132,7 +129,7 @@ class Acessos {
     }
 
     if (!rt && mostrar) {
-      DefaultMensagemNotifier().notify(
+      MensagemNotifier().notify(
           'Acesso indisponível|Acesso ao recurso não esta disponível para uso; Se necessário solicite ao administrador');
     }
     return rt;

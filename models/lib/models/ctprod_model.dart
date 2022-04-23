@@ -6,7 +6,7 @@ import 'package:controls_data/odata_client.dart';
 
 import 'package:controls_data/odata_firestore.dart';
 
-class CtProdItem extends DataItem {
+class ProdutoItem extends DataItem {
   String? codigo;
   String? nome;
   double? precoweb = 0;
@@ -19,7 +19,7 @@ class CtProdItem extends DataItem {
   double? filial;
   String inativo = 'N';
   double descmaximo = 0;
-  CtProdItem({
+  ProdutoItem({
     this.codigo,
     this.nome,
     this.precoweb,
@@ -30,7 +30,7 @@ class CtProdItem extends DataItem {
     this.descmaximo = 0,
   });
 
-  CtProdItem.fromJson(Map<String, dynamic> json) {
+  ProdutoItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);
   }
 
@@ -81,34 +81,34 @@ class CtProdItem extends DataItem {
   }
 
   static List<String> get keys {
-    List<String> k = CtProdItem.fromJson({}).toJson().keys.toList();
+    List<String> k = ProdutoItem.fromJson({}).toJson().keys.toList();
     k.remove('codtitulo'); // nao pertence a tabela
     return k;
   }
 
   static Map<String, dynamic>? copy(dados) {
     var d;
-    if (dados is CtProdItem)
-      d = CtProdItem.fromJson(dados.toJson());
+    if (dados is ProdutoItem)
+      d = ProdutoItem.fromJson(dados.toJson());
     else
-      d = CtProdItem.fromJson(dados);
+      d = ProdutoItem.fromJson(dados);
     return d.toJson();
   }
 }
 
-class CtProdItemModel extends ODataModelClass<CtProdItem> {
-  static final _singleton = CtProdItemModel._create();
-  CtProdItemModel._create() {
+class ProdutoModel extends ODataModelClass<ProdutoItem> {
+  static final _singleton = ProdutoModel._create();
+  ProdutoModel._create() {
     collectionName = 'ctprod';
     super.API = ODataInst();
     super.CC = CloudV3().client..client.silent = true;
 
-    columns = CtProdItem.keys.join(',').replaceAll(',id', '');
+    columns = ProdutoItem.keys.join(',').replaceAll(',id', '');
     externalKeys = 'codtitulo,id';
   }
-  factory CtProdItemModel() => _singleton;
+  factory ProdutoModel() => _singleton;
 
-  CtProdItem newItem() => CtProdItem();
+  ProdutoItem newItem() => ProdutoItem();
 
   Future<List<dynamic>> listGridTabPreco(
       {String? filter,
@@ -154,7 +154,7 @@ class CtProdItemModel extends ODataModelClass<CtProdItem> {
 
   @override
   put(item) {
-    var it = CtProdItem.copy(item);
+    var it = ProdutoItem.copy(item);
     return super.put(it).then((rsp) {
       atalhoUpdate(item);
       updatePrecoFilial(it!);
@@ -164,7 +164,7 @@ class CtProdItemModel extends ODataModelClass<CtProdItem> {
 
   @override
   post(item) {
-    var it = CtProdItem.copy(item);
+    var it = ProdutoItem.copy(item);
     return super.post(it).then((rsp) {
       atalhoUpdate(item);
       updatePrecoFilial(it!);
@@ -190,7 +190,7 @@ class CtProdItemModel extends ODataModelClass<CtProdItem> {
   }
 
   Future<String?> updatePrecoFilial(Map<String, dynamic> dados) async {
-    var it = CtProdItem.fromJson(dados);
+    var it = ProdutoItem.fromJson(dados);
     if ((it.filial ??= 0) > 0) {
       if (driver == 'mssql') return API!.put('ctprod_filial', dados);
       var p = '${it.precoweb}'.replaceAll(',', '.');

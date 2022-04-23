@@ -167,13 +167,13 @@ class SigcauthItem extends DataItem {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id.toString();
-    data['dcto'] = this.dcto;
+    data['dcto'] = strLen(this.dcto, 10);
     data['filial'] = this.filial;
     data['cliente'] = this.cliente;
     data['vendedor'] = this.vendedor;
     data['total'] = this.total;
-    data['obs'] = this.obs;
-    data['entrega'] = this.entrega;
+    data['obs'] = strLen(this.obs, 255);
+    data['entrega'] = strLen(this.entrega, 1);
     data['filialretira'] = this.filialretira;
     data['hora'] = this.hora;
     data['valortroco'] = this.valortroco;
@@ -182,10 +182,10 @@ class SigcauthItem extends DataItem {
     data['lote'] = this.lote;
     data['cobrataxa'] = this.cobrataxa;
     data['contatravada'] = this.contatravada;
-    data['operacao'] = this.operacao;
+    data['operacao'] = strLen(this.operacao, 10);
     data['data'] = this.data;
     data['dav'] = this.dav;
-    data['registrado'] = this.registrado;
+    data['registrado'] = strLen(this.registrado, 1);
     data['prevenda'] = this.prevenda;
     data['baseicmssubst'] = this.baseicmssubst;
     data['icmssubst'] = this.icmssubst;
@@ -194,8 +194,8 @@ class SigcauthItem extends DataItem {
     data['dtent_ret'] = toDateTimeSql(this.dtEntRet ?? DateTime.now());
     data['endentr'] = strLen(endentr, 50);
     data['bairroentr'] = strLen(bairroentr, 20);
-    data['cidadeentr'] = strLen(cidadeentr, 20);
-    data['estadoentr'] = strLen(estadoentr, 5);
+    data['cidadeentr'] = strLen(cidadeentr, 50);
+    data['estadoentr'] = strLen(estadoentr, 2);
     data['cnpjentr'] = cnpjentr;
     data['estprod'] = estprod;
     data['impresso'] = impresso ?? 'N';
@@ -395,7 +395,7 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
     return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  updateById(SigcauthItem item) {
+  updateById(SigcauthItem item) async {
     //var dEnt = toDateTimeSql(item.dtEntRet!);
     Map<String, dynamic> dados = item.toJson();
     dados.remove('total');

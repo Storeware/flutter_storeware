@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
@@ -14,6 +15,7 @@ class SenhasItem extends DataItem {
   String? trocasenha;
   DateTime? dtatualiz;
   String? vendedor;
+  String? funcao;
 
   SenhasItem(
       {this.aplicacao,
@@ -22,6 +24,7 @@ class SenhasItem extends DataItem {
       this.inativo,
       this.nome,
       this.grupo,
+      this.funcao,
       this.validade,
       this.trocasenha,
       this.dtatualiz});
@@ -40,9 +43,12 @@ class SenhasItem extends DataItem {
     validade = json['validade'];
     trocasenha = json['trocasenha'];
     dtatualiz = toDateTime(json['dtatualiz']);
-    vendedor = json['vendedor'];
+    vendedor = '${json['vendedor']}';
+    funcao = json['funcao'];
     return this;
   }
+
+  bool get isEmpty => this.codigo == null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -56,16 +62,25 @@ class SenhasItem extends DataItem {
     data['trocasenha'] = this.trocasenha;
     data['dtatualiz'] = this.dtatualiz;
     data['vendedor'] = this.vendedor;
+    data['funcao'] = this.funcao;
 
     /// quando é um insert, o codigo é gerado no servidor.
     if (this.codigo != null) data['id'] = this.codigo;
     return data;
   }
 
-  get isAdmin => grupo == 'Administrador';
-  get isGestor => 'Gerente,Diretor'.contains(grupo ?? '') || isAdmin;
+  get grupoUpper => (grupo ?? '').toUpperCase();
+  get isAdmin => 'Administrador,Administração,Diretoria'
+      .toUpperCase()
+      .contains(grupoUpper);
+  get isGestor =>
+      'Gerente,Supervisor,Encarregado,Chefe'
+          .toUpperCase()
+          .contains(grupo ?? '') ||
+      isAdmin;
   get isOperador => (!isAdmin && !isGestor);
-  get isReadOnly => 'Consulta'.contains(grupo!);
+  get isReadOnly =>
+      'Consulta,Relatório,Relatorio'.toUpperCase().contains(grupo ?? '');
 }
 
 class SenhasItemModel extends ODataModelClass<SenhasItem> {

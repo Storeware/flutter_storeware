@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
@@ -8,6 +9,7 @@ class SigcadItem extends DataItem {
   double? codigo;
   String? nome;
   String? cnpj;
+  String? ie;
   String? cidade;
   String? bairro;
   String? numero;
@@ -21,21 +23,25 @@ class SigcadItem extends DataItem {
   String? tipo;
   String? terminal;
   double? filial;
+  double? tabela;
 
-  SigcadItem(
-      {this.codigo,
-      this.nome,
-      this.cnpj,
-      this.cidade,
-      this.bairro,
-      this.numero,
-      this.compl,
-      this.ender,
-      this.estado,
-      this.cep,
-      this.celular,
-      this.cpfnaNota,
-      this.email});
+  SigcadItem({
+    this.codigo,
+    this.nome,
+    this.cnpj,
+    this.ie,
+    this.cidade,
+    this.bairro,
+    this.numero,
+    this.compl,
+    this.ender,
+    this.estado,
+    this.cep,
+    this.celular,
+    this.cpfnaNota,
+    this.email,
+    this.tabela,
+  });
 
   SigcadItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);
@@ -45,6 +51,7 @@ class SigcadItem extends DataItem {
     codigo = toDouble(json['codigo']);
     nome = json['nome'];
     cnpj = json['cnpj'];
+    ie = json['ie'];
     cidade = json['cidade'];
     bairro = json['bairro'];
     numero = json['numero'];
@@ -58,14 +65,20 @@ class SigcadItem extends DataItem {
     tipo = json['tipo'];
     terminal = json['terminal'];
     filial = toDouble(json['filial']);
+    tabela = null;
+    if (json['tabela'] != null)
+      tabela = toDouble(json['tabela']); // se for NULL nao usa tabela.
     return this;
   }
+
+  get usaTabelaPreco => this.tabela != null;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['codigo'] = this.codigo;
     data['nome'] = this.nome;
     data['cnpj'] = this.cnpj;
+    data['ie'] = this.ie;
     data['cidade'] = this.cidade;
     data['bairro'] = this.bairro;
     data['numero'] = this.numero;
@@ -80,6 +93,8 @@ class SigcadItem extends DataItem {
     data['tipo'] = this.tipo ?? 'CONSUMIDOR';
     data['filial'] = this.filial ?? 0;
     data['terminal'] = this.terminal ?? 'WEB';
+    //if (usaTabelaPreco) // ser for NULL ou zero, não muda nada
+    data['tabela'] = this.tabela;
     return data;
   }
 
@@ -100,7 +115,7 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
   Future<ODataResult> listRows(
       {filter, select, orderBy = 'nome', top = 20, skip = 0}) {
     var cols = select ??
-        'codigo,filial,tipo,terminal,nome,celular,cidade,bairro,ender,numero,cep,compl,estado,cnpj,email';
+        'codigo,filial,tipo,terminal,nome,celular,cidade,bairro,ender,numero,cep,compl,estado,cnpj,ie,email,tabela';
 
     return search(
         resource: 'sigcad',
@@ -112,10 +127,10 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
         cacheControl: 'no-cache');
   }
 
-  Future<Map<String, dynamic>> buscarByCodigo(double codigo) async {
+  Future<Map<String, dynamic>> buscarByCodigo(double? codigo) async {
     return listCached(
             filter: "codigo eq '$codigo'",
-            select: 'codigo, nome,cnpj,cep,cidade')
+            select: 'codigo, nome,cnpj,ie,cep,cidade')
         .then((rsp) => (rsp.length == 0) ? {} : rsp[0]);
   }
 
@@ -133,9 +148,9 @@ class SigcadItemModel extends ODataModelClass<SigcadItem> {
         (rsp) => ((rsp['rows'] ?? 0) == 0) ? 0 : rsp['result'][0]['conta']);
   }
 
-  Future<double> proximoCodigo(double filial) async {
+  Future<double> proximoCodigo(double? filial) async {
     return CtrlIdItemModel.proximo('CLIFOR').then((rsp) {
-      return (rsp.numero! * 1000) + filial;
+      return (rsp.numero! * 1000) + filial!;
     });
   }
 }

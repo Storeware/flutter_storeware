@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'dart:convert';
 
 import 'package:controls_data/data_model.dart';
@@ -49,7 +50,7 @@ class PixParams {
       data = toDateTime(json['data'] ?? DateTime.now());
     } catch (e) {
       // nada.
-      print(toJson());
+      // print(toJson());
     }
   }
 }
@@ -89,7 +90,7 @@ class PixModel extends ODataModelClass<PixItem> {
   String urlBase = 'https://estouentregando.com/pagar';
   genCode(PixParams item) async {
     var url = '$urlBase/pix?${item.toUrlParams()}';
-    print(url);
+    //print(url);
     Dio dio = Dio();
     return dio.get(url).then((rsp) {
       return rsp.data;

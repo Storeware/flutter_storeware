@@ -7,7 +7,7 @@ import 'package:controls_data/odata_client.dart';
 //import 'package:controls_data/rest_client.dart';
 //import '../widgets/firebird_extensions.dart';
 import 'package:controls_extensions/extensions.dart' as ext;
-import 'package:controls_data/sql_builder.dart';
+import 'sql_builder.dart';
 import 'ctrl_id_model.dart';
 
 /*toDouble(dynamic value) {
@@ -167,13 +167,13 @@ class SigcauthItem extends DataItem {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id.toString();
-    data['dcto'] = strLen(this.dcto, 10);
+    data['dcto'] = this.dcto;
     data['filial'] = this.filial;
     data['cliente'] = this.cliente;
     data['vendedor'] = this.vendedor;
     data['total'] = this.total;
-    data['obs'] = strLen(this.obs, 255);
-    data['entrega'] = strLen(this.entrega, 1);
+    data['obs'] = this.obs;
+    data['entrega'] = this.entrega;
     data['filialretira'] = this.filialretira;
     data['hora'] = this.hora;
     data['valortroco'] = this.valortroco;
@@ -182,10 +182,10 @@ class SigcauthItem extends DataItem {
     data['lote'] = this.lote;
     data['cobrataxa'] = this.cobrataxa;
     data['contatravada'] = this.contatravada;
-    data['operacao'] = strLen(this.operacao, 10);
+    data['operacao'] = this.operacao;
     data['data'] = this.data;
     data['dav'] = this.dav;
-    data['registrado'] = strLen(this.registrado, 1);
+    data['registrado'] = this.registrado;
     data['prevenda'] = this.prevenda;
     data['baseicmssubst'] = this.baseicmssubst;
     data['icmssubst'] = this.icmssubst;
@@ -194,8 +194,8 @@ class SigcauthItem extends DataItem {
     data['dtent_ret'] = toDateTimeSql(this.dtEntRet ?? DateTime.now());
     data['endentr'] = strLen(endentr, 50);
     data['bairroentr'] = strLen(bairroentr, 20);
-    data['cidadeentr'] = strLen(cidadeentr, 50);
-    data['estadoentr'] = strLen(estadoentr, 2);
+    data['cidadeentr'] = strLen(cidadeentr, 20);
+    data['estadoentr'] = strLen(estadoentr, 5);
     data['cnpjentr'] = cnpjentr;
     data['estprod'] = estprod;
     data['impresso'] = impresso ?? 'N';
@@ -395,7 +395,7 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
     return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  updateById(SigcauthItem item) async {
+  updateById(SigcauthItem item) {
     //var dEnt = toDateTimeSql(item.dtEntRet!);
     Map<String, dynamic> dados = item.toJson();
     dados.remove('total');
@@ -415,14 +415,8 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
   }
 
   Future<double> proximoNumero(double? filial) async {
-    String key = 'PEDIDO';
-    if (filial != null) key += '${filial ~/ 1}';
-    return CtrlIdItemModel.proximo(key).then((rsp) {
-      if (filial == null) {
-        return rsp.numero!;
-      } else {
-        return (rsp.numero! * 1000) + filial;
-      }
+    return CtrlIdItemModel.proximo('PEDIDO$filial').then((rsp) {
+      return (rsp.numero! * 1000) + filial!;
     });
   }
 }

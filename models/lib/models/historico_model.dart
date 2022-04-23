@@ -1,4 +1,5 @@
-import 'package:models/models/eventos_item_model.dart';
+// @dart=2.12
+import '../models/eventos_item_model.dart';
 
 class HistoricoItem extends EventosItemItem {
   @override

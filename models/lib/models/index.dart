@@ -51,6 +51,7 @@ export 'produto_grupo_item.dart';
 export 'produto_model.dart';
 export 'produto_precos_model.dart';
 export 'produto_preco_model.dart';
+export 'restserver.dart';
 export 'sig01_model.dart';
 export 'sig02_model.dart';
 export 'sigbco_model.dart';

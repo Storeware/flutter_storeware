@@ -2,8 +2,9 @@
 
 import 'dart:async';
 
+import 'form_callback.dart';
 import 'search_form_field.dart';
-import 'package:console/views/cadastros/produtos/produto.cadastro_page.dart';
+//import 'package:console/views/cadastros/produtos/produto.cadastro_page.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class CtprodSearchFormField extends StatefulWidget {
   final bool canClear;
   final bool obrigatorio;
   final String? Function(String)? validator;
+  final FormSearchCallback onSearch;
+
   const CtprodSearchFormField({
     Key? key,
     this.onChanged,
@@ -34,6 +37,7 @@ class CtprodSearchFormField extends StatefulWidget {
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -145,7 +149,8 @@ class _SigbcoSearchFormFieldState extends State<CtprodSearchFormField> {
                   ? 'Indentificar o produto/serviço'
                   : null;
             },
-            onSearch: (a) {
+            onSearch: (x) => widget.onSearch(context).then((r) => r['codigo']),
+            /*(a) {
               late dynamic y;
               return Dialogs.showPage(context,
                   child: CadastroProdutoPage(
@@ -165,7 +170,7 @@ class _SigbcoSearchFormFieldState extends State<CtprodSearchFormField> {
                       })).then((rsp) {
                 return y;
               });
-            },
+            },*/
             future: (x) {
               var u = x.toUpperCase();
               String f = '';

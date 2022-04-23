@@ -6,8 +6,8 @@ import 'package:controls_web/controls/color_picker.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/injects.dart';
 import 'package:controls_web/controls/responsive.dart';
-import 'package:console/views/agenda/agenda_resource.dart';
-import 'package:console/views/agenda/models/agenda_model.dart';
+import 'agenda_resource.dart';
+import 'models/agenda_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
@@ -45,7 +45,7 @@ class AgendaView extends StatefulWidget {
   /// inserir bottom na edição de dados
   final Widget? editBottom;
   final String? agendaGid;
-  AgendaView(
+  const AgendaView(
       {Key? key,
       this.title,
       this.agendaGid,

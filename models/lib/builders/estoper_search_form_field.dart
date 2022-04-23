@@ -2,8 +2,9 @@
 
 import 'dart:async';
 
+import 'form_callback.dart';
 import 'search_form_field.dart';
-import 'package:console/views/estoque/cadastros/estoper_page.dart';
+//import 'package:console/views/estoque/cadastros/estoper_page.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -19,6 +20,8 @@ class EstoperSearchFormField extends StatefulWidget {
   final bool canDelete;
   final bool? readOnly;
   final String? Function(String)? validator;
+  final FormSearchCallback onSearch;
+
   const EstoperSearchFormField({
     Key? key,
     this.onChanged,
@@ -31,6 +34,7 @@ class EstoperSearchFormField extends StatefulWidget {
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -120,7 +124,11 @@ class _EstoperSearchFormFieldState extends State<EstoperSearchFormField> {
                   ? 'indicar a classificação para a operação'
                   : null;
             },
-            onSearch: (a) {
+            onSearch: (c) => widget.onSearch(context).then((r) {
+                  addSuggestions.value = [r];
+                  return r['codigo'];
+                }),
+            /* (a) {
               dynamic y;
               return Dialogs.showPage(context,
                   width: 400,
@@ -143,7 +151,7 @@ class _EstoperSearchFormFieldState extends State<EstoperSearchFormField> {
                       })).then((rsp) {
                 return y;
               });
-            },
+            },*/
             future: (x) {
               var u = x.toUpperCase();
               String f = '';

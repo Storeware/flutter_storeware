@@ -38,6 +38,7 @@ dependencies:
       path: controls_data
   uuid:
   get:
+  provider:
 
 dev_dependencies:
   flutter_test:

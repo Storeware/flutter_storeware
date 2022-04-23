@@ -4,10 +4,12 @@ import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
 //import 'package:controls_web/controls/masked_field.dart';
 
-import 'package:console/views/financas/cadastros/sig01_page.dart';
+//import 'package:console/views/financas/cadastros/sig01_page.dart';
 import 'package:controls_web/controls/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
+import 'form_callback.dart';
 
 class Sig01FormField extends StatefulWidget {
   final String? codigo;
@@ -19,6 +21,8 @@ class Sig01FormField extends StatefulWidget {
   final bool inRecebimento;
   final String? filter;
   final String? label;
+  final FormSearchCallback onSearch;
+
   const Sig01FormField({
     Key? key,
     this.codigo,
@@ -30,6 +34,7 @@ class Sig01FormField extends StatefulWidget {
     this.readOnly = false,
     this.validator,
     this.filter,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -85,7 +90,10 @@ class _CodigoProdutoFormFieldState extends State<Sig01FormField> {
               onFocusChange: (b, x) {
                 if (x!.isNotEmpty) buscar(x);
               },
-              onSearch: () async {
+              onSearch: () => widget.onSearch(context).then((r) {
+                notifier.value = r;
+                return r['codigo'];
+              }), /* () async {
                 if (widget.readOnly) return null;
                 return Dialogs.showPage(context,
                     width: minX(responsive.size.width, 400),
@@ -103,7 +111,7 @@ class _CodigoProdutoFormFieldState extends State<Sig01FormField> {
                               notifier.value = x;
                               return x['codigo'];
                             }))).then((rsp) => notifier.value['codigo']);
-              },
+              },*/
             ),
           ),
           Expanded(

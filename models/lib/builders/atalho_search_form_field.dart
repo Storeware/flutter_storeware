@@ -2,9 +2,9 @@
 
 import 'dart:async';
 
+import 'package:models/builders/form_callback.dart';
+
 import 'search_form_field.dart';
-import 'package:console/views/cadastros/produtos/categoria.cadastro_page.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -14,12 +14,14 @@ class AtalhosSearchFormField extends StatefulWidget {
   final double? codigo;
   final dynamic Function(String)? validator;
   final bool obrigatorio;
+  final FormSearchCallback onSearch;
   const AtalhosSearchFormField({
     Key? key,
     this.onChanged,
     this.codigo,
     this.validator,
     this.obrigatorio = true,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -115,12 +117,18 @@ class _AtalhosSearchFormFieldState extends State<AtalhosSearchFormField> {
               notifier.value = v;
               textoController.text = v['nome'] ?? '';
             },
-            onSearch: (a) {
+            onSearch: (x) {
+              return widget.onSearch(context).then((r) {
+                addSuggestions.value = [r];
+                return r['codigo'];
+              }) /* (a) {
               late dynamic y;
               return Dialogs.showPage(context,
                   width: 450,
                   //height: 550,
-                  child: CadastroCategoriaView(
+                  child: widget.childDialog(context, (r) {
+                    y = r;
+                  }) CadastroCategoriaView(
                       title: 'Selecione uma categoria',
                       canEdit: false,
                       canInsert: false,
@@ -130,9 +138,11 @@ class _AtalhosSearchFormFieldState extends State<AtalhosSearchFormField> {
                       onSelected: (x) async {
                         y = x;
                         return x['codigo'];
-                      })).then((rsp) {
+                      })
+                  ).then((rsp) {
                 return y;
-              });
+              })*/
+                  ;
             },
             future: (x) {
               var u = x.toUpperCase();

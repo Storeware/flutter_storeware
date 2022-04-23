@@ -2,8 +2,9 @@
 
 import 'dart:async';
 
+import 'form_callback.dart';
 import 'search_form_field.dart';
-import 'package:console/views/cadastros/filiais/filial_page.dart';
+//import 'package:console/views/cadastros/filiais/filial_page.dart';
 //import 'package:console/views/financas/cadastros/filial_page.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
@@ -16,6 +17,8 @@ class FilialSearchFormField extends StatefulWidget {
   final String? label;
   final dynamic Function(double?)? validator;
   final bool todas;
+  final FormSearchCallback onSearch;
+
   const FilialSearchFormField({
     Key? key,
     required this.onChanged,
@@ -23,6 +26,7 @@ class FilialSearchFormField extends StatefulWidget {
     this.label,
     this.todas = false,
     this.validator,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -121,7 +125,11 @@ class _SigbcoSearchFormFieldState extends State<FilialSearchFormField> {
               }
               return null;
             },
-            onSearch: (a) {
+            onSearch: (c) => widget.onSearch(context).then((r) {
+                  addSuggestions.value = [r];
+                  return r['codigo'];
+                }),
+            /* (a) {
               late dynamic y;
               return Dialogs.showPage(context,
                   width: 450,
@@ -139,7 +147,7 @@ class _SigbcoSearchFormFieldState extends State<FilialSearchFormField> {
                       })).then((rsp) {
                 return y;
               });
-            },
+            },*/
             future: (x) {
               var u = x.toUpperCase();
               var cod = double.tryParse(x);

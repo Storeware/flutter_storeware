@@ -1,11 +1,13 @@
 // @dart=2.12
 
-import 'package:controls_web/controls/dialogs_widgets.dart';
+//import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_web/controls/responsive.dart';
-import 'package:console/views/cadastros/clientes/cadastro_clientes.dart';
+//import 'package:console/views/cadastros/clientes/cadastro_clientes.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
+import 'form_callback.dart';
 
 class SigcadFormField extends StatefulWidget {
   final double? codigo;
@@ -16,6 +18,8 @@ class SigcadFormField extends StatefulWidget {
   final Function(int?)? validator;
   final Function(double)? onFocusChanged;
   final Function(dynamic)? onItemChanged;
+  final FormSearchCallback onSearch;
+
   const SigcadFormField({
     Key? key,
     this.codigo = 0.0,
@@ -26,6 +30,7 @@ class SigcadFormField extends StatefulWidget {
     this.validator,
     this.onItemChanged,
     this.onFocusChanged,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -60,7 +65,7 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
 
   @override
   Widget build(BuildContext context) {
-    ResponsiveInfo responsive = ResponsiveInfo(context);
+    // ResponsiveInfo responsive = ResponsiveInfo(context);
     final TextEditingController codigoController =
         TextEditingController(text: (widget.codigo ?? 0.0).toStringAsFixed(0));
     if ((widget.codigo ?? 0) > 0) {
@@ -96,8 +101,14 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
               },
               onSearch: () async {
                 if (widget.readOnly) return null;
+                return widget.onSearch(context).then((r) {
+                  int codigo = (r['codigo'] ?? 0.0).toInt();
+                  codigoController.text = codigo.toString();
+                  buscar(codigo + 0.0);
+                  return codigo;
+                });
                 //var rt = await
-                return Dialogs.showPage(context,
+                /*return Dialogs.showPage(context,
                         child: Scaffold(
                             appBar: AppBar(title: const Text('Contatos')),
                             body: CadastroClientePage(
@@ -113,7 +124,7 @@ class _CodigoProdutoFormFieldState extends State<SigcadFormField> {
                                     //  widget.onChanged(x);
                                   });
                                 })))
-                    .then((rsp) => int.tryParse(codigoController.text));
+                    .then((rsp) => int.tryParse(codigoController.text));*/
               },
             ),
           ),

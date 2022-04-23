@@ -1,18 +1,24 @@
 // @dart=2.12
 
-import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
-import 'package:console/views/cadastros/produtos/produto.cadastro_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
+import 'form_callback.dart';
 
 class CodigoProdutoFormField extends StatefulWidget {
   final String? codigo;
   final Function(String)? onChanged;
   final Function(String)? onSaved;
   final Function(String)? validator;
+  final FormSearchCallback onSearch;
   const CodigoProdutoFormField(
-      {Key? key, this.codigo, this.onChanged, this.onSaved, this.validator})
+      {Key? key,
+      this.codigo,
+      this.onChanged,
+      this.onSaved,
+      this.validator,
+      required this.onSearch})
       : super(key: key);
 
   @override
@@ -49,23 +55,30 @@ class _CodigoProdutoFormFieldState extends State<CodigoProdutoFormField> {
           SizedBox(
             width: 180,
             child: MaskedSearchFormField<String>(
-              autofocus: (widget.codigo ?? '').isEmpty,
-              labelText: 'Código',
-              controller: produtoController,
-              initialValue: widget.codigo,
-              onChanged: widget.onChanged,
-              validator: (x) {
-                if (nome == '') return 'Inválido';
-                return (widget.validator != null) ? widget.validator!(x) : null;
-              },
-              onSaved: (x) {
-                if (widget.onSaved != null) return widget.onSaved!(x);
-              },
-              onFocusChange: (b, x) {
-                // print('focusChange $x');
-                buscarProduto(x);
-              },
-              onSearch: () {
+                autofocus: (widget.codigo ?? '').isEmpty,
+                labelText: 'Código',
+                controller: produtoController,
+                initialValue: widget.codigo,
+                onChanged: widget.onChanged,
+                validator: (x) {
+                  if (nome == '') return 'Inválido';
+                  return (widget.validator != null)
+                      ? widget.validator!(x)
+                      : null;
+                },
+                onSaved: (x) {
+                  if (widget.onSaved != null) return widget.onSaved!(x);
+                },
+                onFocusChange: (b, x) {
+                  // print('focusChange $x');
+                  buscarProduto(x);
+                },
+                onSearch: () {
+                  return widget.onSearch(context).then((r) {
+                    notifier.value = r;
+                    return r['codigo'];
+                  });
+                } /*() {
                 return Dialogs.showPage(context,
                     child: Scaffold(
                       appBar: AppBar(title: const Text('Selecionar produto')),
@@ -80,8 +93,8 @@ class _CodigoProdutoFormFieldState extends State<CodigoProdutoFormField> {
                     )).then((rsp) {
                   return notifier.value['codigo'];
                 });
-              },
-            ),
+              },*/
+                ),
           ),
           Expanded(
             child: ValueListenableBuilder(

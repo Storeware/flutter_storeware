@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'form_callback.dart';
 import 'search_form_field.dart';
 //import 'package:console/views/os/cadastros/sigven_view.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
@@ -17,11 +18,11 @@ class SigvenSearchFormField extends StatefulWidget {
   final bool canDelete;
   final String Function(String)? validator;
   final String? label;
-  final Widget Function(Function onSelected) formChild;
+  final FormSearchCallback onSearch;
   const SigvenSearchFormField({
     Key? key,
     this.onChanged,
-    required this.formChild,
+    required this.onSearch,
     this.codigo,
     this.label,
     this.validator,
@@ -118,13 +119,15 @@ class _SigbcoSearchFormFieldState extends State<SigvenSearchFormField> {
         if (vendedorController.text.isEmpty) return 'Informar o vendedor';
         return null;
       },
-      onSearch: (a) {
+      onSearch: (_) => widget.onSearch(context).then((r) {
+        addSuggestions.value = [r];
+        return r['codigo'];
+      }),
+      /* (a) {
         late dynamic y;
         return Dialogs.showPage(
           context,
-          child: widget.formChild((resp) {
-            y = resp;
-          }), /* SigvenView(
+          child:   SigvenView(
                 //title: 'Classificação da Operação',
                 //inPagamento: widget.inPagamento,
                 //inRecebimento: widget.inRecebimento,
@@ -140,11 +143,11 @@ class _SigbcoSearchFormFieldState extends State<SigvenSearchFormField> {
                 onSelected: (x) async {
                   y = x;
                   return x['codigo'];
-                })*/
+                })
         ).then((rsp) {
           return y;
         });
-      },
+      },*/
       future: (x) {
         var u = x.toUpperCase();
         String f = '';

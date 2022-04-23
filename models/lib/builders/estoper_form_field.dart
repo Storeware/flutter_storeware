@@ -2,9 +2,11 @@
 
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
-import 'package:console/views/estoque/cadastros/estoper_page.dart';
+//import 'package:console/views/estoque/cadastros/estoper_page.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
+import 'form_callback.dart';
 
 class EstOperFormField extends StatefulWidget {
   final String? codigo;
@@ -12,6 +14,8 @@ class EstOperFormField extends StatefulWidget {
   final Function(String)? onSaved;
   final bool readOnly;
   final Function(String)? validator;
+  final FormSearchCallback onSearch;
+
   const EstOperFormField({
     Key? key,
     this.codigo,
@@ -19,6 +23,7 @@ class EstOperFormField extends StatefulWidget {
     this.onSaved,
     this.readOnly = false,
     this.validator,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -71,7 +76,10 @@ class _CodigoProdutoFormFieldState extends State<EstOperFormField> {
               onFocusChange: (b, x) {
                 buscar(x);
               },
-              onSearch: () async {
+              onSearch: () => widget.onSearch(context).then((r) {
+                notifier.value = r;
+                return r['codigo'];
+              }), /* () async {
                 if (widget.readOnly) return null;
                 return Dialogs.showPage(context,
                     child: EstOperView(
@@ -82,7 +90,7 @@ class _CodigoProdutoFormFieldState extends State<EstOperFormField> {
                           //codigoController.text = x['codigo'];
                           return x['codigo'];
                         })).then((rsp) => notifier.value!['codigo']);
-              },
+              },*/
             ),
           ),
           Expanded(

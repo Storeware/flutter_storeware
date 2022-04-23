@@ -1,11 +1,13 @@
 // @dart=2.12
 
 import 'package:controls_web/controls/dialogs_widgets.dart';
-import 'package:console/views/financas/cadastros/sigbco_page.dart';
+//import 'package:console/views/financas/cadastros/sigbco_page.dart';
 import 'package:controls_web/controls/masked_field.dart';
 
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
+import 'form_callback.dart';
 
 class SigbcoFormField extends StatefulWidget {
   final String? codigo;
@@ -13,6 +15,8 @@ class SigbcoFormField extends StatefulWidget {
   final Function(String)? onSaved;
   final bool readOnly;
   final Function(String)? validator;
+  final FormSearchCallback onSearch;
+
   const SigbcoFormField({
     Key? key,
     this.codigo,
@@ -20,6 +24,7 @@ class SigbcoFormField extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.readOnly = false,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -75,7 +80,10 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
               onFocusChange: (b, x) {
                 if (x.isNotEmpty) buscar(x);
               },
-              onSearch: () async {
+              onSearch: () => widget.onSearch(context).then((r) {
+                notifier.value = r;
+                return r['codigo'];
+              }), /* () async {
                 if (widget.readOnly) return null;
                 return Dialogs.showPage(context,
                     child: SigbcoPage(
@@ -85,7 +93,7 @@ class _CodigoProdutoFormFieldState extends State<SigbcoFormField> {
                           notifier.value = x;
                           return x['codigo'];
                         })).then((rsp) => notifier.value['codigo']);
-              },
+              },*/
             ),
           ),
           Expanded(

@@ -2,8 +2,9 @@
 
 import 'dart:async';
 
+import 'form_callback.dart';
 import 'search_form_field.dart';
-import 'package:console/views/financas/cadastros/sigbco_page.dart';
+//import 'package:console/views/financas/cadastros/sigbco_page.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class SigbcoSearchFormField extends StatefulWidget {
   final dynamic Function(String)? validator;
   final EdgeInsets? padding;
   final bool obrigatorio;
+  final FormSearchCallback onSearch;
+
   const SigbcoSearchFormField({
     Key? key,
     this.onChanged,
@@ -24,6 +27,7 @@ class SigbcoSearchFormField extends StatefulWidget {
     this.padding,
     this.obrigatorio = true,
     this.validator,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -116,7 +120,11 @@ class _SigbcoSearchFormFieldState extends State<SigbcoSearchFormField> {
               notifier.value = v;
               bancoController.text = v['nome'] ?? '';
             },
-            onSearch: (a) {
+            onSearch: (_) => widget.onSearch(context).then((r) {
+                  addSuggestions.value = [r];
+                  return r['codigo'];
+                }),
+            /*(a) {
               late dynamic y;
               return Dialogs.showPage(context,
                   width: 450,
@@ -133,7 +141,7 @@ class _SigbcoSearchFormFieldState extends State<SigbcoSearchFormField> {
                       })).then((rsp) {
                 return y;
               });
-            },
+            },*/
             future: (x) {
               var u = x.toUpperCase();
               return SigbcoItemModel()

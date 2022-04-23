@@ -2,10 +2,12 @@
 
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
-import 'package:console/views/cadastros/filiais/filial_page.dart';
+//import 'package:console/views/cadastros/filiais/filial_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
+
+import 'form_callback.dart';
 
 class FilialFormField extends StatefulWidget {
   final double? codigo;
@@ -14,6 +16,8 @@ class FilialFormField extends StatefulWidget {
   final bool readOnly;
   final Function(double)? validator;
   final bool todas;
+  final FormSearchCallback onSearch;
+
   const FilialFormField({
     Key? key,
     this.codigo,
@@ -22,6 +26,7 @@ class FilialFormField extends StatefulWidget {
     this.validator,
     this.todas = false,
     this.readOnly = false,
+    required this.onSearch,
   }) : super(key: key);
 
   @override
@@ -79,7 +84,10 @@ class _CodigoProdutoFormFieldState extends State<FilialFormField> {
               onFocusChange: (b, x) {
                 if (x != null) if (x > 0) buscar(x);
               },
-              onSearch: () async {
+              onSearch: () => widget.onSearch(context).then((r) {
+                notifier.value = r;
+                return r['codigo'] ~/ 1;
+              }), /* () async {
                 if (widget.readOnly) return null;
                 return await Dialogs.showPage(context,
                     child: FilialPage(
@@ -91,7 +99,7 @@ class _CodigoProdutoFormFieldState extends State<FilialFormField> {
                         })).then((rsp) {
                   return notifier.value['codigo'] ~/ 1;
                 });
-              },
+              },*/
             ),
           ),
           Expanded(

@@ -2,12 +2,13 @@
 
 import 'dart:async';
 
+import 'form_callback.dart';
 import 'search_form_field.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
+//import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-import 'package:console/views/cadastros/clientes/cadastro_clientes.dart';
+//import 'package:console/views/cadastros/clientes/cadastro_clientes.dart';
 
 class SigcadSearchFormField extends StatefulWidget {
   final Function(double?) onChanged;
@@ -20,6 +21,9 @@ class SigcadSearchFormField extends StatefulWidget {
   final bool canClear;
   final bool obrigatorio;
   final String Function(String)? validator;
+  final FormSearchCallback onSearch;
+  final FormValueCallback onNew;
+
   const SigcadSearchFormField({
     Key? key,
     required this.onChanged,
@@ -32,6 +36,8 @@ class SigcadSearchFormField extends StatefulWidget {
     this.readOnly = false,
     this.canInsert = true,
     this.validator,
+    required this.onSearch,
+    required this.onNew,
   }) : super(key: key);
 
   @override
@@ -143,7 +149,11 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
               onSearch: widget.readOnly
                   ? null
                   : (a) {
-                      Map<String, dynamic>? y;
+                      return widget.onSearch(context).then((r) {
+                        addSuggestions.value = [r];
+                        return r['codigo'];
+                      });
+                      /* Map<String, dynamic>? y;
                       return Dialogs.showPage(context,
                           child: CadastroClientePage(
                               title: widget.label ?? 'Parceiros',
@@ -158,7 +168,7 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                                 return x['codigo'];
                               })).then((rsp) {
                         return y;
-                      });
+                      });*/
                     },
               future: (x) {
                 var u = x.toUpperCase();
@@ -188,12 +198,17 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                         if (widget.onInsert != null) {
                           widget.onInsert!(context, _digitadoController.text);
                         } else {
-                          ClienteController.doNovoCadastro(
+                          widget.onNew(context,
+                              {"nome": _digitadoController.text}).then((row) {
+                            buscar(row['codigo']);
+                            widget.onChanged(row['codigo']);
+                          });
+                          /*ClienteController.doNovoCadastro(
                               context, {"nome": _digitadoController.text},
                               onChanged: (row) {
                             widget.onChanged(row['codigo']);
                             buscar(row['codigo']);
-                          });
+                          });*/
                         }
                       },
                     )

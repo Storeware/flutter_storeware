@@ -91,8 +91,9 @@ class SenhasItemModel extends ODataModelClass<SenhasItem> {
   }
   SenhasItem newItem() => SenhasItem();
   Future<Map<String, dynamic>> buscarByCodigo(codigo) async {
-    return Cached.value('usuario_$codigo',
+    var k = await Cached.value('usuario_$codigo',
         builder: (x) => super.getOne(filter: "codigo eq '$codigo'"));
+    return k ?? {};
   }
 }
 

@@ -3,7 +3,7 @@
 import 'package:console/config/config.dart';
 import 'package:controls_web/controls/color_picker.dart';
 import 'package:controls_web/controls/data_viewer.dart';
-import 'package:console/comum/controls.dart';
+import 'package:models/builders/controls.dart';
 import 'package:console/views/agenda/models/agenda_recurso_model.dart';
 import 'package:flutter/material.dart';
 

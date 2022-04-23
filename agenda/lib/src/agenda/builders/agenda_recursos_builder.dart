@@ -1,7 +1,7 @@
 // @dart=2.12
 
 import 'package:controls_data/odata_client.dart';
-import 'package:console/comum/controls.dart';
+import 'package:models/builders/controls.dart';
 import 'package:flutter/material.dart';
 
 class AgendaResourceBuilder extends StatelessWidget {
@@ -25,7 +25,7 @@ class AgendaResourceBuilder extends StatelessWidget {
             .toString()
             .toUpperCase()
             .compareTo((b['nome'] ?? '').toString().toUpperCase()));
-        if (items.length == 0) items.insert(0, {'gid': '', 'nome': ''});
+        if (items.isEmpty) items.insert(0, {'gid': '', 'nome': ''});
         return builder(ctx, items);
       },
     );
@@ -37,17 +37,17 @@ class AgendaResourceBuilder extends StatelessWidget {
       if ((gid ?? '').isEmpty && (items.length == 1)) gid = items[0]['gid'];
 
       dynamic corrente = {};
-      items.forEach((it) {
+      for (var it in items) {
         if ((it['gid'] ?? '') == (gid ?? '')) corrente = it;
-      });
+      }
       List<String> keys = [];
-      items.forEach((item) {
-        if (keys.indexOf(item['nome']) < 0) keys.add(item['nome']);
-      });
+      for (var item in items) {
+        if (!keys.contains(item['nome'])) keys.add(item['nome']);
+      }
       //if (keys.length == 0) keys.add('');
 
       return FormComponents.createDropDownFormFieldContainer(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           hintText: "Recurso",
           items: keys,
           onChanged: (newValue) {

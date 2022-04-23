@@ -1,8 +1,8 @@
 // @dart=2.12
 
 import 'package:controls_data/odata_client.dart';
-import 'package:console/comum/controls.dart';
 import 'package:flutter/material.dart';
+import 'package:models/builders/controls.dart';
 
 class AgendaEstadoBuilder extends StatelessWidget {
   final Widget Function(BuildContext, List<dynamic>) builder;
@@ -37,19 +37,19 @@ class AgendaEstadoBuilder extends StatelessWidget {
       if ((gid ?? '').isEmpty && (items.length == 1)) gid = items[0]['gid'];
 
       dynamic corrente = {};
-      items.forEach((it) {
+      for (var it in items) {
         if ((it['gid'] ?? '') == (gid ?? '')) corrente = it;
-      });
+      }
       List<String> keys = [];
-      items.forEach((item) {
-        if (keys.indexOf(item['nome']) < 0) keys.add(item['nome']);
-      });
-      if (keys.length == 0) keys.add('');
+      for (var item in items) {
+        if (!keys.contains(item['nome'])) keys.add(item['nome']);
+      }
+      if (keys.isEmpty) keys.add('');
 
       if (corrente['nome'] == '' && items.length > 1) corrente = items[1];
 
       return FormComponents.createDropDownFormFieldContainer(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           hintText: label ?? "Estado da Agenda",
           style: TextStyle(color: Colors.grey[400]),
           items: keys,

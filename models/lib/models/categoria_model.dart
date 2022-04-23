@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'dart:convert';
 import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
@@ -9,9 +10,11 @@ class CategoriaItem extends DataItem {
   String? nome;
   int? codigoPai = 0;
   int? prioridade = 0;
-  int? conta = 0;
+  int conta = 0;
+  String? bmp;
 
-  CategoriaItem({this.codigo, this.nome, this.codigoPai, this.prioridade});
+  CategoriaItem(
+      {this.codigo, this.nome, this.codigoPai, this.prioridade, this.bmp});
 
   CategoriaItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);
@@ -24,6 +27,7 @@ class CategoriaItem extends DataItem {
     data['codigo_pai'] = this.codigoPai;
     data['prioridade'] = this.prioridade;
     data['id'] = this.codigo;
+    data['bmp'] = this.bmp;
 
     return data;
   }
@@ -35,6 +39,7 @@ class CategoriaItem extends DataItem {
     codigoPai = toInt(json['codigo_pai']);
     prioridade = toInt(json['prioridade']);
     conta = toInt(json['conta']);
+    bmp = json['bmp'];
     return this;
   }
 }

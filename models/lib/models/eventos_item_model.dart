@@ -1,7 +1,8 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
-import 'package:controls_data/odata_client.dart' hide toDouble, toDateTime;
+import 'package:controls_data/odata_client.dart';
 //import 'package:controls_data/odata_firestore.dart';
-import 'package:controls_extensions/extensions.dart';
+//import 'package:controls_extensions/extensions.dart' as ext;
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -93,7 +94,7 @@ class EventosItemItem extends DataItem {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['data'] = toDateTime(this.data).toDateTimeSql();
+    data['data'] = toDateTimeSql(toDateTime(this.data));
     data['obs'] = this.obs;
     data['link'] = this.link;
     data['inativo'] = this.inativo ?? 'N';
@@ -101,7 +102,7 @@ class EventosItemItem extends DataItem {
     data['autor'] = this.autor;
     data['pessoa'] = this.pessoa;
     data['arquivado'] = this.arquivado ?? 'N';
-    data['datalimite'] = toDateTime(this.datalimite).toDateTimeSql();
+    data['datalimite'] = toDateTimeSql(toDateTime(this.datalimite));
     data['idestado'] = this.idestado ?? 0;
     data['idgrupo_estado'] = this.idgrupoEstado ?? 0;
     data['cliente'] = this.cliente ?? 0;
@@ -130,7 +131,7 @@ class EventosItemItem extends DataItem {
   }
 }
 
-class EventosItemNotifier extends BlocModel<String> {
+class EventosItemNotifier extends BlocModel<String?> {
   static final _singleton = EventosItemNotifier._create();
   EventosItemNotifier._create();
   factory EventosItemNotifier() => _singleton;
@@ -154,15 +155,20 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
 
   @override
   put(item) {
-    Map<String, dynamic> _item;
+    Map<String, dynamic>? _item;
     if (item is EventosItemItem)
       _item = item.toJson();
     else
       _item = item;
     return super.put(_item).then((resp) {
-      EventosItemNotifier().notify(_item['titulo']);
-      return resp;
+      EventosItemNotifier().notify(_item!['titulo']);
+      return resp!;
     });
+  }
+
+  pegar(gid, pessoa) {
+    return API!.execute(
+        "update eventos_item set leu='S', arquivado='N', pessoa = '$pessoa' where gid = '$gid' ");
   }
 
   marcarLeu({String? gid, String flag = 'S'}) {
@@ -176,7 +182,7 @@ class EventosItemItemModel extends ODataModelClass<EventosItemItem> {
             filter:
                 "pessoa='$usuario' and arquivado='N' and (leu='N' or leu is null) ")
         .then((rsp) {
-      print(rsp);
+      // print(rsp);
       return (rsp.length == 0) ? 0 : rsp[0]['n'];
     });
   }

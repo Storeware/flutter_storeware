@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 
@@ -174,9 +175,9 @@ class EstmvtoItemModel extends ODataModelClass<EstmvtoItem> {
     super.API = ODataInst();
   }
   EstmvtoItem newItem() => EstmvtoItem();
-  listMvtoEstoque({filter, top, skip, orderBy}) async {
+  Future<List<dynamic>> listMvtoEstoque({filter, top, skip, orderBy}) async {
     var c = 'a.' + EstmvtoItem().toJson().keysJoin(separator: ', a.');
-    print(c);
+    // print(c);
     return listNoCached(
         resource: 'estmvto a, ctprodsd b',
         select: '$c, b.qestfin',

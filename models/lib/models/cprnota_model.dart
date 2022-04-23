@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 //import 'package:controls_extensions/extensions.dart';
@@ -293,9 +294,9 @@ group by data'''; // print(qry);
     }
     final h = DateTime.now();
     for (var item in r) {
-      final v = toDate(item['data']);
-      final d = h.difference(v!).inDays;
-      lista[d] = item['valor'] + 0.0;
+      final v = toDate(item['data'])!;
+      final d = h.difference(v).inDays;
+      lista[d] = (item['valor'] ?? 0) + 0.0;
     }
     // print(lista);
     return lista;

@@ -1,25 +1,31 @@
-import 'usuarios_model.dart';
+// @dart=2.16
 
-enum TipoAcesso { todos, admin, gestor, adminGestor, operador, leitura }
+//import 'usuarios_model.dart';
+
+import 'controller.dart';
+import 'usuarios_model.dart';
+//import 'package:get/get.dart';
+
+enum TipoAcesso { todos, admin, gestor, adminOrGestor, operador, leitura }
 
 class Acesso {
   num? id;
   String? nome;
   TipoAcesso? tipo;
-  List<Acesso> items = [];
+  List<Acesso>? items = [];
   Acesso({this.id, this.nome, this.tipo});
   addOrReplace(Acesso item) {
-    int index = indexOf(item.id ?? -1);
+    int index = indexOf(item.id!);
     if (index < 0) {
-      items.add(item);
+      items!.add(item);
       return item;
     }
-    return items[index].fromMap(item.toJson());
+    return items![index].fromMap(item.toJson());
   }
 
   int indexOf(num id) {
-    for (var i = 0; i < items.length; i++) {
-      if (items[i].id == id) return i;
+    for (var i = 0; i < items!.length; i++) {
+      if (items![i].id == id) return i;
     }
     return -1;
   }
@@ -32,7 +38,7 @@ class Acesso {
   }
 
   toJson() {
-    return {"id": id, "nome": nome, "tipo": tipo?.index};
+    return {"id": id, "nome": nome, "tipo": tipo!.index};
   }
 
   /// usado durante a carga do app, não subsitui cargas já feitas
@@ -43,17 +49,16 @@ class Acesso {
 
   get key => id;
   get name => nome;
-  List<num> get keys =>
-      [for (var i = 0; i < items.length; i++) items[i].id ?? 0];
+  List<num> get keys => [for (var i = 0; i < items!.length; i++) items![i].id!];
   List<String> get names =>
-      [for (var i = 0; i < items.length; i++) items[i].nome ?? ''];
+      [for (var i = 0; i < items!.length; i++) items![i].nome!];
   operator [](num id) => findOf(id);
   findOf(num id) {
     int index = indexOf(id);
-    if (index >= 0) return items[index];
-    if (items.length > 0)
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i].findOf(id);
+    if (index >= 0) return items![index];
+    if (items!.length > 0)
+      for (var i = 0; i < items!.length; i++) {
+        var item = items![i].findOf(id);
         if (item != null) return item;
       }
     return null;
@@ -93,33 +98,44 @@ class Acessos {
     return null;
   }
 
-  static bool habilitado(num id) {
+  static bool habilitado(num id, {bool mostrar = false}) {
+    bool rt = _habilitado(id, mostrar);
+    return rt;
+  }
+
+  static bool _habilitado(num id, bool mostrar) {
     // procura o item
     var ac = Acessos();
     Acesso? item = ac.findFirst(id);
     TipoAcesso tipo = item?.tipo ?? TipoAcesso.todos;
+    bool rt = false;
     switch (tipo) {
       case TipoAcesso.admin:
-        return ac.dadosUsuario.isAdmin;
-      //break;
+        rt = ac.dadosUsuario.isAdmin;
+        break;
       case TipoAcesso.gestor:
-        return ac.dadosUsuario.isGestor;
-      //break;
-      case TipoAcesso.adminGestor:
-        return ac.dadosUsuario.isAdmin || ac.dadosUsuario.isGestor;
-      //break;
+        rt = ac.dadosUsuario.isGestor;
+        break;
+      case TipoAcesso.adminOrGestor:
+        rt = ac.dadosUsuario.isAdmin || ac.dadosUsuario.isGestor;
+        break;
       case TipoAcesso.operador:
-        return ac.dadosUsuario.isOperador ||
+        rt = ac.dadosUsuario.isOperador ||
             ac.dadosUsuario.isAdmin ||
             ac.dadosUsuario.isGestor;
-      //break;
+        break;
       case TipoAcesso.leitura:
         return !ac.dadosUsuario.isReadOnly;
-      //break;
 
       default:
         return true;
     }
+
+    if (!rt && mostrar) {
+      DefaultMensagemNotifier().notify(
+          'Acesso indisponível|Acesso ao recurso não esta disponível para uso; Se necessário solicite ao administrador');
+    }
+    return rt;
   }
 
   /// registrar o acesso caso ainda não esteja na lista
@@ -147,5 +163,5 @@ class Acessos {
   }
 
   operator [](num id) => _singleton.findFirst(id);
-  static String? name(num id) => _singleton.findFirst(id)?.nome;
+  static String? name(num id) => _singleton.findFirst(id)?.nome!;
 }

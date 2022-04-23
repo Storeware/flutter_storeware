@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
@@ -7,36 +9,36 @@ class EstoperItem extends DataItem {
   String? nome;
   String? codfinanc;
 
-  bool? icmsiscustos = false;
-  bool? ipiiscustos = false;
-  bool? isentrada = false;
+  bool icmsiscustos = false;
+  bool ipiiscustos = false;
+  bool isentrada = false;
 
-  bool? mudafinanc = true;
-  bool? mudapmedio = true;
-  bool? naoatualpreco = false;
+  bool mudafinanc = true;
+  bool mudapmedio = true;
+  bool naoatualpreco = false;
 
-  bool? somacompras = false;
-  bool? somavendas = false;
-  bool? somaconsig = false;
-  bool? somademanda = true;
-  bool? mudaestoq = true;
+  bool somacompras = false;
+  bool somavendas = false;
+  bool somaconsig = false;
+  bool somademanda = true;
+  bool mudaestoq = true;
 
   EstoperItem(
       {this.codfinanc,
       this.codigo,
-      this.icmsiscustos,
+      this.icmsiscustos = false,
       // this.id,
-      this.ipiiscustos,
-      this.isentrada,
-      this.mudafinanc,
-      this.mudapmedio,
+      this.ipiiscustos = false,
+      this.isentrada = false,
+      this.mudafinanc = true,
+      this.mudapmedio = true,
       this.nome,
-      this.somacompras,
-      this.somavendas,
-      this.naoatualpreco,
-      this.mudaestoq,
-      this.somaconsig,
-      this.somademanda});
+      this.somacompras = false,
+      this.somavendas = false,
+      this.naoatualpreco = false,
+      this.mudaestoq = true,
+      this.somaconsig = false,
+      this.somademanda = true});
 
   EstoperItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);
@@ -69,20 +71,20 @@ class EstoperItem extends DataItem {
     data['nome'] = this.nome;
     data['codfinanc'] = this.codfinanc;
 
-    data['isentrada'] = this.isentrada ?? false ? 1 : 0;
+    data['isentrada'] = this.isentrada ? 1 : 0;
 
-    data['icmsiscustos'] = this.icmsiscustos ?? false ? 1 : 0;
-    data['ipiiscustos'] = this.ipiiscustos ?? false ? 1 : 0;
-    data['naoatualpreco'] = this.naoatualpreco ?? false ? 1 : 0;
+    data['icmsiscustos'] = this.icmsiscustos ? 1 : 0;
+    data['ipiiscustos'] = this.ipiiscustos ? 1 : 0;
+    data['naoatualpreco'] = this.naoatualpreco ? 1 : 0;
 
-    data['mudafinanc'] = this.mudafinanc ?? true ? 1 : 0;
-    data['mudapmedio'] = this.mudapmedio ?? true ? 1 : 0;
-    data['somacompras'] = this.somacompras ?? false ? 1 : 0;
-    data['somavendas'] = this.somavendas ?? false ? 1 : 0;
+    data['mudafinanc'] = this.mudafinanc ? 1 : 0;
+    data['mudapmedio'] = this.mudapmedio ? 1 : 0;
+    data['somacompras'] = this.somacompras ? 1 : 0;
+    data['somavendas'] = this.somavendas ? 1 : 0;
 
-    data['mudaestoq'] = this.mudaestoq ?? true ? 1 : 0;
-    data['somaconsig'] = this.somaconsig ?? false ? 1 : 0;
-    data['somademanda'] = this.somademanda ?? false ? 1 : 0;
+    data['mudaestoq'] = this.mudaestoq ? 1 : 0;
+    data['somaconsig'] = this.somaconsig ? 1 : 0;
+    data['somademanda'] = this.somademanda ? 1 : 0;
     return data;
   }
 }

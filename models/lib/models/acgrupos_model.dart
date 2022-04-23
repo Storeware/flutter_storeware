@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 

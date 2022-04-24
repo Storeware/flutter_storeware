@@ -1,7 +1,7 @@
 // @dart=2.12
 
-import 'package:console/views/os/os_controller.dart';
-import 'package:console/views/os/os_view.dart';
+//import 'package:console/views/os/os_controller.dart';
+//import 'package:console/views/os/os_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 import 'package:flutter_storeware/login.dart';
@@ -26,6 +26,9 @@ import 'models/agenda_tipo_model.dart';
 
 import 'models/contatos_model.dart';
 
+typedef AgendaGerarVenda = Function(
+    BuildContext context, dynamic inject, AgendaItem item);
+
 class AgendaEdit extends StatefulWidget {
   final AgendaData? data;
   final AgendaItem? item;
@@ -38,6 +41,7 @@ class AgendaEdit extends StatefulWidget {
   final int? interval;
   final bool canDelete;
   final AgendaController? controller;
+  final AgendaGerarVenda? onGerarVenda;
   const AgendaEdit({
     Key? key,
     this.data,
@@ -51,6 +55,7 @@ class AgendaEdit extends StatefulWidget {
     this.header,
     this.bottom,
     this.canDelete = false,
+    this.onGerarVenda,
   }) : super(key: key);
 
   @override
@@ -356,6 +361,10 @@ class _AgendaEditState extends State<AgendaEdit> {
   }
 
   gerarVenda(BuildContext context, injects, AgendaItem item) async {
+    if (widget.onGerarVenda != null) {
+      return await widget.onGerarVenda!(context, injects, item);
+    }
+    /*
     //bool abrirNova = true;
     num? cliente = item.sigcadCodigo;
     DadosNovoFaturamento row = DadosNovoFaturamento.fromJson({});
@@ -407,7 +416,7 @@ class _AgendaEditState extends State<AgendaEdit> {
                     popAfterPayment: true,
                   ))));
       if (r) Navigator.pop(context);
-    });
+    });*/
   }
 
   Row buildDatas(AgendaItem item) {

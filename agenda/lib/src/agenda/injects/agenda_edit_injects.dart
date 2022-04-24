@@ -5,6 +5,7 @@ import 'package:flutter_storeware/index.dart';
 import 'package:flutter_storeware/login.dart';
 import 'package:models/builders/index.dart';
 import 'package:models/models.dart';
+import 'package:views/index.dart';
 
 import '../models/index.dart';
 import 'constantes.dart';
@@ -35,23 +36,29 @@ class InjectsAgendaContato {
                 }
               });
             },
-            onSearch: (x) {
+            onNew: (_, row) async {
+              return ClienteController.doNovoCadastro(context, row,
+                      onChanged: (row) {})
+                  .then((r) {
+                return r;
+              });
+            },
+            onSearch: (x) async {
               Map<String, dynamic>? y;
-              return Dialogs.showPage(context,
+              var rsp = await Dialogs.showPage(context,
                   child: CadastroClientePage(
-                      title: widget.label ?? 'Parceiros',
+                      title: 'Parceiros',
                       //canEdit: widget.canInsert,
-                      canInsert: widget.canInsert,
+                      canInsert: true,
                       //todas: false,
                       onLoaded: (rows) {
-                        addSuggestions.value = rows;
+                        //addSuggestions.value = rows;
                       },
                       onSelected: (x) async {
                         y = x;
                         return x['codigo'];
-                      })).then((rsp) {
-                return y;
-              });
+                      })).then((r) => y);
+              return rsp ?? {};
             },
           );
         }));

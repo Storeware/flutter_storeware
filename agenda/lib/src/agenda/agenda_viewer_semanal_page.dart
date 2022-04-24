@@ -1,15 +1,12 @@
 // @dart=2.12
-//import 'package:controls_web/controls.dart';
 
 import 'package:controls_web/controls/responsive.dart';
-import 'package:console/views/agenda/agenda_const.dart';
-import 'package:console/views/agenda/agenda_notifier.dart';
-import 'package:console/views/agenda/agenda_timeline_dart.dart';
+import 'agenda_const.dart';
+import 'agenda_notifier.dart';
 
 import 'package:flutter/material.dart';
 import 'package:controls_extensions/extensions.dart';
 import 'package:provider/provider.dart';
-//import 'package:get/get.dart';
 import 'agenda_cards.dart';
 import 'agenda_controller.dart';
 import 'agenda_resource.dart';

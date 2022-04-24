@@ -1,5 +1,5 @@
 // @dart=2.12
-import 'package:console/views/agenda/models/agenda_estado_model.dart';
+import 'package:agenda/agenda.dart';
 import 'package:controls_web/controls/color_picker.dart';
 import 'package:controls_web/controls/colores.dart';
 import 'package:controls_web/controls/responsive.dart';

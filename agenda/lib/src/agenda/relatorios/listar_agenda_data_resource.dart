@@ -2,12 +2,10 @@
 
 import 'dart:async';
 
-//import 'package:controls_data/odata_client.dart' show ODataDocument;
 import 'package:controls_web/controls/data_viewer.dart';
-import 'package:console/views/agenda/models/agenda_item_model.dart';
-import 'package:console/views/agenda/models/agenda_model.dart';
+import '../models/agenda_item_model.dart';
+import '../models/agenda_model.dart';
 import 'package:flutter/material.dart';
-//import 'package:controls_data/odata_client.dart';
 import 'package:controls_extensions/extensions.dart';
 
 import '../agenda_controller.dart';

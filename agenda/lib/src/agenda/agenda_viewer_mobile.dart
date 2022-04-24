@@ -1,7 +1,6 @@
 // @dart=2.12
 
-import 'package:console/views/agenda/agenda_cards.dart';
-import 'package:console/views/agenda/agenda_timeline_dart.dart';
+import 'package:agenda/agenda.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:controls_extensions/extensions.dart';

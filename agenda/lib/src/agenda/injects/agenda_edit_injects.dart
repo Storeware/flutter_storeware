@@ -1,11 +1,9 @@
 // @dart=2.12
 
-import 'package:console/builders/sigcad_search_form_field.dart';
 import 'package:console/config/config.dart';
-import 'package:console/views/agenda/models/agenda_item_model.dart';
 import 'package:controls_web/controls/injects.dart';
 import 'package:flutter/material.dart';
-import 'package:models/builders/index.dart';
+import 'package:models/builders.dart';
 import 'package:models/models.dart';
 
 import '../models/index.dart';
@@ -35,6 +33,24 @@ class InjectsAgendaContato {
                     origemGid: dados.gid,
                   );
                 }
+              });
+            },
+            onSearch: (x) {
+              Map<String, dynamic>? y;
+              return Dialogs.showPage(context,
+                  child: CadastroClientePage(
+                      title: widget.label ?? 'Parceiros',
+                      //canEdit: widget.canInsert,
+                      canInsert: widget.canInsert,
+                      //todas: false,
+                      onLoaded: (rows) {
+                        addSuggestions.value = rows;
+                      },
+                      onSelected: (x) async {
+                        y = x;
+                        return x['codigo'];
+                      })).then((rsp) {
+                return y;
               });
             },
           );

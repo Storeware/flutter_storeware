@@ -1094,7 +1094,7 @@ class __MenuState<T> extends State<_Menu<T>> {
   void initState() {
     super.initState();
     if (widget.crossTheEdge == true) {
-      WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
         final RenderBox renderBox =
             key.currentContext!.findRenderObject() as RenderBox;
         final Offset offset = renderBox.globalToLocal(Offset.zero);

@@ -1,6 +1,6 @@
 // @dart=2.12
 
-import 'package:console/views/agenda/models/agenda_item_model.dart';
+import 'package:agenda/agenda.dart';
 import 'package:flutter/widgets.dart';
 
 class DefaultAgendaEdit extends InheritedWidget {

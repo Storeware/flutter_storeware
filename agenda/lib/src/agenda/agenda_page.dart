@@ -1,7 +1,6 @@
 // @dart=2.12
 import 'dart:async';
 
-import 'package:console/socketio/v3_socketio.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:controls_data/local_storage.dart';
 import 'package:controls_web/controls/responsive.dart';
@@ -18,6 +17,7 @@ import 'agenda_viewer_mensal_page.dart';
 import 'agenda_viewer_mobile.dart';
 import 'agenda_viewer_semanal_page.dart';
 import 'models/agenda_item_model.dart';
+import 'package:comum/socketio/index.dart';
 
 class AgendaPage extends StatefulWidget {
   final AgendaController? controller;

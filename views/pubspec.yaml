@@ -1,12 +1,12 @@
-name: agenda
+name: views
 description: A new Flutter package project.
-version: 22.04.23+2
+version: 22.04.23+0
 homepage: www.tireideletra.com
 publish_to: none
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
-  flutter: ">=1.12.0"
+  sdk: ">=2.16.2 <3.0.0"
+  flutter: ">=1.17.0"
 
 dependencies:
   flutter:
@@ -53,12 +53,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^1.0.4
+  flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter packages.
+# The following section is specific to Flutter.
 flutter:
 
   # To add assets to your package, add an assets section, like this:
@@ -70,7 +70,7 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
   #
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.dev/assets-and-images/#resolution-aware
+  # https://flutter.dev/assets-and-images/#resolution-aware.
 
   # To add custom fonts to your package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a

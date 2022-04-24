@@ -35,7 +35,7 @@ class InjectsAgendaContato {
                 }
               });
             },
-            /* onSearch: (x) {
+            onSearch: (x) {
               Map<String, dynamic>? y;
               return Dialogs.showPage(context,
                   child: CadastroClientePage(
@@ -52,7 +52,7 @@ class InjectsAgendaContato {
                       })).then((rsp) {
                 return y;
               });
-            },*/
+            },
           );
         }));
   }

@@ -2,12 +2,6 @@
 
 import 'package:console/views/os/os_controller.dart';
 import 'package:console/views/os/os_view.dart';
-import 'package:console/widgets/share_social_message.dart';
-import 'package:controls_web/controls/date_time_picker_form.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
-import 'package:controls_web/controls/injects.dart';
-import 'package:controls_web/controls/masked_field.dart';
-import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 import 'package:flutter_storeware/login.dart';
@@ -29,7 +23,6 @@ import 'injects/constantes.dart' as cnt;
 import 'models/agenda_model.dart';
 import 'models/agenda_recurso_model.dart';
 import 'models/agenda_tipo_model.dart';
-import 'package:controls_data/odata_client.dart';
 
 import 'models/contatos_model.dart';
 
@@ -386,7 +379,7 @@ class _AgendaEditState extends State<AgendaEdit> {
           select: 'dcto,clifor cliente,data,filial',
           top: 1,
           orderBy: 'data desc');
-      if (existe.length > 0) {
+      if (existe.isNotEmpty) {
         /// juntar o produto ?
         row = DadosNovoFaturamento.fromJson(existe[0]);
         //abrirNova = false;

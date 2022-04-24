@@ -285,9 +285,9 @@ abstract class ConsoleConfig extends ConfigAppBase {
   @override
   Future<ConsoleConfig> init() async {
     if (_instance != null) return _instance!;
+    _instance ??= this;
     _configureLocalTimeZone();
     await super.init();
-    _instance ??= this;
     ODataInst().loginNotifier.stream.listen((rsp) {
       SenhasItemModel().listCached(filter: "codigo eq '$usuario'").then((r) {
         if (r.length > 0) {

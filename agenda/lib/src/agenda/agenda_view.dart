@@ -100,14 +100,16 @@ class _AgendaViewState extends State<AgendaView> {
         future: () {
           //print([controller.de, controller.ate]);
           String filter = '';
-          if (widget.resourceId != null)
+          if (widget.resourceId != null) {
             filter += " and a.recurso_gid = '${widget.resourceId}' ";
-          if (widget.estadoId != null)
+          }
+          if (widget.estadoId != null) {
             filter += " and a.estado_gid = '${widget.estadoId}' ";
+          }
           return AgendaItemModel()
               .listAgenda(
-            filter: "(" +
-                "(a.datainicio between '${controller!.de}' and '${controller!.ate}') or " +
+            filter: "("
+                    "(a.datainicio between '${controller!.de}' and '${controller!.ate}') or " +
                 "a.datainicio le '${controller!.ate}' and a.datafim ge '${controller!.de}') $filter ",
             //top: 250
           )
@@ -161,10 +163,12 @@ class _AgendaViewState extends State<AgendaView> {
         onPostItem: (item, event) async {
           try {
             var mp = item!.toJson();
-            if (event == AgendaPostEvent.insert)
+            if (event == AgendaPostEvent.insert) {
               return AgendaItemModel().post(mp).then((rsp) => mp);
-            if (event == AgendaPostEvent.update)
+            }
+            if (event == AgendaPostEvent.update) {
               return AgendaItemModel().put(mp).then((rsp) => mp);
+            }
             if (event == AgendaPostEvent.delete) {
               var rsp = InjectBuilder.builderAsync(
                       context, 'DeleteObjetoDoServico', item) ??
@@ -288,10 +292,11 @@ class _AgendaViewState extends State<AgendaView> {
                       future: AgendaRecursoItemModel().listNoCached(
                           filter: "inativo eq 'N'", orderBy: 'ordem'),
                       builder: (context, resources) {
-                        if (!resources.hasData)
+                        if (!resources.hasData) {
                           return Align(child: CircularProgressIndicator());
+                        }
                         controller!.resources.clear();
-                        for (var i = 0; i < resources.data.length; i++)
+                        for (var i = 0; i < resources.data.length; i++) {
                           controller!.resources.add(AgendaResource(
                               intervalo:
                                   toDouble(resources.data[i]['intervalo']),
@@ -299,6 +304,7 @@ class _AgendaViewState extends State<AgendaView> {
                               color: ColorExtension.intRGBToColor(
                                   resources.data[i]['cor']),
                               label: resources.data[i]['nome']));
+                        }
                         controller!.data = data;
                         /*return ChangeNotifierProvider.value(
                     value: controller.sourceNotifier,

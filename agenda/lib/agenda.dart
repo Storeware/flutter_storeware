@@ -1,3 +1,3 @@
 library agenda;
 
-export 'src/index.dart';
+export 'src/agenda/index.dart';

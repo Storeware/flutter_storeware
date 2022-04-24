@@ -1,6 +1,6 @@
 name: models
 description: Model Package.
-version: 22.04.23+1
+version: 22.04.23+2
 publish_to: none
 
 environment:

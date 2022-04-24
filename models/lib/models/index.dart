@@ -1,4 +1,3 @@
-export 'acesso.dart';
 export 'acgrupos_model.dart';
 export 'app_types.dart';
 export 'cadastros_model.dart';

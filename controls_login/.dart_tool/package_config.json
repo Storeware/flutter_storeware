@@ -87,7 +87,7 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/collection-1.16.0",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/collection-1.15.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -291,7 +291,7 @@
     },
     {
       "name": "fake_async",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/fake_async-1.3.0",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/fake_async-1.2.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -443,13 +443,13 @@
       "name": "flutter_test",
       "rootUri": "file:///c:/tools/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_web_plugins",
       "rootUri": "file:///c:/tools/flutter/packages/flutter_web_plugins",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "2.12"
     },
     {
       "name": "font_awesome_flutter",
@@ -549,9 +549,9 @@
     },
     {
       "name": "js",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/js-0.6.4",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/js-0.6.3",
       "packageUri": "lib/",
-      "languageVersion": "2.16"
+      "languageVersion": "2.12"
     },
     {
       "name": "lints",
@@ -573,7 +573,7 @@
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/material_color_utilities-0.1.4",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/material_color_utilities-0.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.13"
     },
@@ -597,7 +597,7 @@
     },
     {
       "name": "path",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/path-1.8.1",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/path-1.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -795,9 +795,9 @@
     },
     {
       "name": "source_span",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/source_span-1.8.2",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/source_span-1.8.1",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.12"
     },
     {
       "name": "sqflite",
@@ -843,7 +843,7 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/test_api-0.4.9",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/test_api-0.4.8",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -933,7 +933,7 @@
     },
     {
       "name": "vector_math",
-      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/vector_math-2.1.2",
+      "rootUri": "file:///C:/Users/amari/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/vector_math-2.1.1",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -968,7 +968,7 @@
       "languageVersion": "2.16"
     }
   ],
-  "generated": "2022-04-23T16:32:34.295093Z",
+  "generated": "2022-04-24T02:25:45.830738Z",
   "generator": "pub",
-  "generatorVersion": "2.17.0-266.5.beta"
+  "generatorVersion": "2.16.2"
 }

@@ -1,11 +1,11 @@
 // @dart=2.12
-import 'package:console/config/config.dart';
 import 'package:controls_data/data.dart';
 //import 'package:controls_data/local_storage.dart';
 import 'package:controls_web/controls/color_picker.dart';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/injects.dart';
 import 'package:controls_web/controls/responsive.dart';
+import 'package:flutter_storeware/login.dart';
 import 'agenda_resource.dart';
 import 'models/agenda_model.dart';
 import 'package:flutter/material.dart';
@@ -88,11 +88,11 @@ class _AgendaViewState extends State<AgendaView> {
     String agendaAtiva = LocalStorage().getString('ultima_agenda_ativa') ??
         AgendaViewerType.horario.toString();
     AgendaViewerType? viewType = AgendaViewerType.horario;
-    AgendaViewerType.values.forEach((item) {
+    for (var item in AgendaViewerType.values) {
       if (agendaAtiva == item.toString()) {
         viewType = item;
       }
-    });
+    }
     AgendaConfig().fromMap(configInstance!.configDados);
     // print([AgendaConfig().toJson(), configInstance!.configDados]);
     controller = AgendaController(
@@ -109,7 +109,7 @@ class _AgendaViewState extends State<AgendaView> {
           return AgendaItemModel()
               .listAgenda(
             filter: "("
-                    "(a.datainicio between '${controller!.de}' and '${controller!.ate}') or " +
+                "(a.datainicio between '${controller!.de}' and '${controller!.ate}') or "
                 "a.datainicio le '${controller!.ate}' and a.datafim ge '${controller!.de}') $filter ",
             //top: 250
           )
@@ -119,7 +119,7 @@ class _AgendaViewState extends State<AgendaView> {
         },
         onInsert: (AgendaData data) {
           data.item = AgendaItem.fromJson({})
-            ..gid = Uuid().v4()
+            ..gid = const Uuid().v4()
             ..estadoGid = '1'
             ..recursoGid = data.resource
             ..completada = 0
@@ -293,7 +293,8 @@ class _AgendaViewState extends State<AgendaView> {
                           filter: "inativo eq 'N'", orderBy: 'ordem'),
                       builder: (context, resources) {
                         if (!resources.hasData) {
-                          return Align(child: CircularProgressIndicator());
+                          return const Align(
+                              child: CircularProgressIndicator());
                         }
                         controller!.resources.clear();
                         for (var i = 0; i < resources.data.length; i++) {

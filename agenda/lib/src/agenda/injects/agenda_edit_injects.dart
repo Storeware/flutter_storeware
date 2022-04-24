@@ -1,9 +1,9 @@
 // @dart=2.12
 
-import 'package:console/config/config.dart';
-import 'package:controls_web/controls/injects.dart';
 import 'package:flutter/material.dart';
-import 'package:models/builders.dart';
+import 'package:flutter_storeware/index.dart';
+import 'package:flutter_storeware/login.dart';
+import 'package:models/builders/index.dart';
 import 'package:models/models.dart';
 
 import '../models/index.dart';
@@ -35,7 +35,7 @@ class InjectsAgendaContato {
                 }
               });
             },
-            onSearch: (x) {
+            /* onSearch: (x) {
               Map<String, dynamic>? y;
               return Dialogs.showPage(context,
                   child: CadastroClientePage(
@@ -52,7 +52,7 @@ class InjectsAgendaContato {
                       })).then((rsp) {
                 return y;
               });
-            },
+            },*/
           );
         }));
   }

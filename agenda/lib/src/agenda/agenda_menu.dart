@@ -1,13 +1,12 @@
 // @dart=2.12
 
-import 'package:console/config/config.dart';
 import 'package:controls_web/controls/menu_dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_storeware/login.dart';
 
 import 'cadastros/cadastro_agenda_estado_page.dart';
 import 'cadastros/cadastro_agenda_tipo_page.dart';
 import 'cadastros/cadastro_resources_page.dart';
-import 'package:models/models.dart';
 
 class AgendaMenu {
   static show(context) {
@@ -19,7 +18,7 @@ class AgendaMenu {
         enabled: Acessos.habilitado(acesso_Agenda_Recurso),
         title: 'Cadastro de Recursos',
         icon: Icons.group,
-        builder: (cxt) => CadastroAgendaRecursosPage(),
+        builder: (cxt) => const CadastroAgendaRecursosPage(),
       ),
       MenuChoice(
         index: 1,
@@ -28,7 +27,7 @@ class AgendaMenu {
         enabled: Acessos.habilitado(acesso_Agenda_Tipo),
         title: 'Cadastro de Tipos de Agenda',
         icon: Icons.settings,
-        builder: (cxt) => CadastroAgendaTipoPage(),
+        builder: (cxt) => const CadastroAgendaTipoPage(),
       ),
       MenuChoice(
         index: 2,

@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'agenda_cards.dart';
 import 'agenda_controller.dart';
 import 'agenda_resource.dart';
+import 'agenda_timeline_dart.dart';
 import 'data_slider.dart';
 import 'dropdown_menu.dart';
 import 'models/agenda_config.dart';
@@ -18,7 +19,7 @@ import 'models/agenda_item_model.dart';
 class AgendaSemanalPage extends StatelessWidget {
   final DateTime? dataRef;
   final List<AgendaResource> resources;
-  AgendaSemanalPage({
+  const AgendaSemanalPage({
     Key? key,
     required this.dataRef,
     required this.resources,
@@ -36,13 +37,13 @@ class AgendaSemanalPage extends StatelessWidget {
 
     //DateTime hoje = DateTime.now().startOfWeek();
     var datas = [
-      primeiroDia.add(Duration(days: -21)),
-      primeiroDia.add(Duration(days: -14)),
-      primeiroDia.add(Duration(days: -7)),
+      primeiroDia.add(const Duration(days: -21)),
+      primeiroDia.add(const Duration(days: -14)),
+      primeiroDia.add(const Duration(days: -7)),
       primeiroDia,
-      primeiroDia.add(Duration(days: 7)),
-      primeiroDia.add(Duration(days: 14)),
-      primeiroDia.add(Duration(days: 21)),
+      primeiroDia.add(const Duration(days: 7)),
+      primeiroDia.add(const Duration(days: 14)),
+      primeiroDia.add(const Duration(days: 21)),
     ];
     //print('re-buildDefaultAgendaItemSemanal');
 
@@ -56,10 +57,12 @@ class AgendaSemanalPage extends StatelessWidget {
             end: AgendaConfig().nHoraFim,
             date: primeiroDia,
             onPrior: () {
-              controller.dataChange(controller.data!.add(Duration(days: -7)));
+              controller
+                  .dataChange(controller.data!.add(const Duration(days: -7)));
             },
             onNext: () {
-              controller.dataChange(controller.data!.add(Duration(days: 7)));
+              controller
+                  .dataChange(controller.data!.add(const Duration(days: 7)));
             },
           ),
           Expanded(
@@ -171,7 +174,7 @@ class _DayCardColumnState extends State<DayCardColumn> {
                       AgendaPanelTitle(
                         width: _width,
                         title: _title,
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                         color: genWeekDayColor(widget.data!),
                         count: list.sources!.length,
                         onList: () {
@@ -441,10 +444,11 @@ class SemanalBackgroudContainer extends StatelessWidget {
             decoration: BoxDecoration(
                 color: (accepted) ? Colors.grey.withAlpha(alpha) : color,
                 border: (divider)
-                    ? Border(bottom: BorderSide(width: 1, color: Colors.grey))
+                    ? const Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey))
                     : null),
             child: (accepted && (interval != null))
-                ? Text('$interval min', style: TextStyle(fontSize: 12))
+                ? Text('$interval min', style: const TextStyle(fontSize: 12))
                 : null,
           ),
           onTap: () {

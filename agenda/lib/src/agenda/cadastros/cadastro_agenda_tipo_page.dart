@@ -1,16 +1,16 @@
 // @dart=2.12
 
-import 'package:console/config/config.dart';
 import 'package:controls_web/controls/color_picker.dart';
 import 'package:controls_web/controls/data_viewer.dart';
 import 'package:controls_web/controls/data_viewer_helper.dart';
+import 'package:flutter_storeware/login.dart';
 //import 'package:console/comum/controls.dart';
 import '../models/agenda_tipo_model.dart';
 import 'package:flutter/material.dart';
 
 class CadastroAgendaTipoPage extends StatefulWidget {
-  static final route = '/estados';
-  CadastroAgendaTipoPage({Key? key}) : super(key: key);
+  static const route = '/estados';
+  const CadastroAgendaTipoPage({Key? key}) : super(key: key);
 
   @override
   _CadastroEstadosPedidoViewState createState() =>
@@ -28,7 +28,7 @@ class _CadastroEstadosPedidoViewState extends State<CadastroAgendaTipoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //appBar: AppBar(title: Text('Cadastro de Tipo de Agenda')),
-      bottomNavigationBar: SizedBox(
+      bottomNavigationBar: const SizedBox(
         height: 50,
       ),
       body: DataViewer(

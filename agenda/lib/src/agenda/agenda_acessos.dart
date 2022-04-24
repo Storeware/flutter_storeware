@@ -1,6 +1,5 @@
 // @dart=2.12
-import 'package:console/config/config.dart';
-import 'package:models/models.dart';
+import 'package:flutter_storeware/login.dart';
 
 class AgendaAcessos {
   static register() {

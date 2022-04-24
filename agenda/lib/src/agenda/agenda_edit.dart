@@ -1,6 +1,5 @@
 // @dart=2.12
 
-import 'package:console/config/config.dart';
 import 'package:console/views/os/os_controller.dart';
 import 'package:console/views/os/os_view.dart';
 import 'package:console/widgets/share_social_message.dart';
@@ -10,6 +9,8 @@ import 'package:controls_web/controls/injects.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_storeware/index.dart';
+import 'package:flutter_storeware/login.dart';
 import 'package:get/get.dart';
 import 'package:models/models.dart';
 
@@ -44,7 +45,7 @@ class AgendaEdit extends StatefulWidget {
   final int? interval;
   final bool canDelete;
   final AgendaController? controller;
-  AgendaEdit({
+  const AgendaEdit({
     Key? key,
     this.data,
     this.title,
@@ -103,8 +104,9 @@ class _AgendaEditState extends State<AgendaEdit> {
       // procura o resource
       AgendaResource? resourceObj =
           controller!.resourceFind(widget.data!.resource);
-      if ((resourceObj?.intervalo ?? 0) > 0)
+      if ((resourceObj?.intervalo ?? 0) > 0) {
         resourceIntervalo = resourceObj!.intervalo ~/ 1;
+      }
     }
 
     /// hora de fim do evento
@@ -146,27 +148,25 @@ class _AgendaEditState extends State<AgendaEdit> {
               },
             ),
           if (configInstance!.configuracao.ativarOrdemServico)
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: OutlinedButton(
-                      //color: ,
-                      child: const Text('\$\$\$',
-                          style: TextStyle(color: Colors.white)),
-                      //width: 120,
-                      //image: Icon(Icons.money),
-                      //height: 30,
-                      //type: StrapButtonType.warning,
-                      onPressed: () {
-                        gerarVenda(context, injects, _item!);
-                      },
-                    ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: OutlinedButton(
+                    //color: ,
+                    child: const Text('\$\$\$',
+                        style: TextStyle(color: Colors.white)),
+                    //width: 120,
+                    //image: Icon(Icons.money),
+                    //height: 30,
+                    //type: StrapButtonType.warning,
+                    onPressed: () {
+                      gerarVenda(context, injects, _item!);
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           if (canShare)
             IconButton(
@@ -280,7 +280,7 @@ class _AgendaEditState extends State<AgendaEdit> {
 
                       // Estado da agenda
                       Expanded(
-                        child: Container(
+                        child: SizedBox(
                             width: 200,
                             child: AgendaEstadoBuilder.createDropDownFormField(
                                 context, _item!.estadoGid, onChanged: (gid) {
@@ -288,9 +288,10 @@ class _AgendaEditState extends State<AgendaEdit> {
                               AgendaEstadoItemModel()
                                   .procurar(gid)
                                   .then((item) {
-                                if (item != null)
+                                if (item != null) {
                                   _item!.completada =
                                       (item.encerrado == 'S') ? 1 : 0;
+                                }
                                 //print(['Estadoitem', gid, item]);
                               });
                             })),
@@ -317,7 +318,7 @@ class _AgendaEditState extends State<AgendaEdit> {
                   ValueListenableBuilder<double>(
                       valueListenable: progress,
                       builder: (x, y, z) {
-                        if (y == 0)
+                        if (y == 0) {
                           return StrapButton(
                             text: 'Salvar',
                             onPressed: () {
@@ -329,6 +330,7 @@ class _AgendaEditState extends State<AgendaEdit> {
                               }
                             },
                           );
+                        }
                         return SizedBox(
                             width: 60.0,
                             height: 60.0,
@@ -466,8 +468,9 @@ class _AgendaEditState extends State<AgendaEdit> {
 
   _validar(AgendaItem item) {
     if (isEmptyOrNull(item.recursoGid)) return 'Não indicou quem irá executar';
-    if (isEmptyOrNull(item.tipoGid))
+    if (isEmptyOrNull(item.tipoGid)) {
       return 'Não indicou o tipo de agenda a ser executada';
+    }
     return null;
   }
 
@@ -495,28 +498,32 @@ class _AgendaEditState extends State<AgendaEdit> {
             if (!b) return false;
 
             /// inserir novo item na agenda
-            if (widget.event == AgendaPostEvent.insert)
+            if (widget.event == AgendaPostEvent.insert) {
               widget.data!.controller!.add(item).then((rsp) {
-                if (registrarObjectServico != null)
+                if (registrarObjectServico != null) {
                   registrarObjectServico.builder!(context, item);
+                }
                 widget.data!.sources!.add(rsp);
                 replicar(item).then((rsp) {
                   if (fechar) Navigator.of(context).pop();
                 });
               });
+            }
 
             /// atualizar a agenda
-            if (widget.event == AgendaPostEvent.update)
+            if (widget.event == AgendaPostEvent.update) {
               widget.data!.controller!
                   .update(item, forceReload: recarregarDados)
                   .then((rsp) {
-                if (registrarObjectServico != null)
+                if (registrarObjectServico != null) {
                   registrarObjectServico.builder!(context, item);
+                }
                 widget.data!.sources!.update(rsp);
                 replicar(item).then((rsp) {
                   if (fechar) Navigator.of(context).pop();
                 });
               });
+            }
           });
         }
         return true;

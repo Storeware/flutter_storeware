@@ -5,7 +5,7 @@ homepage: www.tireideletra.com
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.16.0 <3.0.0"
   flutter: ">=1.12.0"
 
 dependencies:
@@ -17,6 +17,10 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_web
+
+  flutter_storeware:
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
 
   controls_dash:
     git:
@@ -39,11 +43,12 @@ dependencies:
   uuid:
   get:
   provider:
+  intl:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^1.0.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

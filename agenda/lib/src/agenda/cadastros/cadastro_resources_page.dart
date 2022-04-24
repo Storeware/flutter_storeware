@@ -1,15 +1,15 @@
 // @dart=2.12
 
-import 'package:console/config/config.dart';
-import 'package:controls_web/controls/color_picker.dart';
-import 'package:controls_web/controls/data_viewer.dart';
-import 'package:models/builders.dart';
+import 'package:flutter_storeware/index.dart';
+import 'package:flutter_storeware/login.dart';
+import 'package:models/builders/controls.dart';
 import '../models/agenda_recurso_model.dart';
 import 'package:flutter/material.dart';
+import 'package:agenda/agenda.dart';
 
 class CadastroAgendaRecursosPage extends StatefulWidget {
-  static final route = '/estados';
-  CadastroAgendaRecursosPage({Key? key}) : super(key: key);
+  static const route = '/estados';
+  const CadastroAgendaRecursosPage({Key? key}) : super(key: key);
 
   @override
   _CadastroEstadosPedidoViewState createState() =>
@@ -29,7 +29,7 @@ class _CadastroEstadosPedidoViewState
   Widget build(BuildContext context) {
     return Scaffold(
       //appBar: AppBar(title: Text('Cadastro de Recursos')),
-      bottomNavigationBar: SizedBox(
+      bottomNavigationBar: const SizedBox(
         height: 50,
       ),
       body: DataViewer(

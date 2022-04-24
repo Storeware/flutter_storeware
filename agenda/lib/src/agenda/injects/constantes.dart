@@ -1,10 +1,10 @@
 // @dart=2.12
-
-import 'package:console/config/diretivas.dart';
+import 'package:models/models.dart';
 
 const String injectAgendaEditHeader = 'AgendaEditHeader';
 const String injectAgendaEditPosTitulo = 'AgendaEditPosTitulo';
 const String injectAgendaEditBottom = 'AgendaEditBottom';
 
-final labelContatoAgenda = (isPET) ? 'Tutor ou Proprietário' : 'Contato';
-final identificacaoContatoObrigatorio = (isPET);
+final labelContatoAgenda =
+    (AppTypes().isPET) ? 'Tutor ou Proprietário' : 'Contato';
+final identificacaoContatoObrigatorio = (AppTypes().isPET);

@@ -5,7 +5,7 @@ import 'package:console/socketio/v3_socketio.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:controls_data/local_storage.dart';
 import 'package:controls_web/controls/responsive.dart';
-import 'package:console/config/const_colors.dart';
+import 'const_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +25,7 @@ class AgendaPage extends StatefulWidget {
   final String? title;
   final bool automaticallyImplyLeading;
 
-  AgendaPage({
+  const AgendaPage({
     Key? key,
     this.controller,
     this.automaticallyImplyLeading = true,
@@ -56,7 +56,7 @@ class AgendaPage extends StatefulWidget {
               datainicio: DateTime(ano, mes, dia, 8 + i, 0),
               datafim:
                   DateTime(ano, mes, dia, 8 + i, i + 30 + (i.isEven ? 30 : 0))
-                      .add(Duration(minutes: 30)),
+                      .add(const Duration(minutes: 30)),
               titulo: 'Reunião com .... $i',
             ),
         ],
@@ -103,7 +103,7 @@ class _AgendaViewState extends State<AgendaPage> {
       socketEvents.push(x.payload);
 
       /// controla mesnagens repetidas.
-      Timer.periodic(Duration(milliseconds: 10000), (timerLocal) {
+      Timer.periodic(const Duration(milliseconds: 10000), (timerLocal) {
         if (canReload && (socketEvents.length > 0)) {
           controller!.dataNotifier.notify(controller!.data);
           socketEvents.removeAll();
@@ -148,7 +148,7 @@ class _AgendaViewState extends State<AgendaPage> {
             data: widget.data,
             controller: controller,
             child: Scaffold(
-              floatingActionButton: AgendaDeleteItemTarget(),
+              floatingActionButton: const AgendaDeleteItemTarget(),
               appBar: PreferredSize(
                   preferredSize: Size.fromHeight(responsive.isMobile
                       ? kToolBarHeightSmall
@@ -159,15 +159,15 @@ class _AgendaViewState extends State<AgendaPage> {
                     backgroundColor: scaffoldBackgroundColor,
                     //backgroundColor: theme.primaryColor.withAlpha(100),
                     title: Text(widget.title ?? '',
-                        style: TextStyle(color: Colors.black)),
+                        style: const TextStyle(color: Colors.black)),
                     elevation: responsive.isMobile ? 0 : 0,
                     actions: [
                       ToggleButtons(
-                        isSelected: [false, false],
+                        isSelected: const [false, false],
                         //highlightColor: Colors.indigo,
                         //color: theme.textTheme.button.color,
                         //selectedColor: theme.iconTheme.color,
-                        children: [
+                        children: const [
                           Tooltip(
                               message: 'Calendário',
                               child: Icon(Icons.calendar_today)),
@@ -175,26 +175,28 @@ class _AgendaViewState extends State<AgendaPage> {
                         ],
                         onPressed: (idx) {
                           // print('$idx');
-                          if (idx == 0)
+                          if (idx == 0) {
                             _selectDate(context).then((d) {
                               // print(d);
                               controller!.dataChange(d);
                             });
+                          }
                           if (idx == 1) controller!.dataChange(DateTime.now());
                         },
                       ),
                       Consumer<AgendaViewerRefNotifier>(builder: (c, mdl, w) {
                         // print('viewer: ${mdl.viewer}');
                         // if (mdl != null)
-                        for (var i = 0; i < _toggleSelects.length; i++)
+                        for (var i = 0; i < _toggleSelects.length; i++) {
                           _toggleSelects[i] = mdl.viewer!.index == i;
+                        }
 
                         return ToggleButtons(
                           //highlightColor: Colors.indigo,
                           //color: theme.primaryIconTheme.color,
                           //selectedColor: theme.iconTheme.color,
                           isSelected: _toggleSelects,
-                          children: [
+                          children: const [
                             // Tooltip(
                             //     message: 'mobile', child: Icon(Icons.view_compact)),
                             Tooltip(
@@ -208,7 +210,7 @@ class _AgendaViewState extends State<AgendaPage> {
                                 child: Icon(Icons.view_comfy)),
                           ],
                           onPressed: (int index) {
-                            AgendaViewerType.values.forEach((item) {
+                            for (var item in AgendaViewerType.values) {
                               if (item.index == index) {
                                 _toggleSelects[item.index] =
                                     item.index == index;
@@ -216,7 +218,7 @@ class _AgendaViewState extends State<AgendaPage> {
                                 LocalStorage().setString(
                                     'ultima_agenda_ativa', item.toString());
                               }
-                            });
+                            }
                           },
                         );
                       }),
@@ -235,8 +237,9 @@ class _AgendaViewState extends State<AgendaPage> {
                       future: controller!.future!(),
                       builder: (context, snapshot) {
                         canReload = false;
-                        if (!snapshot.hasData)
-                          Align(child: CircularProgressIndicator());
+                        if (!snapshot.hasData) {
+                          const Align(child: CircularProgressIndicator());
+                        }
                         controller!.begin(true);
                         if (snapshot.data != null) {
                           controller!.sources!.clear();

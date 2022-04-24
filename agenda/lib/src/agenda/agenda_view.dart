@@ -1,10 +1,5 @@
 // @dart=2.12
-import 'package:controls_data/data.dart';
-//import 'package:controls_data/local_storage.dart';
-import 'package:controls_web/controls/color_picker.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
-import 'package:controls_web/controls/injects.dart';
-import 'package:controls_web/controls/responsive.dart';
+import 'package:flutter_storeware/index.dart';
 import 'package:flutter_storeware/login.dart';
 import 'agenda_resource.dart';
 import 'models/agenda_model.dart';
@@ -45,6 +40,7 @@ class AgendaView extends StatefulWidget {
   /// inserir bottom na edição de dados
   final Widget? editBottom;
   final String? agendaGid;
+  final AgendaGerarVenda? onGerarVenda;
   const AgendaView(
       {Key? key,
       this.title,
@@ -57,7 +53,8 @@ class AgendaView extends StatefulWidget {
       this.editExtended,
       this.editHeader,
       this.editBottom,
-      this.resourceId})
+      this.resourceId,
+      this.onGerarVenda})
       : super(key: key);
 
   @override
@@ -256,6 +253,7 @@ class _AgendaViewState extends State<AgendaView> {
             bottom: widget.editBottom,
             extendBuilder: widget.editExtended,
             data: data,
+            onGerarVenda: widget.onGerarVenda,
           );
         });
   }

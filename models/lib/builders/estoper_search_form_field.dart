@@ -4,8 +4,6 @@ import 'dart:async';
 
 import 'form_callback.dart';
 import 'search_form_field.dart';
-//import 'package:console/views/estoque/cadastros/estoper_page.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
@@ -21,6 +19,7 @@ class EstoperSearchFormField extends StatefulWidget {
   final bool? readOnly;
   final String? Function(String)? validator;
   final FormSearchCallback onSearch;
+  final SuggestionController? suggestionController;
 
   const EstoperSearchFormField({
     Key? key,
@@ -35,6 +34,7 @@ class EstoperSearchFormField extends StatefulWidget {
     this.canInsert = false,
     this.canDelete = false,
     required this.onSearch,
+    this.suggestionController,
   }) : super(key: key);
 
   @override
@@ -93,6 +93,7 @@ class _EstoperSearchFormFieldState extends State<EstoperSearchFormField> {
             label: 'Classificação da Operação',
             initialValue: notifier.value['nome'] ?? '',
             suggestionsNotifier: addSuggestions,
+            suggestionController: widget.suggestionController,
             stateController: stateController,
             onFocusChanged: (b, texto) {
               if (!b &&

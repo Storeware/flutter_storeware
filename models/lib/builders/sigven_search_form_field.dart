@@ -4,8 +4,6 @@ import 'dart:async';
 
 import 'form_callback.dart';
 import 'search_form_field.dart';
-//import 'package:console/views/os/cadastros/sigven_view.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -19,6 +17,8 @@ class SigvenSearchFormField extends StatefulWidget {
   final String Function(String)? validator;
   final String? label;
   final FormSearchCallback onSearch;
+  final SuggestionController? suggestionController;
+
   const SigvenSearchFormField({
     Key? key,
     this.onChanged,
@@ -29,6 +29,7 @@ class SigvenSearchFormField extends StatefulWidget {
     this.canEdit = false,
     this.canInsert = false,
     this.canDelete = false,
+    this.suggestionController,
   }) : super(key: key);
 
   @override
@@ -71,18 +72,15 @@ class _SigbcoSearchFormFieldState extends State<SigvenSearchFormField> {
   @override
   Widget build(BuildContext context) {
     if ((widget.codigo ?? '').isNotEmpty) buscar(widget.codigo);
-    return /*ValueListenableBuilder(
-      valueListenable: notifier,
-      builder: (a, b, c) =>*/
-        SearchFormField(
+    return SearchFormField(
       minChars: 2,
       controller: vendedorController,
       keyStorage: 'sigven_searchfield',
       nameField: 'nome',
       keyField: 'codigo',
       label: widget.label ?? 'Vendedor',
-      //initialValue: notifier.value['nome'] ?? '',
       suggestionsNotifier: addSuggestions,
+      suggestionController: widget.suggestionController,
       stateController: stateController,
       onFocusChanged: (b, texto) {
         if (!b &&

@@ -4,8 +4,6 @@ import 'dart:async';
 
 import 'form_callback.dart';
 import 'search_form_field.dart';
-//import 'package:console/views/cadastros/produtos/produto.cadastro_page.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -23,6 +21,7 @@ class CtprodSearchFormField extends StatefulWidget {
   final bool obrigatorio;
   final String? Function(String)? validator;
   final FormSearchCallback onSearch;
+  final SuggestionController? suggestionController;
 
   const CtprodSearchFormField({
     Key? key,
@@ -38,6 +37,7 @@ class CtprodSearchFormField extends StatefulWidget {
     this.canInsert = false,
     this.canDelete = false,
     required this.onSearch,
+    this.suggestionController,
   }) : super(key: key);
 
   @override
@@ -103,6 +103,7 @@ class _SigbcoSearchFormFieldState extends State<CtprodSearchFormField> {
             suggestionsAmount: suggestionsAmount,
             suggestionsNotifier: addSuggestions,
             stateController: stateController,
+            suggestionController: widget.suggestionController,
             onFocusChanged: (b, texto) {
               if (!b &&
                   (codigo ?? '').isEmpty &&

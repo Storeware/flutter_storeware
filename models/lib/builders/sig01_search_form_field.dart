@@ -4,8 +4,6 @@ import 'dart:async';
 
 import 'form_callback.dart';
 import 'search_form_field.dart';
-//import 'package:console/views/financas/cadastros/sig01_page.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -23,6 +21,8 @@ class Sig01SearchFormField extends StatefulWidget {
   final String? Function(String)? validator;
   final FormSearchCallback onSearch;
 
+// add controller
+  final SuggestionController? suggestionController;
   const Sig01SearchFormField({
     Key? key,
     this.onChanged,
@@ -36,6 +36,7 @@ class Sig01SearchFormField extends StatefulWidget {
     this.canInsert = false,
     this.canDelete = false,
     required this.onSearch,
+    this.suggestionController,
   }) : super(key: key);
 
   @override
@@ -91,6 +92,7 @@ class _SigbcoSearchFormFieldState extends State<Sig01SearchFormField> {
       label: 'Classificação da Operação',
       //initialValue: notifier.value['nome'] ?? '',
       suggestionsNotifier: addSuggestions,
+      suggestionController: widget.suggestionController,
       stateController: stateController,
       onFocusChanged: (b, texto) {
         if (!b &&

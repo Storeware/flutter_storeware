@@ -7,6 +7,25 @@ final _suggestionStorage = {};
 
 class SearchFormFieldController extends MaskedAutoCompleteTextFieldController {}
 
+class SuggestionController {
+  String? keyStorage;
+  ValueNotifier<List>? suggestionsNotifier;
+  add(List<dynamic> list) {
+    bool changed = false;
+    list.forEach((element) {
+      if (!_suggestionStorage[keyStorage].contains(element)) {
+        _suggestionStorage[keyStorage].add(element);
+        changed = true;
+      }
+    });
+    if (changed && suggestionsNotifier != null)
+      suggestionsNotifier!.value = items;
+    return items;
+  }
+
+  get items => _suggestionStorage[keyStorage] ??= [];
+}
+
 class SearchFormField extends StatefulWidget {
   final Function(dynamic)? onChanged;
   final String keyStorage;
@@ -33,53 +52,64 @@ class SearchFormField extends StatefulWidget {
   final Widget? prefixIcon;
   final SearchFormFieldController? stateController;
   final Function(bool hasFocus, String value)? onFocusChanged;
+  final SuggestionController? suggestionController;
 
-  const SearchFormField(
-      {Key? key,
-      required this.keyStorage,
-      this.onChanged,
-      required this.keyField,
-      this.suggestionsNotifier,
-      required this.nameField,
-      required this.future,
-      required this.controller,
-      this.validator,
-      this.label,
-      this.suggestionsAmount = 8,
-      this.readOnly = false,
-      this.onFocusChanged,
-      this.sublabel,
-      this.clearOnSubmit = false,
-      this.initialValue,
-      this.leadding,
-      this.sufixIcon,
-      this.prefixIcon,
-      this.actions,
-      this.autofocus = false,
-      this.minChars = 3,
-      this.interval = 700,
-      this.onSearch,
-      this.stateController,
-      this.keyboardType})
-      : super(key: key);
+  const SearchFormField({
+    Key? key,
+    required this.keyStorage,
+    this.onChanged,
+    required this.keyField,
+    this.suggestionsNotifier,
+    required this.nameField,
+    required this.future,
+    required this.controller,
+    this.validator,
+    this.label,
+    this.suggestionsAmount = 8,
+    this.readOnly = false,
+    this.onFocusChanged,
+    this.sublabel,
+    this.clearOnSubmit = false,
+    this.initialValue,
+    this.leadding,
+    this.sufixIcon,
+    this.prefixIcon,
+    this.actions,
+    this.autofocus = false,
+    this.minChars = 3,
+    this.interval = 700,
+    this.onSearch,
+    this.stateController,
+    this.keyboardType,
+    this.suggestionController,
+  }) : super(key: key);
 
   @override
   _SeartFormFieldState createState() => _SeartFormFieldState();
 }
 
 class _SeartFormFieldState extends State<SearchFormField> {
-  dynamic _suggestions;
+  get _suggestions => _suggestionController.items;
+
   final _initial = {};
-  late dynamic _notifier;
+  late ValueNotifier<List> _notifier;
   FocusNode? _focus;
+  late SuggestionController _suggestionController;
   @override
   void initState() {
     super.initState();
+    //_notifier = widget.suggestionsNotifier ?? ValueNotifier<List>([]);
     _closing = false;
     textController = widget.controller ?? TextEditingController();
     _focus = FocusNode();
+
     _notifier = widget.suggestionsNotifier ?? ValueNotifier<List>([]);
-    _suggestions = _suggestionStorage[widget.keyStorage] ?? [];
+
+    _suggestionController =
+        widget.suggestionController ?? SuggestionController();
+    _suggestionController.keyStorage ??= widget.keyStorage;
+    _suggestionController.suggestionsNotifier ??= _notifier;
+
     _initial[widget.nameField] = widget.initialValue;
     _focus!.addListener(() {
       if (widget.onFocusChanged != null) {
@@ -92,8 +122,6 @@ class _SeartFormFieldState extends State<SearchFormField> {
   @override
   void dispose() {
     _closing = true;
-    //_focus.dispose();
-    _suggestionStorage[widget.keyStorage] = _suggestions;
     super.dispose();
   }
 
@@ -102,6 +130,7 @@ class _SeartFormFieldState extends State<SearchFormField> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
         if (widget.leadding != null) widget.leadding!,
         Expanded(
@@ -155,25 +184,31 @@ class _SeartFormFieldState extends State<SearchFormField> {
     );
   }
 
-  addSugestions(lst) {
+  List addSugestions(List? lst) {
     if (lst != null) {
-      lst.forEach((item) {
-        if (item != null) {
-          var achou = false;
-          _suggestions.forEach((element) {
-            if (element['nome'] == item['nome']) achou = true;
-          });
-          if (!achou) {
-            var s = '';
-            item.keys.forEach((k) {
-              s += ';${item[k]}';
+      if (lst.isNotEmpty) if (lst[0]['nome'] == null) {
+        return _suggestionController.add(lst);
+      } else {
+        lst.forEach((item) {
+          if (item == null || item['nome'] == null) {
+            _suggestionController.add([item]);
+          } else {
+            var achou = false;
+            _suggestions.forEach((element) {
+              if (element['nome'] == item['nome']) achou = true;
             });
-            item['key-search'] = s;
-            _suggestions.add(item);
+            if (!achou) {
+              var s = '';
+              item.keys.forEach((k) {
+                s += ';${item[k]}';
+              });
+              item['key-search'] = s;
+              _suggestions.add(item);
+            }
           }
-        }
-      });
+        });
+      }
     }
-    return lst;
+    return _suggestions;
   }
 }

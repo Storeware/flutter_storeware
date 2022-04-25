@@ -76,7 +76,7 @@ export 'messages.dart';
 export 'mine_bar_chart.dart';
 export 'mobile_widgets.dart';
 //export 'notice_activities.dart';
-export 'overlay_container.dart';
+//export 'overlay_container.dart';
 export 'page_animation.dart';
 export 'page_navigator.dart';
 export 'page_navigator_row.dart';

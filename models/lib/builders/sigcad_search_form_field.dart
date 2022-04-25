@@ -4,11 +4,9 @@ import 'dart:async';
 
 import 'form_callback.dart';
 import 'search_form_field.dart';
-//import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
-//import 'package:console/views/cadastros/clientes/cadastro_clientes.dart';
 
 class SigcadSearchFormField extends StatefulWidget {
   final Function(double?) onChanged;
@@ -23,6 +21,7 @@ class SigcadSearchFormField extends StatefulWidget {
   final String Function(String)? validator;
   final FormSearchCallback onSearch;
   final FormValueCallback onNew;
+  final SuggestionController? suggestionController;
 
   const SigcadSearchFormField({
     Key? key,
@@ -38,6 +37,7 @@ class SigcadSearchFormField extends StatefulWidget {
     this.validator,
     required this.onSearch,
     required this.onNew,
+    this.suggestionController,
   }) : super(key: key);
 
   @override
@@ -101,6 +101,8 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
               label: widget.label ?? 'Parceiro',
               initialValue: notifier.value['nome'] ?? '',
               suggestionsNotifier: addSuggestions,
+              // controller
+              suggestionController: widget.suggestionController,
               onFocusChanged: (b, texto) {
                 double? cod = double.tryParse(texto);
                 if (!b &&

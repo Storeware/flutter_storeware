@@ -56,7 +56,7 @@ packages:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.16.0"
+    version: "1.15.0"
   connectivity:
     dependency: transitive
     description:
@@ -90,7 +90,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: "30e50a19b0976159af0a8393400f1d5afdc82628"
+      resolved-ref: "870878921c5e8fa98d591ba9864c5710a43e2c7b"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.10.11"
@@ -99,7 +99,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "30e50a19b0976159af0a8393400f1d5afdc82628"
+      resolved-ref: "870878921c5e8fa98d591ba9864c5710a43e2c7b"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.27"
@@ -108,7 +108,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: "30e50a19b0976159af0a8393400f1d5afdc82628"
+      resolved-ref: "870878921c5e8fa98d591ba9864c5710a43e2c7b"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -117,7 +117,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: "30e50a19b0976159af0a8393400f1d5afdc82628"
+      resolved-ref: "870878921c5e8fa98d591ba9864c5710a43e2c7b"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -126,16 +126,16 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "30e50a19b0976159af0a8393400f1d5afdc82628"
+      resolved-ref: "870878921c5e8fa98d591ba9864c5710a43e2c7b"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.10.11"
   controls_extensions:
-    dependency: "direct main"
+    dependency: transitive
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: "30e50a19b0976159af0a8393400f1d5afdc82628"
+      resolved-ref: "870878921c5e8fa98d591ba9864c5710a43e2c7b"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -144,7 +144,7 @@ packages:
     description:
       path: controls_web
       ref: HEAD
-      resolved-ref: "30e50a19b0976159af0a8393400f1d5afdc82628"
+      resolved-ref: "870878921c5e8fa98d591ba9864c5710a43e2c7b"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "22.4.12"
@@ -189,7 +189,7 @@ packages:
       name: fake_async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.2.0"
   ffi:
     dependency: transitive
     description:
@@ -288,7 +288,7 @@ packages:
       name: js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.4"
+    version: "0.6.3"
   matcher:
     dependency: transitive
     description:
@@ -302,7 +302,7 @@ packages:
       name: material_color_utilities
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.4"
+    version: "0.1.3"
   meta:
     dependency: transitive
     description:
@@ -323,7 +323,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   path_parsing:
     dependency: transitive
     description:
@@ -400,7 +400,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.0.0"
+    version: "4.4.0"
   platform:
     dependency: transitive
     description:
@@ -524,7 +524,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.2"
+    version: "1.8.1"
   sqflite:
     dependency: transitive
     description:
@@ -580,7 +580,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.9"
+    version: "0.4.8"
   typed_data:
     dependency: transitive
     description:
@@ -678,7 +678,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.1"
   win32:
     dependency: transitive
     description:
@@ -699,7 +699,7 @@ packages:
       name: xml
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.4.1"
+    version: "5.3.1"
 sdks:
-  dart: ">=2.17.0-0 <3.0.0"
+  dart: ">=2.16.0 <3.0.0"
   flutter: ">=2.10.0"

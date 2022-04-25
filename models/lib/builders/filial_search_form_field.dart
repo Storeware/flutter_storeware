@@ -4,9 +4,6 @@ import 'dart:async';
 
 import 'form_callback.dart';
 import 'search_form_field.dart';
-//import 'package:console/views/cadastros/filiais/filial_page.dart';
-//import 'package:console/views/financas/cadastros/filial_page.dart';
-import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -18,6 +15,8 @@ class FilialSearchFormField extends StatefulWidget {
   final dynamic Function(double?)? validator;
   final bool todas;
   final FormSearchCallback onSearch;
+// add controller
+  final SuggestionController? suggestionController;
 
   const FilialSearchFormField({
     Key? key,
@@ -27,6 +26,7 @@ class FilialSearchFormField extends StatefulWidget {
     this.todas = false,
     this.validator,
     required this.onSearch,
+    this.suggestionController,
   }) : super(key: key);
 
   @override
@@ -82,6 +82,8 @@ class _SigbcoSearchFormFieldState extends State<FilialSearchFormField> {
             label: widget.label ?? 'Filial',
             initialValue: notifier.value['nome'] ?? '',
             suggestionsNotifier: addSuggestions,
+            // controller
+            suggestionController: widget.suggestionController,
             stateController: stateController,
             onFocusChanged: (b, texto) {
               double? cod = double.tryParse(texto);

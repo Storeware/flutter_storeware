@@ -655,8 +655,6 @@ class ODataClient extends ODataClientInterface {
     return clone();
   }
 
-  /// [loginNotifier] Notifier para receber evento de login alterado
-  DataNotifyChange loginNotifier = DataNotifyChange<Map>();
   String? token;
   auth(user, pass) {
     var bytes = utf8.encode('$user:$pass');
@@ -679,7 +677,6 @@ class ODataClient extends ODataClientInterface {
       client.authorization = 'Bearer $token';
       if (client.tokenId == null) client.setToken(auth(usuario, senha));
       client.addHeader('contaid', conta);
-      loginNotifier.notify(rsp);
       LoginTokenChanged().notify(true);
       return token;
     }).onError((error, stackTrace) => null);

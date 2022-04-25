@@ -14,9 +14,7 @@ runApp(Widget wg) {
 builderTest() {
   testWidgets("test Atalhos", (WidgetTester tester) async {
     await tester.pumpWidget(
-      runApp(
-        AtalhosSearchFormField(),
-      ),
+      runApp(AtalhosSearchFormField()),
     );
     var r = await tester.pump();
     var f = find.byType(IconButton);

@@ -9,6 +9,34 @@ import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+/// {@tool snippet}
+/// [AtalhosSearchFormField] adiciona form field de busca para tabela de atalhos
+///```dart
+/// AtalhosSearchFormField(onSearch: (a) {
+///              late dynamic y;
+///              SuggestionController suggestionController = SuggestionController();
+///              return Dialogs.showPage(context,
+///                  width: 450,
+///                  //height: 550,
+///                  child: widget.childDialog(context, (r) {
+///                    y = r;
+///                  }) ?? CadastroCategoriaView(
+///                      title: 'Selecione uma categoria',
+///                      canEdit: false,
+///                      canInsert: false,
+///                      suggestionController: suggestionController,
+///                      onLoaded: (rows) {
+///                        suggestionController.add(rows);
+///                      },
+///                      onSelected: (x) async {
+///                       y = x;
+///                        return x['codigo'];
+///                      })
+///                  ).then((rsp) {
+///                return y;
+///              })
+///  );```
+/// {@end-tool}
 class AtalhosSearchFormField extends StatefulWidget {
   final Function(double?)? onChanged;
   final double? codigo;
@@ -122,28 +150,7 @@ class _AtalhosSearchFormFieldState extends State<AtalhosSearchFormField> {
           : (x) => widget.onSearch!(context).then((r) {
                 addSuggestions.value = [r];
                 return r['codigo'];
-              }) /* (a) {
-              late dynamic y;
-              return Dialogs.showPage(context,
-                  width: 450,
-                  //height: 550,
-                  child: widget.childDialog(context, (r) {
-                    y = r;
-                  }) CadastroCategoriaView(
-                      title: 'Selecione uma categoria',
-                      canEdit: false,
-                      canInsert: false,
-                      onLoaded: (rows) {
-                        addSuggestions.value = rows;
-                      },
-                      onSelected: (x) async {
-                        y = x;
-                        return x['codigo'];
-                      })
-                  ).then((rsp) {
-                return y;
-              })*/
-      ,
+              }),
       future: (x) {
         var u = x.toUpperCase();
         var d = double.tryParse(x);

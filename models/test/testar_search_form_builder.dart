@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_mock_adapter/http_mock_adapter.dart';
 import 'package:models/builders.dart';
 //import 'package:get/get.dart';
 
@@ -11,7 +12,7 @@ runApp(Widget wg) {
   );
 }
 
-builderTest() {
+builderTest(DioAdapter adapter) {
   testWidgets("test Atalhos", (WidgetTester tester) async {
     await tester.pumpWidget(
       runApp(AtalhosSearchFormField()),

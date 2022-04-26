@@ -414,9 +414,14 @@ class SigcauthItemModel extends ODataModelClass<SigcauthItem> {
     return API!.execute(qry);
   }
 
-  Future<double> proximoNumero(double? filial) async {
-    return CtrlIdItemModel.proximo('PEDIDO$filial').then((rsp) {
-      return (rsp.numero! * 1000) + filial!;
+  Future<double> proximoNumero([double? filial = 0]) async {
+    var str = 'PEDIDO';
+    if (filial! > 0) str += '${filial.toInt()}';
+    return CtrlIdItemModel.proximo(str).then((rsp) {
+      if (filial > 0)
+        return (rsp.numero! * 1000) + filial;
+      else
+        return rsp.numero!;
     });
   }
 }

@@ -12,14 +12,16 @@ class CodigoProdutoFormField extends StatefulWidget {
   final Function(String)? onSaved;
   final Function(String)? validator;
   final FormSearchCallback onSearch;
-  const CodigoProdutoFormField(
-      {Key? key,
-      this.codigo,
-      this.onChanged,
-      this.onSaved,
-      this.validator,
-      required this.onSearch})
-      : super(key: key);
+  final Future Function(String cd)? buscarFuture;
+  const CodigoProdutoFormField({
+    Key? key,
+    this.codigo,
+    this.onChanged,
+    this.onSaved,
+    this.validator,
+    required this.onSearch,
+    required this.buscarFuture,
+  }) : super(key: key);
 
   @override
   _CodigoProdutoFormFieldState createState() => _CodigoProdutoFormFieldState();
@@ -28,10 +30,16 @@ class CodigoProdutoFormField extends StatefulWidget {
 class _CodigoProdutoFormFieldState extends State<CodigoProdutoFormField> {
   buscarProduto(cd) {
     notifier.value = {};
-    ProdutoModel().buscarByCodigo(cd).then((rsp) {
-      //print(rsp);
-      if (rsp.isNotEmpty) notifier.value = rsp;
-    });
+    if (widget.buscarFuture != null) {
+      widget.buscarFuture!(cd).then((r) {
+        notifier.value = r;
+      });
+    } else {
+      ProdutoModel().buscarByCodigo(cd).then((rsp) {
+        //print(rsp);
+        if (rsp.isNotEmpty) notifier.value = rsp;
+      });
+    }
   }
 
   late ValueNotifier<Map<String, dynamic>> notifier;
@@ -101,9 +109,12 @@ class _CodigoProdutoFormFieldState extends State<CodigoProdutoFormField> {
               valueListenable: notifier,
               builder: (ctx, dynamic row, wg) {
                 nome = row['nome'] ?? '';
-                return MaskedLabeled(
-                  padding: const EdgeInsets.only(left: 4, bottom: 2),
-                  value: nome,
+                return Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(nome
+                      //padding: const EdgeInsets.only(left: 4, bottom: 2),
+                      //value: nome,
+                      ),
                 );
               },
             ),

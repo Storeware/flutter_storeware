@@ -118,7 +118,7 @@ class _AtalhosSearchFormFieldState extends State<AtalhosSearchFormField> {
             if (rsp != null && rsp.length > 0) {
               codigo = rsp['codigo'] + 0.0;
               nome = rsp['nome'];
-              widget.onChanged!(codigo);
+              if (widget.onChanged != null) widget.onChanged!(codigo);
               Timer(const Duration(milliseconds: 500), () {
                 stateController.closeOverlay(nome);
               });

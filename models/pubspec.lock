@@ -90,7 +90,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_android"
       ref: HEAD
-      resolved-ref: "5e061d19d5dbfa767e8a1605e775557f9745bc01"
+      resolved-ref: "710b5dedef3f6088ff9de42578a405854275d7e3"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.10.11"
@@ -99,7 +99,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_interface"
       ref: HEAD
-      resolved-ref: "5e061d19d5dbfa767e8a1605e775557f9745bc01"
+      resolved-ref: "710b5dedef3f6088ff9de42578a405854275d7e3"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.09.27"
@@ -108,7 +108,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_web"
       ref: HEAD
-      resolved-ref: "5e061d19d5dbfa767e8a1605e775557f9745bc01"
+      resolved-ref: "710b5dedef3f6088ff9de42578a405854275d7e3"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -117,7 +117,7 @@ packages:
     description:
       path: "controls_data/control_data_platform_windows"
       ref: HEAD
-      resolved-ref: "5e061d19d5dbfa767e8a1605e775557f9745bc01"
+      resolved-ref: "710b5dedef3f6088ff9de42578a405854275d7e3"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -126,7 +126,7 @@ packages:
     description:
       path: controls_data
       ref: HEAD
-      resolved-ref: "5e061d19d5dbfa767e8a1605e775557f9745bc01"
+      resolved-ref: "710b5dedef3f6088ff9de42578a405854275d7e3"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.10.11"
@@ -135,7 +135,7 @@ packages:
     description:
       path: controls_extensions
       ref: HEAD
-      resolved-ref: "5e061d19d5dbfa767e8a1605e775557f9745bc01"
+      resolved-ref: "710b5dedef3f6088ff9de42578a405854275d7e3"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "2021.11.10"
@@ -144,7 +144,7 @@ packages:
     description:
       path: controls_web
       ref: HEAD
-      resolved-ref: "5e061d19d5dbfa767e8a1605e775557f9745bc01"
+      resolved-ref: "710b5dedef3f6088ff9de42578a405854275d7e3"
       url: "https://github.com/amarildolacerda/flutter_storeware.git"
     source: git
     version: "22.4.12"

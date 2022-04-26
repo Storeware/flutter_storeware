@@ -25,7 +25,7 @@ builderTest() {
     expect(f, isNotNull, reason: 'não achou um TextField no objeto de busca');
   });
   testWidgets('teste ctprod', (WidgetTester tester) async {
-    runSearch(tester, CtprodSearchFormField(
+    await runSearch(tester, CtprodSearchFormField(
       onSearch: (x) {
         return Future.value({});
       },
@@ -103,11 +103,19 @@ builderTest() {
 
   // testar simple CodigoProdutoFormField
   testWidgets('teste codigoProduto', (WidgetTester tester) async {
-    runSimple(tester, CodigoProdutoFormField(
-      onSearch: (x) {
-        return Future.value({});
-      },
-    ));
+    await runSimple(
+        tester,
+        CodigoProdutoFormField(
+          codigo: '1',
+          onSaved: (x) => print(['salvou: ', x]),
+          buscarFuture: (c) =>
+              Future.value({'codigo': '1', 'nome': 'teste-$c'}),
+          onSearch: (x) {
+            return Future.value({});
+          },
+          onChanged: (x) => print(['selecionou: ', x]),
+        ));
+    tester.pump();
   });
 }
 

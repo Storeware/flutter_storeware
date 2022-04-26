@@ -4,6 +4,7 @@ import 'package:controls_data/data.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_mock_adapter/http_mock_adapter.dart';
+// ignore: unused_import
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 import 'testar_models.dart';
@@ -23,9 +24,9 @@ void main() async {
     setUpAll(() async {
       rest.baseUrl = 'https://estouentregando.com';
       rest.prefix = '/v3/';
-      rest.log((s) => msg += s);
-      rest.error((s) => msg += s);
-      dio.interceptors.add(PrettyDioLogger());
+      rest.log((s) => msg += '\n' '$s');
+      rest.error((s) => msg += '\n' '$s');
+      //dio.interceptors.add(PrettyDioLogger());
 
       adapter.onGet(
           '/v3/login', (server) => server.reply(200, {'token': 'teste'}));

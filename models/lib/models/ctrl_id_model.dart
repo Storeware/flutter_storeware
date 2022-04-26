@@ -60,4 +60,13 @@ end""").then((rsp) {
         return CtrlIdItem.fromJson(rsp['result'][0]);
       });
   }
+
+  static Future<double> proximoNumero(String nome, double filial) async {
+    return CtrlIdItemModel.proximo(nome).then((rsp) {
+      if (filial > 0)
+        return (rsp.numero! * 1000) + filial;
+      else
+        return rsp.numero!;
+    });
+  }
 }

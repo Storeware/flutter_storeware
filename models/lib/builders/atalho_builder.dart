@@ -6,18 +6,19 @@ import 'package:flutter/material.dart';
 
 class AtalhoBuilder extends StatelessWidget {
   final Widget Function(BuildContext, List<dynamic>) builder;
-  const AtalhoBuilder({Key? key, required this.builder}) : super(key: key);
+  final Future<dynamic>? future;
+  const AtalhoBuilder({Key? key, this.future, required this.builder})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<dynamic>(
       // ignore: deprecated_member_use
-      future: ODataInst().send(
-          ODataQuery(
-            resource: 'ctprod_atalho_titulo',
-            select: 'codigo, nome',
-          ),
-          cacheControl: 'no-cache'),
+      future: future ??
+          ODataInst().getRows(
+              resource: 'ctprod_atalho_titulo',
+              select: 'codigo, nome',
+              cacheControl: 'no-cache'),
       builder: (ctx, snap) {
         List<dynamic> items = [];
         if (snap.hasData) items = snap.data['result'];

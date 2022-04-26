@@ -80,7 +80,7 @@ builderTest() {
   });
   // testar SigvenSearchFormField
   testWidgets('teste sigven', (WidgetTester tester) async {
-    runSearch(
+    await runSearch(
         tester,
         SigvenSearchFormField(
           suggestionController: SuggestionController(),
@@ -89,19 +89,17 @@ builderTest() {
           },
         ));
   });
-  // testar simple AcgruposDropdownBuilder
-  /* testWidgets('teste acgruposDropDownBuilder', (WidgetTester tester) async {
-    runSimple(tester, AcgruposDropdownBuilder());
-  });
   // testar simple AtalhoBuilder
   testWidgets('teste atalhoBuilder', (WidgetTester tester) async {
-    runSimple(tester, AtalhoBuilder(
-      builder: (x, y) {
-        return Text('teste');
-      },
-    ));
+    runSimple(
+        tester,
+        AtalhoBuilder(
+          builder: (c, x) {
+            return Container();
+          },
+          future: Future.value([]),
+        ));
   });
-  */
 }
 
 runSimple(tester, wg) async {
@@ -110,7 +108,6 @@ runSimple(tester, wg) async {
       wg,
     ),
   );
-  await tester.pump();
 }
 
 runSearch(tester, wg) async {

@@ -383,6 +383,7 @@ class ODataClient extends ODataClientInterface {
     o.client.inDebug = client.inDebug;
     o.baseUrl = baseUrl ?? client.baseUrl;
     o.prefix = prefix ?? client.prefix;
+    o.client.dio = client.dio;
     client.headers.forEach((k, v) {
       o.client.addHeader(k, v);
     });
@@ -670,6 +671,7 @@ class ODataClient extends ODataClientInterface {
     cli.authorization = auth(usuario, senha);
     cli.headers.addAll(client.headers);
     cli.addHeader('contaid', conta);
+    cli.dio = client.dio;
     return cli
         .openJson(cli.formatUrl(path: 'login'), method: 'GET')
         .then((rsp) {

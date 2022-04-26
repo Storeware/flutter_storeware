@@ -105,6 +105,7 @@ class RestClient {
   bool inDebug = false;
   String? _url;
   String? get url => _url;
+  Dio? dio;
   /* decode json string to object */
   Map<String, dynamic> decode(String texto) {
     return json.decode(texto, reviver: (k, v) {
@@ -280,7 +281,7 @@ class RestClient {
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
 
     String uri = Uri.parse(url).toString();
-    Dio dio = Dio(bo);
+    Dio dio = this.dio ?? Dio(bo);
     //dio.transformer = ClientTransformer();
     DataProcessingNotifier.start();
     try {
@@ -412,7 +413,7 @@ class RestClient {
     notifyLog.send('$method: ${this.baseUrl}$url - $contentType');
 
     String uri = Uri.parse(url).toString();
-    Dio dio = Dio(bo);
+    Dio dio = this.dio ?? Dio(bo);
     //dio.transformer = ClientTransformer();
     DataProcessingNotifier.start();
     Future<Response> ref;
@@ -536,7 +537,7 @@ class RestClient {
     notifyLog.send('$method: ${this.baseUrl}$url - $body');
 
     String uri = Uri.parse(url).toString();
-    Dio dio = Dio(bo);
+    Dio dio = this.dio ?? Dio(bo);
 
     DataProcessingNotifier.start();
 

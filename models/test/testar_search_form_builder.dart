@@ -100,6 +100,15 @@ builderTest() {
           future: Future.value([]),
         ));
   });
+
+  // testar simple CodigoProdutoFormField
+  testWidgets('teste codigoProduto', (WidgetTester tester) async {
+    runSimple(tester, CodigoProdutoFormField(
+      onSearch: (x) {
+        return Future.value({});
+      },
+    ));
+  });
 }
 
 runSimple(tester, wg) async {

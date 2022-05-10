@@ -161,7 +161,7 @@ abstract class ConfigAppBase extends ConfigBase {
 
     if (instanceCount == 0) {
       instanceCount++;
-      queryParameters['q'] ??= 'm5'; // entra em demo
+      //queryParameters['q'] ??= 'm5'; // entra em demo
       restServer = queryParameters['h'] ?? 'https://estouentregando.com';
 
       //print(queryParameters['q']);

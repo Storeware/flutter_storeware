@@ -1,7 +1,7 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
-import 'package:controls_extensions/extensions.dart'
-    hide DynamicExtension, toDateTime, toDouble, toInt;
+import 'package:controls_extensions/extensions.dart' as ext;
 import 'package:controls_data/odata_firestore.dart';
 
 /*
@@ -55,7 +55,7 @@ class Sigcaut2HoraItem extends DataItem {
     data['filial'] = this.filial;
     data['total'] = this.total;
     data['itens'] = this.itens; // é virtual;
-    data['id'] = '$filial-$codigo-${this.data?.format('yyyMMdd') ?? ''}$hora';
+    data['id'] = '$filial-$codigo-${this.data!.format('yyyMMdd')}$hora';
     return data;
   }
 }
@@ -74,6 +74,9 @@ class Sigcaut2HoraItemModel extends ODataModelClass<Sigcaut2HoraItem> {
         "select data,hora, sum(qtde) qtde,sum(total) total, count(*) itens from Sigcaut2_hora " +
             "where data = '$dt' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data,hora ";
+
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut2_hora', 'sigcaut2');
+
     return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });
@@ -90,6 +93,7 @@ class Sigcaut2HoraItemModel extends ODataModelClass<Sigcaut2HoraItem> {
         "select data, sum(qtde) qtde,sum(total) total, count(*) itens from Sigcaut2_hora " +
             "where data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data ";
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut2_hora', 'sigcaut2');
     return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });

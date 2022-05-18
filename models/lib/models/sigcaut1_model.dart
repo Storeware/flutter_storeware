@@ -1,7 +1,10 @@
+// @dart=2.12
+import 'dart:convert';
+
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
-//import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
+import 'package:controls_extensions/validadores.dart';
 
 class Sigcaut1Item extends DataItem {
   String? codigo;
@@ -28,7 +31,7 @@ class Sigcaut1Item extends DataItem {
   String? nome;
   // String operacao;
   // double percDesc;
-  // double precobase;
+  double precoBase = 0;
   // double precoBase;
   double? qtdebaixa;
   double? qtdeOrigi;
@@ -46,6 +49,27 @@ class Sigcaut1Item extends DataItem {
   // String cancelado;
   // double qtdecanc;
   DateTime? dtEntRet;
+  double descmaximo =
+      0; // percentual de desconto que pode ser aplicado ao produto
+  double percDesconto = 0;
+
+  double get desconto {
+    try {
+      if (precoBase == 0) precoBase = preco!;
+      return precoBase - preco!;
+    } catch (e) {
+      return 0.0;
+    }
+  }
+
+  double get valorBruto {
+    if (precoBase == 0) precoBase = preco!;
+    return roundTo(precoBase * qtde!, 2) as double;
+  }
+
+  double get valorDesconto => roundTo(desconto * qtde!, 2) as double;
+
+  double get valorLiquido => total!;
 
   static test() {
     return Sigcaut1Item.fromJson({
@@ -68,7 +92,6 @@ class Sigcaut1Item extends DataItem {
       "nome": "PRODUTO DE EXEMPLO",
       "operacao": "129",
       "perc_desc": 0,
-      "precobase": 0,
       "preco_base": 0,
       "qtdebaixa": 0,
       "qtde_origi": 0,
@@ -97,6 +120,8 @@ class Sigcaut1Item extends DataItem {
     this.dcto,
     //this.id,
     this.preco,
+    this.percDesconto = 0,
+    this.descmaximo = 0,
     this.filial,
     this.qtde,
     this.baixado,
@@ -115,7 +140,7 @@ class Sigcaut1Item extends DataItem {
     this.nome,
     //  this.operacao,
     //   this.percDesc,
-    //   this.precobase,
+    this.precoBase = 0,
     //   this.precoBase,
     this.qtdebaixa,
     this.qtdeOrigi,
@@ -161,8 +186,8 @@ class Sigcaut1Item extends DataItem {
     mesa = json['mesa'];
     dctoid = toDouble(json['dctoid']);
     // operacao = json['operacao'];
-    // percDesc = json['perc_desc'];
-    // precobase = json['precobase'];
+    percDesconto = toDouble(json['perc_desc']);
+    precoBase = toDouble(json['preco_base']);
     // precoBase = json['preco_base'];
     qtdebaixa = toDouble(json['qtdebaixa']);
     qtdeOrigi = toDouble(json['qtde_origi']);
@@ -188,8 +213,27 @@ class Sigcaut1Item extends DataItem {
     return this;
   }
 
+  aplicarDescontoPercentual(
+      {required double bruto, required double percDesc, double liquido = 0}) {
+    this.precoBase = bruto;
+    this.percDesconto = percDesc;
+    if (liquido > 0) {
+      this.preco = liquido;
+      this.percDesconto = (bruto - liquido) / bruto * 100;
+    } else
+      this.preco = roundTo(bruto * (1 - percDesc / 100), 2) as double;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+
+    if (precoBase == 0) {
+      if (percDesconto > 0)
+        precoBase = preco! / (1 - percDesconto / 100);
+      else
+        precoBase = preco ?? 0;
+    }
+
     data['codigo'] = this.codigo;
     data['data'] = toDateSql(toDate(this.data)!);
     data['dcto'] = this.dcto;
@@ -208,8 +252,8 @@ class Sigcaut1Item extends DataItem {
     //data['iss'] = this.iss;
     data['nome'] = this.nome;
     //data['operacao'] = this.operacao;
-    //data['perc_desc'] = this.percDesc;
-    //data['precobase'] = this.precobase;
+    data['perc_desc'] = this.percDesconto;
+    data['preco_base'] = this.precoBase;
     //data['preco_base'] = this.precoBase;
     data['qtdebaixa'] = this.qtdebaixa;
     data['qtde_origi'] = this.qtdeOrigi;
@@ -249,10 +293,11 @@ class Sigcaut1ItemModel extends ODataModelClass<Sigcaut1Item> {
     // exclui colunas externas
     keys.remove('unidade');
     keys.remove('dtent_ret');
-
+    String charSet = 'character set WIN1252';
+    if (driver == 'mssql') charSet = '';
     columns = 'a.' +
-        keys.join(', a.').replaceAll('a.nome,',
-            'CAST(a.nome AS varchar(50) character set WIN1252) nome,');
+        keys.join(', a.').replaceAll(
+            'a.nome,', 'CAST(a.nome AS varchar(50) $charSet) nome,');
   }
   Sigcaut1Item newItem() => Sigcaut1Item();
 
@@ -269,26 +314,99 @@ class Sigcaut1ItemModel extends ODataModelClass<Sigcaut1Item> {
     });
   }
 
-  mudarEstadoPara(id, estado) {
-    return API!
-        .execute("update sigcaut1 set estprod = $estado where id = $id ");
+  listPedidosTabPreco(
+      {filter,
+      orderBy,
+      top,
+      skip,
+      select,
+      cacheControl,
+      tabelaPreco,
+      required double filial}) async {
+    String where = (filter != null) ? ' and ($filter)' : '';
+
+    String subQueryPreco =
+        ",(select precoweb from ctprod_filial pf where a.codigo=p.codigo and pf.filial = $filial) as pv";
+    if (tabelaPreco != null)
+      subQueryPreco =
+          ",(select precovenda from web_ctprod_tabpreco t where t.codigo=p.codigo and t.filial=$filial and t.tabela=$tabelaPreco) as pv ";
+
+    return search(
+      select: select ??
+          'distinct $columns' + ', b.dtent_ret, p.unidade $subQueryPreco',
+      resource: 'sigcauth b,  ctprod p,  sigcaut1 a ',
+      filter:
+          "(b.dcto  = a.dcto and b.data = a.data) and a.codigo=p.codigo $where ",
+      orderBy: orderBy,
+      top: top,
+      skip: skip,
+    ).then((ODataResult r) {
+      List<dynamic> rsp = r.asMap();
+      rsp.forEach((it) {
+        if (it['pv'] != null) {
+          it['precovenda'] = it['pv'];
+        }
+        if (toDouble(it['precoweb']) == 0 && it['precovenda'] != null) {
+          it['precoweb'] = it['precovenda'];
+        }
+      });
+      return rsp;
+    });
   }
 
-  mudarQtdePara(id, double qtde, localArmazenamento) {
-    return API!.execute(
-        "update sigcaut1 set qtde=$qtde, localarmazenamento = '$localArmazenamento' where id = $id ");
+  mudarEstadoPara(id, estado) {
+    String qry = "update sigcaut1 set estprod = $estado where id = $id ";
+    if (driver == 'mssql')
+      qry = '''
+         begin
+           $qry;
+           select @@rowcount as __rows;
+         end''';
+    return API!.execute(qry);
+  }
+
+  mudarQtdePara(id, double? qtde, localArmazenamento) {
+    String qry =
+        "update sigcaut1 set qtde=$qtde, localarmazenamento = '$localArmazenamento' where id = $id ";
+    if (driver == 'mssql')
+      qry = '''begin
+       $qry;
+       select @@rowcount as __rows;
+    end
+    ''';
+    return API!.execute(qry);
   }
 
   addItem(Sigcaut1Item item) {
     var vend = (item.vendedor != null) ? "'${item.vendedor}'" : 'null';
-
-    String qry =
-        """SELECT p.TX_MSG, p.NR_PEDIDO, p.NR_LOTE, p.NR_LINHAS_AFETADAS 
-            FROM WEB_REG_OS_ITEM(0, ${item.filial}, 
+    String? qry;
+    if (driver == 'mssql') {
+      qry = """
+      begin
+       declare @id Double precision;
+       exec @id = 
+         WEB_REG_OS_ITEM 0, ${item.filial}, 
         '${toDateSql(item.data!)}', 
         '${item.dcto}', ${item.clifor}, '${item.codigo}', 
         '${item.compl ?? ''}', 
         ${item.qtde}, 
+        ${item.preco}, 
+        ${item.ordem}, $vend, 
+        ${item.lote}, null, null, 1,'N','${item.operacao}', @id;
+        select (case when codigo is not null  then 'OK' else 'Erro no servidor não informado' end) as tx_msg, sigcauthlote as nr_lote, 1 as nr_linhas_afetadas, dcto as nr_pedido from sigcaut1 where dcto='${item.dcto}' and clifor=${item.clifor} and sigcauthlote=${item.lote};
+      end
+      """;
+      return API!.execute(qry).then((rsp) {
+        return jsonDecode(rsp);
+      });
+    } else
+      qry = """SELECT p.TX_MSG, p.NR_PEDIDO, p.NR_LOTE, p.NR_LINHAS_AFETADAS 
+            FROM WEB_REG_OS_ITEM_EX(0, ${item.filial}, 
+        '${toDateSql(item.data!)}', 
+        '${item.dcto}', ${item.clifor}, '${item.codigo}', 
+        '${item.compl ?? ''}', 
+        ${item.qtde}, 
+        ${item.precoBase},
         ${item.preco}, 
         ${item.ordem}, $vend, 
         ${item.lote}, null, null, 1,'N','${item.operacao}') p """;

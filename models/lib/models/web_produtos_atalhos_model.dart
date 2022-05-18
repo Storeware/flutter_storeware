@@ -1,3 +1,5 @@
+// @dart=2.12
+import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 //import 'package:controls_extensions/extensions.dart';
@@ -37,6 +39,7 @@ class WebProdutosAtalhosItem extends DataItem {
   double? precoweb;
   double? qtvarejo;
   double? precovda2;
+  double? descmaximo;
 
   WebProdutosAtalhosItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);
@@ -56,9 +59,11 @@ class WebProdutosAtalhosItem extends DataItem {
     marca = (json['marca']);
     precovenda = toDouble(json['precovenda']);
     estoquedisponivel = toDouble(json['estoquedisponivel']);
-    precoweb = toDouble(json['precoweb']);
+    double pw = toDouble(json['precoweb']);
+    precoweb = (pw == 0) ? precovenda : pw;
     qtvarejo = toDouble(json['qtvarejo']);
     precovda2 = toDouble(json['precovda2']);
+    descmaximo = toDouble(json['descmaximo']);
     return this;
   }
 
@@ -80,6 +85,7 @@ class WebProdutosAtalhosItem extends DataItem {
     data['precoweb'] = this.precoweb;
     data['qtvarejo'] = this.qtvarejo;
     data['precovda2'] = this.precovda2;
+    data['descmaximo'] = this.descmaximo;
     return data;
   }
 }
@@ -91,4 +97,54 @@ class WebProdutosAtalhosItemModel
     super.API = ODataInst();
   }
   WebProdutosAtalhosItem newItem() => WebProdutosAtalhosItem();
+
+  Future<List<dynamic>> listCachedTabPreco(
+      {filter,
+      cacheControl,
+      resource,
+      join,
+      top,
+      skip,
+      orderBy,
+      select,
+      double? tabelaPreco,
+      required double? filial}) async {
+    String cached = (cacheControl ?? 'max-age=60');
+    String tempo = '1';
+    String res = (resource ?? makeCollection(null)) + ' p ';
+    if (cached.contains('=')) tempo = cached.split('=')[1];
+    String key =
+        '${API!.client.headers['contaid']}$res $filter $select ${tabelaPreco ?? ''}';
+
+    String subQueryPreco = '';
+    if (tabelaPreco != null)
+      subQueryPreco =
+          ", (select precovenda from web_ctprod_tabpreco j where j.codigo= p.codigo and filial=$filial and tabela=$tabelaPreco) as pv ";
+
+    String? cols = select;
+    if (cols == null)
+      cols =
+          "p.*, (select descmaximo from ctprod where ctprod.codigo=p.codigo) descmaximo";
+
+    return Cached.value(key, maxage: int.tryParse(tempo) ?? 60, builder: (k) {
+      return search(
+              resource: res,
+              select: '$cols $subQueryPreco',
+              filter: filter,
+              top: top,
+              skip: skip,
+              orderBy: orderBy,
+              cacheControl: cached)
+          .then((ODataResult r) {
+        var mp = r.asMap();
+        for (var e in mp) {
+          if (e['pv'] != null) e['precoweb'] = e['pv'];
+          //print(e);
+          if (toDouble(e['precoweb']) == 0)
+            e['precoweb'] = e['precovenda'] ?? 0;
+        }
+        return mp;
+      });
+    });
+  }
 }

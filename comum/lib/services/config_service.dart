@@ -12,6 +12,12 @@ import 'package:get/get.dart';
 
 bool isFirebase = false;
 
+class UsuarioRecarregarNotifier extends BlocModel<bool> {
+  static final _singleton = UsuarioRecarregarNotifier._create();
+  UsuarioRecarregarNotifier._create();
+  factory UsuarioRecarregarNotifier() => _singleton;
+}
+
 class LoginChanged extends ChangeNotifier {
   ConfigAppBase? config;
   static final _singleton = LoginChanged._create();
@@ -116,7 +122,7 @@ abstract class ConfigAppBase extends ConfigBase {
     try {
       await ls.LocalStorage().init();
     } catch (e) {
-      //TODO: windows - erro ao carregar configruação inicial...
+      //TODO_: windows - erro ao carregar configruação inicial...
     }
     load();
 
@@ -155,7 +161,7 @@ abstract class ConfigAppBase extends ConfigBase {
 
     if (instanceCount == 0) {
       instanceCount++;
-      queryParameters['q'] ??= 'm5'; // entra em demo
+      //queryParameters['q'] ??= 'm5'; // entra em demo
       restServer = queryParameters['h'] ?? 'https://estouentregando.com';
 
       //print(queryParameters['q']);
@@ -321,7 +327,7 @@ abstract class ConfigAppBase extends ConfigBase {
 
   loginSignInByEmail(String loja, email) {
     // procura se o email é valido
-    // TODO: repensar login - usar web-usuarios para pegar o codigo do usuario - depende de alteração na view
+    // TODO_: repensar login - usar web-usuarios para pegar o codigo do usuario - depende de alteração na view
 
     this.usuario = 'checkout';
     this.password = loja;
@@ -333,7 +339,7 @@ abstract class ConfigAppBase extends ConfigBase {
         ODataInst().baseUrl = restServer;
         ODataInst().prefix = xConfig['restserverPrefix'];
         filial = toDouble(xConfig['filial'] ?? 1);
-        // TODO:fazer login na conta cliente
+        // TODO_:fazer login na conta cliente
         setLoja(loja).then((fsp) {
           afterLoaded(xConfig, fsp);
         }); // faz login no v3
@@ -368,7 +374,7 @@ abstract class ConfigAppBase extends ConfigBase {
   }
 
   /// dados do cliente (comprador) que identifica a sua conta
-  /// TODO: Mapear para enviar o codigo de confirmação pelo SMS
+  /// TODO_: Mapear para enviar o codigo de confirmação pelo SMS
   /// o celular é usado para recuperar a conta do usuario;
   String? _celular;
   set celular(String? numero) {

@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:controls_data/cached.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
@@ -9,7 +11,7 @@ class FilialItem extends DataItem {
   String? ender;
   //int id;
   String? ie;
-  String? nome;
+  String? _nome;
   String? inativa;
   String? cep;
   String? fone;
@@ -27,7 +29,7 @@ class FilialItem extends DataItem {
   String? geraencautom;
   String? loja;
   String? sigla;
-  int? sigcad;
+  double? sigcad;
   String? fax;
   String? bairro;
   String? contato;
@@ -59,7 +61,7 @@ class FilialItem extends DataItem {
       this.ender,
       //  this.id,
       this.ie,
-      this.nome,
+      String? nome,
       this.inativa,
       this.cep,
       this.fone,
@@ -97,7 +99,8 @@ class FilialItem extends DataItem {
       this.horariodefechamento,
       this.ffiscal,
       this.idcontabilista,
-      this.fpisCofins});
+      this.fpisCofins})
+      : this._nome = nome;
 
   FilialItem.fromJson(Map<String, dynamic> json) {
     fromMap(json);
@@ -108,53 +111,62 @@ class FilialItem extends DataItem {
   }
 
   @override
-  fromMap(Map<String, dynamic> json) {
+  fromMap(Map<String, dynamic>? json) {
     if (json == null) return this;
-    cgc = json['cgc'];
-    codigo = toDouble(json['codigo']);
-    ender = json['ender'];
-    id = toStr(json['id']);
-    ie = json['ie'];
-    nome = json['nome'];
-    inativa = json['inativa'];
-    cep = json['cep'];
-    fone = json['fone'];
-    cidade = json['cidade'];
-    estado = json['estado'];
-    web = json['web'];
-    razao = json['razao'];
-    fatender = json['fatender'];
-    fatcidade = json['fatcidade'];
-    fatestado = json['fatestado'];
-    fatcnpj = json['fatcnpj'];
-    fatie = json['fatie'];
-    fatfone = json['fatfone'];
-    fatcep = json['fatcep'];
-    geraencautom = json['geraencautom'];
-    loja = json['loja'];
-    sigla = json['sigla'];
-    sigcad = json['sigcad'];
-    fax = json['fax'];
-    bairro = json['bairro'];
-    contato = json['contato'];
-    numero = json['numero'];
-    complemento = json['complemento'];
-    bancoTesouraria = json['banco_tesouraria'];
-    simplesnacional = json['simplesnacional'];
-    im = json['im'];
-    indicadorTipoAtividade = json['indicador_tipo_atividade'];
-    email = json['email'];
-    indicadorPropriedade = json['indicador_propriedade'];
-    cnae = json['cnae'];
-    fgrupo = json['fgrupo'];
-    alteraprecovenda = json['alteraprecovenda'];
-    permitecreditoicmssn = json['permitecreditoicmssn'];
-    horariodeabertura = json['horariodeabertura'];
-    horariodefechamento = json['horariodefechamento'];
-    ffiscal = json['ffiscal'];
-    idcontabilista = json['idcontabilista'];
-    fpisCofins = json['fpis_cofins'];
+    try {
+      cgc = json['cgc'];
+      codigo = toDouble(json['codigo']);
+      ender = json['ender'];
+      id = toStr(json['id']);
+      ie = json['ie'];
+      _nome = json['nome'];
+      inativa = json['inativa'];
+      cep = json['cep'];
+      fone = json['fone'];
+      cidade = json['cidade'];
+      estado = json['estado'];
+      web = json['web'];
+      razao = json['razao'];
+      fatender = json['fatender'];
+      fatcidade = json['fatcidade'];
+      fatestado = json['fatestado'];
+      fatcnpj = json['fatcnpj'];
+      fatie = json['fatie'];
+      fatfone = json['fatfone'];
+      fatcep = json['fatcep'];
+      geraencautom = json['geraencautom'];
+      loja = json['loja'];
+      sigla = json['sigla'];
+      sigcad = toDouble(json['sigcad']);
+      fax = json['fax'];
+      bairro = json['bairro'];
+      contato = json['contato'];
+      numero = json['numero'];
+      complemento = json['complemento'];
+      bancoTesouraria = json['banco_tesouraria'];
+      simplesnacional = json['simplesnacional'];
+      im = json['im'];
+      indicadorTipoAtividade = json['indicador_tipo_atividade'];
+      email = json['email'];
+      indicadorPropriedade = json['indicador_propriedade'] ?? 'T';
+      cnae = toInt(json['cnae']);
+      fgrupo = toDouble(json['fgrupo']);
+      alteraprecovenda = json['alteraprecovenda'];
+      permitecreditoicmssn = json['permitecreditoicmssn'];
+      horariodeabertura = json['horariodeabertura'];
+      horariodefechamento = json['horariodefechamento'];
+      ffiscal = toInt(json['ffiscal']);
+      idcontabilista = toDouble(json['idcontabilista']);
+      fpisCofins = toInt(json['fpis_cofins']);
+    } catch (e) {
+      //
+    }
     return this;
+  }
+
+  String? get nome => this._nome;
+  set nome(String? value) {
+    this._nome = value;
   }
 
   Map<String, dynamic> toJson() {
@@ -164,7 +176,7 @@ class FilialItem extends DataItem {
     data['ender'] = this.ender;
     data['id'] = this.id;
     data['ie'] = this.ie;
-    data['nome'] = this.nome;
+    data['nome'] = this._nome;
     data['inativa'] = this.inativa;
     data['cep'] = this.cep;
     data['fone'] = this.fone;
@@ -211,7 +223,7 @@ class FilialItem extends DataItem {
 class FilialItemModel extends ODataModelClass<FilialItem> {
   static final _singleton = FilialItemModel._create();
   FilialItemModel._create() {
-    collectionName = 'filial_todas';
+    collectionName = 'filial';
     super.API = ODataInst();
     super.CC = CloudV3().client..client.silent = true;
   }
@@ -221,7 +233,7 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
   @override
   Future<List<dynamic>> list({filter}) {
     return Cached.value('_filial_list_${filter ?? ''}', builder: (x) {
-      return super.list(filter: filter).then((rsp) {
+      return super.listNoCached(filter: filter).then((rsp) {
         return rsp;
       });
     });
@@ -229,16 +241,17 @@ class FilialItemModel extends ODataModelClass<FilialItem> {
 
   Future<bool> exists(double codigo) async {
     return Cached.value('exists_filial_$codigo', builder: (v) {
-      return super.getOne(filter: 'codigo=$codigo').then((rsp) {
-        //print(rsp);
-        return rsp!['codigo'] ?? 0 == codigo;
+      return super.getOne(filter: 'codigo=$codigo').then((dynamic rsp) {
+        return rsp['codigo'] ?? 0 == codigo;
       });
     });
   }
 
   Future<Map<String, dynamic>> buscarByCodigo(codigo, {String? select}) async {
     return listCached(
-            filter: "codigo eq $codigo ", select: select ?? 'codigo, nome')
+            resource: 'filial',
+            filter: "codigo eq $codigo ",
+            select: select ?? 'codigo, nome')
         .then((rsp) {
       return (rsp.isEmpty) ? {} : rsp[0];
     });

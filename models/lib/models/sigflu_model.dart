@@ -1,10 +1,10 @@
+// @dart=2.12
 import 'dart:convert';
-import 'package:models/data/sql_builder.dart';
+import 'sql_builder.dart';
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
-import 'package:controls_extensions/extensions.dart'
-    hide DynamicExtension, toDateTime, toDouble, toInt;
+import 'package:controls_extensions/extensions.dart' as ext;
 
 class SigfluItem extends DataItem {
   DateTime? vcto;
@@ -29,10 +29,10 @@ class SigfluItem extends DataItem {
   String? conferido;
 
   /// S ou N
-  bool? aprovado;
+  bool aprovado = false;
   //int tipoIdentPgto;
   /// 1 ou 0
-  bool? bdregdebito;
+  bool bdregdebito = true;
   //String criadorRegistro;
   int? baixaAutomatica;
   String? baixaBanco;
@@ -60,9 +60,9 @@ class SigfluItem extends DataItem {
     this.dtcontabil,
     this.dctook,
     this.prtserie,
-    this.aprovado,
+    this.aprovado = false,
     //this.tipoIdentPgto,
-    this.bdregdebito,
+    this.bdregdebito = true,
     //this.criadorRegistro,
   });
 
@@ -119,8 +119,8 @@ class SigfluItem extends DataItem {
     this.conferido ??= 'N';
     this.clifor ??= 0;
     this.dctook ??= 'N';
-    this.bdregdebito ??= true;
-    this.dtcontabil ??= this.emissao;
+    this.bdregdebito = true;
+    this.dtcontabil = this.emissao;
   }
 
   Map<String, dynamic> toJson() {
@@ -148,9 +148,9 @@ class SigfluItem extends DataItem {
     data['dtcontabil'] = this.dtcontabil;
     data['dctook'] = this.dctook;
     data['prtserie'] = this.prtserie;
-    data['aprovado'] = this.aprovado! ? 'S' : 'N';
+    data['aprovado'] = this.aprovado ? 'S' : 'N';
     //data['tipo_ident_pgto'] = this.tipoIdentPgto;
-    data['bdregdebito'] = this.bdregdebito! ? '1' : '0';
+    data['bdregdebito'] = this.bdregdebito ? '1' : '0';
     //data['criador_registro'] = this.criadorRegistro;
 
     if (this.baixaAutomatica != null) {
@@ -191,7 +191,8 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
   }
   SigfluItem newItem() => SigfluItem();
 //Future<List<Map<String, dynamic>>>
-  entradaSaidasDiarias({double? filial, DateTime? de, DateTime? ate}) async {
+  Future<List> entradaSaidasDiarias(
+      {double? filial, DateTime? de, DateTime? ate}) async {
     final sDe = (de ?? DateTime.now()).toDateSql();
     final sAte = (ate ?? DateTime.now().endOfMonth()).toDateSql();
     var filtro = "data between '$sDe' and '$sAte' ";
@@ -211,55 +212,74 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
         .then((rsp) => rsp['result']);
   }
 
-  contasAPagar({
-    double? filial,
-    DateTime? de,
-    DateTime? ate,
-    String? filtro,
-    String? select,
-    String? orderBy,
-  }) {
+  Future<List> contasAPagar(
+      {double? filial,
+      DateTime? de,
+      DateTime? ate,
+      String? filtro,
+      String? select,
+      String? orderBy,
+      int? top,
+      int? skip,
+      String? selectExt,
+      String alias = 'a',
+      String? cacheControl}) {
     final sDe = toDateSql(de ?? (DateTime.now().addMonths(-2)).startOfDay());
     final sAte = toDateSql(ate ?? (DateTime.now()).endOfDay());
-    final _order = (orderBy != null) ? ' order by $orderBy' : '';
+    final _order = (orderBy != null) ? '  $orderBy' : '';
 
     String f = filtro ?? '';
     if (filial != null) f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial ';
 
     if (f != '') f += ' and ';
 
-    final qry = '''
-select ${select ?? '*'} from sigflu a
-where $f  (a.codigo ge '200' and a.data between '$sDe'  and '$sAte') $_order
-''';
-    print(qry);
-    return API!.openJson(qry, cacheControl: 'no-cache').then((rsp) {
-      // print(rsp);
-      return rsp['result'];
-    });
+    return listNoCached(
+      cacheControl: cacheControl,
+      resource: 'sigflu $alias',
+      skip: skip,
+      top: top,
+      filter:
+          "$f  ($alias.codigo ge '200' and $alias.data between '$sDe'  and '$sAte')",
+      select:
+          "${select ?? alias + '.*'} ${(selectExt != null) ? ', ' + selectExt : ''}",
+      orderBy: _order,
+    );
   }
 
-  contasAReceber({
+  Future<List> contasAReceber({
     double? filial,
     DateTime? de,
     DateTime? ate,
     String? filtro,
     String? select,
     String? orderBy,
+    int? top,
+    int? skip,
+    String alias = 'a',
+    String? selectExt,
+    bool somenteAbertos = true,
+    String? cacheControl,
   }) {
     final sDe = toDateSql(de ?? (DateTime.now().addMonths(-2)).startOfDay());
     final sAte = toDateSql(ate ?? (DateTime.now()).endOfDay());
-    final _order = (orderBy != null) ? ' order by $orderBy' : '';
+    final _order = (orderBy != null) ? '  $orderBy' : '';
     String f = filtro ?? '';
     if (filial != null) f += (f != '') ? ' and ' : ' ' + ' a.filial = $filial ';
-    if (f != '') f += ' and ';
+    if (f.isNotEmpty) f += ' and ';
 
-    final qry = '''
-select ${select ?? '*'} from sigflu a
-where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe'  and '$sAte') $_order
-''';
-    // print(qry);
-    return API!.openJson(qry).then((rsp) => rsp['result']);
+    if (somenteAbertos) f += " coalesce($alias.banco,'')='' and ";
+
+    return listNoCached(
+      cacheControl: cacheControl,
+      resource: 'sigflu $alias',
+      skip: skip,
+      top: top,
+      filter:
+          "$f  ($alias.codigo lt '200' and $alias.data between '$sDe'  and '$sAte')",
+      select:
+          "${select ?? alias + '.*'} ${(selectExt != null) ? ', ' + selectExt : ''}",
+      orderBy: _order,
+    );
   }
 
   @override
@@ -279,9 +299,10 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
   }
 
   @override
-  Future<Map<String, dynamic>?> put(value) async {
+  Future<Map<String, dynamic>?> put(dynamic value) async {
     if (validate(value)) {
-      var sql = SqlBuilder.createSqlUpdate('sigflu', 'id', value);
+      var sql =
+          SqlBuilder.createSqlUpdate('sigflu', 'id', value, driver: driver);
       return this.API!.execute(sql).then((rsp) => json.decode(rsp));
     }
     return null;
@@ -294,9 +315,9 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
     '${dadosPgto.historico}','${dadosPgto.dctook}',
     ${dadosPgto.valorPago},
     ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros},'${dadosPgto.usuario}' )''';
-    print(qry);
+    // print(qry);
     return API!.execute(qry).then((r) {
-      print(r);
+      // print(r);
       return json.decode(r);
     });
   }
@@ -308,11 +329,18 @@ where $f  (a.codigo lt '200'  and coalesce(banco,'')='' and a.data between '$sDe
     '${dadosPgto.historico}','${dadosPgto.dctook}',
     ${dadosPgto.valorPago},
     ${dadosPgto.valorJuros},${dadosPgto.valorDesp},${dadosPgto.valorDesc},${dadosPgto.valorOutros},'${dadosPgto.usuario}' )''';
-    print(qry);
+    // print(qry);
     return API!.execute(qry).then((r) {
-      print(r);
+      //  print(r);
       return json.decode(r);
     });
+  }
+
+  aprovarConta(num id, bool aprovado) {
+    String qry =
+        "update sigflu set aprovado='${aprovado ? 'S' : 'N'}' where id = $id";
+    print(qry);
+    return API!.execute(qry).then((rsp) => json.decode(rsp));
   }
 }
 

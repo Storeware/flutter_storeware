@@ -1,8 +1,4 @@
-import 'package:comum/models/pedido_model.dart';
-import 'package:comum/models/produto_grupo_item.dart';
-import 'package:comum/models/produto_model.dart';
-import 'package:comum/models/produto_precos_model.dart';
-import 'package:controls_data/odata_client.dart';
+import 'package:models/models.dart';
 //import 'package:controls_firebase/odata_firestore.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:controls_extensions/extensions.dart';
@@ -11,9 +7,9 @@ import 'package:controls_extensions/extensions.dart';
 import 'package:controls_data/data.dart';
 
 void main() {
-  var errorListen = ErrorNotify().stream.listen((x) {
-    // print(x);
-  });
+// var errorListen = ErrorNotify().stream.listen((x) {
+  // print(x);
+//  });
   ODataInst().baseUrl = 'http://localhost:8886';
   ODataInst().prefix = '/V3/';
 

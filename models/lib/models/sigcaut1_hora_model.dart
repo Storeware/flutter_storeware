@@ -1,7 +1,7 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
-import 'package:controls_extensions/extensions.dart'
-    hide DynamicExtension, toDateTime, toDouble, toInt;
+import 'package:controls_extensions/extensions.dart' as ext;
 import 'package:controls_data/odata_firestore.dart';
 
 /*
@@ -55,7 +55,7 @@ class Sigcaut1HoraItem extends DataItem {
     data['filial'] = this.filial;
     data['total'] = this.total;
     data['itens'] = this.itens; // é virtual;
-    data['id'] = '$filial-${this.data?.format('yyyyMMdd') ?? ''}$hora';
+    data['id'] = '$filial-${this.data!.format('yyyyMMdd')}$hora';
     return data;
   }
 }
@@ -68,12 +68,14 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
   }
   Sigcaut1HoraItem newItem() => Sigcaut1HoraItem();
 
-  Future<ODataResult?> resumoDiaHora({DateTime? data, filial}) {
+  Future<ODataResult> resumoDiaHora({DateTime? data, filial}) {
     String dt = ((data ?? DateTime.now())).toIso8601String().substring(0, 10);
     String qry =
         "select data,hora, sum(qtde) qtde,sum(total) total, count(*) itens from sigcaut1_hora " +
             "where data = '$dt' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data,hora ";
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut1_hora', 'sigcaut1');
+
     return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });
@@ -90,13 +92,14 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
         "select data, sum(qtde) qtde,sum(total) total, count(*) itens from sigcaut1_hora " +
             "where data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
             "group by data ";
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut1_hora', 'sigcaut1');
     return API!.openJson(qry).then((rsp) {
       return ODataResult(json: rsp);
     });
   }
 
-  rankDoDia({DateTime? data, top = 10, skip = 0}) {
-    DateTime dt = data ?? DateTime.now();
+  Future<List> rankDoDia({required DateTime data, top = 10, skip = 0}) {
+    DateTime dt = data;
     String ini = toDateSql(dt.startOfMonth());
     String hoje = toDateSql(dt.toDate());
     String ontem = toDateSql(dt.toDate().add(Duration(days: -1)));
@@ -106,7 +109,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
           "max(data) data,  " +
           "sum(case when data = '$ontem' then total else 0 end) ontem,  " +
           "sum(case when data = '$hoje' then total else 0 end) subtotal,  " +
-          "sum(total) total ,sum(qtde) qtde from SIGCAUT1_HORA " +
+          "sum(total) total ,sum(qtde) qtde from SIGCAUT1 " +
           "where data>='$ini' " +
           "order by total desc " +
           "OFFSET $skip ROWS FETCH NEXT $top ROWS ONLY";
@@ -122,7 +125,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
     return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  produtosMaisVendidos(
+  Future<List> produtosMaisVendidos(
       {String? filter,
       DateTime? dataDe,
       DateTime? dataAte,
@@ -136,7 +139,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
         "select b.*, (select sum(qestfin) from ctprodsd s where s.codigo=b.codigo) estoque from ("
                 "select a.data,a.codigo,b.nome , a.qtde, a.total, rank() over (order by total desc ) rank from  " +
             "(" +
-            "select data,codigo,sum(qtde) qtde, sum(total) total  from SIGCAUT1_HORA " +
+            "select data,codigo,sum(qtde) qtde, sum(total) total  from sigcaut1_hora " +
             "where data between '$ini' and '$hoje' " +
             "group by codigo,data " +
             "order by total desc " +
@@ -144,6 +147,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
             "where a.codigo=b.codigo   " +
             "rows ${skip + 1} to ${top + skip} ) b " +
             "${(filter != null) ? 'where ' + filter : ''} ";
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut1_hora', 'sigcaut1');
 
     return API!.openJson(qry).then((rsp) => rsp['result']);
   }
@@ -157,21 +161,24 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
     return data.toIso8601String().substring(0, 19).replaceAll('T', ' ');
   }
 
-  contaProdutoSemVendas({DateTime? data}) {
+  Future<List> contaProdutoSemVendas({DateTime? data}) {
     String d =
         toDateSql(data ?? DateTime.now().toDate().add(Duration(days: -30)));
     String qry = "select count(*) conta " +
-        "from ctprod a " +
+        "from ctprod a, ctprodsd f " +
         "where " +
-        "  a.publicaweb='S' " +
+        " a.codigo=f.codigo and a.inativo='N' and a.inservico='N' and f.qestfin>0 "
+            "  " +
         "  and " +
         "  ( " +
         "  not exists  (select codigo from sigcaut1_hora b where a.codigo=b.codigo and b.data>='$d'  ) " +
         "  ) ";
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut1_hora', 'sigcaut1');
+
     return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  produtosSemVenda(
+  Future<List> produtosSemVenda(
       {DateTime? data, filter, top, skip, double filialEstoque = 1}) {
     String d =
         toDateSql(data ?? DateTime.now().toDate().add(Duration(days: -30)));
@@ -183,10 +190,10 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
           "from ctprod a " +
           "where " +
           "  ${(filter != null) ? filter + ' and ' : ''}" +
-          "  a.publicaweb='S' " +
+          "  a.inservico='N' and a.inativo='N' " +
           "  and " +
           "  ( " +
-          "  not exists  (select codigo from sigcaut1_hora b where a.codigo=b.codigo and b.data>='$d'  ) " +
+          "  not exists  (select codigo from sigcaut1 b where a.codigo=b.codigo and b.data>='$d'  ) " +
           "  ) ROWS ${skip + 1} to ${top + skip} ) x   " +
           "  ";
     } else
@@ -204,7 +211,7 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
     return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  resumoPorAtalho({DateTime? inicio, DateTime? fim, filial}) {
+  Future<List> resumoPorAtalho({DateTime? inicio, DateTime? fim, filial}) {
     DateTime? _de = inicio;
     if (_de == null) {
       _de = DateTime.now().startOfMonth();
@@ -220,12 +227,14 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
         "group by b.CODTITULO " +
         ") x , CTPROD_ATALHO_TITULO t " +
         "where x.codtitulo = t.codigo order by 2 desc";
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut1_hora', 'sigcaut1');
+
     return API!.openJson(qry).then((rsp) {
       return rsp['result'];
     });
   }
 
-  evolucao({DateTime? inicio, DateTime? fim, filial}) {
+  Future<List> evolucao({DateTime? inicio, DateTime? fim, filial}) {
     DateTime? _de = inicio;
     if (_de == null) {
       _de = DateTime.now().startOfMonth();
@@ -236,12 +245,13 @@ class Sigcaut1HoraItemModel extends ODataModelClass<Sigcaut1HoraItem> {
         "from sigcaut1_hora " +
         "          where data between '${_de.toIso8601String().substring(0, 10)}' and '${_ate.toIso8601String().substring(0, 10)}' ${(filial != null) ? ' and filial=$filial' : ''} " +
         "group by data ";
+    if (driver == 'mssql') qry = qry.replaceAll('sigcaut1_hora', 'sigcaut1');
     return API!.openJson(qry).then((rsp) {
       return rsp['result'];
     });
   }
 
-  evolucaoPorVendedor(
+  Future<List> evolucaoPorVendedor(
       {String? vendedor, DateTime? inicio, DateTime? fim, filial}) {
     DateTime? _de = inicio;
     if (_de == null) {

@@ -1,8 +1,8 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
-import 'package:controls_extensions/extensions.dart'
-    hide DynamicExtension, toDateTime, toDouble, toInt;
+import 'package:controls_extensions/extensions.dart' as ext;
 
 class SigcxItem extends DataItem {
   String? agencia;
@@ -297,7 +297,8 @@ group by 1,2''';
     return API!.openJson(qry).then((rsp) => rsp['result']);
   }
 
-  realizadoMensal({double? filial, DateTime? de, DateTime? ate}) {
+  Future<List<dynamic>> realizadoMensal(
+      {double? filial, DateTime? de, DateTime? ate}) {
     final sDe = toDateSql((de ?? DateTime.now().addMonths(-6)).startOfMonth());
     final sAte = toDateSql((ate ?? DateTime.now()).endOfMonth());
     var filtro = '';

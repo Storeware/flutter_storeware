@@ -1,14 +1,17 @@
+// @dart=2.12
+
 import 'package:controls_data/odata_client.dart';
 import 'controls.dart';
 import 'package:flutter/material.dart';
 
 class FilialBuilder extends StatelessWidget {
-  final Widget Function(BuildContext, List<dynamic>)? builder;
-  const FilialBuilder({Key? key, @required this.builder}) : super(key: key);
+  final Widget Function(BuildContext, List<dynamic>) builder;
+  const FilialBuilder({Key? key, required this.builder}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ODataBuilder(
+      client: ODataInst(),
       query: ODataQuery(
         resource: 'filial_todas',
         filter: 'codigo>0',
@@ -16,38 +19,37 @@ class FilialBuilder extends StatelessWidget {
       ),
       cacheControl: 'max-age=360',
       builder: (ctx, snap) {
-        if (snap.hasData) {
-          List<dynamic> items = snap.data.asMap();
-          items.sort((a, b) => (a['nome'] ?? '')
-              .toString()
-              .toUpperCase()
-              .compareTo((b['nome'] ?? '').toString().toUpperCase()));
-          items.insert(0, {'codigo': 0, 'nome': ''});
-          return builder!(ctx, items);
-        }
-        return Container();
+        List<dynamic> items = [];
+        if (snap.hasData) items = snap.data.asMap();
+        items.sort((a, b) => (a['nome'] ?? '')
+            .toString()
+            .toUpperCase()
+            .compareTo((b['nome'] ?? '').toString().toUpperCase()));
+        items.insert(0, {'codigo': 0, 'nome': ''});
+        return builder(ctx, items);
       },
     );
   }
 
   static createDropDownFormField(double? codigo,
-      {Function(double value)? onChanged}) {
+      {Function(double? value)? onChanged}) {
     return FilialBuilder(builder: (ctx, List<dynamic> items) {
-      var corrente =
-          items.firstWhere((item) => (item['codigo'] ?? 0) == (codigo ?? 0));
+      var i = items.indexWhere(
+          (item) => (toDouble(item['codigo'])) == (toDouble(codigo)));
+      var corrente = (i < 0) ? {} : items[i];
       List<String> keys = [];
-      items.forEach((item) {
-        if (keys.indexOf(item['nome']) < 0) keys.add(item['nome']);
-      });
+      for (var item in items) {
+        if (!keys.contains(item['nome'])) keys.add(item['nome']);
+      }
       return FormComponents.createDropDownFormFieldContainer(
-          padding: EdgeInsets.all(0),
+          padding: const EdgeInsets.all(0),
           hintText: "Filial",
           items: keys,
           onChanged: (newValue) {
             var item = items.firstWhere((it) => it['nome'] == newValue);
             if (item != null) {
               codigo = item['codigo'] + 0.0;
-              onChanged!(codigo!);
+              onChanged!(codigo);
             }
           },
           value: corrente['nome'] ?? '');

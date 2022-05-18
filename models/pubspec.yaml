@@ -1,6 +1,6 @@
 name: models
 description: Model Package.
-version: 2021.11.10
+version: 22.04.23+2
 publish_to: none
 
 environment:
@@ -11,13 +11,13 @@ dependencies:
     sdk: flutter
   # http:
   dio:
-  
+
   uuid:
 
   #console:
   #  git:
   #    url: https://github.com/amarildolacerda/console.git
-      #path: controls_web
+  #path: controls_web
 
   controls_web:
     git:
@@ -28,14 +28,16 @@ dependencies:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data
 
-  controls_extensions:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_extensions
-
+  #controls_extensions:
+  #  git:
+  #    url: https://github.com/amarildolacerda/flutter_storeware.git
+  #    path: controls_extensions
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  http_mock_adapter:
+  pretty_dio_logger:
 
 flutter:
+  uses-material-design: true

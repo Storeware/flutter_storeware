@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
@@ -64,12 +65,12 @@ class TemplatesItemModel extends ODataModelClass<TemplatesItem> {
       if (rsp.length == 0) return '';
       var txt = rsp[0]['texto'];
       return traduzirTags(txt,
-          titulo: titulo!,
-          values: values!,
-          data: data!,
-          ctprodCodigo: ctprodCodigo!,
-          sigcadCodigo: sigcadCodigo!,
-          filial: filial!);
+          titulo: titulo ?? '',
+          values: values ?? {},
+          data: data ?? DateTime.now(),
+          ctprodCodigo: ctprodCodigo ?? '',
+          sigcadCodigo: sigcadCodigo ?? 0,
+          filial: filial ?? 0);
     });
   }
 

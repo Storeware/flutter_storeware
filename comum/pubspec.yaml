@@ -31,7 +31,12 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_dash
+  models:
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
+      path: models
   get:
+  web_socket_channel:
 
 dev_dependencies:
   flutter_test:

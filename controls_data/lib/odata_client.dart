@@ -383,6 +383,7 @@ class ODataClient extends ODataClientInterface {
     o.client.inDebug = client.inDebug;
     o.baseUrl = baseUrl ?? client.baseUrl;
     o.prefix = prefix ?? client.prefix;
+    o.client.dio = client.dio;
     client.headers.forEach((k, v) {
       o.client.addHeader(k, v);
     });
@@ -655,8 +656,6 @@ class ODataClient extends ODataClientInterface {
     return clone();
   }
 
-  /// [loginNotifier] Notifier para receber evento de login alterado
-  DataNotifyChange loginNotifier = DataNotifyChange<Map>();
   String? token;
   auth(user, pass) {
     var bytes = utf8.encode('$user:$pass');
@@ -672,6 +671,7 @@ class ODataClient extends ODataClientInterface {
     cli.authorization = auth(usuario, senha);
     cli.headers.addAll(client.headers);
     cli.addHeader('contaid', conta);
+    cli.dio = client.dio;
     return cli
         .openJson(cli.formatUrl(path: 'login'), method: 'GET')
         .then((rsp) {
@@ -679,7 +679,6 @@ class ODataClient extends ODataClientInterface {
       client.authorization = 'Bearer $token';
       if (client.tokenId == null) client.setToken(auth(usuario, senha));
       client.addHeader('contaid', conta);
-      loginNotifier.notify(rsp);
       LoginTokenChanged().notify(true);
       return token;
     }).onError((error, stackTrace) => null);

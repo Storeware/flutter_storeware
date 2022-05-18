@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:controls_web/controls/flutter_masked_text.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class FormComponents {
     var node = FocusNode();
     return Container(
         width: width,
-        padding: padding ?? EdgeInsets.symmetric(horizontal: 10),
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 10),
         child: FocusScope(
             //node: node,
             onFocusChange: (b) {
@@ -37,13 +39,12 @@ class FormComponents {
               keyboardType: keyboardType,
               inputFormatters: inputFormatters,
               decoration: InputDecoration(labelText: labelText),
-              onSaved: (x) => onSaved!(x),
+              onSaved: onSaved as void Function(String?)?,
               focusNode: node,
               validator: (String? value) {
-                if (validator != null) {
-                  if (value!.isEmpty) {
-                    return errorMsg;
-                  }
+                if (validator != null) return validator(value);
+                if ((value ?? '').isEmpty && errorMsg != null) {
+                  return errorMsg;
                 }
                 return null;
               },
@@ -55,7 +56,7 @@ class FormComponents {
     String? label,
     Color? activeTrackColor,
     Color? activeColor,
-    bool? autofocus = false,
+    bool autofocus = false,
     Function(bool)? onChanged,
   }) {
     return MaskedSwitchFormField(
@@ -89,7 +90,7 @@ class FormComponents {
       Function? onSaved,
       Function? validator,
       String? errorMsg,
-      bool? readOnly = false,
+      bool readOnly = false,
       Color? hintColor,
       EdgeInsetsGeometry? padding}) {
     return MaskedDropDownFormField(
@@ -108,14 +109,14 @@ class FormComponents {
   }
 
   static createMoneyFormField(
-      {int? precision = 2,
+      {int precision = 2,
       String? label,
       MoneyMaskedTextController? controller,
       double? initialValue = 0,
-      String? symbol = 'R\$',
+      String symbol = 'R\$',
       int? maxLength,
       String? errorMsg,
-      bool? readOnly = false,
+      bool readOnly = false,
       Function(double)? onSaved}) {
     return MaskedMoneyFormField(
       precision: precision,

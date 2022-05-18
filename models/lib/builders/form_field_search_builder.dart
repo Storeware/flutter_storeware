@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:flutter/material.dart';
@@ -5,29 +7,31 @@ import 'package:flutter/material.dart';
 class FormFieldSearchBuilder extends StatefulWidget {
   final String? label;
   final String? value;
-  final Function(String)? onChanged;
-  final bool? readOnly;
-  final Function(String)? validator;
+  final Function(String?) onChanged;
+  final bool readOnly;
+  final Function(String?)? validator;
   final String? filter;
-  final Function(String, Function(dynamic))? onSearch;
-  final Function(String)? onSaved;
-  final Widget Function(String, Function(dynamic))? onDialogBuild;
-  final String? keyField;
-  final String? nameField;
+  final Function(String?, Function(dynamic)) onSearch;
+  final Function(String?)? onSaved;
+  final Widget Function(String, Function(dynamic)) onDialogBuild;
+  final Size? dialogSize;
+  final String keyField;
+  final String nameField;
   final bool? requiredResult;
-  FormFieldSearchBuilder({
+  const FormFieldSearchBuilder({
     Key? key,
-    @required this.value,
+    required this.value,
     this.requiredResult,
-    @required this.onChanged,
+    required this.onChanged,
     this.onSaved,
+    this.dialogSize,
     this.readOnly = false,
     this.validator,
-    @required this.onDialogBuild,
+    required this.onDialogBuild,
     this.filter,
-    @required this.onSearch,
-    @required this.keyField,
-    @required this.nameField,
+    required this.onSearch,
+    required this.keyField,
+    required this.nameField,
     this.label,
   }) : super(key: key);
 
@@ -37,12 +41,12 @@ class FormFieldSearchBuilder extends StatefulWidget {
 
 class _FormFieldSearchBuilderState extends State<FormFieldSearchBuilder> {
   buscar(cd) {
-    widget.onSearch!(cd, (rsp) {
-      if (rsp != null) notifier!.value = rsp;
+    widget.onSearch(cd, (rsp) {
+      if (rsp != null) notifier.value = rsp;
     });
   }
 
-  ValueNotifier<dynamic>? notifier;
+  late ValueNotifier<dynamic> notifier;
   String nomeConta = '';
   @override
   void initState() {
@@ -54,22 +58,22 @@ class _FormFieldSearchBuilderState extends State<FormFieldSearchBuilder> {
   Widget build(BuildContext context) {
     final TextEditingController codigoController =
         TextEditingController(text: widget.value);
-    if ((widget.value ?? '').length > 0) {
+    if ((widget.value ?? '').isNotEmpty) {
       buscar(widget.value);
     }
-    return Container(
+    return SizedBox(
         height: kToolbarHeight + 7,
         child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
+          SizedBox(
               width: 100,
               child: MaskedSearchFormField<dynamic>(
                   readOnly: widget.readOnly,
-                  autofocus: (widget.value ?? '').length == 0,
+                  autofocus: (widget.value ?? '').isEmpty,
                   labelText: widget.label ?? '',
                   controller: codigoController,
                   initialValue: widget.value,
                   onChanged: (x) {
-                    widget.onChanged!(x);
+                    widget.onChanged(x);
                   },
                   validator: (x) {
                     if (nomeConta == '') return 'Inválido';
@@ -84,17 +88,22 @@ class _FormFieldSearchBuilderState extends State<FormFieldSearchBuilder> {
                     if (x.length > 0) buscar(x);
                   },
                   onSearch: () async {
-                    if (widget.readOnly!) return null;
+                    if (widget.readOnly) return null;
                     return Dialogs.showPage(context,
-                        child:
-                            widget.onDialogBuild!(codigoController.text, (x) {
-                          notifier!.value = x;
-                        })).then((rsp) => notifier!.value[widget.keyField]);
+                        width: (widget.dialogSize != null)
+                            ? widget.dialogSize!.width
+                            : null,
+                        height: (widget.dialogSize != null)
+                            ? widget.dialogSize!.height
+                            : null,
+                        child: widget.onDialogBuild(codigoController.text, (x) {
+                          notifier.value = x;
+                        })).then((rsp) => notifier.value[widget.keyField]);
                   })),
           Expanded(
-            child: ValueListenableBuilder<dynamic>(
-                valueListenable: notifier!,
-                builder: (ctx, row, wg) {
+            child: ValueListenableBuilder(
+                valueListenable: notifier,
+                builder: (ctx, dynamic row, wg) {
                   row ??= {};
                   nomeConta = row[widget.nameField] ?? '';
                   //codigoController.text = row[widget.keyField] ?? '';
@@ -102,7 +111,7 @@ class _FormFieldSearchBuilderState extends State<FormFieldSearchBuilder> {
                   //  widget.onChanged(row[widget.keyField]);
 
                   return MaskedLabeled(
-                    padding: EdgeInsets.only(left: 4, bottom: 2),
+                    padding: const EdgeInsets.only(left: 4, bottom: 2),
                     value: nomeConta,
                   );
                 }),

@@ -347,6 +347,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+  models:
+    dependency: "direct main"
+    description:
+      path: models
+      ref: HEAD
+      resolved-ref: e0fad07c56b2de56112a2c98222bfe9dc88c0d44
+      url: "https://github.com/amarildolacerda/flutter_storeware.git"
+    source: git
+    version: "2021.11.10"
   path:
     dependency: transitive
     description:
@@ -709,6 +718,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
+  web_socket_channel:
+    dependency: "direct main"
+    description:
+      name: web_socket_channel
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.0"
   win32:
     dependency: transitive
     description:

@@ -1,3 +1,4 @@
+// @dart=2.12
 import 'package:controls_data/data_model.dart';
 import 'package:controls_data/odata_client.dart';
 //import 'package:controls_extensions/extensions.dart';
@@ -32,12 +33,12 @@ class EstadosItem extends DataItem {
   @override
   fromMap(Map<String, dynamic> json) {
     aliqicms = toDouble(json['aliqicms']);
-    nome = json['nome'];
-    sigla = json['sigla'];
+    nome = (json['nome']);
+    sigla = (json['sigla']);
     redbaseicms = toDouble(json['redbaseicms']);
     aliqicmsinterna = toDouble(json['aliqicmsinterna']);
     regiao = (json['regiao']);
-    codigoibgeUf = (json['codigoibge_uf']);
+    codigoibgeUf = toDouble(json['codigoibge_uf']);
     partilhaPfcpufdest = toDouble(json['partilha_pfcpufdest']);
     partilhaPicmsufdest = toDouble(json['partilha_picmsufdest']);
     partilhaPicmsinterpart = toDouble(json['partilha_picmsinterpart']);

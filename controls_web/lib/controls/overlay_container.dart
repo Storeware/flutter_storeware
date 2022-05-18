@@ -1,3 +1,5 @@
+// @dart=2.12
+
 import 'package:flutter/material.dart';
 
 /// The child passed to this widget is rendered outside the widget hierarchy as an overlay to the exisiting widget tree.
@@ -137,7 +139,8 @@ class _OverlayContainerState extends State<OverlayContainer>
     if (widget.show!) {
       _show();
     }
-    WidgetsBinding.instance!.addObserver(this);
+    if (WidgetsBinding.instance != null)
+      WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
@@ -178,24 +181,26 @@ class _OverlayContainerState extends State<OverlayContainer>
     if (widget.show!) {
       _hide();
     }
-    WidgetsBinding.instance!.removeObserver(this);
+    if (WidgetsBinding.instance != null)
+      WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
   void _show() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-      await Future.delayed(Duration(milliseconds: 280));
-      if (_opened) {
-        _overlayEntry!.remove();
-      }
-      _overlayEntry = _buildOverlayEntry();
-      Overlay.of(context)!.insert(_overlayEntry!);
-      _opened = true;
-    });
+    if (WidgetsBinding.instance != null)
+      WidgetsBinding.instance!.addPostFrameCallback((_) async {
+        await Future.delayed(Duration(milliseconds: 280));
+        if (_opened) {
+          _overlayEntry!.remove();
+        }
+        _overlayEntry = _buildOverlayEntry();
+        Overlay.of(context)!.insert(_overlayEntry!);
+        _opened = true;
+      });
   }
 
   void _hide() {
-    if (_opened) {
+    if (WidgetsBinding.instance != null) if (_opened) {
       WidgetsBinding.instance!.addPostFrameCallback((_) {
         _overlayEntry!.remove();
         _opened = false;

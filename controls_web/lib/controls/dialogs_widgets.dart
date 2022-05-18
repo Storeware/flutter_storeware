@@ -533,7 +533,8 @@ class Dialogs {
           {String? text,
           Widget? title,
           List<Widget>? actions,
-          Widget? content}) =>
+          Widget? content,
+          Function(String value)? onPressed}) =>
       showDialog(
           context: context,
           builder: (ctx) {
@@ -548,12 +549,14 @@ class Dialogs {
                       TextButton(
                           child: Text('Sim'),
                           onPressed: () {
+                            if (onPressed != null) onPressed('S');
                             Navigator.pop(context, true);
                           }),
                       if (actions != null) ...actions,
                       TextButton(
                           child: Text('Não'),
                           onPressed: () {
+                            if (onPressed != null) onPressed('N');
                             Navigator.pop(context, false);
                           }),
                     ])

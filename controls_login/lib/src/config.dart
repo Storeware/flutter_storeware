@@ -2,14 +2,12 @@
 import 'dart:async';
 import 'package:comum/services/config_service.dart';
 import '../socketio/v3_socketio.dart';
-//import 'package:console/views/opcoes/models/checkout_config_model.dart';
 import 'string_encryption.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_web/controls/colores.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import '../models/filial_model.dart';
 import '../models/usuarios_model.dart';
@@ -18,7 +16,6 @@ import 'register_usuario_params.dart';
 import 'firebase_adapter.dart';
 import 'package:controls_extensions/extensions.dart';
 import 'cloud_config_model.dart';
-//import 'diretivas.dart' as diretivas;
 import '../models/acesso.dart';
 export '../models/acesso.dart';
 export 'acesso_const.dart';
@@ -134,7 +131,7 @@ class AppRealoadNotifier extends BlocModel<int> {
 }
 
 /// [AgendaReloadNotifier] stream para notificar que requer recarga da agenda
-/// TODO: avaliar passar para a pasta da agenda
+/// TODO_: avaliar passar para a pasta da agenda
 class AgendaReloadNotifier extends BlocModel<dynamic> {
   static final _singleton = AgendaReloadNotifier._create();
   AgendaReloadNotifier._create();
@@ -285,19 +282,9 @@ abstract class ConsoleConfig extends ConfigAppBase {
   @override
   Future<ConsoleConfig> init() async {
     if (_instance != null) return _instance!;
+    _instance ??= this;
     _configureLocalTimeZone();
     await super.init();
-    _instance ??= this;
-    ODataInst().loginNotifier.stream.listen((rsp) {
-      SenhasItemModel().listCached(filter: "codigo eq '$usuario'").then((r) {
-        if (r.length > 0) {
-          dadosUsuario = SenhasItem.fromJson(r[0]);
-          Acessos().dadosUsuario = dadosUsuario;
-          loginChanged.notify(this);
-          UsuarioNotifier().notify(dadosUsuario);
-        }
-      });
-    });
     this.inDev = inDev;
     if (Firebase.isFirebase) Firebase.app.init(firebaseOptions);
     pushMessageId.addListener(() {
@@ -398,38 +385,50 @@ abstract class ConsoleConfig extends ConfigAppBase {
   //CheckoutConfigItem? checkoutConfigItem;
   FilialItem? dadosFilial;
 
-  /// [afterLoaded] evento executado após a confirmação do [login] indicando que tudo esta ok e pode dar sequência a inicialização
-  @override
-  afterLoaded(dadosLoja, lojaLogin) {
-    _assert();
-    //CheckoutConfigItemModel().listNoCached().then((rsp) {
-    //  checkoutConfigItem = CheckoutConfigItem.fromJson(
-    //      (rsp.length > 0) ? rsp[0] : {"id": configInstance!.loja});
-    //});
-
-    FilialItemModel().buscarByCodigo(filial, select: '*').then((rsp) {
-      dadosFilial = FilialItem.fromJson(rsp);
+  carregarUsuario() async {
+    return await SenhasItemModel()
+        .listCached(filter: "codigo eq '$usuario'")
+        .then((r) {
+      if (r.length > 0) {
+        dadosUsuario = SenhasItem.fromJson(r[0]);
+        Acessos().dadosUsuario = dadosUsuario;
+        registerUsuarioParams(configInstance!.usuario);
+        UsuarioNotifier().notify(dadosUsuario);
+        loginChanged.notify(this);
+      }
+      return r;
     });
+  }
 
+  _initSocketIO() {
     // inicialia a estrutra do V3WebSocket para escutar mudança no banco de dados
-    V3SocketIOConfig().init(
+    return V3SocketIOConfig().init(
         url: restServer,
         contaid: conta,
         token: ODataInst().token,
         usuarioSender: this.usuario,
         driver: this.configDados['db-driver'] ?? 'fb');
+  }
 
-    initPush();
-    registerUsuarioParams(configInstance!.usuario);
-    //diretivas.AppTypesList(); // init
-    //if (dadosLoja['ativarAgendaPET'] ?? false) {
-    //  diretivas.AppTypesList.add(diretivas.AppTypes.pet);
-    //}
-    //if (dadosLoja['ativarAgendaContato'] ?? false) {
-    //  diretivas.AppTypesList.add(diretivas.AppTypes.agendaContato);
-    //}
+  carregarFilial() async {
+    return await FilialItemModel()
+        .buscarByCodigo(filial, select: '*')
+        .then((rsp) {
+      dadosFilial = FilialItem.fromJson(rsp);
+    });
+  }
 
-    DiretivasBloc().notify(DateTime.now().millisecond);
+  /// [afterLoaded] evento executado após a confirmação do [login] indicando que tudo esta ok e pode dar sequência a inicialização
+  @override
+  afterLoaded(dadosLoja, lojaLogin) {
+    _assert();
+    carregarUsuario().then((r) {
+      carregarFilial();
+      _initSocketIO();
+      initPush();
+
+      DiretivasBloc().notify(DateTime.now().millisecond);
+    });
   }
 
   /// [initPush] Inicializa a estsrutur de PUSH

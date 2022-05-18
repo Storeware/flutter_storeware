@@ -511,6 +511,7 @@ class ActionText extends StatelessWidget {
   final double? height, width;
   final Widget? child;
   final double? borderWidth;
+  final MainAxisAlignment? mainAxisAlignment;
   const ActionText(
       {Key? key,
       this.label,
@@ -522,7 +523,8 @@ class ActionText extends StatelessWidget {
       this.child,
       this.borderWidth = 1,
       this.onPressed,
-      this.radius = 5})
+      this.radius = 5,
+      this.mainAxisAlignment})
       : super(key: key);
 
   @override
@@ -547,6 +549,7 @@ class ActionText extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
             children: [
               if (child != null) child!,
               if (label != null)

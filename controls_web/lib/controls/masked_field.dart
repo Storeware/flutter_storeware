@@ -896,6 +896,7 @@ class MaskedMoneyFormField extends StatelessWidget {
   final bool? readOnly;
   final Function(double)? onChanged;
   final double? width;
+  final Function(double value)? onFieldSubmitted;
   const MaskedMoneyFormField({
     Key? key,
     this.width,
@@ -912,6 +913,7 @@ class MaskedMoneyFormField extends StatelessWidget {
     this.validator,
     this.maxLength,
     this.rightSymbol,
+    this.onFieldSubmitted,
   }) : super(key: key);
 
   @override
@@ -934,12 +936,6 @@ class MaskedMoneyFormField extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /*if (label != null)
-            Text(
-              label,
-              style: theme.textTheme.caption, //TextStyle(
-              //fontSize: 12, color: Colors.grey, fontWeight: FontWeight.bold),
-            ),*/
           Container(
             constraints: BoxConstraints(minWidth: 100),
             height: kToolbarHeight + 3,
@@ -960,9 +956,11 @@ class MaskedMoneyFormField extends StatelessWidget {
                         autofocus: true,
                         textAlign: TextAlign.right,
                         decoration: InputDecoration(
-                          //hintText: label,
                           labelText: label,
                         ),
+                        onFieldSubmitted: onFieldSubmitted == null
+                            ? null
+                            : (x) => onFieldSubmitted!(double.parse(x)),
                         validator: (x) {
                           if (validator != null)
                             return validator!(_controller.numberValue);

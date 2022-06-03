@@ -103,7 +103,7 @@ class ShipsBar extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     var w = width! * (value! / 100);
-    print('$width $w');
+    // print('$width $w');
     return Container(
       padding: EdgeInsets.only(left: 2, right: 2, bottom: 2, top: 2),
       width: width,

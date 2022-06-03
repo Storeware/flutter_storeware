@@ -204,7 +204,7 @@ class ShoppingDescriptionPage extends StatelessWidget {
 
   @override
   Widget build(context) {
-    print('detalhes');
+    // print('detalhes');
 
     return Container(
       color: (decoration == null) ? Colors.white30 : null,

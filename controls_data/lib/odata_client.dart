@@ -411,7 +411,7 @@ class ODataClient extends ODataClientInterface {
     return this;
   }
 
-  @Deprecated('Uso interno, trocar por getRows')
+  //@Deprecated('Uso interno, trocar por getRows')
 
   /// [send] monta um requisição para o servidor OData;
   @override

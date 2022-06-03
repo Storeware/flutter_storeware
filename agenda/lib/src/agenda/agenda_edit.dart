@@ -218,7 +218,6 @@ class _AgendaEditState extends State<AgendaEdit> {
                     context,
                     _item!.tipoGid,
                     onChanged: (gid) {
-                      // print(gid);
                       _item!.tipoGid = gid;
                     },
                   ),
@@ -451,7 +450,6 @@ class _AgendaEditState extends State<AgendaEdit> {
             format: 'dd/MM/y HH:mm',
             initialValue: item.datafim,
             onChanged: (x) {
-              // print(x);
               item.datafim = x;
             },
           ),

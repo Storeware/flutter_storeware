@@ -140,7 +140,7 @@ class OData extends _ODataBuilder {
       docs.properties = response[maps['properties']] ?? {};
       docs.startsAt = response[maps['startsAt']];
       docs.endsAt = response[maps['endsAt']];
-      print(docs.endsAt);
+      //  print(docs.endsAt);
       queryBloc.sink.add(docs);
     });
   }

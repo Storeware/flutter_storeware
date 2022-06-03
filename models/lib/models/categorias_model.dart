@@ -55,7 +55,7 @@ class CategoriasItemModel extends ODataModelClass<CategoriasItem> {
       orderBy: 'prioridade',
       select: '*',
     ).then((rsp) {
-      print(rsp);
+      //  print(rsp);
       return rsp;
     });
   }

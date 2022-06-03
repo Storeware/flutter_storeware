@@ -339,7 +339,7 @@ class SigfluItemModel extends ODataModelClass<SigfluItem> {
   aprovarConta(num id, bool aprovado) {
     String qry =
         "update sigflu set aprovado='${aprovado ? 'S' : 'N'}' where id = $id";
-    print(qry);
+    //   print(qry);
     return API!.execute(qry).then((rsp) => json.decode(rsp));
   }
 }

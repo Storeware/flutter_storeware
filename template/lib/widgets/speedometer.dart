@@ -234,7 +234,7 @@ class DigitsBoxes extends StatelessWidget {
     var theme = Theme.of(context);
     String? _value = value!.padLeft(digits, fillWith);
     _value = _value.substring(_value.length - digits);
-    print(_value);
+    // print(_value);
     Color _color = color ?? Colors.grey[100]!;
     return Container(
       height: 20,

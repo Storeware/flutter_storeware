@@ -58,6 +58,7 @@ class AgendaData {
 }
 
 enum AgendaPostEvent { insert, delete, update }
+
 enum AgendaViewerType { horario, semanal, mensal, periodo }
 
 class AgendaViewerRefNotifier with ChangeNotifier {
@@ -119,11 +120,8 @@ class AgendaItemNotifier extends ChangeNotifier {
   AgendaItem? value;
   AgendaItemNotifier({this.value});
   notify(AgendaItem item) {
-    // if (value.gid != item.gid) {
     value = item;
     return notifyListeners();
-    // }
-    // print('AgendaItem changed:${value.gid} -> ${item.gid} {$item.toJson()}');
   }
 }
 
@@ -317,7 +315,6 @@ class AgendaController extends ChangeNotifier {
   double? get endHour => AgendaConfig().nHoraFim;
 
   double calcTop(double? hour) {
-    // print(hour);
     if (hour == null || startHour == null) return 0.0;
     double dif = (hour - startHour!);
     if (dif < 0) dif = 0.0;

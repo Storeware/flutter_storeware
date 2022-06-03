@@ -45,12 +45,13 @@ class DefaultSourceList extends ChangeNotifier {
     if (item != null) {
       sources!.add(item);
       changed();
-      // print('add ${item.gid}');
     }
   }
 
   addAll(List<AgendaItem> its) {
-    its.forEach((item) => add(item));
+    for (var item in its) {
+      add(item);
+    }
     changed();
   }
 

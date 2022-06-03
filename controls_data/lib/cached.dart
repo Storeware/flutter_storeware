@@ -64,7 +64,7 @@ class Cached {
     for (int i = cached.keys.length - 1; i >= 0; i--) {
       var key = cached.keys.elementAt(i);
       if (key.indexOf(keyLike) >= 0) {
-        print(keyLike);
+        // print(keyLike);
         cached.remove(cached[key]);
       }
     }

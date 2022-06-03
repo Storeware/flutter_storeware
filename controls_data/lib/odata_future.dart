@@ -22,7 +22,7 @@ class ODataFuture extends StatelessWidget {
         print('retorno:  ${response.data}');
         if (response.hasData) {
           var rst = ODataResult(json: (response.data as Map<String, dynamic>));
-          print(rst.data.docs.length);
+          // print(rst.data.docs.length);
           return builder!(context, rst);
         } else
           return builder!(context, ODataResult(json: null));

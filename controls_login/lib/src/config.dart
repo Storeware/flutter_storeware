@@ -258,7 +258,7 @@ abstract class ConsoleConfig extends ConfigAppBase {
     });
     ODataInst().error((x) {
       // developer.log(x);
-      print(x);
+      //print(x);
       MensagemNotifier().notify('$x');
     });
     CloudV3().client.log((x) {
@@ -374,7 +374,7 @@ abstract class ConsoleConfig extends ConfigAppBase {
       ODataInst()
           .client
           .addHeader('db-driver', super.configDados['db-driver'] ?? 'fb');
-      print(super.configDados['db-connection']);
+      // print(super.configDados['db-connection']);
       if (super.configDados['db-connection'] != null)
         ODataInst()
             .client

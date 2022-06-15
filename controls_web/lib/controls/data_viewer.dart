@@ -2,7 +2,6 @@
 
 library data_viewer;
 
-//import 'dart:convert';
 import 'dart:async';
 import 'package:controls_data/local_storage.dart';
 import 'package:controls_data/odata_client.dart';
@@ -771,7 +770,9 @@ class _DataViewerState extends State<DataViewer> {
                           ? (b, ctrl) {
                               if (widget.onSelected == null)
                                 return Future.value(false);
-                              return widget.onSelected!(ctrl.data);
+                              var rt = widget.onSelected!(ctrl.data);
+                              if (rt == null) return Future.value(false);
+                              return rt;
                             }
                           : null, //(b, ctrl) => Future.value(null),
                       columnSpacing: 10,

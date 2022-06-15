@@ -86,12 +86,12 @@ class AgendaSourceRefNotifier with ChangeNotifier {
   update(List<AgendaItem?>? source) {
     if (source == null) return;
     String h = '';
-    source.forEach((item) {
+    for (var item in source) {
       h += item?.gid?.substring(0, 1) ?? '';
-    });
+    }
     if (h != hash) {
       hash = h;
-      this.value = source;
+      value = source;
       notifyListeners();
     }
   }
@@ -141,7 +141,7 @@ class AgendaSize {
 
 class AgendaController extends ChangeNotifier {
   final Future<dynamic>? Function()? future;
-  AgendaResources _resources = AgendaResources();
+  final AgendaResources _resources = AgendaResources();
   final AgendaSize size = AgendaSize();
   resourceFind(String? gid) {
     return _resources.find(gid);
@@ -198,7 +198,7 @@ class AgendaController extends ChangeNotifier {
     List<AgendaResource>? resources,
   }) {
     if (resources != null) _resources.addAll(resources);
-    if (sources == null) this.sources = [];
+    sources ??= [];
     viewerNotifier.notify(viewer ?? AgendaViewerType.horario);
   }
 
@@ -265,7 +265,7 @@ class AgendaController extends ChangeNotifier {
 
   /// mudou a data, checa se muda o periodo de dados da agenda
   resetData(DateTime? data) {
-    this._data = data ?? DateTime.now();
+    _data = data ?? DateTime.now();
     switch (viewerNotifier.viewer) {
       case AgendaViewerType.periodo:
         // nao alterar
@@ -332,9 +332,9 @@ class AgendaController extends ChangeNotifier {
   /// filtro para o resource
   List<AgendaItem?> sourceWhere(resourceId, date) {
     List<AgendaItem?> r = [];
-    sources!.forEach((item) {
+    for (var item in sources!) {
       if (item!.resource == resourceId) r.add(item);
-    });
+    }
     return r;
   }
 
@@ -362,6 +362,7 @@ class AgendaController extends ChangeNotifier {
         return novo;
       }
     } catch (e) {
+      // ignore: avoid_print
       print('moveTo: $e');
     }
     return null;
@@ -472,13 +473,14 @@ class AgendaController extends ChangeNotifier {
   }
 }
 
-var ultimoContext;
+BuildContext? ultimoContext;
 
 class DefaultAgenda extends InheritedWidget {
   final AgendaController? controller;
   final DateTime? data;
 
-  DefaultAgenda({Key? key, this.data, required Widget child, this.controller})
+  const DefaultAgenda(
+      {Key? key, this.data, required Widget child, this.controller})
       : super(key: key, child: child);
   @override
   bool updateShouldNotify(DefaultAgenda oldWidget) {
@@ -491,7 +493,7 @@ class DefaultAgenda extends InheritedWidget {
     var rsp = context.dependOnInheritedWidgetOfExactType<DefaultAgenda>();
     if (rsp != null) ultimoContext = context;
     if (rsp == null && ultimoContext != null)
-      rsp = ultimoContext.dependOnInheritedWidgetOfExactType<DefaultAgenda>();
+      rsp = ultimoContext!.dependOnInheritedWidgetOfExactType<DefaultAgenda>();
     return rsp;
   }
 
@@ -509,16 +511,15 @@ class DefaultAgenda extends InheritedWidget {
 
 extension DateTimeChanges on DateTime {
   hourChanges(int hour) {
-    return DateTime(
-        this.year, this.month, this.day, hour, this.minute, this.second);
+    return DateTime(year, month, day, hour, minute, second);
   }
 
   changed(DateTime other) {
-    return this.toLocal() != other.toLocal();
+    return toLocal() != other.toLocal();
   }
 
   dateChanged(DateTime other) {
-    var a = this.format('y/MM/dd');
+    var a = format('y/MM/dd');
     var b = other.format('y/MM/dd');
     return a != b;
   }

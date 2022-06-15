@@ -156,7 +156,7 @@ class _ExpansionTileState extends State<ExpansionCard>
   }
 
   Widget _buildChildren(BuildContext context, Widget? child) {
-    final Color borderSideColor = Colors.transparent; // _borderColor.value ??
+    const Color borderSideColor = Colors.transparent; // _borderColor.value ??
 
     return Stack(
       children: <Widget>[
@@ -176,7 +176,7 @@ class _ExpansionTileState extends State<ExpansionCard>
         Container(
           decoration: BoxDecoration(
             color: _backgroundColor.value ?? Colors.transparent,
-            border: Border(
+            border: const Border(
               top: BorderSide(color: borderSideColor),
               bottom: BorderSide(color: borderSideColor),
             ),
@@ -219,14 +219,14 @@ class _ExpansionTileState extends State<ExpansionCard>
   @override
   void didChangeDependencies() {
     final ThemeData theme = Theme.of(context);
-    _borderColorTween..end = theme.dividerColor;
+    _borderColorTween.end = theme.dividerColor;
     _headerColorTween
       ..begin = Colors.white
-      ..end = widget.color ?? Color(0xff60c9df);
+      ..end = widget.color ?? const Color(0xff60c9df);
     _iconColorTween
       ..begin = Colors.white
-      ..end = widget.color ?? Color(0xff60c9df);
-    _backgroundColorTween..end = widget.backgroundColor;
+      ..end = widget.color ?? const Color(0xff60c9df);
+    _backgroundColorTween.end = widget.backgroundColor;
     super.didChangeDependencies();
   }
 

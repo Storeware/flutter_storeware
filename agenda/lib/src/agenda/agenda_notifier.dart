@@ -66,7 +66,8 @@ class DefaultSourceList extends ChangeNotifier {
 class DefaultAgendaItem extends InheritedWidget {
   final AgendaItem? item;
   final DefaultSourceList? sources;
-  DefaultAgendaItem({Key? key, required Widget child, this.sources, this.item})
+  const DefaultAgendaItem(
+      {Key? key, required Widget child, this.sources, this.item})
       : super(key: key, child: child);
   @override
   bool updateShouldNotify(DefaultAgendaItem oldWidget) {

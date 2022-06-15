@@ -4,11 +4,6 @@ import 'package:agenda/agenda.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:controls_extensions/extensions.dart';
-import 'agenda_controller.dart';
-import 'agenda_notifier.dart';
-import 'agenda_resource.dart';
-import 'data_slider.dart';
-import 'models/agenda_item_model.dart';
 
 class AgendaMobile extends StatelessWidget {
   final DateTime? dataRef;
@@ -53,14 +48,14 @@ class ResourceCard extends StatelessWidget {
 
   buildSources(List<AgendaItem?> srcBase) {
     //list.clear();
-    srcBase.forEach((item) {
+    for (var item in srcBase) {
       if (item!.recursoGid == resource!.gid) if (item.datainicio!
               .toDate()
               .compareTo(dataRef!.toDate()) ==
           0) {
         list.add(item);
       }
-    });
+    }
   }
 
   @override
@@ -77,14 +72,14 @@ class ResourceCard extends StatelessWidget {
         child: Stack(children: [
           AgendaPanelTitle(
               title: resource!.label,
-              style: TextStyle(fontSize: 12),
+              style: const TextStyle(fontSize: 12),
               height: 20,
               color: resource!.color,
               count: list.sources!.length,
               onList: () {
                 controller.listResource(list, resource!.gid);
               },
-              actions: []),
+              actions: const []),
           Positioned(
               top: 30,
               bottom: 5,
@@ -99,7 +94,7 @@ class ResourceCard extends StatelessWidget {
 
   novoItem(DefaultSourceList list, controller, {Widget? child}) {
     return InkWell(
-      child: child ?? CircleAvatar(radius: 15, child: Icon(Icons.add)),
+      child: child ?? const CircleAvatar(radius: 15, child: Icon(Icons.add)),
       onTap: () {
         controller.onInsert(AgendaData(
             controller: controller,
@@ -125,7 +120,7 @@ class ResourceCard extends StatelessWidget {
         onAccept: (data) {
           var gid = data.item!.gid;
           var novo = controller.moveTo(
-              data.item, data.item!.datainicio, this.resource!.gid);
+              data.item, data.item!.datainicio, resource!.gid);
           try {
             data.sources!.begin();
             list.begin();
@@ -154,12 +149,12 @@ class ResourceCard extends StatelessWidget {
                   message: '${itemRef!.titulo}',
                   child: Draggable<AgendaCardData>(
                     data: AgendaCardData(item: itemRef, sources: list),
-                    feedback:
-                        CircleAvatar(child: Icon(Icons.my_location, size: 30)),
+                    feedback: const CircleAvatar(
+                        child: Icon(Icons.my_location, size: 30)),
                     child: Card(
                       //radius: 20,
                       //backgroundColor: Colors.red,
-                      child: Container(
+                      child: SizedBox(
                         width: 70,
                         height: 30,
                         child: Row(
@@ -178,7 +173,7 @@ class ResourceCard extends StatelessWidget {
                                       const EdgeInsets.symmetric(horizontal: 5),
                                   child: Text(
                                       '${itemRef.datainicio!.format('H:mm')}',
-                                      style: TextStyle(fontSize: 14)),
+                                      style: const TextStyle(fontSize: 14)),
                                 ),
                                 onTap: () {
                                   controller.onEdit(AgendaData(
@@ -194,7 +189,7 @@ class ResourceCard extends StatelessWidget {
                               ),
                             ),
                             if (itemRef.completada == 1)
-                              Icon(Icons.check, size: 10)
+                              const Icon(Icons.check, size: 10)
                           ],
                         ),
                       ),

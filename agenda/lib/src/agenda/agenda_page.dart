@@ -121,7 +121,9 @@ class _AgendaViewState extends State<AgendaPage> {
     if (timer != null) {
       try {
         timer!.cancel();
-      } catch (e) {}
+      } catch (e) {
+        // nothing
+      }
     }
     super.dispose();
   }

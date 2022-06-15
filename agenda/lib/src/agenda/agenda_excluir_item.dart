@@ -1,6 +1,5 @@
 // @dart=2.12
 
-
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:flutter/material.dart';
@@ -19,29 +18,31 @@ class AgendaDialogs {
         height: 300,
         child: Center(
             child: Column(children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text(item.titulo!, style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(
+          Text(item.titulo!,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(
             height: 10,
           ),
-          Text(item.texto!, style: TextStyle(fontStyle: FontStyle.italic)),
-          SizedBox(
+          Text(item.texto!,
+              style: const TextStyle(fontStyle: FontStyle.italic)),
+          const SizedBox(
             height: 10,
           ),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(
                 'Início: ${item.datainicio!.format('dd, MMMM:   hh:mm', 'pt-BR')}    à    ${item.datafim!.format('hh:mm')}')
           ]),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           //Text('Excluir o item ?'),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Divider(),
+          const Divider(),
         ])),
         bottom: Center(
           child: StrapButton(

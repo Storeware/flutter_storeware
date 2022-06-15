@@ -118,7 +118,7 @@ class DataViewerHelper {
       };
       column.editBuilder = (a, b, c, row) {
         /// define switch para edição
-        return Container(
+        return SizedBox(
             width: column.width ?? defaultWidth,
             child: TextFormField(
               //label: column.label,
@@ -137,14 +137,7 @@ class DataViewerHelper {
                       : column.label ?? column.name!,
                   suffix: suffix,
                   prefix: prefix,
-                  helperText: column.tooltip ?? ''
-
-                  //    ? (widget.sample != null)
-                  //        ? 'Ex: ${widget.sample}'20
-                  //        : null
-                  //    : null,
-                  //hintStyle: theme.inputDecorationTheme.hintStyle,
-                  ),
+                  helperText: column.tooltip ?? ''),
               onChanged: (x) {
                 row[column.name!] =
                     double.tryParse(x.replaceAll(',', '.')) ?? 0;

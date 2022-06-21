@@ -440,7 +440,6 @@ class RestClient {
         throw "Method inválido";
 
       return ref.then((resp) {
-        DataProcessingNotifier.stop();
         _decodeResp(resp);
         if (inDebug) {
           resp.data['url'] = url;
@@ -462,10 +461,11 @@ class RestClient {
         return throw error;
       });
     } catch (e) {
-      DataProcessingNotifier.stop();
       var error = formataMensagemErro(url, e);
       if (!silent) sendError(error);
       throw error;
+    } finally {
+      DataProcessingNotifier.stop();
     }
   }
 
@@ -568,10 +568,11 @@ class RestClient {
         }
       });
     } catch (e) {
-      DataProcessingNotifier.stop();
       error = formataMensagemErro(url, e);
       if (!silent) sendError(error);
       throw error;
+    } finally {
+      DataProcessingNotifier.stop();
     }
   }
 }

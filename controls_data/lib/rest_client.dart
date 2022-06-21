@@ -307,7 +307,6 @@ class RestClient {
         throw "Method inválido";
       //print('Response: $resp');
       notifyLog.notify('statusCode: $statusCode - $resp');
-      DataProcessingNotifier.stop();
       _decodeResp(resp);
       if (inDebug) {
         resp.data['url'] = url;
@@ -323,7 +322,6 @@ class RestClient {
       //} on TypeErrorImpl catch (e) {
       //  return throw '$e';
     } catch (e) {
-      DataProcessingNotifier.stop();
       try {
         error = formataMensagemErro('$method:$url', e);
         if (!silent)
@@ -334,6 +332,8 @@ class RestClient {
       } catch (err) {
         return throw '$e';
       }
+    } finally {
+      DataProcessingNotifier.stop();
     }
   }
 

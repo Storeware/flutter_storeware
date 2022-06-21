@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity/connectivity.dart';
+//import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:universal_io/io.dart';
+//import 'package:universal_io/io.dart';
 
 class RestClientBloC<T> {
   var _controller = StreamController<T>.broadcast();
@@ -68,14 +68,14 @@ class DataProcessingNotifier {
 
 class RestClientProvider<T> extends StatelessWidget {
   final RestClientBloC<T>? bloc;
-  final AsyncWidgetBuilder? builder;
+  final AsyncWidgetBuilder<T>? builder;
   final Widget? noDataChild;
   const RestClientProvider(
       {Key? key, @required this.bloc, @required this.builder, this.noDataChild})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<T>(
       stream: bloc?.stream,
       builder: (a, b) {
         if (builder != null) return builder!(a, b);
@@ -219,7 +219,7 @@ class RestClient {
   }
 
   int statusCode = 0;
-  _decodeResp(Response resp) {
+  _decodeResp(Response<dynamic> resp) {
     statusCode = resp.statusCode!;
     if (resp.headers['content-type']
         .toString()
@@ -265,7 +265,7 @@ class RestClient {
     _setHeader();
     final _h = _headers;
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
-    Response? resp;
+    Response<dynamic>? resp;
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
@@ -416,7 +416,7 @@ class RestClient {
     Dio dio = this.dio ?? Dio(bo);
     //dio.transformer = ClientTransformer();
     DataProcessingNotifier.start();
-    Future<Response> ref;
+    Future<Response<dynamic>> ref;
     try {
       if (method == 'GET') {
         /*dio.interceptors.add(
@@ -455,7 +455,6 @@ class RestClient {
           return throw (resp.data);
         }
       }, onError: (e) {
-        DataProcessingNotifier.stop();
         error = formataMensagemErro(url, e);
         if (!silent) sendError(error);
         return throw error;

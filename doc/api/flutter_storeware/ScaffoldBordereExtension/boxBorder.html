@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the boxBorder method from the ScaffoldBordereExtension extension, for the Dart programming language.">
+  <title>boxBorder method - ScaffoldBordereExtension extension - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/ScaffoldBordereExtension.html">ScaffoldBordereExtension</a></li>
+    <li class="self-crumb">boxBorder method</li>
+  </ol>
+  <div class="self-name">boxBorder</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">boxBorder</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a></span>
+<span class="name ">boxBorder</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="boxBorder-param-color">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Color-class.html">Color</a>?</span> <span class="parameter-name">color</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-borderWidth"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">borderWidth</span> = <span class="default-value">2.0</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-border"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/BoxBorder-class.html">BoxBorder</a>?</span> <span class="parameter-name">border</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-decoration"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/BoxDecoration-class.html">BoxDecoration</a>?</span> <span class="parameter-name">decoration</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-width"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">width</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-height"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">height</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-borderRadius"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/BorderRadiusGeometry-class.html">BorderRadiusGeometry</a>?</span> <span class="parameter-name">borderRadius</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-borderTop"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">borderTop</span> = <span class="default-value">2.0</span>, </span></li>
+<li><span class="parameter" id="boxBorder-param-borderColor"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Color-class.html">Color</a></span> <span class="parameter-name">borderColor</span> = <span class="default-value">Colors.black26</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Widget boxBorder(
+    {Color? color,
+    double borderWidth = 2.0,
+    BoxBorder? border,
+    BoxDecoration? decoration,
+    double? width,
+    double? height,
+    BorderRadiusGeometry? borderRadius,
+    double borderTop = 2.0,
+    Color borderColor = Colors.black26}) {
+  return Container(
+    width: width,
+    height: height,
+    decoration: decoration ??
+        BoxDecoration(
+          color: color,
+          borderRadius: (borderTop == borderWidth) ? borderRadius : null,
+          border: (borderWidth == 0)
+              ? null
+              : border ??
+                  ((borderTop == borderWidth)
+                      ? Border.all(color: borderColor, width: borderWidth)
+                      : Border(
+                          top: BorderSide(
+                              width: borderTop, color: borderColor),
+                          right: BorderSide(
+                              width: borderWidth, color: borderColor),
+                          left: BorderSide(
+                              width: borderWidth, color: borderColor),
+                          bottom: BorderSide(
+                              width: borderWidth, color: borderColor),
+                        )),
+        ),
+    child: this,
+  );
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/ScaffoldBordereExtension.html">ScaffoldBordereExtension</a></li>
+  <li class="self-crumb">boxBorder method</li>
+</ol>
+
+
+    <h5>ScaffoldBordereExtension extension</h5>
+    <ol>
+
+
+
+
+
+    <li class="section-title"><a href="../../flutter_storeware/ScaffoldBordereExtension.html#instance-methods">Methods</a></li>
+    <li><a href="../../flutter_storeware/ScaffoldBordereExtension/boxBorder.html">boxBorder</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the init method from the ConfigAppBase class, for the Dart programming language.">
+  <title>init method - ConfigAppBase class - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase-class.html">ConfigAppBase</a></li>
+    <li class="self-crumb">init method</li>
+  </ol>
+  <div class="self-name">init</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">init</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<div>
+  <ol class="annotation-list">
+    <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+  </ol>
+</div>
+
+<span class="returntype">dynamic</span>
+<span class="name ">init</span>(<wbr>)
+
+      <div class="features">override</div>
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Chamar antes de iniciado o App</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">@override
+init() async {
+  try {
+    await ls.LocalStorage().init();
+  } catch (e) {
+    &#47;&#47;TODO: windows - erro ao carregar configruação inicial...
+  }
+  load();
+
+  var p = Uri.base.queryParameters;
+  p.forEach((k, v) {
+    &#47;&#47;if (v != null)
+    queryParameters[k] = v;
+  });
+  loginChanged.config = this;
+  inited = true;
+
+  defaultElevation = 0;
+  return this;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/ConfigAppBase-class.html">ConfigAppBase</a></li>
+  <li class="self-crumb">init method</li>
+</ol>
+
+
+    <h5>ConfigAppBase class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../flutter_storeware/ConfigAppBase-class.html#constructors">Constructors</a></li>
+          <li><a href="../../flutter_storeware/ConfigAppBase/ConfigAppBase.html">ConfigAppBase</a></li>
+
+
+    <li class="section-title">
+      <a href="../../flutter_storeware/ConfigAppBase-class.html#instance-properties">Properties</a>
+    </li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/autoLogin.html">autoLogin</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/backgroudColor.html">backgroudColor</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/backgroundColor.html">backgroundColor</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/basePrefix.html">basePrefix</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/baseUrl.html">baseUrl</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/celular.html">celular</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/cloudV3.html">cloudV3</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/configDados.html">configDados</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/conta.html">conta</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/dadosLoja.html">dadosLoja</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/errorNotifier.html">errorNotifier</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/filial.html">filial</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/firebaseOptions.html">firebaseOptions</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/ConfigBase/imagemEntradaUrl.html">imagemEntradaUrl</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/inDev.html">inDev</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/inited.html">inited</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/instanceCount.html">instanceCount</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/lembrarSenha.html">lembrarSenha</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/logado.html">logado</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/loginChanged.html">loginChanged</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/loja.html">loja</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/password.html">password</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/queryParameters.html">queryParameters</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/restCloudAPI.html">restCloudAPI</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/restLocalAPI.html">restLocalAPI</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/ConfigBase/restServer.html">restServer</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/userUid.html">userUid</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/usuario.html">usuario</a></li>
+
+    <li class="section-title"><a href="../../flutter_storeware/ConfigAppBase-class.html#instance-methods">Methods</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/afterConfig.html">afterConfig</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/afterLoaded.html">afterLoaded</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/checkInited.html">checkInited</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/checkToken.html">checkToken</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/decrypt.html">decrypt</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/dispose.html">dispose</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/encrypt.html">encrypt</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/firebaseAuth.html">firebaseAuth</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/firebaseLogin.html">firebaseLogin</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/init.html">init</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/initConfigDados.html">initConfigDados</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/initFirebase.html">initFirebase</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/load.html">load</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/loginSignInByEmail.html">loginSignInByEmail</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/logout.html">logout</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/params.html">params</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/recarregar.html">recarregar</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/save.html">save</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/setLoja.html">setLoja</a></li>
+    <li><a href="../../flutter_storeware/ConfigAppBase/setup.html">setup</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/ConfigAppBase-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

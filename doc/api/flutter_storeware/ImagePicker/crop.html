@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the crop method from the ImagePicker class, for the Dart programming language.">
+  <title>crop method - ImagePicker class - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/ImagePicker-class.html">ImagePicker</a></li>
+    <li class="self-crumb">crop method</li>
+  </ol>
+  <div class="self-name">crop</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">crop</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-typed_data/Uint8List-class.html">Uint8List</a>?</span>&gt;</span></span>
+<span class="name ">crop</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="crop-param-image"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-typed_data/Uint8List-class.html">Uint8List</a></span> <span class="parameter-name">image</span>, </span></li>
+<li><span class="parameter" id="crop-param-rotateAngle">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span> <span class="parameter-name">rotateAngle</span> = <span class="default-value">0.0</span>, </span></li>
+<li><span class="parameter" id="crop-param-rect"><span>required</span> <span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Rect-class.html">Rect</a></span> <span class="parameter-name">rect</span>, </span></li>
+<li><span class="parameter" id="crop-param-action"><span class="type-annotation"><a href="https://pub.dev/documentation/extended_image/6.0.2+1/extended_image/EditActionDetails-class.html">EditActionDetails</a>?</span> <span class="parameter-name">action</span>, </span></li>
+<li><span class="parameter" id="crop-param-quality"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">quality</span> = <span class="default-value">88</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p><a href="../../flutter_storeware/ImagePicker/crop.html">crop</a> corta a image dentro do retangula indicado</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static Future&lt;Uint8List?&gt; crop(Uint8List image,
+    {double rotateAngle = 0.0,
+    required Rect rect,
+    EditActionDetails? action,
+    int quality = 88}) async {
+  ImageEditorOption option = ImageEditorOption();
+  option.addOption(ClipOption.fromRect(rect));
+
+  if (action != null) {
+    final flipHorizontal = action.flipY;
+    final flipVertical = action.flipX;
+    option.addOption(
+        FlipOption(horizontal: flipHorizontal, vertical: flipVertical));
+    if (action.hasRotateAngle) {
+      option.addOption(RotateOption(rotateAngle.toInt()));
+    }
+  }
+  option.outputFormat = OutputFormat.png(quality);
+  &#47;&#47; warm : The problem because flutter plugin(have native code) is not support hot restart&#47;hot reload. So you must exit app and rerun.
+  final Uint8List? result = await ImageEditor.editImage(
+    image: image,
+    imageEditorOption: option,
+  );
+  return result;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/ImagePicker-class.html">ImagePicker</a></li>
+  <li class="self-crumb">crop method</li>
+</ol>
+
+
+    <h5>ImagePicker class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../flutter_storeware/ImagePicker-class.html#constructors">Constructors</a></li>
+          <li><a href="../../flutter_storeware/ImagePicker/ImagePicker.html">ImagePicker</a></li>
+
+
+    <li class="section-title inherited">
+      <a href="../../flutter_storeware/ImagePicker-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/ImagePicker-class.html#instance-methods">Methods</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/ImagePicker/pickFromCamera.html">pickFromCamera</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/ImagePicker/pickFromGallary.html">pickFromGallary</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/ImagePicker-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+        <li class="section-title"><a href="../../flutter_storeware/ImagePicker-class.html#static-methods">Static methods</a></li>
+          <li><a href="../../flutter_storeware/ImagePicker/crop.html">crop</a></li>
+          <li><a href="../../flutter_storeware/ImagePicker/factorResize.html">factorResize</a></li>
+          <li><a href="../../flutter_storeware/ImagePicker/resize.html">resize</a></li>
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

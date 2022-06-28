@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the edit method from the DataViewerController class, for the Dart programming language.">
+  <title>edit method - DataViewerController class - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController-class.html">DataViewerController</a></li>
+    <li class="self-crumb">edit method</li>
+  </ol>
+  <div class="self-name">edit</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">edit</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype">dynamic</span>
+<span class="name ">edit</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="edit-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span></li>
+<li><span class="parameter" id="edit-param-data"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">data</span>, </span></li>
+<li><span class="parameter" id="edit-param-title">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">title</span>, </span></li>
+<li><span class="parameter" id="edit-param-width"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">width</span> = <span class="default-value">650</span>, </span></li>
+<li><span class="parameter" id="edit-param-height"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">height</span> = <span class="default-value">720</span>, </span></li>
+<li><span class="parameter" id="edit-param-event"><span class="type-annotation"><a href="../../flutter_storeware/PaginatedGridChangeEvent.html">PaginatedGridChangeEvent</a></span> <span class="parameter-name">event</span> = <span class="default-value">PaginatedGridChangeEvent.update</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p><a href="../../flutter_storeware/DataViewerController/edit.html">edit</a> abre uma janela de edicao dos dados</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">edit(BuildContext context, Map&lt;String, dynamic&gt; data,
+    {String? title,
+    double? width = 650,
+    double? height = 720,
+    PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update}) async {
+  paginatedController.columns ??= columns;
+  return paginatedController
+      .edit(context, data,
+          title: title, width: width!, height: height!, event: event)
+      .then((r) {
+    if (paginatedController.widget == null) {
+      if (event == PaginatedGridChangeEvent.update)
+        doUpdate(r);
+      else if (event == PaginatedGridChangeEvent.insert)
+        doInsert(r);
+      else if (event == PaginatedGridChangeEvent.delete) doDelete(r);
+    }
+    &#47;&#47;updateStream();
+    return r;
+  });
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/DataViewerController-class.html">DataViewerController</a></li>
+  <li class="self-crumb">edit method</li>
+</ol>
+
+
+    <h5>DataViewerController class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../flutter_storeware/DataViewerController-class.html#constructors">Constructors</a></li>
+          <li><a href="../../flutter_storeware/DataViewerController/DataViewerController.html">DataViewerController</a></li>
+
+
+    <li class="section-title">
+      <a href="../../flutter_storeware/DataViewerController-class.html#instance-properties">Properties</a>
+    </li>
+    <li><a href="../../flutter_storeware/DataViewerController/beforeChange.html">beforeChange</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/changedValues.html">changedValues</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/columns.html">columns</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/context.html">context</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/dataSource.html">dataSource</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/filter.html">filter</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/filterValue.html">filterValue</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/future.html">future</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/keyName.html">keyName</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/onChanged.html">onChanged</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/onClearCache.html">onClearCache</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/onDelete.html">onDelete</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/onInsert.html">onInsert</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/onLog.html">onLog</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/onUpdate.html">onUpdate</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/onValidate.html">onValidate</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/page.html">page</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/paginatedController.html">paginatedController</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/skip.html">skip</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/source.html">source</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/stream.html">stream</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/subscribeChanges.html">subscribeChanges</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/top.html">top</a></li>
+
+    <li class="section-title"><a href="../../flutter_storeware/DataViewerController-class.html#instance-methods">Methods</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/begin.html">begin</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/createColumns.html">createColumns</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/dispose.html">dispose</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/doDelete.html">doDelete</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/doInsert.html">doInsert</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/doUpdate.html">doUpdate</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/edit.html">edit</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/end.html">end</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/findColumn.html">findColumn</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/goPage.html">goPage</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/invalidate.html">invalidate</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/open.html">open</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/openNext.html">openNext</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/reflesh.html">reflesh</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/remove.html">remove</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/reopen.html">reopen</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/show.html">show</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+    <li><a href="../../flutter_storeware/DataViewerController/updateStream.html">updateStream</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/DataViewerController-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

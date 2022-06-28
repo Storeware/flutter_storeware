@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// [CubeVeiwType]
+/// [CubeViewType]
 /// all-> pode ser usada em todos (dimensão ou valores)
 /// row-> em Linhas
 /// column -> em colunas
@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 /// aggr -> valor usando em sumarios (uso interno)
 /// data -> coluna dinamica (uso interno)
 enum CubeViewType { none, row, column, both, value, aggr, data, all }
+
 enum CubeViewAggrType { none, sum, min, max, avg, virtual }
 
 /// [CubeDimension] mantem o atributo da linha, coluna ou valores;

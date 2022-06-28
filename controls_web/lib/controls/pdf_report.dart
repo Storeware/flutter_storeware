@@ -21,18 +21,18 @@ class PdfReportController {
       this.pageFormat = PdfPageFormat.a4,
       this.document,
       this.build}) {
-    this.document ??= pw.Document();
+    document ??= pw.Document();
   }
   Future<Uint8List> save({PdfPageFormat? format}) async {
-    if (format != null) this.pageFormat = format;
+    if (format != null) pageFormat = format;
     if (!inited) callBuild();
     return document!.save();
   }
 
   final Function(pw.Document? document)? build;
   callBuild() {
-    if (build != null) build!(this.document);
-    this.inited = true;
+    if (build != null) build!(document);
+    inited = true;
   }
 
   bool inited = false;
@@ -54,17 +54,17 @@ class PdfReportController {
       return printAsHtml();
     } else
       return await Printing.layoutPdf(
-          onLayout: (pageFormat) async => this.save(format: pageFormat));
+          onLayout: (pageFormat) async => save(format: pageFormat));
   }
 
   Future<File> saveAs({String? path}) async {
-    String? _path = path;
+    String? pathx = path;
 
     if (path == null) {
       final output = await getTemporaryDirectory();
-      _path = '${output.path}/${fileName ?? 'examplo.pdf'}';
+      pathx = '${output.path}/${fileName ?? 'examplo.pdf'}';
     }
-    final file = File('$_path');
+    final file = File('$pathx');
     return await document!.save().then((rsp) {
       return file.writeAsBytes(rsp);
     });
@@ -113,7 +113,7 @@ class PdfReportView extends StatefulWidget {
       : super(key: key);
 
   @override
-  _PdfReportViewState createState() => _PdfReportViewState();
+  State<PdfReportView> createState() => _PdfReportViewState();
 }
 
 class _PdfReportViewState extends State<PdfReportView> {
@@ -133,44 +133,14 @@ class _PdfReportViewState extends State<PdfReportView> {
       allowSharing: widget.canShare,
       //canChangePageFormat: false,
       onError: (BuildContext context, sender) {
-        return Container(child: Text('Não há dados no documento'));
+        return const Text('Não há dados no documento');
       },
-      //actions: widget.pageActions,
       initialPageFormat: widget.controller!.pageFormat,
-      //onPrinted: (context) => widget.controller!.print(),
-      //onShared: (context) => widget.controller!.sharePdf(),
       build: (format) => widget.controller!.save(format: format),
     );
     return Scaffold(
       appBar: widget.appBar ??
-          AppBar(
-              title: Text(widget.title ?? ''),
-              /*leading: IconButton(
-          icon: Icon(Icons.print),
-          onPressed: () {
-            widget.controller.print();
-          },
-        ),*/
-              actions: widget
-                  .actions /* [
-              ...widget.actions ?? [],
-              if (widget.canPrint)
-                IconButton(
-                    icon: Icon(Icons.print),
-                    onPressed: () {
-                      widget.controller!.print();
-                    }),
-              
-              if (widget.canShare)
-                IconButton(
-                    icon: Icon(UniversalPlatform.isWeb
-                        ? Icons.file_download
-                        : Icons.share),
-                    onPressed: () {
-                      widget.controller!.sharePdf();
-                    }),
-            ],*/
-              ),
+          AppBar(title: Text(widget.title ?? ''), actions: widget.actions),
       body: pdfPreview,
     );
   }
@@ -228,12 +198,12 @@ class PdfTitleBand extends PdfBand {
   pw.Widget doBuilder(pw.Context? context) {
     if (builder != null) return builder!(context);
     return pw.Container(
-        height: this.height,
+        height: height,
         child: pw.Column(mainAxisSize: pw.MainAxisSize.min, children: [
           pw.Expanded(
               child: pw.Row(mainAxisSize: pw.MainAxisSize.min, children: [
             pw.Expanded(
-                child: pw.Text(this.title!,
+                child: pw.Text(title!,
                     style: pw.TextStyle(
                       fontSize: 18,
                       fontWeight: pw.FontWeight.bold,
@@ -257,7 +227,7 @@ class PdfPageHeaderBand extends PdfBand {
   @override
   pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height,
+        height: height,
         color: color,
         child: (builder == null) ? null : builder!(context, this));
   }
@@ -274,7 +244,7 @@ class PdfPageFooterBand extends PdfBand {
   @override
   pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height, color: color, child: builder!(context, this));
+        height: height, color: color, child: builder!(context, this));
   }
 }
 
@@ -289,7 +259,7 @@ class PdfHeaderDetailBand extends PdfBand {
   @override
   pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height, color: color, child: builder!(context, this));
+        height: height, color: color, child: builder!(context, this));
   }
 }
 
@@ -304,7 +274,7 @@ class PdfFooterDetailBand extends PdfBand {
   @override
   pw.Widget doBuilder(pw.Context? context) {
     return pw.Container(
-        height: this.height, color: color, child: builder!(context, this));
+        height: height, color: color, child: builder!(context, this));
   }
 }
 
@@ -345,10 +315,10 @@ class PdfDetailTotalBand extends PdfBand {
 
   eval(Map<String, dynamic> data) {
     var r = '';
-    keys!.forEach((key) {
+    for (var key in keys!) {
       var v = data[key];
       r += '$v;';
-    });
+    }
 
     return r;
   }
@@ -397,17 +367,15 @@ class PdfBands {
   });
 }
 
-//////////////////////////////////////////////////////////////
 /// [PdfDataPreview] criar Pdf com base em uma lsita de dados
 ///
-
 class PdfDataPreview extends StatefulWidget {
   final PdfBands? bands;
   final AppBar? appBar;
   final String? appBarTitle;
   final String? reportTitle;
   final List<Map<String, dynamic>> source;
-  final List<PdfReportColumn> columns;
+  final List<PdfReportColumn>? columns;
   final double dataRowHeight;
   final double dataHeaderHeight;
   final double headerHeight;
@@ -433,8 +401,6 @@ class PdfDataPreview extends StatefulWidget {
     this.controller,
     required this.source,
     required this.columns,
-    //this.controller,
-    //this.detailBuilder,
     this.header,
     this.footer,
     this.rowsPerPage,
@@ -449,7 +415,7 @@ class PdfDataPreview extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PdfDataPreviewState createState() => _PdfDataPreviewState();
+  State<PdfDataPreview> createState() => _PdfDataPreviewState();
 
   static tests() {
     return PdfDataPreview(
@@ -470,7 +436,7 @@ class PdfDataPreview extends StatefulWidget {
 class _PdfDataPreviewState extends State<PdfDataPreview> {
   PdfReportController? _controller;
   int get length => widget.source.length;
-  int get columnCount => widget.columns.length;
+  int get columnCount => widget.columns?.length ?? 60;
   int? rowIndex;
   int? _rowsPerPage;
   int get pageCount => pages.length;
@@ -597,19 +563,21 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
           _page,
         );
       } catch (e) {
+        // ignore: avoid_print
         print('$e');
       }
     });
   }
 
   T printx<T>(item) {
+    // ignore: avoid_print
     print(item);
     return item;
   }
 
   buildFooter(pw.Context? ctx, page) {
     return pw.Container(
-        padding: pw.EdgeInsets.only(left: 8, right: 8),
+        padding: const pw.EdgeInsets.only(left: 8, right: 8),
         color: PdfColor.fromHex('#d0d0d0'),
         height: widget.footerHeight,
         child: pw.Row(children: [
@@ -621,7 +589,7 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
   pw.Widget buildHeader(pw.Context? ctx, page) {
     List<pw.Widget> r = [];
     for (var i = 0; i < columnCount; i++) {
-      var column = widget.columns[i];
+      var column = widget.columns![i];
       var t = column.label ?? column.name!;
       r.add(pw.Container(
           width: column.width,
@@ -635,17 +603,17 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
     }
 
     return pw.Container(
-        padding: pw.EdgeInsets.only(left: 8, right: 8),
+        padding: const pw.EdgeInsets.only(left: 8, right: 8),
         color: widget.headerColor ?? PdfColor.fromHex('#d0d0d0'),
         height: widget.dataHeaderHeight,
         child: pw.Row(children: r));
   }
 
-  column(int index) => widget.columns[index];
+  column(int index) => widget.columns![index];
 
   buildRow(pw.Context? context, index, data) {
     var r = pw.Container(
-        padding: pw.EdgeInsets.only(left: 8, right: 8),
+        padding: const pw.EdgeInsets.only(left: 8, right: 8),
         alignment: pw.Alignment.centerLeft,
         height: widget.dataRowHeight,
         child: pw.Row(
@@ -653,8 +621,8 @@ class _PdfDataPreviewState extends State<PdfDataPreview> {
           mainAxisAlignment: pw.MainAxisAlignment.start,
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            for (int col = 0; col < widget.columns.length; col++)
-              buildCell(context, col, widget.columns[col], data),
+            for (int col = 0; col < widget.columns!.length; col++)
+              buildCell(context, col, widget.columns![col], data),
           ],
         ));
     return r;

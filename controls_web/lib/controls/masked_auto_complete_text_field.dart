@@ -8,6 +8,7 @@ import 'autocomplete_textformfield.dart';
 
 class MaskedAutoCompleteTextFieldController
     extends AutoCompleteTextFormFieldController {
+  // ignore: library_private_types_in_public_api
   late _MaskedAutoCompleteTextFieldState maskedState;
   @override
   closeOverlay(String text) {
@@ -17,6 +18,7 @@ class MaskedAutoCompleteTextFieldController
   }
 }
 
+/// AutoComplete Text Field
 class MaskedAutoCompleteTextField extends StatefulWidget {
   final Function(dynamic)? onChanged;
   final String? initialValue;
@@ -73,7 +75,7 @@ class MaskedAutoCompleteTextField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MaskedAutoCompleteTextFieldState createState() =>
+  State<MaskedAutoCompleteTextField> createState() =>
       _MaskedAutoCompleteTextFieldState();
 }
 
@@ -171,20 +173,19 @@ class _MaskedAutoCompleteTextFieldState
   }
 
   addSuggestions(List<dynamic> data) {
-    if (data.length > 0) {
-      data.forEach((elem) {
+    if (data.isNotEmpty) {
+      for (var elem in data) {
         if (_suggestions!
-                .where((it) => it[widget.name] == elem[widget.name])
-                .length ==
-            0) {
+            .where((it) => it[widget.name] == elem[widget.name])
+            .isEmpty) {
           var s = '';
           elem.keys.forEach((k) {
-            s += ';' + '${elem[k]}';
+            s += ';' '${elem[k]}';
           });
           elem['key-search'] = s;
           _suggestions!.add(elem);
         }
-      });
+      }
     }
   }
 
@@ -216,9 +217,9 @@ class _MaskedAutoCompleteTextFieldState
                     validator: widget.validator,
                     autofocus: widget.autofocus,
                     focusNode: widget.focusNode,
-                    decoration: new InputDecoration(
+                    decoration: InputDecoration(
                         labelText: widget.label ?? "procurar por:",
-                        contentPadding: EdgeInsets.all(0),
+                        contentPadding: const EdgeInsets.all(0),
                         // errorText: validating(_controller.text),
                         // errorStyle:
                         //     TextStyle(color: theme.textTheme.bodyText1.color),
@@ -248,15 +249,14 @@ class _MaskedAutoCompleteTextFieldState
                     itemBuilder: widget.itemBuilder as Widget Function(
                             BuildContext, dynamic)? ??
                         (context, suggestion) => Padding(
-                            child: new Container(
-                                child: Text(suggestion[widget.name])),
-                            padding: EdgeInsets.all(8.0)),
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(suggestion[widget.name])),
                   ),
-                  if ((widget.sublabel ?? '').length > 0)
+                  if ((widget.sublabel ?? '').isNotEmpty)
                     Positioned(
                         right: 0,
                         child: Text('(${widget.sublabel})',
-                            style: TextStyle(fontSize: 12))),
+                            style: const TextStyle(fontSize: 12))),
                 ],
               );
             });

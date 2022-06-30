@@ -5,6 +5,7 @@ import 'strap_widgets.dart';
 import 'dart:ui';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/tab_choice.dart';
+import 'dotted_decoration.dart';
 
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
@@ -42,7 +43,7 @@ extension WidgetMorphism on Widget {
   }
 
   Widget padding({EdgeInsets? padding}) {
-    return Padding(padding: padding ?? EdgeInsets.all(8.0), child: this);
+    return Padding(padding: padding ?? const EdgeInsets.all(8.0), child: this);
   }
 
   Widget card(
@@ -84,6 +85,16 @@ extension WidgetMorphism on Widget {
           ),
       child: this,
     );
+  }
+
+  Widget dottedLine({Color? color}) {
+    var edgeInsets = const EdgeInsets.all(1.0);
+    return Container(
+        padding: edgeInsets,
+        height: 2,
+        width: double.infinity,
+        decoration: const DottedDecoration(linePosition: LinePosition.bottom),
+        child: this);
   }
 
   Widget center() => Center(child: this);
@@ -343,7 +354,7 @@ extension WidgetMorphism on Widget {
   }) =>
       SingleChildScrollView(
         controller: controller,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         padding: padding,
         child: this,
       );
@@ -542,7 +553,7 @@ extension ListExtension on List {
     return ExpansionPanelList(
       animationDuration: const Duration(seconds: 1),
       elevation: elevation,
-      expandedHeaderPadding: expandedHeaderPadding ?? EdgeInsets.all(2),
+      expandedHeaderPadding: expandedHeaderPadding ?? const EdgeInsets.all(2),
       children: [
         for (var i = 0; i < this.length; i++)
           ExpansionPanel(

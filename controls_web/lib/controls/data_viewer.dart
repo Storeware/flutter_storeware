@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_data/data.dart';
 import 'ink_button.dart';
+import 'dotted_decoration.dart';
 
 part "dataviewer_storage.dart";
 
@@ -833,9 +834,11 @@ class DataViewerGroup {
   final bool? initiallyExpanded;
   final double? height;
   final Color? color;
+  final Color? dividerColor;
   const DataViewerGroup({
     this.title,
     this.subtitle,
+    this.dividerColor,
     this.children,
     this.leadding,
     this.trailling,
@@ -1052,48 +1055,61 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   createRow(context, DataViewerGroup rows, dynamic data) {
     if ((rows.title ?? '').isEmpty) return createRow2(context, rows, data);
     var color = theme!.primaryColor.withAlpha(50);
-    return IgnorePointer(
-        ignoring: true,
-        child: ExpansionTile(
-          initiallyExpanded: rows.initiallyExpanded ?? widget.initiallyExpanded,
-          collapsedBackgroundColor: color,
-          leading: rows.leadding,
-          subtitle: (rows.subtitle == null) ? null : Text(rows.subtitle!),
-          trailing: rows.trailling,
-          title: (rows.title == null)
-              ? Container()
-              : Container(
-                  //color: color,
-                  alignment: Alignment.centerLeft,
-                  height: kMinInteractiveDimension * 0.6,
-                  child: Row(children: [
-                    // if (rows.leadding != null) rows.leadding!,
-                    Text(rows.title!,
-                        style: rows.titleStyle ??
-                            theme!.textTheme.caption?.copyWith(fontSize: 18)),
-                  ])),
-          children: [
-            if (rows.header != null) rows.header!,
-            Container(
-                height: rows.height,
-                color: rows.color,
-                child: Wrap(
-                  direction: Axis.horizontal,
-                  children: [
-                    if (rows.header != null) rows.header!,
-                    for (var column in rows.children!)
-                      createColumn(
-                        context,
-                        column,
-                        col,
-                        isLast: (itemsCount == ++col),
-                      ),
-                    if (rows.bottom != null) rows.bottom!,
-                  ],
-                )),
-            if (rows.bottom != null) rows.bottom!,
-          ],
-        ));
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.transparent,
+      ),
+      child: ExpansionTile(
+        initiallyExpanded: rows.initiallyExpanded ?? widget.initiallyExpanded,
+        collapsedBackgroundColor: color,
+        leading: rows.leadding,
+        subtitle: (rows.subtitle == null) ? null : Text(rows.subtitle!),
+        trailing: rows.trailling,
+        title: (rows.title == null)
+            ? Container()
+            : Container(
+                alignment: Alignment.centerLeft,
+                height: kMinInteractiveDimension * 0.6,
+                child: Row(children: [
+                  Text(rows.title!,
+                      style: rows.titleStyle ??
+                          theme!.textTheme.caption?.copyWith(fontSize: 18)),
+                ])),
+        children: [
+          if (rows.header != null) rows.header!,
+          Container(
+              height: rows.height,
+              color: rows.color,
+              child: Wrap(
+                direction: Axis.horizontal,
+                children: [
+                  if (rows.header != null) rows.header!,
+                  for (var column in rows.children!)
+                    createColumn(
+                      context,
+                      column,
+                      col,
+                      isLast: (itemsCount == ++col),
+                    ),
+                  if (rows.bottom != null) rows.bottom!,
+                ],
+              )),
+          if (rows.bottom != null) rows.bottom!,
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Container(
+              width: double.infinity,
+              decoration: DottedDecoration(
+                shape: Shape.line,
+                linePosition: LinePosition.bottom,
+                color: rows.dividerColor ?? theme!.dividerColor,
+              ),
+              height: 1.0, //height of container
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   createRow2(context, DataViewerGroup rows, dynamic data) {

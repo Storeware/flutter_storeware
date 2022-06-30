@@ -2,7 +2,6 @@
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 import 'package:flutter/services.dart';
 
@@ -22,7 +21,7 @@ class DataViewerHelper {
   static double get defaultWidth => 300.0;
   static _simnaoFn(p) {
     var t = p['t'];
-    dynamic? v = p['v'];
+    dynamic v = p['v'];
     var f = p['f'];
     if ((t == null) && (v != null)) {
       if (v is bool) {
@@ -108,7 +107,7 @@ class DataViewerHelper {
       column.builder = (idx, row) {
         if (builder != null) return builder(idx, row) ?? Container();
         dynamic v = row[column.name!];
-        String txt = '${v}';
+        String txt = '$v';
         if (v is double && decimais >= 0) txt = v.toStringAsFixed(decimais);
 
         txt = txt.replaceAll('.', ',');
@@ -121,13 +120,11 @@ class DataViewerHelper {
         return SizedBox(
             width: column.width ?? defaultWidth,
             child: TextFormField(
-              //label: column.label,
-              initialValue: '${row[column.name] ?? ''}'.replaceAll('.', ','),
               keyboardType: (decimais <= 0)
                   ? TextInputType.number
                   : TextInputType.numberWithOptions(decimal: decimais > 0),
               inputFormatters: <TextInputFormatter>[
-                if (decimais == 0) FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatterExt.decimal(decimais),
               ],
               maxLength: maxLength ?? column.maxLength,
               decoration: InputDecoration(
@@ -159,7 +156,7 @@ class DataViewerHelper {
       };
       column.editBuilder = (a, b, c, row) {
         /// define switch para edição
-        return Container(
+        return SizedBox(
             width: column.width ?? defaultWidth,
             child: MaskedTextField(
               label: column.label,
@@ -179,9 +176,9 @@ class DataViewerHelper {
       column.builder = (idx, row) {
         /// visualiza switch no grid
         dynamic v = row[column.name];
-        if (v == null) return Text('');
+        if (v == null) return const Text('');
         DateTime d = _toDateTime(v); //DateTime.tryParse(v);
-        if (d == null) return Text('');
+        //if (d == null) return Text('');
         return Text(d.format(mask));
       };
       column.editBuilder = (a, b, c, row) {
@@ -277,4 +274,10 @@ class DataViewerHelper {
     for (var item in ctr.columns)
       if (list.contains(item.name!)) item.visible = true;
   }
+}
+
+extension FilteringTextInputFormatterExt on FilteringTextInputFormatter {
+  static decimal(dec) => MaskedTextInputFormatter.numeric(dec);
+  static date() => MaskedTextInputFormatter.date();
+  static format(String mask) => MaskedTextInputFormatter.format(mask);
 }

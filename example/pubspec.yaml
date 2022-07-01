@@ -27,7 +27,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
-  localization:
   intl:
 
   controls_dash:
@@ -40,12 +39,18 @@ dependencies:
 
   dio:
   fl_chart:
+  flutter_localizations: # Add this line
+    sdk: flutter
 
 dependency_overrides:
   flutter_storeware:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-    #path: ..
+    #    git:
+    #      url: https://github.com/amarildolacerda/flutter_storeware.git
+    path: ..
+  controls_web:
+    #   git:
+    #     url: https://github.com/amarildolacerda/flutter_storeware.git
+    path: ../controls_web
 
   charts_flutter:
     git:

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:controls_web/controls.dart';
 import 'package:flutter_storeware/index.dart';
-//import 'package:controls_web/controls/widget_extensions.dart';
 
 class RoundedCard extends StatelessWidget {
   final Widget child;
@@ -51,18 +51,37 @@ class ExtraView extends StatelessWidget {
             initialValue: '0.00',
             keyboardType: TextInputType.number,
             inputFormatters: [
-              MaskedInputTextFormatter.number(3),
+              MaskedTextInputFormatter.numeric(3),
             ],
           ).rounded(),
           TextFormField(
             initialValue: '01/12/2020',
             keyboardType: TextInputType.number,
             inputFormatters: [
-              MaskedInputTextFormatter.date(),
+              MaskedTextInputFormatter.date(),
             ],
-          ).dottedLine(),
+          ).dottedLine(padding: const EdgeInsets.all(8), color: Colors.red),
+          ['aguardando', 'jogando', 'finalizado'].expansionList<String>(
+              headerBuilder: (a, b, c) => Text('$b'),
+              bodyBuilder: (String a) {
+                print(a);
+                return Text("Expanded content $a");
+              }),
+          StepperWidget(
+            type: StepperType.vertical,
+            choices: [
+              TabChoice(
+                label: 'StepperWidget1',
+                child: const Text('step1'),
+              ),
+              TabChoice(
+                label: 'StepperWidget2',
+                child: const Text('step2'),
+              ),
+            ],
+          ),
         ],
-      ),
+      ).singleChildScrollView(),
     ));
   }
 }

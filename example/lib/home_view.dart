@@ -4,6 +4,7 @@ import 'package:flutter_storeware/index.dart';
 import 'charts_view.dart';
 import 'controls_activities_view.dart';
 import 'controls_clean_view.dart';
+import 'extra_view.dart';
 import 'mix2_view.dart';
 import 'mix1_view.dart';
 import 'mix3_view.dart';
@@ -46,24 +47,6 @@ class HomeView extends StatelessWidget {
           title: const Text('StrapButton'),
           child: pagina1Builder(notifier, context),
         ),
-        /*TabChoice(
-            title: const Text('Dialogs.info'),
-            image: const Icon(Icons.ac_unit_outlined),
-            child: StrapButton(
-                text: 'Button Info',
-                type: StrapButtonType.warning,
-                onPressed: () {
-                  Dialogs.info(context,
-                      text: 'Titulo', content: const Text('Mensagem'));
-                })),
-        */ /*TabChoice(
-          title: const Text('SubMenus'),
-          items: [TabChoice(label: 'Sub1'), TabChoice(label: 'Sub2')],
-        ),*/
-        /*TabChoice(
-          title: const Text('Controls-Web'),
-          child: const ControlsView(),
-        ),*/
         TabChoice(
           title: const Text('Clean'),
           child: const ControlsCleanView(),
@@ -96,6 +79,7 @@ class HomeView extends StatelessWidget {
           label: 'Dashlets',
           child: const SalesView(),
         ),
+        TabChoice(label: 'Extra', child: const ExtraView())
       ],
     );
   }

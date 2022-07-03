@@ -1,5 +1,4 @@
 // @dart=2.12
-//import 'package:controls_web/controls/paginated_data_table_ext.dart';
 import 'package:flutter/material.dart';
 
 /// [ReportControler] um Controller para os dados a serem processados no relátorio
@@ -10,7 +9,7 @@ class ReportController {
     this.columns,
     this.future,
   });
-  var future;
+  dynamic future;
   List<ReportColumn>? columns;
 }
 
@@ -78,7 +77,7 @@ class ReportView extends StatefulWidget {
 
   /// chamado ao final das linhas
   final dynamic Function(ReportRowType, List<DataRow>)? onFooterBuilder;
-  ReportView({
+  const ReportView({
     Key? key,
     @required this.controller,
     this.title,
@@ -106,7 +105,7 @@ class ReportView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ReportViewState createState() => _ReportViewState();
+  State<ReportView> createState() => _ReportViewState();
 }
 
 class _ReportViewState extends State<ReportView> {
@@ -188,7 +187,7 @@ class _ReportViewState extends State<ReportView> {
                     (col.onGetValue != null)
                         ? col.onGetValue!(row[col.name])
                         : '${row[col.name] ?? ''}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     )),
@@ -277,7 +276,7 @@ class _ReportViewState extends State<ReportView> {
 
   /// cria colunas caso não tenha sido informado
   createColumns() {
-    if (source.length == 0) return;
+    if (source.isEmpty) return;
     Map<String, dynamic> row = source[0];
     controller.columns = [];
     for (var key in row.keys) {
@@ -301,7 +300,8 @@ class _ReportViewState extends State<ReportView> {
                 right: widget.columnSpacing! / 2,
               ),
               child: Text(col.label ?? col.name!,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16)),
             ),
           ),
           numeric: col.numeric!,
@@ -317,9 +317,9 @@ class _ReportViewState extends State<ReportView> {
         initialData: controller.source,
         builder: (context, snapshot) {
           if (!snapshot.hasData)
-            return Align(child: CircularProgressIndicator());
+            return const Align(child: CircularProgressIndicator());
           controller.source = snapshot.data;
-          if ((widget.controller!.columns ?? []).length == 0) createColumns();
+          if ((widget.controller!.columns ?? []).isEmpty) createColumns();
 
           return Scaffold(
               body: Container(
@@ -338,7 +338,7 @@ class _ReportViewState extends State<ReportView> {
                       title: Text(
                         widget.title!,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       subtitle: Text(
@@ -351,7 +351,7 @@ class _ReportViewState extends State<ReportView> {
                       leading: widget.leading,
                     ),
                   if (widget.header != null) widget.header!,
-                  Divider(),
+                  const Divider(),
                   Expanded(
                       child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,

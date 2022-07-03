@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the cnpj method from the MaskedTextFieldBr extension, for the Dart programming language.">
+  <title>cnpj method - MaskedTextFieldBr extension - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/MaskedTextFieldBr.html">MaskedTextFieldBr</a></li>
+    <li class="self-crumb">cnpj method</li>
+  </ol>
+  <div class="self-name">cnpj</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">cnpj</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype">dynamic</span>
+<span class="name ">cnpj</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="cnpj-param-key">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/foundation/Key-class.html">Key</a>?</span> <span class="parameter-name">key</span>, </span></li>
+<li><span class="parameter" id="cnpj-param-label"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">label</span> = <span class="default-value">&#39;CNPJ&#39;</span>, </span></li>
+<li><span class="parameter" id="cnpj-param-initialValue"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">initialValue</span>, </span></li>
+<li><span class="parameter" id="cnpj-param-onChanged"><span class="type-annotation">dynamic</span> <span class="parameter-name">onChanged</span>, </span></li>
+<li><span class="parameter" id="cnpj-param-onSave"><span class="type-annotation">dynamic</span> <span class="parameter-name">onSave</span>, </span></li>
+<li><span class="parameter" id="cnpj-param-mask"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">mask</span> = <span class="default-value">&#39;00.000.000&#47;0000-00&#39;</span>, </span></li>
+<li><span class="parameter" id="cnpj-param-match"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">match</span>, </span></li>
+<li><span class="parameter" id="cnpj-param-validator"><span class="type-annotation">dynamic</span> <span class="parameter-name">validator</span>(<ol class="parameter-list"><li><span class="parameter" id="param-"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span></span></li>
+</ol>
+)?, </span></li>
+<li><span class="parameter" id="cnpj-param-style"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/TextStyle-class.html">TextStyle</a>?</span> <span class="parameter-name">style</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static cnpj(
+        {Key? key,
+        String label = &#39;CNPJ&#39;,
+        String? initialValue,
+        onChanged,
+        onSave,
+        String mask = &#39;00.000.000&#47;0000-00&#39;,
+        String? match, &#47;&#47; = r&quot;^\+?\d{2,3}\((\d{2})\)\s?(\d{4,5}\-?\d{4})&quot;,
+        Function(String)? validator,
+        TextStyle? style}) =&gt;
+    MaskedTextField(
+        key: key,
+        label: label,
+        mask: mask,
+        initialValue: initialValue ?? &#39;&#39;,
+        onSaved: onSave,
+        validator: validator,
+        sample: &#39;00.000.000&#47;0000-00&#39;,
+        match: match,
+        onChanged: onChanged,
+        keyboardType: TextInputType.phone,
+        style: style);</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/MaskedTextFieldBr.html">MaskedTextFieldBr</a></li>
+  <li class="self-crumb">cnpj method</li>
+</ol>
+
+
+    <h5>MaskedTextFieldBr extension</h5>
+    <ol>
+
+
+
+
+
+
+
+
+        <li class="section-title"><a href="../../flutter_storeware/MaskedTextFieldBr.html#static-methods">Static methods</a></li>
+          <li><a href="../../flutter_storeware/MaskedTextFieldBr/cep.html">cep</a></li>
+          <li><a href="../../flutter_storeware/MaskedTextFieldBr/cnpj.html">cnpj</a></li>
+          <li><a href="../../flutter_storeware/MaskedTextFieldBr/cpf.html">cpf</a></li>
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

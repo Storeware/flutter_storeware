@@ -1,5 +1,4 @@
 // @dart=2.12
-//import 'package:console/views/agenda/expansion_card.dart';
 import 'package:controls_web/controls/index.dart';
 import 'package:controls_web/controls/responsive.dart';
 import 'package:flutter/material.dart';
@@ -177,8 +176,8 @@ class AgendaPanelWidget extends StatelessWidget {
   Point mapaCount(AgendaItem item) {
     int i = 0;
     int p = 0;
-    dados.mapa.keys.forEach((k) {
-      dados.mapa[k]!.forEach((v) {
+    for (var k in dados.mapa.keys) {
+      for (var v in dados.mapa[k]!) {
         // item é longo;
         if (v.gid == item.gid) p = i;
         //    else {
@@ -192,8 +191,8 @@ class AgendaPanelWidget extends StatelessWidget {
             (v.datainicio!.isBefore(item.datainicio!) &&
                 v.datafim!.isAfter(item.datafim!))) i++;
         //  }
-      });
-    });
+      }
+    }
     return Point(x: i + 0.0, y: p + 0.0);
   }
 
@@ -235,9 +234,9 @@ class AgendaPanelWidget extends StatelessWidget {
             list.sources!
                 .sort((a, b) => a!.datainicio!.compareTo(b!.datainicio!));
 
-            list.sources!.forEach((item) {
+            for (var item in list.sources!) {
               addMapa(item!);
-            });
+            }
             DefaultAgenda.setContext(context);
 
             return Card(
@@ -368,7 +367,7 @@ class AgendaPanelWidget extends StatelessWidget {
 
   List<Widget> buildItem(BuildContext context, list, controller) {
     List<Widget> lst = [];
-    if (mapa.length == 0) return [];
+    if (mapa.isEmpty) return [];
     // inverter a ordem para o drop ficar por cima do item inferior
     for (int x = mapa.length - 1; x > -1; x--) {
       int hora = mapa.keys.elementAt(x);
@@ -414,7 +413,7 @@ class AgendaPanelWidget extends StatelessWidget {
                 itemCount: items.length,
                 builder: (ctx, idx) {
                   List<AgendaItem> litems = mapa[itemIndex]!;
-                  return Container(
+                  return SizedBox(
                       height: kMinInteractiveDimension,
                       child: ChangeNotifierProvider.value(
                           value: AgendaItemNotifier(value: litems[idx]),
@@ -516,10 +515,11 @@ class BackgroudContainer extends StatelessWidget {
             decoration: BoxDecoration(
                 color: (accepted) ? Colors.grey.withAlpha(alpha) : color,
                 border: (divider)
-                    ? Border(bottom: BorderSide(width: 1, color: Colors.grey))
+                    ? const Border(
+                        bottom: BorderSide(width: 1, color: Colors.grey))
                     : null),
             child: (accepted && (interval != null))
-                ? Text('$interval min', style: TextStyle(fontSize: 12))
+                ? Text('$interval min', style: const TextStyle(fontSize: 12))
                 : null,
           ),
           onTap: () {
@@ -556,6 +556,7 @@ class BackgroudContainer extends StatelessWidget {
             sources!.end();
           }
         } catch (e) {
+          // ignore: avoid_print
           print('Accept: $e');
         }
         accepted = false;
@@ -576,7 +577,8 @@ class BackgroudContainer extends StatelessWidget {
 /// Custom MenuButton to display a menu button following Material Design example
 class MenuButton<T> extends StatefulWidget {
   const MenuButton(
-      {required final this.child,
+      {Key? key,
+      required final this.child,
       required final this.items,
       required final this.itemBuilder,
       final this.toggledChild,
@@ -598,7 +600,8 @@ class MenuButton<T> extends StatefulWidget {
       final this.labelDecoration,
       final this.itemBackgroundColor = Colors.white,
       final this.menuButtonBackgroundColor = Colors.white})
-      : assert(showSelectedItemOnList || selectedItem != null);
+      : assert(showSelectedItemOnList || selectedItem != null),
+        super(key: key);
 
   /// Widget to display the default button to trigger the menu button
   final Widget child;
@@ -1094,7 +1097,7 @@ class __MenuState<T> extends State<_Menu<T>> {
   void initState() {
     super.initState();
     if (widget.crossTheEdge == true) {
-      WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
+      WidgetsBinding.instance.addPostFrameCallback((Duration timeStamp) {
         final RenderBox renderBox =
             key.currentContext!.findRenderObject() as RenderBox;
         final Offset offset = renderBox.globalToLocal(Offset.zero);
@@ -1142,9 +1145,7 @@ class __MenuState<T> extends State<_Menu<T>> {
               color: widget.route.decoration.color ??
                   widget.route.itemBackgroundColor,
               border: widget.route.decoration.border,
-              borderRadius: widget.route.decoration.borderRadius != null
-                  ? widget.route.decoration.borderRadius
-                  : null,
+              borderRadius: widget.route.decoration.borderRadius,
               boxShadow: <BoxShadow>[
                 BoxShadow(
                     color: Color.fromARGB(
@@ -1286,11 +1287,11 @@ class MenuButtonUtils {
       }
 
       bool isOldSelectedAlready = false;
-      items.forEach((dynamic element) {
+      for (var element in items) {
         if (element == oldSelected) {
           isOldSelectedAlready = true;
         }
-      });
+      }
 
       items.removeWhere((Object? element) => element == selectedItem);
       if (!isOldSelectedAlready) {

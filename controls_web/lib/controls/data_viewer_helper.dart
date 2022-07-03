@@ -1,9 +1,7 @@
 // @dart=2.12
 import 'package:controls_web/controls/masked_field.dart';
-//import 'package:controls_web/controls/paginated_grid.dart';
+import 'package:controls_web/controls/paginated_grid.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-//import 'package:controls_data/odata_client.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 import 'package:flutter/services.dart';
 
@@ -23,7 +21,7 @@ class DataViewerHelper {
   static double get defaultWidth => 300.0;
   static _simnaoFn(p) {
     var t = p['t'];
-    dynamic? v = p['v'];
+    dynamic v = p['v'];
     var f = p['f'];
     if ((t == null) && (v != null)) {
       if (v is bool) {
@@ -48,7 +46,7 @@ class DataViewerHelper {
     return {'t': t, 'f': f, 'v': v};
   }
 
-  static simnaoColumn(column,
+  static simnaoColumn(PaginatedGridColumn? column,
       {dynamic trueValue,
       dynamic falseValue,
       Color? color,
@@ -58,9 +56,9 @@ class DataViewerHelper {
       column.builder = (idx, row) {
         /// visualiza switch no grid
         var r = DataViewerHelper._simnaoFn(
-            {'v': row[column.name], 't': trueValue, 'f': falseValue});
+            {'v': row[column.name!], 't': trueValue, 'f': falseValue});
 
-        bool b = (row[column.name] ?? r['v']) == r['t'];
+        bool b = (row[column.name!] ?? r['v']) == r['t'];
         return Text(((b) ? 'Sim' : 'Não'),
             style: TextStyle(
               color: (b) ? color : null,
@@ -68,7 +66,7 @@ class DataViewerHelper {
       };
       column.editBuilder = (a, b, c, row) {
         var r = DataViewerHelper._simnaoFn(
-            {'v': row[column.name], 't': trueValue, 'f': falseValue});
+            {'v': row[column.name!], 't': trueValue, 'f': falseValue});
 
         /// define switch para edição
         return MaskedSwitchFormField(
@@ -76,12 +74,12 @@ class DataViewerHelper {
           activeTrackColor: (color != null) ? color.lighten(50) : Colors.blue,
           inactiveTrackColor: inactiveTrackColor ??
               ((color != null) ? color.lighten(80) : Colors.blue),
-          label: column.label ?? column.name,
-          value: (row[column.name] ?? r['v']) == r['t'],
+          label: column.label ?? column.name!,
+          value: (row[column.name!] ?? r['v']) == r['t'],
           onChanged: (x) {
-            row[column.name] = x ? r['t'] : r['f'];
+            row[column.name!] = x ? r['t'] : r['f'];
             if (onChanged != null)
-              onChanged(column.name, row[column.name] ?? r['f']);
+              onChanged(column.name!, row[column.name!] ?? r['f']);
           },
         );
       };
@@ -89,12 +87,13 @@ class DataViewerHelper {
     }
   }
 
-  static intColumn(column, {Widget? suffix, Widget? prefix, int? maxLength}) {
+  static intColumn(PaginatedGridColumn column,
+      {Widget? suffix, Widget? prefix, int? maxLength}) {
     return doubleColumn(column,
         decimais: 0, suffix: suffix, prefix: prefix, maxLength: maxLength);
   }
 
-  static doubleColumn(column,
+  static doubleColumn(PaginatedGridColumn? column,
       {int decimais = 2,
       Widget? suffix,
       Widget? prefix,
@@ -106,9 +105,9 @@ class DataViewerHelper {
       if (column.builder != null) builder = column.builder;
       column.align = align ?? column.align ?? Alignment.centerRight;
       column.builder = (idx, row) {
-        if (builder != null) return builder(idx, row);
-        dynamic v = row[column.name];
-        String txt = '${v}';
+        if (builder != null) return builder(idx, row) ?? Container();
+        dynamic v = row[column.name!];
+        String txt = '$v';
         if (v is double && decimais >= 0) txt = v.toStringAsFixed(decimais);
 
         txt = txt.replaceAll('.', ',');
@@ -118,36 +117,28 @@ class DataViewerHelper {
       };
       column.editBuilder = (a, b, c, row) {
         /// define switch para edição
-        return Container(
+        return SizedBox(
             width: column.width ?? defaultWidth,
             child: TextFormField(
-              //label: column.label,
-              initialValue: '${row[column.name] ?? ''}'.replaceAll('.', ','),
               keyboardType: (decimais <= 0)
                   ? TextInputType.number
                   : TextInputType.numberWithOptions(decimal: decimais > 0),
               inputFormatters: <TextInputFormatter>[
-                if (decimais == 0) FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatterExt.decimal(decimais),
               ],
               maxLength: maxLength ?? column.maxLength,
               decoration: InputDecoration(
                   labelText: (column.editInfo != null)
                       ? (column.editInfo ?? '')
                           .replaceAll('{label}', column.label ?? '')
-                      : column.label ?? column.name,
+                      : column.label ?? column.name!,
                   suffix: suffix,
                   prefix: prefix,
-                  helperText: column.tooltip ?? ''
-
-                  //    ? (widget.sample != null)
-                  //        ? 'Ex: ${widget.sample}'20
-                  //        : null
-                  //    : null,
-                  //hintStyle: theme.inputDecorationTheme.hintStyle,
-                  ),
+                  helperText: column.tooltip ?? ''),
               onChanged: (x) {
-                row[column.name] = double.tryParse(x.replaceAll(',', '.')) ?? 0;
-                if (onChanged != null) onChanged(row[column.name] ?? 0);
+                row[column.name!] =
+                    double.tryParse(x.replaceAll(',', '.')) ?? 0;
+                if (onChanged != null) onChanged(row[column.name!] ?? 0);
               },
             ));
       };
@@ -155,23 +146,23 @@ class DataViewerHelper {
     }
   }
 
-  static stringColumn(column) {
+  static stringColumn(PaginatedGridColumn? column) {
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
         return Text(
-          row[column.name] ?? '',
+          row[column.name!] ?? '',
         );
       };
       column.editBuilder = (a, b, c, row) {
         /// define switch para edição
-        return Container(
+        return SizedBox(
             width: column.width ?? defaultWidth,
             child: MaskedTextField(
               label: column.label,
-              initialValue: row[column.name] ?? '',
+              initialValue: row[column.name!] ?? '',
               onChanged: (x) {
-                row[column.name] = x;
+                row[column.name!] = x;
               },
             ));
       };
@@ -179,15 +170,15 @@ class DataViewerHelper {
     }
   }
 
-  static dateTimeColumn(column,
+  static dateTimeColumn(PaginatedGridColumn? column,
       {mask = 'dd/MM/yyyy', DateTime? firstDate, DateTime? lastDate}) {
     if (column != null) {
       column.builder = (idx, row) {
         /// visualiza switch no grid
         dynamic v = row[column.name];
-        if (v == null) return Text('');
+        if (v == null) return const Text('');
         DateTime d = _toDateTime(v); //DateTime.tryParse(v);
-        if (d == null) return Text('');
+        //if (d == null) return Text('');
         return Text(d.format(mask));
       };
       column.editBuilder = (a, b, c, row) {
@@ -203,7 +194,7 @@ class DataViewerHelper {
           autofocus: column.autofocus,
           initialValue: d,
           onChanged: (x) {
-            row[column.name] = x;
+            row[column.name!] = x;
           },
         );
       };
@@ -212,7 +203,7 @@ class DataViewerHelper {
   }
 
   /// [hideColumn] retira a coluna do grid
-  static hideColumn(column) {
+  static hideColumn(PaginatedGridColumn? column) {
     if (column != null) {
       /// é uma coluna chave
       column.isPrimaryKey = true;
@@ -226,7 +217,8 @@ class DataViewerHelper {
     return column;
   }
 
-  static text(column, {int decimais = 2, double? width, Color? color}) {
+  static text(PaginatedGridColumn? column,
+      {int decimais = 2, double? width, Color? color}) {
     if (column != null) {
       column.editBuilder = (a, b, c, row) {
         return Container(
@@ -234,9 +226,9 @@ class DataViewerHelper {
           color: color,
           child: MaskedTextField(
             label: column.label,
-            initialValue: (row[column.name] ?? ''),
+            initialValue: (row[column.name!] ?? ''),
             onSaved: (x) {
-              row[column.name] = x;
+              row[column.name!] = x;
             },
           ),
         );
@@ -245,7 +237,8 @@ class DataViewerHelper {
     return column;
   }
 
-  static moneyColumn(column, {int decimais = 2, double? width, Color? color}) {
+  static moneyColumn(PaginatedGridColumn? column,
+      {int decimais = 2, double? width, Color? color}) {
     if (column != null) {
       column.align = Alignment.centerRight;
       column.builder = (idx, row) {
@@ -262,7 +255,7 @@ class DataViewerHelper {
             precision: decimais,
             initialValue: (row[column.name] ?? 0.0) + 0.0,
             onSaved: (x) {
-              row[column.name] = x;
+              row[column.name!] = x;
             },
           ),
         );
@@ -279,6 +272,12 @@ class DataViewerHelper {
 
   static showOnly(ctr, List<String> list) {
     for (var item in ctr.columns)
-      if (list.contains(item.name)) item.visible = true;
+      if (list.contains(item.name!)) item.visible = true;
   }
+}
+
+extension FilteringTextInputFormatterExt on FilteringTextInputFormatter {
+  static decimal(dec) => MaskedTextInputFormatter.numeric(dec);
+  static date() => MaskedTextInputFormatter.date();
+  static format(String mask) => MaskedTextInputFormatter.format(mask);
 }

@@ -77,7 +77,7 @@ class MaskedEndereco extends StatefulWidget {
   final double? width;
   final Function(String)? onChanged;
   final String Function(Map<String, dynamic>)? validator;
-  MaskedEndereco({
+  const MaskedEndereco({
     Key? key,
     this.initialValues,
     this.onSave,
@@ -87,7 +87,7 @@ class MaskedEndereco extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MaskedEnderecoState createState() => _MaskedEnderecoState();
+  State<MaskedEndereco> createState() => _MaskedEnderecoState();
 }
 
 class _MaskedEnderecoState extends State<MaskedEndereco> {
@@ -104,11 +104,11 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
   @override
   Widget build(BuildContext context) {
     values = widget.initialValues;
-    return Container(
+    return SizedBox(
       width: widget.width,
       child: Flex(direction: Axis.horizontal, children: [
         Container(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               minWidth: 80,
               maxWidth: 100,
             ),
@@ -120,11 +120,11 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
                   values!['cep'] = x;
                   doSave();
                 })),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
         Container(
-            constraints: BoxConstraints(
+            constraints: const BoxConstraints(
               minWidth: 80,
               maxWidth: 100,
             ),
@@ -136,7 +136,7 @@ class _MaskedEnderecoState extends State<MaskedEndereco> {
                   values!['numero'] = x;
                   doSave();
                 })),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
         Expanded(

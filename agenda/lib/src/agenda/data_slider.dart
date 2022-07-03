@@ -44,7 +44,7 @@ class DataSlider extends StatelessWidget {
                             : null,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  padding: EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -52,10 +52,10 @@ class DataSlider extends StatelessWidget {
                       Text((format != null) ? format!(d)! : '',
                           style: ((d.day == dataRef!.day) ||
                                   ((activated != null) && activated!(d)))
-                              ? TextStyle(
+                              ? const TextStyle(
                                   fontSize: 15, fontWeight: FontWeight.bold)
-                              : TextStyle(fontSize: 10)),
-                      CircleAvatar(
+                              : const TextStyle(fontSize: 10)),
+                      const CircleAvatar(
                         radius: 3,
                       ),
                     ],

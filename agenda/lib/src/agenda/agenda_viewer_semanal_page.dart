@@ -110,7 +110,7 @@ class DayCardColumn extends StatefulWidget {
   final DateTime? data;
   final double? panelWidth;
   final Color? color;
-  DayCardColumn(
+  const DayCardColumn(
       {Key? key, this.color = Colors.blue, this.data, this.panelWidth = 200})
       : super(key: key);
 
@@ -142,13 +142,13 @@ class _DayCardColumnState extends State<DayCardColumn> {
     AgendaController controller = DefaultAgenda.of(context)!.controller!;
     list.sources!.clear();
     mapa.clear();
-    controller.sources!.forEach((item) {
+    for (var item in controller.sources!) {
       if (item!.datainicio!.startOfDay() == widget.data!.startOfDay())
         list.sources!.add(item);
-    });
-    list.sources!.forEach((item) {
+    }
+    for (var item in list.sources!) {
       addMapa(item!);
-    });
+    }
 
     return ChangeNotifierProvider<DefaultSourceList>.value(
         value: list,
@@ -157,9 +157,9 @@ class _DayCardColumnState extends State<DayCardColumn> {
             mapa = {};
             list.sources!
                 .sort((a, b) => a!.datainicio!.compareTo(b!.datainicio!));
-            list.sources!.forEach((item) {
+            for (var item in list.sources!) {
               addMapa(item!);
-            });
+            }
 
             DefaultAgenda.setContext(context);
 
@@ -168,7 +168,7 @@ class _DayCardColumnState extends State<DayCardColumn> {
                 margin: EdgeInsets.all(responsive.isMobile ? 1 : 4),
                 elevation: responsive.isMobile ? 0 : null,
                 child: Consumer<DefaultSourceList>(
-                  builder: (a, list, c) => Container(
+                  builder: (a, list, c) => SizedBox(
                     width: _width,
                     child: Stack(children: [
                       AgendaPanelTitle(
@@ -250,7 +250,7 @@ class _DayCardColumnState extends State<DayCardColumn> {
 
   List<Widget> buildItem(list, controller, double width) {
     List<Widget> lst = [];
-    if (mapa.length == 0) return [];
+    if (mapa.isEmpty) return [];
     // inverter a ordem para o drop ficar por cima do item inferior
     for (int x = mapa.length - 1; x > -1; x--) {
       int hora = mapa.keys.elementAt(x);
@@ -289,7 +289,7 @@ class _DayCardColumnState extends State<DayCardColumn> {
                 itemCount: items.length,
                 builder: (ctx, idx) {
                   List<AgendaItem> litems = mapa[itemIndex]!;
-                  return Container(
+                  return SizedBox(
                     height: kMinInteractiveDimension,
                     child: ChangeNotifierProvider.value(
                       value: AgendaItemNotifier(value: litems[idx]),
@@ -343,15 +343,15 @@ class _DayCardColumnState extends State<DayCardColumn> {
   addMapa(AgendaItem item) {
     int hora = item.datainicio!.hour;
     if (mapa[hora] == null) mapa[hora] = [];
-    if (mapa[hora]!.indexOf(item) < 0) mapa[hora]!.add(item);
+    if (!mapa[hora]!.contains(item)) mapa[hora]!.add(item);
   }
 
   //int mapaCount(int hora) => (mapa[hora] == null) ? 0 : mapa[hora].length;
   Point mapaCount(AgendaItem item) {
     int i = 0;
     int p = 0;
-    mapa.keys.forEach((k) {
-      mapa[k]!.forEach((v) {
+    for (var k in mapa.keys) {
+      for (var v in mapa[k]!) {
         // item é longo;
         if (v.gid == item.gid) p = i;
         //    else {
@@ -365,8 +365,8 @@ class _DayCardColumnState extends State<DayCardColumn> {
             (v.datainicio!.isBefore(item.datainicio!) &&
                 v.datafim!.isAfter(item.datafim!))) i++;
         //  }
-      });
-    });
+      }
+    }
     return Point(x: i + 0.0, y: p + 0.0);
   }
 
@@ -407,7 +407,7 @@ class SemanalBackgroudContainer extends StatelessWidget {
   final Color? color;
   final int alpha;
   final int? interval;
-  SemanalBackgroudContainer(
+  const SemanalBackgroudContainer(
       {Key? key,
       this.hour,
       this.date,
@@ -486,6 +486,7 @@ class SemanalBackgroudContainer extends StatelessWidget {
             sources!.end();
           }
         } catch (e) {
+          // ignore: avoid_print
           print('Accept: $e');
         }
         accepted = false;

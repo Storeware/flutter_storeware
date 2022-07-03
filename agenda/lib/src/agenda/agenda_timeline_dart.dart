@@ -21,7 +21,7 @@ class VerticalTimeline extends StatelessWidget {
   final Function()? onNext;
   final Function()? onList;
   final DefaultSourceList? list;
-  VerticalTimeline({
+  const VerticalTimeline({
     Key? key,
     this.width,
     this.title,
@@ -59,12 +59,12 @@ class VerticalTimeline extends StatelessWidget {
         color: _color,
         elevation: 0,
         margin: EdgeInsets.all(responsive.isMobile ? 1 : 4),
-        child: Container(
+        child: SizedBox(
           width: _width,
           child: Stack(children: [
             Positioned(
               top: 0,
-              child: Container(
+              child: SizedBox(
                 height: _titleHeight,
                 width: _width,
                 child: Stack(
@@ -81,7 +81,7 @@ class VerticalTimeline extends StatelessWidget {
                           alignment: Alignment.center,
                           width: 15,
                           child: InkWell(
-                            child: Icon(Icons.arrow_left, size: 15),
+                            child: const Icon(Icons.arrow_left, size: 15),
                             onTap: () {
                               if (widget.onPrior != null) widget.onPrior();
                             },
@@ -101,7 +101,7 @@ class VerticalTimeline extends StatelessWidget {
                           height: _titleHeight,
                           width: 15,
                           child: InkWell(
-                            child: Icon(Icons.arrow_right, size: 15),
+                            child: const Icon(Icons.arrow_right, size: 15),
                             onTap: () {
                               if (widget.onNext != null) widget.onNext();
                             },
@@ -119,7 +119,7 @@ class VerticalTimeline extends StatelessWidget {
                           color: _color,
                           title: _title,
                           //resource: null,
-                          style: TextStyle(fontSize: kTimeFontSize),
+                          style: const TextStyle(fontSize: kTimeFontSize),
                           width: _width,
                           height: _titleHeight,
                         ),
@@ -153,13 +153,13 @@ class VerticalTimeline extends StatelessWidget {
                     width: _width,
                     decoration: BoxDecoration(
                         color: Colors.blue.withAlpha(i * 10),
-                        border: Border(
+                        border: const Border(
                             bottom: BorderSide(width: 1, color: Colors.grey))),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Text(responsive.isMobile ? '$i' : '$i:00',
-                            style: TextStyle(fontSize: kTimeFontSize)),
+                            style: const TextStyle(fontSize: kTimeFontSize)),
                         Expanded(child: Container()),
                       ],
                     ),
@@ -216,7 +216,7 @@ class AgendaPanelTitle extends StatelessWidget {
         style: theme.primaryTextTheme.bodyText1!,
         child: InkWell(
             child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               height: height ?? kTitleHeight,
               width: width,
               color: color ?? theme.primaryColor,
@@ -228,8 +228,8 @@ class AgendaPanelTitle extends StatelessWidget {
                         if (count! > 0)
                           CircleAvatar(
                             radius: 10,
-                            child:
-                                Text('$count', style: TextStyle(fontSize: 10)),
+                            child: Text('$count',
+                                style: const TextStyle(fontSize: 10)),
                           ),
                       ],
                     )

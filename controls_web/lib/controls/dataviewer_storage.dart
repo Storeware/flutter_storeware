@@ -1,10 +1,3 @@
-//library data_viewer;
-//import 'package:controls_data/data.dart';
-//import 'package:controls_web/controls/data_viewer.dart';
-//import 'package:controls_web/controls/dialogs_widgets.dart';
-//import 'package:controls_web/controls/masked_field.dart';
-//import 'package:flutter/material.dart';
-
 part of data_viewer;
 
 class DataViewerStorage<T> extends StatelessWidget {

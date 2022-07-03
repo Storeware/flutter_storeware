@@ -177,7 +177,7 @@ class _FirestorageUploadImageState extends State<FirestorageUploadImage> {
                           ImageToUpload().load((f) async {
                             //if (f != null) {
                             var size = f.size;
-                            print(size);
+                            // print(size);
                             if (size > widget.maxBytes!)
                               ErrorNotify().notify(
                                   'Imagem com $size bytes (max: ${widget.maxBytes} bytes)');

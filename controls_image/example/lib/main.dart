@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       home: ImageEditorView(
         onSelected: (Uint8List bytes) {
           // ignore: avoid_print
-          print(bytes);
+          // print(bytes);
         },
         useFilter: true,
       ),

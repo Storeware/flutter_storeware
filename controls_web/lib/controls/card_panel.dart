@@ -6,14 +6,25 @@ class CardPanel extends StatelessWidget {
   final Widget? title;
   final List<Widget>? children;
   final Widget? bottom;
+  final double? height;
+  final double? width;
+  final Axis scrollDirection;
   const CardPanel(
-      {Key? key, this.title, this.children, this.bottom, this.hideOption})
+      {Key? key,
+      this.height = 120,
+      this.width,
+      this.scrollDirection = Axis.vertical,
+      this.title,
+      this.children,
+      this.bottom,
+      this.hideOption})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: height,
+      width: width,
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
@@ -22,6 +33,7 @@ class CardPanel extends StatelessWidget {
           //backgroundColor: Colors.transparent,
         ),
         body: ListView(
+          scrollDirection: scrollDirection,
           children: children ?? [],
         ),
         bottomNavigationBar: Column(

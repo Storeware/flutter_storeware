@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the getTimeAgo method from the TimeAgo class, for the Dart programming language.">
+  <title>getTimeAgo method - TimeAgo class - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/TimeAgo-class.html">TimeAgo</a></li>
+    <li class="self-crumb">getTimeAgo method</li>
+  </ol>
+  <div class="self-name">getTimeAgo</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">getTimeAgo</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+<span class="name ">getTimeAgo</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="getTimeAgo-param-timeStamp"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">timeStamp</span>, </span></li>
+<li><span class="parameter" id="getTimeAgo-param-language">{<span class="type-annotation"><a href="../../flutter_storeware/Language.html">Language</a>?</span> <span class="parameter-name">language</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static String getTimeAgo(int? timeStamp, {Language? language}) {
+  assert(timeStamp != null,
+      &quot;Parameter timeStamp must not be null: TimeAgo.getTimeAgo(YOUR_TIME_STAMP)&quot;);
+  language = language ?? Language.ENGLISH;
+
+  if (timeStamp! &lt; 1000000000000) {
+    timeStamp *= 1000;
+  }
+
+  int now = DateTime.now().millisecondsSinceEpoch;
+  if (timeStamp &gt; now || timeStamp &lt;= 0) {
+    final int diff = timeStamp - now;
+    final hora = diff ~&#47; HOUR_MILLIS;
+    final min = diff ~&#47; MINUTE_MILLIS;
+    final dia = (diff ~&#47; DAY_MILLIS);
+    final mes = (diff ~&#47; MONTH_MILLIS);
+    final ano = (diff ~&#47; YEAR_MILLIS);
+
+    if (ano &gt; 0)
+      return &#39;mais de ${(ano).toStringAsFixed(0)} ano${(ano &gt; 1) ? &#39;s&#39; : &#39;&#39;}&#39;;
+    if (mes &gt; 1)
+      return &#39;mais de ${(mes).toStringAsFixed(0)} mes${(mes &gt; 1) ? &#39;es&#39; : &#39;&#39;}&#39;;
+    if (dia &gt; 0)
+      return &#39;em ${(dia).toStringAsFixed(0)} dia${(dia &gt; 1) ? &#39;s&#39; : &#39;&#39;}&#39;;
+    if (hora &gt; 0)
+      return &#39;em ${(hora).toStringAsFixed(0)} hr${(hora &gt; 1) ? &#39;s&#39; : &#39;&#39;} ${((min - (hora * 60))).toStringAsFixed(0)} min${(min &gt; 1) ? &#39;s&#39; : &#39;&#39;}&#39;;
+    if (min &gt; 0)
+      return &#39;em ${(min).toStringAsFixed(0)} min${(min &gt; 1) ? &#39;s&#39; : &#39;&#39;}&#39;;
+
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;just now&quot;;
+      case Language.PERSIAN:
+        return &quot;همین حالا&quot;;
+      case Language.ARABIC:
+        return &quot;الآن&quot;;
+      case Language.GERMAN:
+        return &quot;jetzt&quot;;
+      case Language.SPANISH:
+        return &quot;ahora&quot;;
+      case Language.CHINESE:
+        return &quot;现在&quot;;
+      case Language.RUSSIAN:
+        return &quot;прямо сейчас&quot;;
+      case Language.PORTUGUESE:
+        return &quot;agora&quot;;
+      case Language.JAPANESE:
+        return &quot;ちょうど今&quot;;
+      case Language.HINDI:
+        return &quot;अभी&quot;;
+      case Language.FRENCH:
+        return &quot;à présent&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  }
+
+  final int difference = now - timeStamp;
+  if (difference &lt; MINUTE_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;just now&quot;;
+      case Language.PERSIAN:
+        return &quot;همین حالا&quot;;
+      case Language.ARABIC:
+        return &quot;الآن&quot;;
+      case Language.GERMAN:
+        return &quot;jetzt&quot;;
+      case Language.SPANISH:
+        return &quot;ahora&quot;;
+      case Language.CHINESE:
+        return &quot;现在&quot;;
+      case Language.RUSSIAN:
+        return &quot;прямо сейчас&quot;;
+      case Language.PORTUGUESE:
+        return &quot;agora&quot;;
+      case Language.JAPANESE:
+        return &quot;ちょうど今&quot;;
+      case Language.HINDI:
+        return &quot;अभी&quot;;
+      case Language.FRENCH:
+        return &quot;à présent&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else if (difference &lt; 2 * MINUTE_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;a minute ago&quot;;
+      case Language.PERSIAN:
+        return &quot;یک دقیقه پیش&quot;;
+      case Language.ARABIC:
+        return &quot;منذ دقيقة&quot;;
+      case Language.GERMAN:
+        return &quot;vor einer Minute&quot;;
+      case Language.SPANISH:
+        return &quot;hace un minuto&quot;;
+      case Language.CHINESE:
+        return &quot;一分钟前&quot;;
+      case Language.RUSSIAN:
+        return &quot;прямо сейчас&quot;;
+      case Language.PORTUGUESE:
+        return &quot;um minuto atrás&quot;;
+      case Language.JAPANESE:
+        return &quot;分前&quot;;
+      case Language.HINDI:
+        return &quot;एक मिनट पहले&quot;;
+      case Language.FRENCH:
+        return &quot;Il y&#39;a une minute&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else if (difference &lt; 50 * MINUTE_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} minutes ago&quot;;
+      case Language.PERSIAN:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} دقیقه پیش&quot;;
+      case Language.ARABIC:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} دقائق مضت &quot;;
+      case Language.GERMAN:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} Vor ein paar Minuten&quot;;
+      case Language.SPANISH:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} hace minutos&quot;;
+      case Language.CHINESE:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} 几分钟前&quot;;
+      case Language.RUSSIAN:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} минут назад&quot;;
+      case Language.PORTUGUESE:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} minutos atrás&quot;;
+      case Language.JAPANESE:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} 数分前&quot;;
+      case Language.HINDI:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} कुछ देर पहले&quot;;
+      case Language.FRENCH:
+        return &quot;${(difference &#47; MINUTE_MILLIS).toString().split(&quot;.&quot;)[0]} dernières minutes&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else if (difference &lt; 90 * MINUTE_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;an hour ago&quot;;
+      case Language.PERSIAN:
+        return &quot;یک ساعت پیش&quot;;
+      case Language.ARABIC:
+        return &quot;منذ ساعة&quot;;
+      case Language.GERMAN:
+        return &quot;vor einer Stunde&quot;;
+      case Language.SPANISH:
+        return &quot;hace una hora&quot;;
+      case Language.CHINESE:
+        return &quot;一小时前&quot;;
+      case Language.RUSSIAN:
+        return &quot;час назад&quot;;
+      case Language.PORTUGUESE:
+        return &quot;uma hora atrás&quot;;
+      case Language.JAPANESE:
+        return &quot;一時間前&quot;;
+      case Language.HINDI:
+        return &quot;एक घंटा पहले&quot;;
+      case Language.FRENCH:
+        return &quot;il y a une heure&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else if (difference &lt; 24 * HOUR_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} hours ago&quot;;
+      case Language.PERSIAN:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} ساعت پیش&quot;;
+      case Language.ARABIC:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} ساعات مضت &quot;;
+      case Language.GERMAN:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} Vor Stunden&quot;;
+      case Language.SPANISH:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} Horas atras&quot;;
+      case Language.CHINESE:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} 几小时前&quot;;
+      case Language.RUSSIAN:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} прошедшие часы&quot;;
+      case Language.PORTUGUESE:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} Horas atrás&quot;;
+      case Language.JAPANESE:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} 時間前&quot;;
+      case Language.HINDI:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} घंटो पहले&quot;;
+      case Language.FRENCH:
+        return &quot;${(difference &#47; HOUR_MILLIS).toString().split(&quot;.&quot;)[0]} heures passées&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else if (difference &lt; 48 * HOUR_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;yesterday&quot;;
+      case Language.PERSIAN:
+        return &quot;دیروز&quot;;
+      case Language.ARABIC:
+        return &quot;في الامس&quot;;
+      case Language.GERMAN:
+        return &quot;gestern&quot;;
+      case Language.SPANISH:
+        return &quot;ayer&quot;;
+      case Language.CHINESE:
+        return &quot;昨天&quot;;
+      case Language.RUSSIAN:
+        return &quot;вчера&quot;;
+      case Language.PORTUGUESE:
+        return &quot;ontem&quot;;
+      case Language.JAPANESE:
+        return &quot;昨日&quot;;
+      case Language.HINDI:
+        return &quot;बिता कल&quot;;
+      case Language.FRENCH:
+        return &quot;hier&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else if (difference &lt; 30 * DAY_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} days ago&quot;;
+      case Language.PERSIAN:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} روز قبل&quot;;
+      case Language.ARABIC:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} أيام مضت &quot;;
+      case Language.GERMAN:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} Vor Tagen&quot;;
+      case Language.SPANISH:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} hace días&quot;;
+      case Language.CHINESE:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} 几天前&quot;;
+      case Language.RUSSIAN:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} дней назад&quot;;
+      case Language.PORTUGUESE:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} dias atrás&quot;;
+      case Language.JAPANESE:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} 数日前&quot;;
+      case Language.HINDI:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} दिन पहले&quot;;
+      case Language.FRENCH:
+        return &quot;${(difference &#47; DAY_MILLIS).toString().split(&quot;.&quot;)[0]} jours passés&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else if (difference &lt; 12 * MONTH_MILLIS) {
+    switch (language) {
+      case Language.ENGLISH:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;a month ago&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} months ago&quot;;
+      case Language.PERSIAN:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;یک ماه پیش&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} ماه قبل&quot;;
+      case Language.ARABIC:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;قبل شهر&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} أشهر مضت &quot;;
+      case Language.GERMAN:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;vor einem Monat&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} vor wenigen Monaten&quot;;
+      case Language.SPANISH:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;hace un mes&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} Hace meses&quot;;
+      case Language.CHINESE:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;一个月前&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} 几个月前&quot;;
+      case Language.RUSSIAN:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;месяц назад&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} прошедшие месяцы&quot;;
+      case Language.PORTUGUESE:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;um mês atrás&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} meses atrás&quot;;
+      case Language.JAPANESE:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;一ヶ月前&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} 数か月前&quot;;
+      case Language.HINDI:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;एक महीने पहले&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} महिनो पहले&quot;;
+      case Language.FRENCH:
+        return (difference &#47; MONTH_MILLIS &lt; 2)
+            ? &quot;il y a un mois&quot;
+            : &quot;${(difference &#47; MONTH_MILLIS).toString().split(&quot;.&quot;)[0]} derniers mois&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  } else {
+    switch (language) {
+      case Language.ENGLISH:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;a year ago&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} years ago&quot;;
+      case Language.PERSIAN:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;یک سال پیش&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} سال پیش&quot;;
+      case Language.ARABIC:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;قبل عام&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} سنين مضت &quot;;
+      case Language.GERMAN:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;vor einem Jahr&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} vor Jahren&quot;;
+      case Language.SPANISH:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;Hace un año&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} hace años que&quot;;
+      case Language.CHINESE:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;一年前&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} 几年前&quot;;
+      case Language.RUSSIAN:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;год назад&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} прошедшие годы&quot;;
+      case Language.PORTUGUESE:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;um ano atrás&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} anos atrás&quot;;
+      case Language.JAPANESE:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;一年前&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} 数年前&quot;;
+      case Language.HINDI:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;एक साल पहले&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} बहुत साल पहले&quot;;
+      case Language.FRENCH:
+        return (difference &#47; YEAR_MILLIS &lt; 2)
+            ? &quot;il y a un an&quot;
+            : &quot;${(difference &#47; YEAR_MILLIS).toString().split(&quot;.&quot;)[0]} dernières années&quot;;
+      default:
+        return &quot;&quot;;
+    }
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/TimeAgo-class.html">TimeAgo</a></li>
+  <li class="self-crumb">getTimeAgo method</li>
+</ol>
+
+
+    <h5>TimeAgo class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../flutter_storeware/TimeAgo-class.html#constructors">Constructors</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/TimeAgo.html">TimeAgo</a></li>
+
+
+    <li class="section-title inherited">
+      <a href="../../flutter_storeware/TimeAgo-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/TimeAgo-class.html#instance-methods">Methods</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/TimeAgo-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+        <li class="section-title"><a href="../../flutter_storeware/TimeAgo-class.html#static-methods">Static methods</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/getTimeAgo.html">getTimeAgo</a></li>
+
+        <li class="section-title"><a href="../../flutter_storeware/TimeAgo-class.html#constants">Constants</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/DAY_MILLIS-constant.html">DAY_MILLIS</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/HOUR_MILLIS-constant.html">HOUR_MILLIS</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/MINUTE_MILLIS-constant.html">MINUTE_MILLIS</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/MONTH_MILLIS-constant.html">MONTH_MILLIS</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/SECOND_MILLIS-constant.html">SECOND_MILLIS</a></li>
+          <li><a href="../../flutter_storeware/TimeAgo/YEAR_MILLIS-constant.html">YEAR_MILLIS</a></li>
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

@@ -348,7 +348,6 @@ class Dialogs {
             FutureBuilder<T>(
                 future: onWaiting!(),
                 builder: (a, b) {
-                  print(b.connectionState);
                   if (b.connectionState == ConnectionState.waiting)
                     return Align(child: CircularProgressIndicator());
                   if (onDone != null && b.hasData) onDone(b.data!);

@@ -1,13 +1,16 @@
 //import 'package:exemple/controls_activities_view.dart';
 //import 'package:exemple/controls_clean_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_storeware/index.dart';
+import 'package:intl/intl.dart';
 
 //import 'charts_view.dart';
 //import 'controls_view.dart';
 import 'home_view.dart';
 
 void main() {
+  Intl.defaultLocale = 'pt_BR';
   runApp(const MyApp());
 }
 
@@ -19,6 +22,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Controls - Exemplos',
+      locale: const Locale('pt', 'BR'),
+      supportedLocales: const [
+        Locale('pt', 'BR'),
+        Locale('en', 'US'),
+      ],
+      localizationsDelegates: const [
+        // ... app-specific localization delegate[s] here
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

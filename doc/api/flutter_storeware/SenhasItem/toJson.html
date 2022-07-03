@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the toJson method from the SenhasItem class, for the Dart programming language.">
+  <title>toJson method - SenhasItem class - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem-class.html">SenhasItem</a></li>
+    <li class="self-crumb">toJson method</li>
+  </ol>
+  <div class="self-name">toJson</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">toJson</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
+<span class="name ">toJson</span>(<wbr>)
+
+      <div class="features">override</div>
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">Map&lt;String, dynamic&gt; toJson() {
+  final Map&lt;String, dynamic&gt; data = new Map&lt;String, dynamic&gt;();
+  data[&#39;aplicacao&#39;] = this.aplicacao;
+  data[&#39;caixa&#39;] = this.caixa;
+  data[&#39;codigo&#39;] = this.codigo;
+  data[&#39;inativo&#39;] = this.inativo;
+  data[&#39;nome&#39;] = this.nome;
+  data[&#39;grupo&#39;] = this.grupo;
+  data[&#39;validade&#39;] = this.validade;
+  data[&#39;trocasenha&#39;] = this.trocasenha;
+  data[&#39;dtatualiz&#39;] = this.dtatualiz;
+  data[&#39;vendedor&#39;] = this.vendedor;
+  data[&#39;funcao&#39;] = this.funcao;
+
+  &#47;&#47;&#47; quando é um insert, o codigo é gerado no servidor.
+  if (this.codigo != null) data[&#39;id&#39;] = this.codigo;
+  return data;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/SenhasItem-class.html">SenhasItem</a></li>
+  <li class="self-crumb">toJson method</li>
+</ol>
+
+
+    <h5>SenhasItem class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../flutter_storeware/SenhasItem-class.html#constructors">Constructors</a></li>
+          <li><a href="../../flutter_storeware/SenhasItem/SenhasItem.html">SenhasItem</a></li>
+          <li><a href="../../flutter_storeware/SenhasItem/SenhasItem.fromJson.html">fromJson</a></li>
+
+
+    <li class="section-title">
+      <a href="../../flutter_storeware/SenhasItem-class.html#instance-properties">Properties</a>
+    </li>
+    <li><a href="../../flutter_storeware/SenhasItem/aplicacao.html">aplicacao</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/caixa.html">caixa</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/codigo.html">codigo</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/dtatualiz.html">dtatualiz</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/funcao.html">funcao</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/grupo.html">grupo</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/grupoUpper.html">grupoUpper</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/id.html">id</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/inativo.html">inativo</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/isAdmin.html">isAdmin</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/isEmpty.html">isEmpty</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/isGestor.html">isGestor</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/isOperador.html">isOperador</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/isReadOnly.html">isReadOnly</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/nome.html">nome</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/notifier.html">notifier</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/state.html">state</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/trocasenha.html">trocasenha</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/validade.html">validade</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/vendedor.html">vendedor</a></li>
+
+    <li class="section-title"><a href="../../flutter_storeware/SenhasItem-class.html#instance-methods">Methods</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/byName.html">byName</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/changed.html">changed</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/copyTo.html">copyTo</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/copyWith.html">copyWith</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/dispose.html">dispose</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/fromDateTime.html">fromDateTime</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/fromMap.html">fromMap</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li><a href="../../flutter_storeware/SenhasItem/toJson.html">toJson</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+    <li class="inherited"><a href="../../flutter_storeware/DataItem/validate.html">validate</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/SenhasItem-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

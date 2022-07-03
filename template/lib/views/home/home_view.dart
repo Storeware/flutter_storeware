@@ -29,7 +29,7 @@ class _HomeViewState extends State<HomeView> {
   Future<bool> canClose(context) {
     lastBack ??= DateTime.now();
     var dif = DateTime.now().difference(lastBack!).inMilliseconds;
-    print(dif);
+    // print(dif);
     if (dif > 20 && dif < 500) {
       return Dialogs.okDlg(context,
           text: 'Deseja fechar o aplicativo ?', textButton: 'Fechar');

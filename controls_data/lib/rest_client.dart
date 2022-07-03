@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:connectivity/connectivity.dart';
+//import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:universal_io/io.dart';
+//import 'package:universal_io/io.dart';
 
 class RestClientBloC<T> {
   var _controller = StreamController<T>.broadcast();
@@ -68,14 +68,14 @@ class DataProcessingNotifier {
 
 class RestClientProvider<T> extends StatelessWidget {
   final RestClientBloC<T>? bloc;
-  final AsyncWidgetBuilder? builder;
+  final AsyncWidgetBuilder<T>? builder;
   final Widget? noDataChild;
   const RestClientProvider(
       {Key? key, @required this.bloc, @required this.builder, this.noDataChild})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
+    return StreamBuilder<T>(
       stream: bloc?.stream,
       builder: (a, b) {
         if (builder != null) return builder!(a, b);
@@ -219,7 +219,7 @@ class RestClient {
   }
 
   int statusCode = 0;
-  _decodeResp(Response resp) {
+  _decodeResp(Response<dynamic> resp) {
     statusCode = resp.statusCode!;
     if (resp.headers['content-type']
         .toString()
@@ -265,7 +265,7 @@ class RestClient {
     _setHeader();
     final _h = _headers;
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
-    Response? resp;
+    Response<dynamic>? resp;
     BaseOptions bo = BaseOptions(
         connectTimeout: connectionTimeout,
         followRedirects: followRedirects,
@@ -307,7 +307,6 @@ class RestClient {
         throw "Method inválido";
       //print('Response: $resp');
       notifyLog.notify('statusCode: $statusCode - $resp');
-      DataProcessingNotifier.stop();
       _decodeResp(resp);
       if (inDebug) {
         resp.data['url'] = url;
@@ -323,7 +322,6 @@ class RestClient {
       //} on TypeErrorImpl catch (e) {
       //  return throw '$e';
     } catch (e) {
-      DataProcessingNotifier.stop();
       try {
         error = formataMensagemErro('$method:$url', e);
         if (!silent)
@@ -334,6 +332,8 @@ class RestClient {
       } catch (err) {
         return throw '$e';
       }
+    } finally {
+      DataProcessingNotifier.stop();
     }
   }
 
@@ -416,7 +416,7 @@ class RestClient {
     Dio dio = this.dio ?? Dio(bo);
     //dio.transformer = ClientTransformer();
     DataProcessingNotifier.start();
-    Future<Response> ref;
+    Future<Response<dynamic>> ref;
     try {
       if (method == 'GET') {
         /*dio.interceptors.add(
@@ -440,7 +440,6 @@ class RestClient {
         throw "Method inválido";
 
       return ref.then((resp) {
-        DataProcessingNotifier.stop();
         _decodeResp(resp);
         if (inDebug) {
           resp.data['url'] = url;
@@ -456,16 +455,16 @@ class RestClient {
           return throw (resp.data);
         }
       }, onError: (e) {
-        DataProcessingNotifier.stop();
         error = formataMensagemErro(url, e);
         if (!silent) sendError(error);
         return throw error;
       });
     } catch (e) {
-      DataProcessingNotifier.stop();
       var error = formataMensagemErro(url, e);
       if (!silent) sendError(error);
       throw error;
+    } finally {
+      DataProcessingNotifier.stop();
     }
   }
 
@@ -568,10 +567,11 @@ class RestClient {
         }
       });
     } catch (e) {
-      DataProcessingNotifier.stop();
       error = formataMensagemErro(url, e);
       if (!silent) sendError(error);
       throw error;
+    } finally {
+      DataProcessingNotifier.stop();
     }
   }
 }

@@ -1,12 +1,12 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 
 import 'package:controls_web/controls/flutter_masked_text.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter/services.dart';
-//import 'flutter_masked_text.dart';
 import 'package:intl/intl.dart';
 import 'package:controls_web/controls/currency.dart';
-//import 'package:controls_extensions/extensions.dart';
+import 'package:flutter/services.dart';
 
 bool _showHelperText = true;
 
@@ -40,7 +40,7 @@ class MaskedTextField extends StatefulWidget {
   final InputDecoration? decoration;
 
   final Function(bool)? onFocusChange;
-  MaskedTextField({
+  const MaskedTextField({
     Key? key,
     this.validator,
     this.initialValue,
@@ -72,7 +72,7 @@ class MaskedTextField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MaskedTextFieldState createState() => _MaskedTextFieldState();
+  State<MaskedTextField> createState() => _MaskedTextFieldState();
 
   set showHelperText(bool x) {
     _showHelperText = x;
@@ -118,6 +118,7 @@ class MaskedTextField extends StatefulWidget {
                   if (value!.length < minLength) {
                     return 'senha muito curta ($minLength)';
                   }
+                  return null;
                 }));
   }
 
@@ -225,7 +226,7 @@ class MaskedTextField extends StatefulWidget {
                 var formatter = DateFormat(mask);
                 var d = formatter.parse(value);
                 var s = formatter.format(d);
-                if (s != value) return 'Data inválida (' + s + ')';
+                if (s != value) return 'Data inválida ($s)';
                 return null;
               },
           sample: '29/02/2020',
@@ -355,59 +356,57 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Container(
-      child: Focus(
-          onFocusChange: (x) {
-            if (widget.onFocusChange != null) widget.onFocusChange!(x);
+    return Focus(
+        onFocusChange: (x) {
+          if (widget.onFocusChange != null) widget.onFocusChange!(x);
+        },
+        child: TextFormField(
+          textAlign: widget.textAlign ?? TextAlign.start,
+          maxLength: widget.maxLength,
+          readOnly: widget.readOnly!,
+          autofocus: widget.autofocus!,
+          initialValue:
+              (_controller == null) ? widget.initialValue ?? '' : null,
+          controller: _controller,
+          style: widget.style ??
+              theme.textTheme.bodyText1!.copyWith(fontSize: widget.fontSize),
+          decoration: widget.decoration ??
+              InputDecoration(
+                fillColor: widget.fillColor,
+                focusColor: widget.focusColor,
+                hoverColor: widget.hoverColor,
+                labelText: '${widget.label}',
+                suffix: widget.suffix,
+                prefix: widget.prefix,
+                helperText: !_showHelperText
+                    ? (widget.sample != null)
+                        ? 'Ex: ${widget.sample}'
+                        : widget.helperText
+                    : widget.helperText,
+                hintStyle: theme.inputDecorationTheme.hintStyle,
+              ),
+          keyboardType: widget.keyboardType ?? TextInputType.text,
+          onChanged: widget.onChanged,
+          validator: (value) {
+            if (widget.match != null) {
+              var r = RegExp(widget.match!);
+              if ((!r.hasMatch(value!)) || (r.stringMatch(value) != value))
+                return (widget.sample != null)
+                    ? 'Inválido (ex: ${widget.sample}) Resp: ${r.stringMatch(value)}'
+                    : 'Inválido';
+            }
+            return (widget.validator != null)
+                ? widget.validator!(value!)
+                : (value!.isEmpty)
+                    ? widget.errorText!.replaceFirst('%1', widget.label!)
+                    : null;
           },
-          child: TextFormField(
-            textAlign: widget.textAlign ?? TextAlign.start,
-            maxLength: widget.maxLength,
-            readOnly: widget.readOnly!,
-            autofocus: widget.autofocus!,
-            initialValue:
-                (_controller == null) ? widget.initialValue ?? '' : null,
-            controller: _controller,
-            style: widget.style ??
-                theme.textTheme.bodyText1!.copyWith(fontSize: widget.fontSize),
-            decoration: widget.decoration ??
-                InputDecoration(
-                  fillColor: widget.fillColor,
-                  focusColor: widget.focusColor,
-                  hoverColor: widget.hoverColor,
-                  labelText: '${widget.label}',
-                  suffix: widget.suffix,
-                  prefix: widget.prefix,
-                  helperText: !_showHelperText
-                      ? (widget.sample != null)
-                          ? 'Ex: ${widget.sample}'
-                          : widget.helperText
-                      : widget.helperText,
-                  hintStyle: theme.inputDecorationTheme.hintStyle,
-                ),
-            keyboardType: widget.keyboardType ?? TextInputType.text,
-            onChanged: widget.onChanged,
-            validator: (value) {
-              if (widget.match != null) {
-                var r = RegExp(widget.match!);
-                if ((!r.hasMatch(value!)) || (r.stringMatch(value) != value))
-                  return (widget.sample != null)
-                      ? 'Inválido (ex: ${widget.sample}) Resp: ${r.stringMatch(value)}'
-                      : 'Inválido';
-              }
-              return (widget.validator != null)
-                  ? widget.validator!(value!)
-                  : (value!.isEmpty)
-                      ? widget.errorText!.replaceFirst('%1', widget.label!)
-                      : null;
-            },
-            onSaved: (widget.onSaved == null)
-                ? null
-                : (String? x) {
-                    if (x != null) widget.onSaved!(x);
-                  },
-          )),
-    );
+          onSaved: (widget.onSaved == null)
+              ? null
+              : (String? x) {
+                  if (x != null) widget.onSaved!(x);
+                },
+        ));
   }
 }
 
@@ -428,7 +427,7 @@ class MaskedDatePicker extends StatefulWidget {
   final bool? readOnly;
   final int? dayFly;
   final bool? autofocus;
-  MaskedDatePicker(
+  const MaskedDatePicker(
       {Key? key,
       this.labelText,
       this.initialValue,
@@ -447,7 +446,7 @@ class MaskedDatePicker extends StatefulWidget {
       : super(key: key);
 
   @override
-  _MaskedDatePickerState createState() => _MaskedDatePickerState();
+  State<MaskedDatePicker> createState() => _MaskedDatePickerState();
 }
 
 class _MaskedDatePickerState extends State<MaskedDatePicker> {
@@ -489,7 +488,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Padding(
-        padding: EdgeInsets.only(top: 3),
+        padding: const EdgeInsets.only(top: 3),
         child: TextFormField(
             readOnly: widget.readOnly!,
             autofocus: widget.autofocus!,
@@ -501,13 +500,13 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
                 labelText: widget.labelText,
                 prefix: widget.prefix,
                 suffixIcon: GestureDetector(
-                    child: Icon(Icons.calendar_today),
                     onTap: (widget.readOnly!)
                         ? null
                         : () {
                             _dataController!.text = formatter!
                                 .format(widget.initialValue ?? DateTime.now());
-                          })),
+                          },
+                    child: const Icon(Icons.calendar_today))),
             validator: (x) {
               DateTime d = formatter!.parse(x!);
               //DateTime b = formatter.parse(x);
@@ -543,7 +542,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
          */
               if (widget.type == MaskedDatePickerType.dayAndTime)
                 getDate(context, d).then((x) {
-                  var d1 = x;
+                  // var d1 = x;
                   /*             getTime(context).then((h) {
                     var d = DateTime(d1.year, d1.month, d1.day)
                         .add(Duration(hours: h.hour))
@@ -558,9 +557,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
               widget.onChanged!(formatter!.parse(x));
             },
             onSaved: (x) {
-              if (widget.onSaved != null)
-                return widget.onSaved!(formatter!.parse(x!));
-              return null;
+              if (widget.onSaved != null) widget.onSaved!(formatter!.parse(x!));
             }));
   }
 
@@ -577,20 +574,6 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
       },
     );
   }
-/*
-  Future<TimeOfDay> getTime(BuildContext context) {
-    return showTimePicker(
-      context: context,
-      initialTime: TimeOfDay(
-          hour: widget.initialValue.hour, minute: widget.initialValue.minute),
-      builder: (BuildContext context, Widget child) {
-        return Theme(
-          data: ThemeData.light(),
-          child: child,
-        );
-      },
-    );
-  }*/
 }
 
 class MaskedCheckbox extends StatefulWidget {
@@ -607,7 +590,7 @@ class MaskedCheckbox extends StatefulWidget {
   final TextStyle? style;
   final double? height;
   final WrapCrossAlignment crossAxisAlignment;
-  MaskedCheckbox({
+  const MaskedCheckbox({
     Key? key,
     this.label,
     this.style,
@@ -625,7 +608,7 @@ class MaskedCheckbox extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MaskedCheckboxState createState() => _MaskedCheckboxState();
+  State<MaskedCheckbox> createState() => _MaskedCheckboxState();
 }
 
 class _MaskedCheckboxState extends State<MaskedCheckbox> {
@@ -685,7 +668,7 @@ class MaskedSwitchFormField extends StatefulWidget {
   final Widget? leading;
   final Widget? trailing;
   final bool? readOnly;
-  MaskedSwitchFormField({
+  const MaskedSwitchFormField({
     Key? key,
     this.value,
     this.label,
@@ -700,7 +683,7 @@ class MaskedSwitchFormField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _MaskedSwitchFormFieldState createState() => _MaskedSwitchFormFieldState();
+  State<MaskedSwitchFormField> createState() => _MaskedSwitchFormFieldState();
 }
 
 class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
@@ -710,7 +693,7 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
     super.build(context);
     ValueNotifier<bool> initialValue = ValueNotifier<bool>(widget.value!);
 
-    return Container(
+    return SizedBox(
         width: 180,
         height: kToolbarHeight,
         child: Row(mainAxisSize: MainAxisSize.min, children: [
@@ -718,7 +701,7 @@ class _MaskedSwitchFormFieldState extends State<MaskedSwitchFormField>
           if (widget.label != null)
             Expanded(
               child: Text(
-                widget.label ?? '' + '  ',
+                widget.label ?? '  ',
                 textAlign: TextAlign.right,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -792,7 +775,7 @@ class MaskedDropDownFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    if (items!.length == 0) items!.add('');
+    if (items!.isEmpty) items!.add('');
     String _value = value ?? '';
 
     /// regulariza value que não consta da lista ;
@@ -811,7 +794,7 @@ class MaskedDropDownFormField extends StatelessWidget {
 
     ValueNotifier<String> valueChange = ValueNotifier<String>(_value);
     return Container(
-      padding: padding ?? EdgeInsets.symmetric(horizontal: 10),
+      padding: padding ?? const EdgeInsets.symmetric(horizontal: 10),
       child: ValueListenableBuilder(
         valueListenable: valueChange,
         builder: (a, v, w) {
@@ -838,11 +821,9 @@ class MaskedDropDownFormField extends StatelessWidget {
                       return DropdownMenuItem(
                         key: UniqueKey(),
                         value: label,
-                        child: Container(
-                          child: Text(
-                            label,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        child: Text(
+                          label,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       );
                     }).toList(),
@@ -924,7 +905,7 @@ class MaskedMoneyFormField extends StatelessWidget {
             initialValue: initialValue!,
             decimalSeparator: ',',
             thousandSeparator: '.',
-            leftSymbol: leftSymbol! + '  ',
+            leftSymbol: '${leftSymbol!}  ',
             rightSymbol: rightSymbol ?? '',
             precision: precision ?? 2);
     _controller.selection = TextSelection.fromPosition(
@@ -937,7 +918,7 @@ class MaskedMoneyFormField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            constraints: BoxConstraints(minWidth: 100),
+            constraints: const BoxConstraints(minWidth: 100),
             height: kToolbarHeight + 3,
             width: width,
             child: Focus(
@@ -1004,7 +985,7 @@ class MaskedLabeled extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Padding(
-        padding: padding ?? EdgeInsets.only(left: 4), //, bottom: 2),
+        padding: padding ?? const EdgeInsets.only(left: 4), //, bottom: 2),
         child: Container(
           height: kToolbarHeight + 3,
           decoration: BoxDecoration(
@@ -1028,7 +1009,7 @@ class MaskedLabeled extends StatelessWidget {
                   Text(sublabel!, style: theme.inputDecorationTheme.hintStyle),
               ]),
               Padding(
-                  padding: EdgeInsets.only(bottom: 8, top: 4),
+                  padding: const EdgeInsets.only(bottom: 8, top: 4),
                   child: Text(value ?? '',
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
@@ -1053,8 +1034,8 @@ class MaskedLabeledFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController _controller =
-        this.controller ?? TextEditingController();
-    if (this.controller == null) _controller.text = initialValue ?? '';
+        controller ?? TextEditingController();
+    if (controller == null) _controller.text = initialValue ?? '';
     return TextFormField(
       controller: _controller,
       decoration: InputDecoration(labelText: labelText),
@@ -1113,6 +1094,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
       return '${v ?? initialValue ?? ''}';
   }
 
+  // ignore: avoid_shadowing_type_parameters
   Type typeOf<T>() => T;
   T setValue(String value) {
     if (onSetValue != null) {
@@ -1139,8 +1121,8 @@ class MaskedSearchFormField<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    final TextEditingController _controller = this.controller ??
-        TextEditingController(text: getValueStr(getValue(initialValue!)));
+    final TextEditingController _controller = controller ??
+        TextEditingController(text: getValueStr(getValue(initialValue)));
     return Focus(
         canRequestFocus: false,
         onFocusChange: (x) {
@@ -1194,5 +1176,53 @@ class MaskedSearchFormField<T> extends StatelessWidget {
     var v = '$value';
     if (v == '0' || v == '0.0') return '';
     return value;
+  }
+}
+
+class MaskedTextInputFormatter extends TextInputFormatter {
+  MaskedTextInputFormatter({required this.match, this.expectLenght = 0});
+
+  final RegExp match;
+  final int expectLenght;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue, // unused.
+    TextEditingValue newValue,
+  ) {
+    if (expectLenght > 0 && newValue.text.length < expectLenght) {
+      return newValue;
+    }
+
+    String? truncated = match.stringMatch(newValue.text) ??
+        newValue.text.substring(0, newValue.text.length - 1);
+
+    if (truncated == newValue.text) {
+      return newValue;
+    }
+
+    return TextEditingValue(
+      text: truncated,
+      selection: TextSelection.collapsed(offset: truncated.length),
+      composing: TextRange.empty,
+    );
+  }
+
+  static numeric(dec) {
+    return MaskedTextInputFormatter(match: RegExp('^(\\d+)?\\.?\\d{0,$dec}'));
+  }
+
+  static alfa() {
+    return MaskedTextInputFormatter(match: RegExp('^[a-zA-Z]*'));
+  }
+
+  static date() {
+    return MaskedTextInputFormatter(
+        match: RegExp(
+            r'^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$'));
+  }
+
+  static format(String mask) {
+    return MaskedTextInputFormatter(match: RegExp(mask));
   }
 }

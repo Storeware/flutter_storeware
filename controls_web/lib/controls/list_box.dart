@@ -30,7 +30,7 @@ class ListBox extends StatefulWidget {
   final Function(int index, String value)? onChanged;
 
   @override
-  _ListBoxState createState() => _ListBoxState();
+  State<ListBox> createState() => _ListBoxState();
 }
 
 class _ListBoxState extends State<ListBox> {
@@ -55,10 +55,10 @@ class _ListBoxState extends State<ListBox> {
       children: [
         if (widget.title != null) ...[
           DefaultTextStyle(
-            child: widget.title!,
             style: theme.textTheme.bodyText1!.copyWith(
               fontSize: theme.textTheme.bodyText1!.fontSize! * 1.2,
             ),
+            child: widget.title!,
           ),
           Divider(
             color: widget.dividerColor,

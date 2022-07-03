@@ -2,6 +2,7 @@ library switch_button;
 
 import 'package:flutter/material.dart';
 
+/// [SwitchButton] widget de opções de escolha
 class SwitchButton extends StatefulWidget {
   final bool? value;
   final ValueChanged<bool>? onChanged;
@@ -30,7 +31,7 @@ class SwitchButton extends StatefulWidget {
       : super(key: key);
 
   @override
-  _CustomSwitchState createState() => _CustomSwitchState();
+  State<SwitchButton> createState() => _CustomSwitchState();
 }
 
 class _CustomSwitchState extends State<SwitchButton>
@@ -41,8 +42,8 @@ class _CustomSwitchState extends State<SwitchButton>
   @override
   void initState() {
     super.initState();
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 60));
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 60));
     _circleAnimation = AlignmentTween(
             begin: widget.value! ? Alignment.centerRight : Alignment.centerLeft,
             end: widget.value! ? Alignment.centerLeft : Alignment.centerRight)
@@ -99,7 +100,7 @@ class _CustomSwitchState extends State<SwitchButton>
                       child: Container(
                         width: 25.0,
                         height: 25.0,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             shape: BoxShape.circle, color: Colors.white),
                       ),
                     ),

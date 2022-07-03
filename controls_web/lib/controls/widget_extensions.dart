@@ -1,10 +1,13 @@
 // @dart=2.12
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:flutter/material.dart';
 
 import 'strap_widgets.dart';
 import 'dart:ui';
 import 'package:controls_web/controls/dialogs_widgets.dart';
 import 'package:controls_web/controls/tab_choice.dart';
+import 'dotted_decoration.dart';
 
 // Our design contains Neumorphism design and i made a extention for it
 // We can apply it on any  widget
@@ -42,7 +45,7 @@ extension WidgetMorphism on Widget {
   }
 
   Widget padding({EdgeInsets? padding}) {
-    return Padding(padding: padding ?? EdgeInsets.all(8.0), child: this);
+    return Padding(padding: padding ?? const EdgeInsets.all(8.0), child: this);
   }
 
   Widget card(
@@ -84,6 +87,26 @@ extension WidgetMorphism on Widget {
           ),
       child: this,
     );
+  }
+
+  Widget dottedLine({
+    Color color = const Color(0xFF9E9E9E),
+    EdgeInsets? padding,
+    double? height,
+    BorderRadius? borderRadius,
+    double strokeWidth = 1,
+    LinePosition linePosition = LinePosition.bottom,
+  }) {
+    return Container(
+        padding: padding ?? const EdgeInsets.only(bottom: 3),
+        height: height,
+        width: double.infinity,
+        decoration: DottedDecoration(
+            color: color,
+            borderRadius: borderRadius,
+            linePosition: linePosition,
+            strokeWidth: strokeWidth),
+        child: this);
   }
 
   Widget center() => Center(child: this);
@@ -166,9 +189,9 @@ extension WidgetMorphism on Widget {
   }) {
     return MaterialButton(
       onPressed: onPressed,
-      child: this,
       color: color,
       elevation: elevation,
+      child: this,
     );
   }
 
@@ -178,8 +201,8 @@ extension WidgetMorphism on Widget {
   }) {
     return OutlinedButton(
       onPressed: onPressed,
-      child: this,
       autofocus: autofocus,
+      child: this,
     );
   }
 
@@ -198,9 +221,9 @@ extension WidgetMorphism on Widget {
       {required onPressed, bool autofocus = false, ButtonStyle? style}) {
     return ElevatedButton(
       onPressed: onPressed,
-      child: this,
       style: style,
       autofocus: autofocus,
+      child: this,
     );
   }
 
@@ -214,14 +237,13 @@ extension WidgetMorphism on Widget {
 
   Widget textStyle({Color? color, FontWeight? fontWeight, double? fontSize}) {
     return DefaultTextStyle(
-        child: this,
-        style: TextStyle(
-            color: color, fontSize: fontSize, fontWeight: fontWeight));
+        style:
+            TextStyle(color: color, fontSize: fontSize, fontWeight: fontWeight),
+        child: this);
   }
 
   Widget gradient({List<Color>? colors, TileMode tileMode = TileMode.clamp}) {
     return ShaderMask(
-      child: this,
       blendMode: BlendMode.srcIn,
       shaderCallback: (bounds) {
         return LinearGradient(
@@ -229,6 +251,7 @@ extension WidgetMorphism on Widget {
           tileMode: tileMode,
         ).createShader(bounds);
       },
+      child: this,
     );
   }
 
@@ -248,14 +271,14 @@ extension WidgetMorphism on Widget {
   }) {
     return Draggable<D>(
         data: data,
-        child: this,
         childWhenDragging: childWhenDragging ?? Container(),
         feedback: feedback ??
             Container(
               width: 80,
               height: 80,
               color: Colors.grey[200],
-            ));
+            ),
+        child: this);
   }
 
   Widget dragTarget<D extends Object>({
@@ -327,9 +350,9 @@ extension WidgetMorphism on Widget {
   Widget animatedPadding({double padValue = 0}) {
     return AnimatedPadding(
       padding: EdgeInsets.all(padValue),
-      child: this,
       curve: Curves.easeInOut,
       duration: const Duration(seconds: 1),
+      child: this,
     );
   }
 
@@ -343,7 +366,7 @@ extension WidgetMorphism on Widget {
   }) =>
       SingleChildScrollView(
         controller: controller,
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         padding: padding,
         child: this,
       );
@@ -351,7 +374,7 @@ extension WidgetMorphism on Widget {
     required List<Widget> slivers,
   }) {
     return CustomScrollView(slivers: [
-      this.sliverContainer(),
+      sliverContainer(),
       for (var item in slivers) item.sliverContainer()
     ]);
   }
@@ -368,11 +391,11 @@ extension WidgetMorphism on Widget {
   }) =>
       Dismissible(
         key: key ?? UniqueKey(),
-        child: this,
         onDismissed: onDismissed,
         background: background,
         secondaryBackground: secondaryBackground,
         direction: direction,
+        child: this,
       );
 
   bold({double size = 18.0}) {
@@ -437,7 +460,7 @@ extension ListExtension on List {
       key: _key,
       controller: scrollController,
       scrollDirection: scrollDirection,
-      initialItemCount: this.length,
+      initialItemCount: length,
       reverse: reverse,
       padding: padding,
       itemBuilder: (context, index, Animation<double> animation) {
@@ -457,7 +480,7 @@ extension ListExtension on List {
     double? itemExtent,
   }) =>
       ListView.builder(
-          itemCount: this.length,
+          itemCount: length,
           scrollDirection: scrollDirection,
           reverse: reverse,
           restorationId: restorationId,
@@ -475,7 +498,7 @@ extension ListExtension on List {
     double? itemExtent,
   }) =>
       ListView.builder(
-          itemCount: this.length,
+          itemCount: length,
           scrollDirection: scrollDirection,
           reverse: reverse,
           restorationId: restorationId,
@@ -504,7 +527,7 @@ extension ListExtension on List {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (context, index) => itemBuilder(context, this[index]),
-        childCount: this.length,
+        childCount: length,
       ),
     );
   }
@@ -519,7 +542,7 @@ extension ListExtension on List {
     return SliverGrid(
       delegate: SliverChildBuilderDelegate(
         (context, index) => itemBuilder(context, this[index]),
-        childCount: this.length,
+        childCount: length,
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: crossAxisCount,
@@ -539,24 +562,29 @@ extension ListExtension on List {
     Map<int, bool>? expanded,
   }) {
     Map<int, bool> opened = expanded ?? {};
-    return ExpansionPanelList(
-      animationDuration: const Duration(seconds: 1),
-      elevation: elevation,
-      expandedHeaderPadding: expandedHeaderPadding ?? EdgeInsets.all(2),
-      children: [
-        for (var i = 0; i < this.length; i++)
-          ExpansionPanel(
-            headerBuilder: (context, open) =>
-                headerBuilder(context, this[i], open),
-            body: bodyBuilder(this[i]),
-            canTapOnHeader: canTapOnHeader,
-            isExpanded: opened[i] ?? false,
-          ),
-      ],
-      expansionCallback: (index, open) {
-        opened[index] = open;
-      },
-    );
+    ValueNotifier<int> selected = ValueNotifier<int>(-1);
+    return ValueListenableBuilder(
+        valueListenable: selected,
+        builder: (context, a, b) => ExpansionPanelList(
+              animationDuration: const Duration(seconds: 1),
+              elevation: elevation,
+              expandedHeaderPadding:
+                  expandedHeaderPadding ?? const EdgeInsets.all(2),
+              children: [
+                for (var i = 0; i < length; i++)
+                  ExpansionPanel(
+                    headerBuilder: (context, open) =>
+                        headerBuilder(context, this[i], open),
+                    body: bodyBuilder(this[i]),
+                    canTapOnHeader: canTapOnHeader,
+                    isExpanded: opened[i] ?? false,
+                  ),
+              ],
+              expansionCallback: (index, open) {
+                opened[index] = !open;
+                selected.value = open ? index : -index;
+              },
+            ));
   }
 
   Widget wheelScrollView<T>({
@@ -599,7 +627,7 @@ extension ListExtension on List {
   }) {
     return PageView.builder(
       key: key,
-      itemCount: this.length,
+      itemCount: length,
       scrollDirection: scrollDirection,
       controller: controller,
       onPageChanged: (page) {
@@ -624,7 +652,7 @@ extension ListExtension on List {
         return itemBuilder!(context, this[index]);
       },
       onStepTapped: onStepTapped,
-      itemCount: this.length,
+      itemCount: length,
       type: type,
       elevation: elevation,
     );
@@ -640,7 +668,7 @@ class StepperWidget extends StatefulWidget {
   final StepperType type;
   final List<TabChoice>? choices;
   final StepState Function(int selected, int current)? onState;
-  StepperWidget({
+  const StepperWidget({
     Key? key,
     this.currentStep = 0,
     this.itemCount = 0,
@@ -653,7 +681,7 @@ class StepperWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _StepperViewerState createState() => _StepperViewerState();
+  State<StepperWidget> createState() => _StepperViewerState();
 }
 
 class _StepperViewerState extends State<StepperWidget> {
@@ -675,6 +703,7 @@ class _StepperViewerState extends State<StepperWidget> {
         builder: (BuildContext context, int value, Widget? child) {
           return Stepper(
             currentStep: value,
+            physics: const ScrollPhysics(),
             steps: [
               if (widget.choices != null)
                 for (var i = 0; i < widget.choices!.length; i++)
@@ -768,7 +797,7 @@ popupDialog(context,
     context: context,
     color: color,
     initialValue: 0,
-    semanticLabel: 'xxxx',
+//    semanticLabel: 'xxxx',
     useRootNavigator: false,
     position: RelativeRect.fromLTRB(_left, _top, width,
         height ?? kMinInteractiveDimension * (children.length + 1)),
@@ -777,8 +806,8 @@ popupDialog(context,
 }
 
 _buildPopupItem(i, element, Function(int index) onSelected) {
-  if (element is PopupMenuDivider) return element as PopupMenuDivider;
-  if (element is PopupMenuItem) return element as PopupMenuItem;
+  if (element is PopupMenuDivider) return element;
+  if (element is PopupMenuItem) return element;
   return PopupMenuItem<int>(
     value: i,
     child: element,

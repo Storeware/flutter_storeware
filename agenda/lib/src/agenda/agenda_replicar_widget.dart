@@ -37,38 +37,37 @@ class _ReplicarAgendaWidgetState extends State<ReplicarAgendaWidget> {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return DefaultTextStyle(
-        style: theme.inputDecorationTheme.hintStyle ?? TextStyle(fontSize: 12),
+        style: theme.inputDecorationTheme.hintStyle ??
+            const TextStyle(fontSize: 12),
         child: Wrap(
           children: [
-            Container(
+            SizedBox(
               width: 60,
-              child: Container(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('Replicar'),
-                      Container(
-                        height: 25,
-                        child: MaskedSwitchFormField(
-                          value: replicar,
-                          onChanged: (b) {
-                            setState(() {
-                              replicar = b;
-                              changed(replicar, _dias, _vezes);
-                            });
-                          },
-                        ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text('Replicar'),
+                    SizedBox(
+                      height: 25,
+                      child: MaskedSwitchFormField(
+                        value: replicar,
+                        onChanged: (b) {
+                          setState(() {
+                            replicar = b;
+                            changed(replicar, _dias, _vezes);
+                          });
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
             if (replicar!)
-              Container(
+              SizedBox(
                 height: kToolbarHeight + 8,
                 width: 40,
                 child: MaskedTextField(
@@ -85,11 +84,11 @@ class _ReplicarAgendaWidgetState extends State<ReplicarAgendaWidget> {
                   },
                 ),
               ),
-            SizedBox(
+            const SizedBox(
               width: 2,
             ),
             if (replicar!)
-              Container(
+              SizedBox(
                 height: kToolbarHeight + 8,
                 width: 40,
                 child: MaskedTextField(

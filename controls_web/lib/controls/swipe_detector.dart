@@ -2,6 +2,7 @@ library swipedetector;
 
 import 'package:flutter/material.dart';
 
+/// [SwipeConfiguration] configurações padrões para swipe
 class SwipeConfiguration {
   //Vertical swipe configuration options
   double verticalSwipeMaxWidthThreshold = 50.0;
@@ -48,6 +49,7 @@ class SwipeConfiguration {
   }
 }
 
+/// [SwipeDetector]
 class SwipeDetector extends StatelessWidget {
   final Widget? child;
   final Function()? onSwipeUp;
@@ -57,15 +59,17 @@ class SwipeDetector extends StatelessWidget {
   final SwipeConfiguration? swipeConfiguration;
 
   SwipeDetector(
-      {@required this.child,
+      {Key? key,
+      @required this.child,
       this.onSwipeUp,
       this.onSwipeDown,
       this.onSwipeLeft,
       this.onSwipeRight,
       SwipeConfiguration? swipeConfiguration})
-      : this.swipeConfiguration = swipeConfiguration == null
+      : swipeConfiguration = (swipeConfiguration == null)
             ? SwipeConfiguration()
-            : swipeConfiguration;
+            : swipeConfiguration,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {

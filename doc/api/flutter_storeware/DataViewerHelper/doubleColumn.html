@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the doubleColumn method from the DataViewerHelper class, for the Dart programming language.">
+  <title>doubleColumn method - DataViewerHelper class - flutter_storeware library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../../"
+      data-using-base-href="false">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+    <li><a href="../../flutter_storeware/DataViewerHelper-class.html">DataViewerHelper</a></li>
+    <li class="self-crumb">doubleColumn method</li>
+  </ol>
+  <div class="self-name">doubleColumn</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-method">doubleColumn</span> method 
+    <a href="https://dart.dev/null-safety" class="feature feature-null-safety" title="Supports the null safety language feature.">Null safety</a>
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+
+<span class="returntype">dynamic</span>
+<span class="name ">doubleColumn</span>(<wbr><ol class="parameter-list"><li><span class="parameter" id="doubleColumn-param-column"><span class="type-annotation">dynamic</span> <span class="parameter-name">column</span>, </span></li>
+<li><span class="parameter" id="doubleColumn-param-decimais">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">decimais</span> = <span class="default-value">2</span>, </span></li>
+<li><span class="parameter" id="doubleColumn-param-suffix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a>?</span> <span class="parameter-name">suffix</span>, </span></li>
+<li><span class="parameter" id="doubleColumn-param-prefix"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/Widget-class.html">Widget</a>?</span> <span class="parameter-name">prefix</span>, </span></li>
+<li><span class="parameter" id="doubleColumn-param-align"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/painting/Alignment-class.html">Alignment</a>?</span> <span class="parameter-name">align</span>, </span></li>
+<li><span class="parameter" id="doubleColumn-param-onChanged"><span class="type-annotation">dynamic</span> <span class="parameter-name">onChanged</span>(<ol class="parameter-list"><li><span class="parameter" id="param-"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span></span></li>
+</ol>
+)?, </span></li>
+<li><span class="parameter" id="doubleColumn-param-maxLength"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">maxLength</span>}</span></li>
+</ol>)
+
+      
+
+    </section>
+    
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">static doubleColumn(column,
+    {int decimais = 2,
+    Widget? suffix,
+    Widget? prefix,
+    Alignment? align,
+    Function(double)? onChanged,
+    int? maxLength}) {
+  if (column != null) {
+    Widget? Function(int, Map&lt;String, dynamic&gt;)? builder;
+    if (column.builder != null) builder = column.builder;
+    column.align = align ?? column.align ?? Alignment.centerRight;
+    column.builder = (idx, row) {
+      if (builder != null) return builder(idx, row);
+      dynamic v = row[column.name];
+      String txt = &#39;${v}&#39;;
+      if (v is double &amp;&amp; decimais &gt;= 0) txt = v.toStringAsFixed(decimais);
+
+      txt = txt.replaceAll(&#39;.&#39;, &#39;,&#39;);
+      return Text(
+        txt,
+      );
+    };
+    column.editBuilder = (a, b, c, row) {
+      &#47;&#47;&#47; define switch para edição
+      return Container(
+          width: column.width ?? defaultWidth,
+          child: TextFormField(
+            &#47;&#47;label: column.label,
+            initialValue: &#39;${row[column.name] ?? &#39;&#39;}&#39;.replaceAll(&#39;.&#39;, &#39;,&#39;),
+            keyboardType: (decimais &lt;= 0)
+                ? TextInputType.number
+                : TextInputType.numberWithOptions(decimal: decimais &gt; 0),
+            inputFormatters: &lt;TextInputFormatter&gt;[
+              if (decimais == 0) FilteringTextInputFormatter.digitsOnly,
+            ],
+            maxLength: maxLength ?? column.maxLength,
+            decoration: InputDecoration(
+                labelText: (column.editInfo != null)
+                    ? (column.editInfo ?? &#39;&#39;)
+                        .replaceAll(&#39;{label}&#39;, column.label ?? &#39;&#39;)
+                    : column.label ?? column.name,
+                suffix: suffix,
+                prefix: prefix,
+                helperText: column.tooltip ?? &#39;&#39;
+
+                &#47;&#47;    ? (widget.sample != null)
+                &#47;&#47;        ? &#39;Ex: ${widget.sample}&#39;20
+                &#47;&#47;        : null
+                &#47;&#47;    : null,
+                &#47;&#47;hintStyle: theme.inputDecorationTheme.hintStyle,
+                ),
+            onChanged: (x) {
+              row[column.name] = double.tryParse(x.replaceAll(&#39;,&#39;, &#39;.&#39;)) ?? 0;
+              if (onChanged != null) onChanged(row[column.name] ?? 0);
+            },
+          ));
+    };
+    return column;
+  }
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../../index.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/flutter_storeware-library.html">flutter_storeware</a></li>
+  <li><a href="../../flutter_storeware/DataViewerHelper-class.html">DataViewerHelper</a></li>
+  <li class="self-crumb">doubleColumn method</li>
+</ol>
+
+
+    <h5>DataViewerHelper class</h5>
+    <ol>
+
+        <li class="section-title"><a href="../../flutter_storeware/DataViewerHelper-class.html#constructors">Constructors</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/DataViewerHelper.html">DataViewerHelper</a></li>
+
+
+    <li class="section-title inherited">
+      <a href="../../flutter_storeware/DataViewerHelper-class.html#instance-properties">Properties</a>
+    </li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/DataViewerHelper-class.html#instance-methods">Methods</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+
+    <li class="section-title inherited"><a href="../../flutter_storeware/DataViewerHelper-class.html#operators">Operators</a></li>
+    <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+        <li class="section-title"><a href="../../flutter_storeware/DataViewerHelper-class.html#static-properties">Static properties</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/defaultWidth.html">defaultWidth</a></li>
+
+        <li class="section-title"><a href="../../flutter_storeware/DataViewerHelper-class.html#static-methods">Static methods</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/dateTimeColumn.html">dateTimeColumn</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/doubleColumn.html">doubleColumn</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/hideAll.html">hideAll</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/hideColumn.html">hideColumn</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/intColumn.html">intColumn</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/moneyColumn.html">moneyColumn</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/showOnly.html">showOnly</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/simnaoColumn.html">simnaoColumn</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/stringColumn.html">stringColumn</a></li>
+          <li><a href="../../flutter_storeware/DataViewerHelper/text.html">text</a></li>
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    flutter_storeware
+      22.04.12+4
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/script.js?v1"></script>
+
+
+
+</body>
+
+</html>
+

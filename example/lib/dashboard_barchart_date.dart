@@ -129,7 +129,7 @@ class _DashboardChartsState extends State<DashboardDateBarChart> {
   String _getLabel(DashboardBarChartDateData item) {
     var s = item.label;
     s ??= item.date.day.toString().padLeft(2, '0');
-    print(s);
+    // print(s);
     return s;
   }
 }

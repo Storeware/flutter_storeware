@@ -17,7 +17,7 @@ import 'models/agenda_item_model.dart';
 class AgendaMensalPage extends StatefulWidget {
   final DateTime? dataRef;
   final List<AgendaResource> resources;
-  AgendaMensalPage({
+  const AgendaMensalPage({
     Key? key,
     required this.dataRef,
     required this.resources,
@@ -54,7 +54,7 @@ class _AgendaSemanalPageState extends State<AgendaMensalPage> {
           datas: [for (var i = -3; i < 4; i++) widget.dataRef!.addMonths(i)]),
       body: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Expanded(
@@ -127,12 +127,12 @@ class AgendasMensalContainer extends StatelessWidget {
     final DefaultSourceList list = DefaultSourceList(sources: []);
 
     DateTime _data = data!.toDate();
-    controller.sources!.forEach((item) {
+    for (var item in controller.sources!) {
       DateTime d = item!.datainicio!.toDate();
       if (d.compareTo(_data) == 0) {
         list.sources!.add(item);
       }
-    });
+    }
     if (controller.data!.month != _data.month) return Container();
 
     return ChangeNotifierProvider.value(
@@ -145,7 +145,7 @@ class AgendasMensalContainer extends StatelessWidget {
                 InkWell(
                   child: Text(
                     _data.format('dd'),
-                    style: TextStyle(fontSize: 12),
+                    style: const TextStyle(fontSize: 12),
                   ),
                   onTap: () {
                     // vai para visao diaria;
@@ -201,7 +201,7 @@ class AgendaMensalTarget extends StatelessWidget {
           List<dynamic> rejectedData) {
         return (!accepted)
             ? child!
-            : Icon(Icons.camera, color: Colors.grey, size: 30);
+            : const Icon(Icons.camera, color: Colors.grey, size: 30);
       },
       onWillAccept: (data) {
         accepted = true;
@@ -260,8 +260,8 @@ class AgendaMensalCard extends StatelessWidget {
                       item: item,
                       sources: sources,
                     ),
-                    feedback:
-                        CircleAvatar(child: Icon(Icons.my_location, size: 30)),
+                    feedback: const CircleAvatar(
+                        child: Icon(Icons.my_location, size: 30)),
                     child: CircleAvatar(
                         radius: responsive.isSmall ? 8 : 10,
                         backgroundColor: resource?.color ?? Colors.brown,
@@ -271,14 +271,14 @@ class AgendaMensalCard extends StatelessWidget {
                                   alignment: (responsive.isMobile)
                                       ? Alignment.center
                                       : Alignment.centerRight,
-                                  child: Icon(Icons.check,
+                                  child: const Icon(Icons.check,
                                       color: Colors.white, size: 18))
                               : Container(),
                           if (responsive.isTablet)
                             Center(
                               child: Text(
                                 (resource?.label ?? ' ').substring(0, 1),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.normal,
                                 ),

@@ -109,7 +109,7 @@ getTheme(context, {Brightness brightness = Brightness.dark}) {
   cardColor = t.primaryColor; //.lighten(50);
   primaryColor = t.primaryColor;
   tabBarThemeLabelColor =
-      t.appBarTheme.color ?? theme.primaryTextTheme.bodyText1!.color!;
+      t.appBarTheme.backgroundColor ?? theme.primaryTextTheme.bodyText1!.color!;
   textColor = t.textTheme.button!.color ?? theme.textTheme.bodyText1!.color!;
   primaryTextColor = t.primaryTextTheme.bodyText1!.color!;
   curvaColor = t.primaryColor;
@@ -130,13 +130,12 @@ bool get fontPequena =>
 
 extension ColorMix on Color {
   Color mix(Color color) {
-    var r = (color.red + this.red) ~/ 2;
-    var g = (color.green + this.green) ~/ 2;
-    var b = (color.blue + this.blue) ~/ 2;
-    int a = (color.alpha + this.alpha) ~/ 2;
+    var r = (color.red + red) ~/ 2;
+    var g = (color.green + green) ~/ 2;
+    var b = (color.blue + blue) ~/ 2;
+    int a = (color.alpha + alpha) ~/ 2;
     return Color.fromARGB(a, r, g, b);
   }
 
-  double get luminance =>
-      (0.299 * this.red + 0.587 * this.green + 0.114 * this.blue) / 255;
+  double get luminance => (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
 }

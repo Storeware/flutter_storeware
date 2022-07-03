@@ -54,7 +54,7 @@ class Firebase {
           "uid": userUid
         });
         fb.FBPushNotification().stream.listen((v) {
-          print(v);
+          // print(v);
           bool show = v['show'] ?? true;
           var notification = v['notification'];
           if (notification != null && notification['body'] != null) {

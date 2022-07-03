@@ -61,7 +61,7 @@ extension ColorMix on Color {
   double get luminance =>
       (0.299 * this.red + 0.587 * this.green + 0.114 * this.blue) / 255;
   get isDark {
-    print(luminance);
+    // print(luminance);
     return luminance < 0.5;
   }
 }

@@ -1,8 +1,5 @@
-// @dart=2.12.0
-
 library data_viewer;
 
-//import 'dart:convert';
 import 'dart:async';
 import 'package:controls_data/local_storage.dart';
 import 'package:controls_data/odata_client.dart';
@@ -15,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:controls_web/controls/masked_field.dart';
 import 'package:controls_data/data.dart';
 import 'ink_button.dart';
+import 'dotted_decoration.dart';
 
 part "dataviewer_storage.dart";
 
@@ -76,21 +74,7 @@ class DefaultDataViewerTheme {
   get theme => _singleton._theme;
 }
 
-/// [DefaultDataViewer] widget para propagar dependencia pela arvore
-/*class DefaultDataViewer extends InheritedWidget {
-  final DataViewerController? controller;
-  DefaultDataViewer({Key? key, @required this.controller, Widget? child})
-      : super(key: key, child: child!);
-  @override
-  bool updateShouldNotify(DefaultDataViewer oldWidget) {
-    return false;
-  }
-
-  static of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DefaultDataViewer>();
-  }
-}*/
-
+/// Builder Default DefaultDataViewerController Widget
 class DefaultDataViewerController extends InheritedWidget {
   final DataViewerController? controller;
   DefaultDataViewerController(
@@ -137,7 +121,7 @@ class DataViewerController {
     this.onLog,
   }) {
     if (futureExtended != null) {
-      this.future = () => futureExtended(this);
+      future = () => futureExtended(this);
     }
     paginatedController.parent = this;
   }
@@ -185,8 +169,7 @@ class DataViewerController {
 
   StreamController<List>? _valuesStream;
   _init() {
-    if (_valuesStream == null)
-      _valuesStream = StreamController<List>.broadcast();
+    _valuesStream ??= StreamController<List>.broadcast();
   }
 
   Stream<List> get stream {
@@ -246,7 +229,7 @@ class DataViewerController {
   doDelete(dados, {manual = false}) async {
     if (onClearCache != null) onClearCache!();
 
-    var rsp;
+    dynamic rsp;
     if (onDelete != null)
       return onDelete!(dados).then((r) {
         if (!manual && (rsp != null)) paginatedController.remove(dados);
@@ -310,7 +293,7 @@ class DataViewerController {
   Future<bool> doUpdate(dados, {bool manual = false}) async {
     if (onValidate != null) dados = onValidate!(dados);
     if (onClearCache != null) onClearCache!();
-    var rsp;
+    dynamic rsp;
     if (onUpdate != null)
       return onUpdate!(dados).then((r) {
         if (!manual && (rsp != null)) paginatedController.remove(dados);
@@ -389,13 +372,13 @@ class DataViewerController {
 
 /// [DataViewerColumn] cria as propriedade da coluna no grid
 class DataViewerColumn extends PaginatedGridColumn {
-  late final String? name;
-  final TextEditingController? editController;
-  final void Function(dynamic value)? onChanged;
+  //late final String? name;
+  //final TextEditingController? editController;
+  //final void Function(dynamic value)? onChanged;
   DataViewerColumn({
     /// evento editPressed
-    this.editController,
-    this.onChanged,
+    super.editController,
+    super.onChanged,
     Function(PaginatedGridController)? onEditIconPressed,
     String? defaultValue,
     bool numeric = false,
@@ -412,13 +395,13 @@ class DataViewerColumn extends PaginatedGridColumn {
     int? order = 0,
 
     /// nome da coluna utilizado para localizar na lista de dados
-    @required this.name,
+    required super.name,
     bool required = false,
     bool readOnly = false,
 
     /// [isPrimaryKey] indica se pode ou nao ser editada. True, indica que a coluna nao pode ser editada.
     bool isPrimaryKey = false,
-    dynamic? onSort,
+    dynamic onSort,
     bool placeHolder = false,
 
     /// [label] indica o texto a ser mostrado no titulo da coluna
@@ -445,10 +428,6 @@ class DataViewerColumn extends PaginatedGridColumn {
     String? Function(dynamic)? onValidate,
     bool folded = false,
   }) : super(
-          onChanged: (x) {
-            if (onChanged != null) onChanged(x);
-          },
-          editController: editController,
           defaultValue: defaultValue,
           onEditIconPressed: onEditIconPressed,
           numeric: numeric,
@@ -464,7 +443,6 @@ class DataViewerColumn extends PaginatedGridColumn {
           tooltip: tooltip,
           align: align,
           style: style,
-          name: name,
           order: order,
           onFocusChanged: onFocusChanged,
           required: required,
@@ -553,7 +531,7 @@ class DataViewer extends StatefulWidget {
   final bool? oneRowAutoEdit;
   final Function(dynamic)? onSaved;
   final Color? Function(dynamic row, Color color, int)? dataRowColorBuilder;
-  DataViewer({
+  const DataViewer({
     Key? key,
     this.controller,
     this.child,
@@ -612,7 +590,7 @@ class DataViewer extends StatefulWidget {
         super(key: key);
 
   @override
-  _DataViewerState createState() => _DataViewerState();
+  State<DataViewer> createState() => _DataViewerState();
 }
 
 class _DataViewerState extends State<DataViewer> {
@@ -657,60 +635,57 @@ class _DataViewerState extends State<DataViewer> {
           if (widget.title != null) widget.title!,
           Align(
             alignment: Alignment.centerRight,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                      height: kToolbarHeight + 4,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (widget.leading != null) widget.leading!,
-                          //Expanded(child: Container()),
-                          Spacer(),
-                          Container(
-                              constraints: BoxConstraints(
-                                maxWidth: responsive!.isMobile ? 150 : 250,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                    height: kToolbarHeight + 4,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (widget.leading != null) widget.leading!,
+                        //Expanded(child: Container()),
+                        const Spacer(),
+                        Container(
+                            constraints: BoxConstraints(
+                              maxWidth: responsive!.isMobile ? 150 : 250,
+                            ),
+                            child: TextFormField(
+                              controller: _filtroController,
+                              style: theme!.textTheme.bodyText1,
+                              decoration: InputDecoration(
+                                labelText: 'procurar por',
+                                suffixIcon: InkWell(
+                                    child: const Icon(Icons.clear),
+                                    onTap: () {
+                                      _filtroController.text = '';
+                                    }),
                               ),
-                              child: TextFormField(
-                                controller: _filtroController,
-                                style: theme!.textTheme.bodyText1,
-                                decoration: InputDecoration(
-                                  labelText: 'procurar por',
-                                  suffixIcon: InkWell(
-                                      child: Icon(Icons.clear),
-                                      onTap: () {
-                                        _filtroController.text = '';
-                                      }),
-                                ),
-                              )),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 5, right: 5),
-                            child: Container(
-                                constraints:
-                                    BoxConstraints(maxWidth: 90, maxHeight: 55),
-                                child: StrapButton(
-                                    text: 'filtrar',
-                                    //height: 55,
-                                    //width: 80,
-                                    onPressed: () {
-                                      controller!.page = 1;
-                                      controller!.filter =
-                                          _filtroController.text;
-                                      if (controller!.onClearCache != null)
-                                        controller!.onClearCache!();
-                                      if (widget.onSearchPressed != null)
-                                        widget.onSearchPressed!();
-                                      controller!.goPage(1);
-                                    })),
-                          ),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 5),
+                          child: Container(
+                              constraints: const BoxConstraints(
+                                  maxWidth: 90, maxHeight: 55),
+                              child: StrapButton(
+                                  text: 'filtrar',
+                                  //height: 55,
+                                  //width: 80,
+                                  onPressed: () {
+                                    controller!.page = 1;
+                                    controller!.filter = _filtroController.text;
+                                    if (controller!.onClearCache != null)
+                                      controller!.onClearCache!();
+                                    if (widget.onSearchPressed != null)
+                                      widget.onSearchPressed!();
+                                    controller!.goPage(1);
+                                  })),
+                        ),
 
-                          if (widget.trailling != null) widget.trailling!,
-                        ],
-                      )),
-                ],
-              ),
+                        if (widget.trailling != null) widget.trailling!,
+                      ],
+                    )),
+              ],
             ),
           ),
           if (widget.subtitle != null) widget.subtitle!,
@@ -730,24 +705,25 @@ class _DataViewerState extends State<DataViewer> {
     responsive = ResponsiveInfo(context);
     var vt = DefaultDataViewerTheme.of(context);
     theme = Theme.of(context);
-    var _headingRowHeight = widget.headingRowHeight ?? vt.headingRowHeight;
-    var _dataRowHeight = widget.dataRowHeight ?? vt.dataRowHeight;
+    final double headingRowHeight =
+        widget.headingRowHeight ?? vt.headingRowHeight;
+    final double dataRowHeight = widget.dataRowHeight ?? vt.dataRowHeight;
     //theme = Theme.of(context);
     size = MediaQuery.of(context).size;
-    int _top = (widget.height ??
+    int top = (widget.height ??
             ((size!.height * 0.90) - kToolbarHeight - 20) -
                 (widget.headerHeight!) -
-                _headingRowHeight -
+                headingRowHeight -
                 (widget.footerHeight! * 2)) ~/
-        _dataRowHeight;
-    if (_top <= 3) _top = 3;
-    if (controller!.top == null) controller!.top = _top;
+        dataRowHeight;
+    if (top <= 3) top = 3;
+    if (controller!.top == null) controller!.top = top;
     return StreamBuilder<dynamic>(
         stream: controller!.subscribeChanges.stream,
         builder: (context, snapshot) {
           return DefaultDataViewerController(
             controller: widget.controller,
-            child: Container(
+            child: SizedBox(
               height: widget.height,
               width: widget.width,
               child: widget.child ??
@@ -771,7 +747,9 @@ class _DataViewerState extends State<DataViewer> {
                           ? (b, ctrl) {
                               if (widget.onSelected == null)
                                 return Future.value(false);
-                              return widget.onSelected!(ctrl.data);
+                              var rt = widget.onSelected!(ctrl.data);
+                              if (rt == null) return Future.value(false);
+                              return rt;
                             }
                           : null, //(b, ctrl) => Future.value(null),
                       columnSpacing: 10,
@@ -790,8 +768,8 @@ class _DataViewerState extends State<DataViewer> {
                           : (widget.canSearch)
                               ? createHeader()
                               : null,
-                      headingRowHeight: _headingRowHeight,
-                      dataRowHeight: _dataRowHeight,
+                      headingRowHeight: headingRowHeight,
+                      dataRowHeight: dataRowHeight,
                       dataRowColor: widget.dataRowColor,
                       dataTextStyle: widget.dataTextStyle,
                       controller: controller!.paginatedController,
@@ -802,7 +780,7 @@ class _DataViewerState extends State<DataViewer> {
                       columns: controller!.columns ??
                           controller!.paginatedController.columns,
                       source: widget.source ?? controller!.source,
-                      rowsPerPage: widget.rowsPerPage ?? _top,
+                      rowsPerPage: widget.rowsPerPage ?? top,
                       currentPage: controller!.page,
                       canEdit: widget.canEdit,
                       canInsert: widget.canInsert,
@@ -825,7 +803,7 @@ class _DataViewerState extends State<DataViewer> {
                         if (widget.canEdit ||
                             widget.canInsert ||
                             widget.canDelete) {
-                          var rt;
+                          dynamic rt;
                           if (event == PaginatedGridChangeEvent.delete) {
                             rt = controller!.doDelete(dados, manual: false);
                           } else if (event == PaginatedGridChangeEvent.insert) {
@@ -846,6 +824,7 @@ class _DataViewerState extends State<DataViewer> {
 
 class DataViewerGroup {
   final String? title;
+  final String? subtitle;
   final List<String>? children;
   final Widget? leadding;
   final Widget? trailling;
@@ -855,8 +834,11 @@ class DataViewerGroup {
   final bool? initiallyExpanded;
   final double? height;
   final Color? color;
-  DataViewerGroup({
+  final Color? dividerColor;
+  const DataViewerGroup({
     this.title,
+    this.subtitle,
+    this.dividerColor,
     this.children,
     this.leadding,
     this.trailling,
@@ -870,6 +852,7 @@ class DataViewerGroup {
 }
 
 class DataViewerEditGroupedPageStateController {
+  // ignore: library_private_types_in_public_api
   _DataViewEditGroupedPageState? state;
   BuildContext get context => state!.context;
   save() {
@@ -934,7 +917,7 @@ class DataViewerEditGroupedPage extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DataViewEditGroupedPageState createState() =>
+  State<DataViewerEditGroupedPage> createState() =>
       _DataViewEditGroupedPageState();
 }
 
@@ -998,7 +981,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                 (!changed) &&
                                 widget.event == PaginatedGridChangeEvent.update)
                               IconButton(
-                                  icon: Icon(Icons.delete),
+                                  icon: const Icon(Icons.delete),
                                   onPressed: () {
                                     widget.controller!
                                         .doDelete(widget.data)
@@ -1008,21 +991,22 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                                   }),
                             if (changed && widget.showSaveButton) ...[
                               InkWell(
-                                  child: Icon(Icons.settings_backup_restore),
+                                  child:
+                                      const Icon(Icons.settings_backup_restore),
                                   onTap: () {
                                     _reset();
                                   }),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               if (widget.showSaveButton)
                                 InkWell(
-                                    child: Icon(Icons.check),
+                                    child: const Icon(Icons.check),
                                     onTap: () {
                                       _save(context);
                                     }),
                             ],
                             if (widget.showCloseButton)
                               IconButton(
-                                icon: Icon(Icons.close),
+                                icon: const Icon(Icons.close),
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
@@ -1047,7 +1031,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                     return createRow(context, row, widget.data!);
                   }),
                 if (widget.bottomAction != null) widget.bottomAction!,
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 if ((widget.canEdit || widget.canInsert) &&
@@ -1069,48 +1053,62 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
   int col = 0;
 
   createRow(context, DataViewerGroup rows, dynamic data) {
-    if ((rows.title ?? '').length == 0) return createRow2(context, rows, data);
+    if ((rows.title ?? '').isEmpty) return createRow2(context, rows, data);
     var color = theme!.primaryColor.withAlpha(50);
-    return ExpansionTile(
-      initiallyExpanded: rows.initiallyExpanded ?? widget.initiallyExpanded,
-      collapsedBackgroundColor: color,
-      leading: rows.leadding,
-      trailing: rows.trailling,
-      //collapsedIconColor: Colors.red,
-      title: (rows.title == null)
-          ? Container()
-          : Container(
-              //color: color,
-              alignment: Alignment.centerLeft,
-              height: kMinInteractiveDimension * 0.6,
-              child: Row(children: [
-                // if (rows.leadding != null) rows.leadding!,
-                Text(rows.title!,
-                    style: rows.titleStyle ??
-                        theme!.textTheme.caption?.copyWith(fontSize: 18)),
-                //if (rows.trailling != null) rows.trailling!,
-              ])),
-      children: [
-        if (rows.header != null) rows.header!,
-        Container(
-            height: rows.height,
-            color: rows.color,
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: [
-                if (rows.header != null) rows.header!,
-                for (var column in rows.children!)
-                  createColumn(
-                    context,
-                    column,
-                    col,
-                    isLast: (itemsCount == ++col),
-                  ),
-                if (rows.bottom != null) rows.bottom!,
-              ],
-            )),
-        if (rows.bottom != null) rows.bottom!,
-      ],
+    return Theme(
+      data: Theme.of(context).copyWith(
+        dividerColor: Colors.transparent,
+      ),
+      child: ExpansionTile(
+        initiallyExpanded: rows.initiallyExpanded ?? widget.initiallyExpanded,
+        collapsedBackgroundColor: color,
+        leading: rows.leadding,
+        subtitle: (rows.subtitle == null) ? null : Text(rows.subtitle!),
+        trailing: rows.trailling,
+        title: (rows.title == null)
+            ? Container()
+            : Container(
+                alignment: Alignment.centerLeft,
+                height: kMinInteractiveDimension * 0.6,
+                child: Row(children: [
+                  Text(rows.title!,
+                      style: rows.titleStyle ??
+                          theme!.textTheme.caption?.copyWith(fontSize: 18)),
+                ])),
+        children: [
+          if (rows.header != null) rows.header!,
+          Container(
+              height: rows.height,
+              color: rows.color,
+              child: Wrap(
+                direction: Axis.horizontal,
+                children: [
+                  if (rows.header != null) rows.header!,
+                  for (var column in rows.children!)
+                    createColumn(
+                      context,
+                      column,
+                      col,
+                      isLast: (itemsCount == ++col),
+                    ),
+                  if (rows.bottom != null) rows.bottom!,
+                ],
+              )),
+          if (rows.bottom != null) rows.bottom!,
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Container(
+              width: double.infinity,
+              decoration: DottedDecoration(
+                shape: Shape.line,
+                linePosition: LinePosition.bottom,
+                color: rows.dividerColor ?? theme!.dividerColor,
+              ),
+              height: 1.0, //height of container
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -1154,8 +1152,8 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
 
   createColumn(context, column, int order,
       {bool? isLast, Function()? onLastPressed}) {
-    var col;
-    var ctrl;
+    dynamic col;
+    dynamic ctrl;
 
     if (widget.controller!.columns != null) {
       ctrl = widget.controller;
@@ -1166,15 +1164,13 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
     }
 
     if (col == null) return (Text('null $column'));
-    var edit;
+    dynamic edit;
     if (col.editBuilder != null) {
       edit = col.editBuilder(widget.controller!.paginatedController, col,
           widget.data, widget.data);
       _first++;
     }
-    if (edit == null) {
-      edit = createFormField(context, col, order, isLast: isLast!);
-    }
+    edit ??= createFormField(context, col, order, isLast: isLast!);
     return Container(
         padding: EdgeInsets.only(left: widget.margin!, right: widget.margin!),
         height: widget.dataRowHeight ??
@@ -1238,7 +1234,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
         maxLength: item.maxLength,
         enabled: (widget.canEdit || widget.canInsert) && (!item.readOnly),
         controller: txtController,
-        style: TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+        style: const TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
         decoration: InputDecoration(
           labelText: item.label ?? item.name,
           helperText: item.helperText,

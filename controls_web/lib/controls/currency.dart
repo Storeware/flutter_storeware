@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 class Money {
   double value;
   Money(this.value);
+  @override
   toString() {
     return value.toString();
   }
@@ -16,14 +17,13 @@ class Money {
   }
 
   @override
-  bool operator ==(other) =>
-      (other is Money) ? this.value == other.value : false;
-  compareTo(Money other) => this.value.compareTo(other.value);
-  int get hashCode => this.value ~/ 1;
-  Money operator -(double other) => Money(this.value - other);
-  Money operator +(double other) => Money(this.value + other);
-  Money operator /(double other) => Money(this.value / other);
-  Money operator *(double other) => Money(this.value * other);
+  bool operator ==(other) => (other is Money) ? value == other.value : false;
+  compareTo(Money other) => value.compareTo(other.value);
+  int get hashCode => value ~/ 1;
+  Money operator -(double other) => Money(value - other);
+  Money operator +(double other) => Money(value + other);
+  Money operator /(double other) => Money(value / other);
+  Money operator *(double other) => Money(value * other);
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
@@ -47,6 +47,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
     return 'R\$ 0,00';
   }
 
+  @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
     if (newValue.selection.baseOffset == 0) return newValue;
@@ -59,6 +60,6 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
     return newValue.copyWith(
         text: newText,
-        selection: new TextSelection.collapsed(offset: newText.length));
+        selection: TextSelection.collapsed(offset: newText.length));
   }
 }

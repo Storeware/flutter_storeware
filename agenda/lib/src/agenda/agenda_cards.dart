@@ -5,10 +5,6 @@ import 'package:controls_web/controls/colores.dart';
 import 'package:controls_web/controls/responsive.dart';
 import 'package:flutter/material.dart';
 
-import 'agenda_controller.dart';
-import 'agenda_notifier.dart';
-import 'models/agenda_item_model.dart';
-import 'models/agenda_tipo_model.dart';
 import 'package:controls_extensions/extensions.dart';
 
 class Point {
@@ -67,9 +63,9 @@ class AgendaCardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     dynamic dtipo;
-    controller.tipos.forEach((it) {
+    for (var it in controller.tipos) {
       if (it['gid'] == (item!.tipoGid ?? '')) dtipo = it;
-    });
+    }
     AgendaTipoItem tipo = AgendaTipoItem.fromJson(dtipo ?? {});
     var data = AgendaCardData(
         item: item, sources: (sources ?? []) as DefaultSourceList?);
@@ -117,14 +113,15 @@ class AgendaCardItem extends StatelessWidget {
                             getTitulo(item!, tipo, showHours: showHours) ?? '?',
                             overflow: TextOverflow.ellipsis,
                             maxLines: linhas,
-                            style: TextStyle(fontWeight: FontWeight.w500)),
+                            style:
+                                const TextStyle(fontWeight: FontWeight.w500)),
                         if ((!responsive.isMobile) &&
                             (controller.viewerNotifier.viewer ==
                                 AgendaViewerType.horario))
                           Text('${item!.texto}',
                               maxLines: linhas,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 13)),
+                              style: const TextStyle(fontSize: 13)),
                       ],
                     ),
                   ),
@@ -133,7 +130,7 @@ class AgendaCardItem extends StatelessWidget {
               Wrap(
                 direction: Axis.vertical,
                 children: [
-                  if ((item!.completada ?? 0) == 1) Icon(Icons.check),
+                  if ((item!.completada ?? 0) == 1) const Icon(Icons.check),
                   ...sinalizarVencidos(item!),
                   btnEditar(),
                 ],
@@ -148,7 +145,7 @@ class AgendaCardItem extends StatelessWidget {
 
   InkWell btnEditar() {
     return InkWell(
-      child: Icon(Icons.edit, size: 20),
+      child: const Icon(Icons.edit, size: 20),
       onTap: () {
         if (controller.onEdit != null)
           controller.onEdit!(AgendaData(
@@ -197,12 +194,12 @@ class AgendaCardItem extends StatelessWidget {
 
   List<Widget> sinalizarVencidos(AgendaItem item) {
     List<Widget> r = [];
-    if (item.domicilio == 'S') r.add(Icon(Icons.home, size: 18));
+    if (item.domicilio == 'S') r.add(const Icon(Icons.home, size: 18));
     try {
       if (item.datainicio != null) if (item.datainicio!.between(
           DateTime.now().addMinutes(-(item.minutoslembrete ?? 15)),
           DateTime.now().addMinutes(item.minutoslembrete ?? 15)))
-        r.add(Icon(Icons.timer, size: 18));
+        r.add(const Icon(Icons.timer, size: 18));
     } catch (e) {
       //debugPrint('sinalizarVencidos: $e');
     }
@@ -278,7 +275,7 @@ class DragTagetMultItem extends StatelessWidget {
           List<dynamic> rejectedData) {
         return (!accepted)
             ? child!
-            : Icon(Icons.camera, color: Colors.grey, size: 60);
+            : const Icon(Icons.camera, color: Colors.grey, size: 60);
       },
       onAccept: (AgendaCardData data) {
         var gid = data.item!.gid;

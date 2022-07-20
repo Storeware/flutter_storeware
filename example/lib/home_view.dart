@@ -1,3 +1,4 @@
+import 'package:exemple/notices_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_storeware/index.dart';
 
@@ -63,6 +64,7 @@ class HomeView extends StatelessWidget {
           label: 'Applience',
           child: const Mix1View(),
         ),
+        TabChoice(label: 'Notice', child: const NoticeView()),
         TabChoice(
           label: 'Light',
           child: const Mix2View(),

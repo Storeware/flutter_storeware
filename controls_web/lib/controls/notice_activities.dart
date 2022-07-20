@@ -118,11 +118,11 @@ class NoticeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return NoticeTile(
-      title: title!,
-      color: color!,
-      //fontSize: fontSize,
-      //subtitle: subtitle,
-      //fontColor: fontColor,
+      title: subtitle,
+      color: color,
+      value: title,
+      valueStyle: TextStyle(fontSize: 18),
+      titleStyle: TextStyle(fontSize: 12),
     );
   }
 }
@@ -322,9 +322,9 @@ class NoticeInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return NoticeBox(
-      color: color!,
-      width: width!,
-      height: height!,
+      color: color,
+      width: width,
+      height: height,
       child: Container(
         alignment: Alignment.center,
         child: Row(

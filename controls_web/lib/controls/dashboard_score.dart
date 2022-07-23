@@ -9,6 +9,8 @@ class DashboardScore extends StatefulWidget {
       this.title,
       this.icon,
       this.tagColor = Colors.amber,
+      this.borderRadius = 5,
+      this.tagWidth = 5,
       this.color,
       this.position = TagPosition.left,
       this.onPressed,
@@ -21,6 +23,8 @@ class DashboardScore extends StatefulWidget {
       this.scoreStyle,
       this.height = 90})
       : super(key: key);
+  final double borderRadius;
+  final double tagWidth;
   final String? score;
   final Widget? title;
   final Widget? icon;
@@ -53,10 +57,14 @@ class _DashboardScoreState extends State<DashboardScore> {
           );
   }
 
-  Card _builder(ThemeData theme) {
-    return Card(
+  Widget _builder(ThemeData theme) {
+    return Container(
+        child: Card(
       color: widget.color,
       elevation: widget.elevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(widget.borderRadius),
+      ),
       child: SizedBox(
         width: widget.width,
         height: widget.height,
@@ -68,9 +76,15 @@ class _DashboardScoreState extends State<DashboardScore> {
               Row(children: [
                 if (widget.position == TagPosition.left)
                   Container(
-                    color: widget.tagColor,
-                    width: 5,
+                    width: widget.tagWidth,
                     height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: widget.tagColor,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(widget.borderRadius),
+                        bottomLeft: Radius.circular(widget.borderRadius),
+                      ),
+                    ),
                   ),
                 if (widget.leading != null) widget.leading!,
                 if (widget.icon != null) ...[
@@ -112,16 +126,30 @@ class _DashboardScoreState extends State<DashboardScore> {
                 if (widget.trailing != null) widget.trailing!,
                 if (widget.position == TagPosition.right)
                   Container(
-                    color: widget.tagColor,
-                    width: 5,
+                    //color: widget.tagColor,
+                    width: widget.tagWidth,
                     height: double.infinity,
+                    decoration: BoxDecoration(
+                      color: widget.tagColor,
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(widget.borderRadius),
+                        bottomRight: Radius.circular(widget.borderRadius),
+                      ),
+                    ),
                   ),
               ]),
               if (widget.position == TagPosition.top)
                 Container(
-                  color: widget.tagColor,
-                  height: 5,
+                  //color: widget.tagColor,
+                  height: widget.tagWidth,
                   width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: widget.tagColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(widget.borderRadius),
+                      bottomRight: Radius.circular(widget.borderRadius),
+                    ),
+                  ),
                 ),
               if (widget.position == TagPosition.bottom)
                 Positioned(
@@ -130,13 +158,13 @@ class _DashboardScoreState extends State<DashboardScore> {
                     right: 0,
                     child: Container(
                       color: widget.tagColor,
-                      height: 5,
+                      height: widget.tagWidth,
                       width: double.infinity,
                     )),
             ],
           )),
         ]),
       ),
-    );
+    ));
   }
 }

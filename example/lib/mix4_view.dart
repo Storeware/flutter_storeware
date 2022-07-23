@@ -61,7 +61,7 @@ class Mix4View extends StatelessWidget {
               ],
             ),
           ),
-          Row(
+          Wrap(
             children: [
               DashboardScore(
                 color: Colors.blue[50],
@@ -69,6 +69,29 @@ class Mix4View extends StatelessWidget {
                 score: '\$ 12,234',
                 width: 180,
                 tagColor: Colors.amber,
+                title: const Text('DashboardScore'),
+              ),
+              DashboardScore(
+                color: Colors.blue[50],
+                //   icon: const Icon(Icons.table_bar),
+                borderRadius: 30,
+                tagWidth: 20,
+                score: '\$ 12,234',
+                width: 250,
+
+                tagColor: Colors.blue,
+                title: const Text('DashboardScore'),
+              ),
+              DashboardScore(
+                color: Colors.blue[50],
+                //   icon: const Icon(Icons.table_bar),
+                borderRadius: 30,
+                position: TagPosition.right,
+                tagWidth: 20,
+                score: '\$ 12,234',
+                width: 250,
+
+                tagColor: Colors.blue,
                 title: const Text('DashboardScore'),
               ),
               DashboardScore(

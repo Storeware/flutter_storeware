@@ -91,7 +91,7 @@ class SalesView extends StatelessWidget {
           ),
           DashboardDensedTile(
             icon: const CircleAvatar(
-                child: Text('BRL'), backgroundColor: Colors.green),
+                backgroundColor: Colors.green, child: Text('BRL')),
             title: const Text('Bolsa'),
             subtitle: const Text('volume'),
             value: const Text('\$ 104.650'),
@@ -116,14 +116,28 @@ class SalesView extends StatelessWidget {
             title: const Text('Views'),
             actions: [
               CircleAvatar(
-                  child: const Icon(Icons.person, color: Colors.red, size: 20),
                   backgroundColor: Colors.red[100],
-                  maxRadius: 10),
+                  maxRadius: 10,
+                  child: const Icon(Icons.person, color: Colors.red, size: 20)),
             ],
             color: Colors.blue[100],
             value: const Text('1.39K'),
             percent: const Text('+0.25%'),
             message: const Text('prev. 28 dias'),
+          ),
+          DashboardDensedScore(
+            width: 120,
+            score: '\$ 10mi',
+            label: 'Estimativa',
+            backgroundColor: Colors.blue[100],
+            style: const TextStyle(color: Colors.black26),
+            elevation: 5,
+            labelIcon: const Icon(
+              Icons.star,
+              color: Colors.blue,
+              size: 10,
+            ),
+            //    child: Text('Score'),
           ),
           DashboardSummary(
             height: 140,
@@ -131,9 +145,9 @@ class SalesView extends StatelessWidget {
             title: const Text('DashboardSummary'),
             actions: [
               CircleAvatar(
-                  child: const Icon(Icons.person, color: Colors.red, size: 20),
                   backgroundColor: Colors.red[100],
-                  maxRadius: 10),
+                  maxRadius: 10,
+                  child: const Icon(Icons.person, color: Colors.red, size: 20)),
             ],
             value: const Text('1.39K'),
             percent: const Text('+0.25%'),

@@ -42,6 +42,8 @@ dependencies:
   flutter_localizations: # Add this line
     sdk: flutter
 
+  materialicons:
+
 dependency_overrides:
   flutter_storeware:
     #    git:

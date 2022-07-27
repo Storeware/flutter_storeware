@@ -168,3 +168,113 @@ class _DashboardScoreState extends State<DashboardScore> {
     ));
   }
 }
+
+class DashboardDensedScore extends StatelessWidget {
+  const DashboardDensedScore({
+    Key? key,
+    this.width,
+    this.score,
+    this.child,
+    this.title,
+    this.height,
+    this.label,
+    this.elevation = 0,
+    this.color,
+    this.backgroundColor,
+    this.labelColor,
+    this.labelIcon,
+    this.style,
+  }) : super(key: key);
+  final String? score;
+  final Widget? child;
+  final String? title;
+  final double? width;
+  final double? height;
+  final String? label;
+  final double? elevation;
+  final Color? color;
+  final Color? backgroundColor;
+  final Color? labelColor;
+  final Widget? labelIcon;
+  final TextStyle? style;
+  @override
+  Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    TextStyle styled = style ?? theme.textTheme.headline1!;
+    return Card(
+        elevation: elevation,
+        color: backgroundColor ?? theme.cardColor,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+              width: width,
+              height: height,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (title != null)
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 5),
+                        child: Text(title!,
+                            style: styled.copyWith(
+                              color: color ??
+                                  theme.primaryTextTheme.bodyText2!
+                                      .backgroundColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            )),
+                      ),
+                    ),
+                  if (score != null)
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 1),
+                        child: Text(score!,
+                            //textAlign: TextAlign.left,
+                            style: styled.copyWith(
+                              color: color ??
+                                  theme.primaryTextTheme.bodyText2!
+                                      .backgroundColor,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
+                            )),
+                      ),
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    //mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (label != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 1),
+                          child: Text(label!,
+                              style: styled.copyWith(
+                                color: labelColor ??
+                                    theme.primaryTextTheme.bodyText2!
+                                        .backgroundColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              )),
+                        ),
+                      // if (labelIcon != null)
+                      Padding(
+                          padding: const EdgeInsets.only(left: 5, top: 1),
+                          child: labelIcon ??
+                              Icon(
+                                Icons.circle,
+                                size: 10,
+                                //Icons.water_outlined,
+                                color: styled.color,
+                              )),
+                    ],
+                  ),
+                  if (child != null) child!,
+                ],
+              )),
+        ));
+  }
+}

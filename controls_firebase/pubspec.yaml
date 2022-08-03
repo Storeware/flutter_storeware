@@ -1,43 +1,36 @@
 name: controls_firebase
-description: A new Flutter package project.
-version: 2021.11.10
+description: FirebaseInterface.
+version: 2022.08.03
 homepage: http://tireideletra.com.br
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-
-flutter:
-  plugin:
-    platforms:
-      web:
-        default_package: controls_firebase_platform_web
-      android:
-        default_package: controls_firebase_platform_android
-      ios:
-        default_package: controls_firebase_platform_android
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  universal_html:  ^2.0.8
+  universal_html:
   controls_data:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data
 
-  controls_firebase_platform_web:
+  controls_firebase_platform_interface:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_firebase/controls_firebase_platform_web
-  controls_firebase_platform_android:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_firebase/controls_firebase_platform_android
+      path: controls_firebase/controls_firebase_platform_interface
 
-  
-  uuid:
+  cloud_firestore: ^3.4.3
+  firebase_core: ^1.20.0
+  firebase_storage: ^10.3.4
+  firebase_messaging: ^12.0.1
+  google_sign_in: ^5.4.0
+  firebase_auth: ^3.6.2
+  flutter_local_notifications: ^9.7.0
 
+dependency_overrides:
+  platform: ^3.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

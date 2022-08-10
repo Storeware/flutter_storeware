@@ -15,17 +15,17 @@ version: 2021.11.10
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   data_table_2: ^2.1.1
   controls_web:
-    path: ../
-    #git:
-    #  url: https://github.com/amarildolacerda/flutter_storeware.git
-    #  path: controls_web
+    #path: ../
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
+      path: controls_web
   controls_data:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
@@ -33,7 +33,7 @@ dependencies:
   #path: ../../controls_data
 
   #dependencies_override:
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -46,7 +46,7 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
+  #uses-material-design: true
   assets:
     - assets/images/
   # To add assets to your application, add an assets section, like this:

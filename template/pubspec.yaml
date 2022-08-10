@@ -3,7 +3,7 @@ description: Template - Storeware by WBAGestão
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 2021.11.10
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -32,14 +32,13 @@ dependencies:
   uuid: ^3.0.4
   encrypt: ^5.0.0
 
-  
   desktop_window: ^0.4.0
 
-  console: 
+  console:
     git:
       url: https://github.com/amarildolacerda/console.git
 
-#    path: ../../estoque/console
+  #    path: ../../estoque/console
 
   cupertino_icons: ^1.0.2
   intl: ^0.17.0
@@ -83,9 +82,6 @@ dependency_overrides:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_web
 
-  
-  
-
 dev_dependencies:
   integration_test:
     sdk: flutter
@@ -98,24 +94,21 @@ dev_dependencies:
 
   wave: any
   controls_firebase:
-   git:
-     url: https://github.com/amarildolacerda/flutter_storeware.git
-     path: controls_firebase
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
+      path: controls_firebase
 
   controls_dash:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_dash
 
-
-
 flutter:
-  uses-material-design: true
+  #uses-material-design: true
   assets:
-     - assets/
-     - assets/nav/
-     
-    
+    - assets/
+    - assets/nav/
+
 msix_config:
   #https://sahajrana.medium.com/how-to-generate-a-pfx-certificate-for-flutter-windows-msix-lib-a860cdcebb8
   display_name: Storeware Gestor

@@ -1,11 +1,11 @@
 name: control_data_platform_android
 description: A new Flutter package project.
-version: 2021.10.11
+version: 22.08.10+1
 homepage: https://tireideletra.com.br
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -14,10 +14,9 @@ dependencies:
     git:
       url: https://github.com/amarildolacerda/flutter_storeware.git
       path: controls_data/control_data_platform_interface
-  shared_preferences: 
-  
+  shared_preferences:
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 flutter:
-  

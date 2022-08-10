@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:controls_firebase/firebase.dart';
+import 'package:flutter/material.dart';
 
 void main() {
   FirebaseApp().init(null).then(() {
@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             StreamBuilder(
               stream: null,
               //initialData: initialData ,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              builder: (BuildContext context, snapshot) {
                 return Container(
                   child: Text('x'),
                 );

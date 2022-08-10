@@ -20,7 +20,7 @@ dependencies:
   universal_io:
   universal_platform:
   font_awesome_flutter:
-  flutter_slidable: ^1.2.0
+  flutter_slidable:
   share:
   path_provider:
   get:
@@ -68,4 +68,4 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
+  #uses-material-design: true

@@ -1,5 +1,5 @@
-import "package:intl/intl.dart";
 import 'package:intl/date_symbol_data_local.dart';
+import "package:intl/intl.dart";
 
 /// chamada global para desativar em produção
 debug(texto) {
@@ -62,7 +62,6 @@ bool checaAgendaAlerta(DateTime d, {int minutos = 15}) {
 }
 
 String getDataExtensoAmigavel(DateTime data) {
-  if (data == null) return '';
   String r = '';
   if (toDate(data) == toDate(DateTime.now())) {
     r += 'Hoje as ';

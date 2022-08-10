@@ -4,7 +4,7 @@ version: 22.04.23+2
 publish_to: none
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -40,4 +40,4 @@ dev_dependencies:
   pretty_dio_logger:
 
 flutter:
-  uses-material-design: true
+  #uses-material-design: true

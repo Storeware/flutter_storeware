@@ -28,16 +28,16 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
       WidgetsFlutterBinding.ensureInitialized();
 
       /// a configuração é feita no ambiente
-      //try {
-      //  app = await api.Firebase.initializeApp();
-      //} catch (e) {
-      //  print(['FirebaseAppDriver.init', e]);
-      // }
+      try {
+        app = await api.Firebase.initializeApp();
+      } catch (e) {
+        print(['FirebaseAppDriver.init', e]);
+      }
       // if (api.Firebase.apps.length == 0)
       app = await api.Firebase.initializeApp(
           name: 'DEFAULT',
           options: api.FirebaseOptions(
-            messagingSenderId: options['858174338114'],
+            messagingSenderId: '858174338114',
             databaseURL: options['databaseURL'],
             apiKey: options['apiKey'],
             appId: options['appId'],
@@ -58,7 +58,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
   }
 
   @override
-  auth() {
+  FirebaseAuthDriver auth() {
     return FirebaseAuthDriver();
   }
 
@@ -118,7 +118,13 @@ class FirebaseFirestoreDriver extends FirestoreDriverInterface {
     return store
         .collection(collection)
         .doc(doc)
-        .set(d, fb.SetOptions(merge: merge));
+        .set(d, fb.SetOptions(merge: merge))
+        .then((value) => value);
+    // .then((x) {
+    //print('setDoc: $x');
+    // return x;
+    //}
+    //);
   }
 
   @override

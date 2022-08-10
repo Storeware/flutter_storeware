@@ -17,10 +17,14 @@ class FirebaseApp extends FirebaseAppDriver {
   }
   @override
   init(options) async {
-    if (callStack == 0) {
-      callStack++;
-      await super.init(options);
-      return app;
+    try {
+      if (callStack == 0) {
+        callStack++;
+        await super.init(options);
+        return app;
+      }
+    } catch (e) {
+      print(e);
     }
     return app;
   }

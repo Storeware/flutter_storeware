@@ -20,7 +20,7 @@ dependencies:
   universal_io:
   universal_platform:
   font_awesome_flutter:
-  flutter_slidable:
+  flutter_slidable: ^2.0.0
   share:
   path_provider:
   get:

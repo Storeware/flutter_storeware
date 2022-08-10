@@ -37,7 +37,7 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
       app = await api.Firebase.initializeApp(
           name: 'DEFAULT',
           options: api.FirebaseOptions(
-            messagingSenderId: '858174338114',
+            messagingSenderId: options['messagingSenderId'] ?? '858174338114',
             databaseURL: options['databaseURL'],
             apiKey: options['apiKey'],
             appId: options['appId'],

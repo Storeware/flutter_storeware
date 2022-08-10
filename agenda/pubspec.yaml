@@ -1,11 +1,11 @@
 name: agenda
 description: A new Flutter package project.
-version: 22.04.23+2
+version: 22.08.10+2
 homepage: www.tireideletra.com
 publish_to: none
 
 environment:
-  sdk: ">=2.16.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=1.12.0"
 
 dependencies:

@@ -28,22 +28,22 @@ class FirebaseAppDriver extends FirebaseAppDriverInterface {
       WidgetsFlutterBinding.ensureInitialized();
 
       /// a configuração é feita no ambiente
-      try {
-        app = await api.Firebase.initializeApp();
-      } catch (e) {
-        print(['FirebaseAppDriver.init', e]);
-      }
+      ///try {
+      ///   app = await api.Firebase.initializeApp();
+      // } catch (e) {
+      //   print(['FirebaseAppDriver.init', e]);
+      // }
       // if (api.Firebase.apps.length == 0)
       app = await api.Firebase.initializeApp(
-          name: 'DEFAULT',
+          //name: 'DEFAULT',
           options: api.FirebaseOptions(
-            messagingSenderId: options['messagingSenderId'] ?? '858174338114',
-            databaseURL: options['databaseURL'],
-            apiKey: options['apiKey'],
-            appId: options['appId'],
-            projectId: options['projectId'],
-            storageBucket: options['storageBucket'],
-          ));
+        messagingSenderId: options['messagingSenderId'] ?? '858174338114',
+        databaseURL: options['databaseURL'],
+        apiKey: options['apiKey'],
+        appId: options['appId'],
+        projectId: options['projectId'],
+        storageBucket: options['storageBucket'],
+      ));
       print('Firebase Android Inited');
       return app;
     } catch (e) {

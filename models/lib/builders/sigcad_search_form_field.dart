@@ -160,7 +160,7 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
               },
               onSearch: widget.readOnly || widget.onSearch == null
                   ? null
-                  : (a) {
+                  : (a) async {
                       return widget.onSearch!(context).then((r) {
                         addSuggestions.value = [r];
                         changedItem(r);

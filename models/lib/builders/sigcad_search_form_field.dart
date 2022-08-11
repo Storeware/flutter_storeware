@@ -164,7 +164,7 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                       return widget.onSearch!(context).then((r) {
                         addSuggestions.value = [r];
                         changedItem(r);
-                        return r['codigo'];
+                        return r;
                       });
                       /* Map<String, dynamic>? y;
                       return Dialogs.showPage(context,

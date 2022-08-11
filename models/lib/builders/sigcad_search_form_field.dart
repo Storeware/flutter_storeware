@@ -2,14 +2,15 @@
 
 import 'dart:async';
 
-import 'form_callback.dart';
-import 'search_form_field.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
 
+import 'form_callback.dart';
+import 'search_form_field.dart';
+
 class SigcadSearchFormField extends StatefulWidget {
-  final Function(double?) onChanged;
+  final Function(double?)? onChanged;
   final double? codigo;
   final String? label;
   final Function(BuildContext context, String value)? onInsert;
@@ -19,13 +20,13 @@ class SigcadSearchFormField extends StatefulWidget {
   final bool canClear;
   final bool obrigatorio;
   final String Function(String)? validator;
-  final FormSearchCallback onSearch;
-  final FormValueCallback onNew;
+  final FormSearchCallback? onSearch;
+  final FormValueCallback? onNew;
   final SuggestionController? suggestionController;
 
   const SigcadSearchFormField({
     Key? key,
-    required this.onChanged,
+    this.onChanged,
     this.codigo,
     this.label,
     this.onInsert,
@@ -35,8 +36,8 @@ class SigcadSearchFormField extends StatefulWidget {
     this.readOnly = false,
     this.canInsert = true,
     this.validator,
-    required this.onSearch,
-    required this.onNew,
+    this.onSearch,
+    this.onNew,
     this.suggestionController,
   }) : super(key: key);
 
@@ -62,7 +63,8 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
     });
   }
 
-  ValueNotifier<List> addSuggestions = ValueNotifier<List>([]);
+  ValueNotifier<List<dynamic>> addSuggestions =
+      ValueNotifier<List<dynamic>>([]);
   ValueNotifier<bool> addButton = ValueNotifier<bool>(false);
 
   final TextEditingController _digitadoController = TextEditingController();
@@ -115,7 +117,7 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                     if (rsp.isNotEmpty) {
                       codigo = rsp['codigo'] + 0.0;
                       nome = rsp['nome'];
-                      widget.onChanged(codigo);
+                      if (widget.onChanged != null) widget.onChanged!(codigo);
                       Timer(const Duration(milliseconds: 500), () {
                         stateController.closeOverlay(nome);
                       });
@@ -138,20 +140,21 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                   ? InkButton(
                       child: const Icon(Icons.clear),
                       onTap: () {
-                        widget.onChanged(0.0);
+                        if (widget.onChanged != null) widget.onChanged!(0.0);
                         notifier.value = 0;
                         _digitadoController.text = '';
                       })
                   : null,
               onChanged: (v) {
-                widget.onChanged(v['codigo'] + 0.0);
+                if (widget.onChanged != null)
+                  widget.onChanged!(v['codigo'] + 0.0);
                 notifier.value = v;
                 _digitadoController.text = v['nome'] ?? '';
               },
-              onSearch: widget.readOnly
+              onSearch: widget.readOnly || widget.onSearch == null
                   ? null
                   : (a) {
-                      return widget.onSearch(context).then((r) {
+                      return widget.onSearch!(context).then((r) {
                         addSuggestions.value = [r];
                         return r['codigo'];
                       });
@@ -200,11 +203,14 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                         if (widget.onInsert != null) {
                           widget.onInsert!(context, _digitadoController.text);
                         } else {
-                          widget.onNew(context,
-                              {"nome": _digitadoController.text}).then((row) {
-                            buscar(row['codigo']);
-                            widget.onChanged(row['codigo']);
-                          });
+                          if (widget.onNew != null)
+                            widget.onNew!(
+                                    context, {"nome": _digitadoController.text})
+                                .then((row) {
+                              buscar(row['codigo']);
+                              if (widget.onChanged != null)
+                                widget.onChanged!(row['codigo']);
+                            });
                           /*ClienteController.doNovoCadastro(
                               context, {"nome": _digitadoController.text},
                               onChanged: (row) {

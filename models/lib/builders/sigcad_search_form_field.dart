@@ -11,6 +11,7 @@ import 'search_form_field.dart';
 
 class SigcadSearchFormField extends StatefulWidget {
   final Function(double?)? onChanged;
+  final TextEditingController? controller;
   final double? codigo;
   final String? label;
   final Function(BuildContext context, String value)? onInsert;
@@ -27,6 +28,7 @@ class SigcadSearchFormField extends StatefulWidget {
   const SigcadSearchFormField({
     Key? key,
     this.onChanged,
+    this.controller,
     this.codigo,
     this.label,
     this.onInsert,
@@ -67,10 +69,11 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
       ValueNotifier<List<dynamic>>([]);
   ValueNotifier<bool> addButton = ValueNotifier<bool>(false);
 
-  final TextEditingController _digitadoController = TextEditingController();
+  late TextEditingController _digitadoController;
 
   @override
   void initState() {
+    _digitadoController = widget.controller ?? TextEditingController();
     super.initState();
     _dados = {};
     stateController = SearchFormFieldController();

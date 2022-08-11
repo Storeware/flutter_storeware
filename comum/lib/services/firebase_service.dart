@@ -46,7 +46,6 @@ class FirebaseService {
 
   Future<dynamic> checkoutItemDados() async {
     var v3 = CloudV3();
-    v3.loja = config['loja'];
     try {
       var resp =
           await v3.send(ODataQuery(resource: 'checkoutConfig', select: '*'));

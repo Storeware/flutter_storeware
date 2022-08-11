@@ -96,7 +96,7 @@ abstract class ConfigAppBase extends ConfigBase {
     /// chamado depois de carregar as configurações do servidor cloud
     /// carregar dadosLoja
     return cloudV3.checkoutItemDados().then((rsp) {
-      dadosLoja = rsp;
+      dadosLoja = rsp ?? {};
       return rsp != null;
     });
   }

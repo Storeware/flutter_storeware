@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:controls_data/data.dart';
 import 'package:controls_web/controls/ink_button.dart';
 import 'package:flutter/material.dart';
 import 'package:models/models.dart';
@@ -87,8 +88,9 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
   set nome(x) => _dados['nome'] = x;
 
   changedItem(Map<String, dynamic> row) {
-    buscar(row['codigo']);
-    if (widget.onChanged != null) widget.onChanged!(row['codigo'] + 0.0);
+    double v = toDouble(row['codigo']);
+    buscar(v);
+    if (widget.onChanged != null) widget.onChanged!(v);
     notifier.value = row;
     _digitadoController.text = row['nome'] ?? '';
   }

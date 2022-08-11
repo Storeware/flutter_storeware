@@ -1,4 +1,5 @@
 import 'package:comum/services/config_service.dart';
+import 'package:flutter/material.dart' show InheritedWidget;
 import 'package:flutter/widgets.dart';
 
 class DefaultUsuario extends InheritedWidget {

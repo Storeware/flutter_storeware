@@ -635,10 +635,10 @@
       "name": "comum",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "2.16"
+      "languageVersion": "2.17"
     }
   ],
-  "generated": "2022-07-22T21:04:31.837302Z",
+  "generated": "2022-08-11T11:16:12.009650Z",
   "generator": "pub",
   "generatorVersion": "2.17.6"
 }

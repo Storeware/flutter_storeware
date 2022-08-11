@@ -86,6 +86,13 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
   set codigo(x) => _dados['codigo'] = x;
   set nome(x) => _dados['nome'] = x;
 
+  changedItem(Map<String, dynamic> row) {
+    buscar(row['codigo']);
+    if (widget.onChanged != null) widget.onChanged!(row['codigo'] + 0.0);
+    notifier.value = row;
+    _digitadoController.text = row['nome'] ?? '';
+  }
+
   @override
   Widget build(BuildContext context) {
     if (('${widget.codigo ?? ''}').isNotEmpty) buscar(widget.codigo);
@@ -143,22 +150,18 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                   ? InkButton(
                       child: const Icon(Icons.clear),
                       onTap: () {
-                        if (widget.onChanged != null) widget.onChanged!(0.0);
-                        notifier.value = 0;
-                        _digitadoController.text = '';
+                        changedItem({codigo: 0, nome: ''});
                       })
                   : null,
               onChanged: (v) {
-                if (widget.onChanged != null)
-                  widget.onChanged!(v['codigo'] + 0.0);
-                notifier.value = v;
-                _digitadoController.text = v['nome'] ?? '';
+                changedItem(v);
               },
               onSearch: widget.readOnly || widget.onSearch == null
                   ? null
                   : (a) {
                       return widget.onSearch!(context).then((r) {
                         addSuggestions.value = [r];
+                        changedItem(r);
                         return r['codigo'];
                       });
                       /* Map<String, dynamic>? y;
@@ -210,9 +213,7 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                             widget.onNew!(
                                     context, {"nome": _digitadoController.text})
                                 .then((row) {
-                              buscar(row['codigo']);
-                              if (widget.onChanged != null)
-                                widget.onChanged!(row['codigo']);
+                              changedItem(row);
                             });
                           /*ClienteController.doNovoCadastro(
                               context, {"nome": _digitadoController.text},

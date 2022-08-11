@@ -1,8 +1,7 @@
 import 'package:comum/services/config_service.dart';
-import 'package:flutter/material.dart' show InheritedWidget;
 import 'package:flutter/widgets.dart';
 
-class Usuario extends InheritedWidget {
+class DefaultUsuario extends InheritedWidget {
   final ConfigAppBase? config;
   get logado {
     if (config != null) return config!.logado;
@@ -10,15 +9,15 @@ class Usuario extends InheritedWidget {
 
   get usuario => config!.usuario;
 
-  Usuario({Key? key, @required this.config, Widget? child})
+  DefaultUsuario({Key? key, @required this.config, Widget? child})
       : super(key: key, child: child!);
 
   @override
-  bool updateShouldNotify(Usuario oldWidget) {
+  bool updateShouldNotify(DefaultUsuario oldWidget) {
     return (oldWidget.usuario != usuario) || (oldWidget.logado != logado);
   }
 
   static of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<Usuario>();
+    return context.dependOnInheritedWidgetOfExactType<DefaultUsuario>();
   }
 }

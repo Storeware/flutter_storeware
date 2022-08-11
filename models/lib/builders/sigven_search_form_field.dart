@@ -9,7 +9,8 @@ import 'package:models/models.dart';
 import 'form_callback.dart';
 import 'search_form_field.dart';
 
-class SigcadSearchFormField extends StatefulWidget {
+// TODO: algum link para sigcad - revisar
+class SigvenSearchFormField extends StatefulWidget {
   final Function(double?)? onChanged;
   final double? codigo;
   final String? label;
@@ -24,7 +25,7 @@ class SigcadSearchFormField extends StatefulWidget {
   final FormValueCallback? onNew;
   final SuggestionController? suggestionController;
 
-  const SigcadSearchFormField({
+  const SigvenSearchFormField({
     Key? key,
     this.onChanged,
     this.codigo,
@@ -42,10 +43,10 @@ class SigcadSearchFormField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SigbcoSearchFormFieldState createState() => _SigbcoSearchFormFieldState();
+  _SigvenSearchFormFieldState createState() => _SigvenSearchFormFieldState();
 }
 
-class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
+class _SigvenSearchFormFieldState extends State<SigvenSearchFormField> {
   final ValueNotifier<dynamic> notifier = ValueNotifier({});
 
   buscar(double? cd) {
@@ -93,7 +94,7 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
           child: SearchFormField(
               controller: _digitadoController,
               minChars: 2,
-              keyStorage: 'sigcad_searchfield',
+              keyStorage: 'sigven_searchfield',
               nameField: 'nome',
               keyField: 'codigo',
               label: widget.label ?? 'Parceiro',

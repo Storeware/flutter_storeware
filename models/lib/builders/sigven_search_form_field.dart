@@ -86,11 +86,7 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
   @override
   Widget build(BuildContext context) {
     if (('${widget.codigo ?? ''}').isNotEmpty) buscar(widget.codigo);
-    return /*ValueListenableBuilder(
-      valueListenable: notifier,
-      builder: (a, b, c) => Container(
-        child:*/
-        Row(
+    return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Expanded(
@@ -158,22 +154,6 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                         addSuggestions.value = [r];
                         return r['codigo'];
                       });
-                      /* Map<String, dynamic>? y;
-                      return Dialogs.showPage(context,
-                          child: CadastroClientePage(
-                              title: widget.label ?? 'Parceiros',
-                              //canEdit: widget.canInsert,
-                              canInsert: widget.canInsert,
-                              //todas: false,
-                              onLoaded: (rows) {
-                                addSuggestions.value = rows;
-                              },
-                              onSelected: (x) async {
-                                y = x;
-                                return x['codigo'];
-                              })).then((rsp) {
-                        return y;
-                      });*/
                     },
               future: (x) {
                 var u = x.toUpperCase();
@@ -211,12 +191,6 @@ class _SigbcoSearchFormFieldState extends State<SigcadSearchFormField> {
                               if (widget.onChanged != null)
                                 widget.onChanged!(row['codigo']);
                             });
-                          /*ClienteController.doNovoCadastro(
-                              context, {"nome": _digitadoController.text},
-                              onChanged: (row) {
-                            widget.onChanged(row['codigo']);
-                            buscar(row['codigo']);
-                          });*/
                         }
                       },
                     )

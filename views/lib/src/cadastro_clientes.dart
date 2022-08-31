@@ -298,6 +298,7 @@ class ClienteController {
       {DataViewerController? controller,
       PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update,
       required Map<String, dynamic> dados}) {
+    if (!dados.containsKey('nome')) dados['nome'] = '';
     return DataViewerEditGroupedPage(
       data: dados,
       //actions: [],
@@ -308,7 +309,7 @@ class ClienteController {
       grouped: [
         DataViewerGroup(
           title: 'Identificação',
-          children: ['nome', 'celular', 'fone', 'email'],
+          children: ['nome', 'celular', 'fone', 'email'], /* nome */
         ),
         DataViewerGroup(
           initiallyExpanded: true,
@@ -328,7 +329,7 @@ class ClienteController {
       Map<String, dynamic> dados, PaginatedGridChangeEvent event) async {
     var responsive = ResponsiveInfo(context);
 
-    return await Dialogs.showPage(context,
+    return Dialogs.showPage(context,
             fullPage: responsive.isMobile,
             height: 600,
             width: responsive.size.width > 650 ? 650.0 : null,
@@ -359,7 +360,13 @@ class ClienteController {
 
   _buscarCEP(Map<String, dynamic> r) async {
     r['cep'] = formatCEP(r['cep']);
-    var rsp = CEPItem.fromJson(await CEP.buscar(r['cep']));
+    dynamic json = null;
+    try {
+      json = await CEP.buscar(r['cep']);
+    } catch (err) {
+      return;
+    }
+    var rsp = CEPItem.fromJson(json);
     r['cidade'] = rsp.cidade;
     r['estado'] = rsp.estado;
     r['bairro'] = rsp.bairro;

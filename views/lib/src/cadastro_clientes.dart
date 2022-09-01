@@ -293,15 +293,31 @@ class ClienteController {
     this.onChange,
     this.filterCodigo,
   });
-
+  //DataViewerEditGroupedPage
   static DataViewerEditGroupedPage editItem(
       {DataViewerController? controller,
       PaginatedGridChangeEvent event = PaginatedGridChangeEvent.update,
       required Map<String, dynamic> dados}) {
-    if (!dados.containsKey('nome')) dados['nome'] = '';
+    var defaultValueStrs = [
+      'nome',
+      'celular',
+      'fone',
+      'email',
+      'cnpj',
+      'cep',
+      'ender',
+      'bairro',
+      'cidade',
+      'estado',
+      'compl'
+    ];
+    for (var key in defaultValueStrs) dados[key] ??= '';
+
+    //return Text('OK');
     return DataViewerEditGroupedPage(
       data: dados,
       //actions: [],
+      margin: 0,
       canEdit: true,
       canInsert: true,
       canDelete: false,
@@ -309,11 +325,11 @@ class ClienteController {
       grouped: [
         DataViewerGroup(
           title: 'Identificação',
-          children: ['nome', 'celular', 'fone', 'email'], /* nome */
+          children: ['nome', 'fone', 'celular', 'email'], /* nome */
         ),
         DataViewerGroup(
           initiallyExpanded: true,
-          height: 73,
+          // height: 73,
           children: ['cnpj'],
         ),
         DataViewerGroup(

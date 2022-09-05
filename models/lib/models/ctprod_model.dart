@@ -223,7 +223,7 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
     String subQueryPreco = '';
     if (tabelaPreco != null)
       subQueryPreco = ", (select precovenda from web_ctprod_tabpreco " +
-          " where codigo= $alias.codigo and filial=$filial! and tabela=$tabelaPreco!) as pv ";
+          " where codigo= $alias.codigo and filial=$filial and tabela=$tabelaPreco) as pv ";
     return Cached.value(key, maxage: int.tryParse(tempo) ?? 60, builder: (k) {
       return search(
               resource: res,
@@ -236,7 +236,7 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
           .then((ODataResult r) {
         var mp = r.asMap();
         for (var e in mp) {
-          if (e['pv'] != null) e['precoweb'] = e['pv'];
+          if ((e['pv'] != null) && (e['pv'] != 0)) e['precoweb'] = e['pv'];
           if (toDouble(e['precoweb']) == 0 && e['precovenda'] != null)
             e['precoweb'] = e['precovenda'];
         }

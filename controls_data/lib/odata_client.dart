@@ -85,7 +85,7 @@ int strTimeToMinutes(String time) {
   }
 }
 
-DateTime toDateTime(value, {DateTime? def, num zone = -3}) {
+DateTime toDateTime(value, {DateTime? def, num zone = 0}) {
   if (value is String) {
     DateTime? v = DateTime.tryParse(value);
     num dif = zone * 60;

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:controls_extensions/extensions.dart' hide DynamicExtension;
 import 'package:flutter/services.dart';
 
-DateTime _toDateTime(value, {DateTime? def, zone = -3}) {
+DateTime _toDateTime(value, {DateTime? def, zone = 0}) {
   if (value is String) {
     int dif = (value.endsWith('Z') ? zone : 0);
     return DateTime.tryParse(value)!.add(Duration(hours: dif));

@@ -47,7 +47,7 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
   //DateTime value = DateTime.now();
   int changedCount = 0;
   int savedCount = 0;
-
+  DateTime? selected_dt = DateTime.now();
   @override
   void initState() {
     format = DateFormat(widget.format ?? "dd-MM-yyyy HH:mm");
@@ -68,8 +68,9 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
         format: format!,
         onShowPicker: (context, currentValue) async {
           print('date_time_picker_form->CurrentValue: $currentValue');
-          final today = DateTime.now();
-          final date = await showDatePicker(
+          selected_dt = DateTime.now();
+          var today = DateTime.now();
+          selected_dt = await showDatePicker(
             context: context,
             firstDate: widget.firstDate ?? today.add(Duration(days: -500)),
             initialDate: currentValue ?? today,
@@ -77,7 +78,7 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
             initialEntryMode: widget.initialEntryMode!,
           );
 
-          if (date != null) {
+          if (selected_dt != null) {
             final time = await showTimePicker(
               context: context,
               initialTime:
@@ -88,7 +89,10 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
               //        ? TimePickerEntryMode.input
               //        : TimePickerEntryMode.dial,
             );
-            return DateTimeField.combine(date, time);
+            print('onShowPicker');
+            selected_dt = DateTimeField.combine(selected_dt ?? today, time);
+            print(selected_dt);
+            return selected_dt;
           } else {
             return currentValue;
           }
@@ -100,15 +104,15 @@ class _DateTimePickerFormFieldState extends State<DateTimePickerFormField> {
           return date == null ? 'Data inválida' : null;
         },
         initialValue: initialValue,
-        onChanged: (date) => setState(() {
-          initialValue = date;
-          print(['onChanged', date]);
+        onChanged: (_) => setState(() {
+          initialValue = selected_dt;
+          print(['onChanged', selected_dt]);
           changedCount++;
           if (widget.onChanged != null) widget.onChanged!(initialValue!);
         }),
-        onSaved: (date) => setState(() {
-          print(['onChanged', date]);
-          initialValue = date;
+        onSaved: (_) => setState(() {
+          print(['onSaved', selected_dt]);
+          initialValue = selected_dt;
           savedCount++;
           if (widget.onSaved != null) widget.onSaved!(initialValue!);
         }),

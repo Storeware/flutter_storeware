@@ -1,28 +1,30 @@
 // @dart=2.12
 import 'dart:async';
+
 import 'package:comum/services/config_service.dart';
-import '../socketio/v3_socketio.dart';
-import 'string_encryption.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_data/odata_firestore.dart';
+import 'package:controls_extensions/extensions.dart';
 import 'package:controls_web/controls/colores.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../models/filial_model.dart';
-import '../models/usuarios_model.dart';
-import 'package:universal_platform/universal_platform.dart';
-import 'register_usuario_params.dart';
-import 'firebase_adapter.dart';
-import 'package:controls_extensions/extensions.dart';
-import 'cloud_config_model.dart';
-import '../models/acesso.dart';
-export '../models/acesso.dart';
-export 'acesso_const.dart';
-
+import 'package:intl/intl.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:intl/intl.dart';
+import 'package:universal_platform/universal_platform.dart';
+
+import '../models/acesso.dart';
+import '../models/filial_model.dart';
+import '../models/usuarios_model.dart';
+import '../socketio/v3_socketio.dart';
+import 'cloud_config_model.dart';
+import 'firebase_adapter.dart';
+import 'register_usuario_params.dart';
+import 'string_encryption.dart';
+
+export '../models/acesso.dart';
+export 'acesso_const.dart';
 
 /// Configurações para ambiente de desenvolvimento
 /// desabilita acesso v3 remoto (RestServer) e roteia para v3 local
@@ -248,28 +250,32 @@ abstract class ConsoleConfig extends ConfigAppBase {
   get currentInstance => configInstance;
   AppResourcesConst get resources => AppResourcesConst();
   start() {
-    _instance ??= this;
-    CloudV3().client.client.receiveTimeout = 15000;
-    ODataInst().client.receiveTimeout = 15000;
-    ODataInst().log((x) {
-      if (inLog) {
-        print('V3.log: $x');
-      }
-    });
-    ODataInst().error((x) {
-      // developer.log(x);
-      //print(x);
-      MensagemNotifier().notify('$x');
-    });
-    CloudV3().client.log((x) {
-      if (inLog) {
-        print('CloudV3.log: $x');
-      }
-    });
-    CloudV3().client.error((x) {
-      print('CloudV3.Error: $x');
-      MensagemNotifier().notify('CloudV3: Ops!|$x');
-    });
+    try {
+      _instance ??= this;
+      CloudV3().client.client.receiveTimeout = 15000;
+      ODataInst().client.receiveTimeout = 15000;
+      ODataInst().log((x) {
+        if (inLog) {
+          print('V3.log: $x');
+        }
+      });
+      ODataInst().error((x) {
+        // developer.log(x);
+        //print(x);
+        MensagemNotifier().notify('$x');
+      });
+      CloudV3().client.log((x) {
+        if (inLog) {
+          print('CloudV3.log: $x');
+        }
+      });
+      CloudV3().client.error((x) {
+        print('CloudV3.Error: $x');
+        MensagemNotifier().notify('CloudV3: Ops!|$x');
+      });
+    } finally {
+      return _instance;
+    }
   }
 
   get codigoVendedor => dadosUsuario.vendedor;
@@ -380,6 +386,7 @@ abstract class ConsoleConfig extends ConfigAppBase {
             .client
             .addHeader('db-connection', super.configDados['db-connection']);
     }
+    return super.afterConfig();
   }
 
   //CheckoutConfigItem? checkoutConfigItem;

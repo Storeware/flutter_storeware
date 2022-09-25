@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:controls_data/odata_client.dart';
+import 'package:controls_data/odata_firestore.dart';
 import 'package:controls_data/rest_client.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
-import 'package:controls_data/odata_firestore.dart';
 
 class LojaExistsBloc extends BlocModel<bool> {
   static final _singleton = LojaExistsBloc._create();
@@ -40,6 +40,21 @@ class FirebaseService {
     } catch (e) {
       v3.client.errorNotifier.send(
           'Não estou conseguindo obter informações relevantes para continuar. Verifique a conexão e tente novamente! ');
+      return null;
+    }
+  }
+
+  Future<dynamic> checkoutItemDados() async {
+    var v3 = CloudV3();
+    try {
+      var resp =
+          await v3.send(ODataQuery(resource: 'checkoutConfig', select: '*'));
+      var result = resp['result'] ??
+          [
+            {"inativo": true}
+          ];
+      return result[0];
+    } catch (e) {
       return null;
     }
   }

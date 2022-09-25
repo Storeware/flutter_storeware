@@ -1,10 +1,10 @@
 name: controls_data
 description: Storeware data package.
-version: 2021.10.11
+version: 22.08.10+2
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 flutter:
   plugin:
@@ -27,7 +27,7 @@ dependencies:
   intl:
   #universal_html:
   #http:
-  
+
   dio: any
   connectivity: #^3.0.2
   uuid: #^3.0.1
@@ -37,6 +37,11 @@ dependencies:
   pdf: any
   printing: any
   date_format: #^2.0.2
+
+  control_data_platform_interface:
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
+      path: controls_data/control_data_platform_interface
 
   control_data_platform_web:
     git:
@@ -54,12 +59,12 @@ dependencies:
       path: controls_data/control_data_platform_windows
 
   controls_extensions:
-   git:
-     url: https://github.com/amarildolacerda/flutter_storeware.git
-     path: controls_extensions
+    git:
+      url: https://github.com/amarildolacerda/flutter_storeware.git
+      path: controls_extensions
   #controls_web:
-   #git:
-     #url: https://github.com/amarildolacerda/flutter_storeware.git
+  #git:
+  #url: https://github.com/amarildolacerda/flutter_storeware.git
   #   path: ../controls_web
 
 dev_dependencies:

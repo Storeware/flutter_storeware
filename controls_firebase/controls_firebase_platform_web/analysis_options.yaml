@@ -1,4 +1,0 @@
-analyzer:
-  language:
-    strict-casts: false
-    strict-raw-types: true

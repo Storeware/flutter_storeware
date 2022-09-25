@@ -63,9 +63,11 @@ class _Mix1ViewState extends State<Mix1View> {
             ApplienceContainer(
               color: Colors.red,
               radius: 5,
-              child: const Center(child: Text('ApplienceContainer')),
               height: 100,
               elevation: 10,
+              child: const Center(
+                child: Text('ApplienceContainer'),
+              ),
             ),
             const Divider(),
             const ApplienceBody(
@@ -92,6 +94,18 @@ class _Mix1ViewState extends State<Mix1View> {
                 ],
               ),
             ),
+            const ApplienceInfoTagged(
+              // color: Color.fromARGB(255, 124, 93, 35),
+              title: Text('ApplienceInfoTagged'),
+              content: Text(
+                '''Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum''',
+              ),
+              bottom: Text('Bottom Child'),
+              tagColor: Color.fromARGB(255, 81, 157, 187),
+            ),
+            Container(
+              height: 80,
+            )
           ],
         ),
       ]).singleChildScrollView(),

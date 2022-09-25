@@ -343,6 +343,9 @@ class ClienteController {
     // obter o proximo numero
     SigcadItemModel().proximoCodigo(configInstance!.filial).then((rsp) {
       dados!['codigo'] = rsp;
+      /* ['nome', 'ender', 'cidade'].forEach((item) {
+        dados[item] ??= '';
+      });*/
       ClienteController.doEditItem(
               context, c.controller, dados, PaginatedGridChangeEvent.insert)
           .then((rsp) {

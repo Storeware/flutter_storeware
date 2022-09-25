@@ -130,3 +130,71 @@ class ApplienceBody extends StatelessWidget {
     );
   }
 }
+
+class ApplienceInfoTagged extends StatelessWidget {
+  const ApplienceInfoTagged(
+      {super.key,
+      this.tagColor = Colors.orange,
+      this.title,
+      this.content,
+      this.height = 180,
+      this.tagWidth = 5,
+      this.color,
+      this.bottom,
+      this.width = double.maxFinite});
+  final Widget? bottom;
+  final double? width;
+  final Color? color;
+  final Widget? title;
+  final Widget? content;
+  final Color? tagColor;
+  final double? tagWidth;
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: [
+      Container(
+        width: tagWidth,
+        color: tagColor,
+        height: height!,
+      ),
+      Expanded(
+        child: Container(
+          width: width,
+          height: height,
+          color: color,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (title != null)
+                Container(
+                  padding: const EdgeInsets.only(left: 5),
+                  color: tagColor,
+                  alignment: Alignment.centerLeft,
+                  height: kMinInteractiveDimension * .6,
+                  child: title,
+                ),
+              Expanded(
+                child: content ?? Container(),
+              ),
+              if (bottom != null)
+                Container(
+                  padding: const EdgeInsets.only(left: 5),
+                  color: tagColor,
+                  alignment: Alignment.centerLeft,
+                  height: kMinInteractiveDimension * .6,
+                  child: bottom!,
+                ),
+            ],
+          ),
+        ),
+      ),
+      Container(
+        width: tagWidth,
+        color: tagColor,
+        height: height!,
+      ),
+    ]);
+  }
+}

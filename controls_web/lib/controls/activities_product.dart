@@ -1,4 +1,6 @@
 // @dart=2.12
+// ignore_for_file: prefer_final_fields
+
 import 'package:flutter/material.dart';
 import 'package:controls_web/controls.dart';
 
@@ -65,7 +67,7 @@ class ActivityProductDetail extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ActivityProductDetailState createState() => _ActivityProductDetailState();
+  State<ActivityProductDetail> createState() => _ActivityProductDetailState();
 }
 
 class _ActivityProductDetailState extends State<ActivityProductDetail> {
@@ -131,13 +133,13 @@ class _ActivityProductDetailState extends State<ActivityProductDetail> {
                       ActivityButton(
                         image: Text(
                             'de ${widget.priceFrom.toString().replaceAll('.', ',')}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 14,
                               fontStyle: FontStyle.italic,
                             )),
                         title: 'por',
                       ),
-                    if ((widget.price ?? 0) > 0) Text('Preço unit:  '),
+                    if ((widget.price ?? 0) > 0) const Text('Preço unit:  '),
                     if ((widget.price ?? 0) > 0)
                       Padding(
                         padding: const EdgeInsets.only(right: 8.0),
@@ -209,7 +211,7 @@ class ActivityBuyButton extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ActivityBuyButtonState createState() => _ActivityBuyButtonState();
+  State<ActivityBuyButton> createState() => _ActivityBuyButtonState();
 }
 
 class _ActivityBuyButtonState extends State<ActivityBuyButton> {
@@ -250,7 +252,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
                   ),
                   child: Container(
                       width: 40,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(15),
@@ -301,7 +303,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
                   padding: const EdgeInsets.only(top: 6, bottom: 6, left: 1),
                   child: Container(
                       width: 40,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.only(
                             topRight: Radius.circular(15),
@@ -350,7 +352,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
             ],
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 1,
         ),
         StrapButton(
@@ -398,59 +400,57 @@ class ShowPriceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var minFontSize = (fontSize! / 2);
     if (minFontSize < 10) minFontSize = 10;
-    var partes = '${precovenda!.toStringAsFixed(decimais!)}'.split('.');
+    var partes = precovenda!.toStringAsFixed(decimais!).split('.');
     if (partes.length <= 1) {
       partes.add('00');
       partes.add('00');
     }
     partes[1] = partes[1].padRight(2, '0');
-    return Container(
-      child: Wrap(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              SizedBox(
-                height: fontSize! - 16,
-              ),
-              Text(
-                '$simbol',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-              ),
-              SizedBox(
-                width: 8,
-              )
-            ],
-          ),
-          SizedBox(width: 6),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: Text(
-              '${partes[0]}',
+    return Wrap(
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            SizedBox(
+              height: fontSize! - 16,
+            ),
+            Text(
+              '$simbol',
               style: TextStyle(
-                fontSize: fontSize,
                 fontWeight: FontWeight.bold,
                 color: color,
-
-                //color: Colors.black54,
               ),
+            ),
+            const SizedBox(
+              width: 8,
+            )
+          ],
+        ),
+        const SizedBox(width: 6),
+        Container(
+          alignment: Alignment.bottomCenter,
+          child: Text(
+            partes[0],
+            style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: color,
+
+              //color: Colors.black54,
             ),
           ),
-          Container(
-            alignment: Alignment.topLeft,
-            padding: EdgeInsets.only(top: 2),
-            child: Text(
-              ',${partes[1]}',
-              style: TextStyle(
-                fontSize: minFontSize,
-                color: color,
-              ),
+        ),
+        Container(
+          alignment: Alignment.topLeft,
+          padding: const EdgeInsets.only(top: 2),
+          child: Text(
+            ',${partes[1]}',
+            style: TextStyle(
+              fontSize: minFontSize,
+              color: color,
             ),
-          )
-        ],
-      ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -469,7 +469,7 @@ class ShowDescontoMaximo extends StatefulWidget {
       : super(key: key);
 
   @override
-  _ShowDescontoMaximoState createState() => _ShowDescontoMaximoState();
+  State<ShowDescontoMaximo> createState() => _ShowDescontoMaximoState();
 }
 
 class _ShowDescontoMaximoState extends State<ShowDescontoMaximo> {
@@ -494,7 +494,7 @@ class _ShowDescontoMaximoState extends State<ShowDescontoMaximo> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Container(
+                    SizedBox(
                       //10padding: EdgeInsets.only(top: 40),
                       height: kToolbarHeight + 3,
                       width: 90,
@@ -519,7 +519,7 @@ class _ShowDescontoMaximoState extends State<ShowDescontoMaximo> {
                         //},
                       ),
                     ),
-                    SizedBox(width: 20),
+                    const SizedBox(width: 20),
                     ShowPriceWidget(
                         simbol: '', precovenda: desconto, color: Colors.red),
                   ],
@@ -527,7 +527,7 @@ class _ShowDescontoMaximoState extends State<ShowDescontoMaximo> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('Líquido:  '),
+                    const Text('Líquido:  '),
                     ShowPriceWidget(precovenda: liquido.value),
                   ],
                 ),

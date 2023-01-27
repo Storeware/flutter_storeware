@@ -5,15 +5,13 @@ homepage: https://tireideletra.com.br
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   control_data_platform_interface:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_data/control_data_platform_interface
+    path: ../control_data_platform_interface
   html:
 
 dev_dependencies:

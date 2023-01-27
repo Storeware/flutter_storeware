@@ -16,41 +16,25 @@ dependencies:
 
 dependency_overrides:
   controls_web:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_web
+    path: ./controls_web
   controls_login:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_login
+    path: ./controls_login
 
   comum:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: comum
+    path: ./comum
 
   controls_data:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_data
+    path: ./controls_data
 
   controls_extensions:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_extensions
+    path: ./controls_extensions
   controls_dash:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_dash
+    path: ./controls_dash
 
   controls_image:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_image
+    path: ./controls_image
   controls_codebar:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_codebar
+    path: ./controls_codebar
 
 dev_dependencies:
   flutter_test:

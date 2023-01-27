@@ -12,29 +12,19 @@ dependencies:
   flutter:
     sdk: flutter
   controls_web:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_web
+    path: ../controls_web
   controls_data:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_data
+    path: ../controls_data
   controls_extensions:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_extensions
+    path: ../controls_extensions
   #controls_firebase:
   #  git:
   #    url: https://github.com/amarildolacerda/flutter_storeware.git
   #    path: controls_firebase
   controls_dash:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_dash
+    path: ../controls_dash
   models:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: models
+    path: ../models
   get:
   web_socket_channel:
 

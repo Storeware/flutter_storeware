@@ -148,11 +148,11 @@ class _DataGridPageState extends State<DataGridPage> {
                   initialData: true,
                   stream: _notifier.stream,
                   builder: (x, s) {
-                    print('Builder ${s.data}:$dataSortIndex');
+                    //  print('Builder ${s.data}:$dataSortIndex');
                     if (dataSortIndex > -1) {
                       var col = widget.columns![dataSortIndex];
-                      print(col.name);
-                      if (dataSource != null) if (col.canOrder!)
+                      //print(col.name);
+                      if (col.canOrder!)
                         dataSource.sort((a, b) {
                           try {
                             if (a[col.name] is num)
@@ -166,7 +166,7 @@ class _DataGridPageState extends State<DataGridPage> {
                           }
                         });
                     }
-                    print('DataTable...');
+                    //    print('DataTable...');
                     return DataTable(
                       sortAscending: ascendent,
                       sortColumnIndex: dataSortIndex,
@@ -251,7 +251,7 @@ class _DataGridPageState extends State<DataGridPage> {
       });
     } else
       snaps.docs.forEach((f) {
-        print('doc f: $f');
+        //  print('doc f: $f');
         var d = f.data();
         d['id'] = f.id;
         dataSource.add(d);
@@ -381,7 +381,7 @@ class DataGridScaffold extends StatefulWidget {
 class _DataGridScaffoldState extends State<DataGridScaffold> {
   @override
   Widget build(BuildContext context) {
-    print('scaffold - grid create');
+    // print('scaffold - grid create');
     return Scaffold(
       backgroundColor: defaultScaffoldBackgroudColor,
       appBar: _createAppBar(),
@@ -390,7 +390,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
   }
 
   _createAppBar() {
-    print('createAppBar');
+    //  print('createAppBar');
     return AppBar(title: widget.title, actions: widget.actions);
   }
 
@@ -425,7 +425,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
       ]));
 
   _createBody() {
-    print('createBody');
+    // print('createBody');
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SliverContents(children: [
@@ -463,15 +463,15 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
 
   _onGetValues() {
     var r = (widget.onGetValues != null) ? widget.onGetValues!() : {};
-    print('onGetValues->$r');
+    // print('onGetValues->$r');
     return r;
   }
 
   _onNewClick() {
     Navigator.of(context).push(MaterialPageRoute(builder: (x) {
-      print('DataNew');
+      // print('DataNew');
       if (widget.onStateChange != null) widget.onStateChange!('new');
-      print('loading GridItemView');
+      // print('loading GridItemView');
       return DataGridItemView(
         title: Row(children: [Text('Novo - '), widget.title!]),
         data: _onGetValues(),
@@ -483,7 +483,7 @@ class _DataGridScaffoldState extends State<DataGridScaffold> {
 
   _onEditClick(Map<String, dynamic> data) {
     Navigator.of(context).push(MaterialPageRoute(builder: (x) {
-      print('DataEdit');
+      // print('DataEdit');
       if (widget.onStateChange != null) widget.onStateChange!('edit');
       //print(data);
       return DataGridItemView(
@@ -506,7 +506,7 @@ class DataGridItemView extends StatefulWidget {
   final Function(dynamic)? onSave;
   DataGridItemView({Key? key, this.title, this.data, this.columns, this.onSave})
       : super(key: key) {
-    print('DataGridItemView->created');
+    // print('DataGridItemView->created');
   }
   _DataGridItemViewState createState() => _DataGridItemViewState();
 }
@@ -515,13 +515,13 @@ class _DataGridItemViewState extends State<DataGridItemView> {
   @override
   void initState() {
     super.initState();
-    print('_DataGridItemViewState - initState');
+    // print('_DataGridItemViewState - initState');
     _loadValues();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('_DataGridItemViewState');
+    // print('_DataGridItemViewState');
     return Scaffold(
       appBar: _createAppBar(),
       body: SingleChildScrollView(child: _createBody()),
@@ -581,7 +581,7 @@ class _DataGridItemViewState extends State<DataGridItemView> {
   }
 
   _loadValues() {
-    print('_loadValues()');
+    //  print('_loadValues()');
     for (var key in widget.data.keys) {
       var v = widget.data[key];
       values[key] = v;
@@ -623,26 +623,23 @@ class _DataGridItemViewState extends State<DataGridItemView> {
   }
 
   _salvar() {
-    print('_salvar-init');
+    //  print('_salvar-init');
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
       try {
-        var s = Scaffold.of(context);
-        if (s != null)
-          /**s.showSnackBar(SnackBar(
-              content:
-                  Text('Processando' /*Translate.string('Processando')*/)));**/
-          print('Processando..');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Processando' /*Translate.string('Processando')*/)));
       } catch (x) {
         //
       }
       if (widget.onSave != null) {
-        print('_salvar-onSave');
+//        print('_salvar-onSave');
         var r = widget.onSave!(values);
         if (r == null) {
           try {
-            var scaff = Scaffold.of(context);
-            if (scaff != null) Navigator.of(context).pop();
+            //var scaff = Scaffold.of(context);
+            //if (scaff != null)
+            Navigator.of(context).pop();
           } catch (x) {
             //
           }

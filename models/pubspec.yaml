@@ -20,13 +20,9 @@ dependencies:
   #path: controls_web
 
   controls_web:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_web
+    path: ../controls_web
   controls_data:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_data
+    path: ../controls_data
 
   #controls_extensions:
   #  git:

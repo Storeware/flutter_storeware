@@ -1,14 +1,16 @@
 import 'package:controls_web/controls/responsive.dart';
+//import 'package:controls_web/controls/tab_choice.dart';
 import 'package:controls_web/drivers/bloc_model.dart';
+//import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 /// clase de teste para Kanban
 class KanbanSample extends StatefulWidget {
-  const KanbanSample({Key? key}) : super(key: key);
+  KanbanSample({Key? key}) : super(key: key);
 
   @override
-  State<KanbanSample> createState() => _KanbanSampleState();
+  _KanbanSampleState createState() => _KanbanSampleState();
 }
 
 class _KanbanSampleState extends State<KanbanSample> {
@@ -32,7 +34,7 @@ class _KanbanSampleState extends State<KanbanSample> {
                     {"id": column.id, "ordem": 1, "nome": "teste1", "qtde": 1});
               }),
         ],
-        source: const [
+        source: [
           {"id": 1, "ordem": 1, "nome": "teste1", "qtde": 1},
           {"id": 2, "ordem": 2, "nome": "teste2", "qtde": 2},
         ],
@@ -103,6 +105,7 @@ class KanbanGrid extends StatefulWidget {
   final IconData? dropIcon;
   final Widget? feedback;
   final List<KanbanGridDragSide>? dragSide;
+//  final BoxDecoration decoration;
 
   /// [onAcceptItem] é chamado para gravar um item
   final Future<bool> Function(KanbanController, KanbanColumn, dynamic)?
@@ -125,23 +128,30 @@ class KanbanGrid extends StatefulWidget {
   /// se [DraggableKanbanItem] for null é uma nova linha se houver dados é uma copia
   final dynamic Function(KanbanController, DraggableKanbanItem?)? onNewItem;
 
+  /// [onSelectedItem] é chamado quando click no card item
+  //final Function(DraggableKanbanItem) onSelectedItem;
+  //final Function(DraggableKanbanItem) onDoubleTap;
+
   /// exluir um card
   final Function(DraggableKanbanItem)? onDeleteItem;
   final Widget Function(KanbanColumn)? emptyContainer;
   final List<KanbanSlideAction>? slideLeading;
   final List<KanbanSlideAction>? slideTrailing;
   final Widget? bottom;
-  const KanbanGrid(
+  KanbanGrid(
       {Key? key,
       @required this.columnKeyName,
       @required this.columns,
       @required this.primaryKey,
       this.showProcessing = true,
       this.minWidth = kMinInteractiveDimension,
+      //this.decoration,
       this.builderHeader,
       this.headerHeight,
       this.onWillAccept,
       this.onAcceptItem,
+      //this.onSelectedItem,
+      //this.onDoubleTap,
       this.onNewItem,
       this.onDeleteItem,
       this.emptyContainer,
@@ -149,7 +159,7 @@ class KanbanGrid extends StatefulWidget {
       this.controller,
       this.bottomNavigationBar,
       @required this.source,
-      this.dragSide = const [KanbanGridDragSide.right],
+      List<KanbanGridDragSide>? dragSide,
       this.itemHeight,
       this.slideLeading,
       this.columnBottom,
@@ -159,10 +169,11 @@ class KanbanGrid extends StatefulWidget {
       this.feedback,
       this.dropElevation = 15,
       this.slideTrailing})
-      : super(key: key);
+      : this.dragSide = dragSide ?? [KanbanGridDragSide.right],
+        super(key: key);
 
   @override
-  State<KanbanGrid> createState() => _KanbanGridState();
+  _KanbanGridState createState() => _KanbanGridState();
 }
 
 class _KanbanGridState extends State<KanbanGrid> {
@@ -182,7 +193,7 @@ class _KanbanGridState extends State<KanbanGrid> {
   @override
   Widget build(BuildContext context) {
     ResponsiveInfo resposive = ResponsiveInfo(context);
-    headerHeight ??= widget.headerHeight ?? resposive.isSmall
+    this.headerHeight ??= widget.headerHeight ?? resposive.isSmall
         ? 30
         : kMinInteractiveDimension;
 
@@ -198,35 +209,36 @@ class _KanbanGridState extends State<KanbanGrid> {
                   builder: (context, snap) {
                     if (!snap.hasData)
                       return (widget.showProcessing!)
-                          ? const Align(child: CircularProgressIndicator())
+                          ? Align(child: CircularProgressIndicator())
                           : Container();
                     return ListView(
                       shrinkWrap: true,
-                      physics: const ClampingScrollPhysics(),
+                      physics: ClampingScrollPhysics(),
+                      //controller: scrollCtr,
                       scrollDirection: Axis.horizontal,
                       children: [
                         for (var col in controller!.columns!)
                           Builder(builder: (_) {
-                            double minW =
+                            double min_w =
                                 col.minWidth ?? widget.minWidth ?? 120.0;
-                            double maxW = col.width!;
-                            if (minW > maxW) minW = maxW;
+                            double max_w = col.width!;
+                            if (min_w > max_w) min_w = max_w;
                             return Card(
                               color: col.color ?? Colors.transparent,
                               elevation: col.elevation,
                               child: Container(
                                 width:
-                                    controller!.getCardWidth(col, minW, maxW),
+                                    controller!.getCardWidth(col, min_w, max_w),
                                 constraints: BoxConstraints(
-                                  maxWidth: maxW,
-                                  minWidth: minW,
+                                  maxWidth: max_w,
+                                  minWidth: min_w,
                                   maxHeight: double.maxFinite,
                                 ),
                                 color: col.color,
                                 child: Column(children: [
                                   Expanded(
                                       child: KabanColumnCards(
-                                          minWidth: minW,
+                                          minWidth: min_w,
                                           controller: controller!,
                                           column: col)),
                                   if (widget.columnBottom != null)
@@ -238,7 +250,7 @@ class _KanbanGridState extends State<KanbanGrid> {
                       ],
                     );
                   })),
-          floatingActionButton: SizedBox(
+          floatingActionButton: Container(
             height: 160,
             child: Stack(
               children: [
@@ -277,7 +289,7 @@ class _KanbanGridState extends State<KanbanGrid> {
 
 /// [KanbanColumn] são as colunas do Kanban, ou estados
 class KanbanColumn {
-  dynamic id;
+  var id;
   String? label;
   double? width;
   double? elevation;
@@ -301,6 +313,9 @@ class KanbanColumn {
     this.elevation = 0,
     this.titleColor,
     this.dragColor = Colors.grey,
+    //this.draggableColor,
+    //this.dragDottedColor,
+    //this.dragFocused,
     this.onNewItem,
     this.actions,
     this.color,
@@ -309,12 +324,12 @@ class KanbanColumn {
 
 /// [KanbanController] informações de controle do Kanban
 class KanbanController {
-  final BlocModel<int> _reloadEvent = BlocModel<int>();
+  BlocModel<int> _reloadEvent = BlocModel<int>();
   ValueNotifier<String> processingIndex = ValueNotifier<String>('');
 
   int _key = 0;
   reload() {
-    //print('Reload: $_updating');
+    print('Reload: $_updating');
     if (_updating <= 0) {
       _reloadEvent.notify(_key++);
       _updating = 0;
@@ -324,7 +339,7 @@ class KanbanController {
 
   String? columnKeyName;
   int rowIndexOnColumn = 0;
-  dynamic widget;
+  var widget;
 
   List<KanbanColumn>? columns;
   List<dynamic>? source = [];
@@ -332,9 +347,9 @@ class KanbanController {
   clear() {
     source!.clear();
     if (data != null)
-      for (var k in (data?.keys ?? {})) {
+      (data?.keys ?? {}).forEach((k) {
         data![k]!.clear();
-      }
+      });
     _updating = 0;
     return this;
   }
@@ -342,13 +357,13 @@ class KanbanController {
   buildData() {
     data = {};
     var i = 0;
-    for (var col in (columns ?? [])) {
+    (columns ?? []).forEach((col) {
       col.index = i++;
-    }
+    });
 
-    for (var item in (source ?? [])) {
+    (source ?? []).forEach((item) {
       _addData(item);
-    }
+    });
     return this;
   }
 
@@ -357,7 +372,7 @@ class KanbanController {
   }
 
   isColumnMinWidth(col) {
-    return (data![col.id] ?? []).isEmpty;
+    return (data![col.id] ?? []).length == 0;
   }
 
   _addData(item) {
@@ -411,14 +426,14 @@ class KanbanController {
   Future<dynamic> _insert(KanbanColumn column, int index, dynamic item) async {
     item[columnKeyName] = column.id;
     if (widget.onAcceptItem != null) {
-      rowIndexOnColumn = index;
+      this.rowIndexOnColumn = index;
       return widget.onAcceptItem(this, column, item).then((rsp) {
         if (data![column.id] == null) data![column.id] = [];
         if ((index < 0) || (data![column.id!]!.length <= index))
           data![column.id!]!.add(item);
         else
           data![column.id!]!.insert(index, item);
-        //  print('Response: $rsp');
+        print('Response: $rsp');
         return (rsp is bool) ? rsp : true;
       });
     }
@@ -452,7 +467,7 @@ class KanbanController {
           "Card de destino não existe [$to], não foi possível mover.");
     return _insert(columns![columnToIndex], -1, item).then((resp) {
       if (rowFrom >= 0) {
-        //print('removendo $rowFrom');
+        print('removendo $rowFrom');
         data![cardDe]!.removeAt(rowFrom);
       }
       reload();
@@ -472,7 +487,7 @@ class KabanColumnCards extends StatefulWidget {
   final KanbanColumn? column;
   final KanbanController? controller;
   final double? minWidth;
-  const KabanColumnCards(
+  KabanColumnCards(
       {Key? key,
       @required this.column,
       @required this.controller,
@@ -480,7 +495,7 @@ class KabanColumnCards extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<KabanColumnCards> createState() => _KabanColumnCardsState();
+  _KabanColumnCardsState createState() => _KabanColumnCardsState();
 }
 
 class _KabanColumnCardsState extends State<KabanColumnCards> {
@@ -602,14 +617,14 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
       /// header
       if ((kanban!.headerHeight ?? 40) > 0)
         DragTargetKanbanCard(
-          itemIndex: 0, // DONE: parece ser dinamico
+          itemIndex: 0, // TODO: parece ser dinamico
           controller: widget.controller!,
           data: data,
           column: widget.column!,
           child: AppBar(
               primary: false,
-              backgroundColor: widget.column!.titleColor ??
-                  theme.appBarTheme.backgroundColor,
+              backgroundColor:
+                  widget.column!.titleColor ?? theme.appBarTheme.color,
               toolbarHeight: kanban!.headerHeight,
               elevation: 0,
               automaticallyImplyLeading: false,
@@ -618,7 +633,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
                 child: (widget.controller!.widget.builderHeader != null)
                     ? widget.controller!.widget.builderHeader(widget.column)
                     : Text(widget.column!.label ?? '',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -666,7 +681,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
                   : Container(
                       height: 40,
                       color: theme.primaryColor.withOpacity(0.1),
-                      child: (accepted && items.isNotEmpty)
+                      child: (accepted && items.length > 0)
                           ? kanban!.builder!(
                               items[0]!.column!, 0, items[0]!.data)
                           : null),
@@ -691,7 +706,7 @@ class DraggableKanbanItem {
   final int? itemIndex;
   KanbanController? controller;
   KanbanColumn? column;
-  dynamic data;
+  dynamic? data;
   DraggableKanbanItem(
       {@required this.column,
       @required this.itemIndex,
@@ -701,12 +716,12 @@ class DraggableKanbanItem {
 
 /// objeto que pode ser arrastado para outro estado
 class DraggableKanbanCard extends StatefulWidget {
-  final dynamic item;
+  final dynamic? item;
   final KanbanController? controller;
   final KanbanColumn? column;
   final Widget? child;
   final int? itemIndex;
-  const DraggableKanbanCard(
+  DraggableKanbanCard(
       {Key? key,
       @required this.column,
       this.item,
@@ -716,7 +731,7 @@ class DraggableKanbanCard extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<DraggableKanbanCard> createState() => _DraggableKanbanCardState();
+  _DraggableKanbanCardState createState() => _DraggableKanbanCardState();
 }
 
 class _DraggableKanbanCardState extends State<DraggableKanbanCard> {
@@ -732,15 +747,15 @@ class _DraggableKanbanCardState extends State<DraggableKanbanCard> {
     );
     return Draggable<DraggableKanbanItem>(
       data: draggable,
-      //dragAnchor: DragAnchor.pointer,
-      feedback: const Icon(Icons.room_preferences),
-      childWhenDragging: Material(
-        color: Colors.grey.withOpacity(0.2),
-        child: Container(height: 0),
-      ), //??
+      /**dragAnchor: DragAnchor.pointer,**/
+      feedback: Icon(Icons.room_preferences), //??
       //kanban.feedback ??
       //Icon(kanban.dropIcon ?? Icons.more),
       child: widget.child!,
+      childWhenDragging: Material(
+        color: Colors.grey.withOpacity(0.2),
+        child: Container(height: 0),
+      ),
     );
   }
 }
@@ -753,7 +768,7 @@ class DragTargetKanbanCard extends StatefulWidget {
   final List? data;
   final KanbanColumn? column;
 
-  const DragTargetKanbanCard({
+  DragTargetKanbanCard({
     Key? key,
     this.child,
     this.controller,
@@ -763,7 +778,7 @@ class DragTargetKanbanCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DragTargetKanbanCard> createState() => _DragTargetKanbanCardState();
+  _DragTargetKanbanCardState createState() => _DragTargetKanbanCardState();
 }
 
 class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
@@ -786,7 +801,7 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
   Widget build(BuildContext context) {
     if (widget.itemIndex != null &&
         widget.data != null &&
-        widget.data!.isNotEmpty) item = widget.data![widget.itemIndex!];
+        widget.data!.length > 0) item = widget.data![widget.itemIndex!];
     KanbanGrid kanban = DefaultKanbanGrid.of(context)!.kanbanGrid!;
     return Column(
       children: [
@@ -826,15 +841,15 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
               children: [
                 if (accepted)
                   TweenAnimationBuilder<double>(
-                      duration: const Duration(milliseconds: 100),
+                      duration: Duration(milliseconds: 100),
                       tween: Tween(begin: 1.0, end: 0.90),
-                      builder: (context, value, child) => SizedBox(
+                      builder: (context, value, child) => Container(
                             width: ((candidateData[0]!.column!.width ??
                                     kanban.minWidth!) *
                                 value),
                             child: Material(
                                 elevation: accepted ? kanban.dropElevation! : 0,
-                                child: SizedBox(
+                                child: Container(
                                     height: kanban.itemHeight,
                                     child: kanban.builder!(
                                         candidateData[0]!.column!,
@@ -856,11 +871,11 @@ class _DragTargetKanbanCardState extends State<DragTargetKanbanCard>
           valueListenable: kanban.controller!.processingIndex,
           builder: (BuildContext context, String value, Widget? child) {
             final data = itemData;
-            return SizedBox(
+            return Container(
                 height: 2,
                 child:
                     ((data != null) && (value == data['${kanban.primaryKey}']))
-                        ? const LinearProgressIndicator()
+                        ? LinearProgressIndicator()
                         : null);
           },
         ),
@@ -888,7 +903,7 @@ class DragTargetFloatButton<T> extends StatefulWidget {
   final IconData? iconFocus;
   final Color? backgroundColor;
   final bool Function(dynamic)? onWillAccept;
-  const DragTargetFloatButton({
+  DragTargetFloatButton({
     Key? key,
     this.size = 25,
     this.sizeOnFocus = 45,
@@ -901,8 +916,7 @@ class DragTargetFloatButton<T> extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<DragTargetFloatButton> createState() =>
-      _DragTargetFloatButtonState<T>();
+  _DragTargetFloatButtonState createState() => _DragTargetFloatButtonState<T>();
 }
 
 class _DragTargetFloatButtonState<T> extends State<DragTargetFloatButton> {

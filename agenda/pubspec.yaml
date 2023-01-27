@@ -14,45 +14,29 @@ dependencies:
 
   controls_web:
     #path: ../../flutter_dart/controls_web
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_web
+    path: ../controls_web
 
   flutter_storeware:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-
+    path: ../
   controls_dash:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_dash
+    path: ../controls_dash
 
   comum:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: comum
+    path: ../comum
 
   controls_extensions:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_extensions
+    path: ../controls_extensions
 
   models:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: models
+    path: ../models
   controls_data:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_data
+    path: ../controls_data
   uuid:
   get:
   provider:
   intl:
   views:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: views
+    path: ../views
 
 dev_dependencies:
   flutter_test:

@@ -12,14 +12,10 @@ dependencies:
     sdk: flutter
   universal_html:
   controls_data:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_data
+    path: ../controls_data
 
   controls_firebase_platform_interface:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_firebase/controls_firebase_platform_interface
+    path: ./controls_firebase_platform_interface
 
   cloud_firestore: ^3.4.3
   firebase_core: ^1.20.0

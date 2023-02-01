@@ -46,13 +46,8 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
   @override
   void initState() {
     super.initState();
-    options = widget.options ??
-        [
-          'mês anterior',
-          'na semana',
-          'hoje',
-          'no mês',
-        ];
+    options =
+        widget.options ?? ['Ultimo ano', 'Ultimo Mês', 'Na semana', 'No Dia'];
     de = widget.startDate;
     ate = widget.endDate;
     formatar();
@@ -72,6 +67,53 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
       constraints: BoxConstraints(maxWidth: responsive.size.width),
       child: Column(
         children: [
+          if (widget.extendedOptions)
+            Container(
+              width: double.infinity,
+              height: 40,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: GroupButtons(
+                    color: widget.color,
+                    options: options,
+                    itemIndex: widget.itemIndex,
+                    onChanged: (i) {
+                      if (widget.onChangeValues != null) {
+                        var values = DateIntervalPickerValues(de: de, ate: ate);
+                        var rt = widget.onChangeValues!(i, values);
+                        de = rt.de;
+                        ate = rt.ate;
+                        return;
+                      }
+                      switch (i) {
+                        case 1:
+                          de = DateTime.now().addMonths(-1).startOfMonth();
+                          ate = DateTime.now().addMonths(-1).endOfMonth();
+                          break;
+                        case 2:
+                          de = DateTime.now().startOfWeek();
+                          ate = DateTime.now().endOfWeek();
+                          break;
+                        case 3:
+                          de = DateTime.now().startOfDay();
+                          ate = DateTime.now().endOfDay();
+                          break;
+                        case 0:
+                          int ano_atual = DateTime.now().year;
+                          de = DateTime(ano_atual - 1, 1, 1);
+                          ate = DateTime(ano_atual, 1, 1).addDays(-1);
+                          break;
+
+                        default:
+                          de = DateTime.now().startOfDay();
+                          ate = DateTime.now().endOfDay();
+                      }
+
+                      saved(i);
+                    }),
+              ),
+            ),
           Row(
             children: [
               Container(
@@ -109,53 +151,7 @@ class _DateIntervalPickerState extends State<DateIntervalPicker> {
                     if (widget.onSaved != null) widget.onSaved!(de, ate);
                   })
             ],
-          ),
-          if (widget.extendedOptions)
-            Container(
-              width: double.infinity,
-              height: 40,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: GroupButtons(
-                    color: widget.color,
-                    options: options,
-                    itemIndex: widget.itemIndex,
-                    onChanged: (i) {
-                      if (widget.onChangeValues != null) {
-                        var values = DateIntervalPickerValues(de: de, ate: ate);
-                        var rt = widget.onChangeValues!(i, values);
-                        de = rt.de;
-                        ate = rt.ate;
-                        return;
-                      }
-                      switch (i) {
-                        case 0:
-                          de = DateTime.now().addMonths(-1).startOfMonth();
-                          ate = DateTime.now().addMonths(-1).endOfMonth();
-                          break;
-                        case 1:
-                          de = DateTime.now().startOfWeek();
-                          ate = DateTime.now().endOfWeek();
-                          break;
-                        case 2:
-                          de = DateTime.now().startOfDay();
-                          ate = DateTime.now().endOfDay();
-                          break;
-                        case 3:
-                          de = DateTime.now().startOfMonth();
-                          ate = DateTime.now().endOfMonth();
-                          break;
-
-                        default:
-                          de = DateTime.now().startOfDay();
-                          ate = DateTime.now().endOfDay();
-                      }
-
-                      saved(i);
-                    }),
-              ),
-            ),
+          )
         ],
       ),
     );

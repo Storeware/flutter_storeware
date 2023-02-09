@@ -67,23 +67,25 @@ class DataViewerCards extends StatefulWidget {
   final Widget Function()? noDataBuilder;
   final Widget? placeHolder;
   final bool canHideNavigator;
+  final bool showPageButtons;
   final bool lazyLoader;
   final bool showNavigator;
-  DataViewerCards({
-    Key? key,
-    this.itemWidth = 200,
-    required this.itemBuilder,
-    required this.controller,
-    this.header,
-    this.footer,
-    this.rowsPerPage,
-    this.lazyLoader = false,
-    this.canHideNavigator = false,
-    this.showNavigator = true,
-    this.noDataBuilder,
-    this.placeHolder,
-    this.padding = 2.0,
-  }) : super(key: key);
+  DataViewerCards(
+      {Key? key,
+      this.itemWidth = 200,
+      required this.itemBuilder,
+      required this.controller,
+      this.header,
+      this.footer,
+      this.rowsPerPage,
+      this.lazyLoader = false,
+      this.canHideNavigator = false,
+      this.showNavigator = true,
+      this.noDataBuilder,
+      this.placeHolder,
+      this.padding = 2.0,
+      this.showPageButtons = false})
+      : super(key: key);
   @override
   _cards createState() => _cards();
 
@@ -229,19 +231,26 @@ class _cards extends State<DataViewerCards> {
 
   createPageNavigator(BuildContext context) {
     int n = 0;
+    var btns = [
+      Visibility(
+        child: createNavButton(1),
+        visible: widget.showPageButtons,
+      ),
+      for (var i = widget.controller.page - 1;
+          i < widget.controller.page + 4;
+          i++)
+        if (i > 1)
+          if ((n++) < 4)
+            Visibility(
+                child: createNavButton(i), visible: widget.showPageButtons),
+    ];
+
     return Padding(
       padding: const EdgeInsets.only(left: 14, right: 14, bottom: 40),
       child: Align(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            createNavButton(1),
-            for (var i = widget.controller.page - 1;
-                i < widget.controller.page + 4;
-                i++)
-              if (i > 1)
-                if ((n++) < 4) createNavButton(i),
-          ],
+          children: btns,
         ),
       ),
     );

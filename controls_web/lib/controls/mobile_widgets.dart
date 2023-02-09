@@ -141,7 +141,9 @@ class MobileMenuBox extends StatelessWidget {
                                       elevation: elevation,
                                       automaticallyImplyLeading:
                                           automaticallyImplyLeading,
-                                      title: Text(item.label!),
+                                      title: Text(item.label_title.isEmpty
+                                          ? item.label!
+                                          : item.label_title),
                                       actions: (item.items != null)
                                           ? [
                                               for (var sb in item.items ?? [])

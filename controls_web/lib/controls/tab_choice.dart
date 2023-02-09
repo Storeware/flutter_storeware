@@ -22,6 +22,7 @@ class TabChoice<T> {
   double? width;
   bool Function(int)? completed;
   TextStyle? style;
+  String label_title = '';
   TabChoice(
       {this.builder,
       this.style,
@@ -43,7 +44,8 @@ class TabChoice<T> {
       this.selectedIcon,
       this.primary = false,
       this.enabled = true,
-      this.visible = true})
+      this.visible = true,
+      this.label_title = ''})
       : assert(items != null ||
             (label != null) ||
             (builder != null || child != null || onPressed != null));

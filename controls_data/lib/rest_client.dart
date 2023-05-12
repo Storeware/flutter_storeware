@@ -267,9 +267,9 @@ class RestClient {
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     Response<dynamic>? resp;
     BaseOptions bo = BaseOptions(
-        connectTimeout: connectionTimeout,
+        connectTimeout: Duration(milliseconds: connectionTimeout),
         followRedirects: followRedirects,
-        receiveTimeout: receiveTimeout,
+        receiveTimeout: Duration(milliseconds: receiveTimeout),
         baseUrl: this.baseUrl,
         headers: _h,
         queryParameters: params,
@@ -397,9 +397,9 @@ class RestClient {
     final _h = _headers;
     //if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     BaseOptions bo = BaseOptions(
-      connectTimeout: connectionTimeout,
+      connectTimeout: Duration(milliseconds: connectionTimeout),
       followRedirects: followRedirects,
-      receiveTimeout: receiveTimeout,
+      receiveTimeout: Duration(milliseconds: receiveTimeout),
       baseUrl: this.baseUrl,
       headers: _h,
 
@@ -518,9 +518,9 @@ class RestClient {
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     dynamic ref;
     BaseOptions bo = BaseOptions(
-        connectTimeout: connectionTimeout,
+        connectTimeout: Duration(milliseconds: connectionTimeout),
         followRedirects: followRedirects,
-        receiveTimeout: receiveTimeout,
+        receiveTimeout: Duration(milliseconds: receiveTimeout),
         baseUrl: this.baseUrl,
         headers: _h,
         queryParameters: params,

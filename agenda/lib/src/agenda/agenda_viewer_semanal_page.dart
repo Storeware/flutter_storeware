@@ -285,7 +285,7 @@ class _DayCardColumnState extends State<DayCardColumn> {
               list: sources,
               item: items[0],
               herdarResourseGid: false,
-              child: DropdownMenu(
+              child: DropdownMenuEx(
                 itemCount: items.length,
                 builder: (ctx, idx) {
                   List<AgendaItem> litems = mapa[itemIndex]!;

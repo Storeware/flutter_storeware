@@ -4,7 +4,6 @@ import 'package:controls_web/controls/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import 'agenda_cards.dart';
 import 'agenda_const.dart';
 import 'agenda_controller.dart';
@@ -409,7 +408,7 @@ class AgendaPanelWidget extends StatelessWidget {
               list: sources,
               item: items[0],
               herdarResourseGid: true,
-              child: DropdownMenu(
+              child: DropdownMenuEx(
                 itemCount: items.length,
                 builder: (ctx, idx) {
                   List<AgendaItem> litems = mapa[itemIndex]!;

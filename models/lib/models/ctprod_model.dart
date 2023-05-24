@@ -131,12 +131,13 @@ class ProdutoModel extends ODataModelClass<ProdutoItem> {
             select: 'ctprod.descmaximo, ctprod.codigo,ctprod.inservico,ctprod.inativo, ctprod.nome, ' +
                 'coalesce( ( $subQueryPreco ) ,' +
                 'case when coalesce(ctprod_filial.precoweb,0)=0 then ctprod_filial.precovenda else ctprod_filial.precoweb end) precoweb ,' +
-                'ctprod.unidade,ctprod.obs ,ctprod.sinopse  , i.codtitulo',
+                'ctprod.unidade,ctprod.obs ,ctprod.sinopse  , i.codtitulo,j.qestfin',
             filter: (filter == null)
                 ? 'ctprod.nome is not null'
                 : '$filter and ctprod.nome is not null $ftr',
             join: ' left join ctprod_atalho_itens i on (i.codprod=ctprod.codigo) ' +
-                " left join ctprod_filial on (ctprod_filial.codigo=ctprod.codigo and ctprod_filial.filial=$filial)",
+                " left join ctprod_filial on (ctprod_filial.codigo=ctprod.codigo and ctprod_filial.filial=$filial)"
+                    ' left join ctprodsd j on j.codigo=ctprod.codigo and j.filial=$filial',
             orderBy: orderBy ?? 'ctprod.dtatualiz desc',
             top: top,
             skip: skip,

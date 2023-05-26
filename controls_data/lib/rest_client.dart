@@ -257,6 +257,10 @@ class RestClient {
     return contentType;
   }
 
+  dynamic getConnectTimeout(value) {
+    return value;
+  }
+
   Future<dynamic> openJson(String url,
       {String? method = 'GET',
       body,
@@ -267,9 +271,9 @@ class RestClient {
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     Response<dynamic>? resp;
     BaseOptions bo = BaseOptions(
-        connectTimeout: Duration(milliseconds: connectionTimeout),
+        connectTimeout: getConnectTimeout(connectionTimeout),
         followRedirects: followRedirects,
-        receiveTimeout: Duration(milliseconds: receiveTimeout),
+        receiveTimeout: getConnectTimeout(receiveTimeout),
         baseUrl: this.baseUrl,
         headers: _h,
         queryParameters: params,
@@ -397,9 +401,9 @@ class RestClient {
     final _h = _headers;
     //if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     BaseOptions bo = BaseOptions(
-      connectTimeout: Duration(milliseconds: connectionTimeout),
+      connectTimeout: getConnectTimeout(connectionTimeout),
       followRedirects: followRedirects,
-      receiveTimeout: Duration(milliseconds: receiveTimeout),
+      receiveTimeout: getConnectTimeout(receiveTimeout),
       baseUrl: this.baseUrl,
       headers: _h,
 
@@ -518,9 +522,9 @@ class RestClient {
     if (cacheControl != null) _h['Cache-Control'] = cacheControl;
     dynamic ref;
     BaseOptions bo = BaseOptions(
-        connectTimeout: Duration(milliseconds: connectionTimeout),
+        connectTimeout: getConnectTimeout(connectionTimeout),
         followRedirects: followRedirects,
-        receiveTimeout: Duration(milliseconds: receiveTimeout),
+        receiveTimeout: getConnectTimeout(receiveTimeout),
         baseUrl: this.baseUrl,
         headers: _h,
         queryParameters: params,

@@ -109,7 +109,7 @@ getTheme(context, {Brightness brightness = Brightness.dark}) {
   cardColor = t.primaryColor; //.lighten(50);
   primaryColor = t.primaryColor;
   tabBarThemeLabelColor =
-      t.appBarTheme.color ?? theme.primaryTextTheme.bodyText1!.color!;
+      t.appBarTheme.foregroundColor ?? theme.primaryTextTheme.bodyText1!.color!;
   textColor = t.textTheme.button!.color ?? theme.textTheme.bodyText1!.color!;
   primaryTextColor = t.primaryTextTheme.bodyText1!.color!;
   curvaColor = t.primaryColor;

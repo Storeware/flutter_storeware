@@ -23,7 +23,7 @@ class StyledButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Color color = /*widget.color ??*/ Theme.of(context).buttonColor;
+    Color color = /*widget.color ??*/ Theme.of(context).colorScheme.primary;
     Widget bt =
         text != null ? Text(text!, style: theme.textTheme.button) : child!;
     return GestureDetector(

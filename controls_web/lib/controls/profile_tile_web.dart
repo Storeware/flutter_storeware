@@ -266,7 +266,7 @@ class _ProfileButtonState extends State<ProfileButton> {
           decoration: BoxDecoration(
             border: widget.border,
             //shape: widget.shape,
-            color: (widget.color ?? Theme.of(context).buttonColor)
+            color: (widget.color ?? Theme.of(context).colorScheme.primary)
                 .withAlpha(_tapInProgress! ? 100 : 255),
             borderRadius: BorderRadius.circular(widget.radius!),
           ),

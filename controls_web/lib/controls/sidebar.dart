@@ -216,7 +216,7 @@ class SidebarButton extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
-                  color: color ?? Theme.of(context).buttonColor,
+                  color: color ?? Theme.of(context).colorScheme.primary,
                 ),
                 child: Center(
                   child: (cmpt)

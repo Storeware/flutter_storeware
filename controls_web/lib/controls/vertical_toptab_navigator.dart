@@ -421,7 +421,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                           fontSize: 12,
                           color: _getColor(theme).isDark
                               ? Colors.white70
-                              : theme.appBarTheme.color,
+                              : theme.appBarTheme.foregroundColor,
                           fontWeight: FontWeight.w500,
                         )));
   }

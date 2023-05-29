@@ -144,7 +144,8 @@ class _TabViewBottomState extends State<TabViewBottom> {
     size = MediaQuery.of(context).size;
     theme = Theme.of(context);
     _color = widget.color ?? theme!.bottomAppBarColor;
-    _tabColor = widget.tabColor ?? theme!.appBarTheme.color ?? Colors.amber;
+    _tabColor =
+        widget.tabColor ?? theme!.appBarTheme.foregroundColor ?? Colors.amber;
     // _iconColor = theme!.tabBarTheme.labelColor ?? theme!.buttonColor;
 
     _indicatorColor = widget.indicatorColor ?? Colors.grey.withAlpha(20);
@@ -323,7 +324,6 @@ class _TabViewBottomState extends State<TabViewBottom> {
             },
           ));
   //    });
-
 }
 
 class SelectedItemAvatar extends StatelessWidget {

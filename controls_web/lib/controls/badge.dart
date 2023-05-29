@@ -42,7 +42,7 @@ class BadgeText extends StatelessWidget {
       alignment: Alignment.center,
       padding: EdgeInsets.all(1),
       decoration: BoxDecoration(
-        color: Theme.of(context).accentColor,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(6),
       ),
       constraints: BoxConstraints(

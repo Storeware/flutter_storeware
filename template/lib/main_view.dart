@@ -6,7 +6,7 @@ import 'injects_build.dart';
 import 'routing.dart';
 import 'theming.dart';
 import 'package:get/get.dart';
-import 'package:console/config/config.dart' as cc;
+import 'package:controls_login/src/config.dart' as cc;
 import 'package:controls_web/themes/themes.dart';
 import './widgets/windows_size_interfaced.dart'
     if (dart.library.io) './widgets/windows_size_placement.dart' as sz;

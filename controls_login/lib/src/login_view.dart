@@ -542,7 +542,8 @@ class _LoginViewState extends State<LoginPage> {
         }
       }
       return config
-          .firebaseLogin(config.conta, config.usuario, config.password)
+          .firebaseLogin(_contaController.text, _usuarioController.text,
+              _senhaController.text)
           .then((x) {
         _saveState.value = StrapButtonState.none;
         _treinarState.value = StrapButtonState.none;

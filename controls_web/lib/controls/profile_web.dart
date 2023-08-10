@@ -259,6 +259,10 @@ class _ProfileButtonState extends State<ProfileButton> {
   Widget build(BuildContext context) {
     return Container(
       child: GestureDetector(
+        onTap: () => this.widget.onPressed!(),
+        onTapDown: _tapDown,
+        onTapUp: _tapUp,
+        onTapCancel: _tapCancel,
         child: Container(
           height: widget.height,
           width: widget.width,
@@ -266,16 +270,11 @@ class _ProfileButtonState extends State<ProfileButton> {
           decoration: BoxDecoration(
             border: widget.border,
             //shape: widget.shape,
-            color: (widget.color ?? Theme.of(context).buttonColor)
-                .withAlpha(_tapInProgress! ? 100 : 255),
+            color: widget.color?.withAlpha(_tapInProgress! ? 100 : 255),
             borderRadius: BorderRadius.circular(widget.radius!),
           ),
           child: Center(child: widget.child),
         ),
-        onTap: () => this.widget.onPressed!(),
-        onTapDown: _tapDown,
-        onTapUp: _tapUp,
-        onTapCancel: _tapCancel,
       ),
     );
   }

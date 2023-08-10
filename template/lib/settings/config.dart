@@ -1,7 +1,7 @@
 // @dart=2.12
 import 'package:comum/services/config_service.dart';
-import 'package:console/config/config.dart' as Cc;
 import 'package:controls_data/odata_client.dart';
+import 'package:controls_login/src/config.dart' as Cc;
 
 const inLog = false;
 const inDev = false;

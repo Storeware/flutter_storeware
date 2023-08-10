@@ -89,7 +89,7 @@ class SocketIOClient {
   }
 
   var channel;
-  late StreamSubscription subscription;
+  late StreamSubscription<dynamic> subscription;
   subscribeEvent(String eventName, {Function(TopicEvent)? onData}) async {
     if (!this.config.inited)
       throw 'Não inicializou a estrutura do SocketIO do V3, fazer isto na inicialização do APP. Use [ensureInited((){ ... }] para aguardar inicialização';

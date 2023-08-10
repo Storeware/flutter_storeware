@@ -6,6 +6,8 @@ import 'package:models/builders/controls.dart';
 import '../models/agenda_recurso_model.dart';
 import 'package:flutter/material.dart';
 import 'package:agenda/agenda.dart';
+// ignore: implementation_imports
+import 'package:controls_login/src/config.dart';
 
 class CadastroAgendaRecursosPage extends StatefulWidget {
   static const route = '/estados';

@@ -4,7 +4,7 @@ import 'package:controls_firebase/firebase.dart' as fb;
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:console/models/eventos_item_model.dart';
+import 'package:models/models/eventos_item_model.dart';
 
 ValueNotifier<String> pushMessageId = ValueNotifier<String>('');
 

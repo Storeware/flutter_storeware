@@ -31,6 +31,8 @@ dependencies:
     path: ../models
   controls_data:
     path: ../controls_data
+  controls_login:
+    path: ../controls_login
   uuid:
   get:
   provider:

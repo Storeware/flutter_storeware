@@ -1,4 +1,3 @@
-// @dart=2.9
 import 'package:comum/services/config_service.dart';
 import 'package:controls_web/controls/injects.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ void main() {
     ));
 */
   WidgetsFlutterBinding.ensureInitialized();
-  HttpOverrides.global = new MyHttpOverrides();
 
   Intl.defaultLocale = 'pt_BR';
   //CurrencyExtension.setDefaultLocale('pt_BR');
@@ -34,14 +32,14 @@ void main() {
   });
 }
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          ((X509Certificate cert, String host, int port) {
-        print(host);
-        return true;
-      });
-  }
-}
+// class MyHttpOverrides extends HttpOverrides {
+//   @override
+//   HttpClient createHttpClient(SecurityContext context) {
+//     return super.createHttpClient(context)
+//       ..badCertificateCallback =
+//           ((X509Certificate cert, String host, int port) {
+//         print(host);
+//         return true;
+//       });
+//   }
+// }

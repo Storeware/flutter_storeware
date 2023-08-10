@@ -14,6 +14,8 @@ dependencies:
 
   controls_web:
     path: ../controls_web
+  controls_login:
+    path: ../controls_login
 
   flutter_storeware:
     path: ../

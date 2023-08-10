@@ -203,8 +203,12 @@ abstract class ConfigAppBase extends ConfigBase {
   firebaseLogin(loja, [usuario, senha]) async {
     var cloudV3 = FirebaseService();
     //DateTime d = DateTime.now();
-    if (isFirebase) firebaseAuth(usuario, senha).then((resp) {});
-    return cloudV3.login(loja, usuario, senha ?? loja).then((xCloud) {
+    // if (isFirebase) firebaseAuth(usuario, senha).then((resp) {});
+    return cloudV3.login(loja, usuario, senha).then((xCloud) {
+      print("1 $loja");
+      print("2 $usuario");
+      print("3 $senha");
+      print("4 $xCloud");
       if (xCloud == null) {
         print('não conectou no CloudV3');
         Get.snackbar(
@@ -218,7 +222,7 @@ abstract class ConfigAppBase extends ConfigBase {
       return cloudV3.configDados(loja).then((xConfig) {
         return initConfigDados(xConfig);
       });
-    });
+    }).catchError((err) => {print(err)});
   }
 
   initConfigDados(xConfig) {

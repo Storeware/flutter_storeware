@@ -16,7 +16,8 @@ class RoutesApp {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     if (_singleton == null) RoutesApp();
-    if (settings.name == '') settings = settings.copyWith(name: homeRoute);
+    if (settings.name == '')
+      settings = RouteSettings(name: homeRoute, arguments: settings.arguments);
     return Routes.generateRoute(settings);
   }
 

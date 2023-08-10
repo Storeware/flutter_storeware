@@ -15,6 +15,7 @@ dependencies:
   cupertino_icons: any
 
 dependency_overrides:
+  intl: ^0.18.1
   controls_web:
     path: ./controls_web
   controls_login:

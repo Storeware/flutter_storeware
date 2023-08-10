@@ -1,5 +1,5 @@
 // @dart=2.12
-import 'package:console/config/config.dart';
+import 'package:controls_login/src/config.dart';
 import 'package:console/views/dashboard/eventos/dashboard_eventos_page.dart';
 import 'package:controls_web/controls/injects.dart';
 //import 'package:controls_web/controls/responsive.dart';

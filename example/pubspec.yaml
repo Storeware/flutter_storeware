@@ -27,15 +27,12 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
-  intl:
 
   controls_dash:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_dash
+    path: ../controls_dash
 
   pdf: ^3.7.1
-  printing: ^5.7.2
+  printing: ^5.10.4
 
   dio:
   fl_chart:
@@ -43,6 +40,7 @@ dependencies:
     sdk: flutter
 
 dependency_overrides:
+  intl: ^0.18.0
   flutter_storeware:
     #    git:
     #      url: https://github.com/amarildolacerda/flutter_storeware.git
@@ -52,10 +50,7 @@ dependency_overrides:
     #     url: https://github.com/amarildolacerda/flutter_storeware.git
     path: ../controls_web
 
-  charts_flutter:
-    git:
-      url: https://github.com/amarildolacerda/charts.git
-      path: charts_flutter
+  charts_flutter_new: ^0.12.0
 
 dev_dependencies:
   flutter_test:

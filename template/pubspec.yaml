@@ -35,14 +35,12 @@ dependencies:
   desktop_window: ^0.4.0
 
   console:
-    git:
-      url: https://github.com/amarildolacerda/console.git
+    path: ../../console
 
   #    path: ../../estoque/console
 
   cupertino_icons: ^1.0.2
-  intl: ^0.17.0
-  charts_flutter: ^0.11.0
+  charts_flutter_new: ^0.12.0
   shimmer: ^2.0.0
   #line_icons: ^2.0.1
 
@@ -50,19 +48,11 @@ dependencies:
 
 dependency_overrides:
   pointycastle: ^3.2.0-rc0
-  pdf:
-    git:
-      url: https://github.com/DavBfr/dart_pdf.git
-      ref: master
-      path: pdf
+  pdf: ^3.10.4
 
-  printing:
-    git:
-      url: https://github.com/DavBfr/dart_pdf.git
-      ref: master
-      path: printing
+  printing: ^5.10.4
+  intl: ^0.18.0
   #pdf: ^3.1.0
-  #intl: ^0.17.0
   #get: ^4.0.0-nullsafety.2
   #flutter_cache_manager: ^3.0.0-nullsafety.1
   #image: ^3.0.1
@@ -75,12 +65,10 @@ dependency_overrides:
   args: ^2.0.0
   convert: ^3.0.0
   timezone: ^0.8.0
-  firebase_messaging: ^10.0.0
+  firebase_messaging: ^14.2.1
 
   controls_web:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_web
+    path: ../controls_web
 
 dev_dependencies:
   integration_test:
@@ -94,14 +82,14 @@ dev_dependencies:
 
   wave: any
   controls_firebase:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_firebase
+    path: ../controls_firebase
 
   controls_dash:
-    git:
-      url: https://github.com/amarildolacerda/flutter_storeware.git
-      path: controls_dash
+    path: ../controls_dash
+  controls_login:
+    path: ../controls_login
+  models:
+    path: ../models
 
 flutter:
   #uses-material-design: true

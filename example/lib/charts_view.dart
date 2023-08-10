@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:controls_dash/controls_dash.dart';
 import 'package:flutter_storeware/index.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter_new/flutter.dart' as charts;
 
 class ChartsView extends StatefulWidget {
   const ChartsView({Key? key}) : super(key: key);

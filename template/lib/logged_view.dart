@@ -1,6 +1,6 @@
 // @dart=2.12
 import 'package:comum/services/config_service.dart';
-import 'package:console/views/login/login_view.dart';
+import 'package:controls_login/src/login_view.dart';
 import 'package:controls_data/odata_client.dart';
 import 'package:controls_web/controls/strap_widgets.dart';
 import 'package:flutter/material.dart';

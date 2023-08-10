@@ -1,10 +1,9 @@
 import 'dart:math';
 
 /// Horizontal bar chart example
-import 'package:charts_flutter/src/text_element.dart' as ChartText;
-import 'package:charts_flutter/src/text_style.dart' as ChartStyle;
-import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:charts_flutter/flutter.dart';
+import 'package:charts_flutter_new/src/text_element.dart' as ChartText;
+import 'package:charts_flutter_new/src/text_style.dart' as ChartStyle;
+import 'package:charts_flutter_new/flutter.dart' as charts;
 import 'package:controls_dash/controls_dash.dart';
 //import 'chart_pair.dart';
 import 'package:flutter/material.dart';
@@ -168,15 +167,16 @@ class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
   CustomCircleSymbolRenderer({required this.onGetValue, this.size});
 
   @override
-  void paint(ChartCanvas canvas, Rectangle<num> bounds,
+  void paint(charts.ChartCanvas canvas, Rectangle<num> bounds,
       {List<int>? dashPattern,
-      Color? fillColor,
-      FillPatternType? fillPattern,
-      Color? strokeColor,
+      charts.Color? fillColor,
+      charts.FillPatternType? fillPattern,
+      charts.Color? strokeColor,
       double? strokeWidthPx}) {
     super.paint(canvas, bounds,
         dashPattern: dashPattern,
         fillColor: fillColor,
+        fillPattern: fillPattern,
         strokeColor: strokeColor,
         strokeWidthPx: strokeWidthPx);
 
@@ -184,7 +184,7 @@ class CustomCircleSymbolRenderer extends charts.CircleSymbolRenderer {
 
     ChartStyle.TextStyle textStyle = ChartStyle.TextStyle();
 
-    textStyle.color = Color.black;
+    textStyle.color = Colors.black as charts.Color?;
     textStyle.fontSize = 15;
     canvas.drawText(ChartText.TextElement(text, style: textStyle),
         (bounds.left).round() - 20, (bounds.top - 20).round());

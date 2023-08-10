@@ -1,4 +1,4 @@
-import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:charts_flutter_new/flutter.dart' as charts;
 import 'package:controls_dash/controls_dash.dart';
 import 'package:flutter/material.dart';
 //import 'package:charts_common/src/common/color.dart' as gcolor;

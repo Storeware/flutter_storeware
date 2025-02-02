@@ -258,7 +258,8 @@ class RestClient {
   }
 
   dynamic getConnectTimeout(value) {
-    return value;
+     if value is Duration
+     return Duration(milliseconds: value+0.0); else return value;
   }
 
   Future<dynamic> openJson(String url,

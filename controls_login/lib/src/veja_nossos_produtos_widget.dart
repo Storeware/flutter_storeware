@@ -29,7 +29,7 @@ class VejaNossosProdutos extends StatelessWidget {
               width: 70,
             ),
             DefaultTextStyle(
-                style: theme.primaryTextTheme.bodyText1!,
+                style: theme.primaryTextTheme.bodySmall!,
                 child: Container(
                   width: 80,
                   child: Text('Conheça nossos outros produtos',

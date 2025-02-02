@@ -143,7 +143,7 @@ class _TabViewBottomState extends State<TabViewBottom> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     theme = Theme.of(context);
-    _color = widget.color ?? theme!.bottomAppBarColor;
+    _color = widget.color ?? theme!.appBarTheme.backgroundColor ?? Colors.white;
     _tabColor =
         widget.tabColor ?? theme!.appBarTheme.foregroundColor ?? Colors.amber;
     // _iconColor = theme!.tabBarTheme.labelColor ?? theme!.buttonColor;

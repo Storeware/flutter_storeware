@@ -609,7 +609,7 @@ class _KabanColumnCardsState extends State<KabanColumnCards> {
           child: AppBar(
               primary: false,
               backgroundColor: widget.column!.titleColor ??
-                  theme.appBarTheme.backgroundColor,
+                  theme.appBarTheme.backgroundColor ,
               toolbarHeight: kanban!.headerHeight,
               elevation: 0,
               automaticallyImplyLeading: false,

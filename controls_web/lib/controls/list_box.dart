@@ -55,8 +55,8 @@ class _ListBoxState extends State<ListBox> {
       children: [
         if (widget.title != null) ...[
           DefaultTextStyle(
-            style: theme.textTheme.bodyText1!.copyWith(
-              fontSize: theme.textTheme.bodyText1!.fontSize! * 1.2,
+            style: theme.textTheme.bodySmall!.copyWith(
+              fontSize: theme.textTheme.bodySmall!.fontSize! * 1.2,
             ),
             child: widget.title!,
           ),

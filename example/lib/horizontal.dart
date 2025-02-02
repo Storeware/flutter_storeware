@@ -379,7 +379,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                               title: widget.choices![index].title ??
                                   Text(widget.choices![index].label!,
                                       style: widget.tabStyle ??
-                                          theme!.textTheme.bodyText1!.copyWith(
+                                          theme!.textTheme.bodySmall!.copyWith(
                                               fontWeight: FontWeight.w500,
                                               color: (widget.sidebarBackgroundColor ??
                                                           theme!
@@ -442,7 +442,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                             size: 80,
                                             color: _iconColor ??
                                                 theme.primaryTextTheme
-                                                    .bodyText1!.color,
+                                                    .bodySmall!.color,
                                           ),
                                       tab.title ??
                                           Text(
@@ -452,7 +452,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500,
                                               color: _iconColor ??
-                                                  theme.textTheme.button!.color,
+                                                  theme.textTheme.labelLarge!.color,
                                             ),
                                           ),
                                     ],

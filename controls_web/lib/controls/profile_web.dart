@@ -259,6 +259,10 @@ class _ProfileButtonState extends State<ProfileButton> {
   Widget build(BuildContext context) {
     return Container(
       child: GestureDetector(
+        onTap: () => this.widget.onPressed!(),
+        onTapDown: _tapDown,
+        onTapUp: _tapUp,
+        onTapCancel: _tapCancel,
         child: Container(
           height: widget.height,
           width: widget.width,
@@ -272,11 +276,11 @@ class _ProfileButtonState extends State<ProfileButton> {
           ),
           child: Center(child: widget.child),
         ),
-        onTap: () => this.widget.onPressed!(),
-        onTapDown: _tapDown,
-        onTapUp: _tapUp,
-        onTapCancel: _tapCancel,
       ),
     );
   }
+}
+
+extension on ThemeData {
+  get buttonColor => null;
 }

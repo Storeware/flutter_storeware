@@ -43,7 +43,7 @@ class _TitleSearchFieldState extends State<TitleSearchField> {
   late ValueNotifier<bool> editing;
   final focusNode = FocusNode();
   get theColor =>
-      widget.underlineColor ?? theme.primaryTextTheme.bodyText1!.color;
+      widget.underlineColor ?? theme.primaryTextTheme.bodySmall!.color;
   @override
   void initState() {
     super.initState();

@@ -213,7 +213,7 @@ class AgendaPanelTitle extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     // AgendaController controller = DefaultAgenda.of(context).controller;
     return DefaultTextStyle(
-        style: theme.primaryTextTheme.bodyText1!,
+        style: theme.primaryTextTheme.bodySmall!,
         child: InkWell(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),

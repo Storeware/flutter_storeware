@@ -335,7 +335,7 @@ class NoticeInfo extends StatelessWidget {
                 padding: EdgeInsets.only(left: 8, right: 8, top: 4),
                 child: InkWell(
                   child: icon ??
-                      Icon(Icons.info, size: 40, color: theme.backgroundColor),
+                      Icon(Icons.info, size: 40, color: theme.colorScheme.background),
                   onTap: () => onPressed!(),
                 )),
             Expanded(child: Center(child: child)),

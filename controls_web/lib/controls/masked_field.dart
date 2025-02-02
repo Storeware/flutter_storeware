@@ -369,7 +369,7 @@ class _MaskedTextFieldState extends State<MaskedTextField> {
               (_controller == null) ? widget.initialValue ?? '' : null,
           controller: _controller,
           style: widget.style ??
-              theme.textTheme.bodyText1!.copyWith(fontSize: widget.fontSize),
+              theme.textTheme.bodySmall!.copyWith(fontSize: widget.fontSize),
           decoration: widget.decoration ??
               InputDecoration(
                 fillColor: widget.fillColor,
@@ -495,7 +495,7 @@ class _MaskedDatePickerState extends State<MaskedDatePicker> {
             controller: _dataController,
             keyboardType: TextInputType.phone,
             style: theme.textTheme
-                .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+                .bodySmall, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
             decoration: InputDecoration(
                 labelText: widget.labelText,
                 prefix: widget.prefix,
@@ -1014,7 +1014,7 @@ class MaskedLabeled extends StatelessWidget {
                       softWrap: true,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme
-                          .bodyText1) // TextStyle(fontSize: 14, color: Colors.grey)),
+                          .bodySmall) // TextStyle(fontSize: 14, color: Colors.grey)),
                   ),
             ],
           ),
@@ -1135,7 +1135,7 @@ class MaskedSearchFormField<T> extends StatelessWidget {
             keyboardType: keyboardType ?? getKeyboardType(),
             style: style ??
                 theme.textTheme
-                    .bodyText1, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
+                    .bodySmall, //TextStyle(fontSize: 16, fontStyle: FontStyle.normal),
             decoration: decoration ??
                 InputDecoration(
                     labelText: labelText,

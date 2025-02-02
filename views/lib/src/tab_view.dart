@@ -487,7 +487,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                             size: 80,
                                             color: _iconColor ??
                                                 theme.primaryTextTheme
-                                                    .bodyText1!.color,
+                                                    .bodySmall!.color,
                                           ),
                                       tab.title ??
                                           Text(
@@ -497,7 +497,7 @@ class _HorizontalTabViewState extends State<HorizontalTabView> {
                                               fontSize: 18,
                                               fontWeight: FontWeight.w500,
                                               color: _iconColor ??
-                                                  theme.textTheme.button!.color,
+                                                  theme.textTheme.labelLarge!.color,
                                             ),
                                           ),
                                     ],
@@ -624,7 +624,7 @@ class TabViewScaffold extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: theme.primaryTextTheme.bodyText1!.color),
+                            color: theme.primaryTextTheme.bodySmall!.color),
                         child: Expanded(
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),

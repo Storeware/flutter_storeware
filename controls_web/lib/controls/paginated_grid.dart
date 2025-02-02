@@ -674,7 +674,7 @@ class _PaginatedGridState extends State<PaginatedGrid> {
                                                                       .headingTextStyle ??
                                                                   theme!
                                                                       .textTheme
-                                                                      .caption!
+                                                                      .bodySmall!
                                                                       .copyWith(
                                                                     fontWeight:
                                                                         FontWeight
@@ -1128,7 +1128,7 @@ class PaginatedGridDataTableSource extends DataTableSource {
     return col.style ??
         controller.widget!.dataTextStyle ??
         theme.dataTableTheme.dataTextStyle ??
-        theme.textTheme.bodyText2;
+        theme.textTheme.bodyMedium;
   }
 
   doEditItem(index, bool b) {

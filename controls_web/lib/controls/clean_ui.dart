@@ -24,8 +24,8 @@ class TabButton extends StatelessWidget {
     return (onPressed == null)
         ? buildContainer()
         : TextButton(
-            child: buildContainer(),
             onPressed: onPressed,
+            child: buildContainer(),
           );
   }
 
@@ -88,7 +88,7 @@ class CleanButton extends StatelessWidget {
 
   Widget buildContainer(context) {
     //ThemeData theme = Theme.of(context);
-    var _color = labelColor; //?? theme.primaryTextTheme.bodyText1.color;
+    var _color = labelColor; //?? theme.primaryTextTheme.bodySmall.color;
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -231,7 +231,7 @@ class ActionButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4),
           child: DefaultTextStyle(
               style: style ??
-                  theme.textTheme.subtitle2!
+                  theme.textTheme.titleSmall!
                       .copyWith(fontWeight: FontWeight.w300),
               child: Column(children: [
                 if (child != null) child!,
@@ -279,14 +279,14 @@ class LabeledRow extends StatelessWidget {
         title ??
             Text(label ?? '',
                 style: theme.textTheme
-                    .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
+                    .titleLarge), //(fontSize: 16, fontWeight: FontWeight.bold)),
         SizedBox(
           height: spacing,
         ),
         DefaultTextStyle(
-          style: (style ?? theme.textTheme.subtitle2!).copyWith(
+          style: (style ?? theme.textTheme.titleSmall!).copyWith(
               fontWeight: FontWeight.w300,
-              color: theme.textTheme.subtitle2!.color),
+              color: theme.textTheme.titleSmall!.color),
           child: SafeArea(
             child: Row(
                 mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.start,
@@ -337,12 +337,12 @@ class LabeledColumn extends StatelessWidget {
               title ??
                   Text(label ?? '',
                       style: theme.textTheme
-                          .headline6), //.copyWith(fontWeight: FontWeight.bold)),
+                          .titleLarge), //.copyWith(fontWeight: FontWeight.bold)),
               SizedBox(
                 height: 5,
               ),
               DefaultTextStyle(
-                style: theme.textTheme.subtitle2!
+                style: theme.textTheme.titleSmall!
                     .copyWith(fontWeight: FontWeight.w300),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -398,14 +398,14 @@ class Labeled extends StatelessWidget {
         title ??
             Text(label ?? '',
                 style: theme.textTheme
-                    .headline6), //(fontSize: 16, fontWeight: FontWeight.bold)),
+                    .titleLarge), //(fontSize: 16, fontWeight: FontWeight.bold)),
         SizedBox(
           height: 5,
         ),
         DefaultTextStyle(
-          style: (style ?? theme.textTheme.subtitle2!).copyWith(
+          style: (style ?? theme.textTheme.titleSmall!).copyWith(
               fontWeight: FontWeight.w300,
-              color: theme.textTheme.subtitle2!.color),
+              color: theme.textTheme.titleSmall!.color),
           child: SafeArea(
             child: Wrap(
               alignment: alignment!,
@@ -491,7 +491,7 @@ class ButtonAvatar extends StatelessWidget {
             if (footer != null)
               DefaultTextStyle(
                 style: TextStyle(
-                    fontSize: 12, color: theme.textTheme.bodyText1!.color),
+                    fontSize: 12, color: theme.textTheme.bodySmall!.color),
                 child: footer!,
               ),
           ],
@@ -531,7 +531,7 @@ class ActionText extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     TextStyle _style = style ??
-        theme.textTheme.bodyText1!
+        theme.textTheme.bodySmall!
             .copyWith(color: theme.tabBarTheme.labelColor);
     return InkWell(
       child: Container(

@@ -120,7 +120,7 @@ class DrawerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     Color _color =
-        (enabled) ? theme.textTheme.bodyText2!.color! : theme.dividerColor;
+        (enabled) ? theme.textTheme.bodyMedium!.color! : theme.dividerColor;
 
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
@@ -138,7 +138,7 @@ class DrawerTile extends StatelessWidget {
                     Text(
                       title!,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.caption!.copyWith(
+                      style: theme.textTheme.bodySmall!.copyWith(
                         fontSize: fontSize!,
                         color: _color,
                       ),

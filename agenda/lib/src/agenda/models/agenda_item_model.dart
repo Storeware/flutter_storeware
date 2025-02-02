@@ -31,7 +31,7 @@ class AgendaItem extends DataItem {
   num? sigcadCodigo;
   String? nomeCliente;
   String? domicilio;
-  String? caption;
+  String? bodySmall;
 
   /// usado para pegar o objeto do servico ao qual a agenda esta associada; No PET é uma tabela externa
   String? objectServiceGid;
@@ -71,7 +71,7 @@ class AgendaItem extends DataItem {
       this.statex,
       this.sigcadCodigo,
       this.domicilio,
-      this.caption}) {
+      this.bodySmall}) {
     gid = gid ?? Uuid().v4();
   }
 
@@ -119,7 +119,7 @@ class AgendaItem extends DataItem {
       statex = json['state'];
       sigcadCodigo = toDouble(json['sigcad_codigo']);
       domicilio = json['domicilio'];
-      caption = json['caption'];
+      bodySmall = json['bodySmall'];
       objectServiceGid = json['objectServiceGid'];
       nomeCliente = json['nomecliente'];
     } catch (e) {
@@ -159,7 +159,7 @@ class AgendaItem extends DataItem {
       data['state'] = this.statex;
       data['sigcad_codigo'] = this.sigcadCodigo ?? 0;
       data['domicilio'] = this.domicilio ?? 'N';
-      data['caption'] = this.caption;
+      data['bodySmall'] = this.bodySmall;
       data['id'] = data['gid'];
       if (objectServiceGid != null)
         data['objectServiceGid'] = this.objectServiceGid;

@@ -48,7 +48,7 @@ class _DashboardChartsState extends State<DashboardFilter> {
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: DefaultTextStyle(
-                  style: theme.textTheme.bodyText1!.copyWith(
+                  style: theme.textTheme.bodySmall!.copyWith(
                     color: theme.colorScheme.onSurface,
                   ),
                   child: SizedBox(

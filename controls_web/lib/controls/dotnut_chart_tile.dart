@@ -76,7 +76,7 @@ class _DotnutChartTileState extends State<DotnutChartTile> {
                 ),
                 if (widget.title != null)
                   DefaultTextStyle(
-                      style: theme.textTheme.bodyText1!.copyWith(
+                      style: theme.textTheme.bodySmall!.copyWith(
                         fontSize: 16,
                       ),
                       child: widget.title!),
@@ -96,10 +96,10 @@ class _DotnutChartTileState extends State<DotnutChartTile> {
                 const Spacer(),
                 if (widget.subtitle != null)
                   DefaultTextStyle(
-                      child: widget.subtitle!,
-                      style: theme.textTheme.bodyText2!.copyWith(
+                      style: theme.textTheme.bodyMedium!.copyWith(
                         fontSize: 10,
-                      )),
+                      ),
+                      child: widget.subtitle!),
               ],
             ),
           )),

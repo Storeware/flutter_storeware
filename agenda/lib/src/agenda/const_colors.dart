@@ -73,11 +73,11 @@ getTheme(context, {Brightness brightness = Brightness.dark}) {
       fontWeight: FontWeight.w500,
     )),
     textTheme: theme.textTheme
-      ..caption!.copyWith(
+      ..bodySmall!.copyWith(
         fontSize: fontPequena ? 14 : 16,
         fontWeight: FontWeight.w500,
       )
-      ..bodyText1!.copyWith(
+      ..bodySmall!.copyWith(
         fontWeight: FontWeight.w300,
         fontSize: fontPequena ? 11 : 14,
       )
@@ -86,12 +86,12 @@ getTheme(context, {Brightness brightness = Brightness.dark}) {
         fontSize: fontPequena ? 11 : 14,
       ),
     primaryTextTheme: theme.primaryTextTheme
-      ..caption!.copyWith(
+      ..bodySmall!.copyWith(
         fontWeight: FontWeight.w300,
         fontSize: fontPequena ? 12 : 14,
       )
       ..headline6!.copyWith(color: Colors.indigo)
-      ..bodyText1!.copyWith(
+      ..bodySmall!.copyWith(
         fontSize: getFontSize,
         fontWeight: FontWeight.w300,
       )
@@ -100,7 +100,7 @@ getTheme(context, {Brightness brightness = Brightness.dark}) {
         fontWeight: FontWeight.w300,
       ),
     inputDecorationTheme: InputDecorationTheme(
-        hintStyle: theme.textTheme.caption!
+        hintStyle: theme.textTheme.bodySmall!
             .copyWith(color: Colors.amber, fontSize: 11)),
   );
 
@@ -109,9 +109,9 @@ getTheme(context, {Brightness brightness = Brightness.dark}) {
   cardColor = t.primaryColor; //.lighten(50);
   primaryColor = t.primaryColor;
   tabBarThemeLabelColor =
-      t.appBarTheme.backgroundColor ?? theme.primaryTextTheme.bodyText1!.color!;
-  textColor = t.textTheme.button!.color ?? theme.textTheme.bodyText1!.color!;
-  primaryTextColor = t.primaryTextTheme.bodyText1!.color!;
+      t.appBarTheme.colorScheme.background ?? theme.primaryTextTheme.bodySmall!.color!;
+  textColor = t.textTheme.labelLarge!.color ?? theme.textTheme.bodySmall!.color!;
+  primaryTextColor = t.primaryTextTheme.bodySmall!.color!;
   curvaColor = t.primaryColor;
   sidebarHeaderColor = t.primaryColor; //.lighten(50);
   sidebarBackgroundColor = t.scaffoldBackgroundColor.darken(40).withAlpha(5);

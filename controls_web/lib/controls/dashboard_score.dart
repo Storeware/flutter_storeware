@@ -104,9 +104,9 @@ class _DashboardScoreState extends State<DashboardScore> {
                     children: [
                       if (widget.title != null)
                         DefaultTextStyle(
-                          style: theme.textTheme.bodyText1!.copyWith(
+                          style: theme.textTheme.bodySmall!.copyWith(
                             fontSize:
-                                theme.textTheme.bodyText1!.fontSize! * 0.9,
+                                theme.textTheme.bodySmall!.fontSize! * 0.9,
                           ),
                           child: widget.title!,
                         ),
@@ -116,7 +116,7 @@ class _DashboardScoreState extends State<DashboardScore> {
                             style: widget.scoreStyle ??
                                 TextStyle(
                                   fontSize:
-                                      theme.textTheme.bodyText1!.fontSize! *
+                                      theme.textTheme.bodySmall!.fontSize! *
                                           1.25,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -200,7 +200,7 @@ class DashboardDensedScore extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    TextStyle styled = style ?? theme.textTheme.headline1!;
+    TextStyle styled = style ?? theme.textTheme.displayLarge!;
     return Card(
         elevation: elevation,
         color: backgroundColor ?? theme.cardColor,
@@ -220,7 +220,7 @@ class DashboardDensedScore extends StatelessWidget {
                         child: Text(title!,
                             style: styled.copyWith(
                               color: color ??
-                                  theme.primaryTextTheme.bodyText2!
+                                  theme.primaryTextTheme.bodyMedium!
                                       .backgroundColor,
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
@@ -236,7 +236,7 @@ class DashboardDensedScore extends StatelessWidget {
                             //textAlign: TextAlign.left,
                             style: styled.copyWith(
                               color: color ??
-                                  theme.primaryTextTheme.bodyText2!
+                                  theme.primaryTextTheme.bodyMedium!
                                       .backgroundColor,
                               fontSize: 20,
                               fontWeight: FontWeight.w600,
@@ -254,7 +254,7 @@ class DashboardDensedScore extends StatelessWidget {
                           child: Text(label!,
                               style: styled.copyWith(
                                 color: labelColor ??
-                                    theme.primaryTextTheme.bodyText2!
+                                    theme.primaryTextTheme.bodyMedium!
                                         .backgroundColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,

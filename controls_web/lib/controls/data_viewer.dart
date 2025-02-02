@@ -46,10 +46,10 @@ class DefaultDataViewerTheme {
         ? _singleton._theme!.indicatorColor
         : Colors.black26;
     _singleton.evenRowColor ??=
-        theme.primaryTextTheme.bodyText1!.backgroundColor ??
+        theme.primaryTextTheme.bodySmall!.backgroundColor ??
             theme.primaryColor.withAlpha(10);
     _singleton.oddRowColor ??=
-        theme.primaryTextTheme.bodyText2!.backgroundColor ??
+        theme.primaryTextTheme.bodyMedium!.backgroundColor ??
             theme.primaryColor.withAlpha(5);
 
     _singleton.headingTextStyle =
@@ -652,7 +652,7 @@ class _DataViewerState extends State<DataViewer> {
                             ),
                             child: TextFormField(
                               controller: _filtroController,
-                              style: theme!.textTheme.bodyText1,
+                              style: theme!.textTheme.bodySmall,
                               decoration: InputDecoration(
                                 labelText: 'procurar por',
                                 suffixIcon: InkWell(
@@ -1073,7 +1073,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                 child: Row(children: [
                   Text(rows.title!,
                       style: rows.titleStyle ??
-                          theme!.textTheme.caption?.copyWith(fontSize: 18)),
+                          theme!.textTheme.bodySmall?.copyWith(fontSize: 18)),
                 ])),
         children: [
           if (rows.header != null) rows.header!,
@@ -1126,7 +1126,7 @@ class _DataViewEditGroupedPageState extends State<DataViewerEditGroupedPage> {
                 if (rows.leadding != null) rows.leadding!,
                 Text(rows.title!,
                     style: rows.titleStyle ??
-                        theme!.textTheme.caption?.copyWith(fontSize: 18)),
+                        theme!.textTheme.bodySmall?.copyWith(fontSize: 18)),
                 if (rows.trailling != null) rows.trailling!,
               ])),
         Container(

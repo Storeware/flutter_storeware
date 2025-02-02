@@ -223,7 +223,7 @@ class _LoginViewState extends State<LoginPage> {
                       top: UniversalPlatform.isWeb ? 32.0 : 10.0),
                   child: Card(
                     color: Colors
-                        .transparent, // theme.backgroundColor.withOpacity(0.3),
+                        .transparent, // theme.colorScheme.background.withOpacity(0.3),
                     elevation: AppResourcesConst().elevation,
                     child: Container(
                       width: 330,

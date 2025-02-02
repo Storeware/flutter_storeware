@@ -237,7 +237,7 @@ class _TopAppBarState extends State<TopAppBar> {
                 child: widget.choices![i].title ??
                     Text(widget.choices![i].label!,
                         textAlign: TextAlign.center,
-                        style: theme.primaryTextTheme.bodyText1),
+                        style: theme.primaryTextTheme.bodySmall),
               ),
               onSelected: (x) {
                 selectedItem(i, widget.choices![i].items![x]);
@@ -261,7 +261,7 @@ class _TopAppBarState extends State<TopAppBar> {
             child: widget.choices![i].title ??
                 Text(widget.choices![i].label ?? '',
                     style: theme.primaryTextTheme
-                        .bodyText1), //TextStyle(color:theme.primaryTextTheme.bodyText1.color ) ),
+                        .bodySmall), //TextStyle(color:theme.primaryTextTheme.bodySmall.color ) ),
             onPressed: () {
               selectedItem(i, widget.choices![i]);
             }));

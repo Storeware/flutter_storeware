@@ -360,7 +360,7 @@ class ActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData? theme = Theme.of(context);
     TextStyle? _style = style ??
-        theme.primaryTextTheme.headline5!.copyWith(
+        theme.primaryTextTheme.headlineSmall!.copyWith(
           color: titleColor,
           fontWeight: FontWeight.bold,
         );
@@ -383,12 +383,12 @@ class ActivityCard extends StatelessWidget {
                     child: (image != null)
                         ? CircleAvatar(
                             backgroundColor:
-                                theme.primaryTextTheme.bodyText1!.color,
+                                theme.primaryTextTheme.bodySmall!.color,
                             child: image)
                         : ActivityAvatar(
                             avatarBackgroudColor:
-                                theme.primaryTextTheme.bodyText1!.color,
-                            iconColor: theme.textTheme.button!.color,
+                                theme.primaryTextTheme.bodySmall!.color,
+                            iconColor: theme.textTheme.labelLarge!.color,
                             icon: icon ?? Icons.person_pin,
                           ),
                   ),
@@ -407,10 +407,10 @@ class ActivityCard extends StatelessWidget {
                           ),
                       Text(
                         subtitle ?? '',
-                        style: theme.primaryTextTheme.headline6!.copyWith(
+                        style: theme.primaryTextTheme.titleLarge!.copyWith(
                           color: titleColor,
                           fontSize:
-                              theme.primaryTextTheme.headline6!.fontSize! * 0.8,
+                              theme.primaryTextTheme.titleLarge!.fontSize! * 0.8,
                           fontWeight: FontWeight.w300,
                         ),
                       ),
@@ -632,9 +632,9 @@ class ActivityBar extends StatelessWidget {
 
       //color: Colors.amber,
       decoration: BoxDecoration(
-        color: backgroundColor ?? theme.backgroundColor,
+        color: backgroundColor ?? theme.colorScheme.surface,
         border:
-            Border.all(color: theme.textTheme.overline!.color!.withAlpha(50)),
+            Border.all(color: theme.textTheme.labelSmall!.color!.withAlpha(50)),
         //shape: BoxShape.circle,
       ),
       child: Row(

@@ -101,12 +101,12 @@ class LightAmmount extends StatelessWidget {
             if (label != null)
               Text(
                 label!,
-                style: TextStyle(color: theme.textTheme.caption!.color),
+                style: TextStyle(color: theme.textTheme.bodySmall!.color),
               ),
             if (sublabel != null)
               Text(
                 sublabel!,
-                style: TextStyle(color: theme.textTheme.caption!.color),
+                style: TextStyle(color: theme.textTheme.bodySmall!.color),
               ),
             if (child != null) child!,
           ]),
@@ -262,12 +262,12 @@ class LightValueButton extends StatelessWidget {
               ),
               if (label != null)
                 Text(label!,
-                    style: theme.textTheme.button!.copyWith(
+                    style: theme.textTheme.labelLarge!.copyWith(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                     )),
               if (sublabel != null)
-                Text(sublabel!, style: theme.textTheme.caption),
+                Text(sublabel!, style: theme.textTheme.bodySmall),
             ]),
         onTap: onPressed);
   }

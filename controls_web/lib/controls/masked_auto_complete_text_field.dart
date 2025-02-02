@@ -222,7 +222,7 @@ class _MaskedAutoCompleteTextFieldState
                         contentPadding: const EdgeInsets.all(0),
                         // errorText: validating(_controller.text),
                         // errorStyle:
-                        //     TextStyle(color: theme.textTheme.bodyText1.color),
+                        //     TextStyle(color: theme.textTheme.bodySmall.color),
                         prefixIcon: widget.prefixIcon,
                         suffixIcon: widget.sufixIcon),
                     itemSorter: (a, b) => '$a'.compareTo('$b'),

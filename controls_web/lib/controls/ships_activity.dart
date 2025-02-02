@@ -111,9 +111,9 @@ class ShipsBar extends StatelessWidget {
 
       //color: Colors.amber,
       decoration: BoxDecoration(
-        color: backgroundColor ?? theme.backgroundColor,
+        color: backgroundColor ?? theme.colorScheme.background,
         border:
-            Border.all(color: theme.textTheme.overline!.color!.withAlpha(50)),
+            Border.all(color: theme.textTheme.labelSmall!.color!.withAlpha(50)),
         //shape: BoxShape.circle,
       ),
       child: Row(

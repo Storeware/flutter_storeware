@@ -138,7 +138,7 @@ class DashboardTile extends StatelessWidget {
                                                         fontSize: 32,
                                                         color: theme
                                                             .primaryTextTheme
-                                                            .bodyText1!
+                                                            .bodySmall!
                                                             .color),
                                               )),
                                         ),
@@ -177,7 +177,7 @@ class DashboardTile extends StatelessWidget {
                                         title ?? '',
                                         textAlign: TextAlign.center,
                                         style: titleStyle ??
-                                            theme.primaryTextTheme.caption!
+                                            theme.primaryTextTheme.bodySmall!
                                                 .copyWith(fontSize: 18),
                                       )),
                                       if (actions != null) ...actions!,

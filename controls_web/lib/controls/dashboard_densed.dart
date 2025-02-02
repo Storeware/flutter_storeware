@@ -74,7 +74,7 @@ class _DashboardDensedTileState extends State<DashboardDensedTile> {
                   children: [
                     if (widget.title != null)
                       DefaultTextStyle(
-                          style: theme.textTheme.bodyText1!.copyWith(
+                          style: theme.textTheme.bodySmall!.copyWith(
                             color: theme.colorScheme.onSurface,
                           ),
                           child: widget.title!),
@@ -90,7 +90,7 @@ class _DashboardDensedTileState extends State<DashboardDensedTile> {
                 children: [
                   if (widget.value != null)
                     DefaultTextStyle(
-                      style: theme.textTheme.bodyText1!.copyWith(
+                      style: theme.textTheme.bodySmall!.copyWith(
                         color: theme.colorScheme.onSurface,
                       ),
                       child: widget.value!,
@@ -98,7 +98,7 @@ class _DashboardDensedTileState extends State<DashboardDensedTile> {
                   const Spacer(),
                   if (widget.percent != null)
                     DefaultTextStyle(
-                      style: theme.textTheme.bodyText2!.copyWith(
+                      style: theme.textTheme.bodyMedium!.copyWith(
                           //color: theme.colorScheme.onSurface,
                           ),
                       child: widget.percent!,

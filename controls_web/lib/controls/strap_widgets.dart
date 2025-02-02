@@ -166,7 +166,7 @@ class _StrapButtonState extends State<StrapButton> {
                                   if (widget.image != null) widget.image!,
                                   if (widget.title != null)
                                     DefaultTextStyle(
-                                        style: theme.textTheme.button!,
+                                        style: theme.textTheme.labelLarge!,
                                         child: widget.title!),
                                   if (widget.text != null)
                                     Text(widget.text!,
@@ -180,7 +180,7 @@ class _StrapButtonState extends State<StrapButton> {
                                         )),
                                   if (widget.subtitle != null)
                                     DefaultTextStyle(
-                                        style: theme.textTheme.caption!,
+                                        style: theme.textTheme.bodySmall!,
                                         child: widget.subtitle!),
                                   if ([
                                     StrapButtonState.waiting,

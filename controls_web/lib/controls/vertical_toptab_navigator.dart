@@ -260,7 +260,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
     theme = Theme.of(context);
     //_iconColor = widget.iconColor ??
     //    theme!.tabBarTheme.labelColor ??
-    //    theme!.textTheme.bodyText1!.color!.withAlpha(100);
+    //    theme!.textTheme.bodySmall!.color!.withAlpha(100);
     _tabColor = widget.tabColor ?? theme!.scaffoldBackgroundColor;
     Color _selectedColor =
         widget.selectedColor ?? theme!.scaffoldBackgroundColor;
@@ -417,7 +417,7 @@ class _VerticalTopTabNavigatorState extends State<VerticalTopTabNavigator> {
                     ? TextStyle(color: theme.dividerColor)
                     : widget.choices![index].style ??
                         widget.style ??
-                        theme.textTheme.bodyText1!.copyWith(
+                        theme.textTheme.bodySmall!.copyWith(
                           fontSize: 12,
                           color: _getColor(theme).isDark
                               ? Colors.white70

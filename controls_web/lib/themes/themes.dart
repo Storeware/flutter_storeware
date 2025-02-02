@@ -39,12 +39,14 @@ class DynamicTheme extends StatefulWidget {
     var th = ThemeData(fontFamily: fontFamily, brightness: Brightness.light);
     return th.copyWith(
         appBarTheme: th.appBarTheme.copyWith(
-      textTheme: TextTheme(
-        headline6: TextStyle(color: Colors.black),
+      iconTheme: const IconThemeData(
+        color:  Colors.black,
       ),
       elevation: 0,
       color: th.scaffoldBackgroundColor,
-      iconTheme: th.iconTheme.copyWith(color: Colors.black),
+      actionsIconTheme: const IconThemeData(
+        color:  Colors.black,
+      ),
     ));
   }
 

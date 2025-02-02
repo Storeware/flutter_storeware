@@ -358,7 +358,7 @@ class PaginatedDataTableExtendedState
     }
 
     // FOOTER
-    final TextStyle footerTextStyle = themeData.textTheme.caption!;
+    final TextStyle footerTextStyle = themeData.textTheme.bodySmall!;
     final List<Widget> footerWidgets = <Widget>[];
     if (widget.footer != null) {
       footerWidgets.add(widget.footer!);
@@ -455,9 +455,9 @@ class PaginatedDataTableExtendedState
                       // list and then tweak them appropriately.
                       // See https://material.io/design/components/data-tables.html#tables-within-cards
                       style: _selectedRowCount! > 0
-                          ? themeData.textTheme.subtitle1!
+                          ? themeData.textTheme.titleMedium!
                               .copyWith(color: themeData.colorScheme.secondary)
-                          : themeData.textTheme.headline6!
+                          : themeData.textTheme.titleLarge!
                               .copyWith(fontWeight: FontWeight.w400),
                       child: IconTheme.merge(
                         data: const IconThemeData(opacity: 0.54),

@@ -359,7 +359,7 @@ class SidebarHeader extends StatelessWidget {
                   (controller!.position == SidebarPosition.left)
                       ? Icons.arrow_right
                       : Icons.arrow_left,
-                  color: titleColor ?? theme.primaryTextTheme.headline6!.color,
+                  color: titleColor ?? theme.primaryTextTheme.titleLarge!.color,
                 ),
                 onPressed: () {
                   //print('showCompact');
@@ -374,7 +374,7 @@ class SidebarHeader extends StatelessWidget {
                     child: Icon(
                       Icons.arrow_left,
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6!.color,
+                          titleColor ?? theme.primaryTextTheme.titleLarge!.color,
                     ),
                     onTap: () {
                       //print('hide');
@@ -390,8 +390,8 @@ class SidebarHeader extends StatelessWidget {
                     title ?? '',
                     style: TextStyle(
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6!.color,
-                      fontSize: theme.primaryTextTheme.headline6!.fontSize,
+                          titleColor ?? theme.primaryTextTheme.titleLarge!.color,
+                      fontSize: theme.primaryTextTheme.titleLarge!.fontSize,
                     ),
                   ),
                 )),
@@ -400,7 +400,7 @@ class SidebarHeader extends StatelessWidget {
                     child: Icon(
                       Icons.view_compact,
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6!.color,
+                          titleColor ?? theme.primaryTextTheme.titleLarge!.color,
                     ),
                     onTap: () {
                       //print('showCompact-true');
@@ -413,7 +413,7 @@ class SidebarHeader extends StatelessWidget {
                     child: Icon(
                       Icons.arrow_right,
                       color:
-                          titleColor ?? theme.primaryTextTheme.headline6!.color,
+                          titleColor ?? theme.primaryTextTheme.titleLarge!.color,
                     ),
                     onTap: () {
                       //print('hide_');

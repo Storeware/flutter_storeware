@@ -118,7 +118,7 @@ class _ShoppingViewDemoState extends State<ShoppingViewDemo> {
           ),
           Text(
             '$_counter',
-            style: Theme.of(context).textTheme.caption,
+            style: Theme.of(context).textTheme.bodySmall,
           ),
         ],
       ),

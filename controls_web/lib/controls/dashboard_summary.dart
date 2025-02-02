@@ -68,7 +68,7 @@ class DashboardSummary extends StatelessWidget {
                 children: [
                   if (value != null)
                     DefaultTextStyle(
-                      style: theme.textTheme.bodyText1!.copyWith(
+                      style: theme.textTheme.bodySmall!.copyWith(
                           color: theme.colorScheme.onSurface, fontSize: 18),
                       child: value!,
                     ),
@@ -81,7 +81,7 @@ class DashboardSummary extends StatelessWidget {
                     children: [
                       if (percent != null)
                         DefaultTextStyle(
-                          style: theme.textTheme.bodyText2!.copyWith(
+                          style: theme.textTheme.bodyMedium!.copyWith(
                             //color: theme.colorScheme.onSurface,
                             fontSize: 10,
                           ),
@@ -89,7 +89,7 @@ class DashboardSummary extends StatelessWidget {
                         ),
                       if (message != null)
                         DefaultTextStyle(
-                          style: theme.textTheme.bodyText2!.copyWith(
+                          style: theme.textTheme.bodyMedium!.copyWith(
                             //color: theme.colorScheme.onSurface,
                             fontSize: 10,
                           ),

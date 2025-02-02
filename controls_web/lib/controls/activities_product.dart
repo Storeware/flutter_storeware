@@ -232,7 +232,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    Color captionColor = widget.color ?? theme.primaryColor;
+    Color bodySmallColor = widget.color ?? theme.primaryColor;
     const w = 300.0;
     return Column(
       children: [
@@ -261,7 +261,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
                       child: Center(
                           child: Text('-',
                               style: TextStyle(
-                                  color: captionColor,
+                                  color: bodySmallColor,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold)))),
                 ),
@@ -285,13 +285,13 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
                     textAlign: TextAlign.center,
                     textAlignVertical: TextAlignVertical.center,
                     style: TextStyle(
-                        color: captionColor, fontWeight: FontWeight.bold),
+                        color: bodySmallColor, fontWeight: FontWeight.bold),
                     controller: _qtde,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Qtde',
                       hintStyle: TextStyle(
-                          color: captionColor,
+                          color: bodySmallColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 18),
                     ),
@@ -312,7 +312,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
                       child: Center(
                           child: Text('+',
                               style: TextStyle(
-                                  color: captionColor,
+                                  color: bodySmallColor,
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold)))),
                 ),
@@ -331,7 +331,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
                       Text(widget.label ?? 'comprar',
                           style: TextStyle(
                             color: widget.textColor ??
-                                theme.textTheme.caption!.color,
+                                theme.textTheme.bodySmall!.color,
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           )),
@@ -340,7 +340,7 @@ class _ActivityBuyButtonState extends State<ActivityBuyButton> {
                             style: TextStyle(
                               fontSize: 12,
                               color: widget.textColor ??
-                                  theme.textTheme.caption!.color,
+                                  theme.textTheme.bodySmall!.color, 
                             ))
                     ],
                   )),

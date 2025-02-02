@@ -167,7 +167,7 @@ class _AgendaViewState extends State<AgendaPage> {
                       ToggleButtons(
                         isSelected: const [false, false],
                         //highlightColor: Colors.indigo,
-                        //color: theme.textTheme.button.color,
+                        //color: theme.textTheme.labelLarge.color,
                         //selectedColor: theme.iconTheme.color,
                         children: const [
                           Tooltip(
@@ -226,7 +226,7 @@ class _AgendaViewState extends State<AgendaPage> {
                       }),
                       InkButton(
                         child: Icon(Icons.more_vert,
-                            color: theme.textTheme.button!.color),
+                            color: theme.textTheme.labelLarge!.color),
                         onTap: () {
                           AgendaMenu.show(context);
                         },
